@@ -1,10 +1,10 @@
 import { add, sub } from 'date-fns'
-import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Course_Delivery_Type_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { chance, render, renderHook, screen } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -16,6 +16,12 @@ import {
 import { CourseHeroSummary } from './CourseHeroSummary'
 
 describe('component: CourseHeroSummary', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   afterEach(() => {
     vi.clearAllMocks()
   })
@@ -50,7 +56,9 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    expect(screen.getByText('Course has begun.')).toBeInTheDocument()
+    expect(
+      screen.getByText(t('pages.course-participants.course-began'))
+    ).toBeInTheDocument()
   })
 
   it('displays a correct message if a course begins today', () => {
@@ -70,7 +78,9 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    expect(screen.getByText('Course begins today.')).toBeInTheDocument()
+    expect(
+      screen.getByText(t('pages.course-participants.course-begins-today'))
+    ).toBeInTheDocument()
   })
 
   it('displays a correct message if a course begins in 1 day', () => {
@@ -86,7 +96,11 @@ describe('component: CourseHeroSummary', () => {
 
     render(<CourseHeroSummary course={course} />)
 
-    expect(screen.getByText('1 day until course begins')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        t('pages.course-participants.until-course-begins_days_one')
+      )
+    ).toBeInTheDocument()
   })
 
   it('displays a correct message if a course begins in 2 days', () => {
@@ -106,7 +120,13 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    expect(screen.getByText('2 days until course begins')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        t('pages.course-participants.until-course-begins_days_other', {
+          count: 2,
+        })
+      )
+    ).toBeInTheDocument()
   })
 
   it('displays a correct message if a course has ended', () => {
@@ -126,7 +146,9 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    expect(screen.getByText('Course has ended.')).toBeInTheDocument()
+    expect(
+      screen.getByText(t('pages.course-participants.course-ended'))
+    ).toBeInTheDocument()
   })
 
   it('displays correct course dates', () => {
@@ -189,7 +211,9 @@ describe('component: CourseHeroSummary', () => {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
     })
 
-    expect(screen.getByText('You are the trainer')).toBeInTheDocument()
+    expect(
+      screen.getByText(t('pages.course-participants.trainer'))
+    ).toBeInTheDocument()
   })
 
   it('displays course venue information', () => {
@@ -216,7 +240,11 @@ describe('component: CourseHeroSummary', () => {
     render(<CourseHeroSummary course={course} />)
 
     expect(
-      screen.getByText('Hosted by London First School')
+      screen.getByText(
+        t('pages.course-participants.company-host', {
+          companyName: 'London First School',
+        })
+      )
     ).toBeInTheDocument()
   })
 
@@ -230,6 +258,197 @@ describe('component: CourseHeroSummary', () => {
     render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Virtual')).toBeInTheDocument()
+  })
+
+  it('displays booking contact data in case of exisitng user for external user', () => {
+    const course = buildCourse()
+
+    render(<CourseHeroSummary course={course} />, {
+      auth: { activeRole: RoleName.TRAINER },
+    })
+
+    expect(
+      screen.getByText(t('components.course-form.contact-person-label'), {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.bookingContact?.email as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.bookingContact?.fullName as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.bookingContact?.fullName as string).closest('a')
+    ).toBeNull()
+  })
+
+  it('displays booking contact data in case of exisitng user for internal user', () => {
+    const course = buildCourse()
+
+    render(<CourseHeroSummary course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
+
+    expect(
+      screen.getByText(t('components.course-form.contact-person-label'), {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.bookingContact?.email as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.bookingContact?.fullName as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.bookingContact?.fullName as string).closest('a')
+    ).not.toBeNull()
+  })
+
+  it('displays booking contact data in case of non exisitng user', () => {
+    const inviteData = {
+      email: chance.email(),
+      firstName: chance.name(),
+      lastName: chance.name(),
+    }
+
+    const course = buildCourse({
+      overrides: {
+        bookingContactInviteData: inviteData,
+      },
+    })
+    course.bookingContact = undefined
+
+    render(<CourseHeroSummary course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
+
+    expect(
+      screen.getByText(t('components.course-form.contact-person-label'), {
+        exact: false,
+      })
+    ).toBeInTheDocument()
+
+    expect(screen.getByText(inviteData.email)).toBeInTheDocument()
+
+    expect(
+      screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`)
+    ).toBeInTheDocument()
+
+    expect(
+      screen
+        .getByText(`${inviteData.firstName} ${inviteData.lastName}`)
+        .closest('a')
+    ).toBeNull()
+  })
+
+  it('displays orgnisation key contact data in case of exisitng user for internal user', () => {
+    const course = buildCourse()
+
+    render(<CourseHeroSummary course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
+
+    expect(
+      screen.getByText(
+        t('components.course-form.organization-key-contact-label'),
+        {
+          exact: false,
+        }
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.organizationKeyContact?.email as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.organizationKeyContact?.fullName as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen
+        .getByText(course.organizationKeyContact?.fullName as string)
+        .closest('a')
+    ).not.toBeNull()
+  })
+
+  it('displays orgnisation key contact data in case of exisitng user for external user', () => {
+    const course = buildCourse()
+
+    render(<CourseHeroSummary course={course} />, {
+      auth: { activeRole: RoleName.TRAINER },
+    })
+
+    expect(
+      screen.getByText(
+        t('components.course-form.organization-key-contact-label'),
+        {
+          exact: false,
+        }
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.organizationKeyContact?.email as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByText(course.organizationKeyContact?.fullName as string)
+    ).toBeInTheDocument()
+
+    expect(
+      screen
+        .getByText(course.organizationKeyContact?.fullName as string)
+        .closest('a')
+    ).toBeNull()
+  })
+
+  it('displays orgnisation key contact data in case of non exisitng user', () => {
+    const inviteData = {
+      email: chance.email(),
+      firstName: chance.name(),
+      lastName: chance.name(),
+    }
+
+    const course = buildCourse({
+      overrides: {
+        organizationKeyContactInviteData: inviteData,
+      },
+    })
+    course.organizationKeyContact = undefined
+
+    render(<CourseHeroSummary course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
+
+    expect(
+      screen.getByText(
+        t('components.course-form.organization-key-contact-label'),
+        {
+          exact: false,
+        }
+      )
+    ).toBeInTheDocument()
+
+    expect(screen.getByText(inviteData.email)).toBeInTheDocument()
+
+    expect(
+      screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`)
+    ).toBeInTheDocument()
+
+    expect(
+      screen
+        .getByText(`${inviteData.firstName} ${inviteData.lastName}`)
+        .closest('a')
+    ).toBeNull()
   })
 
   describe('Slots', () => {

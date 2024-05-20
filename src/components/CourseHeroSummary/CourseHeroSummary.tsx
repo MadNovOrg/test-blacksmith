@@ -21,6 +21,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
+import { pick } from 'lodash'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -101,6 +102,35 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     (course.status === Course_Status_Enum.Cancelled ||
       course.status === Course_Status_Enum.Declined)
 
+  const courseContactsData = useMemo(() => {
+    const bookingContact = course.bookingContact
+      ? pick(course.bookingContact, ['id', 'email', 'fullName'])
+      : course.bookingContactInviteData
+      ? {
+          id: null,
+          email: course.bookingContactInviteData.email,
+          fullName: `${course.bookingContactInviteData.firstName} ${course.bookingContactInviteData.lastName} `,
+        }
+      : undefined
+
+    const organisationKeyContact = course.organizationKeyContact
+      ? pick(course.organizationKeyContact, ['id', 'email', 'fullName'])
+      : course.organizationKeyContactInviteData
+      ? {
+          id: null,
+          email: course.organizationKeyContactInviteData.email,
+          fullName: `${course.organizationKeyContactInviteData.firstName} ${course.organizationKeyContactInviteData.lastName} `,
+        }
+      : undefined
+
+    return { bookingContact, organisationKeyContact }
+  }, [
+    course.bookingContact,
+    course.bookingContactInviteData,
+    course.organizationKeyContact,
+    course.organizationKeyContactInviteData,
+  ])
+
   const canReInviteTrainers = useMemo(
     () =>
       course &&
@@ -173,6 +203,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [geoCoordinates]
   )
+
   return (
     <Box
       data-testid="course-hero-summary"
@@ -408,7 +439,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </List>
               </ListItem>
 
-              {course.organizationKeyContact ? (
+              {courseContactsData.organisationKeyContact ? (
                 <ListItem
                   disableGutters
                   sx={{ ...backgroundList, mt: 3, ml: 4 }}
@@ -418,44 +449,25 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                       'components.course-form.organization-key-contact-label'
                     )}: `}
                     <ListItemText>
-                      {acl.isInternalUser() ? (
+                      {acl.isInternalUser() &&
+                      courseContactsData.organisationKeyContact.id ? (
                         <Link
-                          href={`/profile/${course.organizationKeyContact?.id}`}
+                          href={`/profile/${courseContactsData.organisationKeyContact.id}`}
                         >
-                          {`${course.organizationKeyContact?.fullName} `}
+                          {`${courseContactsData.organisationKeyContact.fullName} `}
                         </Link>
                       ) : (
-                        `${course.organizationKeyContact?.fullName} `
+                        `${courseContactsData.organisationKeyContact.fullName} `
                       )}
                     </ListItemText>
                     <ListItemText>
-                      {course.organizationKeyContact?.email}
+                      {courseContactsData.organisationKeyContact.email}
                     </ListItemText>
                   </ListItemText>
                 </ListItem>
               ) : null}
 
-              {course.organizationKeyContactInviteData &&
-              !course.organizationKeyContact ? (
-                <ListItem
-                  disableGutters
-                  sx={{ ...backgroundList, mt: 3, ml: 4 }}
-                >
-                  <ListItemText>
-                    {`${t(
-                      'components.course-form.organization-key-contact-label'
-                    )}: `}
-                    <ListItemText>
-                      {`${course.organizationKeyContactInviteData?.firstName} ${course.organizationKeyContactInviteData?.lastName}`}
-                    </ListItemText>
-                    <ListItemText>
-                      {course.organizationKeyContactInviteData?.email}
-                    </ListItemText>
-                  </ListItemText>
-                </ListItem>
-              ) : null}
-
-              {course.bookingContact ? (
+              {courseContactsData.bookingContact ? (
                 <ListItem
                   disableGutters
                   sx={{ ...backgroundList, mt: 3, ml: 4 }}
@@ -463,15 +475,20 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   <ListItemText>
                     {`${t('components.course-form.contact-person-label')}: `}
                     <ListItemText>
-                      {acl.isInternalUser() ? (
-                        <Link href={`/profile/${course.bookingContact?.id}`}>
-                          {`${course.bookingContact?.fullName} `}
+                      {acl.isInternalUser() &&
+                      courseContactsData.bookingContact.id ? (
+                        <Link
+                          href={`/profile/${courseContactsData.bookingContact?.id}`}
+                        >
+                          {`${courseContactsData.bookingContact.fullName} `}
                         </Link>
                       ) : (
-                        `${course.bookingContact?.fullName} `
+                        `${courseContactsData.bookingContact.fullName} `
                       )}
                     </ListItemText>
-                    <ListItemText>{course.bookingContact?.email}</ListItemText>
+                    <ListItemText>
+                      {courseContactsData.bookingContact.email}
+                    </ListItemText>
                   </ListItemText>
                 </ListItem>
               ) : null}
