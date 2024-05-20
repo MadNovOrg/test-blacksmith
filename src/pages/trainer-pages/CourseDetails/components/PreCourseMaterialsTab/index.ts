@@ -1,0 +1,1 @@
+export { PreCourseMaterialsTab } from './PreCourseMaterialsTab'

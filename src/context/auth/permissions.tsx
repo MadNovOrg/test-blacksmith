@@ -22,6 +22,7 @@ import { Course, CourseInput, RoleName } from '@app/types'
 import {
   getCourseAssistants,
   getCourseLeadTrainer,
+  getCourseModerator,
   REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
 } from '@app/util'
 
@@ -146,6 +147,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       getCourseAssistants(course.trainers)?.some(
         trainer => trainer.profile.id === profile?.id
       ),
+
+    isCourseModerator: (course: Pick<Course, 'trainers'>) =>
+      activeRole === RoleName.TRAINER &&
+      getCourseModerator(course.trainers)?.profile.id === profile?.id,
+
+    /**either Lead, Assistant or Moderator for the course */
+    isCourseAnyTrainer: (course: Pick<Course, 'trainers'>) =>
+      (activeRole === RoleName.TRAINER &&
+        course.trainers?.some(trainer => trainer.profile.id === profile?.id)) ??
+      false,
 
     canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
 
@@ -887,6 +898,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isInternalUser,
       ])(),
     canViewOpenCourseEvaluationSubmitted: () => anyPass([acl.isInternalUser])(),
+    canViewPreCourseMaterials: (course: Course) =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        () => acl.isCourseAnyTrainer(course),
+      ])(),
   })
   return acl
 }

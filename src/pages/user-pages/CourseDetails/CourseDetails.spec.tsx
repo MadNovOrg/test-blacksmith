@@ -21,12 +21,12 @@ import {
 
 import { CourseDetails } from './CourseDetails'
 
-type SpecCourseType = {
+export type SpecCourseType = {
   course: Course
   courseParticipants?: CourseParticipant[]
   orgMembers?: { profile_id: string; isAdmin: boolean }[]
 }
-const getURQLMockClient: (data: SpecCourseType) => Client = ({
+export const getURQLMockClient: (data: SpecCourseType) => Client = ({
   course,
   courseParticipants,
   orgMembers,

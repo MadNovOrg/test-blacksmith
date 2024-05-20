@@ -59534,6 +59534,14 @@ export type ImportLegacyCertificateMutationVariables = Exact<{
 
 export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate?: { __typename?: 'ImportLegacyCertificateOutput', trainerRoleAdded: boolean, success: boolean, error?: ImportLegacyCertificateError | null } | null };
 
+export type GetResourcesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  resourceIds: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type GetResourcesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
+
 export type ToggleAttendanceMutationVariables = Exact<{
   participantId: Scalars['uuid'];
   attended: Scalars['Boolean'];

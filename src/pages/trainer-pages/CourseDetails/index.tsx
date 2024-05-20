@@ -28,6 +28,7 @@ import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Level_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
   GetDietaryAndDisabilitiesCountQuery,
@@ -50,6 +51,7 @@ import { DisabilitiesTab } from './components/DisabilitiesTab/DisabilitiesTab'
 import { EvaluationSummaryTab } from './components/EvaluationSummaryTab'
 import { ExceptionsApprovalAlert } from './components/ExceptionsApprovalAlert'
 import { OrderYourWorkbookAlert } from './components/OrderYourWorkbookAlert'
+import { PreCourseMaterialsTab } from './components/PreCourseMaterialsTab'
 
 export enum CourseDetailsTabs {
   ATTENDEES = 'ATTENDEES',
@@ -60,12 +62,19 @@ export enum CourseDetailsTabs {
   EDIT = 'EDIT',
   DISABILITIES = 'DISABILITIES',
   DIETARY_REQUIREMENTS = 'DIETARY_REQUIREMENTS',
+  PRE_COURSE_MATERIALS = 'PRE_COURSE_MATERIALS',
 }
 
 const snackbarStyles: SxProps = {
   position: 'absolute',
   mt: -1,
 }
+
+export const preCourseMaterialLevels = [
+  Course_Level_Enum.Level_1,
+  Course_Level_Enum.Level_2,
+  Course_Level_Enum.IntermediateTrainer,
+]
 
 export const CourseDetails = () => {
   const { t } = useTranslation()
@@ -232,6 +241,11 @@ export const CourseDetails = () => {
     course,
     course?.trainers ?? []
   )
+
+  const shouldShowPreCourseMaterials =
+    !!course?.level &&
+    preCourseMaterialLevels.includes(course.level) &&
+    acl.canViewPreCourseMaterials(course)
 
   useEffect(() => {
     reexecuteDietaryQuery()
@@ -441,6 +455,17 @@ export const CourseDetails = () => {
                       data-testid="course-overview-tab"
                     />
                   ) : null}
+
+                  {shouldShowPreCourseMaterials && (
+                    <PillTab
+                      label={t(
+                        'pages.course-details.tabs.pre-course-materials.title'
+                      )}
+                      value={CourseDetailsTabs.PRE_COURSE_MATERIALS}
+                      data-testid="pre-course-materials-tab"
+                    />
+                  )}
+
                   {showCourseBuilderOnEditPage ? (
                     <EditIcon
                       sx={{ ml: 2, cursor: 'pointer' }}
@@ -538,6 +563,15 @@ export const CourseDetails = () => {
                   <CourseOverview course={course} />
                 </TabPanel>
               ) : null}
+
+              {shouldShowPreCourseMaterials && (
+                <TabPanel
+                  sx={{ px: 0 }}
+                  value={CourseDetailsTabs.PRE_COURSE_MATERIALS}
+                >
+                  <PreCourseMaterialsTab />
+                </TabPanel>
+              )}
             </Container>
           </TabContext>
         </>
