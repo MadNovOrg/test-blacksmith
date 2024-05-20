@@ -61,9 +61,11 @@ export const TrainerFeedback = () => {
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
 
-  const [{ data: questions }] = useQuery<GetCourseEvaluationQuestionsQuery>({
-    query: GET_COURSE_EVALUATION_QUESTIONS_QUERY,
-  })
+  const [{ data: questionsData }] = useQuery<GetCourseEvaluationQuestionsQuery>(
+    {
+      query: GET_COURSE_EVALUATION_QUESTIONS_QUERY,
+    }
+  )
 
   const [{ data: evaluation }] = useQuery<
     GetEvaluationQuery,
@@ -74,20 +76,28 @@ export const TrainerFeedback = () => {
     pause: !profileId,
   })
 
-  const dataLoaded = !!questions && (readOnly ? !!evaluation : true)
+  const dataLoaded = !!questionsData && (readOnly ? !!evaluation : true)
 
   const hasSubmitted = useMemo(() => {
     return Boolean(evaluation?.answers.length)
   }, [evaluation])
 
+  const questions = useMemo(() => {
+    if (questionsData?.questions.length) {
+      return questionsData?.questions.filter(
+        q => !['ATTENDEE_ADDITIONAL_COMMENTS'].includes(q.questionKey ?? '')
+      )
+    }
+  }, [questionsData?.questions])
+
   const { UNGROUPED: ungroupedQuestions } = groupBy(
-    questions?.questions,
+    questions,
     q => q.group || 'UNGROUPED'
   )
 
   const signatureQuestion = useMemo(
     () =>
-      questions?.questions.find(
+      questions?.find(
         q => q.questionKey === 'SIGNATURE'
       ) as GetCourseEvaluationQuestionsQuery['questions'][0],
     [questions]
@@ -96,7 +106,7 @@ export const TrainerFeedback = () => {
   const schema = useMemo(() => {
     const obj: Record<string, yup.StringSchema> = {}
 
-    questions?.questions.forEach(q => {
+    questions?.forEach(q => {
       if (q.type === Course_Evaluation_Question_Type_Enum.Rating) return
 
       const s = yup.string()

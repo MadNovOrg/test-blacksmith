@@ -406,7 +406,11 @@ export const CourseEvaluation = () => {
                         sx={{ bgcolor: 'common.white', mt: 1 }}
                         variant="filled"
                         placeholder={t('course-evaluation.your-response')}
-                        inputProps={{ sx: { px: 1, py: 1.5 } }}
+                        inputProps={
+                          q.questionKey === 'ATTENDEE_ADDITIONAL_COMMENTS'
+                            ? { maxLength: 300, sx: { px: 1, py: 1.5 } }
+                            : {}
+                        }
                         {...register(q.id)}
                         disabled={readOnly}
                         data-testid="course-evaluation-text-question"
@@ -439,12 +443,13 @@ export const CourseEvaluation = () => {
                     helperText={errors[signatureQuestion.id]?.message}
                     data-testid="course-evaluation-signature"
                   />
+                  <Alert severity="info" sx={{ mt: 2 }}>
+                    {t(
+                      'components.course-form.name-and-surname-validation-info'
+                    )}
+                  </Alert>
                 </>
               )}
-
-              <Alert severity="info" sx={{ mt: 2 }}>
-                {t('components.course-form.name-and-surname-validation-info')}
-              </Alert>
             </Grid>
           </Grid>
 
