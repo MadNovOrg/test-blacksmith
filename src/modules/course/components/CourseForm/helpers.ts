@@ -573,7 +573,7 @@ export function getDefaultSpecialInstructions(
 
   if (
     level === Course_Level_Enum.Level_1 ||
-    Course_Level_Enum.FoundationTrainerPlus
+    level === Course_Level_Enum.FoundationTrainerPlus
   ) {
     key = `${key}.${deliveryType}`
   } else if (level === Course_Level_Enum.Level_2) {
