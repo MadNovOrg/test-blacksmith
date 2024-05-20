@@ -113,7 +113,7 @@ it('stores curriculum selection to local storage when selection changes', async 
         lessons: {
           items: module.lessons.items.map((l: { name: string }) => ({
             ...l,
-            covered: true,
+            covered: false,
           })),
         },
       },
@@ -319,8 +319,6 @@ it('saves modules selection when clicked on the submit button', async () => {
     { initialEntries: [`/courses/1/grading/details/modules`] }
   )
 
-  await user.click(screen.getByLabelText(module.lessons.items[0].name))
-
   await user.click(
     screen.getByRole('button', { name: /continue to grading attendees/i })
   )
@@ -391,4 +389,67 @@ it('displays an alert if there is an error saving the selection', async () => {
   )
 
   expect(screen.getByTestId('saving-alert')).toBeInTheDocument()
+})
+
+it('pre-selects all of the modules when starting grading', () => {
+  const modules = [
+    buildModule({
+      name: 'Theory',
+      mandatory: false,
+      lessons: { items: [buildLesson()] },
+    }),
+    buildModule({
+      name: 'Practical',
+      mandatory: true,
+      lessons: { items: [buildLesson()] },
+    }),
+  ]
+
+  const client = {
+    executeQuery: ({
+      variables,
+      query,
+    }: {
+      variables: CourseCurriculumQueryVariables
+      query: TypedDocumentNode
+    }) => {
+      if (query === COURSE_CURRICULUM && variables.id === 1) {
+        return fromValue<{ data: CourseCurriculumQuery }>({
+          data: {
+            course: {
+              id: 1,
+              curriculum: modules,
+            },
+          },
+        })
+      }
+
+      return never
+    },
+  } as unknown as Client
+
+  render(
+    <Provider value={client}>
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/courses/:id/grading/details/modules"
+            element={<ModulesSelectionV2 />}
+          />
+        </Routes>
+      </GradingDetailsProvider>
+    </Provider>,
+    {},
+    { initialEntries: [`/courses/1/grading/details/modules`] }
+  )
+
+  const checkboxes = screen.getAllByRole('checkbox')
+
+  expect(checkboxes).toHaveLength(2)
+  for (const checkbox of checkboxes) {
+    expect(checkbox).toBeChecked()
+  }
+
+  expect(screen.getByText(/theory/i)).toBeInTheDocument()
+  expect(screen.getByText(/practical/i)).toBeInTheDocument()
 })

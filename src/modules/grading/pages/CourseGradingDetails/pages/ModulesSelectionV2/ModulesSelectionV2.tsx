@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ModulesSelectionListV2 } from '@app/modules/grading/components/ModulesSelectionListV2/ModulesSelectionListV2'
+import { isLesson, isModule } from '@app/modules/grading/shared/utils'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
 
@@ -19,6 +20,32 @@ import { ModulesSelectionTitle } from '../../components/ModulesSelectionTitle/Mo
 
 import { useCourseCurriculum } from './hooks/useCourseCurriculum'
 import { useSaveCurriculumSelection } from './hooks/useSaveCurriculumSelection'
+
+const getInitialCurriculum = (curriculum: unknown) => {
+  const shouldCheckAllModules =
+    curriculum && Array.isArray(curriculum) && curriculum.every(isModule)
+  if (!shouldCheckAllModules) {
+    return curriculum
+  }
+
+  return curriculum.map(module => {
+    const lessons = module.lessons?.items
+
+    return {
+      ...module,
+      lessons: {
+        ...module.lessons,
+        items:
+          Array.isArray(lessons) && lessons.every(isLesson)
+            ? lessons.map(lesson => ({
+                ...lesson,
+                covered: true,
+              }))
+            : [],
+      },
+    }
+  })
+}
 
 export const ModulesSelectionV2: React.FC = () => {
   const { t } = useTranslation()
@@ -40,7 +67,11 @@ export const ModulesSelectionV2: React.FC = () => {
     }
   }, [id])
 
-  const curriculum = savedCurriculum ?? courseData?.course?.curriculum
+  const curriculum = useMemo(
+    () =>
+      savedCurriculum ?? getInitialCurriculum(courseData?.course?.curriculum),
+    [courseData?.course?.curriculum, savedCurriculum]
+  )
 
   const curriculumRef = useRef<unknown>()
 
