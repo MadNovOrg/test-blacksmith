@@ -4457,6 +4457,7 @@ export type Ordering = {
 export type OrgInvite = {
   __typename?: 'OrgInvite';
   id: Scalars['String'];
+  orgId: Scalars['String'];
   orgName: Scalars['String'];
 };
 
@@ -60229,7 +60230,7 @@ export type GetInviteQuery = { __typename?: 'query_root', invite?: { __typename?
 export type GetOrgInviteQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'OrgInvite', id: string, orgName: string } | null };
+export type GetOrgInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'OrgInvite', id: string, orgName: string, orgId: string } | null };
 
 export type InitAuthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -60448,6 +60449,13 @@ export type GetOrgMembersQueryVariables = Exact<{
 
 
 export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, email?: string | null, familyName?: string | null, givenName?: string | null, fullName?: string | null } }> };
+
+export type GetOrgByIdQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type GetOrgByIdQuery = { __typename?: 'query_root', organization: Array<{ __typename?: 'organization', address: any, name: string, id: any }> };
 
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;

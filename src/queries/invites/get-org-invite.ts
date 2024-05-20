@@ -1,9 +1,10 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export type ResponseType = {
   invite: {
     id: string
     orgName: string
+    orgId: string
   }
 }
 
@@ -14,6 +15,7 @@ export const QUERY = gql`
     invite: getOrgInvite {
       id
       orgName
+      orgId
     }
   }
 `

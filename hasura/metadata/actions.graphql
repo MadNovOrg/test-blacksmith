@@ -866,6 +866,7 @@ type CourseInvite {
 type OrgInvite {
   id: String!
   orgName: String!
+  orgId: String!
 }
 
 type Address {

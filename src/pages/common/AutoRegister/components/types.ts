@@ -16,7 +16,7 @@ export type FormInputs = {
   tcs: boolean
   jobTitle: string
   otherJobTitle: string
-  organization?: Pick<Organization, 'name' | 'id'>
+  organization?: Pick<Organization, 'name' | 'id' | 'address'>
 }
 
 export const getFormSchema = (t: TFunction) => {

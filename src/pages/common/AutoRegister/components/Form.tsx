@@ -18,7 +18,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { subYears, format } from 'date-fns'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle, useUpdateEffect } from 'react-use'
@@ -51,11 +51,23 @@ const TextField = styled(MuiTextField)(() => ({
 type Props = {
   onSuccess: () => void
   token: string
+  organizationData?: {
+    id: string
+    name: string
+    address: {
+      city: string
+      country: string
+      line1: string
+      line2: string
+      postCode: string
+    }
+  }
 }
 
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   token,
   onSuccess,
+  organizationData,
 }) => {
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
@@ -131,17 +143,33 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         return
       }
       if (isHubOrg(org)) {
-        setValue('organization', org as Pick<Organization, 'id' | 'name'>, {
-          shouldValidate: true,
-        })
+        setValue(
+          'organization',
+          org as Pick<Organization, 'id' | 'name' | 'address'>,
+          {
+            shouldValidate: true,
+          }
+        )
         return
       }
     },
     [setValue]
   )
+
+  useEffect(() => {
+    if (organizationData) {
+      setValue('organization', {
+        id: organizationData.id,
+        name: organizationData.name,
+        address: organizationData.address,
+      })
+    }
+  }, [organizationData, setValue])
+
   useUpdateEffect(() => {
     if (userData?.createUser.email) onSuccess()
   }, [onSuccess, userData?.createUser.email])
+
   return (
     <Box
       component="form"
@@ -150,6 +178,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       autoComplete="off"
       aria-autocomplete="none"
       mt={3}
+      data-testid="auto-register-form"
     >
       <Typography variant="body1" mb={1} fontWeight="600">
         {t('personal-details')}

@@ -91,6 +91,8 @@ export const OrgInvitationPage = () => {
   const invite = (data?.invite || {}) as GetOrgInviteResponseType['invite']
   const isFetching = !data && !error
 
+  const organizationId = data?.invite?.orgId
+
   const handleSubmit = async () => {
     setIsLoading(true)
 
@@ -105,6 +107,7 @@ export const OrgInvitationPage = () => {
         const qs = new URLSearchParams({
           token: tokenData.token,
           continue: continueUrl,
+          orgId: organizationId ?? '',
         })
 
         return navigate(
