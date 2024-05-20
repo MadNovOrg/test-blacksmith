@@ -2,6 +2,7 @@ import { isFuture, parseISO } from 'date-fns'
 import { anyPass } from 'lodash/fp'
 import { MarkOptional } from 'ts-essentials'
 
+import { isCertificateOutsideGracePeriod } from '@app/components/CourseCertification/utils'
 import {
   Accreditors_Enum,
   Course_Level_Enum,
@@ -492,8 +493,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         auth.profile?.courses as ICourseCategoryUserAttends[]
       )
 
-      const attendedTrainerCourse =
-        attendedCourse && attendedCourse.attendsTrainer
+      const attendedTrainerCourse = attendedCourse?.attendsTrainer
       const trainerCourseIsOngoing =
         courseProgress?.started && !courseProgress.ended
       const hasPassedTrainerCourse = hasPassed
@@ -501,7 +501,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const currentUserCertificates = auth.certificates
         ?.filter(certificate => {
           const expirationDate = parseISO(certificate.expiryDate)
-          return isFuture(expirationDate)
+          return acl.isTrainer()
+            ? !isCertificateOutsideGracePeriod(
+                certificate.expiryDate,
+                certificate.courseLevel
+              )
+            : isFuture(expirationDate)
         })
         .map(certificate => certificate.courseLevel)
 

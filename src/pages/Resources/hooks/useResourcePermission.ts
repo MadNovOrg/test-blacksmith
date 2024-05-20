@@ -96,8 +96,7 @@ export function useResourcePermission() {
        *          Access will be revoked after course has ended but it will be granted
        *          again if user gets a PASS or ASSIST PASS certificate for that course
        */
-      const attendedTrainerCourse =
-        attendedCourse && attendedCourse.attendsTrainer
+      const attendedTrainerCourse = attendedCourse?.attendsTrainer
       const trainerCourseEnded = courseProgress?.ended
       const hasPassedTrainerCourse = hasPassed
 
