@@ -27,8 +27,8 @@ importers:
         specifier: ^11.11.5
         version: 11.11.5(@emotion/react@11.11.4)(@types/react@18.2.14)(react@18.2.0)
       '@fastify/autoload':
-        specifier: ~5.7.1
-        version: 5.7.1
+        specifier: ~5.8.2
+        version: 5.8.2
       '@fastify/sensible':
         specifier: ~5.6.0
         version: 5.6.0
@@ -6725,10 +6725,8 @@ packages:
       fast-uri: 2.2.0
     dev: false
 
-  /@fastify/autoload@5.7.1:
-    resolution: {integrity: sha512-F5c94MYAF0tacVu6X4/1ojO7fzmgrJXsqitDtpqknXgiHZpeFNhYSnNCUHPz6UDRKsfkDohmh0fiPTtOd8clzQ==}
-    dependencies:
-      pkg-up: 3.1.0
+  /@fastify/autoload@5.8.2:
+    resolution: {integrity: sha512-AX555mbAvtYPWZhOJG73y8zV39wH+wEnOcgg13xfGoHJ46rdsfx0Rs8Yfi5exE4bBqdzcM72iIZdhTbLbEqScA==}
     dev: false
 
   /@fastify/busboy@2.0.0:
@@ -23226,13 +23224,6 @@ packages:
       mlly: 1.6.1
       pathe: 1.1.2
     dev: true
-
-  /pkg-up@3.1.0:
-    resolution: {integrity: sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==}
-    engines: {node: '>=8'}
-    dependencies:
-      find-up: 3.0.0
-    dev: false
 
   /playwright-core@1.42.1:
     resolution: {integrity: sha512-mxz6zclokgrke9p1vtdy/COWBH+eOZgYUVVU34C73M+4j4HLlQJHtfcqiqqxpP0o8HhMkflvfbquLX5dg6wlfA==}

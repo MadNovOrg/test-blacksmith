@@ -62,7 +62,7 @@
     "@changesets/cli": "^2.27.1",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@fastify/autoload": "~5.7.1",
+    "@fastify/autoload": "~5.8.2",
     "@fastify/sensible": "~5.6.0",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@hookform/resolvers": "^3.1.0",
