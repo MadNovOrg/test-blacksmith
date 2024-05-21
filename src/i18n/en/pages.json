@@ -609,9 +609,11 @@
         "title": "Grading",
         "grading-details-confirmation": {
           "description": "As the course is now complete, grading must be submitted in order for the attendees to receive a certificate.",
+          "block-course-overivew-changes-info": "Please note, you will be unable to make changes to your Course Overview beyond this stage.",
           "confirm-grading-criteria": "Confirm grading criteria",
           "confirm-modules-and-techniques": "Confirm the modules and techniques covered in the course",
-          "please-note-warning": "Please note, the attendees will only receive a certificate if awarded a pass grade.",
+          "please-note-warning-open-courses": "Please note, the attendees will only receive a certificate if awarded a pass grade.",
+          "please-note-warning-closed-indirect-courses": "The attendees will only receive a certificate if awarded a pass grade with their completed course evaluation.",
           "confirm-grade": "Confirm Grade"
         },
         "grade": "Grade",

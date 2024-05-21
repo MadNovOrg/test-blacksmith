@@ -3,11 +3,15 @@ import { t } from 'i18next'
 import React from 'react'
 import { PropsWithChildren } from 'react'
 
-import { Accreditors_Enum, Course } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import theme from '@app/theme'
 
 type Props = {
-  course: Pick<Course, 'accreditedBy'>
+  course: Pick<Course, 'accreditedBy' | 'type'>
 }
 
 const StyledList = styled('ol')(({ theme }) => ({
@@ -24,6 +28,7 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
   course,
   children,
 }) => {
+  const isOpenCourse = course.type === Course_Type_Enum.Open
   return (
     <Box
       maxWidth="sm"
@@ -38,6 +43,15 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
           'pages.course-details.tabs.grading.grading-details-confirmation.description'
         )}
       </StyledText>
+      {!isOpenCourse ? (
+        <StyledText variant="body1" fontWeight="600">
+          <br />
+          <br />
+          {t(
+            'pages.course-details.tabs.grading.grading-details-confirmation.block-course-overivew-changes-info'
+          )}
+        </StyledText>
+      ) : null}
       <StyledList>
         <li>
           <StyledText variant="body1" fontWeight="500">
@@ -58,7 +72,11 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
       </StyledList>
       <StyledText variant="body1" fontWeight="500">
         {t(
-          'pages.course-details.tabs.grading.grading-details-confirmation.please-note-warning'
+          `pages.course-details.tabs.grading.grading-details-confirmation.${
+            isOpenCourse
+              ? 'please-note-warning-open-courses'
+              : 'please-note-warning-closed-indirect-courses'
+          }`
         )}
       </StyledText>
       {children}
