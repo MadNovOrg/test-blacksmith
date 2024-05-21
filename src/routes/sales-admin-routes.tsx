@@ -139,6 +139,14 @@ const SalesAdminRoutes = () => {
           <Route index element={<Navigate replace to="details" />} />
           <Route path="details" element={<TrainerCourseDetails />} />
           <Route path="grading/:participantId" element={<ParticipantGrade />} />
+          <Route
+            path="transfer/:participantId"
+            element={<AdminTransferParticipantPage />}
+          >
+            <Route index element={<ChooseTransferCourse />} />
+            <Route path="details" element={<TransferDetails />} />
+            <Route path="review" element={<TransferReview />} />
+          </Route>
         </Route>
       </Route>
 
