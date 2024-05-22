@@ -21,6 +21,8 @@ import {
   CertificateStatus,
 } from '@app/generated/graphql'
 
+import { PROFILE_TABLE_ROW_SX } from '../common'
+
 type CertificationsTableProps = {
   verified: boolean
   certifications: GetProfileDetailsQuery['certificates']
@@ -76,11 +78,7 @@ export const CertificationsTable: FC<
                     <TableRow
                       data-testid={'certificate-' + certificate.number}
                       key={certificate.id}
-                      sx={{
-                        '&&.MuiTableRow-root': {
-                          backgroundColor: 'common.white',
-                        },
-                      }}
+                      sx={PROFILE_TABLE_ROW_SX}
                     >
                       <TableCell>{certificate.courseName}</TableCell>
                       <TableCell>{certificate.number}</TableCell>

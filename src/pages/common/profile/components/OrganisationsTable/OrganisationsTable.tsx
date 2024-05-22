@@ -12,9 +12,13 @@ import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
+
+import { PROFILE_TABLE_ROW_SX, PROFILE_TABLE_SX } from '../common'
+
 type OrganisationsTableProps = {
   profile: GetProfileDetailsQuery['profile']
 }
+
 export const OrganisationsTable: FC<
   PropsWithChildren<OrganisationsTableProps>
 > = ({ profile }) => {
@@ -24,18 +28,7 @@ export const OrganisationsTable: FC<
   return (
     <Table data-testid="organisations-table">
       <TableHead>
-        <TableRow
-          sx={{
-            '&&.MuiTableRow-root': {
-              backgroundColor: 'grey.300',
-            },
-            '&& .MuiTableCell-root': {
-              py: 1,
-              color: 'grey.700',
-              fontWeight: '600',
-            },
-          }}
-        >
+        <TableRow sx={PROFILE_TABLE_SX}>
           {tableHeadCells.map(cell => (
             <TableCell key={cell}>{cell}</TableCell>
           ))}
@@ -44,14 +37,7 @@ export const OrganisationsTable: FC<
       <TableBody>
         {profile?.organizations.length ? (
           profile.organizations.map((orgMember, index) => (
-            <TableRow
-              key={orgMember.id + index}
-              sx={{
-                '&&.MuiTableRow-root': {
-                  backgroundColor: 'common.white',
-                },
-              }}
-            >
+            <TableRow key={orgMember.id + index} sx={PROFILE_TABLE_ROW_SX}>
               <TableCell>
                 {acl.isInternalUser() ? (
                   <Link href={`/organisations/${orgMember.organization.id}`}>
@@ -75,13 +61,7 @@ export const OrganisationsTable: FC<
             </TableRow>
           ))
         ) : (
-          <TableRow
-            sx={{
-              '&&.MuiTableRow-root': {
-                backgroundColor: 'common.white',
-              },
-            }}
-          >
+          <TableRow sx={PROFILE_TABLE_ROW_SX}>
             <TableCell colSpan={4} sx={{ textAlign: 'center' }}>
               {t('pages.my-profile.user-is-not-assigned-to-org')}
             </TableCell>

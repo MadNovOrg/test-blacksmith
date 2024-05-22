@@ -4,91 +4,59 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Link,
+  TableSortLabel,
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseStatusChip } from '@app/components/CourseStatusChip'
-import {
-  Course_Status_Enum,
-  Course_Trainer_Type_Enum,
-  GetProfileDetailsQuery,
-} from '@app/generated/graphql'
-import { CourseTrainerType, NonNullish } from '@app/types'
+import { GetProfileDetailsQuery } from '@app/generated/graphql'
+import { NonNullish } from '@app/types'
+
+import { PROFILE_TABLE_SX } from '../common'
+
+import { CourseTrainerRow } from './components/CourseTrainerRow'
+import { useSortedCourseAsTrainerData } from './hooks/useSortedCourseAsTrainerData'
 
 type Props = {
   profile: NonNullish<GetProfileDetailsQuery['profile']>
 }
 
-const trainerTypeLabelMap: Record<CourseTrainerType, string> = {
-  [Course_Trainer_Type_Enum.Assistant]: 'assist-trainer',
-  [Course_Trainer_Type_Enum.Leader]: 'lead-trainer',
-  [Course_Trainer_Type_Enum.Moderator]: 'moderator',
-}
-
 export const CourseAsTrainer: React.FC<React.PropsWithChildren<Props>> = ({
   profile,
 }) => {
+  const { sortOrder, handleSortToggle, sortedCourses } =
+    useSortedCourseAsTrainerData({ profile })
   const { t } = useTranslation()
 
   return (
     <Table sx={{ mt: 1 }}>
       <TableHead>
-        <TableRow
-          sx={{
-            '&&.MuiTableRow-root': {
-              backgroundColor: 'grey.300',
-            },
-            '&& .MuiTableCell-root': {
-              py: 1,
-              color: 'grey.700',
-              fontWeight: '600',
-            },
-          }}
-        >
+        <TableRow sx={PROFILE_TABLE_SX}>
           <TableCell>{t('course-name')}</TableCell>
-          <TableCell>{t('date')}</TableCell>
           <TableCell>{t('training-level')}</TableCell>
           <TableCell>{t('course-status')}</TableCell>
+          <TableCell>
+            <TableSortLabel
+              active
+              direction={sortOrder}
+              onClick={handleSortToggle}
+            >
+              {t('date')}
+            </TableSortLabel>
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {profile.courseAsTrainer?.map(row => {
-          return (
-            <TableRow
-              key={row.id}
-              sx={{
-                '&&.MuiTableRow-root': {
-                  backgroundColor: 'common.white',
-                },
-              }}
-            >
-              <TableCell>
-                <Link href={`/courses/${row.course.id}/details`}>
-                  {row.course.course_code}
-                </Link>
-              </TableCell>
-              <TableCell>
-                {t('dates.defaultShort', {
-                  date: row.course.dates.aggregate?.end?.date,
-                })}
-              </TableCell>
-              <TableCell>
-                {t(
-                  `components.trainer-avatar-group.${
-                    trainerTypeLabelMap[row.type]
-                  }`
-                )}
-              </TableCell>
-              <TableCell>
-                <CourseStatusChip
-                  status={row.course.status as Course_Status_Enum}
-                />
-              </TableCell>
-            </TableRow>
-          )
-        })}
+        {sortedCourses.map(row => (
+          <CourseTrainerRow
+            key={row.id}
+            courseCode={row.course.course_code ?? ''}
+            courseId={row.course_id}
+            courseStartDate={row.course.dates.aggregate?.start?.date ?? ''}
+            courseStatus={row.course.status}
+            trainingLevel={row.type ?? ''}
+          />
+        ))}
       </TableBody>
     </Table>
   )
