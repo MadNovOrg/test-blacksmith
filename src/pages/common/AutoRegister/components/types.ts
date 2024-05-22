@@ -11,6 +11,7 @@ export type FormInputs = {
   country: string
   countryCode: string
   phone: string
+  phoneCountryCode: string
   password: string
   dob: Date | null
   tcs: boolean
@@ -35,6 +36,8 @@ export const getFormSchema = (t: TFunction) => {
     countryCode: yup.string().nonNullable().required(),
 
     phone: schemas.phone(t),
+
+    phoneCountryCode: yup.string().optional(),
 
     dob: yup
       .date()

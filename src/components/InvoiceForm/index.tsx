@@ -144,9 +144,12 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             }}
             error={!!errors.invoiceDetails?.phone}
             helperText={errors.invoiceDetails?.phone?.message}
-            value={values.invoiceDetails?.phone || ''}
-            onChange={p =>
-              setValue('invoiceDetails.phone', p as string, {
+            value={{
+              phoneNumber: values.invoiceDetails?.phone ?? '',
+              countryCode: '',
+            }}
+            onChange={({ phoneNumber }) =>
+              setValue('invoiceDetails.phone', phoneNumber, {
                 shouldValidate: true,
               })
             }

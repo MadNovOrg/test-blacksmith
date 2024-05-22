@@ -156,6 +156,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - tags
         - title
@@ -188,6 +189,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - stripe_customer_id
         - tags
@@ -219,6 +221,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - tags
         - title
@@ -249,6 +252,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - tags
         - title
@@ -280,6 +284,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - stripe_customer_id
         - tags
@@ -313,6 +318,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - stripe_customer_id
         - tags
@@ -346,6 +352,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - stripe_customer_id
         - tags
@@ -378,6 +385,7 @@ select_permissions:
         - job_title
         - last_activity
         - original_record
+        - phoneCountryCode
         - preferences
         - tags
         - title

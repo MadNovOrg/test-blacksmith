@@ -51,7 +51,9 @@ import useWorldCountries, {
 import { ConfirmDialog, Dialog } from '@app/components/dialogs'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
-import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/components/PhoneNumberInput'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
@@ -264,6 +266,7 @@ export const EditProfilePage: React.FC<
           })
         ),
         phone: schemas.phone(t),
+        phoneCountryCode: yup.string().optional(),
         dob: yup
           .date()
           .nullable()
@@ -307,6 +310,7 @@ export const EditProfilePage: React.FC<
       surname: '',
       countryCode: '',
       phone: '',
+      phoneCountryCode: DEFAULT_PHONE_COUNTRY,
       dob: null,
       jobTitle: '',
       disabilities: null,
@@ -367,6 +371,7 @@ export const EditProfilePage: React.FC<
       setValue('org', [])
       setValue('country', profile.country ?? '')
       setValue('countryCode', profile.countryCode ?? '')
+      setValue('phoneCountryCode', profile.phoneCountryCode ?? '')
 
       if (isOtherJobTitle) {
         setValue('jobTitle', 'Other')
@@ -563,6 +568,7 @@ export const EditProfilePage: React.FC<
           dietaryRestrictions: data.dietaryRestrictions,
           country: data.country,
           countryCode: data.countryCode,
+          phoneCountryCode: data.phoneCountryCode ?? '',
         },
       })
 
@@ -943,9 +949,13 @@ export const EditProfilePage: React.FC<
                       variant="filled"
                       error={!!errors.phone}
                       helperText={errors.phone?.message}
-                      value={values.phone !== undefined ? values.phone : ''}
-                      onChange={p => {
-                        setValue('phone', p as string, { shouldValidate: true })
+                      value={{
+                        phoneNumber: values.phone ?? '',
+                        countryCode: values.phoneCountryCode ?? '',
+                      }}
+                      onChange={({ phoneNumber, countryCode }) => {
+                        setValue('phone', phoneNumber, { shouldValidate: true })
+                        setValue('phoneCountryCode', countryCode)
                       }}
                       fullWidth
                       required

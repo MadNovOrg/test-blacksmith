@@ -69,6 +69,7 @@ export const PROFILE = gql`
     updatedAt
     email
     phone
+    phoneCountryCode
     dob
     jobTitle
     lastActivity

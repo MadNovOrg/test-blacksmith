@@ -31,7 +31,9 @@ import useWorldCountries, {
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/components/PhoneNumberInput'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -96,6 +98,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     resolver: yupResolver(schema),
     defaultValues: {
       phone: '',
+      phoneCountryCode: DEFAULT_PHONE_COUNTRY,
     },
   })
 
@@ -111,6 +114,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       otherJobTitle,
       password,
       phone,
+      phoneCountryCode,
       surname,
       tcs,
     } = data
@@ -126,6 +130,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       orgId: data.organization?.id,
       password,
       phone,
+      phoneCountryCode,
     }
 
     await createUser(
@@ -281,10 +286,14 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
             error={!!errors.phone}
             helperText={errors.phone?.message}
-            value={values.phone}
-            onChange={p =>
-              setValue('phone', p as string, { shouldValidate: true })
-            }
+            value={{
+              phoneNumber: values.phone ?? '',
+              countryCode: values.phoneCountryCode ?? '',
+            }}
+            onChange={({ phoneNumber, countryCode }) => {
+              setValue('phone', phoneNumber, { shouldValidate: true })
+              setValue('phoneCountryCode', countryCode)
+            }}
             fullWidth
             required
           />

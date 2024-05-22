@@ -32,7 +32,9 @@ import useWorldCountries, {
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
@@ -89,6 +91,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       countryCode: 'GB-ENG',
       dob: undefined,
       phone: '',
+      phoneCountryCode: DEFAULT_PHONE_COUNTRY,
     },
   })
 
@@ -105,6 +108,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         givenName: data.firstName,
         familyName: data.surname,
         phone: data.phone,
+        phoneCountryCode: data.phoneCountryCode ?? '',
         dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
         acceptTnc: data.tcs,
         courseId,
@@ -161,302 +165,298 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   return (
-    <>
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-        autoComplete="off"
-        aria-autocomplete="none"
-        mt={3}
-        data-testid="signup-form"
-      >
-        <Typography variant="body1" mb={1} fontWeight="600">
-          {t('personal-details')}
-        </Typography>
-        <Grid container spacing={3} mb={3}>
-          <Grid item md={6} xs={12}>
-            <TextField
-              id="firstName"
-              label={t('first-name')}
-              variant="filled"
-              placeholder={t('first-name-placeholder')}
-              error={!!errors.firstName}
-              helperText={errors.firstName?.message}
-              {...register('firstName')}
-              inputProps={{ 'data-testid': 'input-first-name' }}
-              sx={{ bgcolor: 'grey.100' }}
-              autoFocus
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <TextField
-              id="surname"
-              label={t('surname')}
-              variant="filled"
-              placeholder={t('surname-placeholder')}
-              error={!!errors.surname}
-              helperText={errors.surname?.message}
-              {...register('surname')}
-              inputProps={{ 'data-testid': 'input-surname' }}
-              sx={{ bgcolor: 'grey.100' }}
-              fullWidth
-              required
-            />
-          </Grid>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      autoComplete="off"
+      aria-autocomplete="none"
+      mt={3}
+      data-testid="signup-form"
+    >
+      <Typography variant="body1" mb={1} fontWeight="600">
+        {t('personal-details')}
+      </Typography>
+      <Grid container spacing={3} mb={3}>
+        <Grid item md={6} xs={12}>
+          <TextField
+            id="firstName"
+            label={t('first-name')}
+            variant="filled"
+            placeholder={t('first-name-placeholder')}
+            error={!!errors.firstName}
+            helperText={errors.firstName?.message}
+            {...register('firstName')}
+            inputProps={{ 'data-testid': 'input-first-name' }}
+            sx={{ bgcolor: 'grey.100' }}
+            autoFocus
+            fullWidth
+            required
+          />
         </Grid>
-
-        <Box mb={3}>
+        <Grid item md={6} xs={12}>
           <TextField
-            id="email"
-            label={t('work-email')}
+            id="surname"
+            label={t('surname')}
             variant="filled"
-            placeholder={t('email-placeholder')}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            {...register('email')}
-            inputProps={{ 'data-testid': 'input-email' }}
+            placeholder={t('surname-placeholder')}
+            error={!!errors.surname}
+            helperText={errors.surname?.message}
+            {...register('surname')}
+            inputProps={{ 'data-testid': 'input-surname' }}
             sx={{ bgcolor: 'grey.100' }}
             fullWidth
             required
           />
-        </Box>
+        </Grid>
+      </Grid>
 
-        <Box mb={3}>
-          <TextField
-            id="signup-pass"
-            variant="filled"
-            type={showPassword ? 'text' : 'password'}
-            label={t('pages.signup.pass-label')}
-            placeholder={t('pages.signup.pass-placeholder')}
-            error={!!errors.password}
-            helperText={errors.password?.message || ''}
-            {...register('password')}
-            fullWidth
-            required
-            inputProps={{ 'data-testid': 'input-password' }}
-            sx={{ bgcolor: 'grey.100' }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={toggleShowPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Typography
-            variant="body1"
-            sx={{ fontSize: '.75rem', color: 'grey' }}
-            data-testid="password-hint-message"
-          >
-            {t('common.validation-hints.password-hint-message')}
-          </Typography>
-        </Box>
-
-        <Box mb={3}>
-          <CountriesSelector
-            onChange={(_, code) => {
-              if (code) {
-                setValue(
-                  'country',
-                  getCountryLabel(code as WorldCountriesCodes) ?? ''
-                )
-                setValue('countryCode', code)
-              }
-            }}
-            value={values.countryCode}
-          />
-        </Box>
-
-        <Box mb={3}>
-          <PhoneNumberInput
-            label={t('phone')}
-            variant="filled"
-            sx={{ bgcolor: 'grey.100' }}
-            inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
-            error={!!errors.phone}
-            helperText={errors.phone?.message}
-            value={values.phone}
-            onChange={p =>
-              setValue('phone', p as string, { shouldValidate: true })
-            }
-            fullWidth
-            required
-          />
-        </Box>
-
-        <Box sx={{ mb: 3 }}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Controller
-              name="dob"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  label={t('dob')}
-                  format={INPUT_DATE_FORMAT}
-                  value={field.value}
-                  onChange={(d: Date | null) => setValue('dob', d)}
-                  maxDate={minimalAge}
-                  slotProps={{
-                    textField: {
-                      variant: 'filled',
-                      // @ts-expect-error no arbitrary props are allowed by types, which is wrong
-                      'data-testid': 'dob-input',
-                      fullWidth: true,
-                      sx: { bgcolor: 'grey.100' },
-                      error: !!errors.dob,
-                      helperText: errors.dob?.message,
-                      required: true,
-                    },
-                  }}
-                />
-              )}
-            />
-          </LocalizationProvider>
-        </Box>
-
-        <OrgSelector
+      <Box mb={3}>
+        <TextField
+          id="email"
+          label={t('work-email')}
+          variant="filled"
+          placeholder={t('email-placeholder')}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          {...register('email')}
+          inputProps={{ 'data-testid': 'input-email' }}
+          sx={{ bgcolor: 'grey.100' }}
+          fullWidth
           required
-          {...register('organization')}
-          allowAdding={false}
-          autocompleteMode={false}
-          showTrainerOrgOnly={false}
-          error={errors.organization?.message}
-          value={values.organization ?? undefined}
-          countryCode={values.countryCode}
-          onChange={orgSelectorOnChange}
-          textFieldProps={{
-            variant: 'filled',
+        />
+      </Box>
+
+      <Box mb={3}>
+        <TextField
+          id="signup-pass"
+          variant="filled"
+          type={showPassword ? 'text' : 'password'}
+          label={t('pages.signup.pass-label')}
+          placeholder={t('pages.signup.pass-placeholder')}
+          error={!!errors.password}
+          helperText={errors.password?.message || ''}
+          {...register('password')}
+          fullWidth
+          required
+          inputProps={{ 'data-testid': 'input-password' }}
+          sx={{ bgcolor: 'grey.100' }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={toggleShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
           }}
-          sx={{ mb: 3 }}
-          isShallowRetrieval
-          canSearchByAddress={false}
-          searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
-          placeholder={
-            isSearchOnlyByPostCodeEnabled
-              ? undefined
-              : t('components.org-selector.post-code-and-name-placeholder')
+        />
+        <Typography
+          variant="body1"
+          sx={{ fontSize: '.75rem', color: 'grey' }}
+          data-testid="password-hint-message"
+        >
+          {t('common.validation-hints.password-hint-message')}
+        </Typography>
+      </Box>
+
+      <Box mb={3}>
+        <CountriesSelector
+          onChange={(_, code) => {
+            if (code) {
+              setValue(
+                'country',
+                getCountryLabel(code as WorldCountriesCodes) ?? ''
+              )
+              setValue('countryCode', code)
+            }
+          }}
+          value={values.countryCode}
+        />
+      </Box>
+
+      <Box mb={3}>
+        <PhoneNumberInput
+          label={t('phone')}
+          variant="filled"
+          sx={{ bgcolor: 'grey.100' }}
+          inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
+          error={!!errors.phone}
+          helperText={errors.phone?.message}
+          value={{
+            phoneNumber: values.phone ?? '',
+            countryCode: values.phoneCountryCode,
+          }}
+          onChange={({ phoneNumber, countryCode }) => {
+            setValue('phone', phoneNumber, { shouldValidate: true })
+            setValue('phoneCountryCode', countryCode)
+          }}
+          fullWidth
+          required
+        />
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Controller
+            name="dob"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                label={t('dob')}
+                format={INPUT_DATE_FORMAT}
+                value={field.value}
+                onChange={(d: Date | null) => setValue('dob', d)}
+                maxDate={minimalAge}
+                slotProps={{
+                  textField: {
+                    variant: 'filled',
+                    // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+                    'data-testid': 'dob-input',
+                    fullWidth: true,
+                    sx: { bgcolor: 'grey.100' },
+                    error: !!errors.dob,
+                    helperText: errors.dob?.message,
+                    required: true,
+                  },
+                }}
+              />
+            )}
+          />
+        </LocalizationProvider>
+      </Box>
+
+      <OrgSelector
+        required
+        {...register('organization')}
+        allowAdding={false}
+        autocompleteMode={false}
+        showTrainerOrgOnly={false}
+        error={errors.organization?.message}
+        value={values.organization ?? undefined}
+        countryCode={values.countryCode}
+        onChange={orgSelectorOnChange}
+        textFieldProps={{
+          variant: 'filled',
+        }}
+        sx={{ mb: 3 }}
+        isShallowRetrieval
+        canSearchByAddress={false}
+        searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+        placeholder={
+          isSearchOnlyByPostCodeEnabled
+            ? undefined
+            : t('components.org-selector.post-code-and-name-placeholder')
+        }
+        label={
+          isSearchOnlyByPostCodeEnabled
+            ? undefined
+            : t('components.org-selector.residing-org')
+        }
+      />
+
+      <Box>
+        <JobTitleSelector
+          errors={{
+            jobTitle: errors.jobTitle?.message,
+            otherJobTitle: errors.otherJobTitle?.message,
+          }}
+          register={{
+            jobTitle: { ...register('jobTitle') },
+            otherJobTitle: { ...register('otherJobTitle') },
+          }}
+          values={{ jobTitle: values.jobTitle }}
+        />
+      </Box>
+
+      <Box sx={{ my: 5 }}>
+        <Box sx={{ display: 'flex' }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register('tcs')}
+                data-testid="register-checkbox"
+                inputProps={{
+                  'aria-label': `T&Cs`,
+                }}
+              />
+            }
+            label={
+              <>
+                <Typography variant="body2">
+                  <Trans i18nKey="pages.signup.tcs-label">
+                    I accept the
+                    <a
+                      href={`${origin}/policies-procedures/terms-of-use/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('terms-of-use')} (${t(
+                        'opens-new-window'
+                      )})`}
+                    >
+                      Terms of Use
+                    </a>
+                    and agree to Team Teach processing my personal data in
+                    accordance with our
+                    <a
+                      href={`${origin}/policies-procedures/privacy-policy/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('privacy-policy')} (${t(
+                        'opens-new-window'
+                      )})`}
+                    >
+                      Privacy Policy
+                    </a>
+                  </Trans>
+                </Typography>
+                {errors.tcs ? (
+                  <FormHelperText error>{errors.tcs.message}</FormHelperText>
+                ) : null}
+              </>
+            }
+          />
+        </Box>
+      </Box>
+
+      <Box mb={5}>
+        <Recaptcha
+          action={RecaptchaActions.REGISTRATION}
+          onSuccess={token =>
+            setValue('recaptchaToken', token, { shouldValidate: true })
           }
-          label={
-            isSearchOnlyByPostCodeEnabled
-              ? undefined
-              : t('components.org-selector.residing-org')
+          onExpired={() =>
+            setValue('recaptchaToken', '', { shouldValidate: true })
           }
         />
 
-        <Box>
-          <JobTitleSelector
-            errors={{
-              jobTitle: errors.jobTitle?.message,
-              otherJobTitle: errors.otherJobTitle?.message,
-            }}
-            register={{
-              jobTitle: { ...register('jobTitle') },
-              otherJobTitle: { ...register('otherJobTitle') },
-            }}
-            values={{ jobTitle: values.jobTitle }}
-          />
-        </Box>
-
-        <Box sx={{ my: 5 }}>
-          <Box sx={{ display: 'flex' }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  {...register('tcs')}
-                  data-testid="register-checkbox"
-                  inputProps={{
-                    'aria-label': `T&Cs`,
-                  }}
-                />
-              }
-              label={
-                <>
-                  <Typography variant="body2">
-                    <Trans i18nKey="pages.signup.tcs-label">
-                      I accept the
-                      <a
-                        href={`${origin}/policies-procedures/terms-of-use/`}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${t('terms-of-use')} (${t(
-                          'opens-new-window'
-                        )})`}
-                      >
-                        Terms of Use
-                      </a>
-                      and agree to Team Teach processing my personal data in
-                      accordance with our
-                      <a
-                        href={`${origin}/policies-procedures/privacy-policy/`}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${t('privacy-policy')} (${t(
-                          'opens-new-window'
-                        )})`}
-                      >
-                        Privacy Policy
-                      </a>
-                    </Trans>
-                  </Typography>
-                  {errors.tcs ? (
-                    <FormHelperText error>{errors.tcs.message}</FormHelperText>
-                  ) : null}
-                </>
-              }
-            />
-          </Box>
-        </Box>
-
-        <Box mb={5}>
-          <Recaptcha
-            action={RecaptchaActions.REGISTRATION}
-            onSuccess={token =>
-              setValue('recaptchaToken', token, { shouldValidate: true })
-            }
-            onExpired={() =>
-              setValue('recaptchaToken', '', { shouldValidate: true })
-            }
-          />
-
-          {errors.recaptchaToken?.message ? (
-            <FormHelperText error>
-              {errors.recaptchaToken.message}
-            </FormHelperText>
-          ) : null}
-        </Box>
-
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <LoadingButton
-            loading={loading}
-            type="submit"
-            variant="contained"
-            color="primary"
-            data-testid="signup-form-btn"
-            size="large"
-          >
-            {t('pages.signup.submit-btn')}
-          </LoadingButton>
-
-          {signUpError ? (
-            <FormHelperText
-              sx={{ mt: 2 }}
-              error
-              data-testid="signup-form-error"
-            >
-              {signUpError}
-            </FormHelperText>
-          ) : null}
-        </Box>
+        {errors.recaptchaToken?.message ? (
+          <FormHelperText error>{errors.recaptchaToken.message}</FormHelperText>
+        ) : null}
       </Box>
-    </>
+
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <LoadingButton
+          loading={loading}
+          type="submit"
+          variant="contained"
+          color="primary"
+          data-testid="signup-form-btn"
+          size="large"
+        >
+          {t('pages.signup.submit-btn')}
+        </LoadingButton>
+
+        {signUpError ? (
+          <FormHelperText sx={{ mt: 2 }} error data-testid="signup-form-error">
+            {signUpError}
+          </FormHelperText>
+        ) : null}
+      </Box>
+    </Box>
   )
 }

@@ -25,7 +25,9 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
-import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileMutation,
@@ -57,6 +59,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
     country: yup.string().required(),
     countryCode: yup.string().required(),
     phone: schemas.phone(_t),
+    phoneCountryCode: yup.string().optional(),
     dob: yup
       .date()
       .nullable()
@@ -95,6 +98,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           : null),
         country: getCountryLabel('GB-ENG'),
         countryCode: 'GB-ENG',
+        phoneCountryCode: profile?.phoneCountryCode ?? DEFAULT_PHONE_COUNTRY,
       },
     })
 
@@ -119,6 +123,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         givenName: data.givenName,
         dob: data.dob.toDateString(), // not an ISO, we are not storing timezone info
         phone: data.phone,
+        phoneCountryCode: data.phoneCountryCode ?? '',
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
         orgId: data.organization.id,
@@ -220,10 +225,14 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
               error={Boolean(errors.phone)}
               helperText={errors.phone?.message}
-              value={values.phone ?? ''}
-              onChange={p =>
-                setValue('phone', p as string, { shouldValidate: true })
-              }
+              value={{
+                phoneNumber: values.phone ?? '',
+                countryCode: values.phoneCountryCode ?? '',
+              }}
+              onChange={({ phoneNumber, countryCode }) => {
+                setValue('phone', phoneNumber, { shouldValidate: true })
+                setValue('phoneCountryCode', countryCode)
+              }}
               autoFocus
               fullWidth
               required

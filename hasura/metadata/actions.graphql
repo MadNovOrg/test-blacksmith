@@ -589,6 +589,7 @@ input CreateAppUserInput {
   country: String!
   countryCode: String!
   phone: String
+  phoneCountryCode: String
   dob: String
   acceptTnc: Boolean!
   jobTitle: String!
@@ -691,6 +692,7 @@ input UpdateUserProfileInput {
   dietaryRestrictions: String
   disabilities: String
   orgId: String
+  phoneCountryCode: String
 }
 
 input NotifyCourseInput {
@@ -726,6 +728,7 @@ input SignUpInput {
   country: String!
   countryCode: String!
   phone: String
+  phoneCountryCode: String
   dob: date
   courseId: Int
   quantity: Int

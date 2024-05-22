@@ -210,6 +210,7 @@ export type Profile = {
   familyName: string
   fullName: string
   phone: string
+  phoneCountryCode?: string
   dob: string
   jobTitle: string
   avatar: string
