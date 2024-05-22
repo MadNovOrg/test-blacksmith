@@ -405,10 +405,16 @@ export const CourseEvaluation = () => {
                       <TextField
                         sx={{ bgcolor: 'common.white', mt: 1 }}
                         variant="filled"
+                        multiline
+                        minRows={3}
+                        style={{
+                          resize: 'none',
+                          overflow: 'hidden',
+                        }}
                         placeholder={t('course-evaluation.your-response')}
                         inputProps={
                           q.questionKey === 'ATTENDEE_ADDITIONAL_COMMENTS'
-                            ? { maxLength: 300, sx: { px: 1, py: 1.5 } }
+                            ? { maxLength: 300, sx: { px: 1, py: 1.5, pt: 0 } }
                             : {}
                         }
                         {...register(q.id)}
