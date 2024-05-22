@@ -7,19 +7,19 @@ import { DateCell } from '@app/components/DateCell/DateCell'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum, TrainerCoursesQuery } from '@app/generated/graphql'
-import { Course_Invite_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  TrainerCoursesQuery,
+  Course_Invite_Status_Enum,
+} from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
 import { AcceptDeclineCourse, Trainer } from '../AcceptDeclineCourse'
-import {
-  CoursesTable,
-  CourseTitleCell,
-  VenueCell,
-  TableCourse,
-} from '../CoursesTable'
+import { CoursesTable } from '../CoursesTable'
+import { CourseTitleCell, VenueCell } from '../CoursesTable/components'
+import { TableCourse } from '../CoursesTable/types'
 
 type ActionableCoursesTableProps = {
   actionableCourses: TrainerCoursesQuery
