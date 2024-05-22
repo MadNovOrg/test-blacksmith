@@ -24,6 +24,7 @@ import { noop } from 'ts-essentials'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Level_Enum,
@@ -79,6 +80,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   allowCourseEditWithoutScheduledPrice = noop,
 }) => {
   const { t } = useTranslation()
+  const { acl, profile } = useAuth()
   const { isUKCountry } = useWorldCountries()
   const { methods } = useCourseCreationFormSchema({
     courseInput,
@@ -92,6 +94,10 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   // - Closed course ICM residing country https://behaviourhub.atlassian.net/browse/TTHP-3529
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
     'open-icm-course-international-finance'
+  )
+
+  const internationalIndirectEnabled = !!useFeatureFlagEnabled(
+    'international-indirect'
   )
 
   const isInternationalFinanceEnabled = useMemo(
@@ -239,14 +245,19 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     maxParticipants: values.maxParticipants,
   })
 
+  const courseResidingCountry =
+    internationalIndirectEnabled && acl.isTrainer() && profile?.countryCode
+      ? profile?.countryCode
+      : Countries_Code.DEFAULT_RESIDING_COUNTRY
+
   useEffectOnce(() => {
     setValue(
       'residingCountry',
-      courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+      courseInput?.residingCountry ?? courseResidingCountry
     )
 
     const UKcountry = isUKCountry(
-      courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+      courseInput?.residingCountry ?? courseResidingCountry
     )
 
     if (isCreation && UKcountry) {

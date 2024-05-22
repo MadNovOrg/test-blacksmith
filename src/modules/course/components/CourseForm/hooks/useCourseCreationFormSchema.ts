@@ -46,7 +46,7 @@ export const useCourseCreationFormSchema = ({
   trainerRatioNotMet,
 }: Props) => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const { countriesCodesWithUKs, isUKCountry } = useWorldCountries()
 
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
@@ -55,6 +55,10 @@ export const useCourseCreationFormSchema = ({
 
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
+  )
+
+  const internationalIndirectEnabled = !!useFeatureFlagEnabled(
+    'international-indirect'
   )
 
   const isInternationalFinanceEnabled = useMemo(
@@ -70,6 +74,12 @@ export const useCourseCreationFormSchema = ({
   const isCourseInUK = isUKCountry(
     courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
   )
+
+  const residingCountry = internationalIndirectEnabled
+    ? acl.isTrainer() && profile?.countryCode
+      ? profile?.countryCode
+      : Countries_Code.DEFAULT_RESIDING_COUNTRY
+    : Countries_Code.DEFAULT_RESIDING_COUNTRY
 
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isClosedCourse = courseType === Course_Type_Enum.Closed
@@ -345,7 +355,7 @@ export const useCourseCreationFormSchema = ({
             ? {
                 priceCurrency: yup.string().when('residingCountry', {
                   is: (residingCountry: WorldCountriesCodes) =>
-                    !isUKCountry(residingCountry),
+                    !isIndirectCourse && !isUKCountry(residingCountry),
                   then: schema =>
                     schema.required(requiredMsg(t, 'common.currency-word')),
                 }),
@@ -466,51 +476,50 @@ export const useCourseCreationFormSchema = ({
       renewalCycle: courseInput?.renewalCycle,
       ...(isResidingCountryEnabled
         ? {
-            residingCountry:
-              courseInput?.residingCountry ??
-              Countries_Code.DEFAULT_RESIDING_COUNTRY,
+            residingCountry: courseInput?.residingCountry ?? residingCountry,
           }
         : {}),
     }),
     [
-      courseInput?.accountCode,
       courseInput?.accreditedBy,
-      courseInput?.aolCountry,
-      courseInput?.aolRegion,
       courseInput?.arloReferenceId,
-      courseInput?.bildStrategies,
-      courseInput?.blendedLearning,
-      courseInput?.bookingContact,
-      courseInput?.conversion,
-      courseInput?.courseCost,
-      courseInput?.courseLevel,
-      courseInput?.deliveryType,
       courseInput?.displayOnWebsite,
-      courseInput?.endDateTime,
-      courseInput?.freeSpaces,
-      courseInput?.includeVAT,
-      courseInput?.maxParticipants,
-      courseInput?.minParticipants,
       courseInput?.organization,
-      courseInput?.organizationKeyContact,
-      courseInput?.parkingInstructions,
-      courseInput?.price,
-      courseInput?.priceCurrency,
-      courseInput?.reaccreditation,
-      courseInput?.renewalCycle,
-      courseInput?.residingCountry,
       courseInput?.salesRepresentative,
-      courseInput?.source,
-      courseInput?.specialInstructions,
-      courseInput?.startDateTime,
-      courseInput?.timeZone,
+      courseInput?.bookingContact,
+      courseInput?.organizationKeyContact,
+      courseInput?.courseLevel,
+      courseInput?.blendedLearning,
+      courseInput?.reaccreditation,
+      courseInput?.deliveryType,
       courseInput?.venue,
       courseInput?.zoomMeetingUrl,
       courseInput?.zoomProfileId,
+      courseInput?.startDateTime,
+      courseInput?.endDateTime,
+      courseInput?.minParticipants,
+      courseInput?.maxParticipants,
+      courseInput?.freeSpaces,
+      courseInput?.aolCountry,
+      courseInput?.aolRegion,
+      courseInput?.courseCost,
+      courseInput?.accountCode,
+      courseInput?.specialInstructions,
+      courseInput?.parkingInstructions,
+      courseInput?.source,
+      courseInput?.bildStrategies,
+      courseInput?.conversion,
+      courseInput?.price,
+      courseInput?.priceCurrency,
+      courseInput?.timeZone,
+      courseInput?.includeVAT,
+      courseInput?.renewalCycle,
+      courseInput?.residingCountry,
       courseType,
-      isResidingCountryEnabled,
-      isCourseInUK,
       isCreation,
+      isCourseInUK,
+      isResidingCountryEnabled,
+      residingCountry,
     ]
   )
 

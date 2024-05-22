@@ -120,8 +120,13 @@ export enum Countries_Code {
 export const changeCountryOnCourseLevelChange = (
   newCourseLevel: string,
   wasCountryAlreadyChanged: boolean,
+  trainerResidingCountry: string | undefined,
+  courseType: Course_Type_Enum,
   courseResidingCountry: string = Countries_Code.DEFAULT_RESIDING_COUNTRY
 ) => {
+  if (trainerResidingCountry && courseType === Course_Type_Enum.Indirect) {
+    return trainerResidingCountry
+  }
   if (wasCountryAlreadyChanged) return courseResidingCountry
 
   if (

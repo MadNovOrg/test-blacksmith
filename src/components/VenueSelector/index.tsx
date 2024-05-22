@@ -135,12 +135,7 @@ export const VenueSelector: React.FC<
     query: FIND_VENUES,
     variables: {
       query: `%${debouncedQuery}%`,
-      country: [
-        ...(courseResidingCountry
-          ? [courseResidingCountry ?? '']
-          : // for Indirect courses, we need to retun all results based on UK countries since there's no residing country yet
-            [...Object.keys(UKsCountriesCodes)]),
-      ],
+      country: [courseResidingCountry ?? ''],
     },
     pause: !debouncedQuery,
     requestPolicy: 'cache-and-network',

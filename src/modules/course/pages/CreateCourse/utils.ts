@@ -46,7 +46,7 @@ export const priceFieldIsMandatory = ({
 
   if (
     specialUKcountryCondition ||
-    !isUKcountry ||
+    (!isUKcountry && !isIndirectCourse) ||
     (isBILDcourse && !isIndirectCourse)
   ) {
     return true

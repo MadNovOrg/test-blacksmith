@@ -1,6 +1,7 @@
 import { fireEvent, renderHook } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
@@ -31,7 +32,11 @@ import {
   waitFor,
   waitForCalls,
 } from '@test/index'
-import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseSchedule,
+  buildVenue,
+} from '@test/mock-data-utils'
 
 import { CreateCourseForm } from '.'
 
@@ -44,6 +49,10 @@ vi.mock('@app/hooks/useZoomMeetingLink')
 vi.mock('@app/hooks/useCourseDraft')
 
 vi.mock('@app/hooks/useProfile')
+
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
+}))
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
@@ -65,6 +74,8 @@ describe('component: CreateCourseForm', () => {
   } = renderHook(() => useTranslation())
 
   beforeAll(() => {
+    useFeatureFlagEnabled('course-residing-country')
+    useFeatureFlagEnabled('international-indirect')
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
 
     useZoomMeetingUrlMocked.mockReturnValue({
@@ -422,6 +433,206 @@ describe('component: CreateCourseForm', () => {
 
       // ensure it succesfully navigates away to the next step
       expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('allows creating an ICM INDIRECT course outside of UK and not show price error banner', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+              timeZone: 'Australia/Adelaide',
+              venue: buildVenue({
+                overrides: {
+                  country: 'Australia',
+                  countryCode: 'AU',
+                },
+              }),
+            },
+          }),
+        ],
+        residingCountry: 'AU',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const healthLeaflet = screen.getByTestId('healthLeaflet')
+    const practiceProtocols = screen.getByTestId('practiceProtocols')
+    const validID = screen.getByTestId('validID')
+    const connectFee = screen.getByTestId('connectFee')
+    await userEvent.click(healthLeaflet)
+    await userEvent.click(practiceProtocols)
+    await userEvent.click(validID)
+    await userEvent.click(connectFee)
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('does not display AOL section if residing country is outside UK', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        residingCountry: 'AU',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    expect(
+      screen.queryByText('Area Operating License (AOL)')
+    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
+  })
+
+  it('AOL country is the same as course residing country', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    expect(
+      screen.queryByText('Area Operating License (AOL)')
+    ).toBeInTheDocument()
+    const aolCheckbox = screen.getByTestId('aol-checkbox')
+    await userEvent.click(aolCheckbox)
+
+    expect(
+      screen.getByTestId('course-aol-region-select-England')
+    ).toBeInTheDocument()
+
+    expect(screen.getByTestId('aol-country-selector')).toBeInTheDocument()
+
+    expect(screen.getByTestId('residing-country-selector')).toBeInTheDocument()
+    const countrySelectors = screen.getAllByTestId('countries-selector-input')
+
+    expect(countrySelectors.length).toEqual(2)
+
+    expect(countrySelectors[0].innerText).toEqual(countrySelectors[1].innerText)
+    countrySelectors.forEach(selector => {
+      expect(selector.innerHTML.includes('England'))
     })
   })
 
