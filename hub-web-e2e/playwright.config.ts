@@ -70,6 +70,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     timezoneId: 'UTC',
+    headless: true,
   },
   /* Run your local dev server before starting the tests */
   webServer: [

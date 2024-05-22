@@ -131,5 +131,5 @@ export const credentials = [
   { name: 'user1', role: 'Individual' },
   { name: 'userOrgAdmin', role: 'Individual' },
   { name: 'salesAdmin', role: 'Sales administrator' },
-  { name: 'ttOrgAdmin', role: 'Individual' },
+  // { name: 'ttOrgAdmin', role: 'Individual' },
 ] as const satisfies { name: StoredCredentialKey; role: string }[]
