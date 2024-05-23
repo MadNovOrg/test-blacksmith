@@ -22,6 +22,7 @@ export const TRANSFER_PARTICIPANT_DETAILS = gql`
       reaccreditation
       priceCurrency
       deliveryType
+      residingCountry
       dates: schedule_aggregate {
         aggregate {
           start: min {

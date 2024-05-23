@@ -159,7 +159,7 @@ export const CourseBookingDetails: React.FC<
     course?.type === Course_Type_Enum.Open &&
     course?.level === Course_Level_Enum.Level_1 &&
     course?.deliveryType === Course_Delivery_Type_Enum.Virtual &&
-    isUKCountry(course?.residingCountry ?? UKsCodes['GB-ENG'])
+    isUKCountry(course?.residingCountry ?? UKsCodes.GB_ENG)
 
   const schema = useMemo(() => {
     return yup.object({

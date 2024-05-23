@@ -7,8 +7,10 @@ import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
+import { UKsCodes } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   CourseDeliveryType,
+  CourseLevel,
   CourseType,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
@@ -17,7 +19,14 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 
-import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
+import {
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { EligibleCourse } from '../../types'
 import {
@@ -694,5 +703,496 @@ describe('page: TransferDetails', () => {
         true
       )}"`
     )
+  })
+
+  it(`display postal address fields when transfer to UK Virtual course`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      end: addDays(new Date(), 1).toISOString(),
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      type: Course_Type_Enum.Open,
+      residingCountry: UKsCodes.GB_ENG,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      deliveryType: CourseDeliveryType.Virtual,
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      level: CourseLevel.Level_1,
+      reaccreditation: false,
+      startDate: new Date().toISOString(),
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    expect(screen.getByLabelText(t('line1'))).toBeInTheDocument()
+    expect(screen.getByLabelText(t('line2'))).toBeInTheDocument()
+
+    expect(screen.getByLabelText(t('city'))).toBeInTheDocument()
+
+    expect(
+      screen.getByLabelText(
+        t('components.venue-selector.modal.fields.postCode')
+      )
+    ).toBeInTheDocument()
+
+    expect(screen.getByLabelText(t('country'))).toBeInTheDocument()
+  })
+
+  it(`enable review and confirm button when transfer to UK Virtual course on all fields filled`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      end: addDays(new Date(), 1).toISOString(),
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      type: Course_Type_Enum.Open,
+      residingCountry: UKsCodes.GB_ENG,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      deliveryType: CourseDeliveryType.Virtual,
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      level: CourseLevel.Level_1,
+      reaccreditation: false,
+      startDate: new Date().toISOString(),
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    const noFeeCheckbox = screen.getByLabelText(
+      t('components.fees-form.no-fee-option')
+    )
+    await userEvent.click(noFeeCheckbox)
+
+    const reason = screen.getByLabelText(
+      t('pages.edit-course.transfer.reason-for-transfer'),
+      { exact: false }
+    )
+    await userEvent.type(reason, 'Reason')
+
+    const line1 = screen.getByLabelText(t('line1'))
+    expect(line1).toBeInTheDocument()
+    await userEvent.type(line1, 'Line 1')
+
+    const line2 = screen.getByLabelText(t('line2'))
+    expect(line2).toBeInTheDocument()
+
+    const city = screen.getByLabelText(t('city'))
+    expect(city).toBeInTheDocument()
+    await userEvent.type(city, 'City')
+
+    const postCode = screen.getByLabelText(
+      t('components.venue-selector.modal.fields.postCode')
+    )
+    expect(postCode).toBeInTheDocument()
+    await userEvent.type(postCode, 'WC2N 5DU')
+
+    const countriesSelector = screen.getByTestId(
+      'countries-selector-autocomplete'
+    )
+    expect(countriesSelector).toBeInTheDocument()
+    countriesSelector.focus()
+
+    const textField = within(countriesSelector).getByTestId(
+      'countries-selector-input'
+    )
+    expect(textField).toBeInTheDocument()
+    await userEvent.type(textField, 'England')
+
+    const countryInUK = screen.getByTestId('country-GB-ENG')
+    expect(countryInUK).toBeInTheDocument()
+    await userEvent.click(countryInUK)
+
+    const reviewAndConfirmBtn = screen.getByTestId('review-and-confirm')
+    expect(reviewAndConfirmBtn).toBeEnabled()
+  })
+
+  it(`disable review and confirm button when transfer to UK Virtual course if postal address fields are not filled`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      end: addDays(new Date(), 1).toISOString(),
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      type: Course_Type_Enum.Open,
+      residingCountry: UKsCodes.GB_ENG,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      deliveryType: CourseDeliveryType.Virtual,
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      level: CourseLevel.Level_1,
+      reaccreditation: false,
+      startDate: new Date().toISOString(),
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    const noFeeCheckbox = screen.getByLabelText(
+      t('components.fees-form.no-fee-option')
+    )
+    await userEvent.click(noFeeCheckbox)
+
+    const reason = screen.getByLabelText(
+      t('pages.edit-course.transfer.reason-for-transfer'),
+      { exact: false }
+    )
+    await userEvent.type(reason, 'Reason')
+
+    const line1 = screen.getByLabelText(t('line1'))
+    expect(line1).toBeInTheDocument()
+
+    const line2 = screen.getByLabelText(t('line2'))
+    expect(line2).toBeInTheDocument()
+
+    const city = screen.getByLabelText(t('city'))
+    expect(city).toBeInTheDocument()
+
+    const postCode = screen.getByLabelText(
+      t('components.venue-selector.modal.fields.postCode')
+    )
+    expect(postCode).toBeInTheDocument()
+
+    const countriesSelector = screen.getByTestId(
+      'countries-selector-autocomplete'
+    )
+    expect(countriesSelector).toBeInTheDocument()
+    countriesSelector.focus()
+
+    const textField = within(countriesSelector).getByTestId(
+      'countries-selector-input'
+    )
+    expect(textField).toBeInTheDocument()
+
+    const reviewAndConfirmBtn = screen.getByTestId('review-and-confirm')
+    expect(reviewAndConfirmBtn).toBeDisabled()
+  })
+
+  it(`enable review and confirm button when transfer to UK F2F course`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      end: addDays(new Date(), 1).toISOString(),
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      type: Course_Type_Enum.Open,
+      residingCountry: UKsCodes.GB_ENG,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      deliveryType: CourseDeliveryType.F2F,
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      level: CourseLevel.Level_1,
+      reaccreditation: false,
+      startDate: new Date().toISOString(),
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    const noFeeCheckbox = screen.getByLabelText(
+      t('components.fees-form.no-fee-option')
+    )
+    await userEvent.click(noFeeCheckbox)
+
+    const reason = screen.getByLabelText(
+      t('pages.edit-course.transfer.reason-for-transfer'),
+      { exact: false }
+    )
+    await userEvent.type(reason, 'Reason')
+
+    const reviewAndConfirmBtn = screen.getByTestId('review-and-confirm')
+    expect(reviewAndConfirmBtn).toBeEnabled()
+  })
+
+  it(`do not display postal address fields when transfer to UK F2F course`, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      end: addDays(new Date(), 1).toISOString(),
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      type: Course_Type_Enum.Open,
+      residingCountry: UKsCodes.GB_ENG,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      deliveryType: CourseDeliveryType.F2F,
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      level: CourseLevel.Level_1,
+      reaccreditation: false,
+      startDate: new Date().toISOString(),
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
+    )
+
+    expect(screen.queryByLabelText(t('line1'))).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(t('line2'))).not.toBeInTheDocument()
+
+    expect(screen.queryByLabelText(t('city'))).not.toBeInTheDocument()
+
+    expect(
+      screen.queryByLabelText(
+        t('components.venue-selector.modal.fields.postCode')
+      )
+    ).not.toBeInTheDocument()
+
+    expect(screen.queryByLabelText(t('country'))).not.toBeInTheDocument()
   })
 })

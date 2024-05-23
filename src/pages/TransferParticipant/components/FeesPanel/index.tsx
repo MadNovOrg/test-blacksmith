@@ -1,8 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { Alert } from '@mui/material'
 import Box from '@mui/material/Box'
 import React, { memo, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import useWorldCountries, {
+  UKsCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { FeesForm } from '@app/components/FeesForm'
 import {
   schema as feesSchema,
@@ -49,16 +53,19 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
   mode = TransferModeEnum.ADMIN_TRANSFERS,
   courseToTransferTo,
 }) => {
-  const { t } = useScopedTranslation(
+  const { isUKCountry } = useWorldCountries()
+  const { t, _t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )
 
   const { fromCourse } = useTransferParticipantContext()
 
-  const isAddressRequired = isAddressInfoRequired({
-    fromCourse: fromCourse as unknown as TransferCourse,
-    toCourse: courseToTransferTo,
-  })
+  const isAddressRequired =
+    isUKCountry(fromCourse?.residingCountry ?? UKsCodes.GB_ENG) &&
+    isAddressInfoRequired({
+      fromCourse: fromCourse as unknown as TransferCourse,
+      toCourse: courseToTransferTo,
+    })
 
   const schema = () => {
     let combinedSchema = feesSchema
@@ -113,6 +120,15 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
           <Box mt={2}>
             <InfoPanel>
               <ParticipantPostalAddressForm />
+              <Alert
+                variant="filled"
+                color="info"
+                severity="info"
+                sx={{ mt: 2 }}
+              >
+                <b>{_t('important')}:</b>{' '}
+                {`${_t('pages.book-course.notice-participants')}`}
+              </Alert>
             </InfoPanel>
           </Box>
         ) : null}

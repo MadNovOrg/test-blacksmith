@@ -721,6 +721,11 @@ input ReplaceParticipantInput {
   inviteeEmail: String!
   inviteeFirstName: String!
   inviteeLastName: String!
+  inviteeAddressLine1: String
+  inviteeAddressLine2: String
+  inviteeCity: String
+  inviteePostCode: String
+  inviteeCountry: String
 }
 
 input TransferFee {

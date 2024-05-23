@@ -121,93 +121,91 @@ export const UserSelector: React.FC<
   }
 
   return (
-    <>
-      <Autocomplete
-        open={open && !disableSuggestions}
-        onOpen={() => setOpen(true)}
-        onClose={() => setOpen(false)}
-        data-testid="user-selector"
-        sx={sx}
-        openOnFocus
-        clearOnBlur={false}
-        onInputChange={onInputChange}
-        onChange={handleChange}
-        value={value ?? null}
-        options={emailOptions ?? []}
-        noOptionsText={noOptionsText}
-        loading={(q && !debouncedQuery) || loading}
-        disabled={disabled}
-        renderInput={params => (
-          <TextField
-            {...params}
-            onBlur={event => {
-              if (
-                onBlur &&
-                !data?.members.find(opt => {
-                  return opt.profile.email === value
-                })
-              ) {
-                onBlur(event)
-              }
-            }}
-            onChange={e => setQ(e.target.value)}
-            disabled={disabled}
-            required={required}
-            label={t('components.user-selector.placeholder')}
-            placeholder={t('components.user-selector.placeholder')}
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {disableSuggestions ? null : params.InputProps.endAdornment}
-                </React.Fragment>
-              ),
-            }}
-            error={!!error}
-            helperText={error || ''}
-            {...textFieldProps}
-          />
-        )}
-        renderOption={(props, email) => {
-          if (!email) return null
-          const profile = renderProfile(email)
+    <Autocomplete
+      open={open && !disableSuggestions}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      data-testid="user-selector"
+      sx={sx}
+      openOnFocus
+      clearOnBlur={false}
+      onInputChange={onInputChange}
+      onChange={handleChange}
+      value={value ?? null}
+      options={emailOptions ?? []}
+      noOptionsText={noOptionsText}
+      loading={(q && !debouncedQuery) || loading}
+      disabled={disabled}
+      renderInput={params => (
+        <TextField
+          {...params}
+          onBlur={event => {
+            if (
+              onBlur &&
+              !data?.members.find(opt => {
+                return opt.profile.email === value
+              })
+            ) {
+              onBlur(event)
+            }
+          }}
+          onChange={e => setQ(e.target.value)}
+          disabled={disabled}
+          required={required}
+          label={t('components.user-selector.placeholder')}
+          placeholder={t('components.user-selector.placeholder')}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {disableSuggestions ? null : params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+          error={!!error}
+          helperText={error || ''}
+          {...textFieldProps}
+        />
+      )}
+      renderOption={(props, email) => {
+        if (!email) return null
+        const profile = renderProfile(email)
 
-          return (
-            <Box
+        return (
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            px={2}
+            component="li"
+            {...props}
+            key={email}
+            data-testid={`profile-selector-result-${email}`}
+            onClick={() => {
+              onChange(
+                data?.members.find(o => o.profile.email === email)?.profile ??
+                  null
+              )
+              setOpen(false)
+            }}
+          >
+            <Typography
+              flex={1}
+              pr={2}
+              component="span"
               display="flex"
-              justifyContent="space-between"
-              px={2}
-              component="li"
-              {...props}
-              key={email}
-              data-testid={`profile-selector-result-${email}`}
-              onClick={() => {
-                onChange(
-                  data?.members.find(o => o.profile.email === email)?.profile ??
-                    null
-                )
-                setOpen(false)
-              }}
+              alignItems="center"
             >
-              <Typography
-                flex={1}
-                pr={2}
-                component="span"
-                display="flex"
-                alignItems="center"
-              >
-                <Typography variant="body2" color="grey.700" ml={1}>
-                  {profile}
-                </Typography>
+              <Typography variant="body2" color="grey.700" ml={1}>
+                {profile}
               </Typography>
-            </Box>
-          )
-        }}
-        {...props}
-      />
-    </>
+            </Typography>
+          </Box>
+        )
+      }}
+      {...props}
+    />
   )
 }

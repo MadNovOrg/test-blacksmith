@@ -4,10 +4,10 @@ import { useCallback, useMemo } from 'react'
 import countryList from 'react-select-country-list'
 
 export enum UKsCodes {
-  'GB-ENG' = 'GB-ENG',
-  'GB-NIR' = 'GB-NIR',
-  'GB-SCT' = 'GB-SCT',
-  'GB-WLS' = 'GB-WLS',
+  GB_ENG = 'GB-ENG',
+  GB_NIR = 'GB-NIR',
+  GB_SCT = 'GB-SCT',
+  GB_WLS = 'GB-WLS',
 }
 
 export const UKsCountriesCodes = {
