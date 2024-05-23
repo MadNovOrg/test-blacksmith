@@ -292,7 +292,13 @@ export const CourseBookingDetails: React.FC<
   const values = watch()
 
   const onSubmit = async (data: FormInputs) => {
-    const groupedParticipantsByEmail = groupBy(data.participants, 'email')
+    const groupedParticipantsByEmail = groupBy(
+      data.participants.map(participant => ({
+        ...participant,
+        email: participant.email.trim().toLowerCase(),
+      })),
+      'email'
+    )
     const duplicatesParticipantsEmail = filter(
       groupedParticipantsByEmail,
       groupedParticipantsByEmail => groupedParticipantsByEmail.length > 1
@@ -864,7 +870,11 @@ export const CourseBookingDetails: React.FC<
             const emailDuplicated =
               !!values.participants[index] &&
               !!emailValue &&
-              values.participants.filter(p => p.email === emailValue).length > 1
+              values.participants.filter(
+                p =>
+                  p.email.trim().toLocaleLowerCase() ===
+                  emailValue.trim().toLocaleLowerCase()
+              ).length > 1
             return (
               <Box key={`participant-${index}`} display="flex" gap={1}>
                 <Typography p={1}>{index + 1}</Typography>
