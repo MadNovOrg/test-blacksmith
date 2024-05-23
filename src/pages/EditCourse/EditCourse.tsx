@@ -152,6 +152,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { isUKCountry } = useWorldCountries()
 
   const course = courseInfo?.course
+
   const courseInput: CourseInput | undefined = useMemo(() => {
     return course ? courseToCourseInput(course) : undefined
   }, [course])
@@ -231,7 +232,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           newValue: [newStart, newEnd],
         })
 
-        approved = newStart > oldStart
+        approved = false
       }
     }
 
