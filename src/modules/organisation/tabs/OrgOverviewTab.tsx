@@ -10,7 +10,7 @@ import {
   Tab,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -56,18 +56,21 @@ const LEVELS_IN_ORDER = [
   CourseLevel.Level_1Bs,
   CourseLevel.Level_2,
   CourseLevel.FoundationTrainerPlus,
-  null,
-].sort()
+]
+
+const statuses = Object.values(CertificateStatus) as CertificateStatus[]
 
 export const OrgOverviewTab: React.FC<
   React.PropsWithChildren<OrgOverviewTabParams>
 > = ({ orgId }) => {
+  const [userByLevelSelectedTab, setUserByLevelSelectedTab] = useState<
+    CourseLevel | 'none'
+  >()
+
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
-  const [userByLevelSelectedTab, setUserByLevelSelectedTab] = useState<string>()
 
-  const statuses = Object.values(CertificateStatus) as CertificateStatus[]
   const [certificateStatus, setCertificateStatus] = useQueryParam(
     'status',
     withDefault(
@@ -84,6 +87,7 @@ export const OrgOverviewTab: React.FC<
     orgId,
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
+    withUpcomingEnrollmentsOnly: true,
   })
 
   const { data } = useOrgV2({
@@ -122,8 +126,11 @@ export const OrgOverviewTab: React.FC<
       UPCOMING_COURSES_LIMIT
     )
 
-  const defaultTab =
-    LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level))[0] ?? 'none'
+  const levelsToShow = useMemo(() => {
+    return LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level))
+  }, [profilesByLevel])
+
+  const defaultTab = levelsToShow[0] ?? 'none'
 
   useEffect(() => {
     if (userByLevelSelectedTab === undefined) {
@@ -131,13 +138,11 @@ export const OrgOverviewTab: React.FC<
     }
   }, [userByLevelSelectedTab, defaultTab, orgId, profilesByLevel])
 
-  let selectedTab = defaultTab
+  let selectedTab: CourseLevel | 'none' = defaultTab
   if (userByLevelSelectedTab) {
     const value =
-      userByLevelSelectedTab === 'none'
-        ? null
-        : (userByLevelSelectedTab as CourseLevel)
-    selectedTab = profilesByLevel.get(value)
+      userByLevelSelectedTab === 'none' ? null : userByLevelSelectedTab
+    selectedTab = profilesByLevel.get(value as CourseLevel)
       ? userByLevelSelectedTab
       : defaultTab
   }
@@ -146,7 +151,7 @@ export const OrgOverviewTab: React.FC<
     (status: CertificateStatus | null) => {
       if (status) {
         setCertificateStatus(currentStatuses => {
-          if (currentStatuses && currentStatuses.includes(status)) {
+          if (currentStatuses?.includes(status)) {
             return currentStatuses.filter(s => s !== status)
           } else {
             return [...(currentStatuses ?? []), status]
@@ -159,7 +164,9 @@ export const OrgOverviewTab: React.FC<
     [setCertificateStatus]
   )
 
-  if (coursesLoading || (profilesFetching && profilesByLevel.size < 1)) {
+  const shouldShowLoader = coursesLoading || profilesFetching
+
+  if (shouldShowLoader) {
     return (
       <Stack
         alignItems="center"
@@ -170,6 +177,7 @@ export const OrgOverviewTab: React.FC<
       </Stack>
     )
   }
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -212,22 +220,22 @@ export const OrgOverviewTab: React.FC<
               sx={{ mt: 2 }}
               variant="scrollable"
             >
-              {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
-                courseLevel => (
-                  <Tab
-                    key={courseLevel}
-                    label={t(
-                      `pages.org-details.tabs.overview.certificates.${
-                        courseLevel
-                          ? courseLevel.toLowerCase()
-                          : 'no-certification'
-                      }`,
-                      { count: profilesByLevel.get(courseLevel)?.length ?? 0 }
-                    )}
-                    value={courseLevel ?? 'none'}
-                  />
-                )
-              )}
+              {levelsToShow.map(courseLevel => (
+                <Tab
+                  key={courseLevel}
+                  label={t(
+                    `pages.org-details.tabs.overview.certificates.${
+                      courseLevel
+                        ? courseLevel.toLowerCase()
+                        : 'no-certification'
+                    }`,
+                    {
+                      count: profilesByLevel.get(courseLevel)?.length ?? 0,
+                    }
+                  )}
+                  value={courseLevel ?? 'none'}
+                />
+              ))}
             </TabList>
             {profilesFetching ? (
               <Stack
@@ -238,51 +246,43 @@ export const OrgOverviewTab: React.FC<
                 <CircularProgress />
               </Stack>
             ) : (
-              LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
-                courseLevel => (
-                  <TabPanel
-                    value={courseLevel ?? 'none'}
-                    key={courseLevel}
-                    sx={{ p: 0, overflowX: 'auto' }}
-                  >
-                    <IndividualsByLevelList
-                      profilesByLevel={
-                        profilesByLevel as Map<
-                          CourseLevel,
-                          OrganizationProfile[]
-                        >
-                      }
-                      orgId={orgId}
-                      courseLevel={courseLevel}
-                      certificateStatus={certificateStatus}
-                    />
-                  </TabPanel>
-                )
-              )
+              levelsToShow.map(courseLevel => (
+                <TabPanel
+                  value={courseLevel ?? 'none'}
+                  key={courseLevel}
+                  sx={{ p: 0, overflowX: 'auto' }}
+                >
+                  <IndividualsByLevelList
+                    profilesByLevel={
+                      profilesByLevel as Map<CourseLevel, OrganizationProfile[]>
+                    }
+                    orgId={orgId}
+                    courseLevel={courseLevel}
+                  />
+                </TabPanel>
+              ))
             )}
           </TabContext>
         )}
 
-        {orgId === ALL_ORGS ? (
-          profilesFetching ? null : (
-            <>
-              <Box display="flex" justifyContent="space-between" my={2}>
-                <Typography variant="h4">
-                  {t('pages.org-details.tabs.overview.organization-summary')}
-                </Typography>
-                <Button
-                  variant="outlined"
-                  onClick={() => navigate('/organisations/list')}
-                  data-testid="see-all-organisations"
-                >
-                  {t('pages.org-details.tabs.overview.see-all-organizations')}
-                </Button>
-              </Box>
+        {orgId === ALL_ORGS && !profilesFetching && (
+          <>
+            <Box display="flex" justifyContent="space-between" my={2}>
+              <Typography variant="h4">
+                {t('pages.org-details.tabs.overview.organization-summary')}
+              </Typography>
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/organisations/list')}
+                data-testid="see-all-organisations"
+              >
+                {t('pages.org-details.tabs.overview.see-all-organizations')}
+              </Button>
+            </Box>
 
-              <OrgSummaryList orgId={orgId} />
-            </>
-          )
-        ) : null}
+            <OrgSummaryList orgId={orgId} />
+          </>
+        )}
       </Grid>
 
       <Grid item xs={12} md={3} p={1} mt={2}>

@@ -9,6 +9,12 @@ import {
 } from '@app/generated/graphql'
 import { ALL_ORGS } from '@app/util'
 
+import {
+  filterOrganisationProfilesById,
+  filterProfilesByEnrollments,
+  profilesByLevelType,
+} from '../utils'
+
 export const GET_ORG_PROFILES = gql`
   query GetOrganizationProfiles($input: OrganizationProfilesInput!) {
     profiles: getOrganizationProfiles(input: $input) {
@@ -43,6 +49,10 @@ export const GET_ORG_PROFILES = gql`
             course {
               id
               course_code
+              schedule {
+                start
+                end
+              }
             }
           }
           organizations {
@@ -63,12 +73,14 @@ type UserOrgProfiles = {
   orgId: string
   profileId?: string
   showAll?: boolean
+  withUpcomingEnrollmentsOnly?: boolean
 }
 
 export const useOrganisationProfiles = ({
   orgId,
   profileId,
   showAll,
+  withUpcomingEnrollmentsOnly,
 }: UserOrgProfiles) => {
   const [params] = useSearchParams()
   const certificateFilter = params.getAll('status') as CertificateStatus[]
@@ -92,28 +104,48 @@ export const useOrganisationProfiles = ({
     reexecute()
   }, [useEffectDependency, reexecute])
 
+  const profilesByLvl = useMemo(() => {
+    const profiles = new Map(
+      (data?.profiles?.profilesByLevel ?? []).map(profile => [
+        profile?.level,
+        profile?.profiles,
+      ])
+    )
+
+    if (withUpcomingEnrollmentsOnly)
+      return filterProfilesByEnrollments(profiles as profilesByLevelType)
+
+    return profiles
+  }, [data?.profiles?.profilesByLevel, withUpcomingEnrollmentsOnly])
+
+  const profilesByOrganisation = useMemo(() => {
+    const orgs = new Map(
+      data?.profiles?.profilesByOrganisation?.map(profile => [
+        profile?.orgId,
+        profile?.profiles,
+      ])
+    )
+
+    if (withUpcomingEnrollmentsOnly)
+      return filterOrganisationProfilesById(
+        orgs as profilesByLevelType,
+        profilesByLvl as profilesByLevelType
+      )
+
+    return orgs
+  }, [
+    data?.profiles?.profilesByOrganisation,
+    profilesByLvl,
+    withUpcomingEnrollmentsOnly,
+  ])
+
   return useMemo(
     () => ({
-      profilesByOrganisation: new Map(
-        data?.profiles?.profilesByOrganisation?.map(profile => [
-          profile?.orgId,
-          profile?.profiles,
-        ])
-      ),
-      profilesByLevel: new Map(
-        (data?.profiles?.profilesByLevel ?? []).map(profile => [
-          profile?.level,
-          profile?.profiles,
-        ])
-      ),
+      profilesByOrganisation: profilesByOrganisation,
+      profilesByLevel: profilesByLvl,
       error,
       fetching,
     }),
-    [
-      data?.profiles?.profilesByLevel,
-      data?.profiles?.profilesByOrganisation,
-      error,
-      fetching,
-    ]
+    [error, fetching, profilesByLvl, profilesByOrganisation]
   )
 }

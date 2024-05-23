@@ -3070,6 +3070,12 @@ export type EnqueuedStylesheet = EnqueuedAsset & Node & {
   version?: Maybe<Scalars['String']>;
 };
 
+export type EnrollmentCourseSchedule = {
+  __typename?: 'EnrollmentCourseSchedule';
+  end?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['String']>;
+};
+
 /** Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'. */
 export type Float_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['Float']>;
@@ -9820,6 +9826,7 @@ export type UpcomingEnrollmentCourse = {
   id?: Maybe<Scalars['uuid']>;
   level?: Maybe<CourseLevel>;
   name?: Maybe<Scalars['String']>;
+  schedule?: Maybe<Array<Maybe<EnrollmentCourseSchedule>>>;
   type?: Maybe<CourseType>;
 };
 

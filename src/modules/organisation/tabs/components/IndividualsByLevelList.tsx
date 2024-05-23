@@ -27,7 +27,6 @@ import { ALL_ORGS } from '@app/util'
 type IndividualsByLevelListParams = {
   orgId: string
   courseLevel: CourseLevel | null
-  certificateStatus: CertificateStatus[]
   profilesByLevel: Map<CourseLevel | null, OrganizationProfile[]>
 }
 const PER_PAGE = 5

@@ -29,6 +29,7 @@ export const OrgStatsTiles: React.FC<
     orgId,
     profileId: profile?.id,
     showAll: showAllOrgs,
+    withUpcomingEnrollmentsOnly: true,
   })
 
   const { data } = useOrgV2({
