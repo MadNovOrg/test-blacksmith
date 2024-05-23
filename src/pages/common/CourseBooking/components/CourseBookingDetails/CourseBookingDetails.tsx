@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import Big from 'big.js'
 import { utcToZonedTime } from 'date-fns-tz'
+import { groupBy, filter } from 'lodash'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -291,6 +292,15 @@ export const CourseBookingDetails: React.FC<
   const values = watch()
 
   const onSubmit = async (data: FormInputs) => {
+    const groupedParticipantsByEmail = groupBy(data.participants, 'email')
+    const duplicatesParticipantsEmail = filter(
+      groupedParticipantsByEmail,
+      groupedParticipantsByEmail => groupedParticipantsByEmail.length > 1
+    )
+
+    // Restrict if there are duplicated registrants
+    if (duplicatesParticipantsEmail.length) return
+
     setBooking(data)
     navigate('../review')
   }
