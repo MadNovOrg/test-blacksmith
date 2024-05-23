@@ -55,7 +55,7 @@ export const isOutsideOfNoticePeriod = (
 }
 
 export const isLeadTrainerInGracePeriod = (
-  courseData: Pick<CourseData, 'courseLevel'>,
+  courseData: Pick<CourseData, 'courseLevel' | 'type'>,
   trainers: TrainerData
 ) => {
   const leader = trainers.find(t => {
@@ -63,7 +63,9 @@ export const isLeadTrainerInGracePeriod = (
   })
   if (!leader) return false
   const allowedLevels =
-    REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseData.courseLevel]
+    REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseData.type][
+      courseData.courseLevel
+    ]
   const matchingLevels = (leader.levels ?? []).filter(
     l => allowedLevels.indexOf(l.courseLevel as Course_Level_Enum) != -1
   )

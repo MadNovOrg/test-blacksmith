@@ -328,6 +328,7 @@ insert_permissions:
         - organization_key_contact_profile_id
         - parking_instructions
         - reaccreditation
+        - renewal_cycle
         - residingCountry
         - special_instructions
         - updated_at

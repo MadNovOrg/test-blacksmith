@@ -38,7 +38,10 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
     'foundation-trainer-plus-course'
   )
-  const levelOneBSEnabled = useFeatureFlagEnabled('level-one-bs')
+  const levelOneBSEnabled = !!useFeatureFlagEnabled('level-one-bs')
+  const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
+    'international-indirect'
+  )
 
   useEffect(() => {
     onChangeRef.current = onChange
@@ -47,6 +50,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const levels = useMemo(
     () =>
       acl.allowedCourseLevels(
+        courseType,
         getLevels(courseType, courseAccreditor).filter(level => {
           if (
             !foundationTrainerPlusLevelEnabled &&
@@ -55,12 +59,13 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
           )
             return false
 
-          if (
-            !levelOneBSEnabled &&
-            typeof levelOneBSEnabled !== 'undefined' &&
+          const shouldNotIncludeLevelOneBS =
+            (!levelOneBSEnabled ||
+              (!isInternationalIndirectEnabled &&
+                courseType === Course_Type_Enum.Indirect)) &&
             level === Course_Level_Enum.Level_1Bs
-          )
-            return false
+
+          if (shouldNotIncludeLevelOneBS) return false
 
           return true
         })
@@ -71,6 +76,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       courseAccreditor,
       foundationTrainerPlusLevelEnabled,
       levelOneBSEnabled,
+      isInternationalIndirectEnabled,
     ]
   )
 

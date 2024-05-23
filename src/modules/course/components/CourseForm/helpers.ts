@@ -85,6 +85,7 @@ export function getLevels(
     [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Indirect}`]: () => {
       return [
         Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.Advanced,
       ]
@@ -115,33 +116,6 @@ export function getLevels(
 export enum Countries_Code {
   DEFAULT_RESIDING_COUNTRY = 'GB-ENG',
   IRELAND = 'IE',
-}
-
-export const changeCountryOnCourseLevelChange = (
-  newCourseLevel: string,
-  wasCountryAlreadyChanged: boolean,
-  trainerResidingCountry: string | undefined,
-  courseType: Course_Type_Enum,
-  courseResidingCountry: string = Countries_Code.DEFAULT_RESIDING_COUNTRY
-) => {
-  if (trainerResidingCountry && courseType === Course_Type_Enum.Indirect) {
-    return trainerResidingCountry
-  }
-  if (wasCountryAlreadyChanged) return courseResidingCountry
-
-  if (
-    courseResidingCountry !== Countries_Code.DEFAULT_RESIDING_COUNTRY &&
-    newCourseLevel === Course_Level_Enum.Level_1Bs
-  )
-    return courseResidingCountry
-
-  if (
-    newCourseLevel === Course_Level_Enum.FoundationTrainerPlus ||
-    newCourseLevel === Course_Level_Enum.Level_1Bs
-  )
-    return Countries_Code.IRELAND
-
-  return Countries_Code.DEFAULT_RESIDING_COUNTRY
 }
 
 export function canBeBlendedBild(
@@ -357,17 +331,25 @@ export function canBeReacc(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Level_1Bs,
+        ]
         return levels.includes(courseLevel)
       }
 
       if (isMixed) {
-        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Level_1Bs,
+        ]
         return levels.includes(courseLevel)
       }
 
       if (isVirtual) {
-        const levels = [Course_Level_Enum.Level_1]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_1Bs]
         return levels.includes(courseLevel)
       }
 
@@ -464,6 +446,7 @@ export function canBeF2F(
 
       const levels = [
         Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.Advanced,
       ]
@@ -505,7 +488,11 @@ export function canBeMixed(
     [Course_Type_Enum.Indirect]: () => {
       if (!courseLevel) return false
 
-      const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
+      const levels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
+      ]
       return levels.includes(courseLevel)
     },
   }

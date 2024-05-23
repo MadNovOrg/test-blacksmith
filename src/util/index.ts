@@ -829,15 +829,7 @@ export function expiryDateWithGracePeriod(
 export const DEFAULT_PAGINATION_LIMIT = 12
 export const DEFAULT_PAGINATION_ROW_OPTIONS = [12, 24, 50, 100]
 
-/*
- * Map of required certificate for leading a certain course level.
- * key -> desired course level
- * value -> array of possible certificates that will meet the requirement
- *
- * Example: For leading Advanced Modules course you have to have either
- *          Advanced Trainer certificate OR BILD Advanced Trainer.
- */
-export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
+const DEFAULT_TRAINER_CERTIFICATES_FOR_LEVEL = {
   [Course_Level_Enum.Advanced]: [
     Course_Level_Enum.AdvancedTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
@@ -885,6 +877,29 @@ export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
     Course_Level_Enum.AdvancedTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
   ],
+}
+
+/*
+ * Map of required certificate for leading a certain course level.
+ * course type -> key -> desired course level
+ * value -> array of possible certificates that will meet the requirement
+ *
+ * Example: For leading Advanced Modules course you have to have either
+ *          Advanced Trainer certificate OR BILD Advanced Trainer.
+ */
+export const REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL = {
+  [Course_Type_Enum.Open]: DEFAULT_TRAINER_CERTIFICATES_FOR_LEVEL,
+  [Course_Type_Enum.Indirect]: {
+    ...DEFAULT_TRAINER_CERTIFICATES_FOR_LEVEL,
+    [Course_Level_Enum.Level_1Bs]: [
+      Course_Level_Enum.IntermediateTrainer,
+      Course_Level_Enum.BildIntermediateTrainer,
+      Course_Level_Enum.AdvancedTrainer,
+      Course_Level_Enum.BildAdvancedTrainer,
+      Course_Level_Enum.FoundationTrainerPlus,
+    ],
+  },
+  [Course_Type_Enum.Closed]: DEFAULT_TRAINER_CERTIFICATES_FOR_LEVEL,
 }
 
 export const customFeeFormat = (num: number) => {

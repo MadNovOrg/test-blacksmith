@@ -7,7 +7,7 @@ import {
 } from '@app/generated/graphql'
 import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
 import { CourseForm } from '@app/modules/course/components/CourseForm'
-import { RoleName } from '@app/types'
+import { Profile, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
@@ -69,12 +69,14 @@ export async function selectBildCategory() {
 export const renderForm = (
   type: Course_Type_Enum,
   certificateLevel: Course_Level_Enum = Course_Level_Enum.IntermediateTrainer,
-  role: RoleName = RoleName.USER
+  role: RoleName = RoleName.USER,
+  profile?: Partial<Profile>
 ) => {
   return render(<CourseForm type={type} />, {
     auth: {
       activeCertificates: [certificateLevel],
       activeRole: role,
+      profile,
     },
   })
 }

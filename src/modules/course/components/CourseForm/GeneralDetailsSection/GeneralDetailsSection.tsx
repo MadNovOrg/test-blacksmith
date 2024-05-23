@@ -42,7 +42,7 @@ import { type DisabledFields } from '..'
 import { InstructionAccordionField } from '../components/AccordionTextField'
 import { CourseLevelDropdown } from '../components/CourseLevelDropdown'
 import { StrategyToggles } from '../components/StrategyToggles/StrategyToggles'
-import { changeCountryOnCourseLevelChange } from '../helpers'
+import { useCourseFormEffects } from '../hooks/useCourseFormEffects'
 import { useCoursePermissions } from '../hooks/useCoursePermissions'
 import { useSpecialInstructions } from '../hooks/useSpecialInstructions'
 
@@ -58,7 +58,7 @@ export const GeneralDetailsSection = ({
   disabledFields,
   isCreation,
 }: Props) => {
-  const { acl, profile } = useAuth()
+  const { acl } = useAuth()
   const theme = useTheme()
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
   const {
@@ -67,25 +67,25 @@ export const GeneralDetailsSection = ({
     setValue,
     trigger,
     resetField,
-    formState: { errors, dirtyFields },
+    formState: { errors },
   } = useFormContext<CourseInput>()
+  const { changeCountryOnCourseLevelChange } = useCourseFormEffects()
   const { t, _t } = useScopedTranslation('components.course-form')
   const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
     'foundation-trainer-plus-course'
   )
   const levelOneBSEnabled = useFeatureFlagEnabled('level-one-bs')
 
-  const BSor3DaySRTenabled =
+  const BSor3DaySRTEnabled =
     foundationTrainerPlusLevelEnabled || levelOneBSEnabled
   const isResidingCountryEnabled = !!useFeatureFlagEnabled(
     'course-residing-country'
   )
 
-  const internationalIndirectEnabled = !!useFeatureFlagEnabled(
+  const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
     'international-indirect'
   )
 
-  const wasDefaultResidingCountryChanged = !!dirtyFields.residingCountry
   const courseType = useWatch({ control, name: 'type' }) as Course_Type_Enum
   const accreditedBy = useWatch({ control, name: 'accreditedBy' })
   const residingCountry = useWatch({ control, name: 'residingCountry' })
@@ -110,8 +110,16 @@ export const GeneralDetailsSection = ({
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
-  const usesAOL =
-    useWatch({ control, name: 'usesAOL' }) && isIndirectCourse && !isBild
+  const shouldShowAOL =
+    isIndirectCourse &&
+    isUKCountry(residingCountry) &&
+    !isBild &&
+    courseLevel !== Course_Level_Enum.Level_1Bs
+  const usesAOL = useWatch({ control, name: 'usesAOL' }) && shouldShowAOL
+
+  const shouldShowCountrySelector =
+    isResidingCountryEnabled &&
+    (isOpenCourse || (isIndirectCourse && isInternationalIndirectEnabled))
 
   const {
     canBlended,
@@ -148,27 +156,18 @@ export const GeneralDetailsSection = ({
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
 
-  const viewAOLSection = useMemo(() => {
-    return isIndirectCourse && isUKCountry(residingCountry) && !isBild
-  }, [isBild, isIndirectCourse, isUKCountry, residingCountry])
-
   const disableBlended = useMemo(() => {
     return (
       isIndirectCourse &&
-      internationalIndirectEnabled &&
+      isInternationalIndirectEnabled &&
       !isUKCountry(residingCountry)
     )
   }, [
-    internationalIndirectEnabled,
+    isInternationalIndirectEnabled,
     isIndirectCourse,
     isUKCountry,
     residingCountry,
   ])
-
-  const enableResidingCountry =
-    isResidingCountryEnabled &&
-    !isBild &&
-    (isIndirectCourse ? internationalIndirectEnabled : true)
 
   useEffect(() => {
     const mustChange = !canBlended && blendedLearning
@@ -197,12 +196,6 @@ export const GeneralDetailsSection = ({
       })
     }
   }, [canMixed, deliveryType, resetSpecialInstructionsToDefault, setValue])
-
-  const trainerResidingCountry = useMemo(() => {
-    return internationalIndirectEnabled && acl.isTrainer()
-      ? profile?.countryCode
-      : undefined
-  }, [acl, internationalIndirectEnabled, profile?.countryCode])
 
   const handleResidingCountryChange = (code: string) => {
     setValue('residingCountry', code, {
@@ -289,13 +282,9 @@ export const GeneralDetailsSection = ({
           </FormControl>
         ) : null}
 
-        {viewAOLSection ? (
+        {shouldShowAOL ? (
           <>
-            <Typography
-              mt={2}
-              fontWeight={600}
-              color={isBild ? 'text.disabled' : undefined}
-            >
+            <Typography mt={2} fontWeight={600}>
               {t('aol-title')}
             </Typography>
             <Alert severity="info" sx={{ mt: 1 }}>
@@ -332,7 +321,7 @@ export const GeneralDetailsSection = ({
                       data-testid="aol-country-selector"
                     >
                       {isResidingCountryEnabled &&
-                      internationalIndirectEnabled ? (
+                      isInternationalIndirectEnabled ? (
                         <CountriesSelector
                           required
                           onChange={(_, code) => {
@@ -377,7 +366,7 @@ export const GeneralDetailsSection = ({
                         usesAOL={usesAOL}
                         country={
                           (isResidingCountryEnabled &&
-                          internationalIndirectEnabled
+                          isInternationalIndirectEnabled
                             ? getCountryLabel(aolCountry)
                             : aolCountry) ?? ''
                         }
@@ -440,14 +429,11 @@ export const GeneralDetailsSection = ({
                   if (newCourseLevel === courseLevel) return
 
                   field.onChange(event)
-                  BSor3DaySRTenabled &&
+                  BSor3DaySRTEnabled &&
                     setValue(
                       'residingCountry',
                       changeCountryOnCourseLevelChange(
                         newCourseLevel,
-                        wasDefaultResidingCountryChanged,
-                        trainerResidingCountry,
-                        courseType,
                         residingCountry
                       )
                     )
@@ -604,7 +590,7 @@ export const GeneralDetailsSection = ({
           </Alert>
         ) : null}
 
-        {enableResidingCountry ? (
+        {shouldShowCountrySelector ? (
           <FormControl
             fullWidth
             sx={{ my: theme.spacing(2) }}
@@ -684,7 +670,7 @@ export const GeneralDetailsSection = ({
             isBILDcourse={isBild}
             courseType={courseType}
             courseResidingCountry={
-              isIndirectCourse && !internationalIndirectEnabled
+              isIndirectCourse && !isInternationalIndirectEnabled
                 ? 'GB-ENG'
                 : residingCountry
             }

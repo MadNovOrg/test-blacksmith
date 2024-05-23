@@ -2854,7 +2854,9 @@ describe(getACL.name, () => {
         activeRole: undefined,
       })
 
-      expect(acl.allowedCourseLevels(allLevels)).toEqual([])
+      expect(acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels)).toEqual(
+        []
+      )
     })
 
     it.each([RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN])(
@@ -2864,7 +2866,9 @@ describe(getACL.name, () => {
           activeRole,
         })
 
-        expect(acl.allowedCourseLevels(allLevels)).toEqual(allLevels)
+        expect(
+          acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels)
+        ).toEqual(allLevels)
       }
     )
 
@@ -2876,14 +2880,16 @@ describe(getACL.name, () => {
           activeCertificates: [activeCertificate],
         })
         const expected = Object.keys(
-          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[Course_Type_Enum.Open]
         ).filter(courseLevel =>
-          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[Course_Type_Enum.Open][
             courseLevel as Course_Level_Enum
           ].includes(activeCertificate)
         )
 
-        expect(acl.allowedCourseLevels(allLevels)).toEqual(expected)
+        expect(
+          acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels)
+        ).toEqual(expected)
       }
     )
   })

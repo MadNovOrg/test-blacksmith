@@ -367,8 +367,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return false
     },
 
-    // TODO RMX | Too chonky, revise this later
-    allowedCourseLevels: (levels: Course_Level_Enum[]) => {
+    allowedCourseLevels: (
+      courseType: Course_Type_Enum,
+      levels: Course_Level_Enum[]
+    ) => {
       if (!activeRole) {
         return []
       }
@@ -379,7 +381,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return levels.filter(courseLevel => {
         const allowedCertificates =
-          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseLevel]
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseType][courseLevel]
         return allowedCertificates.some(allowed =>
           activeCertificates.some(active => active === allowed)
         )
@@ -389,10 +391,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canCreateSomeCourseLevel: () => {
       const allowedICMLevels =
         acl.allowedCourseLevels(
+          Course_Type_Enum.Indirect,
           getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm)
         ).length > 0
       const allowedBILDLevels =
         acl.allowedCourseLevels(
+          Course_Type_Enum.Indirect,
           getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Bild)
         ).length > 0
 
