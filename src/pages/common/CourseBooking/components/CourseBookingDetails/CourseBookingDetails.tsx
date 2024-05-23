@@ -25,7 +25,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import CountriesSelector from '@app/components/CountriesSelector'
-import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import useWorldCountries, {
+  UKsCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
 import {
@@ -155,7 +157,8 @@ export const CourseBookingDetails: React.FC<
   const isAddressInfoRequired =
     course?.type === Course_Type_Enum.Open &&
     course?.level === Course_Level_Enum.Level_1 &&
-    course?.deliveryType === Course_Delivery_Type_Enum.Virtual
+    course?.deliveryType === Course_Delivery_Type_Enum.Virtual &&
+    isUKCountry(course?.residingCountry ?? UKsCodes['GB-ENG'])
 
   const schema = useMemo(() => {
     return yup.object({

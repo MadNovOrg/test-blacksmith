@@ -3,6 +3,13 @@ import { CountryCode as CountryISOCode } from 'libphonenumber-js'
 import { useCallback, useMemo } from 'react'
 import countryList from 'react-select-country-list'
 
+export enum UKsCodes {
+  'GB-ENG' = 'GB-ENG',
+  'GB-NIR' = 'GB-NIR',
+  'GB-SCT' = 'GB-SCT',
+  'GB-WLS' = 'GB-WLS',
+}
+
 export const UKsCountriesCodes = {
   'GB-ENG': 'England',
   'GB-NIR': 'Northern Ireland',
