@@ -56,7 +56,7 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
           if (row.__typename === 'course_participant') {
             return (
               <CourseParticipantRow
-                key={row.course.id}
+                key={row.id}
                 isInternalUser={isInternalUser}
                 courseInfo={{
                   courseId: row.course.id,
@@ -72,7 +72,7 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
           if (row.__typename === 'course_participant_audit') {
             return (
               <CourseParticipantAuditRow
-                key={row.course_id}
+                key={row.id}
                 isInternalUser={isInternalUser}
                 courseInfo={{
                   courseId: row.course_id,
