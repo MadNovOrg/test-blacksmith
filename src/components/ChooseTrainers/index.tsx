@@ -177,14 +177,16 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
     control: form.control,
   })
 
-  const { reset } = form
+  const { reset, setValue } = form
 
   useImperativeHandle(
     methodsRef,
     () => ({
       reset,
+      setValue,
+      formValues,
     }),
-    [reset]
+    [formValues, reset, setValue]
   )
 
   useEffect(() => {

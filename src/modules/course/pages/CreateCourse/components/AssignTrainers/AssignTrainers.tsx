@@ -10,7 +10,8 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { UseFormReset, UseFormSetValue } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -28,6 +29,7 @@ import {
   checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   CourseTrainer,
   InviteStatus,
@@ -134,10 +136,47 @@ export const AssignTrainers = () => {
   const [courseExceptions, setCourseExceptions] = useState<
     Course_Exception_Enum[]
   >([])
+  const methods = useRef<{
+    formValues: FormValues
+    reset: UseFormReset<FormValues>
+    setValue: UseFormSetValue<FormValues>
+  }>(null)
+
+  const needsModerator = useMemo(() => {
+    if (!courseData) return false
+
+    return isModeratorNeeded({
+      courseLevel: courseData.courseLevel,
+      courseType: courseData.type,
+      isReaccreditation: courseData.reaccreditation,
+      isConversion: courseData.conversion,
+    })
+  }, [courseData])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)
   }, [setCurrentStepKey])
+
+  useEffect(() => {
+    if (!needsModerator) {
+      if (
+        trainers.some(
+          trainer => trainer.type === Course_Trainer_Type_Enum.Moderator
+        ) &&
+        setTrainers
+      ) {
+        setTrainers(
+          trainers.filter(
+            trainer => trainer.type !== Course_Trainer_Type_Enum.Moderator
+          )
+        )
+      }
+
+      if (methods.current?.formValues.moderator.length) {
+        methods.current?.setValue('moderator', [], { shouldValidate: true })
+      }
+    }
+  }, [needsModerator, setTrainers, trainers])
 
   const handleTrainersDataChange = useCallback(
     (data: FormValues, isValid: boolean) => {
@@ -315,6 +354,7 @@ export const AssignTrainers = () => {
               courseData.bildStrategies
             ) as unknown as BildStrategy[]
           }
+          methodsRef={methods}
           useAOL={courseData.usesAOL}
         />
 
