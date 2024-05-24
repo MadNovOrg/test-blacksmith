@@ -154,7 +154,11 @@ describe('page: AutoRegister', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/auto-register?token=${chance.guid()}`] } // set token
+      {
+        initialEntries: [
+          `/auto-register?token=${chance.guid()}&orgId=${chance.guid()}`,
+        ],
+      } // set token
     )
 
     const suspenseLoadingSelector = screen.getByTestId('suspense-loading')
@@ -175,13 +179,15 @@ describe('page: AutoRegister', () => {
       loadProfile: loadProfileMock,
     } as unknown as AuthContextType)
 
+    const orgId = chance.guid()
+
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrgByIdQuery }>({
           data: {
             organization: [
               {
-                id: chance.guid(),
+                id: orgId,
                 name: orgName,
                 address: {},
               },
@@ -197,7 +203,11 @@ describe('page: AutoRegister', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/auto-register?token=${chance.guid()}`] }
+      {
+        initialEntries: [
+          `/auto-register?token=${chance.guid()}&orgId=${orgId}`,
+        ],
+      }
     )
 
     const autoRegisterFormSelector = screen.queryByTestId('auto-register-form')

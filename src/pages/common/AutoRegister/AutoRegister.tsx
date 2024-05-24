@@ -34,7 +34,7 @@ export const AutoRegisterPage: React.FC<
     {
       query: GET_ORG_BY_ID,
       variables: { id: orgId },
-      pause: !token && (!orgId || orgId !== ''),
+      pause: !token || !orgId || orgId === '',
       context: useMemo(
         () => ({
           fetchOptions: {
