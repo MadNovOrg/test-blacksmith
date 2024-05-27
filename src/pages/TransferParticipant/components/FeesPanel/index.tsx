@@ -120,6 +120,9 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
           <Box mt={2}>
             <InfoPanel>
               <ParticipantPostalAddressForm />
+              <Alert severity="info" variant="filled" sx={{ mt: 1 }}>
+                <b>{_t('important')}:</b> {`${_t('pages.book-course.notice')}`}
+              </Alert>
               <Alert
                 variant="filled"
                 color="info"

@@ -777,18 +777,25 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    expect(screen.getByLabelText(t('line1'))).toBeInTheDocument()
+    expect(
+      screen.getByLabelText(t('line1'), { exact: false })
+    ).toBeInTheDocument()
     expect(screen.getByLabelText(t('line2'))).toBeInTheDocument()
 
-    expect(screen.getByLabelText(t('city'))).toBeInTheDocument()
+    expect(
+      screen.getByLabelText(t('city'), { exact: false })
+    ).toBeInTheDocument()
 
     expect(
       screen.getByLabelText(
-        t('components.venue-selector.modal.fields.postCode')
+        t('components.venue-selector.modal.fields.postCode'),
+        { exact: false }
       )
     ).toBeInTheDocument()
 
-    expect(screen.getByLabelText(t('country'))).toBeInTheDocument()
+    expect(
+      screen.getByLabelText(t('country'), { exact: false })
+    ).toBeInTheDocument()
   })
 
   it(`enable review and confirm button when transfer to UK Virtual course on all fields filled`, async () => {
@@ -874,19 +881,20 @@ describe('page: TransferDetails', () => {
     )
     await userEvent.type(reason, 'Reason')
 
-    const line1 = screen.getByLabelText(t('line1'))
+    const line1 = screen.getByLabelText(t('line1'), { exact: false })
     expect(line1).toBeInTheDocument()
     await userEvent.type(line1, 'Line 1')
 
     const line2 = screen.getByLabelText(t('line2'))
     expect(line2).toBeInTheDocument()
 
-    const city = screen.getByLabelText(t('city'))
+    const city = screen.getByLabelText(t('city'), { exact: false })
     expect(city).toBeInTheDocument()
     await userEvent.type(city, 'City')
 
     const postCode = screen.getByLabelText(
-      t('components.venue-selector.modal.fields.postCode')
+      t('components.venue-selector.modal.fields.postCode'),
+      { exact: false }
     )
     expect(postCode).toBeInTheDocument()
     await userEvent.type(postCode, 'WC2N 5DU')
@@ -994,17 +1002,18 @@ describe('page: TransferDetails', () => {
     )
     await userEvent.type(reason, 'Reason')
 
-    const line1 = screen.getByLabelText(t('line1'))
+    const line1 = screen.getByLabelText(t('line1'), { exact: false })
     expect(line1).toBeInTheDocument()
 
     const line2 = screen.getByLabelText(t('line2'))
     expect(line2).toBeInTheDocument()
 
-    const city = screen.getByLabelText(t('city'))
+    const city = screen.getByLabelText(t('city'), { exact: false })
     expect(city).toBeInTheDocument()
 
     const postCode = screen.getByLabelText(
-      t('components.venue-selector.modal.fields.postCode')
+      t('components.venue-selector.modal.fields.postCode'),
+      { exact: false }
     )
     expect(postCode).toBeInTheDocument()
 
@@ -1182,17 +1191,24 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    expect(screen.queryByLabelText(t('line1'))).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText(t('line1'), { exact: false })
+    ).not.toBeInTheDocument()
     expect(screen.queryByLabelText(t('line2'))).not.toBeInTheDocument()
 
-    expect(screen.queryByLabelText(t('city'))).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText(t('city'), { exact: false })
+    ).not.toBeInTheDocument()
 
     expect(
       screen.queryByLabelText(
-        t('components.venue-selector.modal.fields.postCode')
+        t('components.venue-selector.modal.fields.postCode'),
+        { exact: false }
       )
     ).not.toBeInTheDocument()
 
-    expect(screen.queryByLabelText(t('country'))).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText(t('country'), { exact: false })
+    ).not.toBeInTheDocument()
   })
 })

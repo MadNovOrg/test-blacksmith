@@ -70,6 +70,7 @@ export const ParticipantPostalAddressForm = () => {
           helperText={errors.inviteeAddressLine1?.message}
           inputProps={{ 'data-testid': 'addr-line1' }}
           fullWidth
+          required
         />
       </Box>
       <Box mb={3}>
@@ -102,6 +103,7 @@ export const ParticipantPostalAddressForm = () => {
           helperText={errors.inviteeCity?.message}
           inputProps={{ 'data-testid': 'city' }}
           fullWidth
+          required
         />
       </Box>
       <Box mb={3}>
@@ -138,11 +140,13 @@ export const ParticipantPostalAddressForm = () => {
                 }
               : undefined
           }
+          required
         />
       </Box>
       <Box mb={3}>
         {residingCountryEnabled ? (
           <CountriesSelector
+            required
             error={Boolean(errors.inviteeCountry)}
             helperText={errors.inviteeCountry?.message}
             onChange={(_, code) => {

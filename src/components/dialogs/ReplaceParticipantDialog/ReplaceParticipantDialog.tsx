@@ -323,7 +323,14 @@ export const ReplaceParticipantDialog: React.FC<
             {isAddressRequired ? <ParticipantPostalAddressForm /> : null}
 
             <Alert severity="info" variant="outlined" sx={{ mt: 1 }}>
-              <Trans i18nKey="components.replace-participant.alert-message" />
+              {isAddressRequired ? (
+                <>
+                  <b>{_t('important')}:</b>{' '}
+                  {`${_t('pages.book-course.notice')}`}
+                </>
+              ) : (
+                <Trans i18nKey="components.replace-participant.alert-message" />
+              )}
             </Alert>
 
             {isAddressRequired ? (
