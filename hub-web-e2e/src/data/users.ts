@@ -57,6 +57,12 @@ export const users = {
     email: 'trainer02@teamteach.testinator.com',
     password: 'Test12345!',
   },
+  trainer5: {
+    givenName: 'Five',
+    familyName: 'Trainer',
+    email: 'trainer05@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
   assistant: {
     givenName: 'Liam',
     familyName: 'Assistant',

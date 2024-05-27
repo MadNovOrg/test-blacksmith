@@ -7,7 +7,7 @@ import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
-import { stateFilePath } from '@qa/util'
+import { StoredCredentialKey, stateFilePath } from '@qa/util'
 
 const allowedRoles = ['salesAdmin', 'ops', 'admin']
 
@@ -25,7 +25,7 @@ const test = base.extend<{ course: Course }>({
 test.describe.configure({ mode: 'parallel' })
 
 allowedRoles.forEach(role => {
-  test.use({ storageState: stateFilePath(role) })
+  test.use({ storageState: stateFilePath(role as StoredCredentialKey) })
 
   test(`cancel closed course as ${role} @smoke`, async ({ page, course }) => {
     const adminCoursesPage = new MyCoursesPage(page)

@@ -1,7 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
+import { t } from 'i18next'
 
 import { toAttendeesTableRow } from '@qa/data/mappings'
-import { User } from '@qa/data/types'
+import { Course, User } from '@qa/data/types'
 import { CourseHeader } from '@qa/fixtures/components/CourseHeader.fixture'
 import { UiTable } from '@qa/fixtures/components/UiTable.fixture'
 import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
@@ -278,5 +279,73 @@ export class CourseDetailsPage extends BasePage {
   async addAdditionalTrainer() {
     await this.searchTrainerInput.fill('trainer')
     await this.searchTrainerOption.first().click()
+  }
+
+  async checkClosedCourseCreatedSuccessfully(course: Course) {
+    //Check course trainers
+    course.trainers?.forEach(async t => {
+      await expect(this.page.getByText(t.profile.fullName)).toBeVisible()
+    })
+
+    //Check booking contact
+    if (course.bookingContactProfile) {
+      await expect(
+        this.page.getByText(course.bookingContactProfile?.email)
+      ).toBeVisible()
+    }
+
+    //Check organisation name
+    await expect(
+      this.page.getByText(`Hosted by ${course.organization?.name}`)
+    ).toBeVisible()
+
+    //Check max number of attendees
+    await expect(
+      this.page.getByText(`${course.max_participants} attending`)
+    ).toBeVisible()
+
+    //Check course level
+    const courseLevel = t(`common.course-levels.${course.level}`)
+    await expect(this.page.getByText(courseLevel)).toBeVisible()
+
+    //Check course code
+    if (course.course_code) {
+      await expect(this.page.getByText(course.course_code)).toBeVisible()
+    }
+
+    //Check venue name
+    course.schedule.forEach(async s => {
+      if (s.venue) {
+        await expect(this.page.getByText(s.venue?.name)).toBeVisible()
+      }
+    })
+  }
+
+  async checkOpenCourseCreatedSuccessfully(course: Course) {
+    //Check course trainers
+    course.trainers?.forEach(async t => {
+      await expect(this.page.getByText(t.profile.fullName)).toBeVisible()
+    })
+
+    //Check max number of attendees
+    await expect(
+      this.page.getByText(`${course.max_participants} attending`)
+    ).toBeVisible()
+
+    //Check course level
+    const courseLevel = t(`common.course-levels.${course.level}`)
+    await expect(this.page.getByText(courseLevel)).toBeVisible()
+
+    //Check course code
+    if (course.course_code) {
+      await expect(this.page.getByText(course.course_code)).toBeVisible()
+    }
+
+    //Check venue name
+    course.schedule.forEach(async s => {
+      if (s.venue) {
+        await expect(this.page.getByText(s.venue?.name)).toBeVisible()
+      }
+    })
   }
 }

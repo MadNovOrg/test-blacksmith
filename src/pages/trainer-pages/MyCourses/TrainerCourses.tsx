@@ -290,9 +290,9 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           (actionableCourses?.courses.length &&
             selectedTab === Tables.ACTIONABLE) ? (
             <Box mb={3} sx={{ overflowX: 'auto' }}>
-              <Typography variant="h6" mb={1}>
+              {/* <Typography variant="h6" mb={1}>
                 {t('pages.my-courses.actionable-courses-title')}
-              </Typography>
+              </Typography> */}
               <Box
                 px={1}
                 pb={1}

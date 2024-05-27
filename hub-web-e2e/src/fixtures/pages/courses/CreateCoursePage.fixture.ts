@@ -57,6 +57,7 @@ export class CreateCoursePage extends BasePage {
   readonly renewalCycle: Locator
   readonly proceedButton: Locator
   readonly autocompleteLoading: Locator
+  readonly priceInput: Locator
 
   constructor(page: Page) {
     super(page)
@@ -138,6 +139,7 @@ export class CreateCoursePage extends BasePage {
     this.orgKeyContactLastName = this.page.locator(
       'input[name="organizationKeyContact.lastName"]'
     )
+    this.priceInput = this.page.locator('[data-testid="price-input"]')
     this.renewalCycle = this.page.locator('[data-testid]="renewal-cycle"')
     this.saveChangesButton = this.page.locator('[data-testid="save-button"]')
     this.exceptionsConfirmButton = this.page.locator(
@@ -173,8 +175,9 @@ export class CreateCoursePage extends BasePage {
 
   async selectVenue(venue: string) {
     await this.venueInput.fill(venue)
-    await expect(this.autocompleteLoading).toHaveCount(0)
-    await this.organisationInput.click()
+    await this.page.waitForResponse(
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+    )
     await this.autocompleteOption.locator(`text=${venue}`).first().click()
   }
 
@@ -205,7 +208,13 @@ export class CreateCoursePage extends BasePage {
 
   async selectSalesPerson(name: string) {
     await this.salesPersonInput.fill(name)
-    await this.autocompleteOption.first().click()
+    await this.page.waitForResponse(
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+    )
+    await this.salesPersonInput.click()
+    await expect(this.autocompleteLoading).toHaveCount(0)
+    await this.page.keyboard.press('ArrowDown')
+    await this.page.keyboard.press('Enter')
   }
 
   async selectSource(source: Course_Source_Enum) {
@@ -233,6 +242,10 @@ export class CreateCoursePage extends BasePage {
 
   async setMaxAttendees(value: number) {
     await this.maxAttendeesInput.fill(value.toString())
+  }
+  async setPricePerAttendee() {
+    await this.priceInput.click()
+    await this.priceInput.type('500')
   }
 
   async clickSaveChangesButton() {
@@ -330,9 +343,10 @@ export class CreateCoursePage extends BasePage {
     }
 
     await this.selectCourseLevel(course.level)
+    await this.selectDeliveryType(course.deliveryType)
+
     if (course.go1Integration) await this.selectGo1()
     if (course.reaccreditation) await this.selectReaccreditation()
-    await this.selectDeliveryType(course.deliveryType)
     if (course.deliveryType !== Course_Delivery_Type_Enum.Virtual) {
       await this.selectVenue(course.schedule[0].venue?.name as string)
     }
@@ -354,6 +368,14 @@ export class CreateCoursePage extends BasePage {
     await this.setMaxAttendees(course.max_participants)
     if (course.type === Course_Type_Enum.Indirect) {
       await this.checkAcknowledgeCheckboxes()
+    }
+
+    if (
+      course.level === Course_Level_Enum.FoundationTrainerPlus ||
+      (course.type === Course_Type_Enum.Closed &&
+        course.level === Course_Level_Enum.Level_1Bs)
+    ) {
+      await this.setPricePerAttendee()
     }
 
     if (

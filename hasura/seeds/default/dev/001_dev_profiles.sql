@@ -111,6 +111,7 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', (SELECT id from role WHERE name = 'trainer')), -- trainer.with.org@teamteach.testinator.com
 ('bb5526c7-198c-4be5-a53a-1177f55c1c5b', (SELECT id from role WHERE name = 'trainer')), -- trainer.and.user@teamteach.testinator.com
 ('4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', (SELECT id from role WHERE name = 'trainer')), -- assistant@teamteach.testinator.com
+('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from role WHERE name = 'trainer')), -- assistant.with.org@teamteach.testinator.com
 ('6b72504a-6447-4b30-9909-e8e6fc1d300f', (SELECT id from role WHERE name = 'user')), -- user1@teamteach.testinator.com
 ('d394a9ff-7517-4e35-91aa-466f9d4c1b77', (SELECT id from role WHERE name = 'user')), -- user2@teamteach.testinator.com
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', (SELECT id from role WHERE name = 'user')), -- user1.with.org@teamteach.testinator.com
@@ -131,7 +132,22 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', (SELECT id from role WHERE name = 'trainer')), -- trainer09@teamteach.testinator.com
 ('b414536d-29dd-4902-81f9-e808503428ee', (SELECT id from role WHERE name = 'trainer')), -- trainer10@teamteach.testinator.com
 ('7a35d3ce-cc02-4a66-9446-16b6740bfb23', (SELECT id from role WHERE name = 'sales-admin')), -- sales.adm@teamteach.testinator.com
-('6987feba-0877-4a2a-b7da-982de1977eb3', (SELECT id from role WHERE name = 'ld')); -- ld@teamteach.testinator.com
+('7a35d3ce-cc02-4a66-9446-16b6740bfb23', (SELECT id from role WHERE name = 'sales-representative')), -- sales.adm@teamteach.testinator.com
+('6987feba-0877-4a2a-b7da-982de1977eb3', (SELECT id from role WHERE name = 'ld')), -- ld@teamteach.testinator.com
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'booking-contact'));
+
+INSERT INTO profile_trainer_role_type (profile_id, trainer_role_type_id) VALUES
+('13a223a8-2184-42f1-ba37-b49e115e59a2', (SELECT id from trainer_role_type WHERE name = 'principal')), -- trainer@teamteach.testinator.com
+('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from trainer_role_type WHERE name = 'principal')), -- assistant.with.org@teamteach.testinator.com
+('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', (SELECT id from trainer_role_type WHERE name = 'principal')), -- trainer05@teamteach.testinator.com
+
+('13a223a8-2184-42f1-ba37-b49e115e59a2', (SELECT id from trainer_role_type WHERE name = 'assistant')), -- trainer@teamteach.testinator.com
+('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from trainer_role_type WHERE name = 'assistant')), -- assistant.with.org@teamteach.testinator.com
+('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', (SELECT id from trainer_role_type WHERE name = 'assistant')), -- trainer05@teamteach.testinator.com
+
+('13a223a8-2184-42f1-ba37-b49e115e59a2', (SELECT id from trainer_role_type WHERE name = 'moderator')), -- trainer@teamteach.testinator.com
+('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from trainer_role_type WHERE name = 'moderator')), -- assistant.with.org@teamteach.testinator.com
+('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', (SELECT id from trainer_role_type WHERE name = 'moderator')); -- trainer05@teamteach.testinator.com
 
 INSERT INTO organization (id, name, original_record, address) VALUES
 ('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}', '{"line1": "Tankfield, Convent Hill", "line2": "Tramore", "city": "Waterford", "postCode": "X91 PV08"}'),

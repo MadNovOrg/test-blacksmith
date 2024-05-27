@@ -60,6 +60,7 @@ export class CourseOrderDetailsPage extends BasePage {
   }
 
   async clickReviewAndConfirmButton(): Promise<ReviewAndConfirmPage> {
+    await expect(this.reviewAndConfirmButton).toBeEnabled()
     await this.reviewAndConfirmButton.click()
     return new ReviewAndConfirmPage(this.page)
   }

@@ -30,9 +30,10 @@ INSERT INTO public.course_trainer (profile_id, course_id, type, status) VALUES
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10082, 'LEADER', 'ACCEPTED');
 
 
-INSERT INTO public.venue (id, name, city, address_line_one, address_line_two, post_code, geo_coordinates) VALUES
-('bd4e4af5-8822-485c-bf48-16fe0d50729b', 'Birchwood Academy', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point),
-('2fa3a402-3aa0-4d7a-bbf9-e3dda59cd18b', 'Queen Elizabeth II Centre', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point);
+INSERT INTO public.venue (id, name, city, address_line_one, address_line_two, post_code, geo_coordinates, country_code) VALUES
+('bd4e4af5-8822-485c-bf48-16fe0d50729b', 'Birchwood Academy', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point, 'GB-ENG'),
+('2fa3a402-3aa0-4d7a-bbf9-e3dda59cd18b', 'Queen Elizabeth II Centre', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point, 'GB-ENG'),
+('d7d8d368-6241-4fb2-94f3-f18b65f57a20', 'Ireland Vinayaka Temple', 'Dublin', 'Sylvan Drive', '', 'IR3LL', '(53.3067965,-6.3683589)'::point, 'IE');
 
 INSERT INTO public.course_schedule (start, "end", course_id, venue_id) VALUES
 (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month', 10000, 'bd4e4af5-8822-485c-bf48-16fe0d50729b'),

@@ -1000,6 +1000,20 @@ const MODULES_BY_LEVEL: Map<Course_Level_Enum, string[]> = new Map()
     'Physical Warm Up',
     'Personal Safety',
   ])
+  .set(Course_Level_Enum.IntermediateTrainer, [
+    'Theory',
+    'Personal Space & Body Language',
+    'Elevated Risks',
+    'Physical Warm Up',
+    'Personal Safety',
+  ])
+  .set(Course_Level_Enum.AdvancedTrainer, [
+    'Theory',
+    'Personal Space & Body Language',
+    'Elevated Risks',
+    'Physical Warm Up',
+    'Personal Safety',
+  ])
 
 export const getModulesByLevel: (level: Course_Level_Enum) => string[] = (
   level: Course_Level_Enum

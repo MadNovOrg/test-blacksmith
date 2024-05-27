@@ -1,7 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
-import { InviteStatus } from '@app/types'
 
 import { waitForGraphQLResponse } from '@qa/commands'
 import { mapCourseTypesToShort, toCourseTableRow } from '@qa/data/mappings'
@@ -79,6 +78,8 @@ export class MyCoursesPage extends BasePage {
       Course_Level_Enum.Level_1,
       Course_Level_Enum.Level_2,
       Course_Level_Enum.Advanced,
+      Course_Level_Enum.AdvancedTrainer,
+      Course_Level_Enum.IntermediateTrainer,
     ]
   ) {
     const tableRows = await this.coursesTable.getRows()
@@ -149,14 +150,13 @@ export class MyCoursesPage extends BasePage {
   async checkCourseWaitingApproval(courseId: number) {
     await expect(
       this.page.locator(
-        `[data-testid="actionable-course-${courseId}"] [data-testid="AcceptDeclineCourse-acceptBtn"]`
+        `[data-testid="actionable-courses-table"] [data-testid="actionable-course-${courseId}"]`
       )
     ).toBeVisible()
-
+  }
+  async checkAllCourses(courseId: number) {
     await expect(
-      this.page.locator(
-        `[data-testid="actionable-course-${courseId}"] [data-testid="AcceptDeclineCourse-declineBtn"]`
-      )
+      this.page.locator(`[data-testid=course-row-${courseId}]`)
     ).toBeVisible()
   }
 
@@ -170,11 +170,7 @@ export class MyCoursesPage extends BasePage {
 
   async goToCourseBuilder() {
     await Promise.all([
-      waitForGraphQLResponse(
-        this.page,
-        'update_course_trainer_by_pk',
-        `"status":"${InviteStatus.ACCEPTED}"`
-      ),
+      waitForGraphQLResponse(this.page, 'update_course_trainer_by_pk'),
       this.modalSubmitButton.click(),
     ])
   }
