@@ -1,15 +1,7 @@
 name: RELEASE PROD VERSION
 
-# This workflow is designed to be run after the changesets PR has been closed and
-# merged. It should not run for any other PR closure, and should not run if the changesets
-# PR is closed and dismissed without merging. This workflow fetches the version number
-# in package.json and creates a tag using it, then creates a release using that tag. This
-# release should then trigger `cd-prod.yml`
-
 on:
   pull_request:
-    branches:
-      - main
     types:
       - closed
 
@@ -19,30 +11,72 @@ permissions:
 
 jobs:
   fetch-version:
-    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) }}
+    if: ${{ github.event.pull_request.merged == true && ((startsWith(github.event.pull_request.head.ref, 'changeset-release/') && github.event.pull_request.base.ref == 'main') || (startsWith(github.event.pull_request.head.ref, 'hotfix/') && github.event.pull_request.base.ref == 'hotfix_release_branch')) }}
     name: Fetch Version
     runs-on: ubuntu-latest
     outputs:
       RELEASE_VERSION: ${{ steps.get.outputs.RELEASE_VERSION }}
+      RELEASE_TAG: ${{ steps.create_tag.outputs.RELEASE_TAG }}
     steps:
+      - name: Determine Checkout Ref
+        id: determine_checkout_ref
+        run: |
+          if [[ "${{ github.event.pull_request.base.ref }}" == "hotfix_release_branch" ]]; then
+            echo "CHECKOUT_REF=hotfix_release_branch" >> $GITHUB_ENV
+          else
+            echo "CHECKOUT_REF=${{ github.head_ref }}" >> $GITHUB_ENV
+          fi
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CHECKOUT_REF }}
       - name: Fetch Version
         id: get
         run: |
-          export RELEASE_VERSION=$(cat package.json | grep '"version":' | tr -d '"' | tr -d 'version: ' | tr -d ',')
-          echo $RELEASE_VERSION
+          RELEASE_VERSION=$(grep -oP '"version":\s*"\K[0-9]+\.[0-9]+\.[0-9]+' package.json)
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "::set-output name=RELEASE_VERSION::$RELEASE_VERSION"
       - name: Create Tag
+        id: create_tag
         run: |
-          git fetch
-          git checkout main
-          git tag RC-${{ env.RELEASE_VERSION }}
-          git push origin --tags
+          TAG_NAME="RC-${{ env.RELEASE_VERSION }}"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+          echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
+          echo "::set-output name=RELEASE_TAG::$TAG_NAME"
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: 'RC-${{ env.RELEASE_VERSION }}'
+          tag_name: ${{ steps.create_tag.outputs.RELEASE_TAG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  manage-hotfix-release-branch:
+    name: Manage Hotfix Release Branch
+    runs-on: ubuntu-latest
+    needs: fetch-version
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'changeset-release/') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Delete Existing hotfix_release_branch
+        run: |
+          git push origin --delete hotfix_release_branch || true
+      - name: Create hotfix_release_branch from Latest Tag
+        run: |
+          git fetch origin --tags
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          git checkout -b hotfix_release_branch $LATEST_TAG
+          git push origin hotfix_release_branch --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Protect hotfix_release_branch
+        run: |
+          curl -X PUT -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.luke-cage-preview+json" \
+            https://api.github.com/repos/${{ github.repository }}/branches/hotfix_release_branch/protection \
+            -d '{"required_status_checks":{"strict":true,"contexts":[]},"enforce_admins":true,"required_pull_request_reviews":{"dismiss_stale_reviews":true},"restrictions":null}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   prod-cd:
     name: PROD
