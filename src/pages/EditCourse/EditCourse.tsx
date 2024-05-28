@@ -93,6 +93,7 @@ import {
   generateCourseName,
   LoadingStatus,
   profileToInput,
+  UKTimezone,
 } from '@app/util'
 
 import { getCourseRenewalCycle } from '../../modules/course/pages/CreateCourse/utils'
@@ -493,8 +494,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             const payload = {
               oldStartDate: course.schedule[0].start,
               oldEndDate: course.schedule[0].end,
-              newStartDate: courseData.startDateTime.toISOString(),
-              newEndDate: courseData.endDateTime.toISOString(),
+              newStartDate: setDateTimeTimeZone(
+                courseData.startDateTime,
+                course.schedule[0].timeZone ?? UKTimezone
+              ),
+              newEndDate: setDateTimeTimeZone(
+                courseData.endDateTime,
+                course.schedule[0].timeZone ?? UKTimezone
+              ),
               reason: reviewInput?.reason ?? '',
               ...(course.type === Course_Type_Enum.Closed && reviewInput
                 ? {
