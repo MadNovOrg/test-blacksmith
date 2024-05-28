@@ -142,7 +142,13 @@ export default function useActionableCourses({
           status: { _eq: Course_Invite_Status_Enum.Pending },
           profile_id: { _eq: profile?.id },
         },
-        status: { _neq: Course_Status_Enum.ExceptionsApprovalPending },
+        status: {
+          _nin: [
+            Course_Status_Enum.Cancelled,
+            Course_Status_Enum.Declined,
+            Course_Status_Enum.ExceptionsApprovalPending,
+          ],
+        },
       })
     } else {
       conditions.push(statusCondition)
