@@ -15,7 +15,6 @@ import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
   Course_Type_Enum,
-  GetCourseInvitesQuery,
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -45,10 +44,6 @@ export const CourseAttendeesTab: React.FC<
       }
     | undefined
   >(undefined)
-
-  const [courseInvites, setCourseInvites] = useState<
-    GetCourseInvitesQuery['courseInvites']
-  >([])
   const { t } = useTranslation()
   const courseId = Number(id ?? 0)
 
@@ -63,14 +58,10 @@ export const CourseAttendeesTab: React.FC<
       ? { where: { order: { bookingContactProfileId: { _eq: profile?.id } } } }
       : {}),
   })
-
   const invites = useCourseInvites({
     courseId,
   })
-
-  useEffect(() => {
-    setCourseInvites(invites.data)
-  }, [invites, setCourseInvites])
+  const courseInvites = invites.data ?? []
 
   const pendingTotal = courseInvites.filter(
     ci => ci.status === Course_Invite_Status_Enum.Pending
@@ -173,7 +164,10 @@ export const CourseAttendeesTab: React.FC<
                 onSendingCourseInformation={success =>
                   setShowCourseInformationAlert({ success })
                 }
-                updateAttendeesHandler={mutateParticipants}
+                updateAttendeesHandler={() => {
+                  mutateParticipants({ requestPolicy: 'network-only' })
+                  invites.getInvites()
+                }}
               />
             </TabPanel>
             {!isOpenCourse

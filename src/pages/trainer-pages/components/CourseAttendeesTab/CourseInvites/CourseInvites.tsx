@@ -151,7 +151,9 @@ export const CourseInvites = ({
     try {
       setSaving(true)
       await invites.send([...emails, ...leftOvers])
-      invites.getInvites()
+      invites.getInvites({
+        requestPolicy: 'network-only',
+      })
       closeModal()
     } catch (err) {
       setSaving(false)
