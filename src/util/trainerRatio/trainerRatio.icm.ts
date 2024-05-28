@@ -59,7 +59,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
     }
 
     if (courseLevel === Advanced) {
-      return ratio(1, 8, 8)
+      return ratio(1, 16, 8)
     }
 
     if (courseLevel === Level_1Bs) {

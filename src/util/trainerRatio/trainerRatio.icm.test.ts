@@ -354,6 +354,59 @@ describe('getRequiredTrainersV2', () => {
     })
   })
 
+  it('test assist ratio value for Indirect Advanced Modules course', () => {
+    criteria.courseLevel = Course_Level_Enum.Advanced
+    criteria.type = Course_Type_Enum.Indirect
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 15,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 16,
+        })
+      )
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 }))
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+    ).toEqual({
+      min: 2,
+      max: 3,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+    ).toEqual({
+      min: 3,
+      max: 3,
+    })
+  })
+
   it('test assist ratio value for Advanced Trainer Closed Reaccreditation course', () => {
     criteria.courseLevel = Course_Level_Enum.AdvancedTrainer
     criteria.type = Course_Type_Enum.Closed
