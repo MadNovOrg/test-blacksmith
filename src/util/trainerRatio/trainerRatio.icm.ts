@@ -6,7 +6,7 @@ import {
 
 import { RequiredTrainers } from './types'
 
-const { Indirect, Open } = Course_Type_Enum
+const { Indirect, Open, Closed } = Course_Type_Enum
 
 const {
   Advanced,
@@ -77,7 +77,11 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
 
   if (courseLevel === Advanced) return ratio(0, 8, 8)
 
-  if (courseLevel === AdvancedTrainer) return ratio(1, 12, 12)
+  if (courseLevel === AdvancedTrainer) {
+    if (type === Open) return ratio(1, 12, 12)
+
+    if (type === Closed) return ratio(1, 24, 12)
+  }
 
   if (courseLevel === Level_1Bs) return ratio(0, 18, 18)
 

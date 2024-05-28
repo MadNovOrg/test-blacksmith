@@ -30,7 +30,10 @@ const getTrainerRatioBILD = (criteria: BildRatioCriteria): TrainerRatio => {
   )
     return ratio(0, 12, 12)
 
-  if (level === Course_Level_Enum.BildAdvancedTrainer) return ratio(1, 12, 12)
+  if (level === Course_Level_Enum.BildAdvancedTrainer) {
+    if (type === Course_Type_Enum.Open) return ratio(1, 12, 12)
+    if (type === Course_Type_Enum.Closed) return ratio(1, 24, 12)
+  }
 
   return ratio(1, 12, 12)
 }
