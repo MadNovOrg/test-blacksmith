@@ -162,9 +162,14 @@ export const useCourseCreationFormSchema = ({
             ? {
                 residingCountry: yup
                   .string()
-                  .oneOf(countriesCodesWithUKs)
-                  .required(
-                    requiredMsg(t, 'components.course-form.residing-country')
+                  .test(
+                    'is-valid-value',
+                    requiredMsg(t, 'components.course-form.residing-country'),
+                    value => {
+                      return countriesCodesWithUKs.includes(
+                        value as WorldCountriesCodes
+                      )
+                    }
                   ),
               }
             : {}),
