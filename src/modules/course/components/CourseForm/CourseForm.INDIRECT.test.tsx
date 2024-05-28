@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import {
@@ -313,5 +314,17 @@ describe('component: CourseForm - INDIRECT', () => {
       const country = screen.getByLabelText('Course Residing Country')
       expect(country).toHaveValue('Moldova, Republic of')
     })
+  })
+
+  it('allows changing the residing country', async () => {
+    useFeatureFlagEnabledMock.mockImplementation(
+      (flag: string) =>
+        flag === 'course-residing-country' || flag === 'international-indirect'
+    )
+    renderForm(type)
+
+    expect(
+      screen.getByLabelText(t('components.course-form.residing-country'))
+    ).toBeInTheDocument()
   })
 })

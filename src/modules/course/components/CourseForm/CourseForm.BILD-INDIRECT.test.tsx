@@ -1,3 +1,5 @@
+import { t } from 'i18next'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
@@ -6,7 +8,7 @@ import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-import { selectBildCategory, selectLevel } from './test-utils'
+import { renderForm, selectBildCategory, selectLevel } from './test-utils'
 
 import { CourseForm } from '.'
 
@@ -22,7 +24,12 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
 
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
+
 const useCoursePriceMock = vi.mocked(useCoursePrice)
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('CourseForm - indirect BILD', () => {
   beforeEach(() => {
@@ -255,5 +262,17 @@ describe('CourseForm - indirect BILD', () => {
     await selectLevel(Course_Level_Enum.BildRegular)
 
     expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
+  })
+
+  it("doesn't allow changing residing country", async () => {
+    useFeatureFlagEnabledMock.mockImplementation(
+      (flag: string) => flag === 'course-residing-country'
+    )
+    renderForm(Course_Type_Enum.Closed)
+    await selectBildCategory()
+
+    expect(
+      screen.queryByLabelText(t('components.course-form.residing-country'))
+    ).not.toBeInTheDocument()
   })
 })

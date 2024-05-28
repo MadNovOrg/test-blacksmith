@@ -119,7 +119,8 @@ export const GeneralDetailsSection = ({
 
   const shouldShowCountrySelector =
     isResidingCountryEnabled &&
-    (isOpenCourse || (isIndirectCourse && isInternationalIndirectEnabled))
+    !isBild &&
+    (!isIndirectCourse || (isIndirectCourse && isInternationalIndirectEnabled))
 
   const {
     canBlended,
