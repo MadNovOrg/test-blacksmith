@@ -38,6 +38,7 @@ export const ParticipantPostalAddressForm = () => {
     formState: { errors },
     getValues,
     setValue,
+    trigger,
   } = useFormContext<FormValues>()
   const values = getValues()
   const residingCountryEnabled = useFeatureFlagEnabled(
@@ -153,6 +154,7 @@ export const ParticipantPostalAddressForm = () => {
               setValue('inviteeCountry', getLabel(code) ?? '')
             }}
             value={values.inviteeCountry}
+            onBlur={() => trigger('inviteeCountry')}
           />
         ) : (
           <CountryDropdown

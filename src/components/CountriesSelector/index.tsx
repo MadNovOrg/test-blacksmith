@@ -16,6 +16,7 @@ export type CountriesSelectorProps = {
   courseResidingCountry?: string
   isBILDcourse?: boolean
   courseType?: Course_Type_Enum
+  onBlur?: () => void
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -29,6 +30,7 @@ const CountriesSelector = ({
   courseResidingCountry,
   isBILDcourse,
   courseType,
+  onBlur,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -70,6 +72,7 @@ const CountriesSelector = ({
       renderInput={params => (
         <TextField
           {...params}
+          onBlur={onBlur}
           disabled={disabled}
           data-testid={`countries-selector-input`}
           error={error}

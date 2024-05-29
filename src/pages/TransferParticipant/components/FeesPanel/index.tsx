@@ -77,7 +77,7 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
 
   const methods = useForm<FormValues>({
     resolver: yupResolver(schema()),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       feeType:
         mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
