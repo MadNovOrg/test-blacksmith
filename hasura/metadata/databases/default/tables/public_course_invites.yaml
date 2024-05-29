@@ -45,16 +45,18 @@ insert_permissions:
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: ld
     permission:
       check: {}
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: organization-key-contact
     permission:
       check:
@@ -72,8 +74,9 @@ insert_permissions:
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: sales-admin
     permission:
       check: {}
@@ -93,8 +96,9 @@ insert_permissions:
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: trainer
     permission:
       check:
@@ -105,24 +109,27 @@ insert_permissions:
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: tt-admin
     permission:
       check: {}
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: tt-ops
     permission:
       check: {}
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
   - role: user
     permission:
       check:
@@ -137,8 +144,9 @@ insert_permissions:
       columns:
         - course_id
         - email
-        - status
         - expires_in
+        - invited_after_course_end
+        - status
 select_permissions:
   - role: booking-contact
     permission:
@@ -146,11 +154,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter:
         course:
           _or:
@@ -170,11 +179,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -183,11 +193,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter: {}
   - role: organization-key-contact
     permission:
@@ -195,11 +206,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter:
         course:
           _or:
@@ -230,13 +242,14 @@ select_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
+        - expires_in
+        - id
+        - invited_after_course_end
         - note
         - status
-        - created_at
         - updated_at
-        - id
-        - expires_in
       filter:
         course:
           course_type:
@@ -248,13 +261,14 @@ select_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
+        - expires_in
+        - id
+        - invited_after_course_end
         - note
         - status
-        - created_at
         - updated_at
-        - id
-        - expires_in
       filter:
         course:
           trainers:
@@ -268,11 +282,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -281,11 +296,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter: {}
       allow_aggregations: true
   - role: user
@@ -294,11 +310,12 @@ select_permissions:
         - course_id
         - created_at
         - email
+        - expires_in
         - id
+        - invited_after_course_end
         - note
         - status
         - updated_at
-        - expires_in
       filter:
         course:
           organization:

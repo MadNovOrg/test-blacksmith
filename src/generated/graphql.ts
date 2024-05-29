@@ -21775,6 +21775,7 @@ export type Course_Invites = {
   email?: Maybe<Scalars['String']>;
   expiresIn?: Maybe<Scalars['timestamptz']>;
   id: Scalars['uuid'];
+  invited_after_course_end?: Maybe<Scalars['Boolean']>;
   note?: Maybe<Scalars['String']>;
   /** An object relationship */
   participant?: Maybe<Course_Participant>;
@@ -21829,6 +21830,7 @@ export type Course_Invites_Bool_Exp = {
   email?: InputMaybe<String_Comparison_Exp>;
   expiresIn?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  invited_after_course_end?: InputMaybe<Boolean_Comparison_Exp>;
   note?: InputMaybe<String_Comparison_Exp>;
   participant?: InputMaybe<Course_Participant_Bool_Exp>;
   status?: InputMaybe<Course_Invite_Status_Enum_Comparison_Exp>;
@@ -21856,6 +21858,7 @@ export type Course_Invites_Insert_Input = {
   email?: InputMaybe<Scalars['String']>;
   expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  invited_after_course_end?: InputMaybe<Scalars['Boolean']>;
   note?: InputMaybe<Scalars['String']>;
   participant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
@@ -21917,6 +21920,7 @@ export type Course_Invites_Order_By = {
   email?: InputMaybe<Order_By>;
   expiresIn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  invited_after_course_end?: InputMaybe<Order_By>;
   note?: InputMaybe<Order_By>;
   participant?: InputMaybe<Course_Participant_Order_By>;
   status?: InputMaybe<Order_By>;
@@ -21941,6 +21945,8 @@ export enum Course_Invites_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  InvitedAfterCourseEnd = 'invited_after_course_end',
+  /** column name */
   Note = 'note',
   /** column name */
   Status = 'status',
@@ -21955,6 +21961,7 @@ export type Course_Invites_Set_Input = {
   email?: InputMaybe<Scalars['String']>;
   expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  invited_after_course_end?: InputMaybe<Scalars['Boolean']>;
   note?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -21993,6 +22000,7 @@ export type Course_Invites_Stream_Cursor_Value_Input = {
   email?: InputMaybe<Scalars['String']>;
   expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  invited_after_course_end?: InputMaybe<Scalars['Boolean']>;
   note?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -22016,6 +22024,8 @@ export enum Course_Invites_Update_Column {
   ExpiresIn = 'expiresIn',
   /** column name */
   Id = 'id',
+  /** column name */
+  InvitedAfterCourseEnd = 'invited_after_course_end',
   /** column name */
   Note = 'note',
   /** column name */

@@ -1,4 +1,5 @@
 import { differenceInSeconds } from 'date-fns'
+import { isPast } from 'date-fns'
 import { useCallback, useMemo } from 'react'
 import { gql, useMutation, useQuery } from 'urql'
 import * as yup from 'yup'
@@ -200,10 +201,17 @@ export default function useCourseInvites({
 
       await Promise.all(declinedInvites.map(invite => resend(invite)))
 
-      const invites = newEmails.map(email => ({ course_id: courseId, email }))
+      const invites = newEmails.map(email => ({
+        course_id: courseId,
+        email,
+        invited_after_course_end: courseEnd
+          ? isPast(new Date(courseEnd))
+          : false,
+      }))
+
       await saveInvites({ invites })
     },
-    [invitesData?.courseInvites, saveInvites, resend, courseId]
+    [invitesData?.courseInvites, saveInvites, resend, courseId, courseEnd]
   )
 
   const cancel = useCallback(

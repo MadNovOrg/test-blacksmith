@@ -74,7 +74,9 @@ export const CourseInvites = ({
 
   const invites = useCourseInvites({
     courseId: course?.id,
+    courseEnd: course?.dates?.aggregate?.end?.date,
   })
+
   const invitesLeft = course
     ? course.max_participants -
       invites.data.filter(ci => ci.status === Course_Invite_Status_Enum.Pending)
