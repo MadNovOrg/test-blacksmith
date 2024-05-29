@@ -212,8 +212,11 @@ export const ReviewLicenseOrder: React.FC<
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             loading={savingStatus === LoadingStatus.FETCHING}
-            onClick={() => handleSubmitButtonClick()}
+            onClick={() => {
+              if (!(!courseData || !go1Licensing)) handleSubmitButtonClick()
+            }}
             data-testid="courseBuilder-button"
+            disabled={!courseData || !go1Licensing}
           >
             {courseData?.type === Course_Type_Enum.Indirect &&
             acl.isInternalUser()

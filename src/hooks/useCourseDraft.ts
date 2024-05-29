@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useQuery } from 'urql'
 
 import {
@@ -22,12 +23,24 @@ export function useCourseDraft(draftId?: string): UseCourseDraft {
     GetCourseDraftQueryVariables
   >({ query: GET_COURSE_DRAFT, variables: { draftId }, pause: !draftId })
 
-  return {
-    id: data?.course_draft_by_pk?.id,
-    name: data?.course_draft_by_pk?.name,
-    updatedAt: data?.course_draft_by_pk?.updatedAt,
-    data: data?.course_draft_by_pk?.data ?? {},
-    error,
-    fetching,
-  }
+  const courseDraftData = useMemo(
+    () => ({
+      id: data?.course_draft_by_pk?.id,
+      name: data?.course_draft_by_pk?.name,
+      updatedAt: data?.course_draft_by_pk?.updatedAt,
+      data: data?.course_draft_by_pk?.data ?? {},
+      error,
+      fetching,
+    }),
+    [
+      data?.course_draft_by_pk?.data,
+      data?.course_draft_by_pk?.id,
+      data?.course_draft_by_pk?.name,
+      data?.course_draft_by_pk?.updatedAt,
+      error,
+      fetching,
+    ]
+  )
+
+  return courseDraftData
 }

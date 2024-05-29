@@ -7,19 +7,22 @@ import {
 } from '@mui/material'
 import { t } from 'i18next'
 import { capitalize } from 'lodash'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import {
   Outlet,
   useLocation,
   useNavigate,
+  useParams,
   useSearchParams,
 } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { Sticky } from '@app/components/Sticky'
+import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
+import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { NotFound } from '@app/pages/common/NotFound'
 import { DraftConfirmationDialog } from '@app/pages/trainer-pages/MyCourses/components/DraftConfirmationDialog'
@@ -30,17 +33,29 @@ import { CreateCourseSteps } from './components/CreateCourseSteps'
 export const CreateCoursePage = () => {
   const [searchParams] = useSearchParams()
   const location = useLocation()
+  const { id: draftId } = useParams()
 
   const { acl } = useAuth()
   const navigate = useNavigate()
+
   const {
-    draftName,
     completedSteps,
     courseData,
+    courseType: contextCourseType,
     currentStepKey,
-    showDraftConfirmationDialog,
+    draftName: courseDraftName,
+    initializeData,
     setShowDraftConfirmationDialog,
+    showDraftConfirmationDialog,
   } = useCreateCourse()
+
+  const { data: draftData, name: draftName, fetching } = useCourseDraft(draftId)
+
+  useEffect(() => {
+    if (draftData.courseData && !courseData) {
+      initializeData(draftData, draftName ?? undefined)
+    }
+  }, [courseData, draftData, draftName, initializeData])
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -51,6 +66,20 @@ export const CreateCoursePage = () => {
       (searchParams.get('type') as Course_Type_Enum) ?? Course_Type_Enum.Open
     return courseData?.type ?? qsType
   }, [courseData, searchParams])
+
+  const suspenseLoadingForDraftCourse = useMemo(() => {
+    // draftData.courseData?.type !== contextCourseType will wait until the course type from create course context is synced with the draft course one
+    return (
+      (fetching && Boolean(draftId)) ||
+      (!fetching &&
+        Boolean(draftData.courseData?.type) &&
+        draftData.courseData?.type !== contextCourseType)
+    )
+  }, [contextCourseType, draftData.courseData?.type, draftId, fetching])
+
+  if (suspenseLoadingForDraftCourse) {
+    return <SuspenseLoading />
+  }
 
   if (!acl.canCreateCourse(courseType)) {
     return <NotFound />
@@ -107,7 +136,7 @@ export const CreateCoursePage = () => {
       {showDraftConfirmationDialog && (
         <DraftConfirmationDialog
           open={showDraftConfirmationDialog}
-          name={draftName}
+          name={courseDraftName}
           onCancel={() => {
             setShowDraftConfirmationDialog(false)
           }}

@@ -1,6 +1,12 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
@@ -50,17 +56,19 @@ export type SaveDraftResult = {
 }
 
 export type CreateCourseProviderProps = {
-  initialValue?: Draft
   courseType: Course_Type_Enum
-  draftName?: string | null
+  initialValue?: Draft
 }
 
 export const CreateCourseProvider: React.FC<
   React.PropsWithChildren<CreateCourseProviderProps>
-> = ({ children, initialValue, courseType, draftName }) => {
-  const { t } = useTranslation()
-  const { acl, profile } = useAuth()
+> = ({ children, courseType: initialCourseType, initialValue }) => {
+  const [searchParams] = useSearchParams()
   const { id: draftId } = useParams()
+  const { pathname } = useLocation()
+  const { t } = useTranslation()
+
+  const { acl, profile } = useAuth()
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
@@ -80,6 +88,10 @@ export const CreateCourseProvider: React.FC<
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined
   )
+  const [draftName, setDraftName] = useState<string | undefined>(undefined)
+
+  const [courseType, setCourseType] =
+    useState<Course_Type_Enum>(initialCourseType)
 
   const [showDraftConfirmationDialog, setShowDraftConfirmationDialog] =
     useState(false)
@@ -96,6 +108,17 @@ export const CreateCourseProvider: React.FC<
     SetCourseDraftMutation,
     SetCourseDraftMutationVariables
   >(SET_COURSE_DRAFT)
+
+  useEffect(() => {
+    setCourseType(
+      courseData?.type ??
+        getCourseType(
+          profile?.id ?? 'unknown',
+          searchParams.get('type'),
+          pathname === '/courses/new'
+        )
+    )
+  }, [courseData?.type, pathname, profile?.id, searchParams])
 
   const seniorOrPrincipalLead = useMemo(() => {
     return trainers.some(t =>
@@ -134,6 +157,20 @@ export const CreateCourseProvider: React.FC<
       trainers
     )
   }, [courseData, seniorOrPrincipalLead, acl, isETA, isEmployerAOL, trainers])
+
+  const initializeData = useCallback(
+    (data: Draft, draftName: string | undefined = undefined) => {
+      setCompletedSteps(data.completedSteps ?? [])
+      setCourseData(data.courseData)
+      setCurrentStepKey(data.currentStepKey ?? null)
+      setDraftName(draftName)
+      setExpenses(data.expenses ?? {})
+      setGo1Licensing(data.go1Licensing ?? undefined)
+      setInvoiceDetails(data.invoiceDetails ?? undefined)
+      setTrainers(data.trainers ?? [])
+    },
+    []
+  )
 
   const completeStep = useCallback(
     (step: StepsEnum) => {
@@ -240,54 +277,53 @@ export const CreateCourseProvider: React.FC<
 
   const value: ContextValue = useMemo(() => {
     return {
-      completeStep,
       completedSteps,
+      completeStep,
       courseData,
+      courseName,
       courseType,
       currentStepKey,
-      expenses,
       draftName,
+      exceptions,
+      expenses,
+      go1Licensing,
+      initializeData,
+      invoiceDetails,
+      pricing: { amount: 0, error: false },
       saveDraft,
       setCourseData,
       setCurrentStepKey,
       setExpenses,
-      setTrainers,
-      trainers,
-      go1Licensing,
-      showDraftConfirmationDialog,
-      setShowDraftConfirmationDialog,
       setGo1Licensing,
-      exceptions,
-      courseName,
-      pricing: {
-        amount: 0,
-        error: false,
-      },
-      invoiceDetails,
       setInvoiceDetails,
+      setShowDraftConfirmationDialog,
+      setTrainers,
+      showDraftConfirmationDialog,
+      trainers,
     }
   }, [
-    completeStep,
     completedSteps,
+    completeStep,
     courseData,
+    courseName,
     courseType,
     currentStepKey,
-    expenses,
     draftName,
-    saveDraft,
-    trainers,
-    go1Licensing,
     exceptions,
-    courseName,
+    expenses,
+    go1Licensing,
+    initializeData,
     invoiceDetails,
+    saveDraft,
     showDraftConfirmationDialog,
+    trainers,
   ])
 
-  return (
+  return value.courseType ? (
     <CreateCourseContext.Provider value={value}>
       {children}
     </CreateCourseContext.Provider>
-  )
+  ) : null
 }
 
 export function useCreateCourse() {

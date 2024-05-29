@@ -20,29 +20,27 @@ export enum StepsEnum {
 }
 
 export type ContextValue = {
-  completeStep: (step: StepsEnum) => void
   completedSteps: StepsEnum[]
+  completeStep: (step: StepsEnum) => void
   courseData?: ValidCourseInput
   courseName: string
-  pricing: {
-    amount?: number
-    error?: boolean
-  }
-  courseType: Course_Type_Enum
+  courseType?: Course_Type_Enum
   currentStepKey: StepsEnum | null
   draftName?: string | null
+  exceptions: Course_Exception_Enum[]
   expenses: Record<string, ExpensesInput>
+  go1Licensing: Draft['go1Licensing']
+  initializeData: (data: Draft, draftName?: string | undefined) => void
+  invoiceDetails?: InvoiceDetails
+  pricing: { amount?: number; error?: boolean }
   saveDraft: (name?: string) => Promise<SaveDraftResult>
   setCourseData: (courseData: ValidCourseInput) => void
   setCurrentStepKey: (step: StepsEnum) => void
   setExpenses: (expenses: Record<string, ExpensesInput>) => void
-  setTrainers: (trainers: TrainerInput[]) => void
-  trainers: TrainerInput[]
   setGo1Licensing: (go1Licensing: Draft['go1Licensing']) => void
   setInvoiceDetails: (invoiceDetails: InvoiceDetails) => void
-  go1Licensing: Draft['go1Licensing']
-  exceptions: Course_Exception_Enum[]
-  invoiceDetails?: InvoiceDetails
-  showDraftConfirmationDialog: boolean
   setShowDraftConfirmationDialog: (value: boolean) => void
+  setTrainers: (trainers: TrainerInput[]) => void
+  showDraftConfirmationDialog: boolean
+  trainers: TrainerInput[]
 }
