@@ -18,6 +18,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
@@ -50,6 +51,7 @@ export const CourseBookingReview: React.FC<
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
   const { course, booking, amounts, placeOrder } = useBooking()
+  const { isUKCountry } = useWorldCountries()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
@@ -467,48 +469,82 @@ export const CourseBookingReview: React.FC<
           />
         }
         label={
-          <Typography variant="body2">
-            <Trans
-              i18nKey="pages.book-course.review-tnc"
-              components={{
-                termsOfUseLink: (
-                  <Link
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${t('terms-of-use')} (${t(
-                      'opens-new-window'
-                    )})`}
-                    href={`${
-                      import.meta.env.VITE_BASE_TEAMTEACH
-                    }/policies-procedures/terms-of-business/`}
-                  />
-                ),
-                privacyPolicyLink: (
-                  <Link
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${t('privacy-policy')} (${t(
-                      'opens-new-window'
-                    )})`}
-                    href={`${
-                      import.meta.env.VITE_BASE_TEAMTEACH
-                    }/policies-procedures/privacy-policy/`}
-                  />
-                ),
-                moreInfoLink: (
-                  <Link
-                    target="_blank"
-                    rel="noreferrer"
-                    sx={{ color: 'blue' }}
-                    aria-label={`${t('more-information')} (${t(
-                      'opens-new-window'
-                    )})`}
-                    href={`${import.meta.env.VITE_INFO_URL}`}
-                  />
-                ),
-              }}
-            />
-          </Typography>
+          isUKCountry(course?.residingCountry) ? (
+            <Typography variant="body2">
+              <Trans
+                i18nKey="pages.book-course.review-tnc"
+                components={{
+                  termsOfUseLink: (
+                    <Link
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('terms-of-use')} (${t(
+                        'opens-new-window'
+                      )})`}
+                      href={`${
+                        import.meta.env.VITE_BASE_TEAMTEACH
+                      }/policies-procedures/terms-of-business/`}
+                    />
+                  ),
+                  privacyPolicyLink: (
+                    <Link
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('privacy-policy')} (${t(
+                        'opens-new-window'
+                      )})`}
+                      href={`${
+                        import.meta.env.VITE_BASE_TEAMTEACH
+                      }/policies-procedures/privacy-policy/`}
+                    />
+                  ),
+                  moreInfoLink: (
+                    <Link
+                      target="_blank"
+                      rel="noreferrer"
+                      sx={{ color: 'blue' }}
+                      aria-label={`${t('more-information')} (${t(
+                        'opens-new-window'
+                      )})`}
+                      href={`${import.meta.env.VITE_INFO_URL}`}
+                    />
+                  ),
+                }}
+              />
+            </Typography>
+          ) : (
+            <Typography variant="body2">
+              <Trans
+                i18nKey="pages.book-course.review-tnc-international"
+                components={{
+                  termsOfUseLink: (
+                    <Link
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('terms-of-use')} (${t(
+                        'opens-new-window'
+                      )})`}
+                      href={`${
+                        import.meta.env.VITE_BASE_TEAMTEACH
+                      }/policies-procedures/terms-of-business/`}
+                    />
+                  ),
+                  privacyPolicyLink: (
+                    <Link
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('privacy-policy')} (${t(
+                        'opens-new-window'
+                      )})`}
+                      href={`${
+                        import.meta.env.VITE_BASE_TEAMTEACH
+                      }/policies-procedures/privacy-policy/`}
+                    />
+                  ),
+                }}
+              />
+            </Typography>
+          )
         }
       />
 
