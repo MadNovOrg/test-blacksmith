@@ -1,6 +1,11 @@
 import { BaseTextFieldProps } from '@mui/material/TextField/TextField'
-import { MuiTelInput } from 'mui-tel-input'
-import { FC, PropsWithChildren } from 'react'
+import parsePhoneNumberFromString, {
+  CountryCode,
+  PhoneNumber,
+} from 'libphonenumber-js'
+import { MuiTelInput, MuiTelInputInfo } from 'mui-tel-input'
+import { FC, PropsWithChildren, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 
@@ -16,14 +21,45 @@ export const DEFAULT_PHONE_COUNTRY = 'GB'
 export type PhoneNumberInputProps = {
   value: PhoneNumberSelection
   onChange: (value: PhoneNumberSelection) => void
+  handleManualError?: (isError: boolean) => void
 } & BaseTextFieldProps
 
 const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   value,
   onChange,
+  handleManualError,
   ...props
 }) => {
+  const [textError, setTextError] = useState('')
+
   const { countriesISOCodes: onlyCountries } = useWorldCountries()
+  const { t } = useTranslation()
+
+  const _props = {
+    ...props,
+    error: props.error || Boolean(textError),
+    helperText: props.helperText || textError,
+  }
+
+  // when user manually change the flag & prefix, for countries with same country code
+  // like +44 for UK, Isle of Man etc, we run this check to see if the number is still valid
+  // Even if they have same prefix +44, the rest of the number is unique for each of them
+  // example: +44-1481 (Guernsey), +44-1624 (Isle of Man), +44-1534 (Jersey)
+  const checkError = (
+    changeInfo: MuiTelInputInfo,
+    parsedPhone?: PhoneNumber
+  ) => {
+    if (
+      changeInfo.countryCode &&
+      changeInfo.countryCode !== parsedPhone?.country
+    ) {
+      setTextError(t('validation-errors.invalid-phone'))
+      handleManualError?.(true)
+    } else {
+      setTextError('')
+      handleManualError?.(false)
+    }
+  }
 
   return (
     <MuiTelInput
@@ -31,19 +67,18 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
       defaultCountry={DEFAULT_PHONE_COUNTRY}
       value={value.phoneNumber}
       onChange={(phoneNumber, changeInfo) => {
-        const shouldReplaceCountryCode =
-          changeInfo.numberValue?.split(' ').join('').substring(0, 3) !==
-          value.phoneNumber.split(' ').join('').substring(0, 3)
+        const parsedPhone = parsePhoneNumberFromString(
+          phoneNumber,
+          changeInfo.countryCode ?? (DEFAULT_PHONE_COUNTRY as CountryCode)
+        )
 
-        const newCountryCode =
-          shouldReplaceCountryCode || changeInfo.reason === 'country'
-            ? changeInfo.countryCode
-            : value.countryCode
+        checkError(changeInfo, parsedPhone)
 
         const newPhoneInfo: PhoneNumberSelection = {
           phoneNumber: phoneNumber,
-          countryCode: newCountryCode ?? '',
+          countryCode: changeInfo?.countryCode ?? '',
         }
+
         onChange(newPhoneInfo)
       }}
       inputProps={{ 'data-testid': 'phone' }}
@@ -61,7 +96,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
         )
       }}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      {...(props as any)}
+      {...(_props as any)}
     />
   )
 }

@@ -18,7 +18,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { subYears, format } from 'date-fns'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle, useUpdateEffect } from 'react-use'
@@ -74,6 +74,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
   )
+  const [isManualFormError, setIsManualFormError] = useState(false)
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
@@ -106,6 +107,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const minimalAge = subYears(new Date(), 16)
 
   const onSubmit = async (data: FormInputs) => {
+    if (isManualFormError) return
+
     const {
       country,
       countryCode,
@@ -286,6 +289,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
             error={!!errors.phone}
             helperText={errors.phone?.message}
+            handleManualError={isError => setIsManualFormError(isError)}
             value={{
               phoneNumber: values.phone ?? '',
               countryCode: values.phoneCountryCode ?? '',

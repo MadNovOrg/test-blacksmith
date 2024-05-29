@@ -118,17 +118,19 @@ import { UserGo1License } from '../components/UserGo1License'
 export const EditProfilePage: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
+  const [avatarError, setAvatarError] = useState('')
+  const [displayOrgSelector, setDisplayOrgSelector] = useState(false)
+  const [isManualFormError, setIsManualFormError] = useState(false)
+
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [avatarError, setAvatarError] = useState('')
   const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const jobTitles = useJobTitles()
   const orgId = searchParams.get('orgId')
-  const [displayOrgSelector, setDisplayOrgSelector] = useState(false)
   const minimalAge = subYears(new Date(), 16)
   const importCertificateModalRef = useRef<
     ImportLegacyCertificateMutation | undefined
@@ -546,7 +548,7 @@ export const EditProfilePage: React.FC<
   }, [])
 
   const onSubmit = async (data: InferType<typeof formSchema>) => {
-    if (!profile) return
+    if (!profile || isManualFormError) return
 
     try {
       await updateProfile({
@@ -949,6 +951,9 @@ export const EditProfilePage: React.FC<
                       variant="filled"
                       error={!!errors.phone}
                       helperText={errors.phone?.message}
+                      handleManualError={isError =>
+                        setIsManualFormError(isError)
+                      }
                       value={{
                         phoneNumber: values.phone ?? '',
                         countryCode: values.phoneCountryCode ?? '',

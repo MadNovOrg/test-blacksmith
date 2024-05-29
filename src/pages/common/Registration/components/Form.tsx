@@ -68,6 +68,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
+  const [isManualFormError, setIsManualFormError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [signUpError, setError] = useState('')
   const { getLabel: getCountryLabel } = useWorldCountries()
@@ -99,6 +100,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const minimalAge = subYears(new Date(), 16)
 
   const onSubmit = async (data: FormInputs) => {
+    if (isManualFormError) return
+
     setLoading(true)
     setError('')
 
@@ -287,6 +290,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
           error={!!errors.phone}
           helperText={errors.phone?.message}
+          handleManualError={isError => setIsManualFormError(isError)}
           value={{
             phoneNumber: values.phone ?? '',
             countryCode: values.phoneCountryCode,

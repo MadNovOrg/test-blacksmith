@@ -12,7 +12,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { subYears } from 'date-fns'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useEffect, useMemo, useCallback } from 'react'
+import React, { useEffect, useMemo, useCallback, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -41,6 +41,8 @@ import { schemas, yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const [isManualFormError, setIsManualFormError] = useState(false)
+
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
   )
@@ -116,6 +118,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [updateResult, reloadCurrentProfile, navigate])
 
   const submitHandler: SubmitHandler<InferType<typeof schema>> = async data => {
+    if (isManualFormError) return
+
     await updateProfile({
       input: {
         profileId: profile?.id,
@@ -225,6 +229,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
               error={Boolean(errors.phone)}
               helperText={errors.phone?.message}
+              handleManualError={isError => setIsManualFormError(isError)}
               value={{
                 phoneNumber: values.phone ?? '',
                 countryCode: values.phoneCountryCode ?? '',
