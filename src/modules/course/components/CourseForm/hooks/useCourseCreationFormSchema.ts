@@ -464,7 +464,10 @@ export const useCourseCreationFormSchema = ({
       maxParticipants: courseInput?.maxParticipants ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
       usesAOL: Boolean(courseInput?.aolCountry) ?? false,
-      aolCountry: courseInput?.aolCountry ?? null,
+      aolCountry:
+        courseInput?.aolCountry ??
+        courseInput?.residingCountry ??
+        residingCountry,
       aolRegion: courseInput?.aolRegion ?? null,
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? accountCodeValue,

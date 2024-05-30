@@ -203,6 +203,12 @@ export const GeneralDetailsSection = ({
       shouldValidate: true,
     })
     setValue('venue', null)
+    if (code && isUKCountry(code)) {
+      setValue('aolCountry', code, { shouldValidate: true })
+    } else {
+      setValue('aolCountry', null)
+      setValue('usesAOL', false)
+    }
   }
 
   const handleAOLCountryChange = (code: string) => {
@@ -214,15 +220,6 @@ export const GeneralDetailsSection = ({
       setValue('venue', null)
     }
   }
-
-  useEffect(() => {
-    if (residingCountry && isUKCountry(residingCountry))
-      setValue('aolCountry', residingCountry, { shouldValidate: true })
-    else {
-      setValue('aolCountry', null)
-      setValue('usesAOL', false)
-    }
-  }, [isUKCountry, residingCountry, setValue, usesAOL])
 
   useEffect(() => {
     if (disableBlended)
