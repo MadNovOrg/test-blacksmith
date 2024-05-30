@@ -18,11 +18,15 @@ import {
   ModuleGroup,
 } from '@app/types'
 
+import { UNIQUE_COURSE } from '@qa/data/courses'
 import { getModulesByLevel } from '@qa/data/modules'
+import { UNIQUE_ORDER } from '@qa/data/order'
 import { Course, User } from '@qa/data/types'
+import { users } from '@qa/data/users'
 import { Course_Certificate_Insert_Input } from '@qa/generated/graphql'
 
 import { getClient } from './client'
+import { insertOrder } from './order'
 import { getOrganizationId } from './organization'
 import { getProfileId } from './profile'
 import { getVenueId } from './venue'
@@ -275,6 +279,9 @@ export const deleteCourse = async (id?: number) => {
       }
 
       delete_course_audit(where: { course_id: { _eq: $course_id } }) {
+        affected_rows
+      }
+      delete_course_order(where: { course_id: { _eq: $course_id } }) {
         affected_rows
       }
       delete_course(where: { id: { _eq: $course_id } }) {
@@ -556,5 +563,24 @@ export const transferToCourse = async (
     console.log(
       `Transfer failed due to "${response.transferParticipant.error}"`
     )
+  }
+}
+
+export const createCourseWithOrder = async () => {
+  const newCourse = UNIQUE_COURSE()
+  const createdCourse = await insertCourse(newCourse, users.trainer.email)
+
+  const course: Course = {
+    ...newCourse,
+    id: createdCourse.id,
+  }
+
+  const newOrder = await UNIQUE_ORDER(users.admin, [users.trainer], course)
+  const newCourseID = await insertOrder(newOrder)
+
+  return {
+    course,
+    orderId: newCourseID,
+    order: newOrder,
   }
 }

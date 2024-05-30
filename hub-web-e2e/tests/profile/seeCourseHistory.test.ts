@@ -4,6 +4,7 @@ import { addSeconds } from 'date-fns'
 import { Grade_Enum } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { UK_TIMEZONE } from '@qa/constants'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
@@ -17,6 +18,7 @@ const test = base.extend<{ course: Course }>({
       {
         start: addSeconds(new Date(), 1),
         end: addSeconds(new Date(), 2),
+        timeZone: UK_TIMEZONE,
       },
     ]
     course.id = (await API.course.insertCourse(course, users.trainer.email)).id

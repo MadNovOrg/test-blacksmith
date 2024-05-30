@@ -21,6 +21,9 @@ switch (TARGET_ENV) {
     BASE_URL = 'https://connect.teamteach.com'
     HASURA_BASE_URL = 'https://hasura.teamteachhub.co.uk'
     break
+  case 'github':
+    BASE_URL = 'http://localhost:3000'
+    HASURA_BASE_URL = 'https://hasura.dev.teamteachhub.co.uk'
 }
 
 const TEMP_DIR = './tmp'

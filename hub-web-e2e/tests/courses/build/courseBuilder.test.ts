@@ -12,12 +12,14 @@ import { stateFilePath } from '@qa/util'
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
-      data.course.id = await API.course.insertCourse(
-        data.course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-        false
-      )
+      data.course.id = (
+        await API.course.insertCourse(
+          data.course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+          false
+        )
+      ).id
       await use(data.course)
       await API.course.deleteCourse(data.course.id)
     },

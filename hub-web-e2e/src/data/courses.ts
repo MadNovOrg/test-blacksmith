@@ -8,6 +8,7 @@ import {
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 
+import { UK_TIMEZONE } from '@qa/constants'
 import { Accreditors_Enum } from '@qa/generated/graphql'
 
 import { buildVenue } from '@test/mock-data-utils'
@@ -31,6 +32,7 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
+        timeZone: UK_TIMEZONE,
       },
     ],
     min_participants: 6,
@@ -57,6 +59,7 @@ export const COURSES_TO_VIEW: Course[] = [
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
         virtualLink: 'https://zoom.us/dummy.link',
+        timeZone: UK_TIMEZONE,
       },
     ],
     min_participants: 6,
@@ -80,6 +83,7 @@ export const COURSES_TO_VIEW: Course[] = [
         start: addMonths(new Date(), 2),
         end: addMonths(new Date(), 2),
         virtualLink: 'https://zoom.us/dummy.link',
+        timeZone: UK_TIMEZONE,
       },
     ],
     min_participants: 6,
@@ -91,6 +95,8 @@ export const COURSES_TO_VIEW: Course[] = [
 export const UNIQUE_COURSE: () => Course = () => ({
   id: 0,
   accreditedBy: Accreditors_Enum.Icm,
+  price: 120,
+  organization: { name: 'London First School' },
   curriculum: [
     {
       id: '696749a5-689e-4866-9dab-37579a16d2f7',
@@ -172,6 +178,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
       venue: buildVenue({
         overrides: { name: 'Queen Elizabeth II Centre' },
       }),
+      timeZone: UK_TIMEZONE,
     },
   ],
   source: Course_Source_Enum.EmailEnquiry,
@@ -182,5 +189,11 @@ export const UNIQUE_COURSE: () => Course = () => ({
 export const FINISHED_COURSE: () => Course = () => ({
   ...UNIQUE_COURSE(),
   status: Course_Status_Enum.Completed,
-  schedule: [{ start: subDays(new Date(), 2), end: subDays(new Date(), 1) }],
+  schedule: [
+    {
+      start: subDays(new Date(), 2),
+      end: subDays(new Date(), 1),
+      timeZone: UK_TIMEZONE,
+    },
+  ],
 })

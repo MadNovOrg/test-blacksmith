@@ -70,6 +70,7 @@ export type CourseSchedule = {
   end: Date
   venue?: Venue
   virtualLink?: string
+  timeZone: string
 }
 
 export type Organization = {
@@ -125,11 +126,22 @@ export type OrderCreation = {
   billingGivenName: string
   billingPhone: string
   clientPurchaseOrder?: string
-  courseId?: number
+  courseId: number
   organizationId: string
   paymentMethod: PaymentMethod
   promoCodes?: string[]
-  registrants: { email: string; firstName: string; lastName: string }[]
+  quantity: number
+  registrants: {
+    email: string
+    firstName: string
+    lastName: string
+  }[]
+  id?: number
+  bookingContact: {
+    firstName: string
+    lastName: string
+    email: string
+  }
   salesRepresentativeId?: string
   source?: Course_Source_Enum.EmailEnquiry
 }
