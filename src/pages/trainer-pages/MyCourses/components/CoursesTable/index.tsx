@@ -94,34 +94,29 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
               data-testid={`course-row-${course.id}`}
               data-index={index}
             >
-              {!hiddenColumns.has('name') ? (
+              {!hiddenColumns.has('name') && (
                 <CourseTitleCell course={course} />
-              ) : null}
-              {!hiddenColumns.has('venue') ? (
-                <VenueCell course={course} />
-              ) : null}
-              {!hiddenColumns.has('type') ? <TypeCell course={course} /> : null}
-              {!hiddenColumns.has('start') ? (
+              )}
+              {!hiddenColumns.has('venue') && <VenueCell course={course} />}
+              {!hiddenColumns.has('type') && <TypeCell course={course} />}
+              {!hiddenColumns.has('start') && (
                 <DateCell
-                  date={course.dates?.aggregate?.start?.date}
+                  date={course?.schedule[0]?.start}
                   timeZone={timeZone}
                 />
-              ) : null}
-              {!hiddenColumns.has('end') ? (
-                <DateCell
-                  date={course.dates?.aggregate?.end?.date}
-                  timeZone={timeZone}
-                />
-              ) : null}
-              {!hiddenColumns.has('createdAt') ? (
+              )}
+              {!hiddenColumns.has('end') && (
+                <DateCell date={course?.schedule[0]?.end} timeZone={timeZone} />
+              )}
+              {!hiddenColumns.has('createdAt') && (
                 <DateCell date={course.createdAt} timeZone={timeZone} />
-              ) : null}
-              {!hiddenColumns.has('trainers') ? (
+              )}
+              {!hiddenColumns.has('trainers') && (
                 <TableCell>
                   <TrainerAvatarGroup trainers={course.trainers} />
                 </TableCell>
-              ) : null}
-              {!hiddenColumns.has('registrants') ? (
+              )}
+              {!hiddenColumns.has('registrants') && (
                 <TableCell data-testid="participants-cell">
                   <ParticipantsCount
                     participating={
@@ -131,10 +126,8 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
                     waitlist={course.waitlistAgg?.aggregate?.count}
                   />
                 </TableCell>
-              ) : null}
-              {!hiddenColumns.has('status') ? (
-                <StatusCell course={course} />
-              ) : null}
+              )}
+              {!hiddenColumns.has('status') && <StatusCell course={course} />}
             </TableRow>
           )
         })}

@@ -146,28 +146,28 @@ export const CoursesTable: React.FC<
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  {course.dates?.aggregate?.start?.date ? (
+                  {course?.schedule[0]?.start && (
                     <DateCell
-                      date={course.dates.aggregate.start.date}
+                      date={course.schedule[0].start}
                       timeZone={course.schedule[0].timeZone}
                     />
-                  ) : null}
+                  )}
                 </TableCell>
                 <TableCell>
-                  {course.dates?.aggregate?.end?.date ? (
+                  {course?.schedule[0]?.end && (
                     <DateCell
-                      date={course.dates.aggregate.start?.date}
+                      date={course.schedule[0].end}
                       timeZone={course.schedule[0].timeZone}
                     />
-                  ) : null}
+                  )}
                 </TableCell>
                 <TableCell>
-                  {course.createdAt ? (
+                  {course.createdAt && (
                     <DateCell
-                      date={course.dates.aggregate?.start?.date}
+                      date={course.createdAt}
                       timeZone={course.schedule[0].timeZone}
                     />
-                  ) : null}
+                  )}
                 </TableCell>
                 <TableCell>
                   <TrainerAvatarGroup trainers={course.trainers ?? []} />
