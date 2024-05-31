@@ -31,7 +31,7 @@ export const TransferParticipant: React.FC<
   const { participant, completedSteps, currentStepKey, mode } =
     useTransferParticipantContext()
 
-  const attendeeTranfserring = mode === TransferModeEnum.ATTENDEE_TRANSFERS
+  const attendeeTransferring = mode === TransferModeEnum.ATTENDEE_TRANSFERS
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
@@ -39,7 +39,7 @@ export const TransferParticipant: React.FC<
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
           <Box width={400} display="flex" flexDirection="column" pr={4}>
             <Sticky top={20}>
-              {!attendeeTranfserring ? (
+              {!attendeeTransferring ? (
                 <Box mb={2}>
                   <BackButton
                     label={t('back-btn-text')}
@@ -55,7 +55,7 @@ export const TransferParticipant: React.FC<
                 </Typography>
               </Box>
 
-              {!attendeeTranfserring ? (
+              {!attendeeTransferring ? (
                 <Box mb={4}>
                   <Typography
                     color={theme.palette.grey[700]}

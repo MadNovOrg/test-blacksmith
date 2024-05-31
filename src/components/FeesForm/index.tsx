@@ -14,7 +14,10 @@ import { InferType } from 'yup'
 
 import { TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { TransferModeEnum } from '@app/pages/TransferParticipant/components/TransferParticipantProvider'
+import {
+  ContextValue,
+  TransferModeEnum,
+} from '@app/pages/TransferParticipant/components/TransferParticipantProvider'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { customFeeFormat } from '@app/util'
@@ -47,6 +50,7 @@ type Props = {
   mode?: TransferModeEnum
   optionLabels?: Partial<Record<TransferFeeType, string>>
   priceCurrency?: string | null | undefined
+  defaultValues?: ContextValue['fees']
 }
 
 export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
@@ -54,6 +58,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   optionLabels,
   priceCurrency,
+  defaultValues,
 }) => {
   const { t, _t } = useScopedTranslation('components.fees-form')
 
@@ -79,7 +84,10 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (formValues.customFee)
       setValue('customFee', customFeeFormat(formValues.customFee))
-  }, [setValue, formValues.customFee])
+
+    if (formValues.feeType !== TransferFeeType.CustomFee)
+      setValue('customFee', undefined)
+  }, [setValue, formValues.customFee, formValues.feeType])
 
   return (
     <>
@@ -100,6 +108,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
                 aria-labelledby="fees-radio-group-label"
                 name="fees-radio-group"
                 row
+                defaultValue={defaultValues?.type}
               >
                 <FormControlLabel
                   value={TransferFeeType.ApplyTerms}
@@ -136,6 +145,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
         <Box mt={2}>
           <TextField
             type={'number'}
+            defaultValue={defaultValues?.customFee}
             fullWidth
             variant="filled"
             label={t('custom-fee-label')}

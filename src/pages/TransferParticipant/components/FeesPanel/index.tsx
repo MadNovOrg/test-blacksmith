@@ -27,6 +27,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { isAddressInfoRequired } from '@app/pages/TransferParticipant/utils'
 
 import {
+  ContextValue,
   TransferModeEnum,
   useTransferParticipantContext,
 } from '../TransferParticipantProvider'
@@ -43,6 +44,7 @@ type Props = {
   termsTable?: React.ReactElement
   optionLabels?: Record<TransferFeeType, string>
   courseToTransferTo: TransferCourse
+  defaultValues?: ContextValue['fees']
 }
 
 const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
@@ -52,13 +54,15 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
   onChange,
   mode = TransferModeEnum.ADMIN_TRANSFERS,
   courseToTransferTo,
+  defaultValues,
 }) => {
   const { isUKCountry } = useWorldCountries()
   const { t, _t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )
 
-  const { fromCourse } = useTransferParticipantContext()
+  const { fromCourse, virtualCourseParticipantAdress } =
+    useTransferParticipantContext()
 
   const isAddressRequired =
     isUKCountry(fromCourse?.residingCountry ?? UKsCodes.GB_ENG) &&
@@ -82,7 +86,8 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
       feeType:
         mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
           ? TransferFeeType.ApplyTerms
-          : undefined,
+          : defaultValues?.type,
+      ...virtualCourseParticipantAdress,
     },
   })
 
@@ -109,6 +114,7 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
             optionLabels={{
               [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
             }}
+            defaultValues={defaultValues}
           >
             <TransferTermsTable
               startDate={courseStartDate}

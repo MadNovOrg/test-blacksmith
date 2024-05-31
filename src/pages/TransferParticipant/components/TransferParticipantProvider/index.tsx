@@ -53,6 +53,7 @@ type VirtualCourseNewParticipant = {
   inviteeCity: string
   inviteePostCode: string
   inviteeCountry: string
+  inviteeCountryCode?: string | null
 }
 
 export type ContextValue = {

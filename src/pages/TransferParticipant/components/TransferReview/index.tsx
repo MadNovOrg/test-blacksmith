@@ -77,7 +77,10 @@ export const TransferReview: React.FC<
             fromCourse: fromCourse as Course,
             toCourse,
           })
-            ? virtualCourseParticipantAdress
+            ? {
+                ...virtualCourseParticipantAdress,
+                inviteeCountryCode: undefined,
+              }
             : {}),
           reason,
         },

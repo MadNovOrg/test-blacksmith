@@ -33,7 +33,19 @@ export const TransferDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t: _t } = useTranslation()
+
   const [displayReasonField, setDisplayReasonField] = useState<boolean>(false)
+  const {
+    backFrom,
+    fees,
+    feesChosen,
+    fromCourse,
+    mode,
+    reason,
+    setParticipantPostalAddress,
+    setReason,
+    toCourse,
+  } = useTransferParticipantContext()
 
   const schema = useMemo(() => {
     return yup
@@ -60,19 +72,10 @@ export const TransferDetails: React.FC<
   } = useForm<TransferFormInput>({
     resolver: yupResolver(schema),
     defaultValues: {
-      transferReason: '',
+      transferReason: reason,
     },
   })
 
-  const {
-    toCourse,
-    backFrom,
-    feesChosen,
-    fromCourse,
-    mode,
-    setReason,
-    setParticipantPostalAddress,
-  } = useTransferParticipantContext()
   const { t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )
@@ -132,6 +135,7 @@ export const TransferDetails: React.FC<
         inviteeCity: formData.inviteeCity ?? '',
         inviteeCountry: formData.inviteeCountry ?? '',
         inviteePostCode: formData.inviteePostCode ?? '',
+        inviteeCountryCode: formData.inviteeCountryCode,
       })
     }
   }
@@ -168,6 +172,7 @@ export const TransferDetails: React.FC<
         onChange={handleFeesChange}
         mode={mode}
         courseToTransferTo={toCourse}
+        defaultValues={fees}
       />
 
       {displayReasonField ? (

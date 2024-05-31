@@ -28,6 +28,7 @@ export const schema = yup.object({
       isValidUKPostalCode
     ),
   inviteeCountry: yup.string().required(requiredMsg(t, 'country')),
+  inviteeCountryCode: yup.string().nullable(),
 })
 
 export type FormValues = InferType<typeof schema>
@@ -54,6 +55,7 @@ export const ParticipantPostalAddressForm = () => {
       values.inviteeCountry
     )
   }, [values.inviteeCountry])
+
   return (
     <Grid item md={12}>
       <Typography variant="subtitle1">{t('common.postal-address')}</Typography>
@@ -152,8 +154,9 @@ export const ParticipantPostalAddressForm = () => {
             helperText={errors.inviteeCountry?.message}
             onChange={(_, code) => {
               setValue('inviteeCountry', getLabel(code) ?? '')
+              setValue('inviteeCountryCode', code)
             }}
-            value={values.inviteeCountry}
+            value={values.inviteeCountryCode}
             onBlur={() => trigger('inviteeCountry')}
           />
         ) : (
