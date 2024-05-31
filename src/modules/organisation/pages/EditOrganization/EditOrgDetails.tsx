@@ -1,8 +1,10 @@
 import { Box } from '@mui/material'
 import { isValid } from 'date-fns'
+import { useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateOrgMutation,
@@ -18,6 +20,8 @@ export const EditOrgDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { profile, acl } = useAuth()
+  const { isUKCountry } = useWorldCountries()
+
   const [{}, updateOrganisation] = useMutation<
     UpdateOrgMutation,
     UpdateOrgMutationVariables
@@ -57,43 +61,50 @@ export const EditOrgDetails: React.FC<
       }))[0]
     : null
 
-  const onSubmit = async (data: FormInputs) => {
-    if (!id) return
-    const orgDataToBeUpdated = {
-      id,
-      org: {
-        name: data.name.trim(),
-        sector: data.sector,
-        organisationType:
-          data.organisationType?.toLocaleLowerCase() === 'other'
-            ? data.orgTypeSpecifyOther
-            : data.organisationType,
-        attributes: {
-          email: data.orgEmail.toLowerCase(),
-          phone: data.orgPhone,
-          localAuthority: data.localAuthority,
-          ofstedRating: data.ofstedRating,
-          ofstedLastInspection: data.ofstedLastInspection
-            ? data.ofstedLastInspection.toISOString()
-            : null,
-          headFirstName: data.headFirstName,
-          headSurname: data.headSurname,
-          headEmailAddress: data.headEmailAddress,
-          settingName: data.settingName,
-          website: data.website,
+  const onSubmit = useCallback(
+    async (data: FormInputs) => {
+      if (!id) return
+      const orgDataToBeUpdated = {
+        id,
+        org: {
+          name: data.name.trim(),
+          sector: data.sector,
+          organisationType:
+            data.organisationType?.toLocaleLowerCase() === 'other'
+              ? data.orgTypeSpecifyOther
+              : data.organisationType,
+          attributes: {
+            email: data.orgEmail.toLowerCase(),
+            phone: data.orgPhone,
+            headFirstName: data.headFirstName,
+            headSurname: data.headSurname,
+            headEmailAddress: data.headEmailAddress,
+            settingName: data.settingName,
+            website: data.website,
+            ...(isUKCountry(data.countryCode)
+              ? {
+                  localAuthority: data.localAuthority,
+                  ofstedRating: data.ofstedRating,
+                  ofstedLastInspection: data.ofstedLastInspection
+                    ? data.ofstedLastInspection.toISOString()
+                    : null,
+                }
+              : {}),
+          },
+          address: {
+            line1: data.addressLine1,
+            line2: data.addressLine2,
+            city: data.city,
+            country: data.country,
+            postCode: data.postcode,
+          },
         },
-        address: {
-          line1: data.addressLine1,
-          line2: data.addressLine2,
-          city: data.city,
-          country: data.country,
-          postCode: data.postcode,
-        },
-      },
-    }
-    await updateOrganisation(orgDataToBeUpdated)
-    navigate('..?tab=DETAILS')
-  }
+      }
+      await updateOrganisation(orgDataToBeUpdated)
+      navigate('..?tab=DETAILS')
+    },
+    [id, isUKCountry, navigate, updateOrganisation]
+  )
 
   if (!org) return null
 

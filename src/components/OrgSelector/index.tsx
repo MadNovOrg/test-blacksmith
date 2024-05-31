@@ -385,6 +385,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               }
               InputProps={{
                 ...params.InputProps,
+
                 endAdornment: (
                   <React.Fragment>
                     {dfeFetching || orgsFetching ? (

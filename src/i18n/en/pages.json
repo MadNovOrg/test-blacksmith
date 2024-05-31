@@ -1238,7 +1238,7 @@
     "title": "Create Organisation",
     "organization-address": "Organisation address",
     "additional-org-details": "Additional details",
-    "head-of-service-org-details": "Head of service",
+    "organisation-main-contact": "Organisation main contact",
     "fields": {
       "organization-name": "Organisation name",
       "work-email": "Work email",
@@ -1261,7 +1261,7 @@
       },
       "head-first-name": "First name",
       "head-surname": "Surname",
-      "head-email-address": "Head of service email address",
+      "organisation-main-contact-email-address": "Organisation main contact email address",
       "setting-name": "Setting name (if applicable)",
       "local-authority": "Local authority (if applicable)",
       "ofsted-rating": "Ofsted/CQC rating (if applicable)",

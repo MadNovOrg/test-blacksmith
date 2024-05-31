@@ -14,6 +14,7 @@ import { EditUserModal } from './EditUserModal.fixture'
 
 export class AllOrganisations extends BasePage {
   readonly addNewOrganisation: Locator
+  readonly autocompleteOption: Locator
   readonly blendedLicences: Locator
   readonly city: Locator
   readonly country: Locator
@@ -56,9 +57,14 @@ export class AllOrganisations extends BasePage {
     this.addNewOrganisation = this.page.locator(
       '[data-testid="add-new-org-button"]'
     )
+    this.autocompleteOption = this.page.locator(
+      '.MuiAutocomplete-popper .MuiAutocomplete-option'
+    )
     this.blendedLicences = this.page.locator('data-testid=org-blended-licences')
     this.city = this.page.locator('[data-testid="city"]')
-    this.country = this.page.locator('[data-testid="country"]')
+    this.country = this.page.locator(
+      '[data-testid="countries-selector-autocomplete"] input'
+    )
     this.email = this.page.locator('data-testid=org-email')
     this.exportHistory = this.page.locator('data-testid=export-history')
     this.invoiceNote = this.page.locator('text=Add a note (optional)')
@@ -187,9 +193,10 @@ export class AllOrganisations extends BasePage {
     const city = this.chance.city()
     await this.city.type(city)
   }
-  async addCountry() {
-    const country = this.chance.country()
-    await this.country.type(country)
+  async addCountry(name: string) {
+    await this.country.clear()
+    await this.country.fill(name)
+    await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
   async addPostCode() {
     await this.postCode.type('E1 7BT')
