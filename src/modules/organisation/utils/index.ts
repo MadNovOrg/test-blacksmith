@@ -185,15 +185,8 @@ export const filterProfilesByEnrollments = (
       ),
     }))
 
-    const profilesWithEnrollmentsAndActiveCourses = notEndedCourses.filter(
-      profile => profile?.upcomingEnrollments?.length
-    )
-
-    if (profilesWithEnrollmentsAndActiveCourses.length) {
-      filteredProfilesByLevel.set(
-        level,
-        profilesWithEnrollmentsAndActiveCourses
-      )
+    if (notEndedCourses.length) {
+      filteredProfilesByLevel.set(level, notEndedCourses)
     }
   })
 
