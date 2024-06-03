@@ -95,7 +95,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const [isInUK, setIsInUK] = useState(true)
-  const [specifyOtherOrgType, setSpecifyOtherOrgType] = useState<boolean>(false)
+  const [specifyOtherOrgType, setspecifyOtherOrgType] = useState<boolean>(false)
   const [sectorState, setSectorState] = useState<string | undefined | null>(
     editOrgData?.sector
   )
@@ -108,13 +108,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     [t, _t, isInUK, addOrgCountriesSelectorEnabled]
   )
   const {
-    control,
-    formState: { errors },
-    handleSubmit,
     register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
     setValue,
     trigger,
-    watch,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -207,13 +207,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
           .includes(values.organisationType) &&
         values.organisationType?.toLocaleLowerCase() !== 'other'
       ) {
-        setSpecifyOtherOrgType(false)
+        setspecifyOtherOrgType(false)
       } else if (values.organisationType === '') {
         setValue('orgTypeSpecifyOther', '')
         setValue('organisationType', '')
-        setSpecifyOtherOrgType(false)
+        setspecifyOtherOrgType(false)
       } else {
-        setSpecifyOtherOrgType(true)
+        setspecifyOtherOrgType(true)
         setValue('organisationType', 'Other')
         setValue('orgTypeSpecifyOther', editOrgData?.organisationType ?? '')
       }
@@ -229,9 +229,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     if (values.organisationType?.toLocaleLowerCase() === 'other') {
-      setSpecifyOtherOrgType(true)
+      setspecifyOtherOrgType(true)
     } else {
-      setSpecifyOtherOrgType(false)
+      setspecifyOtherOrgType(false)
     }
   }, [values.organisationType])
 
@@ -239,13 +239,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     if (values.sector && sectorState !== values.sector) {
       setValue('orgTypeSpecifyOther', '')
       setValue('organisationType', '')
-      setSpecifyOtherOrgType(false)
+      setspecifyOtherOrgType(false)
       setSectorState(values.sector)
     }
   }, [
     values.sector,
     setValue,
-    setSpecifyOtherOrgType,
+    setspecifyOtherOrgType,
     setSectorState,
     sectorState,
     values.organisationType,
@@ -284,6 +284,137 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
             gap={2}
             mt={{ md: 8, xs: 3 }}
           >
+            {/* ORGANISATION DETAILS */}
+            <>
+              <Typography variant="subtitle1">
+                {t('organization-details')}
+              </Typography>
+
+              <FormPanel>
+                <Grid container flexDirection={'column'} gap={3}>
+                  <Grid item>
+                    {!isEditMode ? (
+                      <OrgSelector
+                        data-testid="name"
+                        required
+                        {...register('name')}
+                        error={errors.name?.message}
+                        allowAdding
+                        autocompleteMode={true}
+                        onChange={onOrgSelected}
+                        onInputChange={onOrgInputChange}
+                        textFieldProps={{
+                          variant: 'filled',
+                        }}
+                      />
+                    ) : (
+                      <TextField
+                        required
+                        label={t('fields.organization-name')}
+                        variant="filled"
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                        {...register('name')}
+                        inputProps={{ 'data-testid': 'name' }}
+                        fullWidth
+                        value={values.name}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item>
+                    <OrganisationSectorDropdown
+                      required
+                      value={values.sector ?? sectorState}
+                      error={errors.sector?.message}
+                      register={{ ...register('sector') }}
+                      label={t('fields.organization-sector')}
+                    />
+                  </Grid>
+
+                  <Grid item>
+                    {values.sector?.toLowerCase() !== 'other' ? (
+                      <OrgTypeSelector
+                        label={t('fields.organization-type')}
+                        value={values.organisationType}
+                        register={{ ...register('organisationType') }}
+                        sector={values.sector}
+                        disabled={!values.sector}
+                        error={
+                          errors.organisationType?.message && values.sector
+                            ? errors.organisationType?.message
+                            : undefined
+                        }
+                        required
+                      />
+                    ) : (
+                      <TextField
+                        id="organisationType"
+                        label={t('fields.organization-type-text-field')}
+                        variant="filled"
+                        error={!!errors.organisationType}
+                        helperText={errors.organisationType?.message}
+                        {...register('organisationType')}
+                        inputProps={{ 'data-testid': 'organisationType' }}
+                        fullWidth
+                        required
+                      />
+                    )}
+                  </Grid>
+                  {specifyOtherOrgType ? (
+                    <Grid item>
+                      <TextField
+                        id="orgTypeSpecifyOther"
+                        label={t('fields.organisation-specify-other')}
+                        variant="filled"
+                        error={!!errors.orgTypeSpecifyOther}
+                        helperText={errors.orgTypeSpecifyOther?.message}
+                        {...register('orgTypeSpecifyOther')}
+                        fullWidth
+                        required
+                      />
+                    </Grid>
+                  ) : null}
+                  <Grid item>
+                    <TextField
+                      id="orgPhone"
+                      label={t('fields.organization-phone')}
+                      variant="filled"
+                      error={!!errors.orgPhone}
+                      helperText={errors.orgPhone?.message}
+                      {...register('orgPhone')}
+                      inputProps={{ 'data-testid': 'org-phone' }}
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      id="orgEmail"
+                      label={t('fields.organization-email')}
+                      variant="filled"
+                      error={!!errors.orgEmail}
+                      helperText={errors.orgEmail?.message}
+                      {...register('orgEmail')}
+                      inputProps={{ 'data-testid': 'org-email' }}
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      id="website"
+                      label={t('fields.organization-website')}
+                      variant="filled"
+                      error={!!errors.website}
+                      helperText={errors.website?.message}
+                      {...register('website')}
+                      inputProps={{ 'data-testid': 'website' }}
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+              </FormPanel>
+            </>
             {/* ORGANISATION ADDRESSES */}
             <>
               <Typography variant="subtitle1">
@@ -302,14 +433,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                               getCountryLabel(code as WorldCountriesCodes) ?? ''
                             )
                             setValue('countryCode', code)
-                            setIsInUK(isUKCountry(code))
-
-                            if (!isUKCountry(code)) {
-                              console.log()
-                              setValue('localAuthority', '')
-                              setValue('ofstedLastInspection', null)
-                              setValue('ofstedRating', '')
-                            }
+                            setIsInUK(isUKCountry(code as CountryCode))
                           }
                         }}
                         value={values.countryCode}
@@ -401,7 +525,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       {...register('postcode')}
                       inputProps={{ 'data-testid': 'postCode' }}
                       fullWidth
-                      required={isInUK}
+                      required
                       InputProps={
                         isInUK
                           ? {
@@ -421,147 +545,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                 </Grid>
               </FormPanel>
             </>
-
-            {/* ORGANISATION DETAILS */}
-            <>
-              <Typography variant="subtitle1">
-                {t('organization-details')}
-              </Typography>
-
-              <FormPanel>
-                <Grid container flexDirection={'column'} gap={3}>
-                  <Grid item>
-                    {!isEditMode ? (
-                      <OrgSelector
-                        data-testid="name"
-                        required
-                        {...register('name')}
-                        error={errors.name?.message}
-                        allowAdding
-                        autocompleteMode={true}
-                        onChange={onOrgSelected}
-                        onInputChange={onOrgInputChange}
-                        textFieldProps={{
-                          variant: 'filled',
-                        }}
-                      />
-                    ) : (
-                      <TextField
-                        required
-                        label={t('fields.organization-name')}
-                        variant="filled"
-                        error={!!errors.name}
-                        helperText={errors.name?.message}
-                        {...register('name')}
-                        inputProps={{ 'data-testid': 'name' }}
-                        fullWidth
-                        value={values.name}
-                      />
-                    )}
-                  </Grid>
-                  <Grid item>
-                    <OrganisationSectorDropdown
-                      required
-                      value={values.sector ?? sectorState}
-                      error={errors.sector?.message}
-                      register={{ ...register('sector') }}
-                      label={t('fields.organization-sector')}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    {values.sector?.toLowerCase() !== 'other' ? (
-                      <OrgTypeSelector
-                        label={t('fields.organization-type')}
-                        value={values.organisationType}
-                        register={{ ...register('organisationType') }}
-                        sector={values.sector}
-                        disabled={!values.sector}
-                        error={
-                          errors.organisationType?.message && values.sector
-                            ? errors.organisationType?.message
-                            : undefined
-                        }
-                        required
-                        international={!isUKCountry(values.countryCode)}
-                      />
-                    ) : (
-                      <TextField
-                        id="organisationType"
-                        label={t('fields.organization-type-text-field')}
-                        variant="filled"
-                        error={!!errors.organisationType}
-                        helperText={errors.organisationType?.message}
-                        {...register('organisationType')}
-                        inputProps={{ 'data-testid': 'organisationType' }}
-                        fullWidth
-                        required
-                      />
-                    )}
-                  </Grid>
-                  {specifyOtherOrgType ? (
-                    <Grid item>
-                      <TextField
-                        id="orgTypeSpecifyOther"
-                        label={t('fields.organisation-specify-other')}
-                        variant="filled"
-                        error={!!errors.orgTypeSpecifyOther}
-                        helperText={errors.orgTypeSpecifyOther?.message}
-                        {...register('orgTypeSpecifyOther')}
-                        fullWidth
-                        required
-                      />
-                    </Grid>
-                  ) : null}
-                  <Grid item>
-                    <TextField
-                      id="orgPhone"
-                      label={t('fields.organization-phone')}
-                      variant="filled"
-                      error={!!errors.orgPhone}
-                      helperText={errors.orgPhone?.message}
-                      {...register('orgPhone')}
-                      inputProps={{ 'data-testid': 'org-phone' }}
-                      fullWidth
-                      required
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      id="orgEmail"
-                      label={t('fields.organization-email')}
-                      variant="filled"
-                      error={!!errors.orgEmail}
-                      helperText={errors.orgEmail?.message}
-                      {...register('orgEmail')}
-                      inputProps={{ 'data-testid': 'org-email' }}
-                      fullWidth
-                      required
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      id="website"
-                      label={t('fields.organization-website')}
-                      variant="filled"
-                      error={!!errors.website}
-                      helperText={errors.website?.message}
-                      {...register('website')}
-                      inputProps={{ 'data-testid': 'website' }}
-                      fullWidth
-                    />
-                  </Grid>
-                </Grid>
-              </FormPanel>
-            </>
-
             {/* HEAD OF SERVICE */}
             <>
               <Typography variant="subtitle1">
                 {t('additional-org-details')}
               </Typography>
               <Typography variant="subtitle2">
-                {t('organisation-main-contact')}
+                {t('head-of-service-org-details')}
               </Typography>
               <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
                 <Grid container spacing={3} mb={3}>
@@ -607,9 +597,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="headEmailAddress"
-                      label={t(
-                        'fields.organisation-main-contact-email-address'
-                      )}
+                      label={t('fields.head-email-address')}
                       variant="filled"
                       error={!!errors.headEmailAddress}
                       helperText={errors.headEmailAddress?.message}
@@ -621,10 +609,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       fullWidth
                     />
                   </Grid>
-                  <Grid
-                    item
-                    mb={isUKCountry(values.countryCode) ? undefined : 3}
-                  >
+                  <Grid item>
                     <TextField
                       id="settingName"
                       label={t('fields.setting-name')}
@@ -640,95 +625,87 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     />
                   </Grid>
 
-                  {isUKCountry(values.countryCode) ? (
-                    <>
-                      <Grid item>
-                        <RegionDropdown
-                          country={values.country}
-                          onChange={value =>
-                            setValue('localAuthority', value as string)
-                          }
-                          value={values.localAuthority ?? null}
-                          label={t('fields.local-authority')}
-                          disabled={Boolean(!values.country)}
-                        />
-                      </Grid>
-                      <Grid
-                        sx={{ flexDirection: { md: 'row', xs: 'column' } }}
-                        container
-                        spacing={3}
-                        mb={3}
-                      >
-                        <Grid item md={6}>
-                          <Controller
-                            name="ofstedRating"
-                            control={control}
-                            render={({ field }) => (
-                              <TextField
-                                id="ofstedRating"
-                                select
-                                label={t('fields.ofsted-rating')}
-                                variant="filled"
-                                error={!!errors.ofstedRating}
-                                helperText={errors.ofstedRating?.message}
-                                value={field.value}
-                                onChange={field.onChange}
-                                data-testid="ofsted-rating-select"
-                                fullWidth
-                              >
-                                {Object.keys(OfstedRating).map((val, i) => {
-                                  const option = OfstedRatingOrder[
-                                    i as OfstedRatingOrderKey
-                                  ] as OfstedRating
+                  <Grid item>
+                    <RegionDropdown
+                      country={values.country}
+                      onChange={value =>
+                        setValue('localAuthority', value as string)
+                      }
+                      value={values.localAuthority ?? null}
+                      label={t('fields.local-authority')}
+                      disabled={Boolean(!values.country)}
+                    />
+                  </Grid>
+                  <Grid
+                    sx={{ flexDirection: { md: 'row', xs: 'column' } }}
+                    container
+                    spacing={3}
+                    mb={3}
+                  >
+                    <Grid item md={6}>
+                      <Controller
+                        name="ofstedRating"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            id="ofstedRating"
+                            select
+                            label={t('fields.ofsted-rating')}
+                            variant="filled"
+                            error={!!errors.ofstedRating}
+                            helperText={errors.ofstedRating?.message}
+                            value={field.value}
+                            onChange={field.onChange}
+                            data-testid="ofsted-rating-select"
+                            fullWidth
+                          >
+                            {Object.keys(OfstedRating).map((val, i) => {
+                              const option = OfstedRatingOrder[
+                                i as OfstedRatingOrderKey
+                              ] as OfstedRating
 
-                                  return (
-                                    <MenuItem
-                                      key={option}
-                                      value={option}
-                                      data-testid={`ofsted-rating-option-${option}`}
-                                    >
-                                      {_t(
-                                        `ofsted-rating.${option.toLowerCase()}`
-                                      )}
-                                    </MenuItem>
-                                  )
-                                })}
-                              </TextField>
-                            )}
-                          />
-                        </Grid>
-                        <Grid item md={6}>
-                          <Controller
-                            name="ofstedLastInspection"
-                            control={control}
-                            render={({ field }) => (
-                              <LocalizationProvider
-                                dateAdapter={AdapterDateFns}
-                              >
-                                <DatePicker
-                                  format={INPUT_DATE_FORMAT}
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                  slotProps={{
-                                    textField: {
-                                      error: !!errors.ofstedLastInspection,
-                                      helperText:
-                                        errors.ofstedLastInspection?.message,
-                                      label: t(
-                                        'fields.ofsted-last-inspection-date'
-                                      ),
-                                      variant: 'filled',
-                                      fullWidth: true,
-                                    },
-                                  }}
-                                />
-                              </LocalizationProvider>
-                            )}
-                          />
-                        </Grid>
-                      </Grid>
-                    </>
-                  ) : null}
+                              return (
+                                <MenuItem
+                                  key={option}
+                                  value={option}
+                                  data-testid={`ofsted-rating-option-${option}`}
+                                >
+                                  {_t(`ofsted-rating.${option.toLowerCase()}`)}
+                                </MenuItem>
+                              )
+                            })}
+                          </TextField>
+                        )}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+                      <Controller
+                        name="ofstedLastInspection"
+                        control={control}
+                        render={({ field }) => (
+                          <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                              format={INPUT_DATE_FORMAT}
+                              value={field.value}
+                              onChange={field.onChange}
+                              slotProps={{
+                                textField: {
+                                  error: !!errors.ofstedLastInspection,
+                                  helperText:
+                                    errors.ofstedLastInspection?.message,
+                                  label: t(
+                                    'fields.ofsted-last-inspection-date'
+                                  ),
+                                  variant: 'filled',
+                                  fullWidth: true,
+                                },
+                              }}
+                            />
+                          </LocalizationProvider>
+                        )}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Box>
             </>

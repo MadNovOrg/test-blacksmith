@@ -1,8 +1,8 @@
-import { gql } from 'urql'
+import { gql } from 'graphql-request'
 
 export const GET_ORG_TYPES = gql`
-  query getOrgTypes($where: organization_type_bool_exp!) {
-    organization_type(where: $where) {
+  query getOrgTypes($sector: organisation_sector_enum!) {
+    organization_type(where: { sector: { _eq: $sector } }) {
       id
       name
     }

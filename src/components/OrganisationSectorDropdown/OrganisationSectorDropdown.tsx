@@ -23,29 +23,31 @@ export const OrganisationSectorDropdown: FC<PropsWithChildren<Props>> = ({
   required = false,
 }) => {
   return (
-    <TextField
-      select
-      value={value}
-      {...register}
-      variant="filled"
-      fullWidth
-      label={label ?? ''}
-      error={Boolean(error)}
-      sx={{ bgcolor: 'grey.100' }}
-      data-testid="sector-select"
-      helperText={error}
-      inputProps={{
-        required,
-      }}
-    >
-      <MenuItem value="" disabled>
-        {label}
-      </MenuItem>
-      {Object.entries(sectors).map(([value, label]) => (
-        <MenuItem key={value} value={value} data-testid={`sector-${value}`}>
+    <>
+      <TextField
+        select
+        value={value}
+        {...register}
+        variant="filled"
+        fullWidth
+        label={label ?? ''}
+        error={Boolean(error)}
+        sx={{ bgcolor: 'grey.100' }}
+        data-testid="sector-select"
+        helperText={error}
+        inputProps={{
+          required,
+        }}
+      >
+        <MenuItem value="" disabled>
           {label}
         </MenuItem>
-      ))}
-    </TextField>
+        {Object.entries(sectors).map(([value, label]) => (
+          <MenuItem key={value} value={value} data-testid={`sector-${value}`}>
+            {label}
+          </MenuItem>
+        ))}
+      </TextField>
+    </>
   )
 }
