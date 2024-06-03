@@ -562,7 +562,7 @@ event_triggers:
       enable_manual: true
       update:
         columns:
-          - attendeesQuantity
+          - xero_invoice_number
     retry_conf:
       interval_sec: 10
       num_retries: 0
