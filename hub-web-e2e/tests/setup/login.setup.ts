@@ -1,6 +1,5 @@
 import { test as setup } from '@playwright/test'
 
-import { bypassHSCookieConsent } from '@qa/commands'
 import { users, credentials } from '@qa/data/users'
 import { LoginPage } from '@qa/fixtures/pages/auth/LoginPage.fixture'
 import { stateFilePath } from '@qa/util'
@@ -11,6 +10,7 @@ credentials.forEach(cred => {
   setup(`logs in with ${cred.name} user`, async ({ page }) => {
     const loginPage = new LoginPage(page)
     await loginPage.goto()
+    await loginPage.cookieConsentDeclinedButton.click()
     const myCoursesPage = await loginPage.logIn(
       users[cred.name].email,
       users[cred.name].password
@@ -26,8 +26,6 @@ credentials.forEach(cred => {
         value: 'true',
       }
     )
-
-    await bypassHSCookieConsent(page)
 
     await myCoursesPage.userMenu.checkIsVisible()
     if (cred.role.toLowerCase() !== 'user') {
