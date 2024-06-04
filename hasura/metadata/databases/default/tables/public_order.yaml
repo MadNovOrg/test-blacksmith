@@ -565,7 +565,7 @@ event_triggers:
           - xero_invoice_number
     retry_conf:
       interval_sec: 10
-      num_retries: 0
+      num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/purchase-licenses'
   - name: new_order
