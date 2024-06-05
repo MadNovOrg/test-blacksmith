@@ -1,5 +1,57 @@
 # @teamteach/hub
 
+## 4.3.0
+
+### Minor Changes
+
+- 3e59e94: Update assist trainer ratio for Indirect Advanced Modules course
+- 9fa3c86: add pre-crouse materials tab to coure details
+- 1581dcb: Display Review changes dialog on edit closed course
+- a0f3608: Add wording changes requested in ticket 3795
+- 7f87ccf: Adjust created date on courses table
+- 6b16ed9: preselect grading modules
+- dd0788a: Add comment box for Additional comments for the attendee course evaluation page.
+- 3e73e32: Sort by date on profile tables
+- c1580de: Add new countries
+- 9541227: add Level 1 Behaviour Support to indirect courses
+- 9c98b97: Add E2E smoke tests for course creation, levels Intermendate Trainer and Advanced Trainer.
+- 1ea9c51: Update trainer ratios for ICM/BILD Closed Advanced Trainer.
+- 4c2d12d: Enable Course residing country on indirect courses
+- 1e656be: Add L1BS rescheduling terms
+- e7b0b4b: Postal address fields on UK L1 Virtual course attendee transfer and replace
+- 8fea268: Enhacement on course invitation
+- 329e73a: Remove postal address fields for Open Level 1 non UK course
+
+### Patch Changes
+
+- 40c6fae: fixing incorrect calculation of free spaces discount type
+- 8a17b47: Do not go to review and confirm order page if there are duplicated registrants
+- 1b57a53: Fix no special instructions display
+- 0ea06bd: Time zone format on course reschedule audit
+- 19e90b3: Do not allow trainers to accept Cancelled or Declined courses
+- 110bc2e: Increase number of retries for license purchase action
+- 2275c4c: Fix Bite Responses module duration
+- 4483768: Change course residing country validation error.
+- c9f65d7: Save initial data on back btn click from transfer review
+- 06780d9: dont query ORG BY ID on AutoRegister page
+- 70fb7c6: Fix purchase go1 licenses
+- 045045f: Update stripe-js version to fix Sentry "Failed to load Stripe.js" error
+- 1acffb9: fix sales admin not being able to use custom cancelation fees
+- db0c824: Display booking and organisation key invite data on course details page
+- 00d2705: Do not send email notification about duplicates users email on user profile update
+- 205d470: Fix resources nav link for trainers
+- 31b66bd: Fix data displayed in 'Individuals by training level' table
+- 4140243: Fix trainer cannot create BILD course
+- 5f7c357: Display Organization name on Auto Register form
+- a0dba1f: change booking checkbox text for international
+- 9fbfcb0: Fix trainer expenses button
+- 1961aea: fix edit course details default AOL value
+- cf43a56: Fix draft course creation
+- 43f5356: adjust transfer participant paths for sales admin
+- 296db96: fix condition for showing country selector
+- fae3e99: fix re-inviting user bugging out
+- c542953: Small fixes for postal address form on attendee transfer and replace forms
+
 ## 4.2.0
 
 ### Minor Changes
