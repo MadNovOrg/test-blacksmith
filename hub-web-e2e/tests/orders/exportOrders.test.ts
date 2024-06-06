@@ -19,9 +19,10 @@ const test = base.extend<{
     // Ensure there is always at least one order
     if (orders.length < 1) {
       const newCourse = UNIQUE_COURSE()
-      const courseId = (
-        await API.course.insertCourse(newCourse, users.trainer.email)
-      ).id
+      const courseId = await API.course.insertCourse(
+        newCourse,
+        users.trainer.email
+      )
       newCourse.id = courseId
       const newOrder = await UNIQUE_ORDER(
         users.userOrgAdmin,

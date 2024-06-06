@@ -1,5 +1,3 @@
-import { gql } from 'urql'
-
 import {
   OrderInfoFragment,
   OrdersQuery,
@@ -42,34 +40,4 @@ export async function getOrders(
   const orders = response.order ?? []
   const filteredOrders = orders.filter(order => order !== null)
   return filteredOrders.length ? filteredOrders : []
-}
-
-export async function deleteOrderById(orderId: string): Promise<string> {
-  const DELETE_ORDER = gql`
-    mutation DeleteOrder($orderId: uuid!) {
-      delete_course_order(where: { order_id: { _eq: $orderId } }) {
-        affected_rows
-      }
-      delete_order(where: { id: { _eq: $orderId } }) {
-        affected_rows
-      }
-    }
-  `
-
-  try {
-    const variables = { orderId }
-    const response = await getClient().request<{
-      delete_order: { affected_rows: number; returning: Array<{ id: number }> }
-    }>(DELETE_ORDER, variables)
-
-    if (response.delete_order.affected_rows > 0) {
-      console.log(`Successfully deleted order with ID "${orderId}".`)
-      return `Deleted ${response.delete_order.affected_rows} records.`
-    } else {
-      console.error(`No order found with ID "${orderId}". No records deleted.`)
-      return `No records deleted.`
-    }
-  } catch (error) {
-    throw new Error(`Error deleting order: ${error}`)
-  }
 }

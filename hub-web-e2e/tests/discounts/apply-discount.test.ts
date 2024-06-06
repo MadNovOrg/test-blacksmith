@@ -13,12 +13,10 @@ const test = base.extend<{ courseId: number }>({
     const openCourse = UNIQUE_COURSE()
     openCourse.type = Course_Type_Enum.Open
 
-    const id = (
-      await API.course.insertCourse(
-        openCourse,
-        'trainer@teamteach.testinator.com'
-      )
-    ).id
+    const id = await API.course.insertCourse(
+      openCourse,
+      'trainer@teamteach.testinator.com'
+    )
 
     await use(id)
 

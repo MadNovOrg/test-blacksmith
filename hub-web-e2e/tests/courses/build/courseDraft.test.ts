@@ -15,14 +15,12 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
     course.status = Course_Status_Enum.ConfirmModules
-    course.id = (
-      await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-        false
-      )
-    ).id
+    course.id = await API.course.insertCourse(
+      course,
+      users.trainer.email,
+      InviteStatus.ACCEPTED,
+      false
+    )
     await use(course)
     await API.course.deleteCourse(course.id)
   },

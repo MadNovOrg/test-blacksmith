@@ -269,11 +269,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <Typography variant="h2" mb={3}>
                   {t('title')}
                 </Typography>
-                <Typography
-                  variant="h2"
-                  mb={4}
-                  data-testid="xero-invoice-number-e2e"
-                >
+                <Typography variant="h2" mb={4}>
                   {order?.xeroInvoiceNumber}
                 </Typography>
                 {isInvoiceInXero && xeroInvoiceUrl ? (
@@ -383,11 +379,11 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                 </Typography>
                               ) : null}
                             </Box>
-                            <Box textAlign="end">
+                            <Box textAlign="end" data-testid="'order-quantity'">
                               <Typography variant="caption">
                                 {t('quantity')}
                               </Typography>
-                              <Typography data-testid="order-quantity">
+                              <Typography>
                                 {quantities.get(Number(course?.id)) ?? 0}
                               </Typography>
                             </Box>
@@ -415,16 +411,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               key={index}
                               data-testid={`order-registrant-${index}`}
                             >
-                              <Typography
-                                color="grey.700"
-                                data-testid="order-registrant-e2e"
-                              >
+                              <Typography color="grey.700">
                                 {lineItem.description}
                               </Typography>
-                              <Typography
-                                color="grey.700"
-                                data-testid="order-price"
-                              >
+                              <Typography color="grey.700">
                                 {_t('common.currency', {
                                   amount: lineItem?.unitAmount,
                                   currency: invoice?.currencyCode,
@@ -528,10 +518,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography color="grey.700">
                           {t('subtotal')}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="order-subtotal-e2e"
-                        >
+                        <Typography color="grey.700">
                           {_t('common.currency', {
                             amount: invoice?.subtotal,
                             currency: invoice?.currencyCode,
@@ -542,10 +529,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography color="grey.700">
                           {t(invoice?.totalTax ? 'vat' : 'no-vat')}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="order-vat-e2e"
-                        >
+                        <Typography color="grey.700">
                           {_t('common.currency', {
                             amount: invoice?.totalTax,
                             currency: invoice?.currencyCode,
@@ -606,11 +590,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             currency: invoice?.currencyCode,
                           })}
                         </Typography>
-                        <Typography
-                          fontWeight={600}
-                          variant="h3"
-                          data-testid="order-amount-due-e2e"
-                        >
+                        <Typography fontWeight={600} variant="h3">
                           {_t('common.currency', {
                             amount: invoice?.amountDue,
                             currency: invoice?.currencyCode,
@@ -634,7 +614,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           )}
                           color={statusColor}
                           size="small"
-                          data-testid="order-invoice-status"
                         />
                       </ItemRow>
                     </Stack>
@@ -652,16 +631,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         </Typography>
                       </ItemRow>
                       <ItemRow>
-                        <Typography
-                          color="grey.700"
-                          data-testid="invoice-date-e2e"
-                        >
+                        <Typography color="grey.700">
                           {_t('dates.default', { date: invoice?.issuedDate })}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="order-reference-e2e"
-                        >
+                        <Typography color="grey.700">
                           {invoice?.reference}
                         </Typography>
                       </ItemRow>
@@ -683,10 +656,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography fontWeight={600}>
                           {_t('components.course-form.source-title')}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="order-source-e2e"
-                        >
+                        <Typography color="grey.700">
                           {_t(`course-sources.${order.source}`)}
                         </Typography>
                       </Stack>
@@ -698,10 +668,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       <Typography fontWeight={600}>
                         {t('payment-method')}
                       </Typography>
-                      <Typography
-                        color="grey.700"
-                        data-testid="order-payment-method"
-                      >
+                      <Typography color="grey.700">
                         {t(`payment-method-${order?.paymentMethod}`)}
                       </Typography>
                     </Stack>
@@ -712,23 +679,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       <Typography fontWeight={600}>
                         {t('ordered-by')}
                       </Typography>
-                      <Typography
-                        color="grey.700"
-                        data-testid="ordered-by-name-e2e"
-                      >
+                      <Typography color="grey.700">
                         {order.user.fullName}
                       </Typography>
-                      <Typography
-                        color="grey.700"
-                        data-testid="ordered-by-email-e2e"
-                      >
+                      <Typography color="grey.700">
                         {order.user.email}
                       </Typography>
                       {order.user.phone ? (
-                        <Typography
-                          color="grey.700"
-                          data-testid="ordered-by-phone-e2e"
-                        >
+                        <Typography color="grey.700">
                           {order.user.phone}
                         </Typography>
                       ) : null}
@@ -741,16 +699,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography fontWeight={600}>
                           {_t('components.course-form.booking-contact')}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="booking-contact-name-e2e"
-                        >
+                        <Typography color="grey.700">
                           {bookingContact.fullName}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="booking-contact-email-e2e"
-                        >
+                        <Typography color="grey.700">
                           {bookingContact.email}
                         </Typography>
                       </Stack>
@@ -769,7 +721,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               href={`/organisations/${order.organizationId}`}
                               component={LinkBehavior}
                               underline="always"
-                              data-testid="invoiced-address-e2e"
                             >
                               {invoicedToInfo}
                             </Link>
@@ -777,23 +728,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             invoicedToInfo
                           )}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="invoiced-name-e2e"
-                        >
+                        <Typography color="grey.700">
                           {order.billingGivenName} {order.billingFamilyName}
                         </Typography>
-                        <Typography
-                          color="grey.700"
-                          data-testid="invoiced-email-e2e"
-                        >
+                        <Typography color="grey.700">
                           {order.billingEmail}
                         </Typography>
                         {phone ? (
-                          <Typography
-                            color="grey.700"
-                            data-testid="invoiced-phone-e2e"
-                          >
+                          <Typography color="grey.700">
                             {order.billingPhone}
                           </Typography>
                         ) : null}
@@ -849,7 +791,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>{t('source')}</Typography>
-                        <Typography data-testid="course-source-e2e">
+                        <Typography>
                           {_t(`course-sources.${mainCourse.source}`)}
                         </Typography>
                       </Stack>
@@ -883,7 +825,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <DetailsItemBox>
                     <Stack spacing={2}>
                       <Typography fontWeight={600}>{t('currency')}</Typography>
-                      <Typography color="grey.700" data-testid="currency-e2e">
+                      <Typography color="grey.700">
                         {t(invoice?.currencyCode ?? 'GBP')}
                       </Typography>
                     </Stack>
