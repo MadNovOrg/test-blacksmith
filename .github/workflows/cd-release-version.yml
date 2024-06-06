@@ -81,7 +81,7 @@ jobs:
   prod-cd:
     name: PROD
     needs: fetch-version
-    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) || (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'hotfix/')) && (github.base_ref == 'hotfix_release_branch')}}
+    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) || (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'hotfix-release/'))}}
     uses: ./.github/workflows/pipeline.yml
     with:
       version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
