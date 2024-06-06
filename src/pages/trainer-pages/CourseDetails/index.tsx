@@ -7,17 +7,15 @@ import {
   Button,
   CircularProgress,
   Container,
-  Link,
   Stack,
   SxProps,
-  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
 import { isFuture, isPast } from 'date-fns'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
@@ -45,6 +43,8 @@ import { ResidingCountryDialog } from '@app/pages/Welcome/components/ResidingCou
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/queries/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { courseEnded, LoadingStatus } from '@app/util'
+
+import { OrderItemComponent } from '../components/OrderItemComponent'
 
 import { DietaryRequirementsTab } from './components/DietaryRequirementsTab'
 import { DisabilitiesTab } from './components/DisabilitiesTab/DisabilitiesTab'
@@ -87,7 +87,7 @@ export const CourseDetails = () => {
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
 
   const [selectedTab, setSelectedTab] = useState(
-    initialTab || CourseDetailsTabs.ATTENDEES
+    initialTab ?? CourseDetailsTabs.ATTENDEES
   )
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
     useState(false)
@@ -157,6 +157,33 @@ export const CourseDetails = () => {
   )
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0]?.order, [course])
+  const [xeroInvoiceNumber, setXeroInvoiceNumber] = useState<
+    string | undefined
+  >(undefined)
+  const [startPollingForXeroInvoiceNumber, pollingForXeroInvoiceNumber] =
+    usePollQuery(
+      () => Promise.resolve(mutate({ requestPolicy: 'network-only' })),
+      () => !!linkedOrderItem?.xeroInvoiceNumber,
+      {
+        interval: 2000,
+        maxPolls: 5,
+      }
+    )
+
+  useEffect(() => {
+    if (linkedOrderItem?.xeroInvoiceNumber) {
+      setXeroInvoiceNumber(linkedOrderItem.xeroInvoiceNumber)
+    }
+    if (linkedOrderItem && !pollingForXeroInvoiceNumber) {
+      startPollingForXeroInvoiceNumber()
+    }
+  }, [
+    linkedOrderItem,
+    linkedOrderItem?.xeroInvoiceNumber,
+    pollingForXeroInvoiceNumber,
+    startPollingForXeroInvoiceNumber,
+  ])
+
   const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
@@ -173,7 +200,6 @@ export const CourseDetails = () => {
     if (acl.isInternalUser()) {
       return false
     }
-
     return (
       (isCourseTypeClosed && (acl.isOrgAdmin() || acl.isBookingContact())) ||
       (isCourseTypeIndirectBlended && (acl.isOrgAdmin() || acl.isTrainer()))
@@ -181,7 +207,7 @@ export const CourseDetails = () => {
   }, [acl, isCourseTypeClosed, isCourseTypeIndirectBlended])
 
   const onRefreshCourse = useCallback(async () => {
-    await mutate()
+    mutate()
   }, [mutate])
 
   // Maybe use urql's retryExchange instead of this
@@ -195,7 +221,7 @@ export const CourseDetails = () => {
 
     const courseEnded =
       Boolean(course?.schedule?.length) &&
-      isPast(new Date(course?.schedule[0]?.end as string))
+      isPast(new Date(course?.schedule[0]?.end))
 
     const graduationFinished = !course?.courseParticipants?.some(
       participant => !participant.grade
@@ -203,7 +229,7 @@ export const CourseDetails = () => {
     const cancelRequested = Boolean(course?.cancellationRequest)
 
     const mappedStatus = getIndividualCourseStatuses(
-      course?.status as Course_Status_Enum,
+      course?.status,
       courseEnded,
       graduationFinished,
       cancelRequested
@@ -302,31 +328,10 @@ export const CourseDetails = () => {
                 : undefined,
               OrderItem: canViewLinkedOrderItem
                 ? () => (
-                    <Trans
-                      i18nKey="common.order-item"
-                      defaults="Order: <0>{{invoiceNumber}}</0>"
-                      components={[
-                        canOnlyViewOrderItemAsText ? (
-                          <Typography
-                            data-testid="order-item-text"
-                            key="order-item-text"
-                            display="inline-flex"
-                            fontWeight="600"
-                            fontSize="1rem"
-                          />
-                        ) : (
-                          <Link
-                            href={`/orders/${linkedOrderItem?.id}`}
-                            data-testid="order-item-link"
-                            key="order-item-link"
-                            color="Highlight"
-                            fontWeight="600"
-                          />
-                        ),
-                      ]}
-                      values={{
-                        invoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
-                      }}
+                    <OrderItemComponent
+                      xeroInvoiceNumber={xeroInvoiceNumber}
+                      linkedOrderItemId={linkedOrderItem?.id}
+                      canOnlyViewOrderItemAsText={canOnlyViewOrderItemAsText}
                     />
                   )
                 : undefined,
