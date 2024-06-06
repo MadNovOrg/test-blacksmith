@@ -794,7 +794,7 @@ describe('page: TransferDetails', () => {
     ).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('country'), { exact: false })
+      screen.getByLabelText(t('residing-country'), { exact: false })
     ).toBeInTheDocument()
   })
 
@@ -1208,7 +1208,7 @@ describe('page: TransferDetails', () => {
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('country'), { exact: false })
+      screen.queryByLabelText(t('residing-country'), { exact: false })
     ).not.toBeInTheDocument()
   })
 })

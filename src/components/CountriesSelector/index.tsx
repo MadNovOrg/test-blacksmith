@@ -77,7 +77,7 @@ const CountriesSelector = ({
           data-testid={`countries-selector-input`}
           error={error}
           helperText={helperText}
-          label={label ?? t('country')}
+          label={label ?? t('residing-country')}
           required={required}
           inputProps={{
             ...params.inputProps,

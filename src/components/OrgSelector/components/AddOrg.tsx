@@ -24,6 +24,7 @@ import {
   InsertOrgLeadMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { CreateNewOrgType } from '@app/pages/common/AutoRegister/components/Form'
 import { MUTATION as INSERT_ORG_MUTATION } from '@app/queries/organization/insert-org-lead'
 import { yup } from '@app/schemas'
 import { Address, Establishment } from '@app/types'
@@ -34,9 +35,12 @@ type Props = {
   onClose: VoidFunction
   option: Establishment | { name: string }
   countryCode: CountryCode | UKsCountriesCode | ExceptionsCountriesCode
+  isNewUser?: boolean
+  storeNewOrgData?: (value: CreateNewOrgType) => void
 }
 
 type FormInput = {
+  id?: string | null
   organisationName: string
   sector: string
   organisationType: string
@@ -55,6 +59,8 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   countryCode,
   onSuccess,
   onClose,
+  isNewUser,
+  storeNewOrgData,
 }) {
   const { t, _t } = useScopedTranslation('components.add-organisation')
   const [{ data: organisationData, fetching: loading }, insertOrganisation] =
@@ -197,7 +203,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     resolver: yupResolver(schema),
     defaultValues,
   })
+
   const values = watch()
+
   const onSubmit = async (data: FormInput) => {
     const vars = {
       name: data.organisationName,
@@ -230,20 +238,32 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
           : null),
       },
     }
+
+    if (isNewUser && storeNewOrgData) {
+      const payload = { ...vars, id: null }
+      storeNewOrgData(payload)
+      onClose()
+      return
+    }
+
     await insertOrganisation(vars)
   }
+
   useEffect(() => {
     setValue('organisationType', '')
   }, [setValue, values.sector])
+
   useEffect(() => {
     onSuccess(organisationData?.org)
   }, [onSuccess, organisationData?.org, organisationData?.org?.name])
+
   useEffect(() => {
     setSpecifyOther(
       values.sector !== 'other' &&
         values.organisationType?.toLocaleLowerCase() === 'other'
     )
   }, [setSpecifyOther, specifyOther, values.organisationType, values.sector])
+
   return (
     <Dialog
       open

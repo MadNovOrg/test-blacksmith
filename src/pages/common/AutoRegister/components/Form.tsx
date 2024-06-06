@@ -37,9 +37,12 @@ import PhoneNumberInput, {
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
+  InsertOrgLeadMutation,
+  InsertOrgLeadMutationVariables,
   Organization,
 } from '@app/generated/graphql'
 import { MUTATION as CREATE_USER_MUTATION } from '@app/queries/invites/create-user'
+import { MUTATION as INSERT_ORG_MUTATION } from '@app/queries/organization/insert-org-lead'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
@@ -64,25 +67,40 @@ type Props = {
       postCode: string
     }
   }
+  isNewUser?: boolean
+}
+
+export interface CreateNewOrgType extends InsertOrgLeadMutationVariables {
+  id: string | null
 }
 
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   token,
   onSuccess,
   organizationData,
+  isNewUser,
 }) => {
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
+  )
+  const isInternationalFlagEnabled = useFeatureFlagEnabled(
+    'course-residing-country'
   )
   const [isManualFormError, setIsManualFormError] = useState(false)
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
+  const [newOrgData, setNewOrgData] = useState<CreateNewOrgType | null>(null)
+
+  const [, insertOrganisation] = useMutation<
+    InsertOrgLeadMutation,
+    InsertOrgLeadMutationVariables
+  >(INSERT_ORG_MUTATION)
   const [{ data: userData, error, fetching: loading }, createUser] =
     useMutation<CreateUserMutation, CreateUserMutationVariables>(
       CREATE_USER_MUTATION
     )
-  const { getLabel: getCountryLabel } = useWorldCountries()
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
@@ -105,6 +123,11 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const values = watch()
   const minimalAge = subYears(new Date(), 16)
+
+  const allowCreatNewOrganisation = useMemo(
+    () => !isUKCountry(values.countryCode) && isInternationalFlagEnabled,
+    [values.countryCode, isUKCountry, isInternationalFlagEnabled]
+  )
 
   const onSubmit = async (data: FormInputs) => {
     if (isManualFormError) return
@@ -136,10 +159,31 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       phoneCountryCode,
     }
 
-    await createUser(
-      { input },
-      { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
-    )
+    try {
+      if (newOrgData) {
+        const createNewOrgPayload = {
+          name: newOrgData.name,
+          sector: newOrgData.sector,
+          orgType: newOrgData.orgType,
+          address: newOrgData.address,
+          attributes: newOrgData.attributes,
+        }
+        const { data: addedOrg } = await insertOrganisation(createNewOrgPayload)
+
+        if (addedOrg?.org?.id) {
+          Object.assign(input, {
+            orgId: addedOrg?.org?.id,
+          })
+
+          await createUser(
+            { input },
+            { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
+          )
+        }
+      }
+    } catch (error) {
+      return
+    }
   }
 
   const handleOrganizationSelection = useCallback(
@@ -171,11 +215,19 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         name: organizationData.name,
         address: organizationData.address,
       })
+    } else if (newOrgData) {
+      setValue('organization', {
+        id: newOrgData.id,
+        name: newOrgData.name,
+        address: newOrgData.address,
+      })
     }
-  }, [organizationData, setValue])
+  }, [organizationData, newOrgData, setValue])
 
   useUpdateEffect(() => {
-    if (userData?.createUser.email) onSuccess()
+    if (userData?.createUser.email) {
+      onSuccess()
+    }
   }, [onSuccess, userData?.createUser.email])
 
   return (
@@ -334,10 +386,12 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Grid item>
           <OrgSelector
             {...register('organization')}
-            allowAdding={false}
+            isNewUser={isNewUser}
+            storeNewOrgData={setNewOrgData}
+            allowAdding={allowCreatNewOrganisation}
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
-            value={values.organization ?? undefined}
+            value={values.organization ?? newOrgData ?? undefined}
             onChange={handleOrganizationSelection}
             textFieldProps={{
               variant: 'filled',
@@ -346,6 +400,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             required
             searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
             canSearchByAddress={false}
+            countryCode={values.countryCode}
             placeholder={
               isSearchOnlyByPostCodeEnabled
                 ? undefined

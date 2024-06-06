@@ -35,6 +35,7 @@ import {
   Dfe_Establishment,
   Organization_Bool_Exp,
 } from '@app/generated/graphql'
+import { CreateNewOrgType } from '@app/pages/common/AutoRegister/components/Form'
 import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
 import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
 
@@ -73,6 +74,8 @@ export type OrgSelectorProps = {
   userOrgIds?: string[]
   value?: Pick<Organization, 'name' | 'id'> | null
   canSearchByAddress?: boolean
+  isNewUser?: boolean
+  storeNewOrgData?: (value: CreateNewOrgType) => void
 }
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
@@ -98,6 +101,8 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     searchOnlyByPostCode = false,
     canSearchByAddress = true,
     label,
+    isNewUser,
+    storeNewOrgData,
     ...props
   }) {
     const { t } = useTranslation()
@@ -128,6 +133,15 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           : undefined,
       [profile?.organizations, showTrainerOrgOnly]
     )
+
+    const allowCreateNewOrg = useMemo(() => {
+      if (allowAdding && !countryCode?.includes('GB')) {
+        return true
+      } else if (allowAdding && countryCode?.includes('GB')) {
+        return false
+      }
+      return false
+    }, [allowAdding, countryCode])
 
     const [{ data: dfeOrgs, fetching: dfeFetching }] = useQuery<
       FindEstablishmentQuery,
@@ -403,8 +417,9 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               !isHubOrg(option) ||
               isXeroSuggestion(option) ||
               isDfeSuggestion(option)
+
             const address = renderAddress(option)
-            const key = !('id' in option) ? 'NEW_ORG' : (option.id as string)
+            const key = !('id' in option) ? 'NEW_ORG' : (option?.id as string)
             return (
               <Box
                 display="flex"
@@ -450,11 +465,12 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     }}
                     size="small"
                     fullWidth={isMobile}
+                    data-testid="new-organisation"
                   >
                     {t(
                       isDfeSuggestion(option)
                         ? 'add'
-                        : allowAdding
+                        : allowCreateNewOrg
                         ? 'create'
                         : 'organisation-enquiry'
                     )}
@@ -471,6 +487,8 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             countryCode={(countryCode as CountryCode) ?? 'GB-ENG'}
             onClose={handleClose}
             onSuccess={handleSuccess}
+            isNewUser={isNewUser}
+            storeNewOrgData={storeNewOrgData}
           />
         ) : null}
       </>

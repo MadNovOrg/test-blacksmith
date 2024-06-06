@@ -188,4 +188,100 @@ describe('component: OrgSelector', () => {
       expect(onChangeMock).toHaveBeenCalledWith(organization)
     })
   })
+
+  it('displays *Organisation Enquiry* button when country is one of UK countries', async () => {
+    const ORG_SEARCH_NAME = 'Organization'
+    const onChangeMock = vi.fn()
+    const organization = buildOrganization({
+      overrides: {
+        name: ORG_SEARCH_NAME,
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganizationsQuery }>({
+          data: {
+            orgs: [organization] as GetOrganizationsQuery['orgs'],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrgSelector
+          onChange={onChangeMock}
+          allowAdding={true}
+          countryCode="GB-ENG"
+        />
+      </Provider>,
+      { auth: { profile } }
+    )
+
+    await userEvent.type(
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
+      'Test'
+    )
+
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+      ).toBeInTheDocument()
+
+      expect(screen.getByTestId('new-organisation')).toBeInTheDocument()
+
+      expect(screen.getByTestId('new-organisation')).toHaveTextContent(
+        'Organisation Enquiry'
+      )
+    })
+  })
+
+  it('displays *Create* button when country is not one of UK countries', async () => {
+    const ORG_SEARCH_NAME = 'Organization'
+    const onChangeMock = vi.fn()
+    const organization = buildOrganization({
+      overrides: {
+        name: ORG_SEARCH_NAME,
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetOrganizationsQuery }>({
+          data: {
+            orgs: [organization] as GetOrganizationsQuery['orgs'],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrgSelector
+          onChange={onChangeMock}
+          allowAdding={true}
+          countryCode="AT"
+        />
+      </Provider>,
+      { auth: { profile } }
+    )
+
+    await userEvent.type(
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
+      'Test'
+    )
+
+    await waitFor(() => {
+      expect(
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+      ).toBeInTheDocument()
+
+      expect(screen.getByTestId('new-organisation')).toBeInTheDocument()
+
+      expect(screen.getByTestId('new-organisation')).toHaveTextContent('Create')
+    })
+  })
 })

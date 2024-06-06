@@ -96,7 +96,7 @@ describe('page: ReplaceParticipantDialog.', () => {
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('country'), { exact: false })
+      screen.queryByLabelText(t('residing-country'), { exact: false })
     ).not.toBeInTheDocument()
   })
 
@@ -166,7 +166,7 @@ describe('page: ReplaceParticipantDialog.', () => {
     ).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('country'), { exact: false })
+      screen.getByLabelText(t('residing-country'), { exact: false })
     ).toBeInTheDocument()
   })
 
@@ -236,7 +236,7 @@ describe('page: ReplaceParticipantDialog.', () => {
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('country'), { exact: false })
+      screen.queryByLabelText(t('residing-country'), { exact: false })
     ).not.toBeInTheDocument()
   })
 
