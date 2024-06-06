@@ -3724,32 +3724,12 @@ export enum MediaItemSizeEnum {
   Medium = 'MEDIUM',
   /** MediaItem with the medium_large size */
   MediumLarge = 'MEDIUM_LARGE',
-  /** MediaItem with the portfolio-five size */
-  PortfolioFive = 'PORTFOLIO_FIVE',
-  /** MediaItem with the portfolio-full size */
-  PortfolioFull = 'PORTFOLIO_FULL',
-  /** MediaItem with the portfolio-one size */
-  PortfolioOne = 'PORTFOLIO_ONE',
-  /** MediaItem with the portfolio-three size */
-  PortfolioThree = 'PORTFOLIO_THREE',
-  /** MediaItem with the portfolio-two size */
-  PortfolioTwo = 'PORTFOLIO_TWO',
   /** MediaItem with the recent-posts size */
   RecentPosts = 'RECENT_POSTS',
   /** MediaItem with the recent-works-thumbnail size */
   RecentWorksThumbnail = 'RECENT_WORKS_THUMBNAIL',
   /** MediaItem with the thumbnail size */
   Thumbnail = 'THUMBNAIL',
-  /** MediaItem with the wpsm_team_pro_small size */
-  WpsmTeamProSmall = 'WPSM_TEAM_PRO_SMALL',
-  /** MediaItem with the wpsm_team_pro_small3 size */
-  WpsmTeamProSmall3 = 'WPSM_TEAM_PRO_SMALL3',
-  /** MediaItem with the wpsm_team_pro_small4 size */
-  WpsmTeamProSmall4 = 'WPSM_TEAM_PRO_SMALL4',
-  /** MediaItem with the wpsm_team_pro_small5 size */
-  WpsmTeamProSmall5 = 'WPSM_TEAM_PRO_SMALL5',
-  /** MediaItem with the wpsm_team_pro_small6 size */
-  WpsmTeamProSmall6 = 'WPSM_TEAM_PRO_SMALL6',
   /** MediaItem with the 1536x1536 size */
   '1536X1536' = '_1536X1536',
   /** MediaItem with the 2048x2048 size */
@@ -45349,6 +45329,7 @@ export type Organization_Type = {
   __typename?: 'organization_type';
   id: Scalars['uuid'];
   name: Scalars['String'];
+  nonUK: Scalars['Boolean'];
   sector: Organisation_Sector_Enum;
 };
 
@@ -45381,6 +45362,7 @@ export type Organization_Type_Bool_Exp = {
   _or?: InputMaybe<Array<Organization_Type_Bool_Exp>>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  nonUK?: InputMaybe<Boolean_Comparison_Exp>;
   sector?: InputMaybe<Organisation_Sector_Enum_Comparison_Exp>;
 };
 
@@ -45394,6 +45376,7 @@ export enum Organization_Type_Constraint {
 export type Organization_Type_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   name?: InputMaybe<Scalars['String']>;
+  nonUK?: InputMaybe<Scalars['Boolean']>;
   sector?: InputMaybe<Organisation_Sector_Enum>;
 };
 
@@ -45431,6 +45414,7 @@ export type Organization_Type_On_Conflict = {
 export type Organization_Type_Order_By = {
   id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  nonUK?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
 };
 
@@ -45446,6 +45430,8 @@ export enum Organization_Type_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  NonUk = 'nonUK',
+  /** column name */
   Sector = 'sector'
 }
 
@@ -45453,6 +45439,7 @@ export enum Organization_Type_Select_Column {
 export type Organization_Type_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   name?: InputMaybe<Scalars['String']>;
+  nonUK?: InputMaybe<Scalars['Boolean']>;
   sector?: InputMaybe<Organisation_Sector_Enum>;
 };
 
@@ -45468,6 +45455,7 @@ export type Organization_Type_Stream_Cursor_Input = {
 export type Organization_Type_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   name?: InputMaybe<Scalars['String']>;
+  nonUK?: InputMaybe<Scalars['Boolean']>;
   sector?: InputMaybe<Organisation_Sector_Enum>;
 };
 
@@ -45477,6 +45465,8 @@ export enum Organization_Type_Update_Column {
   Id = 'id',
   /** column name */
   Name = 'name',
+  /** column name */
+  NonUk = 'nonUK',
   /** column name */
   Sector = 'sector'
 }
@@ -59485,7 +59475,7 @@ export type GetOrganizationProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetOrganizationProfilesQuery = { __typename?: 'query_root', profiles?: { __typename?: 'OrganizationProfilesOutput', profilesByOrganisation?: Array<{ __typename?: 'ProfilesByOrganization', orgId?: any | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, archived?: boolean | null, avatar?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null } | null> | null } | null> | null, profilesByLevel?: Array<{ __typename?: 'ProfilesByLevel', level?: CourseLevel | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null, upcomingEnrollments?: Array<{ __typename?: 'UpcominEnrollment', orgId: any, orgName?: string | null, courseLevel?: CourseLevel | null, course?: { __typename?: 'UpcomingEnrollmentCourse', id?: any | null, course_code?: string | null } | null } | null> | null, organizations?: Array<{ __typename?: 'ProfileOrganization', id?: any | null, position?: string | null, organization: { __typename?: 'OrganizationInfo', id?: any | null, name?: string | null } } | null> | null } | null> | null } | null> | null } | null };
+export type GetOrganizationProfilesQuery = { __typename?: 'query_root', profiles?: { __typename?: 'OrganizationProfilesOutput', profilesByOrganisation?: Array<{ __typename?: 'ProfilesByOrganization', orgId?: any | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, archived?: boolean | null, avatar?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null } | null> | null } | null> | null, profilesByLevel?: Array<{ __typename?: 'ProfilesByLevel', level?: CourseLevel | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null, upcomingEnrollments?: Array<{ __typename?: 'UpcominEnrollment', orgId: any, orgName?: string | null, courseLevel?: CourseLevel | null, course?: { __typename?: 'UpcomingEnrollmentCourse', id?: any | null, course_code?: string | null, schedule?: Array<{ __typename?: 'EnrollmentCourseSchedule', start?: string | null, end?: string | null } | null> | null } | null } | null> | null, organizations?: Array<{ __typename?: 'ProfileOrganization', id?: any | null, position?: string | null, organization: { __typename?: 'OrganizationInfo', id?: any | null, name?: string | null } } | null> | null } | null> | null } | null> | null } | null };
 
 export type ImportUsersJobSubscriptionVariables = Exact<{
   id: Scalars['uuid'];
@@ -60523,7 +60513,7 @@ export type GetOrgDetailsQueryVariables = Exact<{
 export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, lastActivity?: any | null, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null, course?: { __typename?: 'course', type: Course_Type_Enum, name: string, course_code?: string | null } | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgTypesQueryVariables = Exact<{
-  sector: Organisation_Sector_Enum;
+  where: Organization_Type_Bool_Exp;
 }>;
 
 

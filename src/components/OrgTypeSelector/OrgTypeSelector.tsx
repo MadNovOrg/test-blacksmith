@@ -14,6 +14,7 @@ type Props = {
   disabled?: boolean
   value?: Pick<Organization_Type, 'name'> | string
   register?: UseFormRegisterReturn
+  international?: boolean
 }
 
 export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
@@ -24,10 +25,11 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
   label,
   value,
   register,
+  international = false,
 }) => {
   const { t } = useTranslation()
 
-  const { data } = useOrgType(sector)
+  const { data } = useOrgType(sector, international)
 
   return (
     <TextField

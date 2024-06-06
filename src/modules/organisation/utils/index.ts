@@ -141,11 +141,7 @@ export const getFormSchema = (
                   ),
               }
             : {
-                postcode: yup.string().required(
-                  _t('validation-errors.required-field', {
-                    name: t('fields.addresses.zipCode'),
-                  })
-                ),
+                postcode: yup.string(),
               }),
         }
       : {

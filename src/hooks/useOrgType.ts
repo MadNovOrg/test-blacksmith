@@ -5,10 +5,11 @@ import {
   GetOrgTypesQuery,
   GetOrgTypesQueryVariables,
   Organisation_Sector_Enum,
+  Organization_Type_Bool_Exp,
 } from '@app/generated/graphql'
 import { GET_ORG_TYPES } from '@app/queries/organization/get-org-types'
 
-export const useOrgType = (sector: string) => {
+export const useOrgType = (sector: string, international = false) => {
   const sectorMap = new Map()
   switch (sector) {
     case 'edu':
@@ -24,13 +25,18 @@ export const useOrgType = (sector: string) => {
       'other'
   }
 
+  const where: Organization_Type_Bool_Exp = {
+    sector: { _eq: sectorMap.get(sector) },
+    ...(!international ? { nonUK: { _eq: false } } : {}),
+  }
+
   const [{ data: orgTypes }] = useQuery<
     GetOrgTypesQuery,
     GetOrgTypesQueryVariables
   >({
     query: GET_ORG_TYPES,
     variables: {
-      sector: sectorMap.get(sector),
+      where,
     },
     pause: !sector,
   })
