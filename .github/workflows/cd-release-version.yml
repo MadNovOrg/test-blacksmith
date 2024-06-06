@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   fetch-version:
-    if: ${{ github.event.pull_request.merged == true && ((startsWith(github.event.pull_request.head.ref, 'changeset-release/') && github.event.pull_request.base.ref == 'main') || (startsWith(github.event.pull_request.head.ref, 'hotfix/') && github.event.pull_request.base.ref == 'hotfix_release_branch')) }}
+    if: ${{ github.event.pull_request.merged == true && ((startsWith(github.event.pull_request.head.ref, 'changeset-release/') && github.event.pull_request.base.ref == 'main') || (startsWith(github.event.pull_request.head.ref, 'hotfix-release/') && github.event.pull_request.base.ref == 'hotfix_release_branch')) }}
     name: Fetch Version
     runs-on: ubuntu-latest
     outputs:
