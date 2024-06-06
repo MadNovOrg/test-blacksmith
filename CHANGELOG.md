@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.3.1
+
+### Patch Changes
+
+- 960d938: Testing the hotfix process
+
 ## 4.3.0
 
 ### Minor Changes

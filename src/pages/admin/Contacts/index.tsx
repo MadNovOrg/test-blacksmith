@@ -216,6 +216,7 @@ export const Contacts: React.FC<
                 size="small"
                 placeholder={t('search')}
                 onChange={e => setKeyword(e.target.value)}
+                sx={{ width: '100%', mb: 2 }}
               />
             </Box>
             <TableContainer component={Paper} elevation={0}>
