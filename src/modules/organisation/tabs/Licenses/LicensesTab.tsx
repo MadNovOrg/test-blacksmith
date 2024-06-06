@@ -41,7 +41,7 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { Pagination, perPage, currentPage } = useTablePagination({
     id: 'tbl',
-    initialPerPage: 5,
+    initialPerPage: 12,
   })
 
   const [{ data, fetching, error }, refetch] = useQuery<

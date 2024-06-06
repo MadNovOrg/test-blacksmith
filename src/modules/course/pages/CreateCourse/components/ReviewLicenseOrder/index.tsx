@@ -174,7 +174,10 @@ export const ReviewLicenseOrder: React.FC<
           <InfoRow
             label={_t('common.subtotal')}
             value={_t('common.currency', {
-              amount: go1Licensing?.prices.subtotal,
+              amount: go1Licensing
+                ? go1Licensing?.prices.subtotal -
+                  (go1Licensing?.prices.allowancePrice ?? 0)
+                : undefined,
             })}
           />
           {go1Licensing?.prices.vat ? (
