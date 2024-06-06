@@ -208,7 +208,7 @@ export const Contacts: React.FC<
             </Box>
           </Box>
           <Box flex={1}>
-            <Box mt={4}>
+            <Box mt={4} sx={{ display: 'flex', justifyContent: 'end', mb: 2 }}>
               <TextField
                 hiddenLabel
                 value={keyword}
