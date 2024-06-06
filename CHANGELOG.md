@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.3.2
+
+### Patch Changes
+
+- 5170d0a: Hotfix workflow test #2
+
 ## 4.3.1
 
 ### Patch Changes
