@@ -315,7 +315,7 @@
       "city": "Town/City",
       "postCode": "Post code",
       "zipCode": "Zip code",
-      "reisding-country": "Residing Country"
+      "residing-country": "Residing Country"
     }
   },
   "user-selector": {

@@ -1,5 +1,5 @@
 import { MenuItem, TextField } from '@mui/material'
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren, useMemo } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -31,6 +31,21 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
 
   const { data } = useOrgType(sector, international)
 
+  const orgTypes = useMemo(() => {
+    const orgTypesOptions = [...(data?.organization_type ?? [])]
+
+    const otherOption = orgTypesOptions.findIndex(
+      option => option.name === 'Other'
+    )
+
+    if (otherOption && otherOption !== -1) {
+      const item = orgTypesOptions.splice(otherOption, 1)[0]
+      orgTypesOptions.push(item)
+    }
+
+    return orgTypesOptions
+  }, [data?.organization_type])
+
   return (
     <TextField
       select
@@ -47,8 +62,8 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
       {...register}
       data-testid="org-type-selector"
     >
-      {data?.organization_type.length ? (
-        data?.organization_type.map(m => (
+      {orgTypes ? (
+        orgTypes.map(m => (
           <MenuItem
             key={m.id}
             value={m.name ?? value}

@@ -117,8 +117,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       ),
       addressLine2: yup.string(),
       city: yup.string().required(
-        _t('validation-errors.required-field', {
-          name: t('fields.city'),
+        _t('validation-errors.required-composed-field', {
+          field1: t('fields.addresses.town'),
+          field2: t('fields.addresses.city'),
         })
       ),
       ...(addOrgCountriesSelectorEnabled
@@ -139,11 +140,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                     ),
                 }
               : {
-                  postCode: yup.string().required(
-                    _t('validation-errors.required-field', {
-                      name: t('fields.zipCode'),
-                    })
-                  ),
+                  postCode: yup.string(),
                 }),
           }
         : {
@@ -172,12 +169,12 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   const defaultValues: Partial<FormInput> = isDfeSuggestion(option)
     ? {
         organisationName: option.name,
-        addressLine1: option.addressLineOne || '',
-        addressLine2: option.addressLineTwo || '',
-        city: option.town || '',
+        addressLine1: option.addressLineOne ?? '',
+        addressLine2: option.addressLineTwo ?? '',
+        city: option.town ?? '',
         country: getCountryLabel(countryCode),
         countryCode: countryCode,
-        postCode: option.postcode || '',
+        postCode: option.postcode ?? '',
         sector: '',
         organisationType: '',
       }
@@ -199,6 +196,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     formState: { errors },
     watch,
     setValue,
+    trigger,
   } = useForm<FormInput>({
     resolver: yupResolver(schema),
     defaultValues,
@@ -211,7 +209,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       name: data.organisationName,
       sector: data.sector,
       orgType: !specifyOther
-        ? (data.organisationType as string)
+        ? data.organisationType
         : (data.orgTypeSpecifyOther as string),
       address: {
         line1: data.addressLine1,
@@ -250,6 +248,12 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   }
 
   useEffect(() => {
+    if (schema && errors.postCode && !isInUK) {
+      trigger('postCode')
+    }
+  }, [errors.postCode, isInUK, schema, trigger])
+
+  useEffect(() => {
     setValue('organisationType', '')
   }, [setValue, values.sector])
 
@@ -273,94 +277,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       }}
       maxWidth={800}
     >
-      <form noValidate autoComplete="off" aria-autocomplete="none">
-        <Typography mb={2}>{_t('org-details')}</Typography>
-        <Grid
-          sx={{ width: { md: 400, xs: '100%' } }}
-          container
-          flexDirection={'column'}
-          gap={3}
-          mb={3}
-        >
-          <Grid item>
-            <TextField
-              id="organisationName"
-              label={t('fields.organisation-name')}
-              variant="filled"
-              placeholder={t('org-name-placeholder')}
-              error={!!errors.organisationName}
-              helperText={errors.organisationName?.message}
-              {...register('organisationName')}
-              inputProps={{ 'data-testid': 'org-name' }}
-              autoFocus
-              fullWidth
-              required
-            />
-          </Grid>
-          <Grid item>
-            <OrganisationSectorDropdown
-              register={{ ...register('sector') }}
-              label={t('fields.sector')}
-              required
-              value={values.sector}
-              error={errors.sector?.message}
-            />
-          </Grid>
-          <Grid item>
-            {values.sector !== 'other' ? (
-              <OrgTypeSelector
-                sector={values.sector}
-                register={{ ...register('organisationType') }}
-                label={t('fields.organisation-type')}
-                required
-                value={values.organisationType}
-                disabled={!values.sector}
-                error={errors.organisationType?.message}
-              />
-            ) : (
-              <TextField
-                id="sector"
-                label={t('fields.organisation-type')}
-                variant="filled"
-                error={!!errors.organisationType}
-                helperText={errors.organisationType?.message}
-                {...register('organisationType')}
-                inputProps={{ 'data-testid': 'org-type' }}
-                fullWidth
-                required
-              />
-            )}
-          </Grid>
-          {specifyOther ? (
-            <Grid item>
-              <TextField
-                id="orgTypeSpecifyOther"
-                label={t('fields.organisation-specify-other')}
-                variant="filled"
-                error={!!errors.orgTypeSpecifyOther}
-                helperText={errors.orgTypeSpecifyOther?.message}
-                {...register('orgTypeSpecifyOther')}
-                fullWidth
-                required
-              />
-            </Grid>
-          ) : null}
-          <Grid item>
-            <TextField
-              id="organisationEmail"
-              label={t('fields.organisation-email')}
-              variant="filled"
-              error={!!errors.organisationEmail}
-              helperText={errors.organisationEmail?.message}
-              {...register('organisationEmail')}
-              inputProps={{ 'data-testid': 'org-email' }}
-              fullWidth
-              required
-            />
-          </Grid>
-        </Grid>
+      <form noValidate autoComplete="off">
         <Typography mb={2}>{_t('org-address')}</Typography>
-        <Grid container gap={3} flexDirection={'column'}>
+        <Grid container gap={3} mb={3} flexDirection={'column'}>
           <Grid item>
             {addOrgCountriesSelectorEnabled ? (
               <CountriesSelector
@@ -383,7 +302,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                 error={Boolean(errors.country)}
                 errormessage={errors.country?.message}
                 value={values.country}
-                label={t('fields.country')}
+                label={t('fields.residing-country')}
               />
             )}
           </Grid>
@@ -436,7 +355,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               {...register('postCode')}
               inputProps={{ 'data-testid': 'postCode' }}
               fullWidth
-              required
+              required={isInUK}
               InputProps={
                 isInUK
                   ? {
@@ -454,6 +373,93 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             />
           </Grid>
         </Grid>
+
+        <Typography mb={2}>{_t('org-details')}</Typography>
+        <Grid
+          sx={{ width: { md: 400, xs: '100%' } }}
+          container
+          flexDirection={'column'}
+          gap={3}
+        >
+          <Grid item>
+            <TextField
+              id="organisationName"
+              label={t('fields.organisation-name')}
+              variant="filled"
+              placeholder={t('org-name-placeholder')}
+              error={!!errors.organisationName}
+              helperText={errors.organisationName?.message}
+              {...register('organisationName')}
+              inputProps={{ 'data-testid': 'org-name' }}
+              autoFocus
+              fullWidth
+              required
+            />
+          </Grid>
+          <Grid item>
+            <OrganisationSectorDropdown
+              register={{ ...register('sector') }}
+              label={t('fields.sector')}
+              required
+              value={values.sector}
+              error={errors.sector?.message}
+            />
+          </Grid>
+          <Grid item>
+            {values.sector !== 'other' ? (
+              <OrgTypeSelector
+                sector={values.sector}
+                register={{ ...register('organisationType') }}
+                label={t('fields.organisation-type')}
+                required
+                value={values.organisationType}
+                disabled={!values.sector}
+                error={errors.organisationType?.message}
+                international={!isInUK}
+              />
+            ) : (
+              <TextField
+                id="sector"
+                label={t('fields.organisation-type')}
+                variant="filled"
+                error={!!errors.organisationType}
+                helperText={errors.organisationType?.message}
+                {...register('organisationType')}
+                inputProps={{ 'data-testid': 'org-type' }}
+                fullWidth
+                required
+              />
+            )}
+          </Grid>
+          {specifyOther ? (
+            <Grid item>
+              <TextField
+                id="orgTypeSpecifyOther"
+                label={t('fields.organisation-specify-other')}
+                variant="filled"
+                error={!!errors.orgTypeSpecifyOther}
+                helperText={errors.orgTypeSpecifyOther?.message}
+                {...register('orgTypeSpecifyOther')}
+                fullWidth
+                required
+              />
+            </Grid>
+          ) : null}
+          <Grid item>
+            <TextField
+              id="organisationEmail"
+              label={t('fields.organisation-email')}
+              variant="filled"
+              error={!!errors.organisationEmail}
+              helperText={errors.organisationEmail?.message}
+              {...register('organisationEmail')}
+              inputProps={{ 'data-testid': 'org-email' }}
+              fullWidth
+              required
+            />
+          </Grid>
+        </Grid>
+
         <Grid mt={3} display="flex" justifyContent="flex-end" item>
           <Button variant="outlined" color="secondary" onClick={onClose}>
             {_t('cancel')}

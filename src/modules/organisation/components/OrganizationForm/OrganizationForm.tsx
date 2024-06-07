@@ -134,12 +134,15 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const onOrgSelected = useCallback(
     async (org: CallbackOption) => {
       const orgDataMap = new Map()
-      !isEditMode && setXeroId
-        ? setXeroId(
-            org && isXeroSuggestion(org) ? (org.xeroId as string) : undefined
-          )
-        : null
+
+      if (!isEditMode && setXeroId) {
+        setXeroId(
+          org && isXeroSuggestion(org) ? (org.xeroId as string) : undefined
+        )
+      }
+
       setValue('name', org?.name ?? '', { shouldValidate: true })
+
       if (isDfeSuggestion(org)) {
         Object.keys(values).map(async key => {
           if (key === 'ofstedLastInspection') {
@@ -185,6 +188,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     },
     [_t, isEditMode, setValue, setXeroId, trigger, values]
   )
+
+  useEffect(() => {
+    if (schema && errors.postcode && !isInUK) {
+      trigger('postcode')
+    }
+  }, [errors.postcode, isInUK, schema, trigger])
+
   useEffect(() => {
     if (editOrgData && isEditMode) {
       Object.entries(editOrgData).forEach(([key, value]) => {
@@ -305,7 +315,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                             setIsInUK(isUKCountry(code))
 
                             if (!isUKCountry(code)) {
-                              console.log()
                               setValue('localAuthority', '')
                               setValue('ofstedLastInspection', null)
                               setValue('ofstedRating', '')

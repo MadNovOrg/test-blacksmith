@@ -120,7 +120,7 @@ export const getFormSchema = (
     ),
     country: yup.string().required(
       _t('validation-errors.required-field', {
-        name: t('fields.addressess.country'),
+        name: t('fields.addresses.country'),
       })
     ),
     ...(addOrgCountriesSelectorEnabled
