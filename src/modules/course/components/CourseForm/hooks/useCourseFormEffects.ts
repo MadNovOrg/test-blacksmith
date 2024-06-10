@@ -26,10 +26,7 @@ export const useCourseFormEffects = () => {
       if (wasCountryAlreadyChanged) return courseResidingCountry
 
       const shouldUseTrainerCountry =
-        acl.isTrainer() &&
-        isIndirectCourse &&
-        newCourseLevel === Course_Level_Enum.Level_1Bs &&
-        !!profile?.countryCode
+        acl.isTrainer() && isIndirectCourse && !!profile?.countryCode
 
       if (shouldUseTrainerCountry) {
         return profile.countryCode
