@@ -95,7 +95,12 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const addOrgCountriesSelectorEnabled =
     useFeatureFlagEnabled('add-organization-country') ?? true
 
-  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+  const {
+    checkUKsCountryName,
+    getLabel: getCountryLabel,
+    getUKCountryCodeByCountryName,
+    isUKCountry,
+  } = useWorldCountries()
 
   const [isInUK, setIsInUK] = useState(true)
   const [specifyOtherOrgType, setSpecifyOtherOrgType] = useState<boolean>(false)
@@ -211,9 +216,25 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
       if (editOrgData.countryCode) {
         setValue('countryCode', editOrgData.countryCode)
         setIsInUK(isUKCountry(editOrgData.countryCode))
+      } else if (
+        editOrgData.country &&
+        checkUKsCountryName(editOrgData.country)
+      ) {
+        const UKCountryCode = getUKCountryCodeByCountryName(editOrgData.country)
+        if (UKCountryCode) {
+          setValue('countryCode', UKCountryCode)
+        }
+        setIsInUK(true)
       }
     }
-  }, [isEditMode, editOrgData, setValue, isUKCountry])
+  }, [
+    isEditMode,
+    editOrgData,
+    setValue,
+    isUKCountry,
+    checkUKsCountryName,
+    getUKCountryCodeByCountryName,
+  ])
 
   useEffect(() => {
     if (

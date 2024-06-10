@@ -286,12 +286,21 @@ export default function useWorldCountries() {
     []
   )
 
+  const getUKCountryCodeByCountryName = useCallback((countryName: string) => {
+    const found = Object.entries(UKsCountriesCodes).find(
+      ([_, value]) => value === countryName
+    )
+
+    return found ? found[0] : undefined
+  }, [])
+
   return {
     checkUKsCountryName,
     countries,
     countriesCodesWithUKs,
     countriesISOCodes,
     getLabel,
+    getUKCountryCodeByCountryName,
     isUKCountry,
   }
 }
