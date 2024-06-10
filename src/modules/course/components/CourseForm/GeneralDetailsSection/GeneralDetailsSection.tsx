@@ -58,7 +58,7 @@ export const GeneralDetailsSection = ({
   disabledFields,
   isCreation,
 }: Props) => {
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const theme = useTheme()
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
   const {
@@ -185,6 +185,25 @@ export const GeneralDetailsSection = ({
       })
     }
   }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
+
+  useEffect(() => {
+    if (
+      isInternationalIndirectEnabled &&
+      acl.isTrainer() &&
+      isCreation &&
+      isIndirectCourse &&
+      !!profile?.countryCode
+    ) {
+      setValue('residingCountry', profile?.countryCode)
+    }
+  }, [
+    acl,
+    isCreation,
+    isIndirectCourse,
+    isInternationalIndirectEnabled,
+    profile?.countryCode,
+    setValue,
+  ])
 
   useEffect(() => {
     const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
