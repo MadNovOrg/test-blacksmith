@@ -1306,7 +1306,8 @@
           "address-line-2": "Address Line 2",
           "town-or-city": "Town/City",
           "postcode": "Post code",
-          "country": "Country"
+          "country": "Country",
+          "zip-code": "Zip code"
         },
         "additional-details": {
           "title": "Additional details",

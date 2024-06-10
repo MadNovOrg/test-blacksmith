@@ -71,6 +71,10 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     'add-organization-country'
   )
 
+  const useInternationalCountriesSelector = useMemo(() => {
+    return Boolean(addOrgCountriesSelectorEnabled ?? true)
+  }, [addOrgCountriesSelectorEnabled])
+
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
@@ -118,11 +122,11 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       addressLine2: yup.string(),
       city: yup.string().required(
         _t('validation-errors.required-composed-field', {
-          field1: t('fields.addresses.town'),
-          field2: t('fields.addresses.city'),
+          field1: _t('pages.create-organization.fields.addresses.town'),
+          field2: _t('pages.create-organization.fields.addresses.city'),
         })
       ),
-      ...(addOrgCountriesSelectorEnabled
+      ...(useInternationalCountriesSelector
         ? {
             ...(isInUK
               ? {
@@ -164,7 +168,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         })
       ),
     })
-  }, [_t, addOrgCountriesSelectorEnabled, isInUK, t])
+  }, [_t, useInternationalCountriesSelector, isInUK, t])
 
   const defaultValues: Partial<FormInput> = isDfeSuggestion(option)
     ? {
@@ -281,7 +285,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         <Typography mb={2}>{_t('org-address')}</Typography>
         <Grid container gap={3} mb={3} flexDirection={'column'}>
           <Grid item>
-            {addOrgCountriesSelectorEnabled ? (
+            {useInternationalCountriesSelector ? (
               <CountriesSelector
                 onChange={(_, code) => {
                   if (code) {

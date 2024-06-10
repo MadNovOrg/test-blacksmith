@@ -62,7 +62,10 @@ type Props = {
   setOtherOrgType?: (otherOrgType: boolean) => void
   error?: CombinedError | undefined
   loading?: boolean
-  editOrgData?: Partial<Organization>
+  editOrgData?: Partial<Organization> & {
+    country?: string
+    countryCode?: string
+  }
 }
 
 const OfstedRatingOrder = {
@@ -198,10 +201,19 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     if (editOrgData && isEditMode) {
       Object.entries(editOrgData).forEach(([key, value]) => {
+        if (key === 'countryCode') {
+          return
+        }
+
         setValue(key as keyof FormInputs, value)
       })
+
+      if (editOrgData.countryCode) {
+        setValue('countryCode', editOrgData.countryCode)
+        setIsInUK(isUKCountry(editOrgData.countryCode))
+      }
     }
-  }, [isEditMode, editOrgData, setValue])
+  }, [isEditMode, editOrgData, setValue, isUKCountry])
 
   useEffect(() => {
     if (

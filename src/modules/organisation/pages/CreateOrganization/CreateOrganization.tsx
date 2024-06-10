@@ -62,6 +62,7 @@ export const CreateOrganization = () => {
           line2: data.addressLine2,
           city: data.city,
           country: data.country,
+          countryCode: data.countryCode,
           postCode: data.postcode,
         } as Address,
         xeroId,

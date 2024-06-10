@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWindowSize } from 'react-use'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -24,6 +25,7 @@ export const OrgDetailsTab: React.FC<
   const { t, _t } = useScopedTranslation('pages.org-details.tabs.details')
   const { profile, acl } = useAuth()
   const navigate = useNavigate()
+  const { checkUKsCountryName } = useWorldCountries()
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
 
   const { data, fetching, error } = useOrgV2({
@@ -168,7 +170,14 @@ export const OrgDetailsTab: React.FC<
               value={org.address.city}
             />
             <DetailsRow
-              label={t('organization-address-section.postcode')}
+              label={t(
+                `organization-address-section.${
+                  !org.address.country ||
+                  checkUKsCountryName(org.address.country)
+                    ? 'postcode'
+                    : 'zip-code'
+                }`
+              )}
               value={org.address.postCode}
             />
             <DetailsRow
@@ -203,25 +212,30 @@ export const OrgDetailsTab: React.FC<
               label={t('additional-details.setting')}
               value={org.attributes.settingName}
             />
-            <DetailsRow
-              label={t('additional-details.local-authority')}
-              value={org.attributes.localAuthority}
-            />
-            <DetailsRow
-              label={t('additional-details.ofsted-rating')}
-              value={org.attributes.ofstedRating}
-            />
-            <DetailsRow
-              label={t('additional-details.ofsted-last-inspection')}
-              value={
-                isValid(new Date(org.attributes.ofstedLastInspection))
-                  ? format(
-                      new Date(org.attributes.ofstedLastInspection),
-                      'd MMMM yyyy'
-                    )
-                  : org.attributes.ofstedLastInspection || ''
-              }
-            />
+            {!org.address.country ||
+            checkUKsCountryName(org.address.country) ? (
+              <>
+                <DetailsRow
+                  label={t('additional-details.local-authority')}
+                  value={org.attributes.localAuthority}
+                />
+                <DetailsRow
+                  label={t('additional-details.ofsted-rating')}
+                  value={org.attributes.ofstedRating}
+                />
+                <DetailsRow
+                  label={t('additional-details.ofsted-last-inspection')}
+                  value={
+                    isValid(new Date(org.attributes.ofstedLastInspection))
+                      ? format(
+                          new Date(org.attributes.ofstedLastInspection),
+                          'd MMMM yyyy'
+                        )
+                      : org.attributes.ofstedLastInspection || ''
+                  }
+                />
+              </>
+            ) : null}
           </Box>
         </Box>
       ) : null}
