@@ -43,6 +43,7 @@ export type Course = {
   course_code: string
   min_participants: number
   max_participants: number
+  mandatory_course_materials?: number
   status: Course_Status_Enum
   reaccreditation: boolean
   organization?: Organization
@@ -625,6 +626,7 @@ export type CourseInput = {
   maxParticipants: number | null
   minParticipants: number | null
   organization: Organization | null
+  mandatoryCourseMaterials?: number | null
 
   organizationKeyContact: {
     email: string
@@ -810,6 +812,7 @@ export enum CourseExpenseType {
   Transport = 'TRANSPORT',
   Miscellaneous = 'MISCELLANEOUS',
   Accommodation = 'ACCOMMODATION',
+  Materials = 'MATERIALS',
 }
 
 export type CourseExpenseData =
@@ -842,6 +845,10 @@ export type CourseExpenseData =
       type: CourseExpenseType.Accommodation
       accommodationNights: number
       accommodationCost: number
+    }
+  | {
+      type: CourseExpenseType.Materials
+      cost: number
     }
 
 export type Go1LicensingPrices = {

@@ -42,15 +42,26 @@ import {
   TransportMethod,
   Currency,
 } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { LoadingStatus, getMandatoryCourseMaterialsCost } from '@app/util'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
 import { getCourseRenewalCycle } from './utils'
 
 const prepareExpensesData = (
-  expenses: Record<string, ExpensesInput>
+  expenses: Record<string, ExpensesInput>,
+  mandatoryCourseMaterialsCostEnabled: boolean,
+  mandatoryCourseMaterials: number
 ): Array<Course_Expenses_Insert_Input> => {
   const courseExpenses: Array<Course_Expenses_Insert_Input> = []
+
+  if (mandatoryCourseMaterialsCostEnabled) {
+    courseExpenses.push({
+      data: {
+        type: CourseExpenseType.Materials,
+        cost: getMandatoryCourseMaterialsCost(mandatoryCourseMaterials ?? 0),
+      },
+    })
+  }
 
   for (const trainerId of Object.keys(expenses)) {
     const { transport, miscellaneous } = expenses[trainerId]
@@ -150,6 +161,9 @@ export function useSaveCourse(): {
 
   const InternationalFinanceEnabled = useFeatureFlagEnabled(
     'open-icm-course-international-finance'
+  )
+  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
   )
 
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
@@ -332,6 +346,11 @@ export function useSaveCourse(): {
             ? { min_participants: courseData.minParticipants }
             : null),
           max_participants: courseData.maxParticipants,
+          ...(isClosedCourse && mandatoryCourseMaterialsCostEnabled
+            ? {
+                mandatory_course_materials: courseData.mandatoryCourseMaterials,
+              }
+            : null),
           type: courseData.type,
           special_instructions: courseData.specialInstructions,
           parking_instructions: courseData.parkingInstructions,
@@ -408,7 +427,13 @@ export function useSaveCourse(): {
             : null),
           ...(isClosedCourse
             ? {
-                expenses: { data: prepareExpensesData(expenses) },
+                expenses: {
+                  data: prepareExpensesData(
+                    expenses,
+                    mandatoryCourseMaterialsCostEnabled ?? false,
+                    courseData.mandatoryCourseMaterials ?? 0
+                  ),
+                },
               }
             : null),
           ...(shouldInsertOrder && invoiceData
@@ -502,10 +527,11 @@ export function useSaveCourse(): {
     courseName,
     isOpenCourse,
     expenses,
+    mandatoryCourseMaterialsCostEnabled,
+    courseHasManualPrice,
     setDateTimeTimeZone,
     draftId,
     removeCourseDraft,
-    courseHasManualPrice,
   ])
 
   return {

@@ -10,6 +10,11 @@ const { t } = getI18n()
 
 type OnlyXeroDescription = Pick<XeroLineItem, 'description'>
 
+export enum CourseWorkbooks {
+  Mandatory = 'WBK.DIR',
+  Free = 'WBK.FOC',
+}
+
 export function isRegistrantLineItem(
   lineItem: OnlyXeroDescription | null,
   courseLevel: string
@@ -32,6 +37,18 @@ export function isProcessingFeeLineItem(
   lineItem: Pick<XeroLineItem, 'itemCode'> | null
 ) {
   return lineItem?.itemCode === 'CREDIT CARD FEE'
+}
+
+export function isMandatoryCourseMaterials(
+  lineItem: Pick<XeroLineItem, 'itemCode'> | null
+) {
+  return lineItem?.itemCode === CourseWorkbooks.Mandatory
+}
+
+export function isFreeCourseMaterials(
+  lineItem: Pick<XeroLineItem, 'itemCode'> | null
+) {
+  return lineItem?.itemCode === CourseWorkbooks.Free
 }
 
 export function getTrainerExpensesLineItems(

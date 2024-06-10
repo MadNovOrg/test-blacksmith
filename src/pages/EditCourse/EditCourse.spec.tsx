@@ -653,6 +653,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'DE',
         accreditedBy: Accreditors_Enum.Icm,
+        mandatory_course_materials: 6,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -822,6 +823,7 @@ describe(EditCourse.name, () => {
         accreditedBy: Accreditors_Enum.Bild,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
         max_participants: 3,
+        mandatory_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1087,6 +1089,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'GB-ENG', // specifically set the country to UK
         accreditedBy: Accreditors_Enum.Icm,
+        mandatory_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1193,6 +1196,7 @@ describe(EditCourse.name, () => {
         accreditedBy: Accreditors_Enum.Icm,
         go1Integration: true,
         max_participants: 15,
+        mandatory_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {

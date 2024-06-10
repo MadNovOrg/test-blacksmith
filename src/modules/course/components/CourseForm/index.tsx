@@ -39,6 +39,7 @@ import { CourseInput } from '@app/types'
 
 import { AttendeesSection } from './AttendeesSection'
 import { RenewalCycleRadios } from './components/RenewalCycleRadios/RenewalCycleRadios'
+import { CourseMaterialsSection } from './CourseMaterialsSection'
 import BildCourseFinanceSection from './FormFinanceSection/BildCourseFinanceSection'
 import ClosedCourseFinanceSection from './FormFinanceSection/ClosedCourseFinanceSection'
 import OpenCourseFinanceSection from './FormFinanceSection/OpenCourseFinanceSection'
@@ -88,7 +89,6 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     courseType,
     trainerRatioNotMet,
   })
-
   // Used for:
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
   // - Closed course ICM residing country https://behaviourhub.atlassian.net/browse/TTHP-3529
@@ -98,6 +98,10 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const internationalIndirectEnabled = !!useFeatureFlagEnabled(
     'international-indirect'
+  )
+
+  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
   )
 
   const isInternationalFinanceEnabled = useMemo(
@@ -398,6 +402,10 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             disabledFields={disabledFields}
             isCreation={isCreation}
           />
+
+          {isClosedCourse && mandatoryCourseMaterialsCostEnabled ? (
+            <CourseMaterialsSection />
+          ) : null}
 
           {/* For level 1 BS this input is hidden from UI, however it is set when we are sending request to create course*/}
           {startDate &&

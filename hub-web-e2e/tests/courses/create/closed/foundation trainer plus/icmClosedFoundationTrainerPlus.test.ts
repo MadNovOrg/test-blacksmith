@@ -9,6 +9,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { IRELAND_TIMEZONE } from '@qa/constants'
 import { closedCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -74,6 +75,7 @@ allowdUsers.forEach(allowedUser => {
           bookingContactProfile: users.userOrgAdmin,
           freeSpaces: 1,
           max_participants: 13,
+          mandatoryCourseMaterials: 8,
           schedule: [
             {
               start: addMonths(new Date(new Date().setHours(8, 0)), 2),
@@ -81,6 +83,7 @@ allowdUsers.forEach(allowedUser => {
               venue: buildVenue({
                 overrides: { name: 'Ireland Vinayaka Temple' },
               }),
+              timeZone: IRELAND_TIMEZONE,
             },
           ],
           salesRepresentative: users.salesAdmin,

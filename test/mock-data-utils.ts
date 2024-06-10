@@ -335,6 +335,7 @@ export const buildCourse = build<Course>({
     includeVAT: chance.bool(),
     priceCurrency: Currency.Gbp,
     renewalCycle: Course_Renewal_Cycle_Enum.One,
+    mandatory_course_materials: undefined,
   },
 })
 

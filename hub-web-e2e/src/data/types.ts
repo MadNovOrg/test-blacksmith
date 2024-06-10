@@ -49,6 +49,7 @@ export type Course = {
   level: Course_Level_Enum
   max_participants: number
   min_participants: number
+  mandatoryCourseMaterials?: number
   moderator?: User
   name: string
   orders?: unknown

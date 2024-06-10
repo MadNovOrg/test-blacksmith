@@ -46,7 +46,9 @@ import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 import {
   getTrainerExpensesLineItems,
   isDiscountLineItem,
+  isFreeCourseMaterials,
   isGo1LicensesItem,
+  isMandatoryCourseMaterials,
   isProcessingFeeLineItem,
   isRegistrantLineItem,
 } from './utils'
@@ -452,9 +454,20 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <DetailsItemBox data-testid="expenses-row">
                       <Stack spacing={2}>
                         {expensesLineItems.map(expenseLineItem => (
-                          <ItemRow key={expenseLineItem?.description}>
+                          <ItemRow
+                            key={expenseLineItem?.itemCode}
+                            data-testid={`line-item-${expenseLineItem?.itemCode}`}
+                          >
                             <Typography color="grey.700">
-                              {expenseLineItem?.description}
+                              {isMandatoryCourseMaterials(expenseLineItem)
+                                ? t('mandatory-course-materials', {
+                                    count: expenseLineItem?.quantity,
+                                  })
+                                : isFreeCourseMaterials(expenseLineItem)
+                                ? t('free-course-materials', {
+                                    count: expenseLineItem?.quantity,
+                                  })
+                                : expenseLineItem?.description}
                             </Typography>
                             <Typography color="grey.700">
                               {_t('common.currency', {

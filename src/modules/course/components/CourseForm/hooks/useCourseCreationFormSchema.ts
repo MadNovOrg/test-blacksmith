@@ -61,6 +61,10 @@ export const useCourseCreationFormSchema = ({
     'international-indirect'
   )
 
+  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
+  )
+
   const isInternationalFinanceEnabled = useMemo(
     () => Boolean(openIcmInternationalFinanceEnabled),
     [openIcmInternationalFinanceEnabled]
@@ -335,6 +339,34 @@ export const useCourseCreationFormSchema = ({
             }),
           specialInstructions: yup.string().nullable().default(''),
           parkingInstructions: yup.string().nullable().default(''),
+          ...(isClosedCourse && mandatoryCourseMaterialsCostEnabled
+            ? {
+                mandatoryCourseMaterials: yup
+                  .number()
+                  .typeError(
+                    t(
+                      'components.course-form.mandatory-course-materials.errors.is-required'
+                    )
+                  )
+                  .required(
+                    t(
+                      'components.course-form.mandatory-course-materials.errors.is-required'
+                    )
+                  )
+                  .min(
+                    0,
+                    t(
+                      'components.course-form.mandatory-course-materials.errors.is-negative'
+                    )
+                  )
+                  .max(
+                    yup.ref('maxParticipants', {}),
+                    t(
+                      'components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees'
+                    )
+                  ),
+              }
+            : null),
           bildStrategies: strategiesSchema.when(
             ['accreditedBy', 'conversion'],
             {
@@ -399,23 +431,24 @@ export const useCourseCreationFormSchema = ({
         }),
 
     [
-      acl,
-      countriesCodesWithUKs,
-      courseInput?.accreditedBy,
-      courseInput?.maxParticipants,
-      courseInput?.startDate,
-      courseType,
-      hasMinParticipants,
       hasOrg,
+      t,
       isOpenCourse,
       isClosedCourse,
-      isCreation,
       isIndirectCourse,
-      isInternationalFinanceEnabled,
       isResidingCountryEnabled,
-      isUKCountry,
-      t,
+      countriesCodesWithUKs,
+      hasMinParticipants,
+      isCreation,
+      courseInput?.maxParticipants,
+      courseInput?.startDate,
+      courseInput?.accreditedBy,
+      mandatoryCourseMaterialsCostEnabled,
+      isInternationalFinanceEnabled,
+      acl,
       trainerRatioNotMet,
+      courseType,
+      isUKCountry,
     ]
   )
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
@@ -462,6 +495,7 @@ export const useCourseCreationFormSchema = ({
         : '17:00',
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
+      mandatoryCourseMaterials: courseInput?.mandatoryCourseMaterials ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
       usesAOL: courseInput?.usesAOL ?? false,
       aolCountry:
@@ -507,6 +541,7 @@ export const useCourseCreationFormSchema = ({
       courseInput?.endDateTime,
       courseInput?.minParticipants,
       courseInput?.maxParticipants,
+      courseInput?.mandatoryCourseMaterials,
       courseInput?.freeSpaces,
       courseInput?.usesAOL,
       courseInput?.aolCountry,

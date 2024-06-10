@@ -1,5 +1,6 @@
 import { addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -47,7 +48,15 @@ vi.mock('@app/hooks/useCourseDraft', () => ({
     .mockReturnValue({ removeDraft: vi.fn(), setDraft: vi.fn() }),
 }))
 
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
+}))
+
 describe('component: OrderDetails', () => {
+  beforeEach(() => {
+    useFeatureFlagEnabled('mandatory-course-materials-cost')
+  })
+
   it('displays course details, and pricing with trainer expenses for an ICM course', async () => {
     const courseDate = new Date(1, 1, 2023)
 
@@ -80,6 +89,7 @@ describe('component: OrderDetails', () => {
           initialValue={{
             courseData: {
               maxParticipants: 10,
+              mandatoryCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               courseLevel: Course_Level_Enum.Level_1,
@@ -107,16 +117,24 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Course Cost£1,000.00"`)
 
     expect(
+      screen.getByTestId('mandatory-course-materials-row').textContent
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+
+    expect(
+      screen.getByTestId('free-course-materials-row').textContent
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+
+    expect(
       screen.getByTestId('subtotal-row').textContent
-    ).toMatchInlineSnapshot(`"Sub total£1,000.00"`)
+    ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£200.00"`
+      `"VAT (20%)£210.00"`
     )
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£1,200.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,260.00"`)
   })
 
   it('displays course details, and pricing with trainer expenses for a BILD course', async () => {
@@ -169,6 +187,7 @@ describe('component: OrderDetails', () => {
                 SECONDARY: true,
               },
               maxParticipants: 10,
+              mandatoryCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               courseLevel: Course_Level_Enum.Level_1,
@@ -196,16 +215,24 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Course Cost£2,000.00"`)
 
     expect(
+      screen.getByTestId('mandatory-course-materials-row').textContent
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+
+    expect(
+      screen.getByTestId('free-course-materials-row').textContent
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+
+    expect(
       screen.getByTestId('subtotal-row').textContent
-    ).toMatchInlineSnapshot(`"Sub total£2,000.00"`)
+    ).toMatchInlineSnapshot(`"Sub total£2,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£400.00"`
+      `"VAT (20%)£410.00"`
     )
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£2,400.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£2,460.00"`)
   })
 
   it("doesn't calculate and display VAT in order details if it was not included", async () => {
@@ -239,6 +266,7 @@ describe('component: OrderDetails', () => {
           initialValue={{
             courseData: {
               maxParticipants: 10,
+              mandatoryCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               courseLevel: Course_Level_Enum.Level_1,
@@ -266,8 +294,16 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Course Cost£1,000.00"`)
 
     expect(
+      screen.getByTestId('mandatory-course-materials-row').textContent
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+
+    expect(
+      screen.getByTestId('free-course-materials-row').textContent
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+
+    expect(
       screen.getByTestId('subtotal-row').textContent
-    ).toMatchInlineSnapshot(`"Sub total£1,000.00"`)
+    ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
       '"VAT (0%)£0.00"'
@@ -275,10 +311,11 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£1,000.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,050.00"`)
   })
 
   it('saves invoice details and navigates to order review step when submitted', async () => {
+    const courseDate = new Date(1, 1, 2023)
     const client = {
       executeQuery: () =>
         fromValue<{ data: CoursePriceQuery }>({
@@ -309,6 +346,8 @@ describe('component: OrderDetails', () => {
             courseData: {
               price: 120,
               maxParticipants: 10,
+              startDateTime: courseDate,
+              endDateTime: addHours(courseDate, 8),
               organization: { id: 'org-id' },
             } as unknown as ValidCourseInput,
           }}

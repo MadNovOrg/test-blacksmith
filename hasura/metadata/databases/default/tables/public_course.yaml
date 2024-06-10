@@ -280,6 +280,7 @@ insert_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -320,6 +321,7 @@ insert_permissions:
         - id
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -366,6 +368,7 @@ insert_permissions:
         - is_draft
         - include_VAT
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -411,6 +414,7 @@ insert_permissions:
         - is_draft
         - include_VAT
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -442,6 +446,7 @@ select_permissions:
         - end
         - id
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - name
         - price
@@ -499,6 +504,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -608,6 +614,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -674,6 +681,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -726,6 +734,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -821,6 +830,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -887,6 +897,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -941,6 +952,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1037,6 +1049,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1093,6 +1106,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1141,6 +1155,7 @@ select_permissions:
         - id
         - include_VAT
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - name
         - organization_id
@@ -1197,6 +1212,7 @@ select_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1301,6 +1317,7 @@ update_permissions:
         - id
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1361,6 +1378,7 @@ update_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1409,6 +1427,7 @@ update_permissions:
         - id
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1452,6 +1471,7 @@ update_permissions:
         - id
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1520,6 +1540,7 @@ update_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1570,6 +1591,7 @@ update_permissions:
         - include_VAT
         - is_draft
         - max_participants
+        - mandatory_course_materials
         - min_participants
         - modules_duration
         - name

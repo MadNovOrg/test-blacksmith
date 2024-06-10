@@ -1,4 +1,5 @@
 import { addHours } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
@@ -13,7 +14,11 @@ import {
   TransportMethod,
   ValidCourseInput,
 } from '@app/types'
-import { courseToCourseInput, getTrainerCarCostPerMile } from '@app/util'
+import {
+  courseToCourseInput,
+  getMandatoryCourseMaterialsCost,
+  getTrainerCarCostPerMile,
+} from '@app/util'
 
 import { formatCurrency, render, screen, waitFor, within } from '@test/index'
 import {
@@ -34,6 +39,10 @@ vi.mock('react-router-dom', async () => ({
   useNavigate: () => mockNavigate,
 }))
 
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
+}))
+
 const trainers = [buildTrainerInput(), buildTrainerInputAssistant()]
 const expenses: Record<string, ExpensesInput> = {}
 
@@ -42,6 +51,11 @@ for (const trainer of trainers) {
 }
 
 describe('component: ReviewAndConfirm', () => {
+  beforeEach(() => {
+    useFeatureFlagEnabled('mandatory-course-materials-cost')
+    useFeatureFlagEnabled('course-residing-country')
+  })
+
   it('renders alert if course is not found', async () => {
     const client = {
       executeQuery: () => never,
@@ -125,7 +139,7 @@ describe('component: ReviewAndConfirm', () => {
     expect(
       screen.getByTestId('course-dates').textContent
     ).toMatchInlineSnapshot(
-      `"1 February 2023, 12:00 AM - 1 February 2023, 08:00 AM (local time)"`
+      `"1 February 2023, 12:00 AM (GMT+00:00) - 1 February 2023, 08:00 AM (GMT+00:00) Europe/London "`
     )
 
     expect(
@@ -222,7 +236,11 @@ describe('component: ReviewAndConfirm', () => {
     const trainerExpenses = 610
     const freeSpacesDiscount = PRICING_PER_PARTICIPANT * courseData.freeSpaces
     const coursePricing = courseData.price * courseData.maxParticipants
-    const subtotal = trainerExpenses + coursePricing - freeSpacesDiscount
+    const mandatoryCourseCost = getMandatoryCourseMaterialsCost(
+      courseData.mandatoryCourseMaterials ?? 0
+    )
+    const subtotal =
+      trainerExpenses + coursePricing + mandatoryCourseCost - freeSpacesDiscount
     const vat = 1.2
 
     render(
@@ -328,6 +346,18 @@ describe('component: ReviewAndConfirm', () => {
     expect(
       within(screen.getByTestId('course-price-row')).getByText(
         formatCurrency(courseData.price * courseData.maxParticipants)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('mandatory-course-materials-row')).getByText(
+        formatCurrency(mandatoryCourseCost)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('free-course-materials-row')).getByText(
+        formatCurrency(0)
       )
     ).toBeInTheDocument()
 

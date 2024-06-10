@@ -62,6 +62,7 @@ export const INPUT_TIME_FORMAT = 'HH:mm'
 export const DATE_MASK = '__/__/____'
 export const TIME_MASK = '__:__ _M'
 export const DEFAULT_ACCOMMODATION_COST_PER_NIGHT = 95.0
+export const MANDATORY_COURSE_MATERIALS_PRICE_PER_ATTENDEE = 10
 
 export const noop = () => {
   // empty
@@ -417,6 +418,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     venue: course.schedule[0].venue ?? null,
     minParticipants: course.min_participants,
     maxParticipants: course.max_participants,
+    mandatoryCourseMaterials: course.mandatory_course_materials,
     startDateTime: timeZoneSchedule.start,
     startDate: timeZoneSchedule.start,
     startTime: extractTime(timeZoneSchedule.start),
@@ -710,6 +712,10 @@ export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
 }
 
 export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
+
+export const getMandatoryCourseMaterialsCost = (
+  mandatoryCourseMaterials: number
+) => mandatoryCourseMaterials * MANDATORY_COURSE_MATERIALS_PRICE_PER_ATTENDEE
 
 export const getTrainerSubsistenceCost = (nights = 0, isUKCountry = true) =>
   isUKCountry ? nights * 30 : 0

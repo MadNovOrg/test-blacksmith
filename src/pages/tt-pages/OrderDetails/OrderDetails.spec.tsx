@@ -35,6 +35,7 @@ import {
   buildOrder,
   buildPromo,
 } from './mock-utils'
+import { CourseWorkbooks } from './utils'
 
 import { OrderDetails } from '.'
 
@@ -203,6 +204,22 @@ describe('page: OrderDetails', () => {
               description: `Level One, ${user2Email}`,
             },
           }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 10,
+              itemCode: CourseWorkbooks.Mandatory,
+              description: `Mandatory Course Materials x ${12}`,
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 0,
+              itemCode: CourseWorkbooks.Free,
+              description: `Free Course Materials x ${12}`,
+            },
+          }),
         ],
       },
     })
@@ -247,6 +264,12 @@ describe('page: OrderDetails', () => {
     )
 
     const user1Row = screen.getByTestId(`order-registrant-0`)
+    const mandatoryCourseMaterialsRow = screen.getByTestId(
+      `line-item-${CourseWorkbooks.Mandatory}`
+    )
+    const freeCourseMaterialsRow = screen.getByTestId(
+      `line-item-${CourseWorkbooks.Free}`
+    )
 
     expect(
       within(user1Row).getByText(invoice.lineItems[0].description)
@@ -254,6 +277,20 @@ describe('page: OrderDetails', () => {
     expect(
       within(user1Row).getByText(formatCurrency(unitPrice))
     ).toBeInTheDocument()
+    expect(
+      within(mandatoryCourseMaterialsRow).getByText(
+        t('pages.order-details.mandatory-course-materials', {
+          count: invoice.lineItems[2].quantity,
+        })
+      )
+    )
+    expect(
+      within(freeCourseMaterialsRow).getByText(
+        t('pages.order-details.free-course-materials', {
+          count: invoice.lineItems[3].quantity,
+        })
+      )
+    )
   })
 
   it('renders blended learning licenses information if purchased', () => {
@@ -762,7 +799,7 @@ describe('page: OrderDetails', () => {
     const freeSpacesRow = screen.getByTestId('free-spaces-row')
 
     expect(
-      within(freeSpacesRow).getByText(/free spaces \(2\)/i)
+      within(freeSpacesRow).getByText('Free spaces x 2')
     ).toBeInTheDocument()
     expect(
       within(freeSpacesRow).getByText(formatCurrency(discountAmount))

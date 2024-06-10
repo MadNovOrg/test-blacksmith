@@ -13,6 +13,7 @@ import { InvoiceDetails } from '@app/components/InvoiceDetails'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { TransportMethod } from '@app/types'
 import {
+  getMandatoryCourseMaterialsCost,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
   getVatAmount,
@@ -33,7 +34,32 @@ export const OrderDetailsReview: React.FC = () => {
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
   )
+  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
+  )
+
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
+
+  const courseMaterialsCost = useMemo(() => {
+    if (
+      mandatoryCourseMaterialsCostEnabled &&
+      courseData?.mandatoryCourseMaterials
+    ) {
+      return getMandatoryCourseMaterialsCost(
+        courseData?.mandatoryCourseMaterials
+      )
+    }
+    return 0
+  }, [
+    courseData?.mandatoryCourseMaterials,
+    mandatoryCourseMaterialsCostEnabled,
+  ])
+
+  const freeCourseMaterials = useMemo(() => {
+    if (courseData?.maxParticipants && courseData.mandatoryCourseMaterials)
+      return courseData?.maxParticipants - courseData?.mandatoryCourseMaterials
+    return 0
+  }, [courseData?.mandatoryCourseMaterials, courseData?.maxParticipants])
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -119,6 +145,7 @@ export const OrderDetailsReview: React.FC = () => {
       const subtotal = courseBasePrice
         .add(freeSpacesDiscount)
         .add(trainerExpensesTotal)
+        .add(courseMaterialsCost)
 
       const vat = new Big(
         courseData.includeVAT || isUKCountry(courseData?.residingCountry)
@@ -134,7 +161,7 @@ export const OrderDetailsReview: React.FC = () => {
         vat.round().toNumber(),
         amountDue.round().toNumber(),
       ]
-    }, [courseData, trainerExpensesTotal, isUKCountry])
+    }, [courseData, trainerExpensesTotal, courseMaterialsCost, isUKCountry])
 
   const courseVenue = courseData?.venue
   const locationNameAddressCity = [
@@ -167,7 +194,7 @@ export const OrderDetailsReview: React.FC = () => {
         </Typography>
 
         {residingCountryEnabled ? (
-          <Typography>
+          <Typography data-testid="course-dates">
             {`${t('dates.withTime', {
               date: startDate,
             })} ${formatGMTDateTimeByTimeZone(
@@ -267,6 +294,37 @@ export const OrderDetailsReview: React.FC = () => {
           testId="course-price-row"
         />
       </InfoPanel>
+
+      {mandatoryCourseMaterialsCostEnabled ? (
+        <InfoPanel>
+          <PageRow
+            label={t(
+              'pages.create-course.review-and-confirm.mandatory-course-materials',
+              {
+                count: courseData?.mandatoryCourseMaterials,
+              }
+            )}
+            value={t('common.currency', {
+              amount: courseMaterialsCost,
+              currency,
+            })}
+            testId="mandatory-course-materials-row"
+          />
+          <PageRow
+            label={t(
+              'pages.create-course.review-and-confirm.free-course-materials',
+              {
+                count: freeCourseMaterials,
+              }
+            )}
+            value={t('common.currency', {
+              amount: 0,
+              currency,
+            })}
+            testId="free-course-materials-row"
+          />
+        </InfoPanel>
+      ) : null}
 
       <InfoPanel>
         <Stack spacing={1}>

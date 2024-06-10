@@ -7,6 +7,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { IRELAND_TIMEZONE } from '@qa/constants'
 import { openCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -75,6 +76,7 @@ allowedUsers.forEach(allowedUser => {
               venue: buildVenue({
                 overrides: { name: 'Ireland Vinayaka Temple' },
               }),
+              timeZone: IRELAND_TIMEZONE,
             },
           ],
         })
