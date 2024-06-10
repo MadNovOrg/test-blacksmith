@@ -8,6 +8,8 @@ import { AssignTrainers } from '@app/modules/course/pages/CreateCourse/component
 import { CreateCourseForm } from '@app/modules/course/pages/CreateCourse/components/CreateCourseForm'
 import { LicenseOrderDetails } from '@app/modules/course/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewLicenseOrder } from '@app/modules/course/pages/CreateCourse/components/ReviewLicenseOrder'
+import { CourseEvaluation } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary/components/CourseEvaluation'
+import { EvaluationSummary } from '@app/modules/course_evaluation/pages/InternalEvaluationSummary'
 import { GradingRoutes } from '@app/modules/grading/routes'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
@@ -15,13 +17,11 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
-import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { DraftCourses } from '@app/pages/trainer-pages/MyCourses/DraftCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
-import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 

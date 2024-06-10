@@ -7,6 +7,9 @@ import {
   GetUserCanAccessResourcesQuery,
   GetUserCanAccessResourcesQueryVariables,
 } from '@app/generated/graphql'
+import { EvaluationSummary } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary'
+import { CourseEvaluation } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary/components/CourseEvaluation'
+import { CourseHealthAndSafetyForm } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary/components/CourseHealthAndSafetyForm'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import { NotFound } from '@app/pages/common/NotFound'
@@ -19,9 +22,6 @@ import { UserTransferParticipant } from '@app/pages/TransferParticipant/UserTran
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails/CourseDetails'
-import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
-import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
-import { EvaluationSummary } from '@app/pages/user-pages/EvaluationSummary'
 import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
 import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/queries/certificate/get-user-can-access-resources'
 

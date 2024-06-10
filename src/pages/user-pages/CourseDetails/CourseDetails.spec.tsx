@@ -4,7 +4,7 @@ import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
-import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
+import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_evaluation/queries/get-feedback-users'
 import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import { QUERY as GET_COURSE_QUERY } from '@app/queries/user-queries/get-course-by-id'
 import { Course, CourseParticipant, RoleName } from '@app/types'

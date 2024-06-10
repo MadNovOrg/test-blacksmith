@@ -15,6 +15,7 @@ import {
 } from '@app/generated/graphql'
 import { getIndividualsCourseStatusesConditions } from '@app/hooks/useCourses'
 import { Sorting } from '@app/hooks/useTableSort'
+import { useUnevaluatedUserCourses } from '@app/modules/course_evaluation/hooks/useUnevaluatedUserCourses'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
 import {
   AdminOnlyCourseStatus,
@@ -23,8 +24,6 @@ import {
 } from '@app/types'
 import { ALL_ORGS } from '@app/util'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
-
-import { useUnevaluatedUserCourses } from './useUnevaluatedUserCourses'
 
 export type UserCourseStatus =
   | AdminOnlyCourseStatus.CancellationRequested

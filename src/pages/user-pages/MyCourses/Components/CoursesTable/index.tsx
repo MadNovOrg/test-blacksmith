@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AttendeeCourseStatus } from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { DateCell } from '@app/components/DateCell/DateCell'
 import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
@@ -23,6 +22,7 @@ import {
   UserCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { AttendeeCourseStatus } from '@app/modules/course_attendees/components/AttendeeCourseStatus/AttendeeCourseStatus'
 
 export type CoursesTableProps = {
   courses: UserCoursesQuery['courses']

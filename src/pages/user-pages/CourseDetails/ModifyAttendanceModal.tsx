@@ -23,7 +23,7 @@ import {
   CancelMyselfFromCourseMutationVariables,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CancelAttendanceForm } from '@app/pages/user-pages/CourseDetails/CancelAttendanceForm'
+import { CancelAttendanceForm } from '@app/modules/course_attendees/pages/CancelAttendanceForm'
 import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/queries/courses/cancel-myself-from-course'
 import { Course } from '@app/types'
 

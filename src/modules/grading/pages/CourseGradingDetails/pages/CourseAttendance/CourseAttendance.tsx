@@ -22,7 +22,7 @@ import {
   SaveCourseAttendanceMutationVariables,
 } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { MUTATION as SAVE_COURSE_ATTENDANCE } from '@app/queries/courses/save-course-attendance'
+import { MUTATION as SAVE_COURSE_ATTENDANCE } from '@app/modules/course_attendees/queries/save-course-attendance'
 import { CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

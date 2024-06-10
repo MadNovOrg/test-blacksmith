@@ -26,10 +26,6 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  AttendeeCourse,
-  AttendeeCourseStatus,
-} from '@app/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CourseInstructionsDialog } from '@app/components/dialogs'
 import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
@@ -41,6 +37,10 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { DeleteCourseModal } from '@app/modules/course/components/DeleteCourseModal'
+import {
+  AttendeeCourse,
+  AttendeeCourseStatus,
+} from '@app/modules/course_attendees/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { AdminOnlyCourseStatus, Course } from '@app/types'
 import {
   getCourseBeginsForMessage,

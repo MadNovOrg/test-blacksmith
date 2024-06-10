@@ -6,8 +6,8 @@ import {
   GetCourseEvaluationQuestionsQuery,
   GetEvaluationQuery,
 } from '@app/generated/graphql'
-import { QUERY as GET_ANSWERS_QUERY } from '@app/queries/course-evaluation/get-answers'
-import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/queries/course-evaluation/get-questions'
+import { QUERY as GET_ANSWERS_QUERY } from '@app/modules/course_evaluation/queries/get-answers'
+import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_evaluation/queries/get-questions'
 
 import { render, screen, chance } from '@test/index'
 
