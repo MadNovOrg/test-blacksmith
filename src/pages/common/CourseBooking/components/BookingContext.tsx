@@ -1,6 +1,7 @@
 import { Alert, CircularProgress, Stack } from '@mui/material'
 import { allPass } from 'lodash/fp'
 import { round } from 'lodash-es'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
   useCallback,
   useContext,
@@ -43,6 +44,7 @@ import {
   TransportMethod,
 } from '@app/types'
 import {
+  getMandatoryCourseMaterialsCost,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
   max,
@@ -167,6 +169,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   >({
     query: GET_TEMP_PROFILE,
   })
+
+  const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
+  )
 
   const profile = useMemo(() => data?.tempProfiles[0], [data?.tempProfiles])
 
@@ -360,6 +366,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const courseCost = !ready ? 0 : booking.price * booking.quantity
     const trainerExpenses = !ready ? 0 : booking.trainerExpenses
     const subtotal = courseCost + trainerExpenses
+    const mandatoryCourseMaterialsCost = mandatoryCourseMaterialsEnabled
+      ? getMandatoryCourseMaterialsCost(booking.quantity)
+      : 0
 
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
     const discount = !ready
@@ -370,7 +379,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         }, 0)
 
     const subtotalDiscounted = max(
-      subtotal - Number(discount) - freeSpacesDiscount,
+      subtotal +
+        mandatoryCourseMaterialsCost -
+        Number(discount) -
+        freeSpacesDiscount,
       0
     )
     const vat = (subtotalDiscounted * booking.vat) / 100
@@ -398,7 +410,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       trainerExpenses,
       paymentProcessingFee,
     }
-  }, [booking, ready])
+  }, [booking, ready, mandatoryCourseMaterialsEnabled])
 
   const placeOrder = useCallback(async () => {
     const promoCodes =

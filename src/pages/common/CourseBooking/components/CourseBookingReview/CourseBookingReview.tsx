@@ -30,6 +30,7 @@ import useTimeZones from '@app/hooks/useTimeZones'
 import {
   formatCourseVenue,
   formatCurrency,
+  getMandatoryCourseMaterialsCost,
   getOrderDueDate,
   isOrderDueDateImmediate,
 } from '@app/util'
@@ -56,7 +57,9 @@ export const CourseBookingReview: React.FC<
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
   )
-
+  const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
+  )
   const [accept, setAccept] = useState(false)
   const [creatingOrder, setCreatingOrder] = useState(false)
   const [error, setError] = useState<{
@@ -343,6 +346,27 @@ export const CourseBookingReview: React.FC<
             </Typography>
           </Box>
         ))}
+        {mandatoryCourseMaterialsEnabled ? (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography color="grey.700">
+                {t('mandatory-course-materials', {
+                  quantity: booking.quantity,
+                })}
+              </Typography>
+              <Typography color="grey.700">
+                {formatCurrency(
+                  {
+                    amount: getMandatoryCourseMaterialsCost(booking.quantity),
+                    currency: booking.currency,
+                  },
+                  t
+                )}
+              </Typography>
+            </Box>
+          </>
+        ) : null}
         {booking.trainerExpenses > 0 ? (
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">

@@ -56,7 +56,12 @@ import useTimeZones from '@app/hooks/useTimeZones'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'
-import { formatCurrency, isValidUKPostalCode, requiredMsg } from '@app/util'
+import {
+  formatCurrency,
+  getMandatoryCourseMaterialsCost,
+  isValidUKPostalCode,
+  requiredMsg,
+} from '@app/util'
 
 import {
   BookingContact,
@@ -121,6 +126,9 @@ export const CourseBookingDetails: React.FC<
   const navigate = useNavigate()
   const residingCountryEnabled = useFeatureFlagEnabled(
     'course-residing-country'
+  )
+  const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
   )
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
@@ -611,6 +619,24 @@ export const CourseBookingDetails: React.FC<
               )}
             </Typography>
           </Box>
+          {mandatoryCourseMaterialsEnabled ? (
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography color="grey.700">
+                {t('mandatory-course-materials', {
+                  quantity: booking.quantity,
+                })}
+              </Typography>
+              <Typography color="grey.700">
+                {formatCurrency(
+                  {
+                    amount: getMandatoryCourseMaterialsCost(booking.quantity),
+                    currency: booking.currency,
+                  },
+                  t
+                )}
+              </Typography>
+            </Box>
+          ) : null}
 
           {booking.trainerExpenses > 0 ? (
             <Box display="flex" justifyContent="space-between" mb={1}>
