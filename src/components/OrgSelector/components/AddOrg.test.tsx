@@ -24,9 +24,11 @@ describe('AddOrg component', () => {
   )
   it.each([
     t('components.add-organisation.component-title'),
+    t('pages.create-organization.fields.addresses.postalAndZipCode'),
     ...labels.filter(
       label =>
         label !== t('components.add-organisation.fields.zipCode') &&
+        label !== t('components.add-organisation.fields.postCode') &&
         label !==
           t('components.add-organisation.fields.organisation-specify-other')
     ),
@@ -45,9 +47,11 @@ describe('AddOrg component', () => {
 
   it.each([
     t('components.add-organisation.component-title'),
+    t('pages.create-organization.fields.addresses.postalAndZipCode'),
     ...labels.filter(
       label =>
         label !== t('components.add-organisation.fields.postCode') &&
+        label !== t('components.add-organisation.fields.zipCode') &&
         label !==
           t('components.add-organisation.fields.organisation-specify-other')
     ),

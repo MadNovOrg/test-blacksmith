@@ -298,14 +298,12 @@ describe(OrganizationForm.name, () => {
     expect(city).toBeInTheDocument()
     await userEvent.type(city, 'City')
 
-    const postCode = screen.queryByLabelText(t('fields.addresses.postcode'), {
-      exact: false,
-    })
-    expect(postCode).not.toBeInTheDocument()
-
-    const zipCode = screen.getByLabelText(t('fields.addresses.zipCode'), {
-      exact: false,
-    })
+    const zipCode = screen.getByLabelText(
+      t('fields.addresses.postalAndZipCode'),
+      {
+        exact: false,
+      }
+    )
     expect(zipCode).toBeInTheDocument()
 
     // Organisation details

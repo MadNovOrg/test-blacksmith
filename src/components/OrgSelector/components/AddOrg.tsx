@@ -352,7 +352,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
           <Grid item>
             <TextField
               id={'postCode'}
-              label={isInUK ? t('fields.postCode') : t('fields.zipCode')}
+              label={_t(
+                'pages.create-organization.fields.addresses.postalAndZipCode'
+              )}
               variant="filled"
               error={!!errors.postCode}
               helperText={errors.postCode?.message}

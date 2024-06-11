@@ -1261,7 +1261,8 @@
         "city": "City",
         "postcode": "Post code",
         "zipCode": "Zip Code",
-        "country": "Country"
+        "country": "Country",
+        "postalAndZipCode": "Post code/ ZIP code"
       },
       "head-first-name": "First name",
       "head-surname": "Surname",

@@ -420,17 +420,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="postcode"
-                      label={
-                        isInUK
-                          ? t('fields.addresses.postcode')
-                          : t('fields.addresses.zipCode')
-                      }
+                      label={t('fields.addresses.postalAndZipCode')}
                       variant="filled"
-                      placeholder={
-                        isInUK
-                          ? t('fields.addresses.postcode')
-                          : t('fields.addresses.zipCode')
-                      }
+                      placeholder={t('fields.addresses.postalAndZipCode')}
                       error={!!errors.postcode}
                       helperText={errors.postcode?.message}
                       InputLabelProps={
