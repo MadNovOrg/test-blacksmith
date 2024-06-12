@@ -141,7 +141,8 @@
       "errors": {
         "is-required": "Mandatory Course Materials must have a value that is less than or equal to the number of attendees",
         "is-negative": "Mandatory Course Materials value cannot be negative",
-        "more-mcm-than-attendees": "Mandatory Course Materials value should not be greater than the number of attendees"
+        "more-mcm-than-attendees-create": "Mandatory Course Materials value should not be greater than the number of attendees",
+        "more-mcm-than-attendees-edit": "Mandatory Course Materials must have a value that is less than or equal to the number of attendees"
       }
     },
     "course-level-required": "Course level is required field",

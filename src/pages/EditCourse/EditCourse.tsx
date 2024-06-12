@@ -7,12 +7,14 @@ import {
   Button,
   CircularProgress,
   Container,
+  DialogTitle,
   Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -153,6 +155,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { isUKCountry } = useWorldCountries()
 
   const course = courseInfo?.course
+  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
+    'mandatory-course-materials-cost'
+  )
 
   const courseInput: CourseInput | undefined = useMemo(() => {
     return course ? courseToCourseInput(course) : undefined
@@ -456,6 +461,12 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                         : null,
                   }
                 : {}),
+              ...(mandatoryCourseMaterialsCostEnabled && isClosedCourse
+                ? {
+                    mandatory_course_materials:
+                      courseData.mandatoryCourseMaterials ?? 0,
+                  }
+                : {}),
               residingCountry: courseData.residingCountry,
             },
             orderInput: orderToUpdate,
@@ -567,6 +578,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       courseExceptions,
       updateCourse,
       getCourseName,
+      isUKCountry,
+      mandatoryCourseMaterialsCostEnabled,
       courseDiffs,
       setDateTimeTimeZone,
       insertAudit,
@@ -575,7 +588,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       canGoToCourseBuilder,
       navigate,
       courseInput?.id,
-      isUKCountry,
     ]
   )
 
@@ -1019,13 +1031,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Dialog
             open={showRegistrantsCancellationModal}
             onClose={() => setShowRegistrantsCancellationModal(false)}
-            title={
+            maxWidth={700}
+          >
+            <DialogTitle>
               <Typography variant="h3" fontWeight={600}>
                 {t('pages.edit-course.cancellation-modal.title')}
               </Typography>
-            }
-            maxWidth={700}
-          >
+            </DialogTitle>
             <RegistrantsCancellationModal
               onTransfer={() => navigate(`/courses/${course.id}/details`)}
               onProceed={async () => {
@@ -1048,9 +1060,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             <CourseCancellationModal
               course={course}
               onClose={() => setShowCancellationModal(false)}
-              onSubmit={async () => {
-                await mutateCourse()
-
+              onSubmit={() => {
+                mutateCourse()
                 addSnackbarMessage('course-canceled', {
                   label: t('pages.course-details.course-has-been-cancelled', {
                     code: course.course_code,

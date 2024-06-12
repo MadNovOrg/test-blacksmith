@@ -72,7 +72,7 @@ export const renderForm = (
   role: RoleName = RoleName.USER,
   profile?: Partial<Profile>
 ) => {
-  return render(<CourseForm type={type} />, {
+  return render(<CourseForm type={type} isCreation={true} />, {
     auth: {
       activeCertificates: [certificateLevel],
       activeRole: role,

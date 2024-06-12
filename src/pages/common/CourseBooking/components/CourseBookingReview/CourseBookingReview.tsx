@@ -358,7 +358,10 @@ export const CourseBookingReview: React.FC<
               <Typography color="grey.700">
                 {formatCurrency(
                   {
-                    amount: getMandatoryCourseMaterialsCost(booking.quantity),
+                    amount: getMandatoryCourseMaterialsCost(
+                      booking.quantity,
+                      booking.currency
+                    ),
                     currency: booking.currency,
                   },
                   t

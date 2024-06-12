@@ -1,5 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info'
 import { Box, Typography, Grid } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { InfoPanel } from '@app/components/InfoPanel'
@@ -8,7 +9,11 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { type CourseInput } from '@app/types'
 import { isNotNullish } from '@app/util'
 
-export const CourseMaterialsSection = () => {
+type Props = {
+  isCreation?: boolean
+}
+
+export const CourseMaterialsSection = ({ isCreation }: Props) => {
   const { t } = useScopedTranslation(
     'components.course-form.mandatory-course-materials'
   )
@@ -21,6 +26,15 @@ export const CourseMaterialsSection = () => {
     control,
     name: ['maxParticipants', 'mandatoryCourseMaterials'],
   })
+
+  const [enableEditMCM, setEnableEditMCM] = useState(isCreation)
+  const initialMaxParticipants = useRef(maxParticipants)
+
+  useEffect(() => {
+    if (!isCreation) {
+      setEnableEditMCM(maxParticipants !== initialMaxParticipants.current)
+    }
+  }, [isCreation, maxParticipants])
 
   const freeMaterials =
     isNotNullish(maxParticipants) && isNotNullish(mandatoryCourseMaterials)
@@ -57,6 +71,7 @@ export const CourseMaterialsSection = () => {
               helperText={errors.mandatoryCourseMaterials?.message}
               inputProps={{ min: 1 }}
               data-testid="mandatory-course-materials"
+              disabled={!enableEditMCM}
             />
           </Grid>
         </Grid>

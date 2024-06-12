@@ -362,7 +362,9 @@ export const useCourseCreationFormSchema = ({
                   .max(
                     yup.ref('maxParticipants', {}),
                     t(
-                      'components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees'
+                      `components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-${
+                        isCreation ? 'create' : 'edit'
+                      }`
                     )
                   ),
               }

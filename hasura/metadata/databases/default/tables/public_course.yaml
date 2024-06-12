@@ -1685,6 +1685,7 @@ event_triggers:
       update:
         columns:
           - max_participants
+          - mandatory_course_materials
     retry_conf:
       interval_sec: 10
       num_retries: 0

@@ -7,6 +7,7 @@ import {
   CoursePriceQuery,
   Course_Level_Enum,
   Course_Type_Enum,
+  Currency,
 } from '@app/generated/graphql'
 import {
   ExpensesInput,
@@ -237,7 +238,8 @@ describe('component: ReviewAndConfirm', () => {
     const freeSpacesDiscount = PRICING_PER_PARTICIPANT * courseData.freeSpaces
     const coursePricing = courseData.price * courseData.maxParticipants
     const mandatoryCourseCost = getMandatoryCourseMaterialsCost(
-      courseData.mandatoryCourseMaterials ?? 0
+      courseData.mandatoryCourseMaterials ?? 0,
+      Currency.Gbp
     )
     const subtotal =
       trainerExpenses + coursePricing + mandatoryCourseCost - freeSpacesDiscount

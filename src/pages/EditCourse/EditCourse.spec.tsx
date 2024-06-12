@@ -22,7 +22,14 @@ import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-source
 import { BildStrategies, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
+import {
+  cleanup,
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+} from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
 import { EditCourse } from '.'
@@ -37,7 +44,7 @@ vi.mock('posthog-js/react', () => ({
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
-  ...((await vi.importActual('react-router-dom')) as object),
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }))
 
@@ -54,6 +61,10 @@ describe(EditCourse.name, () => {
 
   beforeAll(() => {
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
+  })
+  afterEach(() => {
+    vi.clearAllMocks()
+    cleanup()
   })
 
   it('displays spinner while loading for the course', () => {
@@ -1568,6 +1579,353 @@ describe(EditCourse.name, () => {
       )
 
       // ensure it doesn't navigate back to course details page
+      expect(mockNavigate).not.toHaveBeenCalled()
+    })
+  })
+
+  it('free course materials should display correctly', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+        accreditedBy: Accreditors_Enum.Icm,
+        mandatory_course_materials: 2,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_1,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Gbp,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedCourse.id,
+              level: Course_Level_Enum.Level_1,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] }
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+    const mcmInput = screen.getByLabelText('chargeable Course Materials', {
+      exact: false,
+    })
+
+    await userEvent.clear(maxParticipantsInput)
+    await userEvent.type(maxParticipantsInput, '8')
+    await userEvent.clear(mcmInput)
+    await userEvent.type(mcmInput, '6')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('free-course-materials').textContent).toEqual(
+        t(
+          'components.course-form.mandatory-course-materials.amount-of-free-mcm',
+          {
+            count: 2,
+          }
+        )
+      )
+    })
+  })
+
+  it('does not allow editing MCM amount on an ICM CLOSED course if max participants was not changed', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+        accreditedBy: Accreditors_Enum.Icm,
+        mandatory_course_materials: 2,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_1,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Gbp,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedCourse.id,
+              level: Course_Level_Enum.Level_1,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] }
+    )
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+    const saveButton = screen.getByTestId('save-button')
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+
+    const mcmInput = screen.getByLabelText('Materials', { exact: false })
+
+    await waitFor(() => {
+      expect(mcmInput).toBeDisabled()
+    })
+    userEvent.clear(maxParticipantsInput)
+    userEvent.type(maxParticipantsInput, '24')
+
+    await waitFor(() => {
+      expect(mcmInput).not.toBeDisabled()
+    })
+
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates back to course details page
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/courses/${closedCourse.id}/details`
+      )
+    })
+  })
+
+  it('displays error message if MCM is bigger than max participants', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+        accreditedBy: Accreditors_Enum.Icm,
+        mandatory_course_materials: 2,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_1,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Gbp,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedCourse.id,
+              level: Course_Level_Enum.Level_1,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] }
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+    const mcmInput = screen.getByLabelText('Materials', { exact: false })
+
+    userEvent.clear(maxParticipantsInput)
+    userEvent.type(maxParticipantsInput, '24')
+
+    userEvent.clear(mcmInput)
+    userEvent.type(mcmInput, '25')
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText(
+          t(
+            'components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-edit'
+          )
+        )
+      ).toBeInTheDocument()
       expect(mockNavigate).not.toHaveBeenCalled()
     })
   })

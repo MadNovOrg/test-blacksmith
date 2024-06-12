@@ -62,7 +62,6 @@ export const INPUT_TIME_FORMAT = 'HH:mm'
 export const DATE_MASK = '__/__/____'
 export const TIME_MASK = '__:__ _M'
 export const DEFAULT_ACCOMMODATION_COST_PER_NIGHT = 95.0
-export const MANDATORY_COURSE_MATERIALS_PRICE_PER_ATTENDEE = 10
 
 export const noop = () => {
   // empty
@@ -147,6 +146,14 @@ export function getSWRLoadingStatus(
   }
 
   return status
+}
+
+export const MCMAmount: Record<Currency, number> = {
+  [Currency.Gbp]: 10,
+  [Currency.Eur]: 12,
+  [Currency.Usd]: 13,
+  [Currency.Aud]: 20,
+  [Currency.Nzd]: 20,
 }
 
 export const courseStarted = (course: Course) =>
@@ -714,8 +721,9 @@ export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
 export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
 
 export const getMandatoryCourseMaterialsCost = (
-  mandatoryCourseMaterials: number
-) => mandatoryCourseMaterials * MANDATORY_COURSE_MATERIALS_PRICE_PER_ATTENDEE
+  mandatoryCourseMaterials: number,
+  currency: Currency
+) => mandatoryCourseMaterials * MCMAmount[currency]
 
 export const getTrainerSubsistenceCost = (nights = 0, isUKCountry = true) =>
   isUKCountry ? nights * 30 : 0

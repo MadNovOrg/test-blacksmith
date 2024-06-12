@@ -375,7 +375,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
     if (elements.length > 0) {
       const errorElement = elements[0]
-      if (!errorElement || !errorElement.scrollIntoView) return
+      if (!errorElement?.scrollIntoView) return
       errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
   })
@@ -404,7 +404,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {isClosedCourse && mandatoryCourseMaterialsCostEnabled ? (
-            <CourseMaterialsSection />
+            <CourseMaterialsSection isCreation={isCreation} />
           ) : null}
 
           {/* For level 1 BS this input is hidden from UI, however it is set when we are sending request to create course*/}

@@ -367,7 +367,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const trainerExpenses = !ready ? 0 : booking.trainerExpenses
     const subtotal = courseCost + trainerExpenses
     const mandatoryCourseMaterialsCost = mandatoryCourseMaterialsEnabled
-      ? getMandatoryCourseMaterialsCost(booking.quantity)
+      ? getMandatoryCourseMaterialsCost(booking.quantity, booking.currency)
       : 0
 
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
@@ -415,7 +415,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const placeOrder = useCallback(async () => {
     const promoCodes =
       booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
-    if (course && course.id) {
+    if (course?.id) {
       const { data: createOrderResponse } = await createOrder({
         input: {
           courseId: course.id,

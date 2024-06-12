@@ -84,7 +84,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
 
     await userEvent.type(screen.getByTestId('max-attendees'), '5')
     expect(
-      screen.queryByText(t('errors.more-mcm-than-attendees'))
+      screen.queryByText(t('errors.more-mcm-than-attendees-create'))
     ).toBeInTheDocument()
   })
 

@@ -21,6 +21,7 @@ import {
   RemoveCourseDraftMutationVariables,
   Course_Trainer_Insert_Input,
   Course_Level_Enum,
+  Currency as CurrencyEnum,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import {
@@ -50,7 +51,8 @@ import { getCourseRenewalCycle } from './utils'
 const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>,
   mandatoryCourseMaterialsCostEnabled: boolean,
-  mandatoryCourseMaterials: number
+  mandatoryCourseMaterials: number,
+  currency: CurrencyEnum
 ): Array<Course_Expenses_Insert_Input> => {
   const courseExpenses: Array<Course_Expenses_Insert_Input> = []
 
@@ -58,7 +60,10 @@ const prepareExpensesData = (
     courseExpenses.push({
       data: {
         type: CourseExpenseType.Materials,
-        cost: getMandatoryCourseMaterialsCost(mandatoryCourseMaterials ?? 0),
+        cost: getMandatoryCourseMaterialsCost(
+          mandatoryCourseMaterials ?? 0,
+          currency
+        ),
       },
     })
   }
@@ -431,7 +436,8 @@ export function useSaveCourse(): {
                   data: prepareExpensesData(
                     expenses,
                     mandatoryCourseMaterialsCostEnabled ?? false,
-                    courseData.mandatoryCourseMaterials ?? 0
+                    courseData.mandatoryCourseMaterials ?? 0,
+                    (courseData.priceCurrency as CurrencyEnum) ?? Currency.GBP
                   ),
                 },
               }

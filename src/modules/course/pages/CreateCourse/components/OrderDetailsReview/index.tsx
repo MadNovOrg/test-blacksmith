@@ -2,14 +2,14 @@ import { Box, Stack, Typography } from '@mui/material'
 import Big from 'big.js'
 import { parseISO } from 'date-fns'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React from 'react'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { InvoiceDetails } from '@app/components/InvoiceDetails'
+import { Currency } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { TransportMethod } from '@app/types'
 import {
@@ -46,12 +46,14 @@ export const OrderDetailsReview: React.FC = () => {
       courseData?.mandatoryCourseMaterials
     ) {
       return getMandatoryCourseMaterialsCost(
-        courseData?.mandatoryCourseMaterials
+        courseData?.mandatoryCourseMaterials,
+        courseData?.priceCurrency as Currency
       )
     }
     return 0
   }, [
     courseData?.mandatoryCourseMaterials,
+    courseData?.priceCurrency,
     mandatoryCourseMaterialsCostEnabled,
   ])
 
@@ -261,9 +263,9 @@ export const OrderDetailsReview: React.FC = () => {
           key={trainer.profile_id}
           data-testid={`trainer-${trainer.profile_id}-row`}
         >
-          {expenses && expenses[trainer.profile_id] ? (
+          {expenses?.[trainer.profile_id] ? (
             <ExpensesDetails
-              expenses={expenses[trainer.profile_id]}
+              expenses={expenses?.[trainer.profile_id]}
               trainerName={trainer.fullName ?? ''}
             />
           ) : (

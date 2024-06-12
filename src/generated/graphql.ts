@@ -5513,6 +5513,8 @@ export enum PostStatusEnum {
   RequestFailed = 'REQUEST_FAILED',
   /** Objects with the request-pending status */
   RequestPending = 'REQUEST_PENDING',
+  /** Objects with the spam status */
+  Spam = 'SPAM',
   /** Objects with the trash status */
   Trash = 'TRASH'
 }
@@ -26058,7 +26060,7 @@ export type Course_Pricing_Schedule = {
   coursePricingId: Scalars['uuid'];
   created_at?: Maybe<Scalars['timestamptz']>;
   effectiveFrom: Scalars['date'];
-  effectiveTo?: Maybe<Scalars['date']>;
+  effectiveTo: Scalars['date'];
   id: Scalars['uuid'];
   /** Price per participant without any discounts */
   priceAmount: Scalars['numeric'];
@@ -56935,6 +56937,7 @@ export type Upcoming_Enrollments = {
   profile?: Maybe<Profile>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
+  schedule_end?: Maybe<Scalars['timestamptz']>;
 };
 
 /** aggregated selection of "upcoming_enrollments" */
@@ -57023,6 +57026,7 @@ export type Upcoming_Enrollments_Bool_Exp = {
   profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   scheduleStart?: InputMaybe<Timestamptz_Comparison_Exp>;
+  schedule_end?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
 /** input type for inserting data into table "upcoming_enrollments" */
@@ -57036,6 +57040,7 @@ export type Upcoming_Enrollments_Insert_Input = {
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
   scheduleStart?: InputMaybe<Scalars['timestamptz']>;
+  schedule_end?: InputMaybe<Scalars['timestamptz']>;
 };
 
 /** aggregate max on columns */
@@ -57047,6 +57052,7 @@ export type Upcoming_Enrollments_Max_Fields = {
   orgName?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
+  schedule_end?: Maybe<Scalars['timestamptz']>;
 };
 
 /** order by max() on columns of table "upcoming_enrollments" */
@@ -57057,6 +57063,7 @@ export type Upcoming_Enrollments_Max_Order_By = {
   orgName?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
+  schedule_end?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -57068,6 +57075,7 @@ export type Upcoming_Enrollments_Min_Fields = {
   orgName?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
+  schedule_end?: Maybe<Scalars['timestamptz']>;
 };
 
 /** order by min() on columns of table "upcoming_enrollments" */
@@ -57078,6 +57086,7 @@ export type Upcoming_Enrollments_Min_Order_By = {
   orgName?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
+  schedule_end?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "upcoming_enrollments". */
@@ -57091,6 +57100,7 @@ export type Upcoming_Enrollments_Order_By = {
   profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
+  schedule_end?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "upcoming_enrollments" */
@@ -57106,7 +57116,9 @@ export enum Upcoming_Enrollments_Select_Column {
   /** column name */
   ProfileId = 'profileId',
   /** column name */
-  ScheduleStart = 'scheduleStart'
+  ScheduleStart = 'scheduleStart',
+  /** column name */
+  ScheduleEnd = 'schedule_end'
 }
 
 /** aggregate stddev on columns */
@@ -57158,6 +57170,7 @@ export type Upcoming_Enrollments_Stream_Cursor_Value_Input = {
   orgName?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   scheduleStart?: InputMaybe<Scalars['timestamptz']>;
+  schedule_end?: InputMaybe<Scalars['timestamptz']>;
 };
 
 /** aggregate sum on columns */
@@ -59226,7 +59239,7 @@ export type GetPricingQueryVariables = Exact<{
 }>;
 
 
-export type GetPricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
+export type GetPricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo: any, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo: any, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
 
 export type DeleteMeetingMutationVariables = Exact<{
   meetingId: Scalars['String'];
@@ -59379,6 +59392,102 @@ export type CourseToBuildQueryVariables = Exact<{
 
 
 export type CourseToBuildQuery = { __typename?: 'query_root', course?: { __typename?: 'course', curriculum?: any | null, conversion?: boolean | null, id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, name: string, start?: any | null, end?: any | null, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null, submodules: Array<{ __typename?: 'submodule', id: any, name: string }> } }>, bildModules?: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies?: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', timeZone: string, venue?: { __typename?: 'venue', name: string, city: string } | null }> } | null };
+
+export type ToggleAttendanceMutationVariables = Exact<{
+  participantId: Scalars['uuid'];
+  attended: Scalars['Boolean'];
+}>;
+
+
+export type ToggleAttendanceMutation = { __typename?: 'mutation_root', update_course_participant_by_pk?: { __typename?: 'course_participant', attended?: boolean | null } | null };
+
+export type ToggleSelectedParticipantsAttendanceMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  ids: Array<Scalars['uuid']> | Scalars['uuid'];
+  attended: Scalars['Boolean'];
+}>;
+
+
+export type ToggleSelectedParticipantsAttendanceMutation = { __typename?: 'mutation_root', update_course_participant?: { __typename?: 'course_participant_mutation_response', affected_rows: number } | null };
+
+export type BlendedLearningExportDataDetailsFragment = { __typename?: 'BlendedLearningExportDataOutput', courseName: string, courseCode: string, courseStartDate: string, courseEndDate: string, commissioningOrganisationName: string, leadTrainerName: string, attendees: Array<{ __typename?: 'BlendedLearningAttendeeExportData', userName: string, email: string, blendedLearningStatus: string, blendedLearningPass: string, blendedLearningStartDate: string, blendedLearningEndDate?: string | null }> };
+
+export type ExportBlendedLearningCourseDataQueryVariables = Exact<{
+  input: BlendedLearningExportDataInput;
+}>;
+
+
+export type ExportBlendedLearningCourseDataQuery = { __typename?: 'query_root', attendees?: { __typename?: 'BlendedLearningExportDataOutput', courseName: string, courseCode: string, courseStartDate: string, courseEndDate: string, commissioningOrganisationName: string, leadTrainerName: string, attendees: Array<{ __typename?: 'BlendedLearningAttendeeExportData', userName: string, email: string, blendedLearningStatus: string, blendedLearningPass: string, blendedLearningStartDate: string, blendedLearningEndDate?: string | null }> } | null };
+
+export type SaveCourseAttendanceMutationVariables = Exact<{
+  attended: Array<Scalars['uuid']> | Scalars['uuid'];
+  notAttended: Array<Scalars['uuid']> | Scalars['uuid'];
+  attendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
+  notAttendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
+}>;
+
+
+export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null, saveNotAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveNotAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null };
+
+export type GetEvaluationQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type GetEvaluationQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, question: { __typename?: 'course_evaluation_questions', id: any, type?: Course_Evaluation_Question_Type_Enum | null }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
+
+export type GetEvaluationsSummaryRestrictedQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  profileCondition?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetEvaluationsSummaryRestrictedQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
+
+export type GetEvaluationsSummaryQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  profileCondition?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetEvaluationsSummaryQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
+
+export type GetEvaluationsQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  profileCondition?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetEvaluationsQuery = { __typename?: 'query_root', evaluations: Array<{ __typename?: 'course_evaluation_answers', id: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }>, attendees: Array<{ __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', id: any } }>, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any } }> };
+
+export type GetFeedbackUsersQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type GetFeedbackUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'course_evaluation_answers', profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
+
+export type GetCourseEvaluationQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCourseEvaluationQuestionsQuery = { __typename?: 'query_root', questions: Array<{ __typename?: 'course_evaluation_questions', id: any, type?: Course_Evaluation_Question_Type_Enum | null, questionKey?: string | null, group?: Course_Evaluation_Question_Group_Enum | null, displayOrder: number, required: boolean }> };
+
+export type SaveCourseEvaluationMutationVariables = Exact<{
+  answers: Array<Course_Evaluation_Answers_Insert_Input> | Course_Evaluation_Answers_Insert_Input;
+  id: Scalars['uuid'];
+  completedEvaluation?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null, update_course_participant_by_pk?: { __typename?: 'course_participant', completed_evaluation?: boolean | null } | null };
+
+export type SaveTrainerCourseEvaluationMutationVariables = Exact<{
+  answers: Array<Course_Evaluation_Answers_Insert_Input> | Course_Evaluation_Answers_Insert_Input;
+}>;
+
+
+export type SaveTrainerCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
 export type SaveBildGradeMutationVariables = Exact<{
   modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;
@@ -59612,23 +59721,6 @@ export type GetResourcesQueryVariables = Exact<{
 
 export type GetResourcesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
 
-export type ToggleAttendanceMutationVariables = Exact<{
-  participantId: Scalars['uuid'];
-  attended: Scalars['Boolean'];
-}>;
-
-
-export type ToggleAttendanceMutation = { __typename?: 'mutation_root', update_course_participant_by_pk?: { __typename?: 'course_participant', attended?: boolean | null } | null };
-
-export type ToggleSelectedParticipantsAttendanceMutationVariables = Exact<{
-  courseId: Scalars['Int'];
-  ids: Array<Scalars['uuid']> | Scalars['uuid'];
-  attended: Scalars['Boolean'];
-}>;
-
-
-export type ToggleSelectedParticipantsAttendanceMutation = { __typename?: 'mutation_root', update_course_participant?: { __typename?: 'course_participant_mutation_response', affected_rows: number } | null };
-
 export type ArloCallbackMutationVariables = Exact<{
   input: ArloCallbackInput;
 }>;
@@ -59725,15 +59817,6 @@ export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetBildStrategiesQuery = { __typename?: 'query_root', strategies: Array<{ __typename?: 'bild_strategy', id: any, name: string, shortName: string, modules: any, duration?: number | null, sort?: number | null }> };
 
-export type BlendedLearningExportDataDetailsFragment = { __typename?: 'BlendedLearningExportDataOutput', courseName: string, courseCode: string, courseStartDate: string, courseEndDate: string, commissioningOrganisationName: string, leadTrainerName: string, attendees: Array<{ __typename?: 'BlendedLearningAttendeeExportData', userName: string, email: string, blendedLearningStatus: string, blendedLearningPass: string, blendedLearningStartDate: string, blendedLearningEndDate?: string | null }> };
-
-export type ExportBlendedLearningCourseDataQueryVariables = Exact<{
-  input: BlendedLearningExportDataInput;
-}>;
-
-
-export type ExportBlendedLearningCourseDataQuery = { __typename?: 'query_root', attendees?: { __typename?: 'BlendedLearningExportDataOutput', courseName: string, courseCode: string, courseStartDate: string, courseEndDate: string, commissioningOrganisationName: string, leadTrainerName: string, attendees: Array<{ __typename?: 'BlendedLearningAttendeeExportData', userName: string, email: string, blendedLearningStatus: string, blendedLearningPass: string, blendedLearningStartDate: string, blendedLearningEndDate?: string | null }> } | null };
-
 export type BookPrivateCourseMutationVariables = Exact<{
   booking: Private_Course_Booking_Insert_Input;
 }>;
@@ -59810,66 +59893,6 @@ export type GetCountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCountriesQuery = { __typename?: 'query_root', countries: Array<{ __typename?: 'country', name: string }> };
-
-export type GetEvaluationQueryVariables = Exact<{
-  courseId: Scalars['Int'];
-  profileId: Scalars['uuid'];
-}>;
-
-
-export type GetEvaluationQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, question: { __typename?: 'course_evaluation_questions', id: any, type?: Course_Evaluation_Question_Type_Enum | null }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
-
-export type GetEvaluationsSummaryRestrictedQueryVariables = Exact<{
-  courseId: Scalars['Int'];
-  profileCondition?: InputMaybe<Profile_Bool_Exp>;
-}>;
-
-
-export type GetEvaluationsSummaryRestrictedQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
-
-export type GetEvaluationsSummaryQueryVariables = Exact<{
-  courseId: Scalars['Int'];
-  profileCondition?: InputMaybe<Profile_Bool_Exp>;
-}>;
-
-
-export type GetEvaluationsSummaryQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
-
-export type GetEvaluationsQueryVariables = Exact<{
-  courseId: Scalars['Int'];
-  profileCondition?: InputMaybe<Profile_Bool_Exp>;
-}>;
-
-
-export type GetEvaluationsQuery = { __typename?: 'query_root', evaluations: Array<{ __typename?: 'course_evaluation_answers', id: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }>, attendees: Array<{ __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', id: any } }>, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any } }> };
-
-export type GetFeedbackUsersQueryVariables = Exact<{
-  courseId: Scalars['Int'];
-}>;
-
-
-export type GetFeedbackUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'course_evaluation_answers', profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
-
-export type GetCourseEvaluationQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCourseEvaluationQuestionsQuery = { __typename?: 'query_root', questions: Array<{ __typename?: 'course_evaluation_questions', id: any, type?: Course_Evaluation_Question_Type_Enum | null, questionKey?: string | null, group?: Course_Evaluation_Question_Group_Enum | null, displayOrder: number, required: boolean }> };
-
-export type SaveCourseEvaluationMutationVariables = Exact<{
-  answers: Array<Course_Evaluation_Answers_Insert_Input> | Course_Evaluation_Answers_Insert_Input;
-  id: Scalars['uuid'];
-  completedEvaluation?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null, update_course_participant_by_pk?: { __typename?: 'course_participant', completed_evaluation?: boolean | null } | null };
-
-export type SaveTrainerCourseEvaluationMutationVariables = Exact<{
-  answers: Array<Course_Evaluation_Answers_Insert_Input> | Course_Evaluation_Answers_Insert_Input;
-}>;
-
-
-export type SaveTrainerCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
 export type GetCourseParticipantByInviteQueryVariables = Exact<{
   inviteId: Scalars['uuid'];
@@ -60072,16 +60095,6 @@ export type RequestCourseCancellationMutationVariables = Exact<{
 
 
 export type RequestCourseCancellationMutation = { __typename?: 'mutation_root', insert_course_cancellation_request?: { __typename?: 'course_cancellation_request_mutation_response', affected_rows: number } | null };
-
-export type SaveCourseAttendanceMutationVariables = Exact<{
-  attended: Array<Scalars['uuid']> | Scalars['uuid'];
-  notAttended: Array<Scalars['uuid']> | Scalars['uuid'];
-  attendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
-  notAttendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
-}>;
-
-
-export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null, saveNotAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveNotAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null };
 
 export type SaveCourseModulesBildMutationVariables = Exact<{
   courseId: Scalars['Int'];
