@@ -84,6 +84,7 @@ insert_permissions:
         - course_id
         - email
         - status
+        - invited_after_course_end
         - expires_in
   - role: sales-representative
     permission:
@@ -235,6 +236,7 @@ select_permissions:
         - created_at
         - updated_at
         - id
+        - invited_after_course_end
         - expires_in
       filter: {}
       allow_aggregations: true
