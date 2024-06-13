@@ -678,7 +678,7 @@ export const EditProfilePage: React.FC<
       return err
     }
   }
-  const { getLabel: getCountryLabel } = useWorldCountries()
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
   const allPositions = useMemo(() => {
     return uniq([
       ...positions.edu,
@@ -929,6 +929,7 @@ export const EditProfilePage: React.FC<
                       label={t('residing-country')}
                       variant="filled"
                       required
+                      disableClearable
                       onChange={(_, code) => {
                         if (code) {
                           setValue(
@@ -1168,6 +1169,10 @@ export const EditProfilePage: React.FC<
                   >
                     {displayOrgSelector ? (
                       <OrgSelector
+                        allowAdding={
+                          Boolean(values.countryCode) &&
+                          !isUKCountry(values.countryCode)
+                        }
                         required
                         {...register('organization')}
                         autocompleteMode={false}
@@ -1177,7 +1182,6 @@ export const EditProfilePage: React.FC<
                         userOrgIds={profile?.organizations.map(
                           org => org.organization.id
                         )}
-                        allowAdding
                         value={
                           (values.organization as unknown as Pick<
                             Organization,

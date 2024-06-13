@@ -83,9 +83,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
   )
-  const isInternationalFlagEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
-  )
+
   const [isManualFormError, setIsManualFormError] = useState(false)
 
   const { t } = useTranslation()
@@ -123,11 +121,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const values = watch()
   const minimalAge = subYears(new Date(), 16)
-
-  const allowCreatNewOrganisation = useMemo(
-    () => !isUKCountry(values.countryCode) && isInternationalFlagEnabled,
-    [values.countryCode, isUKCountry, isInternationalFlagEnabled]
-  )
 
   const onSubmit = async (data: FormInputs) => {
     if (isManualFormError) return
@@ -229,7 +222,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       onSuccess()
     }
   }, [onSuccess, userData?.createUser.email])
-
   return (
     <Box
       component="form"
@@ -316,6 +308,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         </Grid>
         <Grid item>
           <CountriesSelector
+            disableClearable
             onChange={(_, code) => {
               setValue(
                 'country',
@@ -388,7 +381,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             {...register('organization')}
             isNewUser={isNewUser}
             storeNewOrgData={setNewOrgData}
-            allowAdding={allowCreatNewOrganisation}
+            allowAdding={
+              Boolean(values.countryCode) && !isUKCountry(values.countryCode)
+            }
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
             value={values.organization ?? newOrgData ?? undefined}

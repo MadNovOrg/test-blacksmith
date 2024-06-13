@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
 import { uniqBy } from 'lodash'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 import { useDebounce } from 'use-debounce'
@@ -133,15 +133,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           : undefined,
       [profile?.organizations, showTrainerOrgOnly]
     )
-
-    const allowCreateNewOrg = useMemo(() => {
-      if (allowAdding && !countryCode?.includes('GB')) {
-        return true
-      } else if (allowAdding && countryCode?.includes('GB')) {
-        return false
-      }
-      return false
-    }, [allowAdding, countryCode])
 
     const [{ data: dfeOrgs, fetching: dfeFetching }] = useQuery<
       FindEstablishmentQuery,
@@ -299,6 +290,15 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         .filter(Boolean)
         .join(', ')
     }
+    const organizationCreationOrEnquiryButton = useCallback(
+      (option: Option): string => {
+        if (isDfeSuggestion(option)) {
+          return t('add')
+        }
+        return t(allowAdding ? 'create' : 'organisation-enquiry')
+      },
+      [allowAdding, t]
+    )
 
     return (
       <>
@@ -418,7 +418,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               !isHubOrg(option) ||
               isXeroSuggestion(option) ||
               isDfeSuggestion(option)
-
             const address = renderAddress(option)
             const key = !('id' in option) ? 'NEW_ORG' : (option?.id as string)
             return (
@@ -468,13 +467,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     fullWidth={isMobile}
                     data-testid="new-organisation"
                   >
-                    {t(
-                      isDfeSuggestion(option)
-                        ? 'add'
-                        : allowCreateNewOrg
-                        ? 'create'
-                        : 'organisation-enquiry'
-                    )}
+                    {organizationCreationOrEnquiryButton(option)}
                   </Button>
                 ) : null}
               </Box>

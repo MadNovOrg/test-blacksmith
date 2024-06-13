@@ -71,7 +71,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [isManualFormError, setIsManualFormError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [signUpError, setError] = useState('')
-  const { getLabel: getCountryLabel } = useWorldCountries()
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
 
@@ -269,6 +269,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
       <Box mb={3}>
         <CountriesSelector
+          disableClearable
           onChange={(_, code) => {
             if (code) {
               setValue(
@@ -337,7 +338,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       <OrgSelector
         required
         {...register('organization')}
-        allowAdding={false}
+        allowAdding={!isUKCountry(values.countryCode)}
         autocompleteMode={false}
         showTrainerOrgOnly={false}
         error={errors.organization?.message}

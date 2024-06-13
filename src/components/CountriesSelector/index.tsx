@@ -17,6 +17,7 @@ export type CountriesSelectorProps = {
   isBILDcourse?: boolean
   courseType?: Course_Type_Enum
   onBlur?: () => void
+  disableClearable?: boolean
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -31,6 +32,7 @@ const CountriesSelector = ({
   isBILDcourse,
   courseType,
   onBlur,
+  disableClearable,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -58,6 +60,7 @@ const CountriesSelector = ({
       options={countriesList}
       autoHighlight
       getOptionLabel={code => getLabel(code as WorldCountriesCodes) ?? ''}
+      disableClearable={disableClearable}
       renderOption={(props, code) => (
         <Box
           data-testid={`country-${code}`}

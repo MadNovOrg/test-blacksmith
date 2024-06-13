@@ -1,15 +1,33 @@
+import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
-import { Client, Provider } from 'urql'
+import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
-import { GetOrganizationsQuery } from '@app/generated/graphql'
+import {
+  FindEstablishmentQuery,
+  GetOrganizationsQuery,
+} from '@app/generated/graphql'
+import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
+import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 import { buildOrganization, buildProfile } from '@test/mock-data-utils'
 
 import { OrgSelector } from '.'
 
 describe('component: OrgSelector', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
   })
@@ -211,7 +229,7 @@ describe('component: OrgSelector', () => {
       <Provider value={client}>
         <OrgSelector
           onChange={onChangeMock}
-          allowAdding={true}
+          allowAdding={false}
           countryCode="GB-ENG"
         />
       </Provider>,
@@ -282,6 +300,48 @@ describe('component: OrgSelector', () => {
       expect(screen.getByTestId('new-organisation')).toBeInTheDocument()
 
       expect(screen.getByTestId('new-organisation')).toHaveTextContent('Create')
+    })
+  })
+  it('should allows creating organizations', async () => {
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_ORGANIZATIONS) {
+          return fromValue<{ data: GetOrganizationsQuery }>({
+            data: {
+              orgs: [] as GetOrganizationsQuery['orgs'],
+            },
+          })
+        }
+        if (query === FIND_ESTABLISHMENTS) {
+          return fromValue<{ data: FindEstablishmentQuery }>({
+            data: {
+              establishments: [] as FindEstablishmentQuery['establishments'],
+              total: {
+                aggregate: {
+                  count: 0,
+                },
+              },
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrgSelector onChange={() => vi.fn()} allowAdding={true} />
+      </Provider>,
+      { auth: { profile } }
+    )
+    await userEvent.type(
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
+      'Test'
+    )
+    await waitFor(() => {
+      const createButton = screen.getByText(t('create'))
+      expect(createButton).toBeInTheDocument()
     })
   })
 })

@@ -51,7 +51,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
   const minimalAge = subYears(new Date(), 16)
-  const { getLabel: getCountryLabel } = useWorldCountries()
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
@@ -209,6 +209,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Grid>
           <Grid item>
             <CountriesSelector
+              disableClearable
               onChange={(_, code) => {
                 if (code) {
                   setValue(
@@ -275,7 +276,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Grid>
           <Grid item>
             <OrgSelector
-              allowAdding={false}
+              allowAdding={!isUKCountry(values.countryCode)}
               required
               {...register('organization')}
               autocompleteMode={false}

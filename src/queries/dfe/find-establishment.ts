@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 import { ESTABLISHMENT } from '@app/queries/fragments'
 

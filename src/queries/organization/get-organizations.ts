@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 import { ORGANIZATION, SHALLOW_ORGANIZATION } from '@app/queries/fragments'
 
