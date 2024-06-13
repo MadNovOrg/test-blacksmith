@@ -37,7 +37,9 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
   }, [isCreation, maxParticipants])
 
   const freeMaterials =
-    isNotNullish(maxParticipants) && isNotNullish(mandatoryCourseMaterials)
+    isNotNullish(maxParticipants) &&
+    isNotNullish(mandatoryCourseMaterials) &&
+    mandatoryCourseMaterials >= 0
       ? maxParticipants - mandatoryCourseMaterials
       : 0
 

@@ -47,18 +47,18 @@ export const OrderDetailsReview: React.FC = () => {
     ) {
       return getMandatoryCourseMaterialsCost(
         courseData?.mandatoryCourseMaterials,
-        courseData?.priceCurrency as Currency
+        currency as Currency
       )
     }
     return 0
   }, [
     courseData?.mandatoryCourseMaterials,
-    courseData?.priceCurrency,
+    currency,
     mandatoryCourseMaterialsCostEnabled,
   ])
 
   const freeCourseMaterials = useMemo(() => {
-    if (courseData?.maxParticipants && courseData.mandatoryCourseMaterials)
+    if (courseData?.maxParticipants && courseData?.mandatoryCourseMaterials)
       return courseData?.maxParticipants - courseData?.mandatoryCourseMaterials
     return 0
   }, [courseData?.mandatoryCourseMaterials, courseData?.maxParticipants])
