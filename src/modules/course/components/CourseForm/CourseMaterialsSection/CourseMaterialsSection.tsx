@@ -20,6 +20,7 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
   const {
     register,
     control,
+    setValue,
     formState: { errors },
   } = useFormContext<CourseInput>()
   const [maxParticipants, mandatoryCourseMaterials] = useWatch({
@@ -29,12 +30,21 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
 
   const [enableEditMCM, setEnableEditMCM] = useState(isCreation)
   const initialMaxParticipants = useRef(maxParticipants)
+  const initialMandatoryCourseMaterials = useRef(mandatoryCourseMaterials)
 
   useEffect(() => {
     if (!isCreation) {
-      setEnableEditMCM(maxParticipants !== initialMaxParticipants.current)
+      if (maxParticipants === initialMaxParticipants.current) {
+        setEnableEditMCM(false)
+        setValue(
+          'mandatoryCourseMaterials',
+          initialMandatoryCourseMaterials.current
+        )
+      } else {
+        setEnableEditMCM(true)
+      }
     }
-  }, [isCreation, maxParticipants])
+  }, [isCreation, maxParticipants, setValue])
 
   const freeMaterials =
     isNotNullish(maxParticipants) &&
