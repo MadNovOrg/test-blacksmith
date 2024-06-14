@@ -65,6 +65,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   }, [])
 
   const onUserNotLoggedIn = () => {
+    posthog.identify('1')
+
     // delete cookie if exists
     TTCookies.deleteCookie('mo_jwt_token', {
       secure: true,

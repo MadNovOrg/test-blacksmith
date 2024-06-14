@@ -72,7 +72,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   )
 
   const useInternationalCountriesSelector = useMemo(() => {
-    return Boolean(addOrgCountriesSelectorEnabled ?? true)
+    return Boolean(addOrgCountriesSelectorEnabled)
   }, [addOrgCountriesSelectorEnabled])
 
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
