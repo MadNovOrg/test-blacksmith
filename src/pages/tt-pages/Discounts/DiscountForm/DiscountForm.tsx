@@ -29,7 +29,6 @@ import { useMutation, useQuery } from 'urql'
 import { useDebounce, useDebouncedCallback } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
-import { ProfileSelector } from '@app/components/ProfileSelector'
 import { SelectCourses } from '@app/components/SelectCourses'
 import { SelectLevels } from '@app/components/SelectLevels'
 import { useAuth } from '@app/context/auth'
@@ -45,6 +44,7 @@ import {
   UpsertPromoCodeMutation,
   UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
+import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { NotFound } from '@app/pages/common/NotFound'
 import { DISABLE_PROMO_CODE } from '@app/queries/promo-codes/disable-promo-code'
 import { GET_PROMO_CODES } from '@app/queries/promo-codes/get-promo-codes'

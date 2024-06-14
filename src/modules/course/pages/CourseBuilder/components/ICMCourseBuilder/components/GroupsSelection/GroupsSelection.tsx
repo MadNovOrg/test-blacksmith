@@ -25,9 +25,13 @@ import {
   Course_Type_Enum,
   ModuleGroupsQuery,
 } from '@app/generated/graphql'
+import {
+  LeftPane,
+  PanesContainer,
+  RightPane,
+} from '@app/modules/course/pages/CourseBuilder/components/Panes/Panes'
 import { getPercentage, formatDurationShort, isNotNullish } from '@app/util'
 
-import { LeftPane, PanesContainer, RightPane } from '../../../Panes/Panes'
 import { StyledAccordionSummary, StyledAccordionDetails } from '../styled'
 
 export type CallbackFn = (data: {

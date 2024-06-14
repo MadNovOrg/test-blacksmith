@@ -9,11 +9,11 @@ import Typography from '@mui/material/Typography'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
 import { Sticky } from '@app/components/Sticky'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { Avatar } from '@app/modules/profile/components/Avatar'
 
 import {
   TransferModeEnum,

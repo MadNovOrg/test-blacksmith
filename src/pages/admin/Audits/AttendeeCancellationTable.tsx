@@ -12,7 +12,6 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import {
@@ -22,6 +21,7 @@ import {
 import useAttendeeAuditLogs from '@app/hooks/useAttendeeAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAvatar'
 import {
   AuditFilteringSidebar,
   FilterChangeEvent,

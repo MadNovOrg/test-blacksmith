@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
 import { schemas, yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
 

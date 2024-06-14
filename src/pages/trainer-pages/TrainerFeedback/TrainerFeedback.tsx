@@ -17,7 +17,6 @@ import { useMutation, useQuery } from 'urql'
 import * as yup from 'yup'
 
 import { BackButton } from '@app/components/BackButton'
-import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
@@ -31,6 +30,7 @@ import {
   SaveTrainerCourseEvaluationMutationVariables,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
+import { BooleanQuestion } from '@app/modules/course_evaluation/components/BooleanQuestion'
 import { QUERY as GET_ANSWERS_QUERY } from '@app/modules/course_evaluation/queries/get-answers'
 import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_evaluation/queries/get-questions'
 import { MUTATION as SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/modules/course_evaluation/queries/save-trainer-evaluation'

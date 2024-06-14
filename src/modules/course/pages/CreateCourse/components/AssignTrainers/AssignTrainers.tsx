@@ -15,7 +15,6 @@ import { UseFormReset, UseFormSetValue } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
@@ -24,6 +23,9 @@ import {
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import ChooseTrainers, {
+  FormValues,
+} from '@app/modules/course/components/ChooseTrainers'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,

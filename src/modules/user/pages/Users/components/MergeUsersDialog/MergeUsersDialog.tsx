@@ -13,15 +13,15 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
-import { Avatar } from '@app/components/Avatar'
 import { Dialog } from '@app/components/dialogs/Dialog'
 import {
   GetProfileDetailsQuery,
   MergeUserMutation,
   MergeUserMutationVariables,
 } from '@app/generated/graphql'
-import useProfile from '@app/hooks/useProfile'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { Avatar } from '@app/modules/profile/components/Avatar'
+import useProfile from '@app/modules/profile/hooks/useProfile'
 import { MUTATION as MERGE_USERS_MUTATION } from '@app/queries/user/merge-users'
 import { LoadingStatus } from '@app/util'
 

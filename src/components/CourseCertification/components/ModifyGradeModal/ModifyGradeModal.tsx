@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useMutation, useQuery } from 'urql'
 
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
-import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Certificate_Changelog_Type_Enum,
@@ -14,6 +13,7 @@ import {
   UpdateGradeMutation,
   UpdateGradeMutationVariables,
 } from '@app/generated/graphql'
+import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { GET_CERTIFICATE_QUERY } from '@app/queries/certificate/get-certificate'
 import { UPDATE_GRADE } from '@app/queries/grading/update-grade'
 import theme from '@app/theme'

@@ -12,13 +12,13 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 import useCourseAuditLogs from '@app/hooks/useCourseAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAvatar'
 import {
   AuditFilteringSidebar,
   FilterChangeEvent,

@@ -31,13 +31,13 @@ import {
   Course_Trainer_Type_Enum,
   SearchTrainer,
 } from '@app/generated/graphql'
-import useProfile from '@app/hooks/useProfile'
 import { CourseForm } from '@app/modules/course/components/CourseForm'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import useProfile from '@app/modules/profile/hooks/useProfile'
 import {
   CourseInput,
   InviteStatus,

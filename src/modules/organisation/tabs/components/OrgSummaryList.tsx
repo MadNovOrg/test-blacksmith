@@ -14,11 +14,11 @@ import Link from '@mui/material/Link'
 import React, { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import { OrganizationProfile } from '@app/generated/graphql'
 import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import { Avatar } from '@app/modules/profile/components/Avatar'
 import theme from '@app/theme'
 
 import useOrganisationStats from '../../hooks/useOrganisationStats'

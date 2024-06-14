@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 
-import { calculateGo1LicenseCost } from '../../../../utils'
+import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
 
 import { OrderDetails } from '.'
 

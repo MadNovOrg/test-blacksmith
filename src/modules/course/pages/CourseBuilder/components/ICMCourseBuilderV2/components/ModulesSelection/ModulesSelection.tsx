@@ -16,9 +16,13 @@ import { usePrevious } from 'react-use'
 import { noop } from 'ts-essentials'
 
 import { ModuleSettingsQuery } from '@app/generated/graphql'
+import {
+  LeftPane,
+  PanesContainer,
+  RightPane,
+} from '@app/modules/course/pages/CourseBuilder/components/Panes/Panes'
 import { formatDurationShort, getPercentage, isNotNullish } from '@app/util'
 
-import { LeftPane, PanesContainer, RightPane } from '../../../Panes/Panes'
 import { ModuleAccordion } from '../ModuleAccordion/ModuleAccordion'
 
 export type CallbackFn = ({

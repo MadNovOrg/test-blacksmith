@@ -4,8 +4,8 @@ import { vi, MockedFunction } from 'vitest'
 
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
-import { useJobTitles } from '@app/hooks/useJobTitles'
 import { gqlRequest } from '@app/lib/gql-request'
+import { useJobTitles } from '@app/modules/profile/hooks/useJobTitles'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -14,7 +14,7 @@ import { Form } from './Form'
 vi.mock('@app/hooks/use-fetcher')
 vi.mock('@app/lib/gql-request')
 vi.mock('aws-amplify')
-vi.mock('../../../../hooks/useJobTitles')
+vi.mock('@app/modules/profile/hooks/useJobTitles')
 vi.mock('@app/components/OrgSelector', () => ({
   OrgSelector: vi.fn(({ onChange }) => {
     return (

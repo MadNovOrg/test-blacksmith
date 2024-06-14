@@ -22,9 +22,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
-import ChooseTrainers, {
-  FormValues as TrainersFormValues,
-} from '@app/components/ChooseTrainers'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Dialog } from '@app/components/dialogs'
@@ -56,6 +53,9 @@ import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import ChooseTrainers, {
+  FormValues as TrainersFormValues,
+} from '@app/modules/course/components/ChooseTrainers'
 import {
   CourseForm,
   DisabledFields,

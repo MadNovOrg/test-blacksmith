@@ -17,10 +17,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { CertificateDocument } from '@app/components/CertificatePDF'
-import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { Grade } from '@app/components/Grade'
-import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
@@ -33,6 +30,9 @@ import {
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
+import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
+import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
+import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { Profile } from '@app/types'
 
 type CertificationsTableProps = {

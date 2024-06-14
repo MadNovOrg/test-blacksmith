@@ -18,7 +18,7 @@ import {
   GetNotDetailedProfileQueryVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/queries/profile/get-not-detailed-profile'
+import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/modules/profile/queries/get-not-detailed-profile'
 import { RoleName, type CourseInput } from '@app/types'
 
 import { type DisabledFields } from '..'

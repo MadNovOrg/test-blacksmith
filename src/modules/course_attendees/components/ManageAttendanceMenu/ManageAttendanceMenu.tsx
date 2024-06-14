@@ -7,9 +7,12 @@ import { cond, constant, stubTrue } from 'lodash-es'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ActionsMenu, Action } from '@app/components/ActionsMenu'
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
+import {
+  ActionsMenu,
+  Action,
+} from '@app/modules/course_attendees/components/ActionsMenu'
 import { Course, CourseParticipant, Profile } from '@app/types'
 import { courseEnded, getParticipantOrgIds } from '@app/util'
 

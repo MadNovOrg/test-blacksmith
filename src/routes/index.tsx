@@ -31,11 +31,15 @@ import { Onboarding } from '@app/pages/Onboarding/Onboarding'
 import { Welcome } from '@app/pages/Welcome/Welcome'
 import { RoleName } from '@app/types'
 
-const ProfileRoutes = React.lazy(() => import('./profile'))
+const ProfileRoutes = React.lazy(
+  () => import('../modules/profile/routes/profile')
+)
 const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
 const UserRoutes = React.lazy(() => import('./user-routes'))
 const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
-const UnverifiedRoutes = React.lazy(() => import('./unverified-routes'))
+const UnverifiedRoutes = React.lazy(
+  () => import('../modules/profile/routes/unverified-routes')
+)
 const SalesAdminRoutes = React.lazy(() => import('./sales-admin-routes'))
 const SalesRepresentativeRoute = React.lazy(
   () => import('./sales-representative-routes')

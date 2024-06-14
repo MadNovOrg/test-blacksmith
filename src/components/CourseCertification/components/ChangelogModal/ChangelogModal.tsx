@@ -13,11 +13,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Grade } from '@app/components/Grade'
-import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import {
   Course_Certificate_Changelog_Type_Enum,
   GetCertificateQuery,
 } from '@app/generated/graphql'
+import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { NonNullish } from '@app/types'
 
 type Participant = Pick<

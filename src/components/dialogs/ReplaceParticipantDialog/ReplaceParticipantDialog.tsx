@@ -41,12 +41,12 @@ import {
   ReplaceParticipantMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { Avatar } from '@app/modules/profile/components/Avatar'
 import { GET_PARTICIPANT_ORDER } from '@app/queries/participants/get-course-participant-order'
 import { schemas, yup } from '@app/schemas'
 import { Course } from '@app/types'
 import { requiredMsg } from '@app/util'
 
-import { Avatar } from '../../Avatar'
 import { Dialog } from '../Dialog'
 
 import { REPLACE_PARTICIPANT } from './queries'

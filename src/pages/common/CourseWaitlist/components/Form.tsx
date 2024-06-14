@@ -12,8 +12,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
-import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
+import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
 
 import { getFormSchema } from './types'
 

@@ -20,7 +20,6 @@ import {
   Mode,
   ReplaceParticipantDialog,
 } from '@app/components/dialogs'
-import { LinkToProfile } from '@app/components/LinkToProfile'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
@@ -34,6 +33,7 @@ import {
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import { ManageAttendanceMenu } from '@app/modules/course_attendees/components/ManageAttendanceMenu'
+import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { MUTATION as SEND_COURSE_INFO } from '@app/queries/courses/send-course-information'
 import {
   BlendedLearningStatus,

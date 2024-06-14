@@ -5,7 +5,7 @@ import {
   GetProfilesQuery,
   GetProfilesQueryVariables,
 } from '@app/generated/graphql'
-import useProfiles from '@app/hooks/useProfiles'
+import useProfiles from '@app/modules/profile/hooks/useProfiles'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
@@ -20,7 +20,7 @@ import {
 
 import { Users } from './Users'
 
-vi.mock('@app/hooks/useProfiles')
+vi.mock('@app/modules/profile/hooks/useProfiles')
 
 const useProfilesMocked = vi.mocked(useProfiles)
 

@@ -23,7 +23,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
-import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
@@ -34,6 +33,7 @@ import {
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/modules/course_evaluation/queries/get-evaluations'
+import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { Course, SortOrder } from '@app/types'
 import { noop } from '@app/util'
 

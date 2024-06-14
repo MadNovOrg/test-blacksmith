@@ -3,7 +3,7 @@ import { Button, Menu, MenuItem } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Avatar } from '@app/components/Avatar'
+import { Avatar } from '@app/modules/profile/components/Avatar'
 import { noop } from '@app/util'
 
 type AttendeeMenuProps = {

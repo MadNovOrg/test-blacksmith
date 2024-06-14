@@ -18,7 +18,6 @@ import MUIImage from 'mui-image'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
-import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -28,6 +27,7 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
 import {
   countLessons,
   isLesson,

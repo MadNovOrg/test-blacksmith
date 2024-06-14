@@ -19,10 +19,8 @@ import {
   CertificateObserveIcon,
   CertificatePassIcon,
 } from '@app/assets'
-import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Dialog } from '@app/components/dialogs'
 import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
-import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -34,6 +32,8 @@ import {
   CertificateStatus,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
+import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { GET_CERTIFICATE_QUERY } from '@app/queries/certificate/get-certificate'
 
 import CertificateHoldHistoryModal from './components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'

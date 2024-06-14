@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 import { gql, useMutation } from 'urql'
 
-import { ButtonMenu } from '@app/components/ButtonMenu/ButtonMenu'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   ToggleSelectedParticipantsAttendanceMutation,
   ToggleSelectedParticipantsAttendanceMutationVariables,
 } from '@app/generated/graphql'
+import { ButtonMenu } from '@app/modules/course_attendees/components/ButtonMenu/ButtonMenu'
 
 type Props = {
   courseId: number

@@ -11,8 +11,8 @@ import {
 
 import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
-import { ProfileSelector } from '@app/components/ProfileSelector'
 import { FindProfilesQuery } from '@app/generated/graphql'
+import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { CourseInput, Profile, RoleName } from '@app/types'
 
 import { SourceDropdown } from '../components/SourceDropdown'

@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 
-import { Avatar } from '../Avatar'
+import { Avatar } from '../../modules/profile/components/Avatar'
 
 export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()

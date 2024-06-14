@@ -23,11 +23,7 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
-} from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileMutation,
@@ -36,7 +32,11 @@ import {
   Organization,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
+import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/modules/profile/components/PhoneNumberInput'
+import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
 import { schemas, yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 

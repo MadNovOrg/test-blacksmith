@@ -1,10 +1,10 @@
 import { CircularProgress, Container, Stack } from '@mui/material'
 import React from 'react'
 
-import { CertificationList } from '@app/components/CertificationList'
 import { useAuth } from '@app/context/auth'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { CertificationList } from '@app/modules/certifications/components/CertificationList'
 import { Course } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

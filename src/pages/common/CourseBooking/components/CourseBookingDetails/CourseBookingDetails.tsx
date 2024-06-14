@@ -37,7 +37,6 @@ import {
 } from '@app/components/InvoiceForm'
 import { OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import { ProfileSelector } from '@app/components/ProfileSelector'
 import {
   Profile as UserSelectorProfile,
   UserSelector,
@@ -54,6 +53,7 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
+import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'
 import {

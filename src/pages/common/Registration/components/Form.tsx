@@ -29,15 +29,15 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
-} from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
+import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/modules/profile/components/PhoneNumberInput'
 import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 

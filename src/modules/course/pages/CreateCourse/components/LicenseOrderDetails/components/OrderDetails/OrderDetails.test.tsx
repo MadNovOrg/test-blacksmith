@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { render, screen } from '@test/index'
+import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
 
-import { calculateGo1LicenseCost } from '../../../../utils'
+import { render, screen } from '@test/index'
 
 import { OrderDetails } from '.'
 

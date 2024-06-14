@@ -1,10 +1,10 @@
 import { Grid } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { CountPanel } from '@app/components/CountPanel'
-import { SelectableCountPanel } from '@app/components/SelectableCountPanel/SelectableCountPanel'
 import { useAuth } from '@app/context/auth'
 import { CertificateStatus, OrganizationProfile } from '@app/generated/graphql'
+import { CountPanel } from '@app/modules/organisation/components/CountPanel'
+import { SelectableCountPanel } from '@app/modules/organisation/components/SelectableCountPanel/SelectableCountPanel'
 import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import { useOrgMembers } from '@app/modules/organisation/hooks/useOrgMembers'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'

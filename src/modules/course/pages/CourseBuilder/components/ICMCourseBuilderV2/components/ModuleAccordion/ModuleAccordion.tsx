@@ -9,12 +9,11 @@ import {
 import React from 'react'
 
 import { ModuleSettingsQuery } from '@app/generated/graphql'
-import theme from '@app/theme'
-
 import {
   StyledAccordionDetails,
   StyledAccordionSummary,
-} from '../../../ICMCourseBuilder/components/styled'
+} from '@app/modules/course/pages/CourseBuilder/components/ICMCourseBuilder/components/styled'
+import theme from '@app/theme'
 
 type ModuleSetting = ModuleSettingsQuery['moduleSettings'][0]
 

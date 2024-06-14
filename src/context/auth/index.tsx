@@ -3,7 +3,7 @@ import posthog from 'posthog-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
-import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/queries/profile/update-profile-activity'
+import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/modules/profile/queries/update-profile-activity'
 import { RoleName } from '@app/types'
 
 import { TTCookies } from './cookies'

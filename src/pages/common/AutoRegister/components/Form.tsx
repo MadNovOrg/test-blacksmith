@@ -28,12 +28,8 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
-} from '@app/components/PhoneNumberInput'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -41,6 +37,10 @@ import {
   InsertOrgLeadMutationVariables,
   Organization,
 } from '@app/generated/graphql'
+import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/modules/profile/components/PhoneNumberInput'
 import { MUTATION as CREATE_USER_MUTATION } from '@app/queries/invites/create-user'
 import { MUTATION as INSERT_ORG_MUTATION } from '@app/queries/organization/insert-org-lead'
 import { INPUT_DATE_FORMAT } from '@app/util'

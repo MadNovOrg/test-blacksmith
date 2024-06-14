@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 import { v4 as uuidv4 } from 'uuid'
 
-import { QUERY as GetTempProfileQuery } from '@app/queries/profile/get-temp-profile'
+import { QUERY as GetTempProfileQuery } from '@app/modules/profile/queries/get-temp-profile'
 import { RoleName } from '@app/types'
 
 import { HasuraRole, runQueryAsRole } from '../gql-query'

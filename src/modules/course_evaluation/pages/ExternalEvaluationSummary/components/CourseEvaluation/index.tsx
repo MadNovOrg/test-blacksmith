@@ -23,7 +23,6 @@ import { useMutation, useQuery } from 'urql'
 import * as yup from 'yup'
 
 import { BackButton } from '@app/components/BackButton'
-import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingQuestion } from '@app/components/RatingQuestion'
 import { Sticky } from '@app/components/Sticky'
@@ -41,6 +40,7 @@ import {
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { AttendeeMenu } from '@app/modules/course_attendees/components/AttendeeMenu'
+import { BooleanQuestion } from '@app/modules/course_evaluation/components/BooleanQuestion'
 import { QUERY as GET_ANSWERS_QUERY } from '@app/modules/course_evaluation/queries/get-answers'
 import {
   ParamsType as GetFeedbackUsersParamsType,

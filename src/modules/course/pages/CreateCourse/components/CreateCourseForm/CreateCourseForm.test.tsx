@@ -16,10 +16,10 @@ import {
 } from '@app/generated/graphql'
 import { Course_Level_Enum, Currency } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
-import useProfile from '@app/hooks/useProfile'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
+import useProfile from '@app/modules/profile/hooks/useProfile'
 import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
 import { BildStrategies, ValidCourseInput, RoleName } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
@@ -48,7 +48,7 @@ vi.mock('@app/hooks/useZoomMeetingLink')
 
 vi.mock('@app/hooks/useCourseDraft')
 
-vi.mock('@app/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile')
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),

@@ -13,7 +13,7 @@ import {
   InsertProfileTempMutationVariables,
 } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
-import { MUTATION as INSERT_PROFILE_TEMP } from '@app/queries/profile/insert-profile-temp'
+import { MUTATION as INSERT_PROFILE_TEMP } from '@app/modules/profile/queries/insert-profile-temp'
 
 import { Form } from './components/Form'
 

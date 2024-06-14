@@ -14,7 +14,6 @@ import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDebounce } from 'use-debounce'
 
-import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import {
   BildStrategy,
@@ -26,6 +25,7 @@ import {
   SearchTrainerAvailability,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
+import { Avatar } from '@app/modules/profile/components/Avatar'
 import { noop } from '@app/util'
 
 import { SearchTrainersSchedule } from './helpers'

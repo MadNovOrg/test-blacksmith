@@ -9,9 +9,9 @@ import { Link } from '@mui/material'
 import { PropsWithChildren, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { GetCourseAuditLogsQuery } from '@app/generated/graphql'
+import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAvatar'
 import { CourseTrainer } from '@app/types'
 import { getCourseLeadTrainer } from '@app/util'
 

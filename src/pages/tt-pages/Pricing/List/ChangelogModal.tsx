@@ -18,13 +18,13 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
-import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import {
   Course_Pricing,
   PricingChangelogQuery,
   PricingChangelogQueryVariables,
 } from '@app/generated/graphql'
+import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { GET_PRICING_CHANGELOG } from '@app/queries/pricing/get-pricing-changelog'
 
 import { getCourseAttributes } from '../utils'
