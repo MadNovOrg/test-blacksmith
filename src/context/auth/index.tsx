@@ -65,8 +65,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   }, [])
 
   const onUserNotLoggedIn = () => {
-    posthog.identify('1')
-
     // delete cookie if exists
     TTCookies.deleteCookie('mo_jwt_token', {
       secure: true,
@@ -121,7 +119,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     onUserNotLoggedIn()
     setState({ loggedOut: true })
 
-    posthog.reset()
+    posthog.identify('1')
     localStorage.removeItem('residingCountryDialogWasDisplayed')
   }, [])
 
