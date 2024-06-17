@@ -75,6 +75,18 @@ export const users = {
     email: 'assistant.with.org@teamteach.testinator.com',
     password: 'Test12345!',
   },
+  bildSeniorTrainer: {
+    givenName: 'Bild',
+    familyName: 'Senior',
+    email: 'bild.senior@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
+  bild2SeniorTrainer: {
+    givenName: 'Bild 2',
+    familyName: 'Senior',
+    email: 'bild.senior2@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
   resetPassword: {
     givenName: 'Logan',
     familyName: 'Password',

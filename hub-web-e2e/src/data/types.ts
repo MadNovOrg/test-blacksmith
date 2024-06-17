@@ -64,6 +64,7 @@ export type Course = {
   trainers?: CourseTrainer[]
   type: Course_Type_Enum
   renewalCycle?: Course_Renewal_Cycle_Enum
+  conversion?: boolean
 }
 
 export type CourseSchedule = {

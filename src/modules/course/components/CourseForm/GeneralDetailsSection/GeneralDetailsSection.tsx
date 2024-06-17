@@ -267,6 +267,7 @@ export const GeneralDetailsSection = ({
               render={({ field }) => (
                 <Select
                   {...field}
+                  id={'course-category'}
                   onChange={e => {
                     setValue('usesAOL', false)
                     setValue('aolCountry', '')
@@ -291,8 +292,18 @@ export const GeneralDetailsSection = ({
                   labelId="course-category-label"
                   disabled={disabledFields.has('accreditedBy')}
                 >
-                  <MenuItem value={`${Accreditors_Enum.Icm}`}>ICM</MenuItem>
-                  <MenuItem value={`${Accreditors_Enum.Bild}`}>BILD</MenuItem>
+                  <MenuItem
+                    value={`${Accreditors_Enum.Icm}`}
+                    data-testid={`course-category-option-${Accreditors_Enum.Icm}`}
+                  >
+                    ICM
+                  </MenuItem>
+                  <MenuItem
+                    value={`${Accreditors_Enum.Bild}`}
+                    data-testid={`course-category-option-${Accreditors_Enum.Bild}`}
+                  >
+                    BILD
+                  </MenuItem>
                 </Select>
               )}
             />

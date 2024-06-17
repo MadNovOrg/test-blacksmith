@@ -1,8 +1,14 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
+
 import { waitForGraphQLResponse } from '@qa/commands'
 import { User } from '@qa/data/types'
-import { searchModerator, searchTrainerLead } from '@qa/util'
+import {
+  searchBildTrainerLead,
+  searchModerator,
+  searchTrainerLead,
+} from '@qa/util'
 
 import { BasePage } from '../BasePage.fixture'
 
@@ -63,7 +69,10 @@ export class AssignTrainersPage extends BasePage {
     }
   }
 
-  async selectTrainer(trainer: User) {
+  async selectTrainer(
+    trainer: User,
+    accreditedBy: Accreditors_Enum = Accreditors_Enum.Icm
+  ) {
     const searchStrings = ['SearchTrainer', 'LEADER']
     await this.trainerInput.click()
     await this.trainerInput.fill(trainer.givenName)
@@ -76,7 +85,10 @@ export class AssignTrainersPage extends BasePage {
         )
       ) {
         await route.fulfill({
-          json: searchTrainerLead(),
+          json:
+            accreditedBy === Accreditors_Enum.Icm
+              ? searchTrainerLead()
+              : searchBildTrainerLead(),
         })
       } else {
         await route.continue()

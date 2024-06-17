@@ -1,6 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { t } from 'i18next'
 
+import { Course_Delivery_Type_Enum } from '@app/generated/graphql'
+
 import { toAttendeesTableRow } from '@qa/data/mappings'
 import { Course, User } from '@qa/data/types'
 import { CourseHeader } from '@qa/fixtures/components/CourseHeader.fixture'
@@ -314,11 +316,13 @@ export class CourseDetailsPage extends BasePage {
     }
 
     //Check venue name
-    course.schedule.forEach(async s => {
-      if (s.venue) {
-        await expect(this.page.getByText(s.venue?.name)).toBeVisible()
-      }
-    })
+    if (course.deliveryType !== Course_Delivery_Type_Enum.Virtual) {
+      course.schedule.forEach(async s => {
+        if (s.venue) {
+          await expect(this.page.getByText(s.venue?.name)).toBeVisible()
+        }
+      })
+    }
   }
 
   async checkOpenCourseCreatedSuccessfully(course: Course) {
@@ -342,10 +346,12 @@ export class CourseDetailsPage extends BasePage {
     }
 
     //Check venue name
-    course.schedule.forEach(async s => {
-      if (s.venue) {
-        await expect(this.page.getByText(s.venue?.name)).toBeVisible()
-      }
-    })
+    if (course.deliveryType !== Course_Delivery_Type_Enum.Virtual) {
+      course.schedule.forEach(async s => {
+        if (s.venue) {
+          await expect(this.page.getByText(s.venue?.name)).toBeVisible()
+        }
+      })
+    }
   }
 }

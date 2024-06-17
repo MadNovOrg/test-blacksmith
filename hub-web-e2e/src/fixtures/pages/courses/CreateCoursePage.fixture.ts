@@ -2,12 +2,14 @@ import { expect, Locator, Page } from '@playwright/test'
 import { format } from 'date-fns'
 
 import {
+  Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Renewal_Cycle_Enum,
   Course_Source_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import { BildStrategies } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { Course, User } from '@qa/data/types'
@@ -22,10 +24,18 @@ import { CourseOrderDetailsPage } from './CourseOrderDetailsPage.fixture'
 export class CreateCoursePage extends BasePage {
   readonly creationSteps: Locator
   readonly certificateDurationRadioBtn: (duration: string) => Locator
+  readonly categorySelector: Locator
+  readonly categoryOption: (category: string) => Locator
   readonly levelDropDown: Locator
   readonly levelOption: (level: string) => Locator
   readonly go1Checkbox: Locator
   readonly reaccreditationCheckbox: Locator
+  readonly conversionCheckbox: Locator
+  readonly bildStrategyPrimaryCheckbox: Locator // Bild Strategy Primary Checkbox
+  readonly bildStrategySecondaryCheckbox: Locator // Bild Strategy Secondary Checkbox
+  readonly bildStrategyNonRTCheckbox: Locator // Bild Strategy Non-Restrictive Tertiary Checkbox
+  readonly bildStrategyRTIntermediateCheckbox: Locator // Bild Strategy Restrictive Tertiary Intermediate Checkbox
+  readonly bildStrategyPRTAdvancedCheckbox: Locator // Bild Strategy Restrictive Tertiary Advanced Checkbox
   readonly deliveryTypeRadioButton: (type: string) => Locator
   readonly venueInput: Locator
   readonly organisationInput: Locator
@@ -68,13 +78,34 @@ export class CreateCoursePage extends BasePage {
     this.certificateDurationRadioBtn = (duration: string) =>
       this.page.locator(`input[name="renewalCycle"][value="${duration}"]`)
 
+    this.categorySelector = this.page.locator('#course-category')
     this.levelDropDown = this.page.locator('#course-level')
     this.levelOption = (level: string) =>
       this.page.locator(`data-testid=course-level-option-${level}`)
+    this.categoryOption = (category: string) =>
+      this.page.locator(`data-testid=course-category-option-${category}`)
+
     this.go1Checkbox = this.page.locator('input[name="blendedLearning"]')
     this.reaccreditationCheckbox = this.page.locator(
       'input[name="reaccreditation"]'
     )
+    this.conversionCheckbox = this.page.locator('input[name="conversion"]')
+    this.bildStrategyPrimaryCheckbox = this.page.locator(
+      `input[name="bildStrategies.${BildStrategies.Primary}"]`
+    )
+    this.bildStrategySecondaryCheckbox = this.page.locator(
+      `input[name="bildStrategies.${BildStrategies.Secondary}"]`
+    )
+    this.bildStrategyNonRTCheckbox = this.page.locator(
+      `input[name="bildStrategies.${BildStrategies.NonRestrictiveTertiary}"]`
+    )
+    this.bildStrategyRTIntermediateCheckbox = this.page.locator(
+      `input[name="bildStrategies.${BildStrategies.RestrictiveTertiaryIntermediate}"]`
+    )
+    this.bildStrategyPRTAdvancedCheckbox = this.page.locator(
+      `input[name="bildStrategies.${BildStrategies.RestrictiveTertiaryAdvanced}"]`
+    )
+
     this.deliveryTypeRadioButton = (type: string) =>
       this.page.locator(`input[name="delivery-type-radio"][value="${type}"]`)
     this.venueInput = this.page.locator('[data-testid="venue-selector"] input')
@@ -164,6 +195,10 @@ export class CreateCoursePage extends BasePage {
     await this.levelDropDown.click()
     await this.levelOption(level).click()
   }
+  async selectCategory(category: string) {
+    await this.categorySelector.click()
+    await this.categoryOption(category).click()
+  }
 
   async selectGo1() {
     await this.go1Checkbox.check()
@@ -171,6 +206,18 @@ export class CreateCoursePage extends BasePage {
 
   async selectReaccreditation() {
     await this.reaccreditationCheckbox.check()
+  }
+
+  async selectConverison() {
+    await this.conversionCheckbox.check()
+  }
+
+  async selectBildStrategies() {
+    await this.bildStrategyPrimaryCheckbox.check()
+    await this.bildStrategySecondaryCheckbox.check()
+    await this.bildStrategyNonRTCheckbox.check()
+    await this.bildStrategyRTIntermediateCheckbox.check()
+    await this.bildStrategyPRTAdvancedCheckbox.check()
   }
 
   async selectDeliveryType(type: Course_Delivery_Type_Enum) {
@@ -333,6 +380,9 @@ export class CreateCoursePage extends BasePage {
   }
 
   async fillCourseDetails(course: Course, ignoreOrganisationSelect = false) {
+    if (course.type !== Course_Type_Enum.Indirect) {
+      await this.selectCategory(course.accreditedBy)
+    }
     if (
       course.type !== Course_Type_Enum.Open &&
       course.organization &&
@@ -355,6 +405,17 @@ export class CreateCoursePage extends BasePage {
     }
 
     await this.selectCourseLevel(course.level)
+    if (
+      course.type === Course_Type_Enum.Closed &&
+      course.accreditedBy === Accreditors_Enum.Bild &&
+      course.level === Course_Level_Enum.BildRegular
+    ) {
+      await this.selectBildStrategies()
+    }
+
+    if (course.accreditedBy === Accreditors_Enum.Bild && course.conversion) {
+      await this.selectConverison()
+    }
     await this.selectDeliveryType(course.deliveryType)
 
     if (course.go1Integration) await this.selectGo1()
@@ -416,6 +477,9 @@ export class CreateCoursePage extends BasePage {
         `${course.salesRepresentative.givenName} ${course.salesRepresentative.familyName}`
       )
       await this.selectSource(course.source)
+    }
+    if (course.accreditedBy === Accreditors_Enum.Bild) {
+      await this.setPricePerAttendee()
     }
   }
 }
