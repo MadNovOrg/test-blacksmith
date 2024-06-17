@@ -75,7 +75,7 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/lab": "^5.0.0-alpha.122",
     "@mui/material": "^5.14.11",
-    "@mui/utils": "^5.15.11",
+    "@mui/utils": "^5.15.20",
     "@mui/x-data-grid": "^6.19.4",
     "@mui/x-date-pickers": "^6.19.6",
     "@react-pdf/renderer": "^3.4.4",
