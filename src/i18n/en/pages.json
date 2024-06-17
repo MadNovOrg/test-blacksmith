@@ -1262,7 +1262,7 @@
         "postcode": "Post code",
         "zipCode": "Zip Code",
         "country": "Country",
-        "postalAndZipCode": "Post code/ ZIP code"
+        "postalAndZipCode": "Post code/ZIP code"
       },
       "head-first-name": "First name",
       "head-surname": "Surname",
