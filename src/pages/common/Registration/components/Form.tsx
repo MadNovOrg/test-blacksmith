@@ -142,8 +142,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         },
       })
 
-      onSignUp(data.email, data.password)
-      await insertOrganisation(organizationData)
+      const { data: newOrganizationData } = await insertOrganisation(
+        organizationData
+      )
+
+      if (newOrganizationData?.org?.id) {
+        onSignUp(data.email, data.password)
+      }
     } catch (err) {
       console.log(err)
       const { code = 'UnknownError' } = err as Error & { code: string }
