@@ -131,7 +131,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   })
   const values = watch()
 
-  const { data: orgTypes } = useOrgType(values.sector)
+  const { data: orgTypes } = useOrgType(values.sector, !isInUK)
 
   const onOrgInputChange = useCallback(
     (value: string) => {
