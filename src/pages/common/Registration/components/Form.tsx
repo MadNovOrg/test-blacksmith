@@ -109,6 +109,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     setError('')
 
     try {
+      const { data: newOrganizationData } = await insertOrganisation(
+        organizationData
+      )
       const input: SignUpMutationVariables['input'] = {
         email: data.email,
         givenName: data.firstName,
@@ -122,7 +125,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         recaptchaToken: data.recaptchaToken,
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
-        orgId: data.organization?.id,
+        orgId: newOrganizationData?.org?.id,
         country: data.country,
         countryCode: data.countryCode,
       }
@@ -142,13 +145,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         },
       })
 
-      const { data: newOrganizationData } = await insertOrganisation(
-        organizationData
-      )
-
-      if (newOrganizationData?.org?.id) {
-        onSignUp(data.email, data.password)
-      }
+      onSignUp(data.email, data.password)
     } catch (err) {
       console.log(err)
       const { code = 'UnknownError' } = err as Error & { code: string }
