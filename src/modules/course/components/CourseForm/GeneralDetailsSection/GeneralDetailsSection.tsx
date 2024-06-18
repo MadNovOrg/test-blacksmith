@@ -186,6 +186,14 @@ export const GeneralDetailsSection = ({
     }
   }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
 
+  const disableCountrySelector = useMemo(() => {
+    return (
+      isIndirectCourse &&
+      isInternationalIndirectEnabled &&
+      !isCreation &&
+      acl.isTrainer()
+    )
+  }, [acl, isCreation, isIndirectCourse, isInternationalIndirectEnabled])
   useEffect(() => {
     if (
       isInternationalIndirectEnabled &&
@@ -364,6 +372,7 @@ export const GeneralDetailsSection = ({
                           helperText={errors.aolCountry?.message}
                           isBILDcourse={isBild}
                           courseType={courseType}
+                          disabled={disableCountrySelector}
                         />
                       ) : (
                         <CountryDropdown
@@ -637,6 +646,7 @@ export const GeneralDetailsSection = ({
               helperText={errors.residingCountry?.message}
               isBILDcourse={isBild}
               courseType={courseType}
+              disabled={disableCountrySelector}
             />
           </FormControl>
         ) : null}
