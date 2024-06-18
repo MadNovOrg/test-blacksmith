@@ -54,7 +54,8 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
     courseType
   )
   const showTrainerOrgOnly =
-    usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
+    !usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
+
   const contactField = isClosedCourse
     ? 'bookingContact'
     : isIndirectCourse
