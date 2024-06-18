@@ -42,6 +42,7 @@ import { type DisabledFields } from '..'
 import { InstructionAccordionField } from '../components/AccordionTextField'
 import { CourseLevelDropdown } from '../components/CourseLevelDropdown'
 import { StrategyToggles } from '../components/StrategyToggles/StrategyToggles'
+import { Countries_Code } from '../helpers'
 import { useCourseFormEffects } from '../hooks/useCourseFormEffects'
 import { useCoursePermissions } from '../hooks/useCoursePermissions'
 import { useSpecialInstructions } from '../hooks/useSpecialInstructions'
@@ -106,16 +107,15 @@ export const GeneralDetailsSection = ({
   const isBild = accreditedBy === Accreditors_Enum.Bild
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isVirtualCourse = deliveryType === Course_Delivery_Type_Enum.Virtual
+  const isL1BS = courseLevel === Course_Level_Enum.Level_1Bs
   const hasVenue = [
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
   const shouldShowAOL =
-    isIndirectCourse &&
-    isUKCountry(residingCountry) &&
-    !isBild &&
-    courseLevel !== Course_Level_Enum.Level_1Bs
-  const usesAOL = useWatch({ control, name: 'usesAOL' }) && shouldShowAOL
+    isIndirectCourse && isUKCountry(residingCountry) && !isBild
+  const usesAOL =
+    useWatch({ control, name: 'usesAOL' }) && shouldShowAOL && !isL1BS
 
   const shouldShowCountrySelector =
     isResidingCountryEnabled &&
@@ -329,8 +329,10 @@ export const GeneralDetailsSection = ({
                       resetField('courseCost')
                     }
                   }}
-                  checked={usesAOL}
-                  disabled={disabledFields.has('usesAOL') || !allowUseAOL}
+                  checked={usesAOL && !isL1BS}
+                  disabled={
+                    disabledFields.has('usesAOL') || isL1BS || !allowUseAOL
+                  }
                   data-testid="aol-checkbox"
                 />
               }
@@ -455,16 +457,17 @@ export const GeneralDetailsSection = ({
                 onChange={event => {
                   const newCourseLevel = event.target.value as Course_Level_Enum
                   if (newCourseLevel === courseLevel) return
-
+                  const countryToChangeTo = changeCountryOnCourseLevelChange(
+                    newCourseLevel,
+                    residingCountry
+                  )
                   field.onChange(event)
                   BSor3DaySRTEnabled &&
-                    setValue(
-                      'residingCountry',
-                      changeCountryOnCourseLevelChange(
-                        newCourseLevel,
-                        residingCountry
-                      )
-                    )
+                    setValue('residingCountry', countryToChangeTo)
+                  setValue(
+                    'aolCountry',
+                    countryToChangeTo ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+                  )
                   resetSpecialInstructionsToDefault({
                     newCourseLevel,
                   })

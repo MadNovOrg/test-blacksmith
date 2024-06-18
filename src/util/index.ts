@@ -885,6 +885,7 @@ const DEFAULT_TRAINER_CERTIFICATES_FOR_LEVEL = {
     Course_Level_Enum.BildIntermediateTrainer,
     Course_Level_Enum.AdvancedTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
+    Course_Level_Enum.FoundationTrainerPlus,
   ],
   [Course_Level_Enum.Level_2]: [
     Course_Level_Enum.IntermediateTrainer,
