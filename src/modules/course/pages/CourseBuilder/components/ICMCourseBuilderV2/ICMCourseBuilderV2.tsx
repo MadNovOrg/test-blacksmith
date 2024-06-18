@@ -220,6 +220,15 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
         translationKey: 'foundation-trainer-plus-choose-modules',
       }),
     ],
+    [
+      matches({
+        level: Course_Level_Enum.Level_1Bs,
+      }),
+      constant({
+        duration: '6-hour',
+        translationKey: 'ICM-description',
+      }),
+    ],
     [stubTrue, constant(null)],
   ])
 
