@@ -1,4 +1,10 @@
 import { gql } from 'graphql-request'
+import { useMutation } from 'urql'
+
+import {
+  InsertOrgLeadMutation,
+  InsertOrgLeadMutationVariables,
+} from '@app/generated/graphql'
 
 import { ORGANIZATION } from '../fragments'
 
@@ -25,3 +31,9 @@ export const MUTATION = gql`
     }
   }
 `
+
+export const useInsertNewOrganization = () => {
+  return useMutation<InsertOrgLeadMutation, InsertOrgLeadMutationVariables>(
+    MUTATION
+  )
+}

@@ -38,11 +38,12 @@ import useWorldCountries, {
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { FormPanel } from '@app/components/FormPanel'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
-import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector'
 import {
   isXeroSuggestion,
   isDfeSuggestion,
-  getOfstedRating,
+  ofstedRating,
+  CallbackOption,
 } from '@app/components/OrgSelector/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
@@ -180,7 +181,14 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   : null
               )
             case 'ofstedRating':
-              return orgDataMap.set(key, getOfstedRating(org.ofstedRating))
+              return orgDataMap.set(
+                key,
+                org.ofstedRating !== undefined
+                  ? (ofstedRating[
+                      org.ofstedRating as keyof typeof ofstedRating
+                    ] as string)
+                  : ''
+              )
             case 'name':
               return orgDataMap.set(key, org.name)
             default:

@@ -29,8 +29,8 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
-import { isHubOrg } from '@app/components/OrgSelector/utils'
+import { OrgSelector } from '@app/components/OrgSelector'
+import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
@@ -38,8 +38,9 @@ import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelect
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY,
 } from '@app/modules/profile/components/PhoneNumberInput'
+import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import { Organization } from '@app/types'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import { INPUT_DATE_FORMAT, organizationData } from '@app/util'
 
 import { SIGN_UP_MUTATION } from '../queries'
 
@@ -77,6 +78,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
+
+  const [, insertOrganisation] = useInsertNewOrganization()
 
   const {
     register,
@@ -140,6 +143,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       })
 
       onSignUp(data.email, data.password)
+      await insertOrganisation(organizationData)
     } catch (err) {
       console.log(err)
       const { code = 'UnknownError' } = err as Error & { code: string }

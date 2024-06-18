@@ -33,6 +33,7 @@ import {
   Submodule_Aggregate,
   CertificateStatus,
   CourseLevel,
+  InsertOrgLeadMutationVariables,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
@@ -964,6 +965,12 @@ export function checkIsEmployerAOL(trainer_role_types: TrainerRoleType[]) {
     false
   )
 }
+
+// Used to locally store organization data before account creation
+export let organizationData: InsertOrgLeadMutationVariables
+export const saveNewOrganizationDataInLocalState = (
+  organization: InsertOrgLeadMutationVariables
+) => (organizationData = { ...organization })
 
 export const ALL_ORGS = 'all'
 export const UKTimezone = 'Europe/London'

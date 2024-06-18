@@ -1,28 +1,31 @@
-import {
-  CallbackOption,
-  SuggestionOption,
-} from '@app/components/OrgSelector/index'
-import { Establishment, OfstedRating, Organization } from '@app/types'
+import { SxProps, TextFieldProps } from '@mui/material'
+import { useMemo } from 'react'
 
-export function getOfstedRating(dfeValue?: string) {
-  if (dfeValue === 'Outstanding') {
-    return OfstedRating.OUTSTANDING
-  } else if (dfeValue === 'Inadequate') {
-    return OfstedRating.INADEQUATE
-  } else if (dfeValue === 'Requires improvement') {
-    return OfstedRating.REQUIRES_IMPROVEMENT
-  } else if (dfeValue === 'Insufficient evidence') {
-    return OfstedRating.INSUFFICIENT_EVIDENCE
-  } else if (dfeValue === 'Serious Weaknesses') {
-    return OfstedRating.SERIOUS_WEAKNESSES
-  } else if (dfeValue === 'Good') {
-    return OfstedRating.GOOD
-  } else if (dfeValue === 'Special Measures') {
-    return OfstedRating.SPECIAL_MEASURES
-  } else {
-    return null
-  }
+import { Dfe_Establishment } from '@app/generated/graphql'
+import { Establishment, OfstedRating, Organization } from '@app/types'
+import { organizationData as localSavedOrgToBeCreated } from '@app/util'
+
+export enum OfstedRatingEnum {
+  OUTSTANDING = 'Outstanding',
+  INADEQUATE = 'Inadequate',
+  REQUIRES_IMPROVEMENT = 'Requires improvement',
+  INSUFFICIENT_EVIDENCE = 'Insufficient evidence',
+  SERIOUS_WEAKNESSES = 'Serious Weaknesses',
+  GOOD = 'Good',
+  SPECIAL_MEASURES = 'Special Measures',
 }
+
+export const ofstedRating: Record<OfstedRatingEnum & 'default', OfstedRating> =
+  {
+    [OfstedRatingEnum.OUTSTANDING]: OfstedRating.OUTSTANDING,
+    [OfstedRatingEnum.INADEQUATE]: OfstedRating.INADEQUATE,
+    [OfstedRatingEnum.REQUIRES_IMPROVEMENT]: OfstedRating.REQUIRES_IMPROVEMENT,
+    [OfstedRatingEnum.INSUFFICIENT_EVIDENCE]:
+      OfstedRating.INSUFFICIENT_EVIDENCE,
+    [OfstedRatingEnum.SERIOUS_WEAKNESSES]: OfstedRating.SERIOUS_WEAKNESSES,
+    [OfstedRatingEnum.GOOD]: OfstedRating.GOOD,
+    [OfstedRatingEnum.SPECIAL_MEASURES]: OfstedRating.SPECIAL_MEASURES,
+  }
 
 export type XeroSuggestion = {
   id: string
@@ -37,3 +40,42 @@ export const isXeroSuggestion = (o: CallbackOption): o is SuggestionOption =>
 
 export const isHubOrg = (o: CallbackOption): o is Organization =>
   !!o && 'id' in o && !isDfeSuggestion(o)
+
+export type OrgSelectorProps = {
+  label?: string
+  allowAdding?: boolean
+  autocompleteMode?: boolean
+  countryCode?: string
+  disabled?: boolean
+  error?: string
+  isEditProfile?: boolean
+  isShallowRetrieval?: boolean
+  onChange: (org: CallbackOption) => void
+  onInputChange?: (value: string) => void
+  placeholder?: string
+  required?: boolean
+  searchOnlyByPostCode?: boolean
+  showDfeResults?: boolean
+  showHubResults?: boolean
+  showTrainerOrgOnly?: boolean
+  sx?: SxProps
+  textFieldProps?: TextFieldProps
+  userOrgIds?: string[]
+  value?: Pick<Organization, 'name' | 'id'> | null
+  canSearchByAddress?: boolean
+}
+
+export type SuggestionOption = {
+  id?: string
+  name: string
+  xeroId?: string
+}
+export type CallbackOption =
+  | Organization
+  | Dfe_Establishment
+  | SuggestionOption
+  | null
+
+export const useOrganizationToBeCreatedOnRegistration = () => {
+  return useMemo(() => localSavedOrgToBeCreated, [localSavedOrgToBeCreated]) //eslint-disable-line  react-hooks/exhaustive-deps
+}

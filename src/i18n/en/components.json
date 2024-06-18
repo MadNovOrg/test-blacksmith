@@ -300,7 +300,7 @@
     "residing-org": "Residing Organisation",
     "placeholder": "Start typing organisation post code, address or name",
     "post-code-placeholder": "Start typing organisation post code",
-    "post-code-and-name-placeholder": "Start typing organisation name or postcode",
+    "post-code-and-name-placeholder": "Start typing organisation name or post code/zip code",
     "no-results": "No organisations found",
     "no-individuals": "No individuals found",
     "start-typing": "Please start typing for suggestions.",

@@ -75,7 +75,6 @@ export const AutoRegisterPage: React.FC<
         onSuccess={handleSuccess}
         token={token}
         organizationData={organizationData}
-        isNewUser={true}
       />
     </AppLayoutMinimal>
   )

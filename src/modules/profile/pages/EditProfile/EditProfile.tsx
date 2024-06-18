@@ -48,7 +48,8 @@ import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { ConfirmDialog, Dialog } from '@app/components/dialogs'
-import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector'
+import { CallbackOption } from '@app/components/OrgSelector/utils'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
@@ -1174,6 +1175,7 @@ export const EditProfilePage: React.FC<
                           !isUKCountry(values.countryCode)
                         }
                         required
+                        countryCode={values.countryCode}
                         {...register('organization')}
                         autocompleteMode={false}
                         showTrainerOrgOnly={false}

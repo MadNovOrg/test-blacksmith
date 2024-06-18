@@ -5,15 +5,13 @@ import {
   CircularProgress,
   Grid,
   List,
-  SxProps,
   TextField,
-  TextFieldProps,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
-import { uniqBy } from 'lodash'
+import { uniqBy, uniqueId } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
@@ -23,6 +21,8 @@ import {
   isDfeSuggestion,
   isHubOrg,
   isXeroSuggestion,
+  OrgSelectorProps,
+  useOrganizationToBeCreatedOnRegistration,
 } from '@app/components/OrgSelector/utils'
 import { useAuth } from '@app/context/auth'
 import {
@@ -35,48 +35,13 @@ import {
   Dfe_Establishment,
   Organization_Bool_Exp,
 } from '@app/generated/graphql'
-import { CreateNewOrgType } from '@app/pages/common/AutoRegister/components/Form'
 import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
 import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
 
 import { AddOrg } from './components/AddOrg'
 type OptionToAdd = Dfe_Establishment | { id?: string; name: string }
 type Option = Organization | OptionToAdd
-export type SuggestionOption = {
-  id?: string
-  name: string
-  xeroId?: string
-}
-export type CallbackOption =
-  | Organization
-  | Dfe_Establishment
-  | SuggestionOption
-  | null
-export type OrgSelectorProps = {
-  label?: string
-  allowAdding?: boolean
-  autocompleteMode?: boolean
-  countryCode?: string
-  disabled?: boolean
-  error?: string
-  isEditProfile?: boolean
-  isShallowRetrieval?: boolean
-  onChange: (org: CallbackOption) => void
-  onInputChange?: (value: string) => void
-  placeholder?: string
-  required?: boolean
-  searchOnlyByPostCode?: boolean
-  showDfeResults?: boolean
-  showHubResults?: boolean
-  showTrainerOrgOnly?: boolean
-  sx?: SxProps
-  textFieldProps?: TextFieldProps
-  userOrgIds?: string[]
-  value?: Pick<Organization, 'name' | 'id'> | null
-  canSearchByAddress?: boolean
-  isNewUser?: boolean
-  storeNewOrgData?: (value: CreateNewOrgType) => void
-}
+
 const getOptionLabel = (option: Option) => option.name ?? ''
 export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
   function ({
@@ -101,8 +66,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     searchOnlyByPostCode = false,
     canSearchByAddress = true,
     label,
-    isNewUser,
-    storeNewOrgData,
     ...props
   }) {
     const { t } = useTranslation()
@@ -113,6 +76,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const [adding, setAdding] = useState<OptionToAdd | null>()
     const [q, setQ] = useState('')
     const [debouncedQuery] = useDebounce(q, 300)
+    const localSavedOrgToBeCreated = useOrganizationToBeCreatedOnRegistration()
 
     useEffect(() => {
       if (q) setOpen(true)
@@ -227,6 +191,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         onChange(option)
       }
     }
+
     const options = useMemo(() => {
       if (showTrainerNonAOLOrgs) {
         if (defaultOrg) onChange(defaultOrg)
@@ -244,6 +209,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             : []),
           ...(!allowAdding
             ? [{ name: t('components.org-selector.request-creation-sub') }]
+            : []),
+          ...(localSavedOrgToBeCreated &&
+          localSavedOrgToBeCreated.name.includes(debouncedQuery)
+            ? [{ ...localSavedOrgToBeCreated, id: uniqueId() }]
             : []),
         ],
         'id'
@@ -263,7 +232,9 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       showHubResults,
       showTrainerNonAOLOrgs,
       t,
+      localSavedOrgToBeCreated,
     ])
+
     const noOptionsText = q ? (
       <Typography variant="body2">
         {dfeFetching || orgsFetching
@@ -307,7 +278,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           value={!value ? null : value}
           open={open}
           onOpen={() => {
-            if (showTrainerNonAOLOrgs && myOrg?.length) {
+            if (
+              (showTrainerNonAOLOrgs && myOrg?.length) ||
+              localSavedOrgToBeCreated
+            ) {
               setOpen(true)
             }
           }}
@@ -481,8 +455,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             countryCode={(countryCode as CountryCode) ?? 'GB-ENG'}
             onClose={handleClose}
             onSuccess={handleSuccess}
-            isNewUser={isNewUser}
-            storeNewOrgData={storeNewOrgData}
           />
         ) : null}
       </>

@@ -23,7 +23,8 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector'
+import { CallbackOption } from '@app/components/OrgSelector/utils'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileMutation,
@@ -277,6 +278,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Grid item>
             <OrgSelector
               allowAdding={!isUKCountry(values.countryCode)}
+              countryCode={values.countryCode}
               required
               {...register('organization')}
               autocompleteMode={false}

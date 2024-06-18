@@ -6,7 +6,7 @@ import { CountryCode } from 'libphonenumber-js'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'urql'
+import { useLocation } from 'react-router-dom'
 
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
@@ -19,39 +19,23 @@ import { Dialog } from '@app/components/dialogs'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
 import { isDfeSuggestion } from '@app/components/OrgSelector/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
-import {
-  InsertOrgLeadMutation,
-  InsertOrgLeadMutationVariables,
-} from '@app/generated/graphql'
+import { InsertOrgLeadMutation } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { CreateNewOrgType } from '@app/pages/common/AutoRegister/components/Form'
-import { MUTATION as INSERT_ORG_MUTATION } from '@app/queries/organization/insert-org-lead'
-import { yup } from '@app/schemas'
+import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import { Address, Establishment } from '@app/types'
-import { isValidUKPostalCode } from '@app/util'
+import { saveNewOrganizationDataInLocalState } from '@app/util'
+
+import {
+  getSchema,
+  getDefaultValues,
+  AddNewOrganizationFormInputs as FormInput,
+} from './utils'
 
 type Props = {
   onSuccess: (org: InsertOrgLeadMutation['org']) => void
   onClose: VoidFunction
   option: Establishment | { name: string }
   countryCode: CountryCode | UKsCountriesCode | ExceptionsCountriesCode
-  isNewUser?: boolean
-  storeNewOrgData?: (value: CreateNewOrgType) => void
-}
-
-type FormInput = {
-  id?: string | null
-  organisationName: string
-  sector: string
-  organisationType: string
-  orgTypeSpecifyOther?: string
-  organisationEmail: string
-  addressLine1: string
-  addressLine2: string
-  city: string
-  postCode: string
-  country: string
-  countryCode: string
 }
 
 export const AddOrg: FC<PropsWithChildren<Props>> = function ({
@@ -59,17 +43,15 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   countryCode,
   onSuccess,
   onClose,
-  isNewUser,
-  storeNewOrgData,
 }) {
   const { t, _t } = useScopedTranslation('components.add-organisation')
   const [{ data: organisationData, fetching: loading }, insertOrganisation] =
-    useMutation<InsertOrgLeadMutation, InsertOrgLeadMutationVariables>(
-      INSERT_ORG_MUTATION
-    )
+    useInsertNewOrganization()
   const addOrgCountriesSelectorEnabled = useFeatureFlagEnabled(
     'add-organization-country'
   )
+
+  const { pathname } = useLocation()
 
   const useInternationalCountriesSelector = useMemo(() => {
     return Boolean(addOrgCountriesSelectorEnabled)
@@ -80,119 +62,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
   const [specifyOther, setSpecifyOther] = useState(false)
 
-  const schema = useMemo(() => {
-    return yup.object({
-      organisationName: yup.string().required(
-        _t('validation-errors.required-field', {
-          name: t('fields.organisation-name'),
-        })
-      ),
-      sector: yup.string().required(
-        _t('validation-errors.required-field', {
-          name: t('fields.sector'),
-        })
-      ),
-      organisationType: yup.string().required(
-        _t('validation-errors.required-field', {
-          name: t('fields.organisation-type'),
-        })
-      ),
-      orgTypeSpecifyOther: yup.string().when('specifyOther', {
-        is: true,
-        then: ot =>
-          ot.required(
-            _t('validation-errors.required-field', {
-              name: t('fields.organisation-specify-other'),
-            })
-          ),
-      }),
-      organisationEmail: yup
-        .string()
-        .required(
-          _t('validation-errors.required-field', {
-            name: t('fields.organisation-email'),
-          })
-        )
-        .email(_t('validation-errors.email-invalid')),
-      addressLine1: yup.string().required(
-        _t('validation-errors.required-field', {
-          name: t('fields.primary-address-line'),
-        })
-      ),
-      addressLine2: yup.string(),
-      city: yup.string().required(
-        _t('validation-errors.required-composed-field', {
-          field1: _t('pages.create-organization.fields.addresses.town'),
-          field2: _t('pages.create-organization.fields.addresses.city'),
-        })
-      ),
-      ...(useInternationalCountriesSelector
-        ? {
-            ...(isInUK
-              ? {
-                  postCode: yup
-                    .string()
-                    .required(
-                      _t('validation-errors.required-field', {
-                        name: t('fields.postCode'),
-                      })
-                    )
-                    .test(
-                      'is-uk-postcode',
-                      _t('validation-errors.invalid-postcode'),
-                      isValidUKPostalCode
-                    ),
-                }
-              : {
-                  postCode: yup.string(),
-                }),
-          }
-        : {
-            postCode: yup
-              .string()
-              .required(
-                _t('validation-errors.required-field', {
-                  name: t('fields.postCode'),
-                })
-              )
-              .test(
-                'is-uk-postcode',
-                _t('validation-errors.invalid-postcode'),
-                isValidUKPostalCode
-              ),
-          }),
-
-      country: yup.string().required(
-        _t('validation-errors.required-field', {
-          name: t('fields.country'),
-        })
-      ),
-    })
-  }, [_t, useInternationalCountriesSelector, isInUK, t])
-
-  const defaultValues: Partial<FormInput> = isDfeSuggestion(option)
-    ? {
-        organisationName: option.name,
-        addressLine1: option.addressLineOne ?? '',
-        addressLine2: option.addressLineTwo ?? '',
-        city: option.town ?? '',
-        country: getCountryLabel(countryCode),
-        countryCode: countryCode,
-        postCode: option.postcode ?? '',
-        sector: '',
-        organisationType: '',
-      }
-    : {
-        organisationName: option.name,
-        addressLine1: '',
-        sector: '',
-        addressLine2: '',
-        city: '',
-        country: getCountryLabel(countryCode),
-        countryCode: countryCode,
-        organisationType: '',
-        postCode: '',
-      }
+  const schema = getSchema({ t, useInternationalCountriesSelector, isInUK })
 
   const {
     register,
@@ -203,7 +73,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     trigger,
   } = useForm<FormInput>({
     resolver: yupResolver(schema),
-    defaultValues,
+    defaultValues: getDefaultValues({ option, countryCode, getCountryLabel }),
   })
 
   const values = watch()
@@ -241,11 +111,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       },
     }
 
-    if (isNewUser && storeNewOrgData) {
-      const payload = { ...vars, id: null }
-      storeNewOrgData(payload)
+    if (['/registration', '/auto-register'].includes(pathname)) {
       onClose()
-      return
+      return saveNewOrganizationDataInLocalState(vars)
     }
 
     await insertOrganisation(vars)

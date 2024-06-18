@@ -28,13 +28,11 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CallbackOption, OrgSelector } from '@app/components/OrgSelector'
-import { isHubOrg } from '@app/components/OrgSelector/utils'
+import { OrgSelector } from '@app/components/OrgSelector'
+import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/utils'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
-  InsertOrgLeadMutation,
-  InsertOrgLeadMutationVariables,
   Organization,
 } from '@app/generated/graphql'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
@@ -42,8 +40,11 @@ import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { MUTATION as CREATE_USER_MUTATION } from '@app/queries/invites/create-user'
-import { MUTATION as INSERT_ORG_MUTATION } from '@app/queries/organization/insert-org-lead'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
+import {
+  INPUT_DATE_FORMAT,
+  organizationData as localStateOrganizationToBeCreated,
+} from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
 
@@ -70,15 +71,10 @@ type Props = {
   isNewUser?: boolean
 }
 
-export interface CreateNewOrgType extends InsertOrgLeadMutationVariables {
-  id: string | null
-}
-
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   token,
   onSuccess,
   organizationData,
-  isNewUser,
 }) => {
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration'
@@ -88,12 +84,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
-  const [newOrgData, setNewOrgData] = useState<CreateNewOrgType | null>(null)
 
-  const [, insertOrganisation] = useMutation<
-    InsertOrgLeadMutation,
-    InsertOrgLeadMutationVariables
-  >(INSERT_ORG_MUTATION)
+  const [, insertOrganisation] = useInsertNewOrganization()
+
   const [{ data: userData, error, fetching: loading }, createUser] =
     useMutation<CreateUserMutation, CreateUserMutationVariables>(
       CREATE_USER_MUTATION
@@ -153,15 +146,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     try {
-      if (newOrgData) {
-        const createNewOrgPayload = {
-          name: newOrgData.name,
-          sector: newOrgData.sector,
-          orgType: newOrgData.orgType,
-          address: newOrgData.address,
-          attributes: newOrgData.attributes,
-        }
-        const { data: addedOrg } = await insertOrganisation(createNewOrgPayload)
+      if (localStateOrganizationToBeCreated) {
+        const { data: addedOrg } = await insertOrganisation(
+          localStateOrganizationToBeCreated
+        )
 
         if (addedOrg?.org?.id) {
           Object.assign(input, {
@@ -208,14 +196,8 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         name: organizationData.name,
         address: organizationData.address,
       })
-    } else if (newOrgData) {
-      setValue('organization', {
-        id: newOrgData.id,
-        name: newOrgData.name,
-        address: newOrgData.address,
-      })
     }
-  }, [organizationData, newOrgData, setValue])
+  }, [organizationData, setValue])
 
   useUpdateEffect(() => {
     if (userData?.createUser.email) {
@@ -379,14 +361,12 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         <Grid item>
           <OrgSelector
             {...register('organization')}
-            isNewUser={isNewUser}
-            storeNewOrgData={setNewOrgData}
             allowAdding={
               Boolean(values.countryCode) && !isUKCountry(values.countryCode)
             }
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
-            value={values.organization ?? newOrgData ?? undefined}
+            value={values.organization ?? undefined}
             onChange={handleOrganizationSelection}
             textFieldProps={{
               variant: 'filled',
