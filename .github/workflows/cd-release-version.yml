@@ -28,8 +28,8 @@ jobs:
           fi
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ env.CHECKOUT_REF }}
+        # with:
+        #   ref: ${{ env.CHECKOUT_REF }}
       - name: Fetch Version
         id: get
         run: |
