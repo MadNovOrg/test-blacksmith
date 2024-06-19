@@ -18,17 +18,17 @@ export const getSchema = ({
   return yup.object({
     organisationName: yup.string().required(
       t('validation-errors.required-field', {
-        name: t('fields.organisation-name'),
+        name: t('components.add-organisation.fields.organisation-name'),
       })
     ),
     sector: yup.string().required(
       t('validation-errors.required-field', {
-        name: t('fields.sector'),
+        name: t('components.add-organisation.fields.sector'),
       })
     ),
     organisationType: yup.string().required(
       t('validation-errors.required-field', {
-        name: t('fields.organisation-type'),
+        name: t('components.add-organisation.fields.organisation-type'),
       })
     ),
     orgTypeSpecifyOther: yup.string().when('specifyOther', {
@@ -36,7 +36,9 @@ export const getSchema = ({
       then: ot =>
         ot.required(
           t('validation-errors.required-field', {
-            name: t('fields.organisation-specify-other'),
+            name: t(
+              'components.add-organisation.fields.organisation-specify-other'
+            ),
           })
         ),
     }),
@@ -44,13 +46,13 @@ export const getSchema = ({
       .string()
       .required(
         t('validation-errors.required-field', {
-          name: t('fields.organisation-email'),
+          name: t('components.add-organisation.fields.organisation-email'),
         })
       )
       .email(t('validation-errors.email-invalid')),
     addressLine1: yup.string().required(
       t('validation-errors.required-field', {
-        name: t('fields.primary-address-line'),
+        name: t('components.add-organisation.fields.primary-address-line'),
       })
     ),
     addressLine2: yup.string(),
@@ -68,7 +70,7 @@ export const getSchema = ({
                   .string()
                   .required(
                     t('validation-errors.required-field', {
-                      name: t('fields.postCode'),
+                      name: t('components.add-organisation.fields.postCode'),
                     })
                   )
                   .test(
@@ -86,7 +88,7 @@ export const getSchema = ({
             .string()
             .required(
               t('validation-errors.required-field', {
-                name: t('fields.postCode'),
+                name: t('components.add-organisation.fields.postCode'),
               })
             )
             .test(
@@ -98,7 +100,7 @@ export const getSchema = ({
 
     country: yup.string().required(
       t('validation-errors.required-field', {
-        name: t('fields.country'),
+        name: t('components.add-organisation.fields.country'),
       })
     ),
   })

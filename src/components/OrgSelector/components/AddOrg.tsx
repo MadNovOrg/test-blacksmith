@@ -62,7 +62,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
   const [specifyOther, setSpecifyOther] = useState(false)
 
-  const schema = getSchema({ t, useInternationalCountriesSelector, isInUK })
+  const schema = getSchema({ t: _t, useInternationalCountriesSelector, isInUK })
 
   const {
     register,
