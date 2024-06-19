@@ -14,11 +14,13 @@ import {
   useTheme,
 } from '@mui/material'
 import omit from 'lodash-es/omit'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
 import {
@@ -80,7 +82,11 @@ export const CreateCourseForm = () => {
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { isUKCountry } = useWorldCountries()
 
+  const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
+    'international-indirect'
+  )
   const { savingStatus, saveCourse, allowCreateCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
@@ -97,13 +103,17 @@ export const CreateCourseForm = () => {
     useState<boolean>(false)
 
   const { certifications } = useProfile(profile?.id)
+  const displayConnectFeeCondition =
+    isINDIRECTcourse &&
+    isInternationalIndirectEnabled &&
+    isUKCountry(courseData?.residingCountry)
 
   const [consentFlags, setConsentFlags] = useState({
     healthLeaflet: false,
     practiceProtocols: false,
     validID: false,
     needsAnalysis: false,
-    connectFee: false,
+    ...(displayConnectFeeCondition ? { connectFee: false } : {}),
   })
 
   const methods = useRef<{
@@ -465,22 +475,24 @@ export const CreateCourseForm = () => {
                 data-testid="validID"
               />
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={consentFlags.connectFee}
-                    onChange={e =>
-                      handleConsentFlagChange('connectFee', e.target.checked)
-                    }
-                  />
-                }
-                label={
-                  t(
-                    'pages.create-course.form.connect-fee-notification'
-                  ) as string
-                }
-                data-testid="connectFee"
-              />
+              {displayConnectFeeCondition ? (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={consentFlags.connectFee}
+                      onChange={e =>
+                        handleConsentFlagChange('connectFee', e.target.checked)
+                      }
+                    />
+                  }
+                  label={
+                    t(
+                      'pages.create-course.form.connect-fee-notification'
+                    ) as string
+                  }
+                  data-testid="connectFee"
+                />
+              ) : null}
 
               {isBILDcourse && (
                 <FormControlLabel

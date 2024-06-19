@@ -243,6 +243,7 @@ describe('component: CreateCourseForm', () => {
             },
           }),
         ],
+        residingCountry: 'GB-ENG',
       },
     })
 
@@ -437,6 +438,156 @@ describe('component: CreateCourseForm', () => {
     })
   })
 
+  it('displays Connect Fee Condition when country is in UK', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const healthLeaflet = screen.getByTestId('healthLeaflet')
+    const practiceProtocols = screen.getByTestId('practiceProtocols')
+    const validID = screen.getByTestId('validID')
+    const connectFee = screen.getByTestId('connectFee')
+
+    expect(connectFee).toBeInTheDocument()
+    await userEvent.click(healthLeaflet)
+    await userEvent.click(practiceProtocols)
+    await userEvent.click(validID)
+    await userEvent.click(connectFee)
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('does not display Connect Fee Condition when country is outside UK and allows assign trainers', async () => {
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        bookingContact: undefined,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+              timeZone: 'Australia/Adelaide',
+              venue: buildVenue({
+                overrides: {
+                  country: 'Australia',
+                  countryCode: 'AU',
+                },
+              }),
+            },
+          }),
+        ],
+        residingCountry: 'AU',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const healthLeaflet = screen.getByTestId('healthLeaflet')
+    const practiceProtocols = screen.getByTestId('practiceProtocols')
+    const validID = screen.getByTestId('validID')
+    const connectFee = screen.queryByTestId('connectFee')
+
+    expect(connectFee).not.toBeInTheDocument()
+    await userEvent.click(healthLeaflet)
+    await userEvent.click(practiceProtocols)
+    await userEvent.click(validID)
+
+    const nextStepButton = screen.getByTestId('next-page-btn')
+    await userEvent.click(nextStepButton)
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates away to the next step
+      expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
   it('allows creating an ICM INDIRECT course outside of UK and not show price error banner', async () => {
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
@@ -494,11 +645,10 @@ describe('component: CreateCourseForm', () => {
     const healthLeaflet = screen.getByTestId('healthLeaflet')
     const practiceProtocols = screen.getByTestId('practiceProtocols')
     const validID = screen.getByTestId('validID')
-    const connectFee = screen.getByTestId('connectFee')
+
     await userEvent.click(healthLeaflet)
     await userEvent.click(practiceProtocols)
     await userEvent.click(validID)
-    await userEvent.click(connectFee)
 
     const nextStepButton = screen.getByTestId('next-page-btn')
     await userEvent.click(nextStepButton)
