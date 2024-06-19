@@ -104,9 +104,8 @@ export const CreateCourseForm = () => {
 
   const { certifications } = useProfile(profile?.id)
   const displayConnectFeeCondition =
-    isINDIRECTcourse &&
-    isInternationalIndirectEnabled &&
-    isUKCountry(courseData?.residingCountry)
+    !isInternationalIndirectEnabled ||
+    (isINDIRECTcourse && isUKCountry(courseData?.residingCountry))
 
   const [consentFlags, setConsentFlags] = useState({
     healthLeaflet: false,
@@ -316,6 +315,16 @@ export const CreateCourseForm = () => {
     [setCourseData]
   )
 
+  useEffect(() => {
+    setConsentFlags({
+      healthLeaflet: false,
+      practiceProtocols: false,
+      validID: false,
+      needsAnalysis: false,
+      ...(displayConnectFeeCondition ? { connectFee: false } : {}),
+    })
+  }, [courseData?.residingCountry, displayConnectFeeCondition])
+
   const nextStepButtonLabel =
     courseData?.blendedLearning &&
     courseData.type === Course_Type_Enum.Indirect &&
@@ -383,7 +392,7 @@ export const CreateCourseForm = () => {
               <SearchTrainers
                 trainerType={Course_Trainer_Type_Enum.Assistant}
                 courseLevel={
-                  courseData?.courseLevel || Course_Level_Enum.Level_1
+                  courseData?.courseLevel ?? Course_Level_Enum.Level_1
                 }
                 courseSchedule={{
                   start: courseData?.startDateTime ?? undefined,
