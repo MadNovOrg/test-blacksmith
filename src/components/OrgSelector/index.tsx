@@ -202,6 +202,9 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       }
       return uniqBy(
         [
+          ...(localSavedOrgToBeCreated?.name.includes(debouncedQuery)
+            ? [{ ...localSavedOrgToBeCreated, id: uniqueId() }]
+            : []),
           ...(showHubResults ? hubOrgs?.orgs ?? [] : []),
           ...(showDfeResults ? dfeOrgs?.establishments ?? [] : []),
           ...(allowAdding && !autocompleteMode && debouncedQuery
@@ -209,10 +212,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             : []),
           ...(!allowAdding
             ? [{ name: t('components.org-selector.request-creation-sub') }]
-            : []),
-          ...(localSavedOrgToBeCreated &&
-          localSavedOrgToBeCreated.name.includes(debouncedQuery)
-            ? [{ ...localSavedOrgToBeCreated, id: uniqueId() }]
             : []),
         ],
         'id'
