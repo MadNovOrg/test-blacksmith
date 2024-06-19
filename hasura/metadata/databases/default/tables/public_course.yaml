@@ -445,8 +445,9 @@ select_permissions:
         - description
         - end
         - id
-        - max_participants
+        - include_VAT
         - mandatory_course_materials
+        - max_participants
         - min_participants
         - name
         - price
