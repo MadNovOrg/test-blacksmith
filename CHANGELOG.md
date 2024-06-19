@@ -1,5 +1,32 @@
 # @teamteach/hub
 
+## 4.4.0
+
+### Minor Changes
+
+- e80f559: Allow creating new Org as international user
+- b1affa4: Add mandatory course materials for closed courses
+- 13d8ae1: Add Indirect L1 BS course codes
+- e2c97f0: Add profile's country field for HubSpot users sync
+- f2a222c: Updates the Create Organization flows to allow for international organization creation
+- e349fc1: Add Mandatory Course Materials cost on Open Course.
+- 94e5dff: Don't display Connect Fee condition on international indirect courses.
+- ed0dade: Handle historical UK organisation on edit organisation form
+- afb9bb7: Edit number of mandatory course materials on closed course.
+- f85f4e2: International organisation create
+
+### Patch Changes
+
+- a2f3c25: Display course order xero invoice number link
+- bea2fbb: Upcoming enrollments are courses in present or in the future.
+- 050b283: Fix organization form fields' error messages
+- ccf991b: Restrict organization search only to trainer's organizations on Indirect non AOL course creation
+- 002375a: Display subtotal minus allowance on go1 order licenses review
+- 1b21b0c: Apply international organisation create changes on add organisation form on create course and user sign up
+- ffb0f2e: Display org country as default on org edit form. Display org details fields based on org's country
+- 269c1cb: Fix Sales Admin can't invite attendees
+- 002375a: Display default rows per page for licenses table
+
 ## 4.3.1
 
 ### Patch Changes
