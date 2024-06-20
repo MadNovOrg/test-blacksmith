@@ -939,15 +939,15 @@ export const validUserSignature = (
       .split(' ')
       .filter(name => name.length)
       .map(name => name.trim().toLowerCase())
+      .join('')
 
     const splitSignature = signature
       .split(' ')
       .filter(name => name.length)
       .map(name => name.trim().toLowerCase())
+      .join('')
 
-    if (splitFullName.length !== splitSignature.length) return false
-
-    return JSON.stringify(splitFullName) === JSON.stringify(splitSignature)
+    return splitFullName === splitSignature
   }
 
   return false

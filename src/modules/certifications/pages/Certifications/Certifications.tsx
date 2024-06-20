@@ -74,10 +74,19 @@ export const Certifications: React.FC<
     if (keyword) {
       const query = keyword?.trim()
 
-      const ilike = { _ilike: `${query}%` }
+      const ilike = { _ilike: `%${query}%` }
       conditions.push({
         _or: [
-          { profile: { _or: [{ fullName: ilike }, { familyName: ilike }] } },
+          {
+            profile: {
+              _or: [
+                { fullName: ilike },
+                { familyName: ilike },
+                { translatedFamilyName: ilike },
+                { translatedGivenName: ilike },
+              ],
+            },
+          },
           { course: { course_code: ilike } },
           { number: ilike },
         ],

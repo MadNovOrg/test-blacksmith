@@ -26,6 +26,137 @@ export type ExceptionsCountriesCode = keyof typeof ExceptionsCountriesCodes
 
 export type WorldCountriesCodes = CountryISOCode | UKsCountriesCode
 
+export enum ForeignScript {
+  ARABIC = 'Arabic',
+  ARMENIAN = 'Armenian',
+  CHINESE = 'Chinese',
+  GEORGIAN = 'Georgian',
+  HEBREW = 'Hebrew',
+  JAPANESE = 'Japanese',
+  KOREAN = 'Korean',
+  LAO = 'Lao',
+  MYANMAR = 'Myanmar',
+  THAI = 'Thai',
+}
+
+export const ForeignScriptRegex = {
+  [ForeignScript.ARABIC]:
+    /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/,
+  [ForeignScript.ARMENIAN]: /[\u0530-\u058F\uFB13-\uFB17]/,
+  [ForeignScript.CHINESE]: /[\u4E00-\u9FFF\u3400-\u4DBF]/,
+  [ForeignScript.GEORGIAN]: /[\u10A0-\u10FF]/,
+  [ForeignScript.HEBREW]: /[\u0590-\u05FF]/,
+  [ForeignScript.JAPANESE]:
+    /[\u3040-\u30FF\u31F0-\u31FF\u3200-\u32FF\u3300-\u33FF]/,
+  [ForeignScript.KOREAN]: /[\uAC00-\uD7AF\uD7B0-\uD7FF]/,
+  [ForeignScript.LAO]: /[\u0E80-\u0EFF]/,
+  [ForeignScript.MYANMAR]: /[\u1000-\u109F\uAA60-\uAA7F]/,
+  [ForeignScript.THAI]: /[\u0E00-\u0E7F]/,
+}
+
+export const ForeignScriptFontPaths = {
+  [ForeignScript.ARABIC]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosansarabic/v18/nwpxtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHF3lhQ5l3sQWIHPqzCflmyvu3CBFQLaig.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosansarabic/v18/nwpxtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHF3lhQ5l3sQWIHPqzCf-myvu3CBFQLaig.ttf',
+    },
+  ],
+  [ForeignScript.ARMENIAN]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosansarmenian/v43/ZgN0jOZKPa7CHqq0h37c7ReDUubm2SEdFXp7ig73qtTY5kBb74R9UdM3y2nZLoqvb60iYy6zF3Eg.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosansarmenian/v43/ZgN0jOZKPa7CHqq0h37c7ReDUubm2SEdFXp7ig73qtTY5kBb74R9UdM3y2nZLorDb60iYy6zF3Eg.ttf',
+    },
+  ],
+  [ForeignScript.CHINESE]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosanssc/v36/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG4HFnYxNbPzS5HE.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosanssc/v36/k3kCo84MPvpLmixcA63oeAL7Iqp5IZJF9bmaG-3FnYxNbPzS5HE.ttf',
+    },
+  ],
+  [ForeignScript.GEORGIAN]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosansgeorgian/v44/PlIaFke5O6RzLfvNNVSitxkr76PRHBC4Ytyq-Gof7PUs4UnzWn-8YDB09HFNdpu5zFj-f5WK0OQV.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosansgeorgian/v44/PlIaFke5O6RzLfvNNVSitxkr76PRHBC4Ytyq-Gof7PUs4UnzWn-8YDB09HFNdpvVzFj-f5WK0OQV.ttf',
+    },
+  ],
+  [ForeignScript.HEBREW]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosanshebrew/v45/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCz9eNKYZC0sqk3xXGiXKYqtoiJltutR2g.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosanshebrew/v45/or3HQ7v33eiDljA1IufXTtVf7V6RvEEdhQlk0LlGxCz9eNKYZC0sqk3xXGiXRYqtoiJltutR2g.ttf',
+    },
+  ],
+  [ForeignScript.JAPANESE]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFE8j75vY0rw-oME.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosansjp/v52/-F6jfjtqLzI2JPCgQBnw7HFyzSD-AsregP8VFCMj75vY0rw-oME.ttf',
+    },
+  ],
+  [ForeignScript.KOREAN]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosanskr/v36/PbyxFmXiEBPT4ITbgNA5Cgms3VYcOA-vvnIzzrQyeLTq8H4hfeE.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosanskr/v36/PbyxFmXiEBPT4ITbgNA5Cgms3VYcOA-vvnIzztgyeLTq8H4hfeE.ttf',
+    },
+  ],
+  [ForeignScript.LAO]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosanslao/v30/bx6lNx2Ol_ixgdYWLm9BwxM3NW6BOkuf763Clj6QCiQ_J1Djx9pidOt4L8bdf5MK3riB2w.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosanslao/v30/bx6lNx2Ol_ixgdYWLm9BwxM3NW6BOkuf763Clj6QCiQ_J1Djx9pidOt4Q8bdf5MK3riB2w.ttf',
+    },
+  ],
+  [ForeignScript.MYANMAR]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosansmyanmar/v20/AlZv_y1ZtY3ymOryg38hOCSdOnFq0HFa9MEwiEwLxR-r.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosansmyanmar/v20/AlZv_y1ZtY3ymOryg38hOCSdOnFq0HEC9cEwiEwLxR-r.ttf',
+    },
+  ],
+  [ForeignScript.THAI]: [
+    {
+      fontWeight: 300,
+      src: 'https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNPsd1MKVQt_So_9CdU8ptpzF-QRvzzXg.ttf',
+    },
+    {
+      fontWeight: 500,
+      src: 'https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNPsd1MKVQt_So_9CdU6ZtpzF-QRvzzXg.ttf',
+    },
+  ],
+}
+
 export default function useWorldCountries() {
   const countries = useMemo(() => {
     return countryList()
@@ -303,4 +434,14 @@ export default function useWorldCountries() {
     getUKCountryCodeByCountryName,
     isUKCountry,
   }
+}
+
+export const getForeignScript = (text: string): ForeignScript | null => {
+  const result = Object.keys(ForeignScriptRegex).find(script =>
+    ForeignScriptRegex[script as ForeignScript].test(text)
+  )
+
+  if (!result) return null
+
+  return result as ForeignScript
 }

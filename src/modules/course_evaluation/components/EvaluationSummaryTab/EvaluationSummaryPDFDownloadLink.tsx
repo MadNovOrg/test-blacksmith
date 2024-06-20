@@ -115,7 +115,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
       a.profile.id === profileId ? 'trainer' : 'attendee'
     )
 
-    const trainerAnswers = trainer?.sort(a =>
+    const trainerAnswers = trainer?.toSorted(a =>
       booleanQuestionTypes.includes(
         a.question.type as unknown as Course_Evaluation_Question_Type_Enum
       )
@@ -125,7 +125,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
 
     const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
       attendee,
-      a => a.question.group || 'UNGROUPED'
+      a => a.question.group ?? 'UNGROUPED'
     )
 
     const grouped = {} as CourseEvaluationGroupedQuestion
@@ -177,7 +177,6 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
 
   const course = courseData?.course
 
-  //#TTHP-2016
   const isRestricted = anyPass([
     acl.isBookingContact,
     acl.isOrgAdmin,

@@ -1,14 +1,17 @@
-import pdf from '@react-pdf/renderer'
+import pdf, { Styles } from '@react-pdf/renderer'
 import { groupBy } from 'lodash-es'
-import React, { Fragment } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import TTLogoImage from '@app/assets/TT-Colour-Logo.png'
 import {
+  ForeignScriptFontPaths,
+  getForeignScript,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import {
   Accreditors_Enum,
   Course_Evaluation_Question_Type_Enum,
   Course_Trainer_Type_Enum as CourseTrainerTypes,
-  CourseParticipantsQuery,
   GetCourseByIdQuery,
   Venue,
   GetEvaluationsSummaryQuery,
@@ -24,17 +27,33 @@ import { formatCourseVenue } from '@app/util'
 const { Document, Font, Page, StyleSheet, Text, View, Image } = pdf
 
 type Props = {
-  course: NonNullable<GetCourseByIdQuery['course']>
+  course: Pick<
+    NonNullable<GetCourseByIdQuery['course']>,
+    | 'accreditedBy'
+    | 'bildModules'
+    | 'deliveryType'
+    | 'modules'
+    | 'name'
+    | 'schedule'
+    | 'trainers'
+    | 'type'
+  >
   isRestricted: boolean
-  participants: NonNullable<CourseParticipantsQuery['courseParticipants']>
+  participants: {
+    id: string
+    attended?: boolean | null
+    profile: { id: string; archived?: boolean | null; fullName?: string | null }
+  }[]
   grouped: CourseEvaluationGroupedQuestion
   ungrouped: CourseEvaluationUngroupedQuestion
   injuryQuestion: CourseEvaluationInjuryQuestion
-  trainerAnswers: GetEvaluationsSummaryQuery['answers']
+  trainerAnswers: Pick<
+    GetEvaluationsSummaryQuery['answers'][number],
+    'answer' | 'id' | 'question'
+  >[]
 }
 
 type PDFRatingSummaryProps = {
-  key: string
   questionKey: string
   answers: GetEvaluationsSummaryQuery['answers']
 }
@@ -313,18 +332,23 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
   )
   const moduleGroups = Object.keys(groupedCourseModules)
 
-  participants.sort((p1, p2) =>
-    !p1.attended && p2.attended ? 1 : p1.attended && !p2.attended ? -1 : 0
-  )
+  participants.sort((p1, p2) => {
+    if (!p1.attended && p2.attended) return 1
+    if (p1.attended && !p2.attended) return -1
+    return 0
+  })
+
   for (const g of moduleGroups) {
-    groupedCourseModules[g].sort((m1, m2) =>
-      !m1.covered && m2.covered ? 1 : m1.covered && !m2.covered ? -1 : 0
-    )
+    groupedCourseModules[g].sort((m1, m2) => {
+      if (!m1.covered && m2.covered) return 1
+      if (m1.covered && !m2.covered) return -1
+      return 0
+    })
   }
 
   const leadTrainer = course?.trainers?.find(t => t.type === 'LEADER') ?? {
     id: null,
-    profile: { fullName: '' },
+    profile: { id: null, fullName: '' },
   }
 
   const assistTrainers = course?.trainers?.filter(
@@ -334,6 +358,32 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
   const moderators = course?.trainers?.filter(
     t => t.type === CourseTrainerTypes.Moderator
   )
+
+  const foreignFontsStyles = useMemo(() => {
+    const namesFontStyles: Styles = {}
+
+    ;[...(course?.trainers ?? []), ...participants].forEach(participant => {
+      if (participant.profile.fullName) {
+        const foreignScript = getForeignScript(participant.profile.fullName)
+
+        if (foreignScript) {
+          namesFontStyles[participant.profile.id] = {
+            fontFamily: foreignScript,
+            fontWeight: 500,
+          }
+
+          if (!Font.getRegisteredFontFamilies().includes(foreignScript)) {
+            Font.register({
+              family: foreignScript,
+              fonts: ForeignScriptFontPaths[foreignScript],
+            })
+          }
+        }
+      }
+    })
+
+    return StyleSheet.create(namesFontStyles)
+  }, [course?.trainers, participants])
 
   return (
     <Document>
@@ -371,20 +421,27 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
 
               <Text style={styles.largerText}>
                 {t('course-evaluation.pdf-export.lead-trainer')}:{' '}
-                {leadTrainer?.profile.fullName}
+                <Text style={foreignFontsStyles[leadTrainer?.profile.id] ?? {}}>
+                  {leadTrainer?.profile.fullName}
+                </Text>
               </Text>
 
               {assistTrainers.map(assistant => (
                 <Text key={assistant.id} style={styles.largerText}>
                   {t('course-evaluation.pdf-export.assist-trainer')}:{' '}
-                  {assistant?.profile.fullName}
+                  <Text style={foreignFontsStyles[assistant?.profile.id] ?? {}}>
+                    {' '}
+                    {assistant?.profile.fullName}
+                  </Text>
                 </Text>
               ))}
 
               {moderators.map(moderator => (
                 <Text key={moderator.id} style={styles.largerText}>
                   {t('course-evaluation.pdf-export.moderator')}:{' '}
-                  {moderator?.profile.fullName}
+                  <Text style={foreignFontsStyles[moderator?.profile.id] ?? {}}>
+                    {moderator?.profile.fullName}
+                  </Text>
                 </Text>
               ))}
             </View>
@@ -454,8 +511,8 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
 
                         {bildModules[strategyName].modules?.length
                           ? bildModules[strategyName].modules.map(
-                              (module: { name: string }, index: number) => (
-                                <Text key={index} style={[styles.text]}>
+                              (module: { name: string }) => (
+                                <Text key={module.name} style={[styles.text]}>
                                   {module.name}
                                 </Text>
                               )
@@ -514,13 +571,18 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
               <FlexGroup
                 type="column"
                 data={participants.map(
-                  ({ id, profile: { fullName: name, archived }, attended }) => (
+                  ({
+                    id,
+                    profile: { fullName: name, archived, id: profileId },
+                    attended,
+                  }) => (
                     <Text
                       key={id}
-                      style={[
-                        styles.text,
-                        attended ? {} : styles.strikeThrough,
-                      ]}
+                      style={{
+                        ...styles.text,
+                        ...(attended ? {} : styles.strikeThrough),
+                        ...(foreignFontsStyles[profileId] ?? {}),
+                      }}
                     >
                       {archived ? t('common.archived-profile') : name}
                     </Text>
@@ -612,7 +674,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                           key={id}
                           style={styles.participantAnswer}
                         >
-                          {answer ||
+                          {answer ??
                             t('course-evaluation.pdf-export.no-answer')}
                         </Text>
                       ))}
@@ -721,7 +783,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                           key={a.id}
                           style={styles.participantAnswer}
                         >
-                          {a.answer ||
+                          {a.answer ??
                             t('course-evaluation.pdf-export.no-answer')}
                         </Text>
                       </View>

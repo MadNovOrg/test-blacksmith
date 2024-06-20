@@ -46314,6 +46314,12 @@ export type Profile = {
   trainer_role_types: Array<Profile_Trainer_Role_Type>;
   /** An aggregate relationship */
   trainer_role_types_aggregate: Profile_Trainer_Role_Type_Aggregate;
+  /** A computed field, executes function "profile_translated_family_name" */
+  translatedFamilyName?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_translated_given_name" */
+  translatedGivenName?: Maybe<Scalars['String']>;
+  translated_family_name?: Maybe<Scalars['String']>;
+  translated_given_name?: Maybe<Scalars['String']>;
   /** An array relationship */
   upcomingEnrollments: Array<Upcoming_Enrollments>;
   /** An aggregate relationship */
@@ -46666,6 +46672,10 @@ export type Profile_Bool_Exp = {
   title?: InputMaybe<String_Comparison_Exp>;
   trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
   trainer_role_types_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Bool_Exp>;
+  translatedFamilyName?: InputMaybe<String_Comparison_Exp>;
+  translatedGivenName?: InputMaybe<String_Comparison_Exp>;
+  translated_family_name?: InputMaybe<String_Comparison_Exp>;
+  translated_given_name?: InputMaybe<String_Comparison_Exp>;
   upcomingEnrollments?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
   upcomingEnrollments_aggregate?: InputMaybe<Upcoming_Enrollments_Aggregate_Bool_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -46756,6 +46766,8 @@ export type Profile_Insert_Input = {
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
   trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Arr_Rel_Insert_Input>;
+  translated_family_name?: InputMaybe<Scalars['String']>;
+  translated_given_name?: InputMaybe<Scalars['String']>;
   upcomingEnrollments?: InputMaybe<Upcoming_Enrollments_Arr_Rel_Insert_Input>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -46790,6 +46802,12 @@ export type Profile_Max_Fields = {
   phoneCountryCode?: Maybe<Scalars['String']>;
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_translated_family_name" */
+  translatedFamilyName?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_translated_given_name" */
+  translatedGivenName?: Maybe<Scalars['String']>;
+  translated_family_name?: Maybe<Scalars['String']>;
+  translated_given_name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -46823,6 +46841,12 @@ export type Profile_Min_Fields = {
   phoneCountryCode?: Maybe<Scalars['String']>;
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_translated_family_name" */
+  translatedFamilyName?: Maybe<Scalars['String']>;
+  /** A computed field, executes function "profile_translated_given_name" */
+  translatedGivenName?: Maybe<Scalars['String']>;
+  translated_family_name?: Maybe<Scalars['String']>;
+  translated_given_name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -46893,6 +46917,10 @@ export type Profile_Order_By = {
   tags?: InputMaybe<Order_By>;
   title?: InputMaybe<Order_By>;
   trainer_role_types_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Order_By>;
+  translatedFamilyName?: InputMaybe<Order_By>;
+  translatedGivenName?: InputMaybe<Order_By>;
+  translated_family_name?: InputMaybe<Order_By>;
+  translated_given_name?: InputMaybe<Order_By>;
   upcomingEnrollments_aggregate?: InputMaybe<Upcoming_Enrollments_Aggregate_Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -47211,6 +47239,10 @@ export enum Profile_Select_Column {
   /** column name */
   Title = 'title',
   /** column name */
+  TranslatedFamilyName = 'translated_family_name',
+  /** column name */
+  TranslatedGivenName = 'translated_given_name',
+  /** column name */
   UpdatedAt = 'updatedAt'
 }
 
@@ -47244,6 +47276,8 @@ export type Profile_Set_Input = {
   stripe_customer_id?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
+  translated_family_name?: InputMaybe<Scalars['String']>;
+  translated_given_name?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -47303,6 +47337,8 @@ export type Profile_Stream_Cursor_Value_Input = {
   stripe_customer_id?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
+  translated_family_name?: InputMaybe<Scalars['String']>;
+  translated_given_name?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -47974,6 +48010,10 @@ export enum Profile_Update_Column {
   Tags = 'tags',
   /** column name */
   Title = 'title',
+  /** column name */
+  TranslatedFamilyName = 'translated_family_name',
+  /** column name */
+  TranslatedGivenName = 'translated_given_name',
   /** column name */
   UpdatedAt = 'updatedAt'
 }

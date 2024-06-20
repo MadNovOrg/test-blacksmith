@@ -1,9 +1,13 @@
-import pdf from '@react-pdf/renderer'
-import React from 'react'
+import pdf, { Styles } from '@react-pdf/renderer'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import BILDOutlineImage from '@app/assets/bild-outline.jpg'
 import ICMOutlineImage from '@app/assets/outline_icm.jpg'
+import {
+  ForeignScriptFontPaths,
+  getForeignScript,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   Accreditors_Enum,
   Grade_Enum,
@@ -44,7 +48,7 @@ Font.register({
   ],
 })
 
-const styles = StyleSheet.create({
+const defaultStyles = {
   pageBackground: {
     position: 'absolute',
     minWidth: '99%',
@@ -88,10 +92,6 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: '18px',
   },
-  participantName: {
-    fontWeight: 600,
-    fontFamily: 'Inter',
-  },
   footer: {
     fontSize: '8px',
     width: '70%',
@@ -99,7 +99,9 @@ const styles = StyleSheet.create({
     marginRight: '120',
     fontFamily: 'Inter',
   },
-})
+}
+
+const styles = StyleSheet.create(defaultStyles as Styles)
 
 type CertificateDocumentProps = {
   participantName: string
@@ -126,6 +128,30 @@ export const CertificateDocument: React.FC<
 }) => {
   const { t } = useTranslation()
 
+  const participantNameStyles: Styles = useMemo(() => {
+    const foreignScript = getForeignScript(participantName)
+    if (foreignScript) {
+      Font.register({
+        family: foreignScript,
+        fonts: ForeignScriptFontPaths[foreignScript],
+      })
+
+      return StyleSheet.create({
+        name: {
+          fontFamily: foreignScript,
+          fontWeight: 500,
+        },
+      } as Styles)
+    }
+
+    return StyleSheet.create({
+      name: {
+        fontFamily: 'Inter',
+        fontWeight: 600,
+      },
+    } as Styles)
+  }, [participantName])
+
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
@@ -142,7 +168,10 @@ export const CertificateDocument: React.FC<
           {t('common.course-certificate.title')}
         </Text>
         <Text
-          style={{ ...styles.participantName, marginBottom: theme.spacing(1) }}
+          style={{
+            ...participantNameStyles.name,
+            marginBottom: theme.spacing(1),
+          }}
         >
           {participantName}
         </Text>

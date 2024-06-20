@@ -204,36 +204,80 @@ export const Users = () => {
                   {
                     _and: [
                       {
-                        givenName: {
-                          _ilike: `%${
-                            keywordDebounced.trim().split(' ')[0] ?? ''
-                          }%`,
-                        },
+                        _or: [
+                          {
+                            givenName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[0] ?? ''
+                              }%`,
+                            },
+                          },
+                          {
+                            translatedGivenName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[0] ?? ''
+                              }%`,
+                            },
+                          },
+                        ],
                       },
                       {
-                        familyName: {
-                          _ilike: `%${
-                            keywordDebounced.trim().split(' ')[1] ?? ''
-                          }%`,
-                        },
+                        _or: [
+                          {
+                            familyName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[1] ?? ''
+                              }%`,
+                            },
+                          },
+                          {
+                            translatedFamilyName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[1] ?? ''
+                              }%`,
+                            },
+                          },
+                        ],
                       },
                     ],
                   },
                   {
                     _and: [
                       {
-                        givenName: {
-                          _ilike: `%${
-                            keywordDebounced.trim().split(' ')[1] ?? ''
-                          }%`,
-                        },
+                        _or: [
+                          {
+                            givenName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[1] ?? ''
+                              }%`,
+                            },
+                          },
+                          {
+                            translatedGivenName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[1] ?? ''
+                              }%`,
+                            },
+                          },
+                        ],
                       },
                       {
-                        familyName: {
-                          _ilike: `%${
-                            keywordDebounced.trim().split(' ')[0] ?? ''
-                          }%`,
-                        },
+                        _or: [
+                          {
+                            familyName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[0] ?? ''
+                              }%`,
+                            },
+                          },
+                          {
+                            translatedFamilyName: {
+                              _ilike: `%${
+                                keywordDebounced.trim().split(' ')[0] ?? ''
+                              }%`,
+                            },
+                          },
+                        ],
                       },
                     ],
                   },
@@ -248,6 +292,16 @@ export const Users = () => {
                   },
                   {
                     familyName: {
+                      _ilike: `%${keywordDebounced.trim() ?? ''}%`,
+                    },
+                  },
+                  {
+                    translatedGivenName: {
+                      _ilike: `%${keywordDebounced.trim() ?? ''}%`,
+                    },
+                  },
+                  {
+                    translatedFamilyName: {
                       _ilike: `%${keywordDebounced.trim() ?? ''}%`,
                     },
                   },
