@@ -3336,8 +3336,11 @@ export type HierarchicalTermNode = {
 
 export type ImportArloCertificatesOutput = {
   __typename?: 'ImportArloCertificatesOutput';
-  added: Scalars['Int'];
-  processed: Scalars['Int'];
+  added?: Maybe<Scalars['Int']>;
+  error?: Maybe<Scalars['String']>;
+  invalid?: Maybe<Scalars['Int']>;
+  invalidEntries?: Maybe<Array<Maybe<InvalidEntries>>>;
+  processed?: Maybe<Scalars['Int']>;
 };
 
 export enum ImportLegacyCertificateError {
@@ -3394,6 +3397,11 @@ export type Int_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['Int']>;
   _neq?: InputMaybe<Scalars['Int']>;
   _nin?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+export type InvalidEntries = {
+  __typename?: 'InvalidEntries';
+  email: Scalars['String'];
 };
 
 export enum InviteStatus {
@@ -56937,7 +56945,6 @@ export type Upcoming_Enrollments = {
   profile?: Maybe<Profile>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
-  schedule_end?: Maybe<Scalars['timestamptz']>;
 };
 
 /** aggregated selection of "upcoming_enrollments" */
@@ -57026,7 +57033,6 @@ export type Upcoming_Enrollments_Bool_Exp = {
   profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   scheduleStart?: InputMaybe<Timestamptz_Comparison_Exp>;
-  schedule_end?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
 /** input type for inserting data into table "upcoming_enrollments" */
@@ -57040,7 +57046,6 @@ export type Upcoming_Enrollments_Insert_Input = {
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
   scheduleStart?: InputMaybe<Scalars['timestamptz']>;
-  schedule_end?: InputMaybe<Scalars['timestamptz']>;
 };
 
 /** aggregate max on columns */
@@ -57052,7 +57057,6 @@ export type Upcoming_Enrollments_Max_Fields = {
   orgName?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
-  schedule_end?: Maybe<Scalars['timestamptz']>;
 };
 
 /** order by max() on columns of table "upcoming_enrollments" */
@@ -57063,7 +57067,6 @@ export type Upcoming_Enrollments_Max_Order_By = {
   orgName?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
-  schedule_end?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -57075,7 +57078,6 @@ export type Upcoming_Enrollments_Min_Fields = {
   orgName?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
   scheduleStart?: Maybe<Scalars['timestamptz']>;
-  schedule_end?: Maybe<Scalars['timestamptz']>;
 };
 
 /** order by min() on columns of table "upcoming_enrollments" */
@@ -57086,7 +57088,6 @@ export type Upcoming_Enrollments_Min_Order_By = {
   orgName?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
-  schedule_end?: InputMaybe<Order_By>;
 };
 
 /** Ordering options when selecting data from "upcoming_enrollments". */
@@ -57100,7 +57101,6 @@ export type Upcoming_Enrollments_Order_By = {
   profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
   scheduleStart?: InputMaybe<Order_By>;
-  schedule_end?: InputMaybe<Order_By>;
 };
 
 /** select columns of table "upcoming_enrollments" */
@@ -57116,9 +57116,7 @@ export enum Upcoming_Enrollments_Select_Column {
   /** column name */
   ProfileId = 'profileId',
   /** column name */
-  ScheduleStart = 'scheduleStart',
-  /** column name */
-  ScheduleEnd = 'schedule_end'
+  ScheduleStart = 'scheduleStart'
 }
 
 /** aggregate stddev on columns */
@@ -57170,7 +57168,6 @@ export type Upcoming_Enrollments_Stream_Cursor_Value_Input = {
   orgName?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   scheduleStart?: InputMaybe<Scalars['timestamptz']>;
-  schedule_end?: InputMaybe<Scalars['timestamptz']>;
 };
 
 /** aggregate sum on columns */
@@ -59789,7 +59786,7 @@ export type ImportArloCertificatesResultQueryVariables = Exact<{
 }>;
 
 
-export type ImportArloCertificatesResultQuery = { __typename?: 'query_root', importArloCertificates?: { __typename?: 'importArloCertificates', errors?: any | null, output?: { __typename?: 'ImportArloCertificatesOutput', processed: number, added: number } | null } | null };
+export type ImportArloCertificatesResultQuery = { __typename?: 'query_root', importArloCertificates?: { __typename?: 'importArloCertificates', output?: { __typename?: 'ImportArloCertificatesOutput', processed?: number | null, added?: number | null, invalid?: number | null, error?: string | null, invalidEntries?: Array<{ __typename?: 'InvalidEntries', email: string } | null> | null } | null } | null };
 
 export type GetAttendeeAuditLogsQueryVariables = Exact<{
   where: Course_Participant_Audit_Bool_Exp;

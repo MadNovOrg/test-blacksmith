@@ -972,6 +972,11 @@ custom_types:
         - description: null
           is_deprecated: null
           value: INACTIVE
+    - name: ImportFailCause
+      values:
+        - description: null
+          is_deprecated: null
+          value: INVALID_DATA
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1107,5 +1112,9 @@ custom_types:
     - name: scheduleAboutTrainingSurveysOutput
     - name: DeleteOrganisationOutput
     - name: EnrollmentCourseSchedule
+    - name: ImportArloCertificatesResponse
+    - name: ImportArloCertificatesError
+    - name: FailedImportEntries
+    - name: InvalidEntries
   scalars:
     - name: Date

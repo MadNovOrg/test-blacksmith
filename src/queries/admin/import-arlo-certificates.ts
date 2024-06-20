@@ -12,8 +12,12 @@ export const IMPORT_ARLO_CERTIFICATES_ACTION_RESULT = gql`
       output {
         processed
         added
+        invalid
+        error
+        invalidEntries {
+          email
+        }
       }
-      errors
     }
   }
 `

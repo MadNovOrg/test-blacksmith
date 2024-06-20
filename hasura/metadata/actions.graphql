@@ -588,6 +588,10 @@ enum CertificateStatus {
   INACTIVE
 }
 
+enum ImportFailCause {
+  INVALID_DATA
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -1311,8 +1315,11 @@ type RejectCourseOutput {
 }
 
 type ImportArloCertificatesOutput {
-  processed: Int!
-  added: Int!
+  processed: Int
+  added: Int
+  invalid: Int
+  invalidEntries: [InvalidEntries]
+  error: String
 }
 
 type XeroInvoiceSyncOutput {
@@ -1461,6 +1468,29 @@ type DeleteOrganisationOutput {
 type EnrollmentCourseSchedule {
   start: String
   end: String
+}
+
+type ImportArloCertificatesResponse {
+  processed: Int!
+  added: Int!
+  invalid: Int!
+  invalidEntries: [InvalidEntries]
+  error: String
+}
+
+type ImportArloCertificatesError {
+  message: String!
+  failedEntries: [FailedImportEntries]
+}
+
+type FailedImportEntries {
+  email: String!
+  total: Int!
+  cause: ImportFailCause
+}
+
+type InvalidEntries {
+  email: String!
 }
 
 scalar Date
