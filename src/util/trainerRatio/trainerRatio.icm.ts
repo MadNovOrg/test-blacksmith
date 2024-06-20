@@ -27,6 +27,7 @@ export type TrainerRatio = {
 export type TrainerRatioCriteria = {
   courseLevel: Course_Level_Enum
   deliveryType: Course_Delivery_Type_Enum
+  isUKCountry: boolean
   maxParticipants: number
   reaccreditation: boolean
   type: Course_Type_Enum
@@ -44,7 +45,22 @@ export const ratio = (
 })
 
 const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
-  const { type, courseLevel, deliveryType, reaccreditation, usesAOL } = criteria
+  const {
+    courseLevel,
+    deliveryType,
+    isUKCountry,
+    reaccreditation,
+    type,
+    usesAOL,
+  } = criteria
+
+  if (
+    !isUKCountry &&
+    type === Indirect &&
+    [Level_1, Level_2, Level_1Bs].includes(courseLevel)
+  ) {
+    return ratio(0, 12, 12)
+  }
 
   if (type === Open && deliveryType === Course_Delivery_Type_Enum.Virtual)
     return ratio(0, 24, 12)

@@ -263,6 +263,7 @@ export const CreateCourseForm = () => {
           isTrainer: acl.isTrainer(),
           isETA: isETA,
           isEmployerAOL: isEmployerAOL,
+          isUKCountry: isUKCountry(courseData.residingCountry),
         },
         [
           ...assistants.map(assistant => ({
@@ -344,6 +345,7 @@ export const CreateCourseForm = () => {
           max_participants: courseData.maxParticipants,
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
+          isUKCountry: isUKCountry(courseData.residingCountry),
         },
         assistants.map(assistant => ({
           type: Course_Trainer_Type_Enum.Assistant,
@@ -352,7 +354,7 @@ export const CreateCourseForm = () => {
         }))
       )
     )
-  }, [acl, assistants, courseData])
+  }, [acl, assistants, courseData, isUKCountry])
 
   if (displayNoCoursePriceError) {
     return (

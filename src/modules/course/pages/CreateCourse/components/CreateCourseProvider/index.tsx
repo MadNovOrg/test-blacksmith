@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -69,6 +70,7 @@ export const CreateCourseProvider: React.FC<
   const { t } = useTranslation()
 
   const { acl, profile } = useAuth()
+  const { isUKCountry } = useWorldCountries()
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
@@ -153,10 +155,19 @@ export const CreateCourseProvider: React.FC<
         isTrainer: acl.isTrainer(),
         isETA: isETA,
         isEmployerAOL: isEmployerAOL,
+        isUKCountry: isUKCountry(courseData.residingCountry),
       },
       trainers
     )
-  }, [courseData, seniorOrPrincipalLead, acl, isETA, isEmployerAOL, trainers])
+  }, [
+    courseData,
+    seniorOrPrincipalLead,
+    acl,
+    isETA,
+    isEmployerAOL,
+    isUKCountry,
+    trainers,
+  ])
 
   const initializeData = useCallback(
     (data: Draft, draftName: string | undefined = undefined) => {

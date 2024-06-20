@@ -15,6 +15,7 @@ import { UseFormReset, UseFormSetValue } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
@@ -123,6 +124,7 @@ const trainerInputToCourseTrainer = (
 export const AssignTrainers = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
+  const { isUKCountry } = useWorldCountries()
   const { completeStep, courseData, setCurrentStepKey, setTrainers, trainers } =
     useCreateCourse()
   const { addSnackbarMessage } = useSnackbar()
@@ -270,6 +272,7 @@ export const AssignTrainers = () => {
           isTrainer: acl.isTrainer(),
           isETA: isETA,
           isEmployerAOL: isEmployerAOL,
+          isUKCountry: isUKCountry(courseData.residingCountry),
         },
         trainers
       )
@@ -287,6 +290,7 @@ export const AssignTrainers = () => {
     courseData,
     isETA,
     isEmployerAOL,
+    isUKCountry,
     seniorOrPrincipalLead,
     submit,
     trainers,
@@ -310,6 +314,7 @@ export const AssignTrainers = () => {
           max_participants: courseData.maxParticipants,
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
+          isUKCountry: isUKCountry(courseData.residingCountry),
         },
         trainers.map(trainer => ({
           type: trainer.type,
@@ -317,7 +322,7 @@ export const AssignTrainers = () => {
         }))
       )
     )
-  }, [acl, courseData, trainers])
+  }, [acl, courseData, isUKCountry, trainers])
 
   if (!courseData) {
     return (

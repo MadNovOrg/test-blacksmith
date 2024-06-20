@@ -723,6 +723,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           isTrainer: acl.isTrainer(),
           isETA: isETA,
           isEmployerAOL: isEmployerAOL,
+          isUKCountry: isUKCountry(courseData.residingCountry),
         },
         [
           ...trainersData.lead.map(leader => ({
@@ -761,15 +762,16 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     courseData,
     profile,
     trainersData,
+    allowCourseEditWithoutScheduledPrice,
     acl,
     editCourse,
     seniorOrPrincipalLead,
     isETA,
     isEmployerAOL,
+    isUKCountry,
     canRescheduleCourseEndDate,
     autoapproved,
     alignedWithProtocol,
-    allowCourseEditWithoutScheduledPrice,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -790,6 +792,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         max_participants: courseData.maxParticipants as unknown as number,
         usesAOL: courseData.usesAOL,
         isTrainer: acl.isTrainer(),
+        isUKCountry: isUKCountry(courseData.residingCountry),
       },
       [
         ...(trainersData?.assist ?? []).map(assistant => ({
@@ -812,6 +815,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [
     acl,
     courseData,
+    isUKCountry,
     trainersData?.assist,
     trainersData?.lead,
     trainersData?.moderator,

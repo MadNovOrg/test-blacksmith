@@ -13,14 +13,15 @@ import { RequiredTrainers } from './types'
 export type RatioCourseData = Pick<
   Course,
   | 'accreditedBy'
-  | 'level'
-  | 'type'
   | 'deliveryType'
-  | 'reaccreditation'
+  | 'level'
   | 'max_participants'
+  | 'reaccreditation'
+  | 'type'
 > & {
-  usesAOL?: boolean
   isTrainer: boolean
+  isUKCountry: boolean
+  usesAOL?: boolean
 }
 
 export type RatioTrainerData = Pick<
@@ -29,12 +30,13 @@ export type RatioTrainerData = Pick<
 >[]
 
 export function getRequiredAssistants(
-  courseData: RatioCourseData & { type: Course_Type_Enum }
+  courseData: RatioCourseData & Pick<Course, 'type' | 'residingCountry'>
 ): RequiredTrainers {
   if (courseData.accreditedBy === Accreditors_Enum.Icm) {
     return getRequiredAssistantsIcm({
       courseLevel: courseData.level,
       deliveryType: courseData.deliveryType,
+      isUKCountry: courseData.isUKCountry,
       maxParticipants: courseData.max_participants,
       reaccreditation: courseData.reaccreditation ?? false,
       type: courseData.type,

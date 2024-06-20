@@ -38,6 +38,7 @@ export type CourseData = {
   isTrainer?: boolean
   isETA?: boolean
   isEmployerAOL?: boolean
+  isUKCountry: boolean
 }
 export type TrainerData = {
   type: Course_Trainer_Type_Enum
@@ -145,6 +146,7 @@ export function checkCourseDetailsForExceptions(
         deliveryType: courseData.deliveryType,
         usesAOL: courseData.usesAOL,
         isTrainer: courseData.isTrainer ?? false,
+        isUKCountry: courseData.isUKCountry,
       },
       trainerData.map(t => ({
         type: t.type,

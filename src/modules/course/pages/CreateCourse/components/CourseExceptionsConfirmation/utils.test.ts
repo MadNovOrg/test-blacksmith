@@ -26,6 +26,7 @@ describe('course exception utils', () => {
     maxParticipants: 0,
     modulesDuration: 0,
     hasSeniorOrPrincipalLeader: false,
+    isUKCountry: true,
   }
   const defaultTrainerData = {
     type: Course_Trainer_Type_Enum.Leader,
