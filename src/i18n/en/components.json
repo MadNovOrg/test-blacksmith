@@ -135,7 +135,7 @@
     "mandatory-course-materials": {
       "section-title": "Course Materials",
       "panel-title": "Mandatory Course Materials",
-      "panel-description": "All attendees will receive course materials: however, additional £10 (+VAT) will be charged per person. Please enter the amount of chargeable course materials you wish to charge the organisation.",
+      "panel-description": "All attendees will receive course materials: however, additional {{mcmAmount}} {{VAT}} will be charged per person. Please enter the amount of chargeable course materials you wish to charge the organisation.",
       "placeholder-description": "Number of chargeable Course Materials",
       "amount-of-free-mcm": "Free Course Materials: {{count}}",
       "errors": {

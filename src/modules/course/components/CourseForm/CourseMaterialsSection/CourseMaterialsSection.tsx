@@ -5,9 +5,10 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { InfoPanel } from '@app/components/InfoPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { Currency } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { type CourseInput } from '@app/types'
-import { isNotNullish } from '@app/util'
+import { CurrencySymbol, MCMAmount, VAT, isNotNullish } from '@app/util'
 
 type Props = {
   isCreation?: boolean
@@ -23,14 +24,21 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
     setValue,
     formState: { errors },
   } = useFormContext<CourseInput>()
-  const [maxParticipants, mandatoryCourseMaterials] = useWatch({
-    control,
-    name: ['maxParticipants', 'mandatoryCourseMaterials'],
-  })
+  const [maxParticipants, mandatoryCourseMaterials, priceCurrency, includeVAT] =
+    useWatch({
+      control,
+      name: [
+        'maxParticipants',
+        'mandatoryCourseMaterials',
+        'priceCurrency',
+        'includeVAT',
+      ],
+    })
 
   const [enableEditMCM, setEnableEditMCM] = useState(isCreation)
   const initialMaxParticipants = useRef(maxParticipants)
   const initialMandatoryCourseMaterials = useRef(mandatoryCourseMaterials)
+  const courseCurrency = priceCurrency as Currency
 
   useEffect(() => {
     if (!isCreation) {
@@ -66,7 +74,10 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
       <Box>
         <Typography fontWeight={600}>{t('panel-title')}</Typography>
         <Typography variant="body2" mb={2}>
-          {t('panel-description')}
+          {t('panel-description', {
+            mcmAmount: `${CurrencySymbol[courseCurrency]}${MCMAmount[courseCurrency]}`,
+            VAT: includeVAT ? VAT : '',
+          })}
         </Typography>
 
         <Grid container spacing={2}>

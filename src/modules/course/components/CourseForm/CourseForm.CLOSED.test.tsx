@@ -302,7 +302,6 @@ describe('component: CourseForm - CLOSED', () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
         if (query === GET_COURSE_SOURCES_QUERY) {
-          console.log('SOURCESSSS')
           return fromValue<{ data: GetCoursesSourcesQuery }>({
             data: {
               sources: [
@@ -315,7 +314,6 @@ describe('component: CourseForm - CLOSED', () => {
         }
 
         if (query === COURSE_PRICE_QUERY) {
-          console.log('enters heree')
           return fromValue<{ data: CoursePriceQuery }>({
             data: {
               coursePrice: [

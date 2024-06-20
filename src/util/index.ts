@@ -157,6 +157,16 @@ export const MCMAmount: Record<Currency, number> = {
   [Currency.Nzd]: 20,
 }
 
+export const CurrencySymbol: Record<Currency, string> = {
+  [Currency.Gbp]: '£',
+  [Currency.Eur]: '€',
+  [Currency.Usd]: '$',
+  [Currency.Aud]: 'AUD$',
+  [Currency.Nzd]: 'NZD$',
+}
+
+export const VAT = '(+VAT)'
+
 export const courseStarted = (course: Course) =>
   isPast(new Date(course.schedule[0]?.start))
 export const courseEnded = (course: Course) =>
