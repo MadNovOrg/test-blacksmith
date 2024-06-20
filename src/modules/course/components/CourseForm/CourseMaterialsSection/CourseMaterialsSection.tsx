@@ -38,7 +38,7 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
   const [enableEditMCM, setEnableEditMCM] = useState(isCreation)
   const initialMaxParticipants = useRef(maxParticipants)
   const initialMandatoryCourseMaterials = useRef(mandatoryCourseMaterials)
-  const courseCurrency = priceCurrency as Currency
+  const courseCurrency = (priceCurrency as Currency) ?? Currency.Gbp
 
   useEffect(() => {
     if (!isCreation) {
