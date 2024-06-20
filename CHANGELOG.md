@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.4.1
+
+### Patch Changes
+
+- 5acf3b1: Hotfix: Fix registration flow failing due to missing org id
+
 ## 4.4.0
 
 ### Minor Changes

@@ -30,7 +30,11 @@ import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { OrgSelector } from '@app/components/OrgSelector'
-import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/utils'
+import {
+  CallbackOption,
+  isHubOrg,
+  useOrganizationToBeCreatedOnRegistration,
+} from '@app/components/OrgSelector/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
@@ -40,7 +44,7 @@ import PhoneNumberInput, {
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import { Organization } from '@app/types'
-import { INPUT_DATE_FORMAT, organizationData } from '@app/util'
+import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { SIGN_UP_MUTATION } from '../queries'
 
@@ -72,6 +76,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [isManualFormError, setIsManualFormError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [signUpError, setError] = useState('')
+  const organizationData = useOrganizationToBeCreatedOnRegistration()
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
@@ -109,10 +114,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     setError('')
 
     try {
-      const { data: newOrganizationData } = await insertOrganisation(
-        organizationData
-      )
-      const input: SignUpMutationVariables['input'] = {
+      let input: SignUpMutationVariables['input'] = {
         email: data.email,
         givenName: data.firstName,
         familyName: data.surname,
@@ -125,9 +127,19 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         recaptchaToken: data.recaptchaToken,
         jobTitle:
           data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
-        orgId: newOrganizationData?.org?.id,
         country: data.country,
         countryCode: data.countryCode,
+      }
+      if (organizationData) {
+        const { data: newOrganizationData } = await insertOrganisation(
+          organizationData
+        )
+        input = {
+          ...input,
+          orgId: newOrganizationData?.org?.id,
+        }
+      } else {
+        input = { ...input, orgId: data.organization?.id }
       }
 
       await gqlRequest<SignUpMutation, SignUpMutationVariables>(
