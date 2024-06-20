@@ -133,7 +133,10 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
 
         {result && !importInProgress ? (
           <Alert severity={alertSeverity} variant="outlined">
-            {t('pages.arlo.import-certificate-success', result)}
+            {t('pages.arlo.import-certificate-success', {
+              ...result,
+              invalid: result?.invalid ?? 0,
+            })}
           </Alert>
         ) : null}
 
