@@ -2,11 +2,6 @@ name: CD-STG
 
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Tag you want to deploy, leave empty for latest'
-        required: false
-        type: string
 
 permissions:
   id-token: write
@@ -18,7 +13,6 @@ jobs:
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'staging'
-      checkout_ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || 'refs/heads/main' }}
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
