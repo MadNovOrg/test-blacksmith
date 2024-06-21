@@ -1,5 +1,9 @@
 # @teamteach/hub
 
+### Patch Changes
+
+- 260d615: Fix auto register flow
+
 ## 4.4.1
 
 ### Patch Changes

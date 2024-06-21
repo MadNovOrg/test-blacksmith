@@ -150,18 +150,18 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         const { data: addedOrg } = await insertOrganisation(
           localStateOrganizationToBeCreated
         )
-
-        if (addedOrg?.org?.id) {
-          Object.assign(input, {
-            orgId: addedOrg?.org?.id,
-          })
-
-          await createUser(
-            { input },
-            { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
-          )
-        }
+        Object.assign(input, {
+          orgId: addedOrg?.org?.id,
+        })
+      } else {
+        Object.assign(input, {
+          orgId: data.organization?.id,
+        })
       }
+      await createUser(
+        { input },
+        { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
+      )
     } catch (error) {
       return
     }
