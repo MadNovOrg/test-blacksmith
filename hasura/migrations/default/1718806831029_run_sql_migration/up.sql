@@ -10,7 +10,7 @@ DELETE FROM "public"."module_v2" WHERE "name" ILIKE '%Level 1 BS%';
 INSERT INTO "public"."module_v2"("display_name", "name", "lessons", "created_at", "updated_at") VALUES
 ('Theory', 'Level 1 BS Theory', '{"items":[{"name":"The Why"},{"name":"Values"},{"name":"Behaviours of communication"},{"name":"Law and guidance"},{"name":"Stages of distress and support"},{"name":"Conflict spiral and cycle of influence"},{"name":"Listening and learning"},{"name":"Quiz and evaluation"}]}', '2024-03-28T14:48:49.020976+00:00', '2024-03-28T14:48:49.020976+00:00'),
 ('Personal Space and Body Language', 'Level 1 BS Personal Space & Body Language', '{"items":[{"name":"Circles of awareness and danger"},{"name":"Posturing, non-verbal and verbal communication"},{"name":"Calm stance"},{"name":"Calming scripts"}]}', '2024-03-28T14:51:59.697155+00:00', '2024-03-28T14:51:59.697155+00:00'),
-('Elevated Risk', 'Level 1 BS Elevated Risk', '{"items":[{"name":"Positional asphyxia and hyper flexion"},{"name":"Pressure on abdomen and ribcage"},{"name":"Leaning forward"},{"name":"Prone restraint"}]}', '2024-03-28T14:54:06.367508+00:00', '2024-03-28T14:54:06.367508+00:00'),
+('Elevated Risks', 'Level 1 BS Elevated Risks', '{"items":[{"name":"Positional asphyxia and hyper flexion"},{"name":"Pressure on abdomen and ribcage"},{"name":"Leaning forward"},{"name":"Prone restraint"}]}', '2024-03-28T14:54:06.367508+00:00', '2024-03-28T14:54:06.367508+00:00'),
 ('Physical Warm Up', 'Level 1 BS Physical Warm Up', '{"items":[{"name":"Pulse raisers"},{"name":"Stretches"},{"name":"Rowboat and ride bike"},{"name":"Pass ball"},{"name":"Sensitivity of fingers"},{"name":"Circle of friends"}]}', '2024-03-28T14:58:36.442156+00:00', '2024-03-28T14:58:36.442156+00:00'),
 ('Prompts, Guides and Separations', 'Level 1 BS Prompts, Guides & Separations', '{"items":[{"name":"Show and go"},{"name":"Caring C guide"},{"name":"Steering away"},{"name":"Punches and kicks"}]}', '2024-03-28T15:03:10.357521+00:00', '2024-03-28T15:03:10.357521+00:00'),
 ('Personal Safety - Assess Risk, Reduce Risk, Gates', 'Level 1 BS Personal Safety - Assess Risk, Reduce Risk, Gates', 
@@ -35,14 +35,14 @@ INSERT INTO "public"."module_v2"("display_name", "name", "lessons", "created_at"
  
  
 INSERT INTO "public"."module_setting"("course_level", "reaccreditation", "go1_integration", "color", "duration", "course_delivery_type", "course_type", "module_name", "sort", "mandatory", "conversion") VALUES
-(E'LEVEL_1_BS', false, false, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, false, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', false, true, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, true, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', false, false, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, false, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', false, true, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, true, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risk', 4, false, false),
+(E'LEVEL_1_BS', false, false, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, false, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', false, true, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, true, E'navy', 10, E'F2F', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', false, false, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, false, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', false, true, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, true, E'navy', 10, E'MIXED', E'INDIRECT', E'Level 1 BS Elevated Risks', 4, false, false),
  
 (E'LEVEL_1_BS', false, false, E'navy', 70, E'F2F', E'INDIRECT', E'Level 1 BS Personal Safety - Assess Risk, Reduce Risk, Gates', 5, false, false),
 (E'LEVEL_1_BS', true, false, E'navy', 70, E'F2F', E'INDIRECT', E'Level 1 BS Personal Safety - Assess Risk, Reduce Risk, Gates', 5, false, false),
@@ -110,14 +110,14 @@ INSERT INTO "public"."module_setting"("course_level", "reaccreditation", "go1_in
 -------------------- CLOSED ------------------
 
 INSERT INTO "public"."module_setting"("course_level", "reaccreditation", "go1_integration", "color", "duration", "course_delivery_type", "course_type", "module_name", "sort", "mandatory", "conversion") VALUES
-(E'LEVEL_1_BS', false, false, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, false, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', false, true, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, true, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', false, false, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, false, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', false, true, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
-(E'LEVEL_1_BS', true, true, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risk', 4, false, false),
+(E'LEVEL_1_BS', false, false, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, false, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', false, true, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, true, E'navy', 10, E'F2F', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', false, false, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, false, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', false, true, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
+(E'LEVEL_1_BS', true, true, E'navy', 10, E'MIXED', E'CLOSED', E'Level 1 BS Elevated Risks', 4, false, false),
  
 (E'LEVEL_1_BS', false, false, E'navy', 70, E'F2F', E'CLOSED', E'Level 1 BS Personal Safety - Assess Risk, Reduce Risk, Gates', 5, false, false),
 (E'LEVEL_1_BS', true, false, E'navy', 70, E'F2F', E'CLOSED', E'Level 1 BS Personal Safety - Assess Risk, Reduce Risk, Gates', 5, false, false),
@@ -189,7 +189,7 @@ INSERT INTO "public"."module_setting"("course_level", "reaccreditation", "go1_in
 
 
 INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependency_id) VALUES 
-    ---- Elevated Risk
+    ---- Elevated Risks
 (
   (
     SELECT id FROM module_setting 
@@ -198,7 +198,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = false
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -219,7 +219,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = false
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -240,7 +240,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = true
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -261,7 +261,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = true
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -283,7 +283,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = false
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -304,7 +304,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = false
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -325,7 +325,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = true
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -346,7 +346,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = true
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -369,7 +369,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = false
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -390,7 +390,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = false
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -411,7 +411,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = true
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -432,7 +432,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = true
     AND course_delivery_type = 'F2F'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -454,7 +454,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = false
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -475,7 +475,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = false
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -496,7 +496,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = false
     AND reaccreditation = true
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
@@ -517,7 +517,7 @@ INSERT INTO module_setting_dependency(module_setting_id, module_setting_dependen
     AND go1_integration = true
     AND reaccreditation = true
     AND course_delivery_type = 'MIXED'
-    AND module_name = 'Level 1 BS Elevated Risk'
+    AND module_name = 'Level 1 BS Elevated Risks'
   ),
 (
     SELECT id FROM module_setting 
