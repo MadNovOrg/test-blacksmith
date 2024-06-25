@@ -323,7 +323,7 @@ importers:
         version: 16.7.4(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(ts-node@10.9.2)(typescript@5.4.5)
       '@nx/playwright':
         specifier: 16.7.4
-        version: 16.7.4(@playwright/test@1.42.1)(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(typescript@5.4.5)
+        version: 16.7.4(@playwright/test@1.45.0)(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(typescript@5.4.5)
       '@nx/react':
         specifier: ^16.7.4
         version: 16.7.4(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(typescript@5.4.5)(webpack@5.91.0)
@@ -331,8 +331,8 @@ importers:
         specifier: 16.7.4
         version: 16.7.4(@swc/core@1.3.100)(@types/node@20.14.8)(nx@16.7.4)(typescript@5.4.5)(vite@4.5.0)(vitest@1.4.0)
       '@playwright/test':
-        specifier: ^1.42.1
-        version: 1.42.1
+        specifier: ^1.45.0
+        version: 1.45.0
       '@sentry/vite-plugin':
         specifier: ^2.16.0
         version: 2.16.0
@@ -7638,7 +7638,7 @@ packages:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.14.2
+      '@types/node': 20.14.8
       '@types/yargs': 15.0.19
       chalk: 4.1.2
     dev: false
@@ -9180,7 +9180,7 @@ packages:
     dev: true
     optional: true
 
-  /@nx/playwright@16.7.4(@playwright/test@1.42.1)(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(typescript@5.4.5):
+  /@nx/playwright@16.7.4(@playwright/test@1.45.0)(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(typescript@5.4.5):
     resolution: {integrity: sha512-Gg8mXO2l2nGjv+VKbhFv22asklrkOvCGHDKgNFGrGcwkh6mn7SUnCi5VX13H8K/TL09eXEXy4k397MgWvdZWVA==}
     peerDependencies:
       '@playwright/test': ^1.36.0
@@ -9190,7 +9190,7 @@ packages:
     dependencies:
       '@nx/devkit': 16.7.4(nx@16.7.4)
       '@nx/linter': 16.7.4(@swc/core@1.3.100)(@types/node@20.14.8)(eslint@8.57.0)(nx@16.7.4)(typescript@5.4.5)
-      '@playwright/test': 1.42.1
+      '@playwright/test': 1.45.0
       tslib: 2.5.3
     transitivePeerDependencies:
       - '@babel/traverse'
@@ -9386,12 +9386,12 @@ packages:
     dev: true
     optional: true
 
-  /@playwright/test@1.42.1:
-    resolution: {integrity: sha512-Gq9rmS54mjBL/7/MvBaNOBwbfnh7beHvS6oS4srqXFcQHpQCV1+c8JXWE8VLPyRDhgS3H8x8A7hztqI9VnwrAQ==}
-    engines: {node: '>=16'}
+  /@playwright/test@1.45.0:
+    resolution: {integrity: sha512-TVYsfMlGAaxeUllNkywbwek67Ncf8FRGn8ZlRdO291OL3NjG9oMbfVhyP82HQF0CZLMrYsvesqoUekxdWuF9Qw==}
+    engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      playwright: 1.42.1
+      playwright: 1.45.0
     dev: true
 
   /@polka/url@1.0.0-next.25:
@@ -13252,11 +13252,6 @@ packages:
       undici-types: 5.26.5
     dev: true
 
-  /@types/node@20.14.2:
-    resolution: {integrity: sha512-xyu6WAMVwv6AKFLB+e/7ySZVr/0zLCzOa7rSpq6jNwpqOrUbcACDWC+53d4n2QHOnDou0fbIsg8wZu/sxrnI4Q==}
-    dependencies:
-      undici-types: 5.26.5
-
   /@types/node@20.14.8:
     resolution: {integrity: sha512-DO+2/jZinXfROG7j7WKFn/3C6nFwxy2lLpgLjEXJz+0XKphZlTLJ14mo8Vfg8X5BWN6XjyESXq+LcYdT7tR3bA==}
     dependencies:
@@ -15632,7 +15627,7 @@ packages:
     engines: {node: '>=12.13.0'}
     hasBin: true
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 20.14.8
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -15657,7 +15652,7 @@ packages:
   /chromium-edge-launcher@1.0.0:
     resolution: {integrity: sha512-pgtgjNKZ7i5U++1g1PWv75umkHvhVTDOQIZ+sjeUX9483S7Y6MUvO0lrd7ShGlQlFHMN4SwKTCq/X8hWrbv2KA==}
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 20.14.8
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -20343,7 +20338,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 20.14.8
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -23136,18 +23131,18 @@ packages:
       pathe: 1.1.2
     dev: true
 
-  /playwright-core@1.42.1:
-    resolution: {integrity: sha512-mxz6zclokgrke9p1vtdy/COWBH+eOZgYUVVU34C73M+4j4HLlQJHtfcqiqqxpP0o8HhMkflvfbquLX5dg6wlfA==}
-    engines: {node: '>=16'}
+  /playwright-core@1.45.0:
+    resolution: {integrity: sha512-lZmHlFQ0VYSpAs43dRq1/nJ9G/6SiTI7VPqidld9TDefL9tX87bTKExWZZUF5PeRyqtXqd8fQi2qmfIedkwsNQ==}
+    engines: {node: '>=18'}
     hasBin: true
     dev: true
 
-  /playwright@1.42.1:
-    resolution: {integrity: sha512-PgwB03s2DZBcNRoW+1w9E+VkLBxweib6KTXM0M3tkiT4jVxKSi6PmVJ591J+0u10LUrgxB7dLRbiJqO5s2QPMg==}
-    engines: {node: '>=16'}
+  /playwright@1.45.0:
+    resolution: {integrity: sha512-4z3ac3plDfYzGB6r0Q3LF8POPR20Z8D0aXcxbJvmfMgSSq1hkcgvFRXJk9rUq5H/MJ0Ktal869hhOdI/zUTeLA==}
+    engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      playwright-core: 1.42.1
+      playwright-core: 1.45.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
