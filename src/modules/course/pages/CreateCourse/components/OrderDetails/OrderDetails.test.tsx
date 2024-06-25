@@ -131,12 +131,12 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£210.00"`
+      `"VAT (20%)£200.00"`
     )
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£1,260.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,250.00"`)
   })
 
   it('displays course details, and pricing with trainer expenses for a BILD course', async () => {
@@ -230,12 +230,12 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Sub total£2,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£410.00"`
+      `"VAT (20%)£400.00"`
     )
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£2,460.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£2,450.00"`)
   })
 
   it('[MCM FF Disabled] displays course details, and pricing with trainer expenses for an ICM course', async () => {
@@ -316,12 +316,12 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£210.00"`
+      `"VAT (20%)£200.00"`
     )
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£1,260.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,250.00"`)
   })
 
   it('[MCM FF Disabled] displays course details, and pricing with trainer expenses for a BILD course', async () => {
@@ -419,12 +419,12 @@ describe('component: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Sub total£2,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£410.00"`
+      `"VAT (20%)£400.00"`
     )
 
     expect(
       screen.getByTestId('total-costs-row').textContent
-    ).toMatchInlineSnapshot(`"Amount due GBP£2,460.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£2,450.00"`)
   })
 
   it("doesn't calculate and display VAT in order details if it was not included", async () => {

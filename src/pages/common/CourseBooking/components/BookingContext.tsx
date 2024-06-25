@@ -385,7 +385,8 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         freeSpacesDiscount,
       0
     )
-    const vat = (subtotalDiscounted * booking.vat) / 100
+    const vat =
+      ((subtotalDiscounted - mandatoryCourseMaterialsCost) * booking.vat) / 100
     const amountDue = subtotalDiscounted + vat
 
     const paymentProcessingFee =

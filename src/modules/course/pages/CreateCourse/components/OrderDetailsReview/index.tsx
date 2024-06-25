@@ -9,7 +9,7 @@ import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldC
 import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { InvoiceDetails } from '@app/components/InvoiceDetails'
-import { Currency } from '@app/generated/graphql'
+import { Accreditors_Enum, Currency } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { TransportMethod } from '@app/types'
 import {
@@ -151,7 +151,7 @@ export const OrderDetailsReview: React.FC = () => {
 
       const vat = new Big(
         courseData.includeVAT || isUKCountry(courseData?.residingCountry)
-          ? getVatAmount(subtotal.toNumber())
+          ? getVatAmount(subtotal.minus(courseMaterialsCost).toNumber())
           : 0
       )
       const amountDue = subtotal.add(vat)
@@ -349,7 +349,8 @@ export const OrderDetailsReview: React.FC = () => {
 
           <PageRow
             label={t(
-              courseData?.includeVAT
+              courseData?.includeVAT ||
+                courseData?.accreditedBy === Accreditors_Enum.Bild
                 ? 'pages.create-course.review-and-confirm.vat'
                 : 'pages.create-course.review-and-confirm.no-vat'
             )}
