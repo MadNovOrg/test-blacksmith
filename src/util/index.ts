@@ -444,7 +444,11 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     endDate: timeZoneSchedule.end,
     endTime: extractTime(timeZoneSchedule.end),
     courseCost: course.aolCostOfCourse ?? null,
-    usesAOL: Boolean(course.aolCostOfCourse),
+    usesAOL: Boolean(
+      course.aolCostOfCourse !== null &&
+        course.aolCostOfCourse !== undefined &&
+        course.aolCostOfCourse >= 0
+    ),
     aolCountry: course.aolCountry ?? null,
     aolRegion: course.aolRegion ?? null,
     freeSpaces: course.freeSpaces ?? null,
