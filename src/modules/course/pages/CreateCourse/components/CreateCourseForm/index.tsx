@@ -221,15 +221,16 @@ export const CreateCourseForm = () => {
       formSubmitted &&
       (!consentFlags.practiceProtocols ||
         !consentFlags.validID ||
-        !consentFlags.connectFee ||
+        (displayConnectFeeCondition && !consentFlags.connectFee) ||
         (isBILDcourse && !consentFlags.needsAnalysis)),
     [
       formSubmitted,
-      isBILDcourse,
       consentFlags.practiceProtocols,
       consentFlags.validID,
-      consentFlags.needsAnalysis,
       consentFlags.connectFee,
+      consentFlags.needsAnalysis,
+      displayConnectFeeCondition,
+      isBILDcourse,
     ]
   )
 
