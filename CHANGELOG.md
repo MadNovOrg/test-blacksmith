@@ -1,5 +1,23 @@
 # @teamteach/hub
 
+## 4.5.0
+
+### Minor Changes
+
+- cf8a74e: Create SQL views for Hubspot Dashboard
+- 3b44469: L1BS CLOSED | INDIRECT BUILDER UPDATES
+- 18d4aca: Assist trainer ratio for Indirect international courses
+- bead050: Display MCM cost info depending on the course currency
+- edd2a6f: Profile name and surname special characters
+- 93090d8: SRT | MVA -> FTP | BS certificates mapping
+- c51ec5c: Remove VAT from MCM closed course
+- 3b44469: L1BS course builder adjustments
+
+### Patch Changes
+
+- 720ea00: Check AOL course cost to be greater equal to 0.
+- a5f227e: Don't display checkbox error for Connect Fee if it is not displayed in form.
+
 ### Patch Changes
 
 - 260d615: Fix auto register flow
