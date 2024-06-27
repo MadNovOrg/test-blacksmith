@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/dialogs'
+import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Color_Enum,
@@ -67,6 +68,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+  const { acl } = useAuth()
 
   const navigate = useNavigate()
 
@@ -351,7 +353,9 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
             >
               <Link
                 underline="always"
-                href={`/manage-courses/all/${courseData.course.id}/details`}
+                href={`/${
+                  acl.isInternalUser() ? 'manage-courses/all' : 'courses'
+                }/${courseData.course.id}/details`}
               >
                 {courseData.course.course_code}
               </Link>
@@ -367,6 +371,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     courseCreated,
     submitModulesData,
     courseData?.course,
+    acl,
   ])
 
   if (!fetchingCourse && !courseData?.course && !courseError) {

@@ -7,6 +7,7 @@ import { useMutation, useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/dialogs'
+import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Color_Enum,
@@ -77,6 +78,7 @@ export const ICMCourseBuilder: React.FC<
 > = ({ editMode }) => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+  const { acl } = useAuth()
 
   const navigate = useNavigate()
   const [isTimeCommitmentModalOpen, setIsTimeCommitmentModalOpen] =
@@ -398,7 +400,9 @@ export const ICMCourseBuilder: React.FC<
             >
               <Link
                 underline="always"
-                href={`/manage-courses/all/${courseData.course.id}/details`}
+                href={`/${
+                  acl.isInternalUser() ? 'manage-courses/all' : 'courses'
+                }/${courseData.course.id}/details`}
               >
                 {courseData.course.course_code}
               </Link>
@@ -414,6 +418,7 @@ export const ICMCourseBuilder: React.FC<
     courseCreated,
     finalizeCourseData,
     courseData?.course,
+    acl,
   ])
 
   useEffect(() => {
