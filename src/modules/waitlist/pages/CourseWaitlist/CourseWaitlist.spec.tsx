@@ -1,18 +1,22 @@
 import { t } from 'i18next'
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Client, Provider } from 'urql'
+import { Client, Provider, TypedDocumentNode } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
 import {
   Course,
+  GetCourseResidingCountryQuery,
   JoinWaitlistMutation,
   JoinWaitlistMutationVariables,
   WaitlistCourseQuery,
   WaitlistCourseQueryVariables,
 } from '@app/generated/graphql'
+import {
+  WAITLIST_COURSE,
+  GET_COURSE_RESIDING_COUNTRY,
+} from '@app/modules/waitlist/hooks'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
@@ -29,7 +33,7 @@ vi.mock('@app/components/Recaptcha', async () => ({
 
 const MockedRecaptcha = vi.mocked(Recaptcha)
 
-describe('page: Waitlist', () => {
+describe(CourseWaitlist.name, () => {
   it('displays a skeleton while loading course details', () => {
     const client = {
       executeQuery: () => never,
@@ -72,17 +76,28 @@ describe('page: Waitlist', () => {
     const client = {
       executeQuery: ({
         variables,
+        query,
       }: {
         variables: WaitlistCourseQueryVariables
+        query: TypedDocumentNode
       }) => {
-        return fromValue<{ data: WaitlistCourseQuery }>({
-          data: {
-            courses:
-              variables.id === courseId
-                ? ([course] as unknown as Course[])
-                : [],
-          },
-        })
+        if (query === WAITLIST_COURSE) {
+          return fromValue<{ data: WaitlistCourseQuery }>({
+            data: {
+              courses:
+                variables.id === courseId
+                  ? ([course] as unknown as Course[])
+                  : [],
+            },
+          })
+        }
+        if (query === GET_COURSE_RESIDING_COUNTRY) {
+          return fromValue<{ data: GetCourseResidingCountryQuery }>({
+            data: {
+              course: [{ residingCountry: 'GB' }],
+            },
+          })
+        }
       },
     } as unknown as Client
 
@@ -130,21 +145,38 @@ describe('page: Waitlist', () => {
     MockedRecaptcha.mockImplementation(RecaptchaMock)
 
     const client = {
-      executeQuery: () =>
-        fromValue<{ data: WaitlistCourseQuery }>({
-          data: {
-            courses: [buildCourse()] as unknown as Course[],
-          },
-        }),
+      executeQuery: ({
+        variables,
+        query,
+      }: {
+        variables: WaitlistCourseQueryVariables
+        query: TypedDocumentNode
+      }) => {
+        if (query === WAITLIST_COURSE) {
+          return fromValue<{ data: WaitlistCourseQuery }>({
+            data: {
+              courses:
+                variables.id === courseId
+                  ? ([buildCourse()] as unknown as Course[])
+                  : [],
+            },
+          })
+        }
+        if (query === GET_COURSE_RESIDING_COUNTRY) {
+          return fromValue<{ data: GetCourseResidingCountryQuery }>({
+            data: {
+              course: [{ residingCountry: 'GB' }],
+            },
+          })
+        }
+      },
       executeMutation: ({
         variables,
       }: {
         variables: JoinWaitlistMutationVariables
       }) => {
         const submittedVariables = variables.input
-
         const success = submittedVariables.courseId === courseId
-
         return fromValue<{ data: JoinWaitlistMutation }>({
           data: {
             joinWaitlist: {
@@ -171,7 +203,7 @@ describe('page: Waitlist', () => {
       screen.getByLabelText(/email/i),
       'john.doe@example.com'
     )
-    await userEvent.type(screen.getByLabelText(/phone/i), '11111')
+    await userEvent.type(screen.getByLabelText(/phone/i), '7999 999999')
     await userEvent.type(screen.getByLabelText(/organisation name/i), 'Org')
 
     await userEvent.click(screen.getByText(/join waiting list/i))

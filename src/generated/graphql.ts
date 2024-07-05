@@ -5521,8 +5521,6 @@ export enum PostStatusEnum {
   RequestFailed = 'REQUEST_FAILED',
   /** Objects with the request-pending status */
   RequestPending = 'REQUEST_PENDING',
-  /** Objects with the spam status */
-  Spam = 'SPAM',
   /** Objects with the trash status */
   Trash = 'TRASH'
 }
@@ -59316,16 +59314,6 @@ export type RecreateOrgInviteMutationVariables = Exact<{
 
 export type RecreateOrgInviteMutation = { __typename?: 'mutation_root', update_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null };
 
-export type GetProfilesQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<Profile_Order_By> | Profile_Order_By>;
-  where?: InputMaybe<Profile_Bool_Exp>;
-}>;
-
-
-export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, countryCode?: string | null, organizations: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
-
 export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -59654,6 +59642,116 @@ export type GetOrganizationProfilesQueryVariables = Exact<{
 
 export type GetOrganizationProfilesQuery = { __typename?: 'query_root', profiles?: { __typename?: 'OrganizationProfilesOutput', profilesByOrganisation?: Array<{ __typename?: 'ProfilesByOrganization', orgId?: any | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, archived?: boolean | null, avatar?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null } | null> | null } | null> | null, profilesByLevel?: Array<{ __typename?: 'ProfilesByLevel', level?: CourseLevel | null, profiles?: Array<{ __typename?: 'OrganizationProfile', id: any, fullName?: string | null, certificates?: Array<{ __typename?: 'CourseCertificate', courseLevel?: CourseLevel | null, status?: string | null, expiryDate?: any | null } | null> | null, upcomingEnrollments?: Array<{ __typename?: 'UpcominEnrollment', orgId: any, orgName?: string | null, courseLevel?: CourseLevel | null, course?: { __typename?: 'UpcomingEnrollmentCourse', id?: any | null, course_code?: string | null, schedule?: Array<{ __typename?: 'EnrollmentCourseSchedule', start?: string | null, end?: string | null } | null> | null } | null } | null> | null, organizations?: Array<{ __typename?: 'ProfileOrganization', id?: any | null, position?: string | null, organization: { __typename?: 'OrganizationInfo', id?: any | null, name?: string | null } } | null> | null } | null> | null } | null> | null } | null };
 
+export type ImportLegacyCertificateMutationVariables = Exact<{
+  input: ImportLegacyCertificateInput;
+}>;
+
+
+export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate?: { __typename?: 'ImportLegacyCertificateOutput', trainerRoleAdded: boolean, success: boolean, error?: ImportLegacyCertificateError | null } | null };
+
+export type GetJobTitlesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetJobTitlesQuery = { __typename?: 'query_root', jobTitles: Array<{ __typename?: 'job_title', title: string }> };
+
+export type GetProfilesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<Profile_Order_By> | Profile_Order_By>;
+  where?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, countryCode?: string | null, organizations: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+
+export type ArchiveProfileMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type ArchiveProfileMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
+
+export type DeleteProfileMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+  dryRun?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type DeleteProfileMutation = { __typename?: 'mutation_root', deleteUser: { __typename?: 'DeleteUserOutput', success: boolean, error?: DeleteUserError | null, courseIds?: string | null } };
+
+export type DeleteTempProfileMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type DeleteTempProfileMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'profile_temp_mutation_response', affectedRows: number } | null };
+
+export type FindProfilesQueryVariables = Exact<{
+  where?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }> };
+
+export type GetNotDetailedProfileQueryVariables = Exact<{
+  where?: InputMaybe<Profile_Bool_Exp>;
+}>;
+
+
+export type GetNotDetailedProfileQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, email?: string | null, familyName?: string | null, givenName?: string | null, fullName?: string | null }> };
+
+export type GetProfileDetailsQueryVariables = Exact<{
+  profileId: Scalars['uuid'];
+  withGo1Licenses?: InputMaybe<Scalars['Boolean']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  withCourseHistory?: InputMaybe<Scalars['Boolean']>;
+  withCourseTrainerHistory?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courseAsTrainer: Array<{ __typename?: 'course_trainer', id: any, course_id: number, type: Course_Trainer_Type_Enum, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, start?: any | null, end?: any | null } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum, course_code?: string | null, name: string, status?: Course_Status_Enum | null, reaccreditation?: boolean | null }> };
+
+export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, price?: any | null, priceCurrency?: string | null, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, freeSpaces?: number | null, residingCountry?: string | null, includeVAT?: boolean | null, courseCode?: string | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, schedule: Array<{ __typename?: 'course_schedule', timeZone: string, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
+
+export type InsertProfileTempMutationVariables = Exact<{
+  input: Profile_Temp_Insert_Input;
+}>;
+
+
+export type InsertProfileTempMutation = { __typename?: 'mutation_root', profile?: { __typename?: 'profile_temp_mutation_response', affectedRows: number } | null };
+
+export type UpdateProfileActivityMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type UpdateProfileActivityMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
+
+export type UpdateAvatarMutationVariables = Exact<{
+  avatar: Scalars['bytea'];
+}>;
+
+
+export type UpdateAvatarMutation = { __typename?: 'mutation_root', updateAvatar?: { __typename?: 'UpdateAvatarResponse', avatar: string } | null };
+
+export type UpdateProfileRolesMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  roles: Array<Profile_Role_Insert_Input> | Profile_Role_Insert_Input;
+}>;
+
+
+export type UpdateProfileRolesMutation = { __typename?: 'mutation_root', delete_profile_role?: { __typename?: 'profile_role_mutation_response', affected_rows: number } | null, insert_profile_role?: { __typename?: 'profile_role_mutation_response', affected_rows: number } | null };
+
+export type UpdateProfileMutationVariables = Exact<{
+  input: UpdateUserProfileInput;
+}>;
+
+
+export type UpdateProfileMutation = { __typename?: 'mutation_root', updateUserProfile: boolean };
+
 export type ImportUsersJobSubscriptionVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -59667,6 +59765,27 @@ export type StartImportUsersJobMutationVariables = Exact<{
 
 
 export type StartImportUsersJobMutation = { __typename?: 'mutation_root', importUsers?: { __typename?: 'ImportUsersOutput', jobId: string } | null };
+
+export type GetCourseResidingCountryQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type GetCourseResidingCountryQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', residingCountry?: string | null }> };
+
+export type WaitlistCourseQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne?: string | null, addressLineTwo?: string | null, city: string, postCode?: string | null } | null }> }> };
+
+export type JoinWaitlistMutationVariables = Exact<{
+  input: JoinWaitlistInput;
+}>;
+
+
+export type JoinWaitlistMutation = { __typename?: 'mutation_root', joinWaitlist: { __typename?: 'JoinWaitlistOutput', success: boolean } };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -59722,33 +59841,12 @@ export type KnowledgeHubResourcesQueryVariables = Exact<{ [key: string]: never; 
 
 export type KnowledgeHubResourcesQuery = { __typename?: 'query_root', knowledgeHubResources?: { __typename?: 'KnowledgeHubResourcesOutput', resources: Array<{ __typename?: 'KnowledgeHubResource', id: string, title: string, description: string, imageUrl: string, srcSet?: string | null, url: string, publishedDate: string, type: KnowledgeHubResourceType, authors?: Array<string> | null }> } | null };
 
-export type WaitlistCourseQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne?: string | null, addressLineTwo?: string | null, city: string, postCode?: string | null } | null }> }> };
-
-export type JoinWaitlistMutationVariables = Exact<{
-  input: JoinWaitlistInput;
-}>;
-
-
-export type JoinWaitlistMutation = { __typename?: 'mutation_root', joinWaitlist: { __typename?: 'JoinWaitlistOutput', success: boolean } };
-
 export type SignUpMutationVariables = Exact<{
   input: SignUpInput;
 }>;
 
 
 export type SignUpMutation = { __typename?: 'mutation_root', signUp?: { __typename?: 'SignUpOutput', success: boolean } | null };
-
-export type ImportLegacyCertificateMutationVariables = Exact<{
-  input: ImportLegacyCertificateInput;
-}>;
-
-
-export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate?: { __typename?: 'ImportLegacyCertificateOutput', trainerRoleAdded: boolean, success: boolean, error?: ImportLegacyCertificateError | null } | null };
 
 export type GetResourcesQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -60380,11 +60478,6 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'mutation_root', verifyUser: boolean };
 
-export type GetJobTitlesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetJobTitlesQuery = { __typename?: 'query_root', jobTitles: Array<{ __typename?: 'job_title', title: string }> };
-
 export type BlogQueryVariables = Exact<{
   orderDirection?: OrderEnum;
   term?: InputMaybe<Scalars['String']>;
@@ -60764,94 +60857,6 @@ export type SetCoursePricingBulkMutationVariables = Exact<{
 
 
 export type SetCoursePricingBulkMutation = { __typename?: 'mutation_root', update_course_pricing?: { __typename?: 'course_pricing_mutation_response', affected_rows: number } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog_mutation_response', affected_rows: number } | null };
-
-export type ArchiveProfileMutationVariables = Exact<{
-  profileId: Scalars['uuid'];
-}>;
-
-
-export type ArchiveProfileMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
-
-export type DeleteProfileMutationVariables = Exact<{
-  profileId: Scalars['uuid'];
-  dryRun?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type DeleteProfileMutation = { __typename?: 'mutation_root', deleteUser: { __typename?: 'DeleteUserOutput', success: boolean, error?: DeleteUserError | null, courseIds?: string | null } };
-
-export type DeleteTempProfileMutationVariables = Exact<{
-  email: Scalars['String'];
-}>;
-
-
-export type DeleteTempProfileMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'profile_temp_mutation_response', affectedRows: number } | null };
-
-export type FindProfilesQueryVariables = Exact<{
-  where?: InputMaybe<Profile_Bool_Exp>;
-}>;
-
-
-export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }> };
-
-export type GetNotDetailedProfileQueryVariables = Exact<{
-  where?: InputMaybe<Profile_Bool_Exp>;
-}>;
-
-
-export type GetNotDetailedProfileQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, email?: string | null, familyName?: string | null, givenName?: string | null, fullName?: string | null }> };
-
-export type GetProfileDetailsQueryVariables = Exact<{
-  profileId: Scalars['uuid'];
-  withGo1Licenses?: InputMaybe<Scalars['Boolean']>;
-  orgId?: InputMaybe<Scalars['uuid']>;
-  withCourseHistory?: InputMaybe<Scalars['Boolean']>;
-  withCourseTrainerHistory?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-
-export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courseAsTrainer: Array<{ __typename?: 'course_trainer', id: any, course_id: number, type: Course_Trainer_Type_Enum, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, start?: any | null, end?: any | null } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum, course_code?: string | null, name: string, status?: Course_Status_Enum | null, reaccreditation?: boolean | null }> };
-
-export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, accreditedBy: Accreditors_Enum, price?: any | null, priceCurrency?: string | null, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, freeSpaces?: number | null, residingCountry?: string | null, includeVAT?: boolean | null, courseCode?: string | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, schedule: Array<{ __typename?: 'course_schedule', timeZone: string, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
-
-export type InsertProfileTempMutationVariables = Exact<{
-  input: Profile_Temp_Insert_Input;
-}>;
-
-
-export type InsertProfileTempMutation = { __typename?: 'mutation_root', profile?: { __typename?: 'profile_temp_mutation_response', affectedRows: number } | null };
-
-export type UpdateProfileActivityMutationVariables = Exact<{
-  profileId: Scalars['uuid'];
-}>;
-
-
-export type UpdateProfileActivityMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
-
-export type UpdateAvatarMutationVariables = Exact<{
-  avatar: Scalars['bytea'];
-}>;
-
-
-export type UpdateAvatarMutation = { __typename?: 'mutation_root', updateAvatar?: { __typename?: 'UpdateAvatarResponse', avatar: string } | null };
-
-export type UpdateProfileRolesMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  roles: Array<Profile_Role_Insert_Input> | Profile_Role_Insert_Input;
-}>;
-
-
-export type UpdateProfileRolesMutation = { __typename?: 'mutation_root', delete_profile_role?: { __typename?: 'profile_role_mutation_response', affected_rows: number } | null, insert_profile_role?: { __typename?: 'profile_role_mutation_response', affected_rows: number } | null };
-
-export type UpdateProfileMutationVariables = Exact<{
-  input: UpdateUserProfileInput;
-}>;
-
-
-export type UpdateProfileMutation = { __typename?: 'mutation_root', updateUserProfile: boolean };
 
 export type ApproveCodeMutationVariables = Exact<{
   id: Scalars['uuid'];

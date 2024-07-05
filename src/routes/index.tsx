@@ -12,13 +12,12 @@ import {
 import { useAuth } from '@app/context/auth'
 import { AppLayout } from '@app/layouts/AppLayout'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
+import { WaitlistRoutes } from '@app/modules/waitlist/routes'
 import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
 import { ChangePasswordPage } from '@app/pages/common/ChangePassword'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
-import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
-import { CourseWaitlistCancellation } from '@app/pages/common/CourseWaitlistCancellation'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
 import { LogoutPage } from '@app/pages/common/Logout'
@@ -50,8 +49,8 @@ const publicRoutesMap: Record<string, React.ElementType> = {
   '/invitation': InvitationPage,
   '/org-invitation': OrgInvitationPage,
   '/auto-login': AutoLogin,
-  '/waitlist': CourseWaitlist,
-  '/waitlist-cancellation': CourseWaitlistCancellation,
+  '/waitlist': WaitlistRoutes,
+  '/waitlist-cancellation': WaitlistRoutes,
   '/change-password': ChangePasswordPage,
 } as const
 

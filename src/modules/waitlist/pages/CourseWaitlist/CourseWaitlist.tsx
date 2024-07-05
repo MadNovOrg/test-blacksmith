@@ -2,36 +2,23 @@ import { Box, Typography, Link, Alert } from '@mui/material'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import { useMutation, useQuery } from 'urql'
 
-import {
-  JoinWaitlistMutation,
-  JoinWaitlistMutationVariables,
-  WaitlistCourseQuery,
-  WaitlistCourseQueryVariables,
-} from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
-import { CourseInfo, CourseInfoSkeleton } from './components/CourseInfo'
-import { Form, FormInputs } from './components/Form'
-import { JoinedWaitlist } from './components/JoinedWaitlist'
-import { JOIN_WAITLIST, WAITLIST_COURSE } from './queries'
+import { CourseInfo, CourseInfoSkeleton } from '../../components/CourseInfo'
+import { Form, FormInputs } from '../../components/Form/Form'
+import { JoinedWaitlist } from '../../components/JoinedWaitlist'
+import { useCourseWaitlist, useJoinWaitlist } from '../../hooks'
 
 export const CourseWaitlist: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
-  const courseId = searchParams.get('course_id')
+  const courseId = Number(searchParams.get('course_id'))
   const emailRef = useRef('')
 
-  const [{ data, fetching }] = useQuery<
-    WaitlistCourseQuery,
-    WaitlistCourseQueryVariables
-  >({
-    query: WAITLIST_COURSE,
-    variables: { id: Number(courseId) ?? 0 },
-  })
+  const [{ data, fetching }] = useCourseWaitlist({ courseId: courseId })
 
   const [
     {
@@ -40,12 +27,9 @@ export const CourseWaitlist: React.FC<
       error: errorJoinWaitlist,
     },
     joinWaitlistMutation,
-  ] = useMutation<JoinWaitlistMutation, JoinWaitlistMutationVariables>(
-    JOIN_WAITLIST
-  )
+  ] = useJoinWaitlist()
 
   const course = data?.courses.length ? data.courses[0] : null
-
   const joinWaitlist = (data: FormInputs) => {
     emailRef.current = data.email ?? ''
     joinWaitlistMutation({
@@ -128,7 +112,11 @@ export const CourseWaitlist: React.FC<
       ) : null}
 
       {course && !fetching ? (
-        <Form onSuccess={joinWaitlist} saving={joiningWaitlist} />
+        <Form
+          onSuccess={joinWaitlist}
+          saving={joiningWaitlist}
+          courseId={courseId}
+        />
       ) : null}
     </AppLayoutMinimal>
   )

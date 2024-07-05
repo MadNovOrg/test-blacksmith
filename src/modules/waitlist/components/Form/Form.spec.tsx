@@ -1,7 +1,9 @@
-import React from 'react'
+import { Client, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
 
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
+import { GetCourseResidingCountryQuery } from '@app/generated/graphql'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -17,13 +19,30 @@ vi.mock('@app/components/Recaptcha', async () => ({
 
 const MockedRecaptcha = vi.mocked(Recaptcha)
 
-describe('component: Waitlist/Form', () => {
+describe(`Waitlist: ${Form.name}`, () => {
+  const client = {
+    executeQuery: () =>
+      fromValue<{ data: GetCourseResidingCountryQuery }>({
+        data: {
+          course: [
+            {
+              residingCountry: 'GB',
+            },
+          ],
+        },
+      }),
+  } as unknown as Client
+
   beforeEach(() => {
     MockedRecaptcha.mockImplementation(RecaptchaMock)
   })
 
   it('validates form', async () => {
-    render(<Form onSuccess={vi.fn} saving={false} />)
+    render(
+      <Provider value={client}>
+        <Form onSuccess={vi.fn} saving={false} courseId={chance.integer()} />
+      </Provider>
+    )
 
     await userEvent.click(screen.getByText(/join waiting list/i))
 
@@ -48,17 +67,24 @@ describe('component: Waitlist/Form', () => {
   })
 
   it('calls callback when form is submitted', async () => {
-    const submittedData: FormInputs = {
+    const submittedData: Omit<FormInputs, 'phone'> = {
       firstName: chance.first(),
       surname: chance.last(),
       email: chance.email(),
       orgName: chance.name(),
-      phone: '1111111',
       recaptchaToken: 'token',
     }
-    const onSuccessMock = vi.fn()
+    const onSuccessMock = vi.fn(() => never)
 
-    render(<Form onSuccess={onSuccessMock} saving={false} />)
+    render(
+      <Provider value={client}>
+        <Form
+          onSuccess={onSuccessMock}
+          saving={false}
+          courseId={chance.integer()}
+        />
+      </Provider>
+    )
 
     await userEvent.type(
       screen.getByLabelText(/first name/i),
@@ -72,12 +98,11 @@ describe('component: Waitlist/Form', () => {
       screen.getByLabelText(/email/i),
       submittedData.email ?? ''
     )
-    await userEvent.type(screen.getByLabelText(/phone/i), submittedData.phone)
+    await userEvent.type(screen.getByLabelText(/phone/i), '7999999999')
     await userEvent.type(
       screen.getByLabelText(/organisation name/i),
       submittedData.orgName
     )
-
     await userEvent.click(screen.getByText(/join waiting list/i))
     await userEvent.click(screen.getByTestId('recaptcha-success'))
 
@@ -85,7 +110,7 @@ describe('component: Waitlist/Form', () => {
       expect(onSuccessMock).toHaveBeenCalledTimes(1)
       expect(onSuccessMock).toHaveBeenCalledWith({
         ...submittedData,
-        phone: '+44 111 111 1',
+        phone: '+44 7999 999999',
       })
     })
   })
@@ -96,11 +121,15 @@ describe('component: Waitlist/Form', () => {
       surname: chance.last(),
       email: chance.email(),
       orgName: chance.name(),
-      phone: '1111111',
+      phone: '7999999999',
       recaptchaToken: 'token',
     }
 
-    render(<Form onSuccess={vi.fn()} saving={false} />)
+    render(
+      <Provider value={client}>
+        <Form onSuccess={vi.fn()} saving={false} courseId={chance.integer()} />
+      </Provider>
+    )
 
     await userEvent.type(
       screen.getByLabelText(/first name/i),

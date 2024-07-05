@@ -11,10 +11,7 @@ export const getFormSchema = (t: TFunction) => {
 
     email: schemas.email(t).required(t('validation-errors.email-required')),
 
-    phone: yup
-      .string()
-      .required(requiredMsg(t, 'phone'))
-      .min(10, t('validation-errors.phone-invalid')),
+    phone: schemas.phone(t).required(),
 
     orgName: yup.string().required(requiredMsg(t, 'org-name')),
     recaptchaToken: yup

@@ -22,12 +22,14 @@ export type PhoneNumberInputProps = {
   value: PhoneNumberSelection
   onChange: (value: PhoneNumberSelection) => void
   handleManualError?: (isError: boolean) => void
+  defaultCountry?: string
 } & BaseTextFieldProps
 
 const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   value,
   onChange,
   handleManualError,
+  defaultCountry,
   ...props
 }) => {
   const [textError, setTextError] = useState('')
@@ -64,7 +66,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   return (
     <MuiTelInput
       onlyCountries={onlyCountries}
-      defaultCountry={DEFAULT_PHONE_COUNTRY}
+      defaultCountry={defaultCountry ?? DEFAULT_PHONE_COUNTRY}
       value={value.phoneNumber}
       onChange={(phoneNumber, changeInfo) => {
         const parsedPhone = parsePhoneNumberFromString(

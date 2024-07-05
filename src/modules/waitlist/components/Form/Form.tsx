@@ -6,16 +6,18 @@ import {
   styled,
   TextField as MuiTextField,
   FormHelperText,
+  CircularProgress,
 } from '@mui/material'
 import React, { useMemo } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
+import { useCourseResidingCountry } from '@app/modules/waitlist/hooks'
 
-import { getFormSchema } from './types'
+import { getFormSchema } from '../types'
 
 const TextField = styled(MuiTextField)(() => ({
   '& .MuiInput-root': {
@@ -28,12 +30,18 @@ export type FormInputs = InferType<ReturnType<typeof getFormSchema>>
 type Props = {
   onSuccess: (data: FormInputs) => void
   saving: boolean
+  courseId: number
 }
 
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   onSuccess,
   saving,
+  courseId,
 }) => {
+  const [{ data: courseWithResidingCountry, fetching }] =
+    useCourseResidingCountry({
+      courseId,
+    })
   const { t } = useTranslation()
 
   const schema = useMemo(() => getFormSchema(t), [t])
@@ -58,14 +66,17 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const values = watch()
 
-  const onSubmit: SubmitHandler<FormInputs> = data => {
-    onSuccess(data)
+  if (fetching) {
+    return (
+      <Box display="flex" justifyContent="center" mt={3}>
+        <CircularProgress />
+      </Box>
+    )
   }
-
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(data => onSuccess(data))}
       noValidate
       autoComplete="off"
       aria-autocomplete="none"
@@ -124,6 +135,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       <Box mb={5}>
         <PhoneNumberInput
           label={t('phone')}
+          defaultCountry={
+            courseWithResidingCountry?.course[0].residingCountry?.split('-')[0]
+          }
           variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}

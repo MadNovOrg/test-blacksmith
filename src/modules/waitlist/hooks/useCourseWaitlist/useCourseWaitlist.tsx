@@ -1,4 +1,9 @@
-import { gql } from 'urql'
+import { gql, useQuery } from 'urql'
+
+import {
+  WaitlistCourseQuery,
+  WaitlistCourseQueryVariables,
+} from '@app/generated/graphql'
 
 export const WAITLIST_COURSE = gql`
   query WaitlistCourse($id: Int!) {
@@ -36,10 +41,9 @@ export const WAITLIST_COURSE = gql`
   }
 `
 
-export const JOIN_WAITLIST = gql`
-  mutation JoinWaitlist($input: JoinWaitlistInput!) {
-    joinWaitlist(input: $input) {
-      success
-    }
-  }
-`
+export const useCourseWaitlist = ({ courseId }: { courseId: number }) => {
+  return useQuery<WaitlistCourseQuery, WaitlistCourseQueryVariables>({
+    query: WAITLIST_COURSE,
+    variables: { id: courseId },
+  })
+}
