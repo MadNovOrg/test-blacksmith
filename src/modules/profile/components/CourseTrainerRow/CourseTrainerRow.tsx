@@ -40,7 +40,7 @@ export const CourseTrainerRow = ({
       </TableCell>
       <TableCell data-testid="trainer-level">
         {t(
-          `components.trainer-avatar-group.${trainerTypeLabelMap[trainingLevel]}`
+          `components.trainer-avatar-group.${trainerTypeLabelMap[trainingLevel]}`,
         )}
       </TableCell>
       <TableCell>

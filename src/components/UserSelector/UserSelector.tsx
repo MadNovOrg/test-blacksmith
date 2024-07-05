@@ -92,12 +92,12 @@ export const UserSelector: React.FC<
         onEmailChange(value)
       }
     },
-    [onEmailChange]
+    [onEmailChange],
   )
 
   const handleChange = (
     event: React.SyntheticEvent,
-    option?: string | null
+    option?: string | null,
   ) => {
     event.preventDefault()
     const profile = data?.members.find(o => o.profile.email === option)
@@ -186,7 +186,7 @@ export const UserSelector: React.FC<
             onClick={() => {
               onChange(
                 data?.members.find(o => o.profile.email === email)?.profile ??
-                  null
+                  null,
               )
               setOpen(false)
             }}

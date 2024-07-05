@@ -23,7 +23,7 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
     await API.course.insertCourseGradingForParticipants(
       course,
       [user],
-      Grade_Enum.Pass
+      Grade_Enum.Pass,
     )
     await API.course.insertCertificateForParticipants(course, [user])
     await use({ course: course, user: user })
@@ -37,7 +37,7 @@ allowedRoles.forEach(role => {
   test(`${role} can revoke a certificate`, async ({ page, certificate }) => {
     const certificationPage = new CertificationPage(page)
     await certificationPage.goto(
-      `${certificate.user.givenName} ${certificate.user.familyName}`
+      `${certificate.user.givenName} ${certificate.user.familyName}`,
     )
     const certPage = await certificationPage.clickSecondViewCertificate()
     await certPage.clickManageCertificateButton()

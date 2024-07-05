@@ -25,7 +25,7 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.getByTestId('fetching-courses')).toBeInTheDocument()
@@ -51,7 +51,7 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.queryByTestId('fetching-courses')).not.toBeInTheDocument()
@@ -78,7 +78,7 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.type(screen.getByPlaceholderText('Search'), 'search')
@@ -116,7 +116,7 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     userEvent.type(screen.getByPlaceholderText('Search'), 'search')
@@ -127,7 +127,7 @@ describe('user-pages/MyCourses', () => {
 
     expect(within(courseRowElem).getByText(course.name)).toBeInTheDocument()
     expect(
-      within(courseRowElem).getByText(course.schedule[0].venue?.name ?? '')
+      within(courseRowElem).getByText(course.schedule[0].venue?.name ?? ''),
     ).toBeInTheDocument()
   })
 
@@ -163,7 +163,7 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     userEvent.click(screen.getByText('Name'))
@@ -171,7 +171,7 @@ describe('user-pages/MyCourses', () => {
     await waitFor(() => {
       expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
         'data-index',
-        '0'
+        '0',
       )
     })
   })
@@ -207,14 +207,14 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
-      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`)
+      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`),
     ).toBeInTheDocument()
     expect(
-      screen.queryByTestId(`course-row-${secondBatch[0].id}`)
+      screen.queryByTestId(`course-row-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     userEvent.click(screen.getByLabelText('Go to next page'))
@@ -222,11 +222,11 @@ describe('user-pages/MyCourses', () => {
     await waitFor(() => {
       expect(
         screen.getByTestId(
-          `course-row-${secondBatch[firstBatch.length - 1].id}`
-        )
+          `course-row-${secondBatch[firstBatch.length - 1].id}`,
+        ),
       ).toBeInTheDocument()
       expect(
-        screen.queryByTestId(`course-row-${firstBatch[0].id}`)
+        screen.queryByTestId(`course-row-${firstBatch[0].id}`),
       ).not.toBeInTheDocument()
 
       expect(screen.getByLabelText('Go to next page')).toBeDisabled()

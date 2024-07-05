@@ -65,11 +65,11 @@ export const CourseAttendeesTab: React.FC<
   const courseInvites = invites.data ?? []
 
   const pendingTotal = courseInvites.filter(
-    ci => ci.status === Course_Invite_Status_Enum.Pending
+    ci => ci.status === Course_Invite_Status_Enum.Pending,
   ).length
 
   const declinedTotal = courseInvites.filter(
-    ci => ci.status === Course_Invite_Status_Enum.Declined
+    ci => ci.status === Course_Invite_Status_Enum.Declined,
   ).length
   const { total: waitlistTotal } = useWaitlist({
     courseId: courseId,
@@ -137,7 +137,7 @@ export const CourseAttendeesTab: React.FC<
                 {t(
                   showCourseInformationAlert.success
                     ? 'pages.course-participants.course-information-sent'
-                    : 'common.errors.generic.unknown-error-please-retry'
+                    : 'common.errors.generic.unknown-error-please-retry',
                 )}
               </Alert>
             ) : null}
@@ -176,21 +176,15 @@ export const CourseAttendeesTab: React.FC<
                   Course_Invite_Status_Enum.Pending,
                   Course_Invite_Status_Enum.Declined,
                 ].map((status, index) => (
-                  <>
-                    <TabPanel
-                      key={status}
-                      value={`${index + 1}`}
-                      sx={{ px: 0 }}
-                    >
-                      <InvitesTab
-                        course={course}
-                        inviteStatus={status}
-                        invitesData={courseInvites.filter(
-                          ci => ci.status === status
-                        )}
-                      />
-                    </TabPanel>
-                  </>
+                  <TabPanel key={status} value={`${index + 1}`} sx={{ px: 0 }}>
+                    <InvitesTab
+                      course={course}
+                      inviteStatus={status}
+                      invitesData={courseInvites.filter(
+                        ci => ci.status === status,
+                      )}
+                    />
+                  </TabPanel>
                 ))
               : null}
             {isOpenCourse && acl.canSeeWaitingLists() ? (

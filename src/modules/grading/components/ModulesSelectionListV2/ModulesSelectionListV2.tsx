@@ -66,7 +66,7 @@ export const ModulesSelectionListV2: React.FC<Props> = ({
       }
 
       return curriculumMap
-    }
+    },
   )
 
   useEffect(() => {
@@ -219,7 +219,7 @@ export const ModulesSelectionListV2: React.FC<Props> = ({
                       }
 
                       const isLessonGroup = Boolean(
-                        Array.isArray(lesson.items) && lesson.items?.length
+                        Array.isArray(lesson.items) && lesson.items?.length,
                       )
 
                       const { numberOfLessons, coveredLessons } = isLessonGroup

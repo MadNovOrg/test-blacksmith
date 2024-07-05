@@ -4,7 +4,7 @@ import { Promo_Code, Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { PromoCodeStatus } from '@app/types'
 
 export const promoCodeNeedsApproval = (
-  promoCode: Pick<Promo_Code, 'type' | 'amount'>
+  promoCode: Pick<Promo_Code, 'type' | 'amount'>,
 ): boolean =>
   (promoCode.amount >= 15 && promoCode.type === Promo_Code_Type_Enum.Percent) ||
   (promoCode.amount > 3 && promoCode.type === Promo_Code_Type_Enum.FreePlaces)
@@ -19,7 +19,7 @@ export const getPromoCodeStatus = (
     | 'type'
     | 'amount'
     | 'disabled'
-  >
+  >,
 ) => {
   if (promoCode.disabled) {
     return PromoCodeStatus.DISABLED

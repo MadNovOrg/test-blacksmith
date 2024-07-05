@@ -36,7 +36,7 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
     allOrgs.orgs.length === 1 &&
     activeRole &&
     ![RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT].includes(
-      activeRole
+      activeRole,
     )
 
   useEffect(() => {

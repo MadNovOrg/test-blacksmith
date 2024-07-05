@@ -62,20 +62,20 @@ describe('CourseForm - open BILD', () => {
 
     expect(
       screen.getByTestId(
-        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
-      )
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
       screen.getByTestId(
-        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
-      )
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${Course_Level_Enum.BildRegular}`
-      )
+        `course-level-option-${Course_Level_Enum.BildRegular}`,
+      ),
     ).not.toBeInTheDocument()
   })
 
@@ -157,7 +157,7 @@ describe('CourseForm - open BILD', () => {
     await selectBildCategory()
 
     expect(
-      screen.getByPlaceholderText(/price per attendee/i)
+      screen.getByPlaceholderText(/price per attendee/i),
     ).toBeInTheDocument()
   })
 
@@ -182,18 +182,18 @@ describe('CourseForm - open BILD', () => {
 
       expect(screen.getByLabelText(/virtual/i)).toBeEnabled()
       expect(screen.getByLabelText(/both/i)).toBeEnabled()
-    }
+    },
   )
 
   it("doesn't allow changing residing country", async () => {
     useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) => flag === 'course-residing-country'
+      (flag: string) => flag === 'course-residing-country',
     )
     renderForm(Course_Type_Enum.Closed)
     await selectBildCategory()
 
     expect(
-      screen.queryByLabelText(t('components.course-form.residing-country'))
+      screen.queryByLabelText(t('components.course-form.residing-country')),
     ).not.toBeInTheDocument()
   })
 })

@@ -66,11 +66,11 @@ describe('page: ChooseTransferCourse', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"No eligible courses for transfer at the moment"`
+      `"No eligible courses for transfer at the moment"`,
     )
   })
 
@@ -150,7 +150,7 @@ describe('page: ChooseTransferCourse', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByLabelText(TO_COURSE_ID))
@@ -158,7 +158,7 @@ describe('page: ChooseTransferCourse', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(`chosen course for transfer is ${TO_COURSE_ID}`)
+        screen.getByText(`chosen course for transfer is ${TO_COURSE_ID}`),
       ).toBeInTheDocument()
     })
   })

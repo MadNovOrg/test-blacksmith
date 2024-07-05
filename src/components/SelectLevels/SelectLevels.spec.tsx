@@ -23,7 +23,7 @@ describe(SelectLevels.name, () => {
   })
   it('should display all levels if MVA feature flag is enabled', () => {
     const allLevels = Object.values(Course_Level_Enum).map(level =>
-      t(`course-levels.${level}`)
+      t(`course-levels.${level}`),
     )
     useFeatureFlagEnabledMock.mockReturnValueOnce(true)
     setup()
@@ -49,7 +49,7 @@ describe(SelectLevels.name, () => {
     })
 
     expect(
-      screen.queryByText(t(`course-levels.${Course_Level_Enum.Level_1Bs}`))
+      screen.queryByText(t(`course-levels.${Course_Level_Enum.Level_1Bs}`)),
     ).not.toBeInTheDocument()
   })
 })

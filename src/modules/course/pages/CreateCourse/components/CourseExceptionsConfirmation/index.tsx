@@ -48,7 +48,7 @@ export const CourseExceptionsConfirmation: React.FC<
                 approvalRequired
                   ? 'course-approval-required'
                   : 'no-approval-required'
-              }`
+              }`,
             )}
           </Typography>
         ),
@@ -61,7 +61,7 @@ export const CourseExceptionsConfirmation: React.FC<
             {t(
               `pages.create-course.exceptions.${
                 approvalRequired ? 'approval-header' : 'no-approval-header'
-              }`
+              }`,
             )}
           </Typography>
           <ul>

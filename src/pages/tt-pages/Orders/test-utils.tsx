@@ -14,7 +14,7 @@ import { chance, render } from '@test/index'
 import { buildInvoice } from '../OrderDetails/mock-utils'
 
 export function buildOrder(
-  overrides?: Partial<OrderInfoFragment>
+  overrides?: Partial<OrderInfoFragment>,
 ): OrderInfoFragment {
   return {
     id: chance.guid(),
@@ -36,7 +36,7 @@ export function buildOrder(
 
 export const renderWithOrders = (
   ui: React.ReactElement,
-  { orders, total }: { orders: OrdersQuery['order']; total: number }
+  { orders, total }: { orders: OrdersQuery['order']; total: number },
 ) => {
   const client = {
     executeQuery: () => {

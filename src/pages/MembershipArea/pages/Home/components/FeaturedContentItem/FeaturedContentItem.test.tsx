@@ -37,7 +37,7 @@ describe('component: FeaturedContentItem', () => {
         />
       </Routes>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.getByText(webinar.excerpt ?? '')).toBeInTheDocument()

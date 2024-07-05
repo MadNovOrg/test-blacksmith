@@ -29,7 +29,7 @@ describe('formatDateForDraft', () => {
     const date = new Date(2022, 3, 28, 15, 15, 31)
     const tMock = vi.fn()
     expect(formatDateForDraft(date, 'ago', tMock)).toBe(
-      'less than a minute ago'
+      'less than a minute ago',
     )
   })
 

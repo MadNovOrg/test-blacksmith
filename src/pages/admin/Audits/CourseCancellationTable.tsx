@@ -84,13 +84,13 @@ export const CourseCancellationTable: React.FC<
         exportRender: (log: CourseLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
-    [t]
+    [t],
   )
 
   const renderExportData = useCallback(
     () =>
       getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
-    [cols, getUnpagedLogs]
+    [cols, getUnpagedLogs],
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {

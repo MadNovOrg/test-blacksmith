@@ -20,10 +20,10 @@ insertRoles.forEach(role => {
   test(`@query it doesn't allow role ${role} to insert an invoice`, async () => {
     const schema = await API.introspection.introspection(role)
     const insertMutation = schema.__schema.mutationType.fields.find(
-      f => f.name === 'insert_xero_invoice'
+      f => f.name === 'insert_xero_invoice',
     )
     const insertOneMutation = schema.__schema.mutationType.fields.find(
-      f => f.name === 'insert_xero_invoice_one'
+      f => f.name === 'insert_xero_invoice_one',
     )
     test.expect(insertMutation).toBeFalsy()
     test.expect(insertOneMutation).toBeFalsy()
@@ -62,17 +62,17 @@ selectRoles.forEach(role => {
       'xeroId',
     ]
     const invoicesQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_invoice'
+      f => f.name === 'xero_invoice',
     )
     const invoiceQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_invoice_by_pk'
+      f => f.name === 'xero_invoice_by_pk',
     )
     const invoiceType = schema.__schema.types.find(
-      f => f.name === 'xero_invoice'
+      f => f.name === 'xero_invoice',
     )
     const invoiceFields = invoiceType?.fields.map(f => f.name)
     const hasAllowedFields = allowedFields?.every(f =>
-      invoiceFields?.includes(f)
+      invoiceFields?.includes(f),
     )
     expect(invoiceQuery).toBeTruthy()
     expect(invoicesQuery).toBeTruthy()
@@ -89,13 +89,13 @@ cannotSelectRoles.forEach(role => {
   test(`@query doesn't allow role ${role} to select an invoice`, async () => {
     const schema = await API.introspection.introspection(role)
     const invoicesQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_invoice'
+      f => f.name === 'xero_invoice',
     )
     const invoiceQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_invoice_by_pk'
+      f => f.name === 'xero_invoice_by_pk',
     )
     const invoiceType = schema.__schema.types.find(
-      f => f.name === 'xero_invoice'
+      f => f.name === 'xero_invoice',
     )
     expect(invoicesQuery).toBeFalsy()
     expect(invoiceQuery).toBeFalsy()

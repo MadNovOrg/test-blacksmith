@@ -47,7 +47,7 @@ describe('OrderItem', () => {
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
       {},
-      { initialEntries: [`/course/${course.id}/details`] }
+      { initialEntries: [`/course/${course.id}/details`] },
     )
   }
 

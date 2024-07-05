@@ -36,7 +36,7 @@ type CancellationFeeDetailsProps = {
     name: 'cancellationFeePercent' | 'cancellationFee',
     options?:
       | RegisterOptions<FormInput, 'cancellationFeePercent' | 'cancellationFee'>
-      | undefined
+      | undefined,
   ) => UseFormRegisterReturn<'cancellationFeePercent' | 'cancellationFee'>
 
   showEditFeePercent?: boolean
@@ -57,7 +57,7 @@ export const CancellationFeeDetails: React.FC<
   const { t } = useTranslation()
 
   const isInternationalAttendeeTransferEnabled = useFeatureFlagEnabled(
-    'international-attendee-transfer'
+    'international-attendee-transfer',
   )
   return (
     <Box>
@@ -143,13 +143,11 @@ export const CancellationFeeDetails: React.FC<
           }
           InputProps={{
             endAdornment: (
-              <React.Fragment>
-                <Typography variant="body1" color="grey.600">
-                  {isInternationalAttendeeTransferEnabled && currency
-                    ? CurrenciesSymbols[currency as CurrencyCode]
-                    : CurrenciesSymbols[defaultCurrency]}
-                </Typography>
-              </React.Fragment>
+              <Typography variant="body1" color="grey.600">
+                {isInternationalAttendeeTransferEnabled && currency
+                  ? CurrenciesSymbols[currency as CurrencyCode]
+                  : CurrenciesSymbols[defaultCurrency]}
+              </Typography>
             ),
           }}
           sx={{ mt: 2 }}

@@ -94,9 +94,9 @@ export const InviteUserToOrganization = () => {
             ? new Set([...(data?.orgs ?? []), ...(data?.specificOrg ?? [])])
             : new Set(queriedData?.organization ?? [])),
         ],
-        'id'
+        'id',
       ),
-    [data?.orgs, data?.specificOrg, debouncedQuery, queriedData?.organization]
+    [data?.orgs, data?.specificOrg, debouncedQuery, queriedData?.organization],
   ) as GetOrganisationDetailsQuery['orgs']
 
   const schema = useMemo(() => {
@@ -108,7 +108,7 @@ export const InviteUserToOrganization = () => {
           yup
             .string()
             .email(t('validation-errors.email-invalid'))
-            .required(t('validation-errors.email-invalid'))
+            .required(t('validation-errors.email-invalid')),
         )
         .required()
         .min(1, requiredMsg(t, 'pages.invite-to-org.work-email')),
@@ -222,7 +222,7 @@ export const InviteUserToOrganization = () => {
                       loading={singleOrgLoading}
                       defaultValue={
                         organisationsData.find(
-                          organization => organization.id === id
+                          organization => organization.id === id,
                         ) ?? selectedOrg
                       }
                       renderOption={(props, option) => (
@@ -356,7 +356,7 @@ export const InviteUserToOrganization = () => {
                                   color={theme.palette.grey[700]}
                                 >
                                   {t(
-                                    'pages.invite-to-org.organization-admin-hint'
+                                    'pages.invite-to-org.organization-admin-hint',
                                   )}
                                 </Typography>
                               </Box>

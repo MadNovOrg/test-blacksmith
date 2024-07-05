@@ -21,7 +21,7 @@ export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
   disabled,
 }) => {
   const { t, _t } = useScopedTranslation(
-    'pages.org-details.tabs.licenses.export'
+    'pages.org-details.tabs.licenses.export',
   )
 
   const [{ data, fetching }, fetchHistory] = useQuery<

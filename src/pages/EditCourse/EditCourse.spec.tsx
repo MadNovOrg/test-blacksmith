@@ -85,7 +85,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByTestId('edit-course-fetching')).toBeInTheDocument()
@@ -109,7 +109,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.queryByTestId('edit-course-fetching')).not.toBeInTheDocument()
@@ -134,12 +134,12 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.queryByTestId('edit-course-fetching')).not.toBeInTheDocument()
     expect(
-      screen.getByText('There was an error loading the course')
+      screen.getByText('There was an error loading the course'),
     ).toBeInTheDocument()
   })
 
@@ -169,7 +169,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TRAINER } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -201,7 +201,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -233,7 +233,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TRAINER } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -265,7 +265,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -297,7 +297,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.SALES_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -329,7 +329,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -368,20 +368,20 @@ describe(EditCourse.name, () => {
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
-        { initialEntries: ['/courses/edit/1'] }
+        { initialEntries: ['/courses/edit/1'] },
       )
     })
 
     const primaryToggle = screen.getByLabelText(/primary/i)
     const secondaryToggle = screen.getByLabelText(/secondary/i)
     const nonRestrictiveToggle = screen.getByLabelText(
-      /non restrictive tertiary/i
+      /non restrictive tertiary/i,
     )
     const intermediateToggle = screen.getByLabelText(
-      /restrictive tertiary intermediate/i
+      /restrictive tertiary intermediate/i,
     )
     const advancedToggle = screen.getByLabelText(
-      /restrictive tertiary advanced/i
+      /restrictive tertiary advanced/i,
     )
 
     const selectedToggles = [primaryToggle, secondaryToggle]
@@ -433,7 +433,7 @@ describe(EditCourse.name, () => {
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
-        { initialEntries: ['/courses/edit/1'] }
+        { initialEntries: ['/courses/edit/1'] },
       )
     })
 
@@ -479,7 +479,7 @@ describe(EditCourse.name, () => {
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
-        { initialEntries: ['/courses/edit/1'] }
+        { initialEntries: ['/courses/edit/1'] },
       )
     })
 
@@ -526,7 +526,7 @@ describe(EditCourse.name, () => {
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
-        { initialEntries: ['/courses/edit/1'] }
+        { initialEntries: ['/courses/edit/1'] },
       )
     })
 
@@ -570,7 +570,7 @@ describe(EditCourse.name, () => {
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
-        { initialEntries: ['/courses/edit/1'] }
+        { initialEntries: ['/courses/edit/1'] },
       )
     })
 
@@ -636,7 +636,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -649,7 +649,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${openCourse.id}/details`
+        `/courses/${openCourse.id}/details`,
       )
     })
   })
@@ -721,7 +721,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/edit/1`] }
+      { initialEntries: [`/courses/edit/1`] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -734,7 +734,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${closedCourse.id}/details`
+        `/courses/${closedCourse.id}/details`,
       )
     })
   })
@@ -803,7 +803,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -816,7 +816,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${openBildCourse.id}/details`
+        `/courses/${openBildCourse.id}/details`,
       )
     })
   })
@@ -905,7 +905,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -918,7 +918,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${closedBildCourse.id}/details`
+        `/courses/${closedBildCourse.id}/details`,
       )
     })
   })
@@ -987,7 +987,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1000,7 +1000,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${bildIndirectCourse.id}/details`
+        `/courses/${bildIndirectCourse.id}/details`,
       )
     })
   })
@@ -1072,7 +1072,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1085,7 +1085,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${openCourse.id}/details`
+        `/courses/${openCourse.id}/details`,
       )
     })
   })
@@ -1176,7 +1176,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/edit/1`] }
+      { initialEntries: [`/courses/edit/1`] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1189,7 +1189,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${closedCourse.id}/details`
+        `/courses/${closedCourse.id}/details`,
       )
     })
   })
@@ -1283,7 +1283,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1296,7 +1296,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${closedCourse.id}/details`
+        `/courses/${closedCourse.id}/details`,
       )
     })
   })
@@ -1363,7 +1363,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1374,7 +1374,7 @@ describe(EditCourse.name, () => {
       // ensure the price error banner is shown
       expect(errorBanner).toBeInTheDocument()
       expect(errorBanner).toHaveTextContent(
-        t('pages.create-course.no-course-price')
+        t('pages.create-course.no-course-price'),
       )
 
       // ensure it doesn't navigate back to course details page
@@ -1462,7 +1462,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1473,7 +1473,7 @@ describe(EditCourse.name, () => {
       // ensure the price error banner is shown
       expect(errorBanner).toBeInTheDocument()
       expect(errorBanner).toHaveTextContent(
-        t('pages.create-course.no-course-price')
+        t('pages.create-course.no-course-price'),
       )
 
       // ensure it doesn't navigate back to course details page
@@ -1564,7 +1564,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: ['/courses/edit/1'] }
+      { initialEntries: ['/courses/edit/1'] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1575,7 +1575,7 @@ describe(EditCourse.name, () => {
       // ensure the price error banner is shown
       expect(errorBanner).toBeInTheDocument()
       expect(errorBanner).toHaveTextContent(
-        t('pages.create-course.no-course-price')
+        t('pages.create-course.no-course-price'),
       )
 
       // ensure it doesn't navigate back to course details page
@@ -1669,7 +1669,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/edit/1`] }
+      { initialEntries: [`/courses/edit/1`] },
     )
 
     const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
@@ -1690,8 +1690,8 @@ describe(EditCourse.name, () => {
           'components.course-form.mandatory-course-materials.amount-of-free-mcm',
           {
             count: 2,
-          }
-        )
+          },
+        ),
       )
     })
   })
@@ -1782,7 +1782,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/edit/1`] }
+      { initialEntries: [`/courses/edit/1`] },
     )
 
     const errorBanner = screen.queryByTestId('price-error-banner')
@@ -1811,7 +1811,7 @@ describe(EditCourse.name, () => {
 
       // ensure it succesfully navigates back to course details page
       expect(mockNavigate).toHaveBeenCalledWith(
-        `/courses/${closedCourse.id}/details`
+        `/courses/${closedCourse.id}/details`,
       )
     })
   })
@@ -1902,7 +1902,7 @@ describe(EditCourse.name, () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/edit/1`] }
+      { initialEntries: [`/courses/edit/1`] },
     )
 
     const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
@@ -1922,9 +1922,9 @@ describe(EditCourse.name, () => {
       expect(
         screen.queryByText(
           t(
-            'components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-edit'
-          )
-        )
+            'components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-edit',
+          ),
+        ),
       ).toBeInTheDocument()
       expect(mockNavigate).not.toHaveBeenCalled()
     })

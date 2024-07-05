@@ -50,7 +50,7 @@ export const CourseHealthAndSafetyForm = () => {
 
   const validSignature = useMemo(
     () => validUserSignature(profile?.fullName, signature),
-    [profile?.fullName, signature]
+    [profile?.fullName, signature],
   )
 
   const valid = healthCheck && riskCheck && validSignature

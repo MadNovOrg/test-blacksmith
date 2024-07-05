@@ -32,7 +32,7 @@ describe(SearchTrainers.name, () => {
         courseLevel={Course_Level_Enum.Level_1}
         courseSchedule={course.schedule[0]}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     // Assert
@@ -62,7 +62,7 @@ describe(SearchTrainers.name, () => {
         courseSchedule={course.schedule[0]}
         placeholder={placeholder}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     // Assert
@@ -96,7 +96,7 @@ describe(SearchTrainers.name, () => {
         data: {
           trainers,
         },
-      })
+      }),
     )
 
     // Act
@@ -108,7 +108,7 @@ describe(SearchTrainers.name, () => {
           courseSchedule={course.schedule[0]}
           courseType={Course_Type_Enum.Open}
         />
-      </Provider>
+      </Provider>,
     )
 
     // Assert
@@ -161,7 +161,7 @@ describe(SearchTrainers.name, () => {
             },
           ] as SearchTrainersQuery['trainers'],
         },
-      })
+      }),
     )
 
     // Act
@@ -173,7 +173,7 @@ describe(SearchTrainers.name, () => {
           courseSchedule={course.schedule[0]}
           courseType={Course_Type_Enum.Open}
         />
-      </Provider>
+      </Provider>,
     )
 
     // Assert
@@ -186,13 +186,13 @@ describe(SearchTrainers.name, () => {
       expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(3)
       expect(
         within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
-          'John McSmith'
-        )
+          'John McSmith',
+        ),
       ).toBeInTheDocument()
       expect(
         within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
-          'Principal'
-        )
+          'Principal',
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -234,7 +234,7 @@ describe(SearchTrainers.name, () => {
         data: {
           trainers: trainers as unknown as SearchTrainersQuery['trainers'],
         },
-      })
+      }),
     )
 
     // Act
@@ -247,7 +247,7 @@ describe(SearchTrainers.name, () => {
           max={1}
           courseType={Course_Type_Enum.Open}
         />
-      </Provider>
+      </Provider>,
     )
 
     // Assert
@@ -275,7 +275,7 @@ describe(SearchTrainers.name, () => {
         data: {
           trainers: trainers as unknown as SearchTrainersQuery['trainers'],
         },
-      })
+      }),
     )
 
     const onChange = vi.fn()
@@ -288,7 +288,7 @@ describe(SearchTrainers.name, () => {
           onChange={onChange}
           courseType={Course_Type_Enum.Open}
         />
-      </Provider>
+      </Provider>,
     )
 
     // Assert
@@ -307,7 +307,7 @@ describe(SearchTrainers.name, () => {
           target: { value: [trainers[2]] },
         })
       },
-      { timeout: 3000, interval: 300 }
+      { timeout: 3000, interval: 300 },
     )
   })
 
@@ -320,7 +320,7 @@ describe(SearchTrainers.name, () => {
         data: {
           trainers: [],
         },
-      })
+      }),
     )
 
     // Act
@@ -332,7 +332,7 @@ describe(SearchTrainers.name, () => {
           courseSchedule={course.schedule[0]}
           courseType={Course_Type_Enum.Open}
         />
-      </Provider>
+      </Provider>,
     )
 
     // Assert

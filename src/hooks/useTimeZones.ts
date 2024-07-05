@@ -32,7 +32,7 @@ export default function useTimeZones() {
           `https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lng}&timestamp=${timestamp}&key=${key}`,
           {
             timeout: 5000,
-          }
+          },
         )
 
         response.data.rawOffset =
@@ -43,14 +43,14 @@ export default function useTimeZones() {
         return null
       }
     },
-    []
+    [],
   )
 
   const getTimeZoneOffset = useCallback(
     (timeZone: string, date?: Date | number) => {
       return getTimezoneOffset(timeZone, date ?? Date.now()) / 1000 / 60
     },
-    []
+    [],
   )
 
   const getTimeZonesByCountryCode = useCallback(
@@ -66,7 +66,7 @@ export default function useTimeZones() {
         timeZoneId: zone,
       }))
     },
-    [getTimeZoneOffset, isUKCountry]
+    [getTimeZoneOffset, isUKCountry],
   )
 
   const setDateTimeTimeZone = useCallback(
@@ -75,12 +75,12 @@ export default function useTimeZones() {
 
       const timeZoneDateTime = addMinutes(
         date,
-        -getTimeZoneOffset(timeZoneId, date) - currentTimeZoneOffset
+        -getTimeZoneOffset(timeZoneId, date) - currentTimeZoneOffset,
       )
 
       return timeZoneDateTime.toISOString()
     },
-    [getTimeZoneOffset]
+    [getTimeZoneOffset],
   )
 
   const setDateTimeGeoCoordinates = useCallback(
@@ -93,14 +93,14 @@ export default function useTimeZones() {
 
       return null
     },
-    [getTimeZoneLatLng, setDateTimeTimeZone]
+    [getTimeZoneLatLng, setDateTimeTimeZone],
   )
 
   const formatGMTDateTimeByTimeZone = useCallback(
     (
       date: Date | string,
       timeZoneId?: string,
-      includeTimeZoneName?: boolean
+      includeTimeZoneName?: boolean,
     ) => {
       const UTCDate = utcToZonedTime(date, timeZoneId ?? 'Europe/London')
       const offset = getTimeZoneOffset(timeZoneId ?? 'Europe/London', UTCDate)
@@ -112,7 +112,7 @@ export default function useTimeZones() {
         includeTimeZoneName ? ` ${timeZoneId ?? 'Europe/London'}` : ''
       }`
     },
-    [getTimeZoneOffset]
+    [getTimeZoneOffset],
   )
 
   return {

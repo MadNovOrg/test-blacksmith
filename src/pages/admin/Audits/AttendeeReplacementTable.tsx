@@ -109,7 +109,7 @@ export const AttendeeReplacementTable: React.FC<
         exportRender: (log: AttendeeLogType) =>
           log.profile.organizations.reduce(
             (acc, orgMember) => `${acc}, ${orgMember.organization.name}`,
-            ''
+            '',
           ),
       },
       {
@@ -133,13 +133,13 @@ export const AttendeeReplacementTable: React.FC<
         exportRender: (log: AttendeeLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
-    [t]
+    [t],
   )
 
   const renderExportData = useCallback(
     () =>
       getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
-    [cols, getUnpagedLogs]
+    [cols, getUnpagedLogs],
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {
@@ -201,7 +201,7 @@ export const AttendeeReplacementTable: React.FC<
 
                   {logs.map(log => {
                     const participant = profiles?.profile.find(
-                      el => el.email === log.newAttendeeEmail
+                      el => el.email === log.newAttendeeEmail,
                     )
                     const invoice = getAttendeeInvoice(log)
                     return (

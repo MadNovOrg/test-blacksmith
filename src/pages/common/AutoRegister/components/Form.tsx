@@ -77,7 +77,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   organizationData,
 }) => {
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
-    'search-only-by-postcode-on-registration'
+    'search-only-by-postcode-on-registration',
   )
 
   const [isManualFormError, setIsManualFormError] = useState(false)
@@ -89,7 +89,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [{ data: userData, error, fetching: loading }, createUser] =
     useMutation<CreateUserMutation, CreateUserMutationVariables>(
-      CREATE_USER_MUTATION
+      CREATE_USER_MUTATION,
     )
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
@@ -148,7 +148,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     try {
       if (localStateOrganizationToBeCreated) {
         const { data: addedOrg } = await insertOrganisation(
-          localStateOrganizationToBeCreated
+          localStateOrganizationToBeCreated,
         )
         Object.assign(input, {
           orgId: addedOrg?.org?.id,
@@ -160,7 +160,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       }
       await createUser(
         { input },
-        { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } }
+        { fetchOptions: { headers: { 'x-auth': `Bearer ${token}` } } },
       )
     } catch (error) {
       return
@@ -181,12 +181,12 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           org as Pick<Organization, 'id' | 'name' | 'address'>,
           {
             shouldValidate: true,
-          }
+          },
         )
         return
       }
     },
-    [setValue]
+    [setValue],
   )
 
   useEffect(() => {
@@ -295,7 +295,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               setValue(
                 'country',
                 getCountryLabel(code as WorldCountriesCodes) ?? '',
-                { shouldValidate: true }
+                { shouldValidate: true },
               )
               setValue('countryCode', code as WorldCountriesCodes, {
                 shouldValidate: true,
@@ -422,7 +422,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('terms-of-business')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                     >
                       Terms of Business
@@ -432,7 +432,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     <a
                       href={`${origin}/privacy-policy`}
                       aria-label={`${t('privacy-policy')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                     >
                       Privacy Policy

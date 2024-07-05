@@ -11,7 +11,7 @@ export class AuditPage extends BasePage {
     super(page)
     this.courseCodeEntry = (courseId: number) =>
       this.page.locator(
-        `[data-testid=audit-log-entry-course-code]:has-text('${courseId}')`
+        `[data-testid=audit-log-entry-course-code]:has-text('${courseId}')`,
       )
   }
 

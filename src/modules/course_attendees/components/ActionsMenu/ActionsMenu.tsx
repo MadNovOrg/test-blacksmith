@@ -35,7 +35,7 @@ export const ActionsMenu = <T,>({
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget)
     },
-    []
+    [],
   )
 
   const onClose = useCallback(() => {
@@ -47,7 +47,7 @@ export const ActionsMenu = <T,>({
       setAnchorEl(null)
       action?.onClick?.(item)
     },
-    [item]
+    [item],
   )
 
   return (

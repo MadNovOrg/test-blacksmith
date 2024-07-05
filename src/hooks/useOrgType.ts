@@ -45,6 +45,6 @@ export const useOrgType = (sector: string, international = false) => {
     () => ({
       data: orgTypes,
     }),
-    [orgTypes]
+    [orgTypes],
   )
 }

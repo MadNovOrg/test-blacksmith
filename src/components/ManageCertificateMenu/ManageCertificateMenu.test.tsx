@@ -24,13 +24,13 @@ describe('ManageCertificateMenu', () => {
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
       />,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     expect(screen.queryByText('revoke certificate')).not.toBeInTheDocument()
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certificate' })
+      screen.getByRole('button', { name: 'Manage certificate' }),
     )
 
     expect(screen.queryByText('Modify grade')).toBeInTheDocument()
@@ -52,11 +52,11 @@ describe('ManageCertificateMenu', () => {
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
       />,
-      { auth: { activeRole: RoleName.USER } }
+      { auth: { activeRole: RoleName.USER } },
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certificate' })
+      screen.getByRole('button', { name: 'Manage certificate' }),
     )
 
     expect(screen.queryByText('Modify grade')).not.toBeInTheDocument()
@@ -78,11 +78,11 @@ describe('ManageCertificateMenu', () => {
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
       />,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certificate' })
+      screen.getByRole('button', { name: 'Manage certificate' }),
     )
 
     expect(screen.queryByText('Reinstate')).toBeInTheDocument()
@@ -101,11 +101,11 @@ describe('ManageCertificateMenu', () => {
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
       />,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certificate' })
+      screen.getByRole('button', { name: 'Manage certificate' }),
     )
 
     expect(screen.queryByText('Change log')).not.toBeInTheDocument()

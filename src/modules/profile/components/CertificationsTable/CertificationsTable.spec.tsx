@@ -25,8 +25,8 @@ describe(CertificationsTable.name, () => {
   ] as GetProfileDetailsQuery['certificates']
   beforeEach(() =>
     render(
-      <CertificationsTable certifications={certifications} verified={true} />
-    )
+      <CertificationsTable certifications={certifications} verified={true} />,
+    ),
   )
   it('should render the component', () => {
     expect(screen.getByText(t('certifications'))).toBeInTheDocument()
@@ -37,7 +37,7 @@ describe(CertificationsTable.name, () => {
       screen
         .getAllByText(cell)
         .forEach(cellText => expect(cellText).toBeInTheDocument())
-    }
+    },
   )
   describe.each(certifications)(
     'should render all certificate details',
@@ -54,9 +54,9 @@ describe(CertificationsTable.name, () => {
         await userEvent.click(viewCertificateButton)
         expect(mockNavigate).toHaveBeenCalledTimes(certifications.length)
         expect(mockNavigate).toHaveBeenCalledWith(
-          `/certification/${certificate.id}`
+          `/certification/${certificate.id}`,
         )
       })
-    }
+    },
   )
 })

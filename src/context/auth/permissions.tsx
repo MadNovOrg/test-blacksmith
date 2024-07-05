@@ -64,7 +64,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     hasOrgAdmin: (orgId?: string) =>
       Boolean(
-        auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true)
+        auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true),
       ),
 
     isOrgAdmin: (orgId?: string) =>
@@ -99,19 +99,19 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         | 'participantSubmittedEvaluationCount'
         | 'trainers'
         | 'type'
-      >
+      >,
     ) => {
       // Only Indirect NON Blended Learning courses without any evaluation submitted or graded participant
       if (
         course.go1Integration ||
         [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
-          course.type
+          course.type,
         ) ||
         !course.courseParticipants ||
         (course.participantSubmittedEvaluationCount?.aggregate.count ?? 0) >
           0 ||
         course.courseParticipants.some(participant =>
-          Boolean(participant.grade)
+          Boolean(participant.grade),
         )
       ) {
         return false
@@ -145,7 +145,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     isCourseAssistantTrainer: (course: Pick<Course, 'trainers'>) =>
       activeRole === RoleName.TRAINER &&
       getCourseAssistants(course.trainers)?.some(
-        trainer => trainer.profile.id === profile?.id
+        trainer => trainer.profile.id === profile?.id,
       ),
 
     isCourseModerator: (course: Pick<Course, 'trainers'>) =>
@@ -242,7 +242,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canBookingContactCancelResendInvite: (
       courseType: Course_Type_Enum,
-      courseStatus: CourseStatus
+      courseStatus: CourseStatus,
     ) => {
       return [
         courseType === Course_Type_Enum.Closed,
@@ -262,7 +262,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canInviteAttendees: (
       courseType: Course_Type_Enum,
       courseStatus?: CourseStatus,
-      course?: Pick<Course, 'trainers'>
+      course?: Pick<Course, 'trainers'>,
     ) => {
       switch (courseType) {
         case Course_Type_Enum.Open:
@@ -286,7 +286,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
               courseStatus
                 ? acl.canBookingContactCancelResendInvite(
                     courseType,
-                    courseStatus
+                    courseStatus,
                   )
                 : false,
           ])()
@@ -305,7 +305,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canInviteAttendeesAfterCourseEnded: (courseType: Course_Type_Enum) => {
       if (
         [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
-          courseType
+          courseType,
         )
       ) {
         return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])()
@@ -369,7 +369,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     allowedCourseLevels: (
       courseType: Course_Type_Enum,
-      levels: Course_Level_Enum[]
+      levels: Course_Level_Enum[],
     ) => {
       if (!activeRole) {
         return []
@@ -383,7 +383,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         const allowedCertificates =
           REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseType][courseLevel]
         return allowedCertificates.some(allowed =>
-          activeCertificates.some(active => active === allowed)
+          activeCertificates.some(active => active === allowed),
         )
       })
     },
@@ -392,12 +392,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const allowedICMLevels =
         acl.allowedCourseLevels(
           Course_Type_Enum.Indirect,
-          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm)
+          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm),
         ).length > 0
       const allowedBILDLevels =
         acl.allowedCourseLevels(
           Course_Type_Enum.Indirect,
-          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Bild)
+          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Bild),
         ).length > 0
 
       return allowedBILDLevels || allowedICMLevels
@@ -410,7 +410,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           return true
         case RoleName.SALES_ADMIN: {
           return [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
-            course.type
+            course.type,
           )
         }
         case RoleName.TRAINER:
@@ -499,13 +499,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canViewResources: () => {
       const attendedCourse = courseCategoryUserAttends(
-        auth.profile?.courses as ICourseCategoryUserAttends[]
+        auth.profile?.courses as ICourseCategoryUserAttends[],
       )
       const courseProgress = trainerCourseProgress(
-        auth.profile?.courses as ICourseCategoryUserAttends[]
+        auth.profile?.courses as ICourseCategoryUserAttends[],
       )
       const hasPassed = hasGotPassForTrainerCourse(
-        auth.profile?.courses as ICourseCategoryUserAttends[]
+        auth.profile?.courses as ICourseCategoryUserAttends[],
       )
 
       const attendedTrainerCourse = attendedCourse?.attendsTrainer
@@ -519,7 +519,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           return acl.isTrainer()
             ? !isCertificateOutsideGracePeriod(
                 certificate.expiryDate,
-                certificate.courseLevel
+                certificate.courseLevel,
               )
             : isFuture(expirationDate)
         })
@@ -532,13 +532,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isOrgKeyContact,
             acl.isTrainer,
             acl.isUser,
-          ] || attendedTrainerCourse
+          ] || attendedTrainerCourse,
         )()
       ) {
         return Boolean(
           currentUserCertificates?.length ||
             trainerCourseIsOngoing ||
-            hasPassedTrainerCourse
+            hasPassedTrainerCourse,
         )
       }
 
@@ -554,7 +554,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return (
         acl.isOrgAdmin() &&
         orgIds.some(participantOrgId =>
-          managedOrgIds.some(managedOrgId => managedOrgId === participantOrgId)
+          managedOrgIds.some(managedOrgId => managedOrgId === participantOrgId),
         )
       )
     },
@@ -562,13 +562,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     isOrganizationKeyContactOfCourse: (_course: Course) =>
       Boolean(
         acl.isOrgKeyContact() &&
-          _course.organizationKeyContact?.id === auth.profile?.id
+          _course.organizationKeyContact?.id === auth.profile?.id,
       ),
 
     isBookingContactOfCourse: (_course: Course) =>
       Boolean(
         acl.isBookingContact() &&
-          _course.bookingContact?.id === auth.profile?.id
+          _course.bookingContact?.id === auth.profile?.id,
       ),
 
     isOneOfBookingContactsOfTheOpenCourse: (course: Course) =>
@@ -577,8 +577,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           course.type === Course_Type_Enum.Open &&
           profile?.id &&
           course.courseParticipants?.some(
-            p => p.order?.bookingContactProfileId === profile?.id
-          )
+            p => p.order?.bookingContactProfileId === profile?.id,
+          ),
       ),
 
     canParticipateInCourses: () =>
@@ -629,7 +629,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canCancelParticipantINDIRECT: (
       participantOrgIds: string[],
-      course: Course
+      course: Course,
     ) => {
       return anyPass([
         () => acl.isCourseLeader(course),
@@ -644,7 +644,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canCancelParticipantCLOSED: (
       participantOrgIds: string[],
-      course: Course
+      course: Course,
     ) => {
       return anyPass([
         () => acl.isCourseLeader(course),
@@ -668,7 +668,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canSendCourseInformationINDIRECT: (
       participantOrgIds: string[],
-      course: Course
+      course: Course,
     ) => {
       return anyPass([
         () => acl.isCourseLeader(course),
@@ -683,7 +683,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canSendCourseInformationCLOSED: (
       participantOrgIds: string[],
-      course: Course
+      course: Course,
     ) => {
       return anyPass([
         () => acl.isCourseLeader(course),
@@ -698,7 +698,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canManageParticipantAttendance: (
       participantOrgIds: string[],
-      course: Course
+      course: Course,
     ) =>
       (course.type === Course_Type_Enum.Closed
         ? [
@@ -720,7 +720,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canOnlySendCourseInformation: (
       participantOrgIds: string[],
-      course: Course
+      course: Course,
     ) => {
       return (
         !acl.canTransferParticipant(participantOrgIds, course) &&
@@ -734,14 +734,14 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       trainers: {
         profile: { id: string }
         type: Course_Trainer_Type_Enum | CourseTrainerType
-      }[]
+      }[],
     ) => {
       if (
         activeRole === RoleName.TRAINER &&
         trainers.find(
           t =>
             t.profile.id === auth.profile?.id &&
-            t.type !== Course_Trainer_Type_Enum.Moderator
+            t.type !== Course_Trainer_Type_Enum.Moderator,
         )
       ) {
         return true
@@ -813,7 +813,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canDeliveryTertiaryAdvancedStrategy: () => {
       if (activeRole === RoleName.TRAINER) {
         return activeCertificates.includes(
-          Course_Level_Enum.BildAdvancedTrainer
+          Course_Level_Enum.BildAdvancedTrainer,
         )
       }
 
@@ -834,7 +834,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       trainers: {
         profile: { id: string }
         type: Course_Trainer_Type_Enum | CourseTrainerType
-      }[]
+      }[],
     ) => {
       if (
         !(
@@ -852,7 +852,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         trainers.find(
           t =>
             t.profile.id === auth.profile?.id &&
-            t.type === Course_Trainer_Type_Enum.Leader
+            t.type === Course_Trainer_Type_Enum.Leader,
         )
       ) {
         return true
@@ -862,7 +862,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
     canViewDietaryAndDisabilitiesDetails: (course: Course) => {
       const isCourseTrainer = course?.trainers?.some(
-        trainer => trainer.profile.id === auth.profile?.id
+        trainer => trainer.profile.id === auth.profile?.id,
       )
 
       return (

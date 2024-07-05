@@ -40,11 +40,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/invoice no/i)
+      within(screen.getByTestId('table-head')).getByText(/invoice no/i),
     )
 
     await waitFor(() => {
@@ -77,11 +77,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/reference/i)
+      within(screen.getByTestId('table-head')).getByText(/reference/i),
     )
 
     await waitFor(() => {
@@ -116,11 +116,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/bill to/i)
+      within(screen.getByTestId('table-head')).getByText(/bill to/i),
     )
 
     await waitFor(() => {
@@ -155,11 +155,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/payment method/i)
+      within(screen.getByTestId('table-head')).getByText(/payment method/i),
     )
 
     await waitFor(() => {
@@ -192,11 +192,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/amount/i)
+      within(screen.getByTestId('table-head')).getByText(/amount/i),
     )
 
     await waitFor(() => {
@@ -231,7 +231,7 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(within(screen.getByTestId('table-head')).getByText('Due'))
@@ -268,11 +268,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/due date/i)
+      within(screen.getByTestId('table-head')).getByText(/due date/i),
     )
 
     await waitFor(() => {
@@ -307,11 +307,11 @@ describe('page: Orders sorting', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.click(
-      within(screen.getByTestId('table-head')).getByText(/status/i)
+      within(screen.getByTestId('table-head')).getByText(/status/i),
     )
 
     await waitFor(() => {

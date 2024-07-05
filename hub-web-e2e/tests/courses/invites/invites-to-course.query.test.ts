@@ -30,7 +30,7 @@ const allowedRoles: HasuraRole[] = [
 const forbiddenRoles: HasuraRole[] = [RoleName.ANONYMOUS, RoleName.UNVERIFIED]
 
 function buildMutationInput(
-  courseId: number
+  courseId: number,
 ): SaveCourseInvitesMutationVariables {
   const invite = buildInvite()
   return {
@@ -67,7 +67,7 @@ allowedRoles.forEach(role => {
       {
         'x-hasura-user-id': role === RoleName.TRAINER ? trainerId : uuidv4(),
         'x-hasura-user-email': 'whatever',
-      }
+      },
     )
     await expect(results.insert_course_invites?.returning[0].id).not.toBeNull()
   })
@@ -81,7 +81,7 @@ forbiddenRoles.forEach(role => {
       runQueryAsRole(SAVE_INVITE, buildMutationInput(course.id), role, {
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
-      })
+      }),
     ).rejects.toEqual(expect.any(Error))
 
     API.course.deleteCourse(course.id)

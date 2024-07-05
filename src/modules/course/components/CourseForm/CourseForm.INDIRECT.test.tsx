@@ -258,7 +258,7 @@ describe('component: CourseForm - INDIRECT', () => {
         const levels = screen.getAllByRole('option')
         const text = 'Level One Behaviour Support'
         expect(levels.some(level => level.textContent === text)).toBe(true)
-      }
+      },
     )
 
     it('allows re-accreditation to be selected', async () => {
@@ -306,7 +306,7 @@ describe('component: CourseForm - INDIRECT', () => {
         RoleName.TRAINER,
         {
           countryCode: 'MD',
-        }
+        },
       )
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
@@ -319,12 +319,12 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows changing the residing country', async () => {
     useFeatureFlagEnabledMock.mockImplementation(
       (flag: string) =>
-        flag === 'course-residing-country' || flag === 'international-indirect'
+        flag === 'course-residing-country' || flag === 'international-indirect',
     )
     renderForm(type)
 
     expect(
-      screen.getByLabelText(t('components.course-form.residing-country'))
+      screen.getByLabelText(t('components.course-form.residing-country')),
     ).toBeInTheDocument()
   })
 })

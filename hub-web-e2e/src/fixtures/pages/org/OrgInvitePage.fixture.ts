@@ -12,7 +12,7 @@ export class OrgInvitationPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.continueToOrganisationButton = this.page.locator(
-      '[data-testid="invite-submit"]'
+      '[data-testid="invite-submit"]',
     )
   }
   async acceptInvitation(): Promise<AllOrganisations> {

@@ -38,13 +38,13 @@ describe('user-pages/MyCourses - displaying statuses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Info required'
-      )
+        'Info required',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -89,13 +89,13 @@ describe('user-pages/MyCourses - displaying statuses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Missing evaluation'
-      )
+        'Missing evaluation',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -138,13 +138,13 @@ describe('user-pages/MyCourses - displaying statuses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Unattended'
-      )
+        'Unattended',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -188,13 +188,13 @@ describe('user-pages/MyCourses - displaying statuses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Awaiting grade'
-      )
+        'Awaiting grade',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -238,13 +238,13 @@ describe('user-pages/MyCourses - displaying statuses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Scheduled'
-      )
+        'Scheduled',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -294,13 +294,13 @@ describe('user-pages/MyCourses - displaying statuses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        'Completed'
-      )
+        'Completed',
+      ),
     ).toBeInTheDocument()
   })
 })

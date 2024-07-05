@@ -38,7 +38,7 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const filtered = Object.values(filters).reduce(
     (acc, filter) => acc || filter.length > 0,
-    false
+    false,
   )
 
   return (

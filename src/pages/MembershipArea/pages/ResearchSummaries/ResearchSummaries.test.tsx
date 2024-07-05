@@ -28,14 +28,14 @@ describe('page: ResearchSummaries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/research-summaries'] }
+      { initialEntries: ['/research-summaries'] },
     )
 
     expect(
-      screen.getByTestId('featured-research-summary-skeleton')
+      screen.getByTestId('featured-research-summary-skeleton'),
     ).toBeInTheDocument()
     expect(
-      screen.getByTestId('research-summaries-grid-skeleton')
+      screen.getByTestId('research-summaries-grid-skeleton'),
     ).toBeInTheDocument()
   })
 
@@ -62,44 +62,44 @@ describe('page: ResearchSummaries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/research-summaries'] }
+      { initialEntries: ['/research-summaries'] },
     )
 
     expect(
-      screen.queryByTestId('featured-research-summary-skeleton')
+      screen.queryByTestId('featured-research-summary-skeleton'),
     ).not.toBeInTheDocument()
     expect(
-      screen.queryByTestId('research-summaries-grid-skeleton')
+      screen.queryByTestId('research-summaries-grid-skeleton'),
     ).not.toBeInTheDocument()
 
     const featuredResearchSummary = screen.getByTestId(
-      'featured-research-summary'
+      'featured-research-summary',
     )
 
     expect(
       within(featuredResearchSummary).getByText(
-        researchSummaries[0].title ?? ''
-      )
+        researchSummaries[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      within(featuredResearchSummary).getByText('New summary')
+      within(featuredResearchSummary).getByText('New summary'),
     ).toBeInTheDocument()
 
     expect(
       within(featuredResearchSummary).getByAltText(
-        researchSummaries[0].title ?? ''
-      )
+        researchSummaries[0].title ?? '',
+      ),
     ).toHaveAttribute(
       'src',
-      researchSummaries[0].featuredImage?.node?.mediaItemUrl ?? ''
+      researchSummaries[0].featuredImage?.node?.mediaItemUrl ?? '',
     )
 
     expect(
-      within(featuredResearchSummary).getByText('Download resource')
+      within(featuredResearchSummary).getByText('Download resource'),
     ).toHaveAttribute(
       'href',
-      researchSummaries[0].downloads?.file?.mediaItemUrl
+      researchSummaries[0].downloads?.file?.mediaItemUrl,
     )
   })
 
@@ -126,29 +126,29 @@ describe('page: ResearchSummaries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/research-summaries'] }
+      { initialEntries: ['/research-summaries'] },
     )
 
     researchSummaries.forEach(item => {
       const itemElement = screen.getByTestId(
-        `research-summary-grid-item-${item.id}`
+        `research-summary-grid-item-${item.id}`,
       )
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
 
       expect(
-        within(itemElement).getByText('Download resource')
+        within(itemElement).getByText('Download resource'),
       ).toHaveAttribute('href', item.downloads?.file?.mediaItemUrl ?? '')
     })
   })
@@ -186,17 +186,17 @@ describe('page: ResearchSummaries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/research-summaries'] }
+      { initialEntries: ['/research-summaries'] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search summaries'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`research-summary-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`research-summary-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -248,47 +248,47 @@ describe('page: ResearchSummaries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/research-summaries'] }
+      { initialEntries: ['/research-summaries'] },
     )
 
     await userEvent.click(screen.getByTestId('research-summaries-next-page'))
 
     expect(
       within(screen.getByTestId('featured-research-summary')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`research-summary-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`research-summary-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`research-summary-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`research-summary-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('research-summaries-next-page')).toBeDisabled()
 
     await userEvent.click(
-      screen.getByTestId('research-summaries-previous-page')
+      screen.getByTestId('research-summaries-previous-page'),
     )
 
     expect(
       within(screen.getByTestId('featured-research-summary')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`research-summary-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`research-summary-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`research-summary-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`research-summary-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId('research-summaries-previous-page')
+      screen.getByTestId('research-summaries-previous-page'),
     ).toBeDisabled()
   })
 })

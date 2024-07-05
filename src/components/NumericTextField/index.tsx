@@ -8,7 +8,7 @@ export const NumericTextField = React.forwardRef<
   NumericTextFieldProps
 >((props, ref) => {
   const numberInputOnWheelPreventChange = (
-    event: WheelEvent<HTMLDivElement>
+    event: WheelEvent<HTMLDivElement>,
   ) => {
     // Prevent the input value change
     const target = event.target as HTMLElement

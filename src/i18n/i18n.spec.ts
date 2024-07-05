@@ -46,7 +46,7 @@ describe('i18n', () => {
 
   it('formats dates to time from - to', () => {
     expect(t('dates.timeFromTo', { from: date, to: dateTo })).toBe(
-      '10:10 AM - 06:10 PM'
+      '10:10 AM - 06:10 PM',
     )
   })
 })

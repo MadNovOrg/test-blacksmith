@@ -75,7 +75,7 @@ export type ContextValue = {
   reason: string
   setReason: (reason: string) => void
   setParticipantPostalAddress: (
-    participant: VirtualCourseNewParticipant
+    participant: VirtualCourseNewParticipant,
   ) => void
   virtualCourseParticipantAdress: VirtualCourseNewParticipant | undefined
 }
@@ -101,18 +101,18 @@ export const TransferParticipantProvider: React.FC<
   mode = TransferModeEnum.ADMIN_TRANSFERS,
 }) => {
   const [participant, setParticipant] = useState<ContextValue['participant']>(
-    initialValue?.participant
+    initialValue?.participant,
   )
   const [fromCourse, setFromCourse] = useState<ContextValue['fromCourse']>(
-    initialValue?.fromCourse
+    initialValue?.fromCourse,
   )
   const [toCourse, setToCourse] = useState<ContextValue['toCourse']>(
-    initialValue?.toCourse
+    initialValue?.toCourse,
   )
   const [fees, setFees] = useState<ContextValue['fees']>(() =>
     mode === TransferModeEnum.ADMIN_TRANSFERS
       ? initialValue?.fees
-      : { type: TransferFeeType.ApplyTerms }
+      : { type: TransferFeeType.ApplyTerms },
   )
   const [virtualCourseParticipantAdress, setVirtualCourseParticipantAddress] =
     useState<VirtualCourseNewParticipant>()
@@ -120,7 +120,7 @@ export const TransferParticipantProvider: React.FC<
     ContextValue['completedSteps']
   >(initialValue?.completedSteps ?? [])
   const [currentStepKey, setCurrentStepKey] = useState<TransferStepsEnum>(
-    initialValue?.currentStepKey ?? TransferStepsEnum.SELECT_COURSE
+    initialValue?.currentStepKey ?? TransferStepsEnum.SELECT_COURSE,
   )
   const [reason, setReason] = useState<ContextValue['reason']>('')
 
@@ -154,7 +154,7 @@ export const TransferParticipantProvider: React.FC<
     step => {
       setCompletedSteps([...completedSteps, step])
     },
-    [completedSteps]
+    [completedSteps],
   )
 
   const backFrom = useCallback(
@@ -184,7 +184,7 @@ export const TransferParticipantProvider: React.FC<
         }
       }
     },
-    [navigate, participantId, mode]
+    [navigate, participantId, mode],
   )
 
   const courseChosen: ContextValue['courseChosen'] = useCallback(
@@ -202,7 +202,7 @@ export const TransferParticipantProvider: React.FC<
       navigate(nextStep)
       setCurrentStepKey(nextStepKey)
     },
-    [completeStep, navigate, mode]
+    [completeStep, navigate, mode],
   )
 
   const feesChosen: ContextValue['feesChosen'] = useCallback(
@@ -216,12 +216,12 @@ export const TransferParticipantProvider: React.FC<
       setCurrentStepKey(TransferStepsEnum.REVIEW)
       navigate('./review')
     },
-    [completeStep, navigate]
+    [completeStep, navigate],
   )
   const setParticipantPostalAddress: ContextValue['setParticipantPostalAddress'] =
     useCallback(
       participant => setVirtualCourseParticipantAddress(participant),
-      []
+      [],
     )
 
   const cancel: ContextValue['cancel'] = useCallback(() => {
@@ -263,7 +263,7 @@ export const TransferParticipantProvider: React.FC<
       reason,
       virtualCourseParticipantAdress,
       setParticipantPostalAddress,
-    ]
+    ],
   )
 
   if (fetching) {
@@ -306,7 +306,7 @@ export function useTransferParticipantContext() {
 
   if (context === undefined) {
     throw new Error(
-      'useTransferParticipantContext must be used within a TransferParticipantContext'
+      'useTransferParticipantContext must be used within a TransferParticipantContext',
     )
   }
 

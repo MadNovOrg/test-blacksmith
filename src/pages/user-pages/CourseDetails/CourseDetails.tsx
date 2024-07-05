@@ -155,7 +155,7 @@ export const CourseDetails: React.FC<
   const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
-    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended]
+    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended],
   )
   const [activeTab, setActiveTab] = useState('')
   const [showModifyAttendanceModal, setShowModifyAttendanceModal] =
@@ -177,13 +177,15 @@ export const CourseDetails: React.FC<
       : null
 
   const isBookingContact = Boolean(
-    course && acl.isBookingContact() && bookingOnly
+    course && acl.isBookingContact() && bookingOnly,
   )
   const isOrgKeyContact = Boolean(
-    course && acl.isOrganizationKeyContactOfCourse(course) && bookingOnly
+    course && acl.isOrganizationKeyContactOfCourse(course) && bookingOnly,
   )
   const isOrgAdmin = Boolean(
-    course && course.organization?.id && acl.isOrgAdmin(course.organization?.id)
+    course &&
+      course.organization?.id &&
+      acl.isOrgAdmin(course.organization?.id),
   )
 
   const isOrgAdminIsPartOfParticipantOrganization = useMemo(() => {
@@ -191,12 +193,12 @@ export const CourseDetails: React.FC<
 
     const isAdminParticipant = courseParticipants?.some(participant => {
       const participantOrganizationIds = participant.profile.organizations.map(
-        org => org.organization.id
+        org => org.organization.id,
       )
 
       if (!adminOrganizations?.length) return false
       return adminOrganizations.some(adminOrg =>
-        participantOrganizationIds.includes(adminOrg.organization.id)
+        participantOrganizationIds.includes(adminOrg.organization.id),
       )
     })
 
@@ -218,7 +220,7 @@ export const CourseDetails: React.FC<
       setActiveTab(
         [isBookingContact, isOrgKeyContact].includes(true)
           ? CourseDetailsTabs.ATTENDEES
-          : 'checklist'
+          : 'checklist',
       )
     }
   }, [activeTab, course, isBookingContact, isOrgAdmin, isOrgKeyContact])
@@ -249,7 +251,7 @@ export const CourseDetails: React.FC<
       isPast(new Date(course?.schedule[0].end as string))
 
     const graduationFinished = !course?.courseParticipants?.some(
-      participant => !participant.grade
+      participant => !participant.grade,
     )
     const cancelRequested = Boolean(course?.cancellationRequest)
 
@@ -257,7 +259,7 @@ export const CourseDetails: React.FC<
       course?.status as Course_Status_Enum,
       courseEnded,
       graduationFinished,
-      cancelRequested
+      cancelRequested,
     )
 
     const allowRequestCancelConditions = course
@@ -427,7 +429,7 @@ export const CourseDetails: React.FC<
                           <PillTab
                             data-testid="participant-course-checklist"
                             label={t(
-                              'pages.participant-course.checklist-tab-title'
+                              'pages.participant-course.checklist-tab-title',
                             )}
                             value="checklist"
                           />
@@ -438,7 +440,7 @@ export const CourseDetails: React.FC<
                           <PillTab
                             data-testid="participant-course-certification"
                             label={t(
-                              'pages.participant-course.certification-tab-title'
+                              'pages.participant-course.certification-tab-title',
                             )}
                             value="certification"
                           />
@@ -446,7 +448,7 @@ export const CourseDetails: React.FC<
                         {isCourseContact ? (
                           <PillTab
                             label={t(
-                              'pages.course-details.tabs.attendees.title'
+                              'pages.course-details.tabs.attendees.title',
                             )}
                             value={CourseDetailsTabs.ATTENDEES}
                             data-testid="attendees-tab"
@@ -456,7 +458,7 @@ export const CourseDetails: React.FC<
                         course.type !== Course_Type_Enum.Open ? (
                           <PillTab
                             label={t(
-                              'pages.course-details.tabs.evaluation.title'
+                              'pages.course-details.tabs.evaluation.title',
                             )}
                             value={CourseDetailsTabs.EVALUATION}
                             data-testid="evaluation-tab"
@@ -479,9 +481,9 @@ export const CourseDetails: React.FC<
                                     .aggregate?.count ?? 0) +
                                     (dietaryAndDisabilitiesCount
                                       .trainerDietaryRestrictionsCount.aggregate
-                                      ?.count ?? 0)
+                                      ?.count ?? 0),
                                 ),
-                              }
+                              },
                             )}
                             value={CourseDetailsTabs.DIETARY_REQUIREMENTS}
                             data-testid="dietary-requirements-tab"
@@ -502,9 +504,9 @@ export const CourseDetails: React.FC<
                                     ?.count ?? 0) +
                                     (dietaryAndDisabilitiesCount
                                       .trainerDisabilitiesCount.aggregate
-                                      ?.count ?? 0)
+                                      ?.count ?? 0),
                                 ),
-                              }
+                              },
                             )}
                             value={CourseDetailsTabs.DISABILITIES}
                             data-testid="disabilities-tab"
@@ -516,7 +518,7 @@ export const CourseDetails: React.FC<
                           .count ? (
                           <PillTab
                             label={t(
-                              'pages.course-details.tabs.certifications.title'
+                              'pages.course-details.tabs.certifications.title',
                             )}
                             value={CourseDetailsTabs.CERTIFICATIONS}
                             data-testid="certifications-tab"
@@ -525,7 +527,7 @@ export const CourseDetails: React.FC<
                         {showCourseOverview && (
                           <PillTab
                             label={t(
-                              'pages.course-details.tabs.course-overview.title'
+                              'pages.course-details.tabs.course-overview.title',
                             )}
                             value={CourseDetailsTabs.COURSE_OVERVIEW}
                             data-testid="course-overview-tab"
@@ -605,7 +607,7 @@ export const CourseDetails: React.FC<
                           <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
                           <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
                             {t(
-                              'pages.participant-course.personal-data-document-title'
+                              'pages.participant-course.personal-data-document-title',
                             )}
                           </Typography>
                           {courseParticipant?.healthSafetyConsent ? (
@@ -627,12 +629,12 @@ export const CourseDetails: React.FC<
                                 sx={{ mt: isMobile ? 2 : 0 }}
                                 onClick={() =>
                                   navigate(
-                                    `/courses/${courseId}/health-and-safety`
+                                    `/courses/${courseId}/health-and-safety`,
                                   )
                                 }
                               >
                                 {t(
-                                  'pages.participant-course.review-and-submit'
+                                  'pages.participant-course.review-and-submit',
                                 )}
                               </Button>
                             </>
@@ -653,7 +655,7 @@ export const CourseDetails: React.FC<
                           >
                             {' '}
                             {t(
-                              'pages.participant-course.course-summary-evaluation-title'
+                              'pages.participant-course.course-summary-evaluation-title',
                             )}
                           </Typography>
                           <Chip
@@ -683,7 +685,7 @@ export const CourseDetails: React.FC<
                           >
                             {!lastCourseDay
                               ? t(
-                                  'pages.participant-course.course-summary-button-after-completion'
+                                  'pages.participant-course.course-summary-button-after-completion',
                                 )
                               : t('pages.participant-course.evaluate-course')}
                           </Button>
@@ -718,7 +720,7 @@ export const CourseDetails: React.FC<
                           sx={{ mb: 3 }}
                         >
                           {t(
-                            'pages.participant-course.certification-course-not-ended'
+                            'pages.participant-course.certification-course-not-ended',
                           )}
                         </Alert>
                       </Box>

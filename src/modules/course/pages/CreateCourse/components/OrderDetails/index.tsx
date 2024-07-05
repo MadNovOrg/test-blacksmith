@@ -39,7 +39,7 @@ export const OrderDetails: React.FC = () => {
       yup.object({
         invoiceDetails: formSchema(_t),
       }),
-    [_t]
+    [_t],
   )
 
   const {

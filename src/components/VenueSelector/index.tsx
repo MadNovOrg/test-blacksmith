@@ -79,7 +79,7 @@ function getOptionLabel(value: AutocompletePrediction | Venue | string) {
 
 function getAddressPart(placeDetails: PlaceResult, partName: string): string {
   const addressPart = placeDetails.address_components?.find(component =>
-    component.types.includes(partName)
+    component.types.includes(partName),
   )
   return addressPart?.long_name || ''
 }
@@ -87,7 +87,7 @@ function getAddressPart(placeDetails: PlaceResult, partName: string): string {
 function getCountry(placeDetails: PlaceResult): string {
   if (placeDetails?.address_components) {
     const countryAddressComponent = placeDetails?.address_components.find(
-      address => address.types.includes('country')
+      address => address.types.includes('country'),
     )
     return countryAddressComponent?.long_name ?? ''
   }
@@ -97,7 +97,7 @@ function getCountry(placeDetails: PlaceResult): string {
 function getCountryCode(placeDetails: PlaceResult): string {
   if (placeDetails.address_components) {
     const countryAddressComponent = placeDetails?.address_components.find(
-      address => address.types.includes('country')
+      address => address.types.includes('country'),
     )
     return countryAddressComponent?.short_name ?? ''
   }
@@ -146,7 +146,7 @@ export const VenueSelector: React.FC<
       const googleResponse = await getGoogleMapsSuggestions(
         debouncedQuery,
         isBILDcourse,
-        courseResidingCountry as WorldCountriesCodes
+        courseResidingCountry as WorldCountriesCodes,
       )
       if (googleResponse) setGoogleSuggestions(googleResponse)
     }
@@ -158,8 +158,8 @@ export const VenueSelector: React.FC<
       const suggestions = googleSuggestions.predictions.filter(
         prediction =>
           !(data?.venues ?? []).some(
-            venue => venue.googlePlacesId === prediction?.place_id
-          )
+            venue => venue.googlePlacesId === prediction?.place_id,
+          ),
       )
       return [...(data?.venues ?? []), ...suggestions]
     } else {
@@ -182,7 +182,7 @@ export const VenueSelector: React.FC<
             : '',
           googlePlacesId: placeDetails.place_id,
           countryCode: ukCountries.includes(
-            UKsCountriesCodes[courseResidingCountry as UKsCountriesCode]
+            UKsCountriesCodes[courseResidingCountry as UKsCountriesCode],
           )
             ? courseResidingCountry
             : getCountryCode(placeDetails),
@@ -192,7 +192,7 @@ export const VenueSelector: React.FC<
         onChange(value ?? undefined)
       }
     },
-    [courseResidingCountry, onChange, ukCountries]
+    [courseResidingCountry, onChange, ukCountries],
   )
 
   const onDialogClose = () => {

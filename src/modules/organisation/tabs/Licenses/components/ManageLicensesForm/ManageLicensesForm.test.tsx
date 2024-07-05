@@ -14,7 +14,7 @@ describe('component: ManageLicencesForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Amount must be a positive number')
+        screen.getByText('Amount must be a positive number'),
       ).toBeInTheDocument()
     })
   })
@@ -26,7 +26,7 @@ describe('component: ManageLicencesForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Total remaining licences 150')
+        screen.getByText('Total remaining licences 150'),
       ).toBeInTheDocument()
     })
   })
@@ -41,7 +41,7 @@ describe('component: ManageLicencesForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Invoice number is a required field')
+        screen.getByText('Invoice number is a required field'),
       ).toBeInTheDocument()
     })
   })
@@ -181,7 +181,7 @@ describe('component: ManageLicencesForm', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/maximum number of licences to remove is 1/i)
+        screen.getByText(/maximum number of licences to remove is 1/i),
       ).toBeInTheDocument()
     })
   })

@@ -23,7 +23,7 @@ export const DietaryRequirementsTab: FC<
   PropsWithChildren<{ courseId: number }>
 > = ({ courseId }) => {
   const { t } = useScopedTranslation(
-    'pages.course-details.tabs.dietary-requirements'
+    'pages.course-details.tabs.dietary-requirements',
   )
   const { acl } = useAuth()
   const [{ data: dietaryData }] = useQuery<
@@ -61,7 +61,7 @@ export const DietaryRequirementsTab: FC<
           sorting: false,
         },
       ].filter(Boolean),
-    [t]
+    [t],
   )
   return (
     <>
@@ -100,7 +100,7 @@ export const DietaryRequirementsTab: FC<
                     <Typography key={org.organization.id}>
                       {org.organization.name}
                     </Typography>
-                  )
+                  ),
                 )}
               </TableCell>
               <TableCell>

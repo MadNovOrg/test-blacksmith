@@ -31,7 +31,7 @@ export const TableMenu: React.FC<TabMenuProps> = ({
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl(event.currentTarget)
     },
-    []
+    [],
   )
 
   const onClose = useCallback(() => {

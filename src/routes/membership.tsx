@@ -7,29 +7,29 @@ const Blog = React.lazy(() => import('@app/pages/MembershipArea/pages/Blog'))
 const Post = React.lazy(() => import('@app/pages/MembershipArea/pages/Post'))
 
 const Ebooks = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Ebooks')
+  () => import('@app/pages/MembershipArea/pages/Ebooks'),
 )
 const Home = React.lazy(() => import('@app/pages/MembershipArea/pages/Home'))
 const Podcast = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Podcast')
+  () => import('@app/pages/MembershipArea/pages/Podcast'),
 )
 const Podcasts = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Podcasts')
+  () => import('@app/pages/MembershipArea/pages/Podcasts'),
 )
 const ResearchSummaries = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/ResearchSummaries')
+  () => import('@app/pages/MembershipArea/pages/ResearchSummaries'),
 )
 const VideoItem = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/VideoItem')
+  () => import('@app/pages/MembershipArea/pages/VideoItem'),
 )
 const VideoSeries = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/VideoSeries')
+  () => import('@app/pages/MembershipArea/pages/VideoSeries'),
 )
 const Webinar = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Webinar')
+  () => import('@app/pages/MembershipArea/pages/Webinar'),
 )
 const Webinars = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Webinars')
+  () => import('@app/pages/MembershipArea/pages/Webinars'),
 )
 const Term = React.lazy(() => import('@app/pages/MembershipArea/pages/Term'))
 

@@ -49,7 +49,7 @@ export const BILDModulesSelection: FC<Props> = ({
 
     strategy.modules?.forEach(module => {
       strategySelection.add(
-        getModuleKey({ strategyName, moduleName: module.name })
+        getModuleKey({ strategyName, moduleName: module.name }),
       )
     })
 
@@ -60,7 +60,7 @@ export const BILDModulesSelection: FC<Props> = ({
             strategyName,
             groupName: group.name,
             moduleName: module.name,
-          })
+          }),
         )
       })
     })
@@ -117,7 +117,7 @@ export const BILDModulesSelection: FC<Props> = ({
       })
 
       const strategySelectionCount = Array.from(selectedStrategyModules).filter(
-        key => key.includes(strategyName) && key !== strategyName
+        key => key.includes(strategyName) && key !== strategyName,
       ).length
 
       if (strategySelectionCount > 0 && strategySelectionCount < modulesCount) {
@@ -157,7 +157,7 @@ export const BILDModulesSelection: FC<Props> = ({
                     checked={Boolean(selectedStrategyModules.has(strategyName))}
                     disabled={mandatoryStrategies.includes(strategyName)}
                     indeterminate={partiallySelectedStrategies.has(
-                      strategyName
+                      strategyName,
                     )}
                     onChange={(_, checked) => {
                       if (
@@ -216,7 +216,7 @@ export const BILDModulesSelection: FC<Props> = ({
                           />
                         </FormGroup>
                       )
-                    }
+                    },
                   )
                 : null}
 
@@ -251,11 +251,11 @@ export const BILDModulesSelection: FC<Props> = ({
                                         }
                                       }}
                                       checked={Boolean(
-                                        selectedStrategyModules.has(moduleKey)
+                                        selectedStrategyModules.has(moduleKey),
                                       )}
                                       disabled={
                                         mandatoryStrategies.includes(
-                                          strategyName
+                                          strategyName,
                                         ) || module.mandatory
                                       }
                                     />
@@ -298,11 +298,11 @@ function transformSelection(selected: Set<string>): Record<string, Strategy> {
       const [groupName, moduleName] = parts
 
       const existingGroup = transformedSelection[strategyName].groups?.find(
-        group => group.name === groupName
+        group => group.name === groupName,
       )
 
       let group = transformedSelection[strategyName].groups?.find(
-        group => group.name === groupName
+        group => group.name === groupName,
       ) ?? {
         name: groupName,
         modules: [],
@@ -326,7 +326,7 @@ function transformSelection(selected: Set<string>): Record<string, Strategy> {
 }
 
 function reverseTransformSelection(
-  strategyModules: Record<string, Partial<Strategy>>
+  strategyModules: Record<string, Partial<Strategy>>,
 ): Set<string> {
   const selection = new Set<string>([])
 
@@ -344,7 +344,7 @@ function reverseTransformSelection(
             strategyName,
             groupName: group.name,
             moduleName: module.name,
-          })
+          }),
         )
       })
     })

@@ -26,7 +26,7 @@ test('cancel indirect course as trainer', async ({ page, course }) => {
   const trainerCoursesPage = new MyCoursesPage(page)
   await trainerCoursesPage.goto(`${course.id}`)
   const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
-    course.id
+    course.id,
   )
   await courseDetailsPage.clickEditCourseButton()
   const cancelPopup = await courseDetailsPage.clickCancelCourseButton()

@@ -26,7 +26,7 @@ import { RoleName, Profile } from '@app/types'
 export type ProfileSelectorProps = {
   value?: FindProfilesQuery['profiles'][0] | undefined | Profile
   onChange: (
-    value: FindProfilesQuery['profiles'][0] | undefined | Profile
+    value: FindProfilesQuery['profiles'][0] | undefined | Profile,
   ) => void
   orgId?: string
   sx?: SxProps
@@ -85,7 +85,7 @@ export const ProfileSelector: React.FC<
   const renderOption = (
     props: HTMLAttributes<HTMLLIElement>,
     option: FindProfilesQuery['profiles'][0],
-    _state: AutocompleteRenderOptionState
+    _state: AutocompleteRenderOptionState,
   ) => {
     return (
       <Box

@@ -48,7 +48,7 @@ export const schema = ({ t }: { t: TFunction }) => {
     code: yup.string().required(
       t('validation-errors.required-field', {
         name: t('pages.promoCodes.fld-code-label'),
-      })
+      }),
     ),
     description: yup.string(),
     amount: yup
@@ -76,7 +76,7 @@ export const schema = ({ t }: { t: TFunction }) => {
         yup.ref('validFrom'),
         t('validation-errors.date-gte-field', {
           field: t('pages.promoCodes.fld-validFrom-label'),
-        })
+        }),
       ),
     bookerSingleUse: yup.bool().required(),
     usesMax: yup

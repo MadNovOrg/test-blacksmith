@@ -80,7 +80,7 @@ describe('CourseEvaluation page', () => {
         initialEntries: [
           `/manage-courses/all/${course.id}/evaluation/view?profile_id=${attendeeId}`,
         ],
-      }
+      },
     )
 
     expect(screen.getByText('Additional comments')).toBeInTheDocument()
@@ -114,7 +114,7 @@ describe('CourseEvaluation page', () => {
       { auth: { activeRole: RoleName.USER } },
       {
         initialEntries: [`/courses/${course.id}/evaluation`],
-      }
+      },
     )
 
     expect(screen.getByText('Additional comments')).toBeInTheDocument()

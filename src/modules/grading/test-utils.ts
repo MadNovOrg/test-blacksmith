@@ -8,7 +8,7 @@ export function buildModule(
       ModuleForGrading,
       'id' | 'name' | 'displayName' | 'lessons' | 'mandatory' | 'note'
     >
-  >
+  >,
 ): Pick<ModuleForGrading, 'id' | 'name' | 'displayName' | 'lessons' | 'note'> {
   return {
     id: chance.guid(),

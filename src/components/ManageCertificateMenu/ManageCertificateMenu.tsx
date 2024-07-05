@@ -37,7 +37,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
   }
 
   const handleMenuButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     ref.current = event.currentTarget
     setOpen(true)

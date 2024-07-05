@@ -16,7 +16,7 @@ describe(CourseExceptionsLogTable.name, () => {
         loading={loading ?? false}
         logs={[]}
         sorting={{ by: 'created_at', dir: 'desc', onSort: () => null }}
-      />
+      />,
     )
   it('should render the component', () => {
     // Act
@@ -24,7 +24,7 @@ describe(CourseExceptionsLogTable.name, () => {
 
     // Assert
     expect(
-      screen.getByTestId('course-exceptions-log-table')
+      screen.getByTestId('course-exceptions-log-table'),
     ).toBeInTheDocument()
   })
   it('should render all the required table columns', () => {
@@ -32,14 +32,14 @@ describe(CourseExceptionsLogTable.name, () => {
     const cols = Object.values(
       t('pages.admin.course-exceptions-log.table-cols', {
         returnObjects: true,
-      })
+      }),
     )
     // Act
     setup()
     //Assert
     cols
       .filter(
-        col => col !== t('pages.admin.course-exceptions-log.table-cols.reason')
+        col => col !== t('pages.admin.course-exceptions-log.table-cols.reason'),
       )
       .map(col => expect(screen.getByText(col)).toBeInTheDocument())
   })

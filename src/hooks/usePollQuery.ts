@@ -14,7 +14,7 @@ export default function usePollQuery(
     interval?: number
     maxPolls?: number
     onTimeout?: () => void
-  }
+  },
 ): [() => void, boolean] {
   const maxPolls = options?.maxPolls ?? DEFAULT_MAX_POLLS
   const interval = options?.interval ?? DEFAULT_INTERVAL
@@ -34,7 +34,7 @@ export default function usePollQuery(
         await pollFn()
       }
     },
-    running ? interval : null
+    running ? interval : null,
   )
 
   return [

@@ -31,7 +31,7 @@ allowedRoles.forEach(role => {
       runQueryAsRole(OrgLicensesWithHistoryQuery, params, role, {
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
-      })
+      }),
     ).resolves.not.toThrow()
   })
 })
@@ -42,7 +42,7 @@ forbiddenRoles.forEach(role => {
       runQueryAsRole(OrgLicensesWithHistoryQuery, params, role, {
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
-      })
+      }),
     ).rejects.toEqual(expect.any(Error))
   })
 })

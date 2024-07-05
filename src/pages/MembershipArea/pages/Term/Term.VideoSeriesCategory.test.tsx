@@ -30,7 +30,7 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/term/category-id'] }
+      { initialEntries: ['/term/category-id'] },
     )
 
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
@@ -68,14 +68,14 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     const firstPost = screen.getByTestId(
-      `video-series-grid-item-${videoItems[0].id}`
+      `video-series-grid-item-${videoItems[0].id}`,
     )
     await userEvent.click(
-      within(firstPost).getByAltText(videoItems[0].title ?? '')
+      within(firstPost).getByAltText(videoItems[0].title ?? ''),
     )
 
     expect(screen.getByText('Video page')).toBeInTheDocument()
@@ -112,25 +112,25 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     videoItems.forEach(item => {
       const itemElement = screen.getByTestId(
-        `video-series-grid-item-${item.id}`
+        `video-series-grid-item-${item.id}`,
       )
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -172,17 +172,17 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search videos'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`video-series-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`video-series-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -223,26 +223,28 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     expect(
-      screen.getByTestId(`video-series-grid-item-${videoItems[0].id}`)
+      screen.getByTestId(`video-series-grid-item-${videoItems[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`video-series-grid-item-${reversedVideoItems[0].id}`)
+      screen.queryByTestId(
+        `video-series-grid-item-${reversedVideoItems[0].id}`,
+      ),
     ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByTestId('order-menu-button'))
     await userEvent.click(screen.getByText('Oldest'))
 
     expect(
-      screen.queryByTestId(`video-series-grid-item-${videoItems[0].id}`)
+      screen.queryByTestId(`video-series-grid-item-${videoItems[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`video-series-grid-item-${reversedVideoItems[0].id}`)
+      screen.getByTestId(`video-series-grid-item-${reversedVideoItems[0].id}`),
     ).toBeInTheDocument()
   })
 
@@ -297,17 +299,17 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
-      screen.queryByTestId(`video-series-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`video-series-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`video-series-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`video-series-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
@@ -315,11 +317,11 @@ describe('page: Term - WebinarsCategory', () => {
     await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
-      screen.getByTestId(`video-series-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`video-series-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`video-series-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`video-series-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('term-previous-page')).toBeDisabled()

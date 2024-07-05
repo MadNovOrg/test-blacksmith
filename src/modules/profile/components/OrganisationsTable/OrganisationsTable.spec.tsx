@@ -18,8 +18,8 @@ describe(OrganisationsTable.name, () => {
     render(
       <OrganisationsTable
         profile={profile as unknown as GetProfileDetailsQuery['profile']}
-      />
-    )
+      />,
+    ),
   )
   it('should render the component', () => {
     expect(screen.getByTestId('organisations-table')).toBeInTheDocument()
@@ -28,7 +28,7 @@ describe(OrganisationsTable.name, () => {
     'it should render cell: %s',
     cell => {
       expect(screen.getByText(cell)).toBeInTheDocument()
-    }
+    },
   )
   describe.each(profile.organizations)(
     'should render each organisation`s details',
@@ -36,6 +36,6 @@ describe(OrganisationsTable.name, () => {
       it.each([org.organization.name])('it should render: %s', value => {
         expect(screen.getByText(value as string)).toBeInTheDocument()
       })
-    }
+    },
   )
 })

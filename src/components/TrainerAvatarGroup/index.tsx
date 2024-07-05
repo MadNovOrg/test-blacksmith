@@ -95,7 +95,9 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
       <LightTooltip
         key={trainer.id}
         title={`${t(
-          `components.trainer-avatar-group.${trainerTypeLabelMap[trainer.type]}`
+          `components.trainer-avatar-group.${
+            trainerTypeLabelMap[trainer.type]
+          }`,
         )}: ${name}`}
         placement="top"
       >

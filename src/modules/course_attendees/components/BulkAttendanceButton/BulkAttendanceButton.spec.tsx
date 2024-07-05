@@ -25,11 +25,11 @@ it('disables button if prop is passed', () => {
         disabled
         participantIds={[chance.guid()]}
       />
-    </Provider>
+    </Provider>,
   )
 
   expect(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   ).toBeDisabled()
 })
 
@@ -41,11 +41,11 @@ it('disables button if no participants are selected', () => {
   render(
     <Provider value={client}>
       <BulkAttendanceButton courseId={1} participantIds={[]} />
-    </Provider>
+    </Provider>,
   )
 
   expect(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   ).toBeDisabled()
 })
 
@@ -57,11 +57,11 @@ it('renders correct menu items', async () => {
   render(
     <Provider value={client}>
       <BulkAttendanceButton courseId={1} participantIds={[chance.guid()]} />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.click(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   )
 
   expect(screen.getByRole('menuitem', { name: /attended/i }))
@@ -104,11 +104,11 @@ it('marks selected participants as attended when option is selected', async () =
         participantIds={participantIds}
         onSuccess={onSuccessMock}
       />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.click(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   )
   await userEvent.click(screen.getByRole('menuitem', { name: /attended/i }))
 
@@ -151,14 +151,14 @@ it('marks selected participants as did not attend when option is selected', asyn
         participantIds={participantIds}
         onSuccess={onSuccessMock}
       />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.click(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   )
   await userEvent.click(
-    screen.getByRole('menuitem', { name: /did not attend/i })
+    screen.getByRole('menuitem', { name: /did not attend/i }),
   )
 
   expect(onSuccessMock).toHaveBeenCalledTimes(1)

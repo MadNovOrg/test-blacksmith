@@ -52,7 +52,7 @@ vi.mock('file-saver', () => ({ saveAs: vi.fn() }))
 const urqlMockClient = {
   executeQuery: () =>
     fromValue<{ data: ExportBlendedLearningCourseDataQuery }>(
-      buildBlExportData()
+      buildBlExportData(),
     ),
 } as never as Client
 
@@ -169,7 +169,7 @@ describe(CourseInvites.name, () => {
 
     const expectedMsg = `${course.max_participants} invites left`
     expect(screen.getByTestId('modal-invites-left')).toHaveTextContent(
-      expectedMsg
+      expectedMsg,
     )
   })
 
@@ -192,7 +192,7 @@ describe(CourseInvites.name, () => {
     expect(inviteBtn).toBeDisabled()
 
     expect(screen.getByTestId('invites-left')).toHaveTextContent(
-      '0 invites left'
+      '0 invites left',
     )
   })
 
@@ -222,7 +222,7 @@ describe(CourseInvites.name, () => {
 
     expect(screen.getByTestId('invites-left')).toHaveTextContent(expectedMsg)
     expect(screen.getByTestId('modal-invites-left')).toHaveTextContent(
-      expectedMsg
+      expectedMsg,
     )
   })
 
@@ -254,7 +254,7 @@ describe(CourseInvites.name, () => {
 
     expect(screen.getByTestId('invites-left')).toHaveTextContent(expectedMsg)
     expect(screen.getByTestId('modal-invites-left')).toHaveTextContent(
-      expectedMsg
+      expectedMsg,
     )
   })
 
@@ -404,7 +404,7 @@ describe(CourseInvites.name, () => {
     await waitForCalls(useCourseInvitesDefaults.send)
 
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(
-      emails.map(e => e.trim())
+      emails.map(e => e.trim()),
     )
   })
 
@@ -564,7 +564,7 @@ describe(CourseInvites.name, () => {
           activeRole: RoleName.TT_ADMIN,
           allowedRoles: new Set([RoleName.TT_ADMIN]),
         },
-      }
+      },
     )
 
     const exportProgressBtn = screen.queryByTestId('progress-export')
@@ -591,7 +591,7 @@ describe(CourseInvites.name, () => {
           activeRole: RoleName.TT_ADMIN,
           allowedRoles: new Set([RoleName.TT_ADMIN]),
         },
-      }
+      },
     )
 
     const exportProgressBtn = screen.getByTestId('progress-export')

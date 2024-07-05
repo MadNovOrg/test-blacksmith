@@ -41,7 +41,7 @@ export const OrgDetailsTab: React.FC<
   const org = data?.orgs.length ? data.orgs[0] : null
   const [, sector = org?.sector] =
     Object.entries(sectors).find(
-      ([key, value]) => key === org?.sector && value
+      ([key, value]) => key === org?.sector && value,
     ) || []
 
   return (
@@ -176,7 +176,7 @@ export const OrgDetailsTab: React.FC<
                   checkUKsCountryName(org.address.country)
                     ? 'postcode'
                     : 'zip-code'
-                }`
+                }`,
               )}
               value={org.address.postCode}
             />
@@ -229,7 +229,7 @@ export const OrgDetailsTab: React.FC<
                     isValid(new Date(org.attributes.ofstedLastInspection))
                       ? format(
                           new Date(org.attributes.ofstedLastInspection),
-                          'd MMMM yyyy'
+                          'd MMMM yyyy',
                         )
                       : org.attributes.ofstedLastInspection || ''
                   }

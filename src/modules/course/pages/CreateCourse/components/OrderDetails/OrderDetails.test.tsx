@@ -107,35 +107,35 @@ describe('component: OrderDetails', () => {
         >
           <OrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('course-title-duration').textContent
+      screen.getByTestId('course-title-duration').textContent,
     ).toMatchInlineSnapshot(`"Positive Behaviour Training: Level One "`)
 
     expect(
-      screen.getByTestId('course-price-row').textContent
+      screen.getByTestId('course-price-row').textContent,
     ).toMatchInlineSnapshot(`"Course Cost£1,000.00"`)
 
     expect(
-      screen.getByTestId('mandatory-course-materials-row').textContent
+      screen.getByTestId('mandatory-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
 
     expect(
-      screen.getByTestId('free-course-materials-row').textContent
+      screen.getByTestId('free-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
 
     expect(
-      screen.getByTestId('subtotal-row').textContent
+      screen.getByTestId('subtotal-row').textContent,
     ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£200.00"`
+      `"VAT (20%)£200.00"`,
     )
 
     expect(
-      screen.getByTestId('total-costs-row').textContent
+      screen.getByTestId('total-costs-row').textContent,
     ).toMatchInlineSnapshot(`"Amount due GBP£1,250.00"`)
   })
 
@@ -206,35 +206,35 @@ describe('component: OrderDetails', () => {
         >
           <OrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('course-title-duration').textContent
+      screen.getByTestId('course-title-duration').textContent,
     ).toMatchInlineSnapshot(`"BILD Certified Course: PS"`)
 
     expect(
-      screen.getByTestId('course-price-row').textContent
+      screen.getByTestId('course-price-row').textContent,
     ).toMatchInlineSnapshot(`"Course Cost£2,000.00"`)
 
     expect(
-      screen.getByTestId('mandatory-course-materials-row').textContent
+      screen.getByTestId('mandatory-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
 
     expect(
-      screen.getByTestId('free-course-materials-row').textContent
+      screen.getByTestId('free-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
 
     expect(
-      screen.getByTestId('subtotal-row').textContent
+      screen.getByTestId('subtotal-row').textContent,
     ).toMatchInlineSnapshot(`"Sub total£2,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£400.00"`
+      `"VAT (20%)£400.00"`,
     )
 
     expect(
-      screen.getByTestId('total-costs-row').textContent
+      screen.getByTestId('total-costs-row').textContent,
     ).toMatchInlineSnapshot(`"Amount due GBP£2,450.00"`)
   })
 
@@ -292,35 +292,35 @@ describe('component: OrderDetails', () => {
         >
           <OrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('course-title-duration').textContent
+      screen.getByTestId('course-title-duration').textContent,
     ).toMatchInlineSnapshot(`"Positive Behaviour Training: Level One "`)
 
     expect(
-      screen.getByTestId('course-price-row').textContent
+      screen.getByTestId('course-price-row').textContent,
     ).toMatchInlineSnapshot(`"Course Cost£1,000.00"`)
 
     expect(
-      screen.getByTestId('mandatory-course-materials-row').textContent
+      screen.getByTestId('mandatory-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
 
     expect(
-      screen.getByTestId('free-course-materials-row').textContent
+      screen.getByTestId('free-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
 
     expect(
-      screen.getByTestId('subtotal-row').textContent
+      screen.getByTestId('subtotal-row').textContent,
     ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£200.00"`
+      `"VAT (20%)£200.00"`,
     )
 
     expect(
-      screen.getByTestId('total-costs-row').textContent
+      screen.getByTestId('total-costs-row').textContent,
     ).toMatchInlineSnapshot(`"Amount due GBP£1,250.00"`)
   })
 
@@ -395,35 +395,35 @@ describe('component: OrderDetails', () => {
         >
           <OrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('course-title-duration').textContent
+      screen.getByTestId('course-title-duration').textContent,
     ).toMatchInlineSnapshot(`"BILD Certified Course: PS"`)
 
     expect(
-      screen.getByTestId('course-price-row').textContent
+      screen.getByTestId('course-price-row').textContent,
     ).toMatchInlineSnapshot(`"Course Cost£2,000.00"`)
 
     expect(
-      screen.getByTestId('mandatory-course-materials-row').textContent
+      screen.getByTestId('mandatory-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
 
     expect(
-      screen.getByTestId('free-course-materials-row').textContent
+      screen.getByTestId('free-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
 
     expect(
-      screen.getByTestId('subtotal-row').textContent
+      screen.getByTestId('subtotal-row').textContent,
     ).toMatchInlineSnapshot(`"Sub total£2,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      `"VAT (20%)£400.00"`
+      `"VAT (20%)£400.00"`,
     )
 
     expect(
-      screen.getByTestId('total-costs-row').textContent
+      screen.getByTestId('total-costs-row').textContent,
     ).toMatchInlineSnapshot(`"Amount due GBP£2,450.00"`)
   })
 
@@ -475,35 +475,35 @@ describe('component: OrderDetails', () => {
         >
           <OrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('course-title-duration').textContent
+      screen.getByTestId('course-title-duration').textContent,
     ).toMatchInlineSnapshot(`"Positive Behaviour Training: Level One "`)
 
     expect(
-      screen.getByTestId('course-price-row').textContent
+      screen.getByTestId('course-price-row').textContent,
     ).toMatchInlineSnapshot(`"Course Cost£1,000.00"`)
 
     expect(
-      screen.getByTestId('mandatory-course-materials-row').textContent
+      screen.getByTestId('mandatory-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
 
     expect(
-      screen.getByTestId('free-course-materials-row').textContent
+      screen.getByTestId('free-course-materials-row').textContent,
     ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
 
     expect(
-      screen.getByTestId('subtotal-row').textContent
+      screen.getByTestId('subtotal-row').textContent,
     ).toMatchInlineSnapshot(`"Sub total£1,050.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
-      '"VAT (0%)£0.00"'
+      '"VAT (0%)£0.00"',
     )
 
     expect(
-      screen.getByTestId('total-costs-row').textContent
+      screen.getByTestId('total-costs-row').textContent,
     ).toMatchInlineSnapshot(`"Amount due GBP£1,050.00"`)
   })
 
@@ -556,14 +556,14 @@ describe('component: OrderDetails', () => {
         </CreateCourseProvider>
       </Provider>,
       {},
-      { initialEntries: ['/order-details'] }
+      { initialEntries: ['/order-details'] },
     )
     await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
     await userEvent.type(screen.getByLabelText('First Name *'), 'John')
     await userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
     await userEvent.type(
       screen.getByLabelText('Email *'),
-      'john.doe@example.com'
+      'john.doe@example.com',
     )
     await userEvent.type(screen.getByLabelText('Phone *'), '1234567890')
 

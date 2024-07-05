@@ -25,7 +25,7 @@ describe('page: Webinar', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] },
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -58,7 +58,7 @@ describe('page: Webinar', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] },
     )
 
     expect(screen.getByText('Webinar not found')).toBeInTheDocument()
@@ -89,11 +89,11 @@ describe('page: Webinar', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] },
     )
 
     expect(screen.getByTestId('webinar-title')).toHaveTextContent(
-      webinar.title ?? ''
+      webinar.title ?? '',
     )
 
     const description = screen.getByTestId('webinar-description').textContent
@@ -127,23 +127,23 @@ describe('page: Webinar', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] },
     )
 
     recentWebinars.forEach(relatedItem => {
       const relatedItemEl = screen.getByTestId(
-        `webinars-grid-item-${relatedItem.id}`
+        `webinars-grid-item-${relatedItem.id}`,
       )
 
       expect(
-        within(relatedItemEl).getByText(relatedItem.title ?? '')
+        within(relatedItemEl).getByText(relatedItem.title ?? ''),
       ).toBeInTheDocument()
 
       expect(
-        within(relatedItemEl).getByAltText(relatedItem.title ?? '')
+        within(relatedItemEl).getByAltText(relatedItem.title ?? ''),
       ).toHaveAttribute(
         'src',
-        relatedItem.featuredImage?.node?.mediaItemUrl ?? ''
+        relatedItem.featuredImage?.node?.mediaItemUrl ?? '',
       )
     })
   })

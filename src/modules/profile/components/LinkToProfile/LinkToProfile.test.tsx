@@ -14,7 +14,7 @@ describe('component: LinkToProfile', () => {
     render(
       <LinkToProfile profileId={profileId} isProfileArchived={false}>
         {label}
-      </LinkToProfile>
+      </LinkToProfile>,
     )
 
     expect(screen.getByText(label)).toBeInTheDocument()
@@ -30,7 +30,7 @@ describe('component: LinkToProfile', () => {
     RoleName.TRAINER,
   ]
   const cannotViewProfileRoles = Object.values(RoleName).filter(
-    r => !canViewProfileRoles.includes(r)
+    r => !canViewProfileRoles.includes(r),
   )
 
   canViewProfileRoles.forEach(role => {
@@ -43,7 +43,7 @@ describe('component: LinkToProfile', () => {
           auth: {
             activeRole: role,
           },
-        }
+        },
       )
 
       const linkToProfile = screen.getByTestId('link-to-user-profile')
@@ -63,7 +63,7 @@ describe('component: LinkToProfile', () => {
           auth: {
             activeRole: role,
           },
-        }
+        },
       )
 
       const noLinkGenerated = screen.getByTestId('no-link-generated')
@@ -82,7 +82,7 @@ describe('component: LinkToProfile', () => {
   ].filter(r => canViewProfileRoles.includes(r))
 
   const cannotViewArchivedProfileRoles = Object.values(RoleName).filter(
-    r => !canViewArchivedProfileRoles.includes(r)
+    r => !canViewArchivedProfileRoles.includes(r),
   )
 
   canViewArchivedProfileRoles.forEach(role => {
@@ -95,7 +95,7 @@ describe('component: LinkToProfile', () => {
           auth: {
             activeRole: role,
           },
-        }
+        },
       )
 
       const linkToProfile = screen.getByTestId('link-to-user-profile')
@@ -115,7 +115,7 @@ describe('component: LinkToProfile', () => {
           auth: {
             activeRole: role,
           },
-        }
+        },
       )
 
       const noLinkGenerated = screen.getByTestId('no-link-generated')

@@ -90,7 +90,7 @@ export const Row: React.FC<React.PropsWithChildren<Props>> = ({
           <>
             <Ellipsize
               text={Object.values(
-                promo.courses.map(s => s.course?.course_code) || ''
+                promo.courses.map(s => s.course?.course_code) || '',
               ).join(', ')}
               len={25}
             />

@@ -50,7 +50,7 @@ describe('component: EvaluationSummaryTab', () => {
         />
       </Routes>,
       {},
-      { initialEntries: ['/courses/1/details'] }
+      { initialEntries: ['/courses/1/details'] },
     )
 
     expect(screen.queryByTestId('evaluations-fetching')).toBeInTheDocument()
@@ -66,10 +66,10 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
       expect(
-        screen.queryByText('Complete my evaluation')
+        screen.queryByText('Complete my evaluation'),
       ).not.toBeInTheDocument()
     })
   })
@@ -98,7 +98,7 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
       expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
     })
@@ -130,7 +130,7 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
       expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
     })
@@ -144,10 +144,10 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
       expect(
-        screen.queryByText('Complete my evaluation')
+        screen.queryByText('Complete my evaluation'),
       ).not.toBeInTheDocument()
     })
   })
@@ -162,10 +162,10 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
       expect(
-        screen.queryByText('Complete my evaluation')
+        screen.queryByText('Complete my evaluation'),
       ).not.toBeInTheDocument()
     })
 
@@ -178,10 +178,10 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
       expect(
-        screen.queryByText('Complete my evaluation')
+        screen.queryByText('Complete my evaluation'),
       ).not.toBeInTheDocument()
     })
   })
@@ -210,17 +210,17 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[0].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
 
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[0].profile.id) {
           expect(
-            screen.queryByText(new RegExp(evaluation.profile.fullName))
+            screen.queryByText(new RegExp(evaluation.profile.fullName)),
           ).toBeInTheDocument()
         } else {
           expect(
-            screen.queryByText(new RegExp(evaluation.profile.fullName))
+            screen.queryByText(new RegExp(evaluation.profile.fullName)),
           ).not.toBeInTheDocument()
         }
       }
@@ -249,17 +249,17 @@ describe('component: EvaluationSummaryTab', () => {
           />
         </Routes>,
         { auth: { profile: { id: trainers[1].profile.id } } },
-        { initialEntries: ['/courses/1/details'] }
+        { initialEntries: ['/courses/1/details'] },
       )
 
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[1].profile.id) {
           expect(
-            screen.queryByText(new RegExp(evaluation.profile.fullName))
+            screen.queryByText(new RegExp(evaluation.profile.fullName)),
           ).toBeInTheDocument()
         } else {
           expect(
-            screen.queryByText(new RegExp(evaluation.profile.fullName))
+            screen.queryByText(new RegExp(evaluation.profile.fullName)),
           ).not.toBeInTheDocument()
         }
       }
@@ -290,7 +290,7 @@ describe('component: EvaluationSummaryTab', () => {
         <Route path="/evaluation/submit" element={<p>Evaluation submit</p>} />
       </Routes>,
       { auth: { profile: { id: trainers[0].profile.id } } },
-      { initialEntries: ['/courses/1/details'] }
+      { initialEntries: ['/courses/1/details'] },
     )
 
     await userEvent.click(screen.getByText('Complete my evaluation'))

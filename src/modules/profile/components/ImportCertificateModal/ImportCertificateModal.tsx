@@ -50,7 +50,7 @@ export const ImportCertificateModal = forwardRef<
     () => {
       return data
     },
-    [data]
+    [data],
   )
 
   useEffect(() => {

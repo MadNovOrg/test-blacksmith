@@ -179,7 +179,7 @@ export const Configure: React.FC = () => {
                   label={t('steps.configure.certificate-number-column-label')}
                   {...register('certificateNumberColumn')}
                   error={Boolean(
-                    formState.errors.certificateNumberColumn?.message
+                    formState.errors.certificateNumberColumn?.message,
                   )}
                 >
                   {columns.map(c => (
@@ -192,7 +192,7 @@ export const Configure: React.FC = () => {
                 {formState.errors.certificateNumberColumn?.message ? (
                   <FormHelperText
                     error={Boolean(
-                      formState.errors.certificateNumberColumn?.message
+                      formState.errors.certificateNumberColumn?.message,
                     )}
                   >
                     {formState.errors.certificateNumberColumn.message}

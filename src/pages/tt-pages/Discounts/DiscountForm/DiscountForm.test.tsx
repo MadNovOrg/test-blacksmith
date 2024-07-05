@@ -103,7 +103,7 @@ describe('page: DiscountForm', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.COURSES}`
 
     client.executeQuery.mockImplementationOnce(() =>
-      fromValue({ data: { courses: [] } })
+      fromValue({ data: { courses: [] } }),
     )
 
     _render({})
@@ -184,14 +184,14 @@ describe('page: DiscountForm', () => {
     await userEvent.clear(startDate)
 
     await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i })
+      screen.getByRole('button', { name: /create discount/i }),
     )
 
     await waitFor(() => {
       expect(
         within(screen.getByTestId('valid-from')).getByText(
-          /this field is required/i
-        )
+          /this field is required/i,
+        ),
       ).toBeInTheDocument()
     })
 
@@ -217,12 +217,12 @@ describe('page: DiscountForm', () => {
     await userEvent.paste('01/01/2023')
 
     await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i })
+      screen.getByRole('button', { name: /create discount/i }),
     )
 
     await waitFor(() => {
       expect(
-        screen.getByText(/must be greater or equal to 'Start date'/i)
+        screen.getByText(/must be greater or equal to 'Start date'/i),
       ).toBeInTheDocument()
     })
   })
@@ -235,12 +235,12 @@ describe('page: DiscountForm', () => {
     await userEvent.clear(screen.getByLabelText(/maximum usages/i))
     await userEvent.type(screen.getByLabelText(/maximum usages/i), '0')
     await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i })
+      screen.getByRole('button', { name: /create discount/i }),
     )
 
     await waitFor(() => {
       expect(
-        screen.getByText(/maximum usages must be greater than or equal to 1/i)
+        screen.getByText(/maximum usages must be greater than or equal to 1/i),
       ).toBeInTheDocument()
     })
   })
@@ -292,24 +292,24 @@ describe('page: DiscountForm', () => {
 
     await userEvent.click(within(percentageOptions).getByRole('button'))
     await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(/other/i)
+      within(screen.getByRole('listbox')).getByText(/other/i),
     )
 
     await userEvent.clear(screen.getByPlaceholderText(/amount/i))
     await userEvent.type(screen.getByPlaceholderText(/amount/i), '20')
 
     await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i })
+      screen.getByRole('button', { name: /create discount/i }),
     )
 
     await waitFor(() => {
       const dialog = screen.getByRole('dialog')
 
       expect(
-        within(dialog).getByText(/discount approval required/i)
+        within(dialog).getByText(/discount approval required/i),
       ).toBeInTheDocument()
       expect(
-        within(dialog).getByText(/percentage is greater or equal to 15%/i)
+        within(dialog).getByText(/percentage is greater or equal to 15%/i),
       ).toBeInTheDocument()
     })
   })
@@ -324,24 +324,24 @@ describe('page: DiscountForm', () => {
 
     await userEvent.click(within(percentageOptions).getByRole('button'))
     await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(/other/i)
+      within(screen.getByRole('listbox')).getByText(/other/i),
     )
 
     await userEvent.clear(screen.getByPlaceholderText(/amount/i))
     await userEvent.type(screen.getByPlaceholderText(/amount/i), '15')
 
     await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i })
+      screen.getByRole('button', { name: /create discount/i }),
     )
 
     await waitFor(() => {
       const dialog = screen.getByRole('dialog')
 
       expect(
-        within(dialog).getByText(/discount approval required/i)
+        within(dialog).getByText(/discount approval required/i),
       ).toBeInTheDocument()
       expect(
-        within(dialog).getByText(/percentage is greater or equal to 15%/i)
+        within(dialog).getByText(/percentage is greater or equal to 15%/i),
       ).toBeInTheDocument()
     })
   })
@@ -354,18 +354,18 @@ describe('page: DiscountForm', () => {
     await userEvent.type(screen.getByPlaceholderText(/free places/i), '4')
 
     await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i })
+      screen.getByRole('button', { name: /create discount/i }),
     )
 
     await waitFor(() => {
       const dialog = screen.getByRole('dialog')
 
       expect(
-        within(dialog).getByText(/discount approval required/i)
+        within(dialog).getByText(/discount approval required/i),
       ).toBeInTheDocument()
 
       expect(
-        within(dialog).getByText(/number of free spaces exceeds 3/i)
+        within(dialog).getByText(/number of free spaces exceeds 3/i),
       ).toBeInTheDocument()
     })
   })
@@ -394,8 +394,8 @@ describe('page: DiscountForm', () => {
       await waitFor(() => {
         expect(
           screen.queryByText(
-            'This discount has been disabled and editing it is not possible.'
-          )
+            'This discount has been disabled and editing it is not possible.',
+          ),
         ).toBeInTheDocument()
       })
     })
@@ -422,7 +422,7 @@ describe('page: DiscountForm', () => {
 
       await waitFor(() => {
         expect(
-          within(screen.getByTestId('profile-selector')).getByRole('combobox')
+          within(screen.getByTestId('profile-selector')).getByRole('combobox'),
         ).toBeDisabled()
         expect(screen.getByTestId('fld-code')).toBeDisabled()
         expect(screen.getByTestId('fld-description')).toBeDisabled()
@@ -502,6 +502,6 @@ function _render({
       initialEntries: [
         id ? `/admin/discounts/edit/${id}` : '/admin/discounts/new',
       ],
-    }
+    },
   )
 }

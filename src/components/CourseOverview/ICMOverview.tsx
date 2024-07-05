@@ -50,9 +50,9 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
   const modulesData = useMemo(
     () =>
       modulesDataResponse?.groups.filter(
-        group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0
+        group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0,
       ),
-    [modulesDataResponse]
+    [modulesDataResponse],
   )
   const modulesLoadingStatus = getSWRLoadingStatus(modulesData, moduleDataError)
 
@@ -60,7 +60,7 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     const modulesInCourse = course.moduleGroupIds.map(
-      ({ module }) => module.moduleGroup.id
+      ({ module }) => module.moduleGroup.id,
     )
 
     setUsedModules(modulesInCourse)
@@ -119,7 +119,7 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
               ))}
             </Container>
           </Accordion>
-        ) : null
+        ) : null,
       )}
     </>
   )

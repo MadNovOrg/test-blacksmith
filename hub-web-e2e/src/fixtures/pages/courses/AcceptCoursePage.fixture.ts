@@ -6,7 +6,7 @@ import { CourseDetailsPage } from './course-details/CourseDetailsPage.fixture'
 
 export class AcceptCoursePage extends BasePage {
   acceptConfirmationAlert = this.page.getByText(
-    'You are now attending this course. Please complete the checklist.'
+    'You are now attending this course. Please complete the checklist.',
   )
   async gotoAccept(courseId: number, inviteId: string) {
     await super.goto(`accept-invite/${inviteId}?courseId=${courseId}`)

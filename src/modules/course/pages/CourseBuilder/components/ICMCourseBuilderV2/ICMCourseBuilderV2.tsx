@@ -238,7 +238,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     if (!courseData?.course) return ''
 
     const mappedCourseDescription = mapCourseLevelToDescription(
-      courseData.course
+      courseData.course,
     )
 
     if (!mappedCourseDescription) return ''
@@ -247,7 +247,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       `pages.trainer-base.create-course.new-course.${mappedCourseDescription.translationKey}`,
       {
         duration: mappedCourseDescription.duration,
-      }
+      },
     )
   }, [courseData, t, mapCourseLevelToDescription])
 
@@ -319,14 +319,14 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
 
   const validateSelection = (selectedIds: string[]): boolean => {
     const selectedModules = moduleSettingsData?.moduleSettings.filter(
-      moduleSetting => selectedIds.includes(moduleSetting.module.id)
+      moduleSetting => selectedIds.includes(moduleSetting.module.id),
     )
 
     if (courseData?.course?.level === Course_Level_Enum.Level_2) {
       return Boolean(
         selectedModules?.some(
-          moduleSetting => moduleSetting.color === Color_Enum.Purple
-        )
+          moduleSetting => moduleSetting.color === Color_Enum.Purple,
+        ),
       )
     }
 
@@ -422,7 +422,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
                       duration: maxDuration
                         ? `${maxDuration / 60} hours`
                         : '0 hours',
-                    }
+                    },
                   ),
               }}
             />
@@ -448,7 +448,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
                     {t(
                       `pages.trainer-base.create-course.new-course.${
                         courseBuilderWarning[courseData.course.level]
-                      }`
+                      }`,
                     )}
                   </Alert>
                 ) : null,
@@ -467,21 +467,21 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
               {
                 hours: Math.max(
                   minimumTimeCommitment,
-                  Math.ceil((estimatedDurationRef.current ?? 0) / 60)
+                  Math.ceil((estimatedDurationRef.current ?? 0) / 60),
                 ),
-              }
+              },
             )}
             {editMode ? (
               <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
                 {t(
-                  'pages.trainer-base.create-course.new-course.time-commitment-warning'
+                  'pages.trainer-base.create-course.new-course.time-commitment-warning',
                 )}
               </Alert>
             ) : null}
           </>
         }
         title={t(
-          'pages.trainer-base.create-course.new-course.time-commitment-title'
+          'pages.trainer-base.create-course.new-course.time-commitment-title',
         )}
         okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
         data-testid="time-commitment-dialog"

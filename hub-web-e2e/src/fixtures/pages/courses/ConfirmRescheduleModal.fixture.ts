@@ -14,19 +14,19 @@ export class ConfirmRescheduleModal extends BasePage {
   constructor(page: Page) {
     super(page)
     this.reasonInput = this.page.locator(
-      '[data-testid="reasonForChange-input"] input'
+      '[data-testid="reasonForChange-input"] input',
     )
     this.confirmButton = this.page.locator(
-      '[data-testid="confirmChanges-button"]'
+      '[data-testid="confirmChanges-button"]',
     )
     this.noFeesCheckbox = this.page.locator(
-      '[data-testid="noFee-radio-button"]'
+      '[data-testid="noFee-radio-button"]',
     )
     this.applyFeesCheckbox = this.page.locator(
-      '[data-testid="applyTerms-radio-button"]'
+      '[data-testid="applyTerms-radio-button"]',
     )
     this.customFeesCheckbox = this.page.locator(
-      '[data-testid="customFee-radio-button"]'
+      '[data-testid="customFee-radio-button"]',
     )
   }
 

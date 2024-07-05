@@ -33,7 +33,7 @@ export const ProfileArchiveDialog: React.FC<React.PropsWithChildren<Props>> = ({
     profileId,
     undefined,
     undefined,
-    true
+    true,
   )
 
   const futureCoursesAsTrainer = useMemo(() => {
@@ -41,8 +41,8 @@ export const ProfileArchiveDialog: React.FC<React.PropsWithChildren<Props>> = ({
       return profile.courseAsTrainer.filter(
         courseTrainer =>
           !ENDED_COURSES_STATUSES.includes(
-            courseTrainer.course.status ?? Course_Status_Enum.Draft
-          )
+            courseTrainer.course.status ?? Course_Status_Enum.Draft,
+          ),
       )
     }
     return []
@@ -53,8 +53,8 @@ export const ProfileArchiveDialog: React.FC<React.PropsWithChildren<Props>> = ({
       return upcomingCourses.filter(
         course =>
           !ENDED_COURSES_STATUSES.includes(
-            course.status ?? Course_Status_Enum.Draft
-          )
+            course.status ?? Course_Status_Enum.Draft,
+          ),
       )
     }
     return []

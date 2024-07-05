@@ -33,14 +33,14 @@ export const TreeList: React.FC<React.PropsWithChildren<TreeListProps>> = ({
 
   const allSelected = useMemo(
     () => group.modules.every(m => state[`${name}.${m.name}`] ?? false),
-    [state, group, name]
+    [state, group, name],
   )
 
   const someSelected = useMemo(
     () =>
       !allSelected &&
       group.modules.some(m => state[`${name}.${m.name}`] ?? false),
-    [state, group, name, allSelected]
+    [state, group, name, allSelected],
   )
 
   useEffect(() => {

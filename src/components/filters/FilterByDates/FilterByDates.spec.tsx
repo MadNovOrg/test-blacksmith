@@ -8,10 +8,10 @@ import { FilterByDates } from './FilterByDates'
 const { t } = getI18n()
 const errors = {
   endDateBeforeStartDate: t(
-    'components.filter-dates.validation.end-date-before-start-date'
+    'components.filter-dates.validation.end-date-before-start-date',
   ),
   startDateAfterEndDate: t(
-    'components.filter-dates.validation.start-date-after-end-date'
+    'components.filter-dates.validation.start-date-after-end-date',
   ),
   invalidDate: t('components.filter-dates.validation.invalid-date'),
 }
@@ -35,7 +35,7 @@ describe(FilterByDates.name, () => {
 
     expect(onChange).toHaveBeenCalledWith(
       new Date('2022-05-30T00:00:00'),
-      undefined
+      undefined,
     )
   })
 
@@ -55,7 +55,7 @@ describe(FilterByDates.name, () => {
 
     expect(onChange).toHaveBeenCalledWith(
       undefined,
-      new Date('2022-05-30T00:00:00')
+      new Date('2022-05-30T00:00:00'),
     )
   })
 
@@ -75,12 +75,12 @@ describe(FilterByDates.name, () => {
 
     const dateFrom = screen.getByTestId('DateFrom')
     expect(
-      within(dateFrom).queryByText(errors.startDateAfterEndDate)
+      within(dateFrom).queryByText(errors.startDateAfterEndDate),
     ).not.toBeInTheDocument()
 
     const dateTo = screen.getByTestId('DateTo')
     expect(
-      within(dateTo).queryByText(errors.endDateBeforeStartDate)
+      within(dateTo).queryByText(errors.endDateBeforeStartDate),
     ).not.toBeInTheDocument()
 
     const to = screen.getByLabelText('To')
@@ -95,16 +95,16 @@ describe(FilterByDates.name, () => {
 
     await waitFor(() => {
       expect(
-        within(dateFrom).getByText(errors.startDateAfterEndDate)
+        within(dateFrom).getByText(errors.startDateAfterEndDate),
       ).toBeInTheDocument()
       expect(
-        within(dateTo).getByText(errors.endDateBeforeStartDate)
+        within(dateTo).getByText(errors.endDateBeforeStartDate),
       ).toBeInTheDocument()
     })
 
     expect(onChange).toHaveBeenCalledWith(
       new Date('2024-07-30T00:00:00'),
-      undefined
+      undefined,
     )
   })
 })

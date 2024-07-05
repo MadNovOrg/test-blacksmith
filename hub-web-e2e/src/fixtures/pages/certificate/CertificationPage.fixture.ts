@@ -18,13 +18,13 @@ class ModifyGradeModal {
   constructor(page: Page) {
     this.page = page
     this.gradingMenu = this.page.locator(
-      '[data-testid=course-grading-menu-selected]'
+      '[data-testid=course-grading-menu-selected]',
     )
     this.notesInput = this.page.locator(
-      '[data-testid=modify-grade-modal-notes] input'
+      '[data-testid=modify-grade-modal-notes] input',
     )
     this.confirmButton = this.page.locator(
-      '[data-testid=modify-grade-modal-confirm]'
+      '[data-testid=modify-grade-modal-confirm]',
     )
   }
 
@@ -53,13 +53,13 @@ export class CertificationPage extends BasePage {
     super(page)
     this.name = this.page.locator('[data-testid=name]')
     this.table = new UiTable(
-      this.page.locator('[data-testid=certification-table]')
+      this.page.locator('[data-testid=certification-table]'),
     )
     this.manageCertificationButton = this.page.locator(
-      '[data-testid=manage-certification-button]'
+      '[data-testid=manage-certification-button]',
     )
     this.manageModifyGrade = this.page.locator(
-      '[data-testid=manage-certificate-modify-grade]'
+      '[data-testid=manage-certificate-modify-grade]',
     )
     this.certificateGrade = this.page.locator('[data-testid=certificate-grade]')
   }

@@ -36,7 +36,7 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
           profile_id: { _eq: await getProfileId(email) },
         },
       },
-    }
+    },
   )
   // Update the start and end times for each course
   return courses.map(course => ({
@@ -53,7 +53,7 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
 
 export const getCourseParticipantId = async (
   courseId: number,
-  email: string
+  email: string,
 ): Promise<string> => {
   const profileId = await getProfileId(email)
   const response: { course_participant: { id: string }[] } =
@@ -69,7 +69,7 @@ export const getCourseParticipantId = async (
 export const setCourseDates = async (
   courseId: number,
   newStart: Date,
-  newEnd: Date
+  newEnd: Date,
 ) => {
   const query = gql`
     mutation MyMutation {
@@ -90,7 +90,7 @@ export const setCourseDates = async (
 
 export const getModuleIds = async (
   moduleGroups: string[],
-  level: Course_Level_Enum
+  level: Course_Level_Enum,
 ): Promise<string[]> => {
   const query = gql`
     query ModuleGroupsByLevel {
@@ -107,10 +107,10 @@ export const getModuleIds = async (
     }
   `
   const response: { module_group: ModuleGroup[] } = await getClient().request(
-    query
+    query,
   )
   return response.module_group.flatMap((m: { modules: { id: string }[] }) =>
-    m.modules.flatMap(i => i.id)
+    m.modules.flatMap(i => i.id),
   )
 }
 
@@ -118,7 +118,7 @@ export const insertCourse = async (
   course: Course,
   email: string,
   trainerStatus = InviteStatus.ACCEPTED,
-  modules = true
+  modules = true,
 ): Promise<{ id: number; name: string; courseCode: string }> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const courseInput: any = {
@@ -141,12 +141,12 @@ export const insertCourse = async (
   }
   if (course.organization) {
     courseInput.organization_id = await getOrganizationId(
-      course.organization.name
+      course.organization.name,
     )
   }
   if (course.bookingContactProfile) {
     const bookingContactProfileId = await getProfileId(
-      course.bookingContactProfile.email
+      course.bookingContactProfile.email,
     )
     courseInput.bookingContactProfileId = bookingContactProfileId
     courseInput.bookingContactInviteData = {
@@ -159,7 +159,7 @@ export const insertCourse = async (
 
   if (course.organizationKeyContactProfile) {
     const organizationKeyContactProfileId = await getProfileId(
-      course.organizationKeyContactProfile.email
+      course.organizationKeyContactProfile.email,
     )
     courseInput.organizationKeyContactProfileId =
       organizationKeyContactProfileId
@@ -252,7 +252,7 @@ export const insertCourse = async (
     } catch (error: any) {
       if (error.message.includes('Uniqueness violation')) {
         console.error(
-          `Failed to insert course for ${email}, due to uniqueness. Retrying...`
+          `Failed to insert course for ${email}, due to uniqueness. Retrying...`,
         )
         await new Promise(resolve => setTimeout(resolve, 1000))
       } else {
@@ -292,7 +292,7 @@ export const deleteCourse = async (id?: number) => {
 
 export const makeSureTrainerHasCourses = async (
   courses: Course[],
-  email: string
+  email: string,
 ): Promise<Course[]> => {
   const existingCourses = await getTrainerCourses(email)
   for (const course of courses) {
@@ -302,7 +302,7 @@ export const makeSureTrainerHasCourses = async (
   }
   const allCourses = await getTrainerCourses(email)
   const newCourses = allCourses.filter(
-    course => !existingCourses.map(c => c.id).includes(course.id)
+    course => !existingCourses.map(c => c.id).includes(course.id),
   )
   return newCourses
 }
@@ -310,7 +310,7 @@ export const makeSureTrainerHasCourses = async (
 export const insertCourseParticipants = async (
   courseId: number,
   users: User[],
-  bookingDate = new Date()
+  bookingDate = new Date(),
 ): Promise<CourseParticipant[]> => {
   const participants = users.map(async user => {
     const profileId = await getProfileId(user.email)
@@ -361,7 +361,7 @@ export const insertCourseParticipants = async (
 
 async function setStatus(
   users: string[],
-  moduleIds: string[]
+  moduleIds: string[],
 ): Promise<
   { completed: boolean; course_participant_id: string; module_id: string }[]
 > {
@@ -382,11 +382,11 @@ export async function insertCourseGradingForParticipants(
   course: Course,
   users: User[],
   grade: Grade_Enum,
-  evaluationSubmitted = false
+  evaluationSubmitted = false,
 ): Promise<void> {
   const courseId = course.id
   const participantIds = await Promise.all(
-    users.map(user => getCourseParticipantId(courseId, user.email))
+    users.map(user => getCourseParticipantId(courseId, user.email)),
   )
   const moduleIds = (
     await getModuleIds(getModulesByLevel(course.level), course.level)
@@ -428,7 +428,7 @@ export async function insertCertificate(course: Course, users: User[]) {
       blendedLearning: course.go1Integration,
       reaccreditation: course.reaccreditation,
       courseAccreditedBy: course.accreditedBy,
-    })
+    }),
   )
   const certificateQuery = gql`
     mutation insertCertificate($objects: [course_certificate_insert_input!]!) {
@@ -457,13 +457,13 @@ export async function insertCertificate(course: Course, users: User[]) {
     throw e
   }
   return certificateResult.insert_course_certificate.returning.map(
-    certificate => certificate.id
+    certificate => certificate.id,
   )
 }
 
 export async function insertCertificateForParticipants(
   course: Course,
-  users: User[]
+  users: User[],
 ): Promise<void> {
   const certificateIds = await insertCertificate(course, users)
   const participantQuery = gql`
@@ -504,7 +504,7 @@ export async function insertCertificateForParticipants(
 export const cancelCourse = async (
   courseId: number,
   cancellationReason = 'reason',
-  cancellationFeePercent = 0
+  cancellationFeePercent = 0,
 ) => {
   try {
     await getClient({
@@ -531,7 +531,7 @@ export const transferToCourse = async (
   fromCourseId: number,
   toCourseId: number,
   email: string,
-  reason: string
+  reason: string,
 ): Promise<void> => {
   const participantId = await getCourseParticipantId(fromCourseId, email)
   const variables = {
@@ -550,11 +550,11 @@ export const transferToCourse = async (
     }>(TRANSFER_PARTICIPANT, variables)
   if (response.transferParticipant.success) {
     console.log(
-      `Transferred "${email}" from course "${fromCourseId}" to "${toCourseId}"`
+      `Transferred "${email}" from course "${fromCourseId}" to "${toCourseId}"`,
     )
   } else {
     console.log(
-      `Transfer failed due to "${response.transferParticipant.error}"`
+      `Transfer failed due to "${response.transferParticipant.error}"`,
     )
   }
 }

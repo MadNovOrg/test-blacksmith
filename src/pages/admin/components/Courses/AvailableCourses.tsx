@@ -63,7 +63,7 @@ export const AvailableCourses: React.FC<
     Course_Level_Enum[]
   >([])
   const [sortMode, setSortMode] = useState(
-    id !== ALL_ORGS ? 'distance-to-org' : 'date-ascending'
+    id !== ALL_ORGS ? 'distance-to-org' : 'date-ascending',
   )
 
   const sortingByDistance = sortMode === 'distance-to-org'
@@ -148,8 +148,8 @@ export const AvailableCourses: React.FC<
           course.id,
           geoDistance(
             orgs?.orgs.find(org => org.id === id)?.geoCoordinates,
-            course.schedules[0].venue?.geoCoordinates
-          )
+            course.schedules[0].venue?.geoCoordinates,
+          ),
         )
       })
     }
@@ -167,7 +167,7 @@ export const AvailableCourses: React.FC<
       if (aDistance > bDistance) return 1
       return 0
     },
-    [distances]
+    [distances],
   )
 
   const sortModes = useMemo(() => {
@@ -187,18 +187,18 @@ export const AvailableCourses: React.FC<
   const courses = useMemo(() => {
     if (coursesForBooking && sortingByDistance) {
       const knownDistances = coursesForBooking.filter(
-        c => !!distances.get(c.id)
+        c => !!distances.get(c.id),
       )
       const online = coursesForBooking.filter(c => !c.schedules[0].venue)
       const unknown = coursesForBooking.filter(
-        c => c.schedules[0].venue && !distances.get(c.id)
+        c => c.schedules[0].venue && !distances.get(c.id),
       )
       return [...knownDistances.sort(sortByDistance), ...online, ...unknown]
     }
     return orderBy(
       coursesForBooking,
       'start',
-      sortMode === 'date-ascending' ? 'asc' : 'desc'
+      sortMode === 'date-ascending' ? 'asc' : 'desc',
     )
   }, [
     sortingByDistance,

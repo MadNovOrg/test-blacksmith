@@ -28,19 +28,19 @@ describe('components: CreateCourseMenu', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByText('Create course'))
 
     await userEvent.click(
       within(screen.getByTestId('create-course-options')).getByText(
-        'Open course'
-      )
+        'Open course',
+      ),
     )
 
     await waitFor(() =>
-      expect(screen.getByText('OPEN form')).toBeInTheDocument()
+      expect(screen.getByText('OPEN form')).toBeInTheDocument(),
     )
   })
 
@@ -56,15 +56,15 @@ describe('components: CreateCourseMenu', () => {
         },
       },
 
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByText('Create course'))
 
     await userEvent.click(
       within(screen.getByTestId('create-course-options')).getByText(
-        'Closed course'
-      )
+        'Closed course',
+      ),
     )
 
     await waitFor(async () => {
@@ -83,15 +83,15 @@ describe('components: CreateCourseMenu', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByText('Create course'))
 
     await userEvent.click(
       within(screen.getByTestId('create-course-options')).getByText(
-        'Indirect course'
-      )
+        'Indirect course',
+      ),
     )
 
     await waitFor(() => {
@@ -110,15 +110,15 @@ describe('components: CreateCourseMenu', () => {
           activeRole: RoleName.TT_OPS,
         },
       },
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByText('Create course'))
 
     expect(
       within(screen.getByTestId('create-course-options')).queryByText(
-        'Indirect course'
-      )
+        'Indirect course',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -135,7 +135,7 @@ describe('components: CreateCourseMenu', () => {
           activeCertificates: [Course_Level_Enum.IntermediateTrainer],
         },
       },
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByText('Create course'))
@@ -157,20 +157,20 @@ describe('components: CreateCourseMenu', () => {
           allowedRoles: generateRolesUpTo(RoleName.SALES_ADMIN),
         },
       },
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(screen.getByText('Create course'))
 
     expect(
       within(screen.getByTestId('create-course-options')).getByText(
-        /open course/i
-      )
+        /open course/i,
+      ),
     ).toBeInTheDocument()
     expect(
       within(screen.getByTestId('create-course-options')).getByText(
-        /closed course/i
-      )
+        /closed course/i,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -183,7 +183,7 @@ describe('components: CreateCourseMenu', () => {
     })
 
     expect(
-      screen.getByRole('button', { name: /create course/i })
+      screen.getByRole('button', { name: /create course/i }),
     ).toBeDisabled()
   })
 })

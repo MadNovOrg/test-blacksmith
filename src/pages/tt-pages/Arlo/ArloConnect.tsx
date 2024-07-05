@@ -50,11 +50,11 @@ export const ArloConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
     url.searchParams.set('response_type', 'code')
     url.searchParams.set(
       'scope',
-      'openid profile offline_access read all_claims'
+      'openid profile offline_access read all_claims',
     )
     url.searchParams.set(
       'redirect_uri',
-      'https://web.dev.teamteachhub.com/admin/arlo/connect'
+      'https://web.dev.teamteachhub.com/admin/arlo/connect',
     )
     url.searchParams.set('state', 'abc')
 

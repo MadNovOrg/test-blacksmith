@@ -40,7 +40,7 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     const table = screen.getByTestId('courses-table')
@@ -75,7 +75,7 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
     )
 
     const table = screen.getByTestId('courses-table')
@@ -110,7 +110,7 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TRAINER,
         },
-      }
+      },
     )
 
     const table = screen.getByTestId('courses-table')

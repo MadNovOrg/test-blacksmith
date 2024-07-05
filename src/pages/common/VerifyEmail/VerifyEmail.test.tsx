@@ -39,7 +39,7 @@ describe('page: VerifyEmailPage', () => {
         <Route path="/profile" element={<div />} />
       </Routes>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
   }
 
@@ -51,7 +51,7 @@ describe('page: VerifyEmailPage', () => {
     await waitForCalls(AuthMock.verifyCurrentUserAttribute)
     expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
   })
 
@@ -60,7 +60,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     expect(screen.queryByTestId('signup-verify-error')).toBeNull()
@@ -75,7 +75,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     const code = '1234'
@@ -86,7 +86,7 @@ describe('page: VerifyEmailPage', () => {
 
     const error = await screen.findByTestId('signup-verify-error')
     expect(error).toHaveTextContent(
-      'Please enter 6 digit passcode received in email'
+      'Please enter 6 digit passcode received in email',
     )
 
     expect(AuthMock.verifyCurrentUserAttributeSubmit).not.toHaveBeenCalled()
@@ -99,7 +99,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     const code = '123456'
@@ -111,10 +111,10 @@ describe('page: VerifyEmailPage', () => {
     await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
     expect(AuthMock.verifyCurrentUserAttributeSubmit).toHaveBeenCalledWith(
       'email',
-      code
+      code,
     )
     await waitFor(() =>
-      expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument()
+      expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument(),
     )
   })
 
@@ -127,7 +127,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     const code = '123456'
@@ -151,7 +151,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     const code = '123456'
@@ -165,7 +165,7 @@ describe('page: VerifyEmailPage', () => {
 
     const error = await screen.findByTestId('signup-verify-error')
     expect(error).toHaveTextContent(
-      'Verification code expired. Please request new code.'
+      'Verification code expired. Please request new code.',
     )
   })
 
@@ -174,7 +174,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     const resendBtn = screen.getByTestId('signup-verify-resend')
@@ -201,7 +201,7 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
-      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
     )
 
     const code = '123456'
@@ -212,7 +212,7 @@ describe('page: VerifyEmailPage', () => {
     await userEvent.click(submitBtn)
 
     await waitFor(() =>
-      expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument()
+      expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument(),
     )
 
     await userEvent.click(screen.getByTestId('btn-goto-login'))
@@ -228,6 +228,6 @@ async function fillCode(code: string) {
     code.split('').map((n, i) => {
       const iN = screen.getByTestId(`signup-verify-code-${i}`)
       return userEvent.type(iN, n)
-    })
+    }),
   )
 }

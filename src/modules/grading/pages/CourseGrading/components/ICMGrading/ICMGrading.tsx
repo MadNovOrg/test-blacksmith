@@ -99,7 +99,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
 
     const rawStoredSelection = localStorage.getItem(STORAGE_KEY)
     const storedSelection: Record<string, boolean> = JSON.parse(
-      rawStoredSelection ?? '{}'
+      rawStoredSelection ?? '{}',
     )
     course.modules.forEach(courseModule => {
       if (!courseModule.covered || !courseModule.module.moduleGroup) {
@@ -122,7 +122,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
         name: courseModule.module.name,
         covered: storedSelection[courseModule.module.id] ?? true,
         submodules: course.modules.find(
-          x => x.module.id === courseModule.module.id
+          x => x.module.id === courseModule.module.id,
         )?.module.submodules,
       })
     })
@@ -216,7 +216,7 @@ export const ICMGrading: FC<Props> = ({ course }) => {
   const canAddModuleNotes = acl.canAddModuleNotes(
     course.trainers
       .filter(t => t.type === Course_Trainer_Type_Enum.Leader)
-      .map(t => t.profile_id)
+      .map(t => t.profile_id),
   )
 
   return (

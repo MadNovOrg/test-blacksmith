@@ -78,7 +78,7 @@ const CertificateHoldHistoryModal: React.FC<
             </TableCell>
             <TableCell>
               {t(
-                `common.course-certificate.put-on-hold-modal.reasons.${changelog.payload.reason.toLocaleLowerCase()}`
+                `common.course-certificate.put-on-hold-modal.reasons.${changelog.payload.reason.toLocaleLowerCase()}`,
               )}
             </TableCell>
             <TableCell>

@@ -19,7 +19,7 @@ it('displays N/A if there is no information if participant attended a course or 
   render(
     <Provider value={client}>
       <AttendingToggle participant={{ id: chance.guid(), attended: null }} />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('button', { name: 'N/A' })).toBeInTheDocument()
@@ -36,12 +36,12 @@ it('marks the chip as disabled', () => {
         participant={{ id: chance.guid(), attended: null }}
         disabled
       />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('button', { name: 'N/A' })).toHaveAttribute(
     'aria-disabled',
-    'true'
+    'true',
   )
 })
 
@@ -53,7 +53,7 @@ it('displays Attended chip if a participant attended a course', () => {
   render(
     <Provider value={client}>
       <AttendingToggle participant={{ id: chance.guid(), attended: true }} />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('button', { name: /attended/i })).toBeInTheDocument()
@@ -67,11 +67,11 @@ it("displays Did not attend chip if a participant didn't attend a course", () =>
   render(
     <Provider value={client}>
       <AttendingToggle participant={{ id: chance.guid(), attended: false }} />
-    </Provider>
+    </Provider>,
   )
 
   expect(
-    screen.getByRole('button', { name: /did not attend/i })
+    screen.getByRole('button', { name: /did not attend/i }),
   ).toBeInTheDocument()
 })
 
@@ -103,7 +103,7 @@ it('toggles attendance when chip is clicked', async () => {
   render(
     <Provider value={client}>
       <AttendingToggle participant={{ id: participantId, attended: null }} />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.click(screen.getByRole('button', { name: 'N/A' }))
@@ -143,7 +143,7 @@ it('updates attendance chip after toggling', async () => {
   const { rerender } = render(
     <Provider value={client}>
       <AttendingToggle participant={{ id: participantId, attended: null }} />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.click(screen.getByRole('button', { name: 'N/A' }))
@@ -153,7 +153,7 @@ it('updates attendance chip after toggling', async () => {
   rerender(
     <Provider value={client}>
       <AttendingToggle participant={{ id: participantId, attended: false }} />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('button', { name: /did not attend/i }))

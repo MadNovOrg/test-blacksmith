@@ -13,7 +13,7 @@ export class CourseTransferPage extends BasePage {
     super(page)
     this.transferDetails = this.page.locator('[data-testId=transfer-details]')
     this.reviewAndConfirm = this.page.locator(
-      '[data-testid="review-and-confirm"]'
+      '[data-testid="review-and-confirm"]',
     )
     this.confirmTransfer = this.page.locator('[data-testid="confirm-transfer"]')
   }

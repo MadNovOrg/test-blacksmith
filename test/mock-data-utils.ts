@@ -104,7 +104,7 @@ export const buildBlExportData = build<{
       attendees: {
         attendees: [buildBlExportDataAttendee(), buildBlExportDataAttendee()],
         commissioningOrganisationName: perBuild(() =>
-          chance.word({ length: 3 })
+          chance.word({ length: 3 }),
         ),
         courseCode: 'CL-L1-10000',
         courseEndDate: sub(new Date(), { days: 2 }).toISOString(),
@@ -218,7 +218,7 @@ export const buildVenue = build<Venue>({
     postCode: perBuild(() => chance.zip()),
     country: perBuild(() => chance.country()),
     geoCoordinates: `(${perBuild(() => chance.latitude())},${perBuild(() =>
-      chance.longitude()
+      chance.longitude(),
     )}`,
   },
 })
@@ -692,7 +692,7 @@ export const buildWaitlistEntry = build<WaitlistSummaryFragment>({
 
 export function buildEntities<T>(
   count: number,
-  buildFunction: (buildTimeConfig?: BuildTimeConfig<T> | undefined) => T
+  buildFunction: (buildTimeConfig?: BuildTimeConfig<T> | undefined) => T,
 ): T[] {
   const entities: T[] = []
 
@@ -709,7 +709,7 @@ export const buildExpensesInput = build<ExpensesInput>({
       .fill(null)
       .map(() => {
         const method = chance.pickone(
-          Object.keys(TransportMethod)
+          Object.keys(TransportMethod),
         ) as TransportMethod
         const tripData: ExpensesInput['transport'][number] = {
           method,
@@ -754,7 +754,7 @@ export const buildTrainerInput = build<TrainerInput>({
 })
 
 export const buildTrainerInputAssistant = (
-  overrides?: Partial<TrainerInput>
+  overrides?: Partial<TrainerInput>,
 ) => {
   return buildTrainerInput({
     overrides: { ...overrides, type: Course_Trainer_Type_Enum.Assistant },
@@ -762,7 +762,7 @@ export const buildTrainerInputAssistant = (
 }
 
 export const buildTrainerInputModerator = (
-  overrides?: Partial<TrainerInput>
+  overrides?: Partial<TrainerInput>,
 ) => {
   return buildTrainerInput({
     overrides: { ...overrides, type: Course_Trainer_Type_Enum.Moderator },

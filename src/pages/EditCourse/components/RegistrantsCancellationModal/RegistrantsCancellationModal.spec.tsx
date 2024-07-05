@@ -12,10 +12,10 @@ describe(RegistrantsCancellationModal.name, () => {
   } = renderHook(() => useTranslation())
   const pageButtons = [
     t(
-      'pages.edit-course.registrants-cancellation-modal.proceed-with-cancellation'
+      'pages.edit-course.registrants-cancellation-modal.proceed-with-cancellation',
     ),
     t(
-      'pages.edit-course.registrants-cancellation-modal.transfer-attendees-first'
+      'pages.edit-course.registrants-cancellation-modal.transfer-attendees-first',
     ),
   ]
   const onProceed = vi.fn()
@@ -25,12 +25,12 @@ describe(RegistrantsCancellationModal.name, () => {
       <RegistrantsCancellationModal
         onProceed={onProceed}
         onTransfer={onTransfer}
-      />
-    )
+      />,
+    ),
   )
   it('should render the component', () => {
     expect(
-      screen.getByTestId('registrants-cancellation-modal')
+      screen.getByTestId('registrants-cancellation-modal'),
     ).toBeInTheDocument()
   })
   it.each(pageButtons)('should render the %s button', button => {

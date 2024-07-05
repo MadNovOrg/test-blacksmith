@@ -28,7 +28,7 @@ describe('page: Ebooks', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/ebooks'] }
+      { initialEntries: ['/ebooks'] },
     )
 
     expect(screen.getByTestId('featured-ebook-skeleton')).toBeInTheDocument()
@@ -58,28 +58,28 @@ describe('page: Ebooks', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/ebooks'] }
+      { initialEntries: ['/ebooks'] },
     )
 
     expect(
-      screen.queryByTestId('featured-ebook-skeleton')
+      screen.queryByTestId('featured-ebook-skeleton'),
     ).not.toBeInTheDocument()
     expect(screen.queryByTestId('ebooks-grid-skeleton')).not.toBeInTheDocument()
 
     const featuredEbook = screen.getByTestId('featured-ebook')
 
     expect(
-      within(featuredEbook).getByText(ebooks[0].title ?? '')
+      within(featuredEbook).getByText(ebooks[0].title ?? ''),
     ).toBeInTheDocument()
 
     expect(within(featuredEbook).getByText('New ebook')).toBeInTheDocument()
 
     expect(
-      within(featuredEbook).getByAltText(ebooks[0].title ?? '')
+      within(featuredEbook).getByAltText(ebooks[0].title ?? ''),
     ).toHaveAttribute('src', ebooks[0].featuredImage?.node?.mediaItemUrl ?? '')
 
     expect(
-      within(featuredEbook).getByText('Download resource')
+      within(featuredEbook).getByText('Download resource'),
     ).toHaveAttribute('href', ebooks[0].downloads?.file?.mediaItemUrl)
   })
 
@@ -106,27 +106,27 @@ describe('page: Ebooks', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/ebooks'] }
+      { initialEntries: ['/ebooks'] },
     )
 
     ebooks.forEach(item => {
       const itemElement = screen.getByTestId(`ebook-grid-item-${item.id}`)
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
 
       expect(
-        within(itemElement).getByText('Download resource')
+        within(itemElement).getByText('Download resource'),
       ).toHaveAttribute('href', item.downloads?.file?.mediaItemUrl ?? '')
     })
   })
@@ -159,17 +159,17 @@ describe('page: Ebooks', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/ebooks'] }
+      { initialEntries: ['/ebooks'] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search ebooks'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`ebook-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`ebook-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -217,23 +217,23 @@ describe('page: Ebooks', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/ebooks'] }
+      { initialEntries: ['/ebooks'] },
     )
 
     await userEvent.click(screen.getByTestId('ebooks-next-page'))
 
     expect(
       within(screen.getByTestId('featured-ebook')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`ebook-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`ebook-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`ebook-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`ebook-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('ebooks-next-page')).toBeDisabled()
@@ -242,16 +242,16 @@ describe('page: Ebooks', () => {
 
     expect(
       within(screen.getByTestId('featured-ebook')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`ebook-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`ebook-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`ebook-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`ebook-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('ebooks-previous-page')).toBeDisabled()

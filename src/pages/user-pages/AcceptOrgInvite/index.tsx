@@ -31,7 +31,7 @@ export const AcceptOrgInvite = () => {
           fetchOptions: {
             headers: { 'x-auth': `Bearer ${token}` },
           },
-        }
+        },
       )
 
       if (resp.data?.invite?.id) {

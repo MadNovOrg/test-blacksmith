@@ -15,7 +15,7 @@ yup.addMethod(yup.string, 'phoneNumber', function (t: TFunction) {
   return this.test(
     'phoneNumber',
     t('validation-errors.invalid-phone'),
-    (value?: string) => matchIsValidTel(value ?? '')
+    (value?: string) => matchIsValidTel(value ?? ''),
   )
 })
 
@@ -23,7 +23,7 @@ yup.addMethod(yup.string, 'isPossiblePhoneNumber', function (t: TFunction) {
   return this.test(
     'isPossiblePhoneNumber',
     t('validation-errors.invalid-phone'),
-    (value?: string) => isPossiblePhoneNumber(value ?? '')
+    (value?: string) => isPossiblePhoneNumber(value ?? ''),
   )
 })
 
@@ -67,7 +67,7 @@ const schemas = {
       .string()
       .oneOf(
         [yup.ref(passRef), ''],
-        t('validation-errors.confirm-password-invalid')
+        t('validation-errors.confirm-password-invalid'),
       )
   },
   phone: (t: TFunction) => {

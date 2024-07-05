@@ -28,8 +28,8 @@ export const FilterByCertificateValidity: React.FC<
     'status',
     withDefault(
       createEnumArrayParam<CertificateStatus>(statuses),
-      [] as CertificateStatus[]
-    )
+      [] as CertificateStatus[],
+    ),
   )
 
   const options = useMemo(() => {
@@ -41,7 +41,7 @@ export const FilterByCertificateValidity: React.FC<
               id: o,
               title: t(`certification-status.${o.toLocaleLowerCase()}`),
               selected: selected.includes(o),
-            }
+            },
       )
       .filter(Boolean)
   }, [selected, excludedStatuses, t])
@@ -52,7 +52,7 @@ export const FilterByCertificateValidity: React.FC<
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

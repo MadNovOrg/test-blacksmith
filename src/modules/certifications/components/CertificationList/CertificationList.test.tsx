@@ -32,7 +32,7 @@ describe('component: CertificationList', () => {
     expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
     expect(within(columnHeaders[2]).getByText('Email')).toBeInTheDocument()
     expect(
-      within(columnHeaders[3]).getByText('Organisation')
+      within(columnHeaders[3]).getByText('Organisation'),
     ).toBeInTheDocument()
     expect(within(columnHeaders[4]).getByText('Grade')).toBeInTheDocument()
     expect(within(columnHeaders[5]).getByText('Status')).toBeInTheDocument()
@@ -64,7 +64,7 @@ describe('component: CertificationList', () => {
         participants={participants}
         sorting={sorting}
         columns={columns}
-      />
+      />,
     )
 
     const table = screen.getByRole('table')
@@ -76,29 +76,29 @@ describe('component: CertificationList', () => {
     expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
     expect(within(columnHeaders[2]).getByText('Email')).toBeInTheDocument()
     expect(
-      within(columnHeaders[3]).getByText('Organisation')
+      within(columnHeaders[3]).getByText('Organisation'),
     ).toBeInTheDocument()
     expect(
-      within(columnHeaders[4]).getByText('Certificate')
+      within(columnHeaders[4]).getByText('Certificate'),
     ).toBeInTheDocument()
     expect(
-      within(columnHeaders[5]).getByText('Course code')
+      within(columnHeaders[5]).getByText('Course code'),
     ).toBeInTheDocument()
     expect(within(columnHeaders[6]).getByText('Status')).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody).toBeInTheDocument()
     expect(
-      within(tableBody).getByText(participant.profile.fullName)
+      within(tableBody).getByText(participant.profile.fullName),
     ).toBeInTheDocument()
     expect(within(tableBody).getByText('Pass')).toBeInTheDocument()
     expect(
-      within(tableBody).getByText(participant.certificate.number)
+      within(tableBody).getByText(participant.certificate.number),
     ).toBeInTheDocument()
     expect(
-      within(tableBody).getByText(participant.course.course_code)
+      within(tableBody).getByText(participant.course.course_code),
     ).toBeInTheDocument()
     expect(
-      within(tableBody).getByText(participant.course.course_code)
+      within(tableBody).getByText(participant.course.course_code),
     ).toBeInTheDocument()
     expect(within(tableBody).getByText('Active')).toBeInTheDocument()
   })
@@ -114,10 +114,10 @@ describe('component: CertificationList', () => {
     render(<CertificationList participants={participants} sorting={sorting} />)
 
     expect(
-      screen.getByTestId('download-all-certifications')
+      screen.getByTestId('download-all-certifications'),
     ).toBeInTheDocument()
     expect(
-      screen.getByTestId('download-selected-certifications')
+      screen.getByTestId('download-selected-certifications'),
     ).toBeDisabled()
     await userEvent.click(screen.getByTestId('TableChecks-Head'))
     expect(screen.getByTestId('download-selected-certifications')).toBeEnabled()

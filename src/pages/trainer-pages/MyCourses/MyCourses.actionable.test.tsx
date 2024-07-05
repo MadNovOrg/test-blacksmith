@@ -67,11 +67,11 @@ describe('trainers-pages/MyCourses', () => {
         <Provider value={client}>
           <TrainerCourses />
         </Provider>,
-        { auth: { activeRole: RoleName.TT_ADMIN } }
+        { auth: { activeRole: RoleName.TT_ADMIN } },
       )
 
       expect(
-        screen.queryByTestId('actionable-courses-table')
+        screen.queryByTestId('actionable-courses-table'),
       ).not.toBeInTheDocument()
 
       expect(screen.getByTestId('courses-table')).toBeInTheDocument()
@@ -107,7 +107,7 @@ describe('trainers-pages/MyCourses', () => {
             activeRole: RoleName.TRAINER,
             profile: { id: TRAINER_PROFILE_ID },
           },
-        }
+        },
       )
 
       expect(screen.getByTestId('actionable-courses-table')).toBeInTheDocument()
@@ -115,14 +115,14 @@ describe('trainers-pages/MyCourses', () => {
       expect(screen.getByTestId('courses-table')).toBeInTheDocument()
 
       const actionableCourseRow = screen.getByTestId(
-        `actionable-course-${actionableCourse.id}`
+        `actionable-course-${actionableCourse.id}`,
       )
 
       expect(
-        within(actionableCourseRow).getByText(/accept/i)
+        within(actionableCourseRow).getByText(/accept/i),
       ).toBeInTheDocument()
       expect(
-        within(actionableCourseRow).getByText(/decline/i)
+        within(actionableCourseRow).getByText(/decline/i),
       ).toBeInTheDocument()
     })
 
@@ -168,11 +168,11 @@ describe('trainers-pages/MyCourses', () => {
             profile: { id: TRAINER_PROFILE_ID },
           },
         },
-        { initialEntries: [`/courses`] }
+        { initialEntries: [`/courses`] },
       )
 
       const actionableCourseRow = screen.getByTestId(
-        `actionable-course-${actionableCourse.id}`
+        `actionable-course-${actionableCourse.id}`,
       )
 
       await userEvent.click(within(actionableCourseRow).getByText(/decline/i))
@@ -180,7 +180,7 @@ describe('trainers-pages/MyCourses', () => {
       const declineInviteDialog = screen.getByRole('dialog')
 
       await userEvent.click(
-        within(declineInviteDialog).getByRole('button', { name: /decline/i })
+        within(declineInviteDialog).getByRole('button', { name: /decline/i }),
       )
 
       expect(screen.queryByText(/course builder/i)).not.toBeInTheDocument()
@@ -228,11 +228,11 @@ describe('trainers-pages/MyCourses', () => {
             profile: { id: TRAINER_PROFILE_ID },
           },
         },
-        { initialEntries: [`/courses`] }
+        { initialEntries: [`/courses`] },
       )
 
       const actionableCourseRow = screen.getByTestId(
-        `actionable-course-${actionableCourse.id}`
+        `actionable-course-${actionableCourse.id}`,
       )
 
       await userEvent.click(within(actionableCourseRow).getByText(/accept/i))
@@ -242,7 +242,7 @@ describe('trainers-pages/MyCourses', () => {
       await userEvent.click(
         within(declineInviteDialog).getByRole('button', {
           name: /continue to course builder/i,
-        })
+        }),
       )
 
       expect(screen.getByText(/course builder/i)).toBeInTheDocument()
@@ -295,11 +295,11 @@ describe('trainers-pages/MyCourses', () => {
             profile: { id: TRAINER_PROFILE_ID },
           },
         },
-        { initialEntries: [`/courses`] }
+        { initialEntries: [`/courses`] },
       )
 
       const actionableCourseRow = screen.getByTestId(
-        `actionable-course-${actionableCourse.id}`
+        `actionable-course-${actionableCourse.id}`,
       )
 
       await userEvent.click(within(actionableCourseRow).getByText(/accept/i))
@@ -309,7 +309,7 @@ describe('trainers-pages/MyCourses', () => {
       await userEvent.click(
         within(dialog).getByRole('button', {
           name: /accept/i,
-        })
+        }),
       )
 
       expect(screen.getByText(/course details/i)).toBeInTheDocument()
@@ -362,11 +362,11 @@ describe('trainers-pages/MyCourses', () => {
             profile: { id: TRAINER_PROFILE_ID },
           },
         },
-        { initialEntries: [`/courses`] }
+        { initialEntries: [`/courses`] },
       )
 
       const actionableCourseRow = screen.getByTestId(
-        `actionable-course-${actionableCourse.id}`
+        `actionable-course-${actionableCourse.id}`,
       )
 
       await userEvent.click(within(actionableCourseRow).getByText(/accept/i))
@@ -376,7 +376,7 @@ describe('trainers-pages/MyCourses', () => {
       await userEvent.click(
         within(dialog).getByRole('button', {
           name: /accept/i,
-        })
+        }),
       )
 
       expect(screen.getByText(/course details/i)).toBeInTheDocument()
@@ -424,7 +424,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -439,14 +439,14 @@ describe('trainers-pages/MyCourses', () => {
         () => {
           expect(
             within(actionableTbl).getByTestId(
-              `actionable-course-${courses[0].id}`
-            )
+              `actionable-course-${courses[0].id}`,
+            ),
           ).toHaveAttribute('data-index', '0')
         },
         {
           timeout: 2000,
           interval: 200,
-        }
+        },
       )
     })
 
@@ -472,7 +472,7 @@ describe('trainers-pages/MyCourses', () => {
         }) => {
           const conditions: Course_Bool_Exp['_or'] = variables.where?._or ?? []
           const courseCodeCondition = conditions.find(cond =>
-            Object.keys(cond).includes('searchFields')
+            Object.keys(cond).includes('searchFields'),
           )
           const courses =
             courseCodeCondition?.searchFields?._ilike === `%${keyword}%`
@@ -495,7 +495,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -526,19 +526,19 @@ describe('trainers-pages/MyCourses', () => {
         course_from_15_01_23_to_27_11_23 =
           buildActionableTrainerCourseWithDates(
             new Date(2023, 0, 15),
-            new Date(2023, 10, 27)
+            new Date(2023, 10, 27),
           )
         // 13/03/2023 - 25/07/2023
         course_from_13_03_23_to_25_07_23 =
           buildActionableTrainerCourseWithDates(
             new Date(2023, 2, 13),
-            new Date(2023, 6, 25)
+            new Date(2023, 6, 25),
           )
         // 22/03/2023 - 20/12/2023
         course_from_22_03_23_to_20_12_23 =
           buildActionableTrainerCourseWithDates(
             new Date(2023, 2, 22),
-            new Date(2023, 11, 20)
+            new Date(2023, 11, 20),
           )
 
         allCourses = [
@@ -557,7 +557,7 @@ describe('trainers-pages/MyCourses', () => {
           }) => {
             const conditions =
               variables.where?.schedule?._and?.filter(obj =>
-                Object.keys(obj).includes('start')
+                Object.keys(obj).includes('start'),
               ).length === 1 ?? false
 
             const courses = conditions
@@ -583,7 +583,7 @@ describe('trainers-pages/MyCourses', () => {
         render(
           <Provider value={client as unknown as Client}>
             <TrainerCourses />
-          </Provider>
+          </Provider>,
         )
 
         const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -597,7 +597,7 @@ describe('trainers-pages/MyCourses', () => {
         })
 
         const from = within(screen.getByTestId('date-range')).getByLabelText(
-          'From'
+          'From',
         )
 
         from.focus()
@@ -623,7 +623,7 @@ describe('trainers-pages/MyCourses', () => {
           }) => {
             const conditions =
               variables.where?.schedule?._and?.filter(obj =>
-                Object.keys(obj).includes('end')
+                Object.keys(obj).includes('end'),
               ).length === 1 ?? false
 
             const courses = conditions
@@ -649,7 +649,7 @@ describe('trainers-pages/MyCourses', () => {
         render(
           <Provider value={client as unknown as Client}>
             <TrainerCourses />
-          </Provider>
+          </Provider>,
         )
         const actionableTbl = screen.getByTestId('actionable-courses-table')
 
@@ -709,7 +709,7 @@ describe('trainers-pages/MyCourses', () => {
         render(
           <Provider value={client as unknown as Client}>
             <TrainerCourses />
-          </Provider>
+          </Provider>,
         )
         const actionableTbl = screen.getByTestId('actionable-courses-table')
         await expectActionableTableTo({
@@ -722,7 +722,7 @@ describe('trainers-pages/MyCourses', () => {
         })
 
         const from = within(screen.getByTestId('date-range')).getByLabelText(
-          'From'
+          'From',
         )
 
         from.focus()
@@ -777,7 +777,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -832,7 +832,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -843,10 +843,14 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       userEvent.click(
-        within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One')
+        within(screen.getByTestId('FilterByCourseLevel')).getByText(
+          'Level One',
+        ),
       )
       userEvent.click(
-        within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two')
+        within(screen.getByTestId('FilterByCourseLevel')).getByText(
+          'Level Two',
+        ),
       )
 
       await expectActionableTableTo({
@@ -892,7 +896,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -903,10 +907,10 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       userEvent.click(
-        within(screen.getByTestId('FilterByCourseType')).getByText('Open')
+        within(screen.getByTestId('FilterByCourseType')).getByText('Open'),
       )
       userEvent.click(
-        within(screen.getByTestId('FilterByCourseType')).getByText('Closed')
+        within(screen.getByTestId('FilterByCourseType')).getByText('Closed'),
       )
 
       await expectActionableTableTo({
@@ -927,7 +931,7 @@ describe('trainers-pages/MyCourses', () => {
           variables: TrainerCoursesQueryVariables
         }) => {
           const courses = variables.where?.accreditedBy?._in?.includes(
-            Accreditors_Enum.Bild
+            Accreditors_Enum.Bild,
           )
             ? [filteredCourse]
             : [course]
@@ -948,11 +952,11 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       await userEvent.click(
-        within(screen.getByTestId('filter-accredited-by')).getByText('BILD')
+        within(screen.getByTestId('filter-accredited-by')).getByText('BILD'),
       )
 
       const table = screen.getByTestId('courses-table')
@@ -974,7 +978,7 @@ describe('trainers-pages/MyCourses', () => {
           variables: TrainerCoursesQueryVariables
         }) => {
           const courses = variables.where?.deliveryType?._in?.includes(
-            Course_Delivery_Type_Enum.Virtual
+            Course_Delivery_Type_Enum.Virtual,
           )
             ? [filteredCourse]
             : [course]
@@ -995,7 +999,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const actionableTbl = screen.getByTestId('actionable-courses-table')
@@ -1007,8 +1011,8 @@ describe('trainers-pages/MyCourses', () => {
 
       await userEvent.click(
         within(screen.getByTestId('FilterByCourseDeliveryType')).getByText(
-          'Virtual'
-        )
+          'Virtual',
+        ),
       )
 
       await expectActionableTableTo({

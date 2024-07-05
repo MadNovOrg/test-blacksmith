@@ -149,7 +149,7 @@ it("shows scheduled if course hasn't started and participant has provided health
 })
 
 function buildAttendeeCourse(
-  overrides?: Partial<AttendeeCourse>
+  overrides?: Partial<AttendeeCourse>,
 ): AttendeeCourse {
   return {
     status: Course_Status_Enum.Scheduled,

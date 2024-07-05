@@ -34,7 +34,7 @@ export const TreeListSummary: React.FC<
               label={<Typography>{m.name}</Typography>}
               sx={{ width: '100%' }}
             />
-          ) : null
+          ) : null,
         )}
       </Box>
     </Box>

@@ -24,12 +24,12 @@ describe('component: TransferTermsTable', () => {
 
       expect(within(fifteenFee).getByText(/2-4 weeks/i)).toBeInTheDocument()
       expect(
-        within(fifteenFee).getByText(/15% of payment due/i)
+        within(fifteenFee).getByText(/15% of payment due/i),
       ).toBeInTheDocument()
 
       expect(within(twentyfiveFee).getByText(/0-2 weeks/i)).toBeInTheDocument()
       expect(
-        within(twentyfiveFee).getByText(/25% of payment due/i)
+        within(twentyfiveFee).getByText(/25% of payment due/i),
       ).toBeInTheDocument()
     })
   })
@@ -49,12 +49,12 @@ describe('component: TransferTermsTable', () => {
 
       expect(within(twentyfiveFee).getByText(/1-4 weeks/i)).toBeInTheDocument()
       expect(
-        within(twentyfiveFee).getByText(/25% of payment due/i)
+        within(twentyfiveFee).getByText(/25% of payment due/i),
       ).toBeInTheDocument()
 
       expect(within(fiftyFee).getByText(/0-1 week/i)).toBeInTheDocument()
       expect(
-        within(fiftyFee).getByText(/50% of payment due/i)
+        within(fiftyFee).getByText(/50% of payment due/i),
       ).toBeInTheDocument()
     })
   })
@@ -64,12 +64,12 @@ describe('component: TransferTermsTable', () => {
       <TransferTermsTable
         courseLevel={Course_Level_Enum.Level_1}
         startDate={addWeeks(new Date(), 5)}
-      />
+      />,
     )
 
     expect(screen.getByTestId('term-row-0-fee')).toHaveAttribute(
       'data-highlighted',
-      'true'
+      'true',
     )
   })
 
@@ -78,12 +78,12 @@ describe('component: TransferTermsTable', () => {
       <TransferTermsTable
         courseLevel={Course_Level_Enum.Level_1}
         startDate={addWeeks(new Date(), 4)}
-      />
+      />,
     )
 
     expect(screen.getByTestId('term-row-15-fee')).toHaveAttribute(
       'data-highlighted',
-      'true'
+      'true',
     )
   })
 
@@ -92,12 +92,12 @@ describe('component: TransferTermsTable', () => {
       <TransferTermsTable
         courseLevel={Course_Level_Enum.Level_1}
         startDate={addWeeks(new Date(), 1)}
-      />
+      />,
     )
 
     expect(screen.getByTestId('term-row-25-fee')).toHaveAttribute(
       'data-highlighted',
-      'true'
+      'true',
     )
   })
 
@@ -106,12 +106,12 @@ describe('component: TransferTermsTable', () => {
       <TransferTermsTable
         courseLevel={Course_Level_Enum.IntermediateTrainer}
         startDate={addWeeks(new Date(), 4)}
-      />
+      />,
     )
 
     expect(screen.getByTestId('term-row-25-fee-trainer')).toHaveAttribute(
       'data-highlighted',
-      'true'
+      'true',
     )
   })
 
@@ -120,12 +120,12 @@ describe('component: TransferTermsTable', () => {
       <TransferTermsTable
         courseLevel={Course_Level_Enum.IntermediateTrainer}
         startDate={addDays(new Date(), 6)}
-      />
+      />,
     )
 
     expect(screen.getByTestId('term-row-50-fee-trainer')).toHaveAttribute(
       'data-highlighted',
-      'true'
+      'true',
     )
   })
 })

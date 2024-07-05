@@ -13,7 +13,7 @@ export const reschedulingFees = {
 }
 
 export const getCancellationTermsFee = (
-  courseStartDate: Date | string
+  courseStartDate: Date | string,
 ): number => {
   const start = isDate(courseStartDate)
     ? courseStartDate
@@ -34,7 +34,7 @@ export const getCancellationTermsFee = (
 
 export const getReschedulingTermsFee = (
   startDate: Date,
-  level: Course_Level_Enum
+  level: Course_Level_Enum,
 ): number => {
   const diffInWeeks = differenceInWeeks(startDate, new Date())
 
@@ -84,16 +84,16 @@ export type CourseDiff = {
 
 export function getChangedTrainers(
   currentTrainers: Omit<SetCourseTrainerInput, 'course_id'>[],
-  newTrainers: Pick<SetCourseTrainerInput, 'profile_id' | 'type'>[]
+  newTrainers: Pick<SetCourseTrainerInput, 'profile_id' | 'type'>[],
 ): [Omit<SetCourseTrainerInput, 'course_id'>[], string[]] {
   const trainersToDelete = difference(
     currentTrainers.map(t => t.profile_id),
-    newTrainers.map(t => t.profile_id)
+    newTrainers.map(t => t.profile_id),
   )
   const trainersToAdd: Omit<SetCourseTrainerInput, 'course_id'>[] = []
 
   const currentTrainersMap = new Map(
-    currentTrainers.map(t => [t.profile_id, t])
+    currentTrainers.map(t => [t.profile_id, t]),
   )
 
   newTrainers.forEach(t => {

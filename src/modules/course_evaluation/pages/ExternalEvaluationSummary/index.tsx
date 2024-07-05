@@ -35,11 +35,11 @@ const groups = [
 ]
 
 const normalizeAnswers = (
-  answers: GetEvaluationsSummaryRestrictedQuery['answers']
+  answers: GetEvaluationsSummaryRestrictedQuery['answers'],
 ) => {
   const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
     answers,
-    a => a.question.group || 'UNGROUPED'
+    a => a.question.group || 'UNGROUPED',
   )
 
   const grouped = {} as CourseEvaluationGroupedQuestion
@@ -50,11 +50,11 @@ const normalizeAnswers = (
 
   const { ANY_INJURIES: injuryQuestion = [], ...ungrouped } = groupBy(
     ungroupedAnswers,
-    a => a.question.questionKey
+    a => a.question.questionKey,
   )
 
   const injuryResponse = groupBy(injuryQuestion, a =>
-    a.answer?.startsWith('YES') ? 'YES' : 'NO'
+    a.answer?.startsWith('YES') ? 'YES' : 'NO',
   )
 
   return {
@@ -110,7 +110,7 @@ export const EvaluationSummary = () => {
 
   const { grouped } = useMemo(
     () => normalizeAnswers(attendeeAnswers),
-    [attendeeAnswers]
+    [attendeeAnswers],
   )
 
   if (fetching) {

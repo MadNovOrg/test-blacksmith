@@ -83,7 +83,7 @@ describe(CourseAttendeesTab.name, () => {
     render(<CourseAttendeesTab course={course} />)
 
     expect(
-      screen.getByTestId('course-participants-fetching')
+      screen.getByTestId('course-participants-fetching'),
     ).toBeInTheDocument()
   })
 
@@ -148,7 +148,7 @@ describe(CourseAttendeesTab.name, () => {
           auth: {
             activeRole: role ?? RoleName.USER,
           },
-        }
+        },
       )
     }
     it('should display a table if a course has participants', () => {
@@ -169,12 +169,12 @@ describe(CourseAttendeesTab.name, () => {
             exact: false,
             suggest: true,
           })
-        )?.length
+        )?.length,
       ).toEqual(participants.length)
 
       participants.forEach(participant => {
         expect(
-          screen.getByTestId(`course-participant-row-${participant.id}`)
+          screen.getByTestId(`course-participant-row-${participant.id}`),
         ).toBeInTheDocument()
       })
     })
@@ -183,13 +183,13 @@ describe(CourseAttendeesTab.name, () => {
       setup()
       const { participants } = testData
       const participantRow = screen.getByTestId(
-        `course-participant-row-${participants[0].id}`
+        `course-participant-row-${participants[0].id}`,
       )
 
       // Assert
 
       expect(
-        within(participantRow).getByText(`${participants[0].profile.fullName}`)
+        within(participantRow).getByText(`${participants[0].profile.fullName}`),
       ).toBeInTheDocument()
     })
 
@@ -197,12 +197,12 @@ describe(CourseAttendeesTab.name, () => {
       setup()
       const { participants } = testData
       const participantRow = screen.getByTestId(
-        `course-participant-row-${participants[0].id}`
+        `course-participant-row-${participants[0].id}`,
       )
 
       // Assert
       expect(
-        within(participantRow).getByText(participants[0].profile.email)
+        within(participantRow).getByText(participants[0].profile.email),
       ).toBeInTheDocument()
     })
 
@@ -210,14 +210,14 @@ describe(CourseAttendeesTab.name, () => {
       setup()
       const { participants } = testData
       const participantRow = screen.getByTestId(
-        `course-participant-row-${participants[0].id}`
+        `course-participant-row-${participants[0].id}`,
       )
 
       // Assert
       expect(
         within(participantRow).getByText(
-          participants[0].profile.organizations[0].organization?.name ?? ''
-        )
+          participants[0].profile.organizations[0].organization?.name ?? '',
+        ),
       ).toBeInTheDocument()
     })
 
@@ -225,7 +225,7 @@ describe(CourseAttendeesTab.name, () => {
       setup(RoleName.TT_ADMIN)
       const { participants } = testData
       const participantRow = screen.getByTestId(
-        `course-participant-row-${participants[0].id}`
+        `course-participant-row-${participants[0].id}`,
       )
 
       // Assert
@@ -233,8 +233,8 @@ describe(CourseAttendeesTab.name, () => {
       expect(
         within(participantRow).getByText(
           // @ts-expect-error types difference between the generator method and the actual query result
-          participants[0].order.xeroInvoiceNumber ?? ''
-        )
+          participants[0].order.xeroInvoiceNumber ?? '',
+        ),
       ).toBeInTheDocument()
     })
 
@@ -242,14 +242,14 @@ describe(CourseAttendeesTab.name, () => {
       setup(RoleName.TT_OPS, Course_Type_Enum.Closed)
       const { participants } = testData
       const participantRow = screen.getByTestId(
-        `course-participant-row-${participants[0].id}`
+        `course-participant-row-${participants[0].id}`,
       )
       // Assert
       expect(
         within(participantRow).queryByText(
           // @ts-expect-error types difference between buildParticipant and the actual type returned by the query
-          participants[0].order.xeroInvoiceNumber ?? ''
-        )
+          participants[0].order.xeroInvoiceNumber ?? '',
+        ),
       ).not.toBeInTheDocument()
     })
 
@@ -257,14 +257,14 @@ describe(CourseAttendeesTab.name, () => {
       setup()
       const { participants } = testData
       const participantRow = screen.getByTestId(
-        `course-participant-row-${participants[0].id}`
+        `course-participant-row-${participants[0].id}`,
       )
 
       // Assert
       expect(
         within(participantRow).queryByText(
-          participants[0].order?.xeroInvoiceNumber ?? ''
-        )
+          participants[0].order?.xeroInvoiceNumber ?? '',
+        ),
       ).not.toBeInTheDocument()
     })
   })
@@ -291,17 +291,17 @@ describe(CourseAttendeesTab.name, () => {
     render(<CourseAttendeesTab course={course} />)
 
     const noAttendeesMesage = screen.getByTestId(
-      'course-participants-zero-message'
+      'course-participants-zero-message',
     )
 
     expect(
-      within(noAttendeesMesage).getByText('No invites accepted')
+      within(noAttendeesMesage).getByText('No invites accepted'),
     ).toBeInTheDocument()
   })
 
   it('paginates course participants', async () => {
     const participants = new Array(DEFAULT_PAGINATION_LIMIT).map(() =>
-      buildParticipant()
+      buildParticipant(),
     )
 
     useCourseParticipantsMock.mockReturnValue({
@@ -343,7 +343,7 @@ describe(CourseAttendeesTab.name, () => {
 
   it('sorts descending by participants name', async () => {
     const participants = new Array(DEFAULT_PAGINATION_LIMIT).map(() =>
-      buildParticipant()
+      buildParticipant(),
     )
 
     useCourseParticipantsMock.mockReturnValue({
@@ -458,16 +458,16 @@ describe(CourseAttendeesTab.name, () => {
 
       expect(row).toBeInTheDocument()
       expect(
-        within(row).getByText(entry.givenName, { exact: false })
+        within(row).getByText(entry.givenName, { exact: false }),
       ).toBeInTheDocument()
       expect(
-        within(row).getByText(entry.familyName, { exact: false })
+        within(row).getByText(entry.familyName, { exact: false }),
       ).toBeInTheDocument()
       expect(
-        within(row).getByText(entry.email, { exact: false })
+        within(row).getByText(entry.email, { exact: false }),
       ).toBeInTheDocument()
       expect(
-        within(row).getByText(entry.phone, { exact: false })
+        within(row).getByText(entry.phone, { exact: false }),
       ).toBeInTheDocument()
     }
   })
@@ -588,7 +588,7 @@ describe(CourseAttendeesTab.name, () => {
 
       const resendButton = getByTestId(
         table,
-        `course-resend-invite-btn-${invite.id}`
+        `course-resend-invite-btn-${invite.id}`,
       )
       expect(resendButton).toBeVisible()
       await userEvent.click(resendButton)
@@ -600,7 +600,7 @@ describe(CourseAttendeesTab.name, () => {
 
       const deleteButton = getByTestId(
         table,
-        `course-cancel-invite-btn-${invite.id}`
+        `course-cancel-invite-btn-${invite.id}`,
       )
       expect(deleteButton).toBeVisible()
 

@@ -75,7 +75,7 @@ export const CoursesTable: React.FC<
       { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
     ],
 
-    [t]
+    [t],
   )
 
   return (

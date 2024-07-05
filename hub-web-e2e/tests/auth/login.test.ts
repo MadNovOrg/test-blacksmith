@@ -9,7 +9,7 @@ test('login successfully @smoke', async ({ page }) => {
   await loginPage.goto()
   const myCoursesPage = await loginPage.logIn(
     users.trainer.email,
-    users.trainer.password
+    users.trainer.password,
   )
   await myCoursesPage.userMenu.checkIsVisible()
 })

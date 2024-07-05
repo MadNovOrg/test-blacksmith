@@ -14,10 +14,10 @@ export class RevokeCertificatePopup extends BasePage {
   constructor(page: Page) {
     super(page)
     this.reasonDropdown = this.page.locator(
-      '[data-testid=revoke-reason-select]'
+      '[data-testid=revoke-reason-select]',
     )
     this.reasonDropdownOtherOption = this.page.locator(
-      '[data-testid=other-dropdown-option]'
+      '[data-testid=other-dropdown-option]',
     )
     this.reasonInput = this.page.locator('[data-testid=specify-reason] input')
     this.checkbox = this.page.locator('[data-testid=revoke-checkbox]')

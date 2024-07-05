@@ -58,8 +58,8 @@ describe('course exception utils', () => {
         isOutsideOfNoticePeriod(
           extend({}, defaultCourseData, {
             startDateTime: new Date('2022-01-10 10:00'),
-          })
-        )
+          }),
+        ),
       ).toBeTruthy()
     })
   })
@@ -75,13 +75,13 @@ describe('course exception utils', () => {
           extend({}, defaultTrainerData, {
             type: Course_Trainer_Type_Enum.Assistant,
           }),
-        ])
+        ]),
       ).toBeFalsy()
     })
 
     it('should return false if leader with valid certificate for course level', () => {
       expect(
-        isLeadTrainerInGracePeriod(defaultCourseData, [defaultTrainerData])
+        isLeadTrainerInGracePeriod(defaultCourseData, [defaultTrainerData]),
       ).toBeFalsy()
     })
 
@@ -96,7 +96,7 @@ describe('course exception utils', () => {
               },
             ],
           }),
-        ])
+        ]),
       ).toBeTruthy()
     })
   })
@@ -105,16 +105,16 @@ describe('course exception utils', () => {
     it('should return true if course duration more than 6h', () => {
       expect(
         isAdvisedTimeExceeded(
-          extend({}, defaultCourseData, { modulesDuration: 6 * 60 + 1 })
-        )
+          extend({}, defaultCourseData, { modulesDuration: 6 * 60 + 1 }),
+        ),
       ).toBeTruthy()
     })
 
     it('should return false if course duration less or equal to 6h', () => {
       expect(
         isAdvisedTimeExceeded(
-          extend({}, defaultCourseData, { modulesDuration: 6 * 60 })
-        )
+          extend({}, defaultCourseData, { modulesDuration: 6 * 60 }),
+        ),
       ).toBeFalsy()
     })
   })

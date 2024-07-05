@@ -46,7 +46,7 @@ describe('CourseTitleCell', () => {
 
   it('renders the course title without link if the course trainer status is pending', () => {
     const { getByTestId } = render(
-      <CourseTitleCell course={course as unknown as TableCourse} />
+      <CourseTitleCell course={course as unknown as TableCourse} />,
     )
     const courseNameCell = getByTestId('course-name-cell')
     expect(courseNameCell.querySelector('a')).not.toBeInTheDocument()
@@ -55,7 +55,7 @@ describe('CourseTitleCell', () => {
 
   it('renders the Arlo reference ID for internal users', () => {
     const { getByTestId } = render(
-      <CourseTitleCell course={course as unknown as TableCourse} />
+      <CourseTitleCell course={course as unknown as TableCourse} />,
     )
     const arloReference = getByTestId('arlo-reference-id')
     expect(arloReference).toBeInTheDocument()
@@ -68,7 +68,7 @@ describe('CourseTitleCell', () => {
       acl: { ...mockAuthContext.acl, isInternalUser: vi.fn(() => false) },
     })
     const { queryByTestId } = render(
-      <CourseTitleCell course={course as unknown as TableCourse} />
+      <CourseTitleCell course={course as unknown as TableCourse} />,
     )
     const arloReference = queryByTestId('arlo-reference-id')
     expect(arloReference).toBeNull()

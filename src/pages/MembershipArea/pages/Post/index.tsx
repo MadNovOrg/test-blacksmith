@@ -43,7 +43,7 @@ const Post: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [id])
 
   const shouldDisplayAuthor = Boolean(
-    data?.content?.post?.customAuthor?.displayAuthor
+    data?.content?.post?.customAuthor?.displayAuthor,
   )
 
   const authorName =

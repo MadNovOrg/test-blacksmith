@@ -70,7 +70,7 @@ export const renderForm = (
   type: Course_Type_Enum,
   certificateLevel: Course_Level_Enum = Course_Level_Enum.IntermediateTrainer,
   role: RoleName = RoleName.USER,
-  profile?: Partial<Profile>
+  profile?: Partial<Profile>,
 ) => {
   return render(<CourseForm type={type} isCreation={true} />, {
     auth: {

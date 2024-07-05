@@ -19,7 +19,7 @@ const testData = [
         await API.course.insertCourse(
           course,
           users.trainer.email,
-          InviteStatus.PENDING
+          InviteStatus.PENDING,
         )
       ).id
       return course
@@ -34,7 +34,7 @@ const testData = [
         await API.course.insertCourse(
           course,
           users.trainer.email,
-          InviteStatus.PENDING
+          InviteStatus.PENDING,
         )
       ).id
       return course
@@ -49,7 +49,7 @@ const testData = [
         await API.course.insertCourse(
           course,
           users.trainer.email,
-          InviteStatus.PENDING
+          InviteStatus.PENDING,
         )
       ).id
       return course

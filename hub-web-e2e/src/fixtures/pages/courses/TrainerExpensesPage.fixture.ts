@@ -11,7 +11,7 @@ export class TrainerExpensesPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.reviewAndConfirmButton = this.page.locator(
-      'button:has-text("Trainer expenses")'
+      'button:has-text("Trainer expenses")',
     )
     this.orderDetailsButton = this.page
       .locator('button:has-text("Order details")')

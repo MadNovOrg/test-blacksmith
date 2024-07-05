@@ -19,7 +19,7 @@ export const CourseOverview: React.FC<
   const { t } = useTranslation()
 
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model'
+    'new-modules-data-model',
   )
 
   return (

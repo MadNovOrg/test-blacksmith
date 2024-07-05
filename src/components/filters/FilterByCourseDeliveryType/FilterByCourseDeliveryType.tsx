@@ -20,7 +20,7 @@ const deliveryTypes = Object.values(Course_Delivery_Type_Enum)
 
 const CourseDeliveryParam = withDefault(
   createEnumArrayParam<Course_Delivery_Type_Enum>(deliveryTypes),
-  [] as Course_Delivery_Type_Enum[]
+  [] as Course_Delivery_Type_Enum[],
 )
 
 export const FilterByCourseDeliveryType: React.FC<
@@ -50,7 +50,7 @@ export const FilterByCourseDeliveryType: React.FC<
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

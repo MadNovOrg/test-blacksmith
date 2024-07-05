@@ -43,7 +43,7 @@ const StyledText = styled(Typography)(({ theme }) => ({
 export const CourseAttendance = () => {
   const { id: courseId } = useParams()
   const [attendanceSavingStatus, setAttendanceSavingStatus] = useState(
-    LoadingStatus.IDLE
+    LoadingStatus.IDLE,
   )
   const { t } = useTranslation()
   const theme = useTheme()
@@ -52,7 +52,7 @@ export const CourseAttendance = () => {
   const { completeStep, steps } = useGradingDetails()
 
   const { data: participantsData, status } = useCourseParticipants(
-    Number(courseId) ?? ''
+    Number(courseId) ?? '',
   )
 
   const saveGradingDetails = useSaveGradingDetails()
@@ -76,7 +76,7 @@ export const CourseAttendance = () => {
     const rawStoredAttendance = localStorage.getItem(ATTENDANCE_KEY)
 
     const storedAttendance: Record<string, boolean> = JSON.parse(
-      rawStoredAttendance ?? '{}'
+      rawStoredAttendance ?? '{}',
     )
 
     return participantsData.map(participant => ({
@@ -114,7 +114,7 @@ export const CourseAttendance = () => {
 
     for (const id in attendanceRef.current) {
       const participant = participantsData?.find(
-        p => p.id === id
+        p => p.id === id,
       ) as CourseParticipant
 
       if (attendanceRef.current[id]) {
@@ -150,7 +150,7 @@ export const CourseAttendance = () => {
           steps.length === 1
             ? saveGradingDetails({ courseId: Number(courseId) })
             : null,
-        ].filter(Boolean)
+        ].filter(Boolean),
       )
 
       setAttendanceSavingStatus(LoadingStatus.SUCCESS)

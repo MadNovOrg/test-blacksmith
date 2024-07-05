@@ -26,7 +26,7 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
 }) => {
   const { acl } = useAuth()
   const { sortOrder, handleSortToggle, sortedData } = useSortedCoursesTableData(
-    { profile }
+    { profile },
   )
 
   const isInternalUser = useMemo(() => {

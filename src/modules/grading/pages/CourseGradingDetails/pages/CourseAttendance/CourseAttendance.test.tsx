@@ -61,7 +61,7 @@ describe('component: CourseAttendance', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     expect(screen.getByTestId('participants-fetching')).toBeInTheDocument()
@@ -99,16 +99,16 @@ describe('component: CourseAttendance', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     expect(
-      screen.queryByTestId('participants-fetching')
+      screen.queryByTestId('participants-fetching'),
     ).not.toBeInTheDocument()
 
     participants.forEach(participant => {
       expect(
-        screen.getByText(`${participant.profile.fullName}`)
+        screen.getByText(`${participant.profile.fullName}`),
       ).toBeInTheDocument()
     })
   })
@@ -145,27 +145,27 @@ describe('component: CourseAttendance', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     expect(
       within(
-        screen.getByTestId(`participant-attendance-${participants[0].id}`)
+        screen.getByTestId(`participant-attendance-${participants[0].id}`),
       ).getByText(
-        t('pages.course-attendance.participant-not-attended-chip-label')
-      )
+        t('pages.course-attendance.participant-not-attended-chip-label'),
+      ),
     ).toBeInTheDocument()
 
     expect(
       within(
-        screen.getByTestId(`participant-attendance-${participants[1].id}`)
-      ).getByText(t('pages.course-attendance.participant-attended-chip-label'))
+        screen.getByTestId(`participant-attendance-${participants[1].id}`),
+      ).getByText(t('pages.course-attendance.participant-attended-chip-label')),
     ).toBeInTheDocument()
 
     expect(
       within(
-        screen.getByTestId(`participant-attendance-${participants[2].id}`)
-      ).getByText(t('pages.course-attendance.participant-attended-chip-label'))
+        screen.getByTestId(`participant-attendance-${participants[2].id}`),
+      ).getByText(t('pages.course-attendance.participant-attended-chip-label')),
     ).toBeInTheDocument()
   })
 
@@ -201,15 +201,15 @@ describe('component: CourseAttendance', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     await userEvent.click(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
+      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
     )
 
     const storedAttendance = localStorage.getItem(
-      `course-attendance-${COURSE_ID}`
+      `course-attendance-${COURSE_ID}`,
     )
 
     expect(JSON.parse(storedAttendance ?? '')).toEqual({
@@ -239,7 +239,7 @@ describe('component: CourseAttendance', () => {
         [participants[0].id]: false,
         [participants[1].id]: true,
         [participants[2].id]: true,
-      })
+      }),
     )
 
     const client = {
@@ -261,11 +261,11 @@ describe('component: CourseAttendance', () => {
       </Provider>,
 
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     expect(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
+      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
     ).not.toBeChecked()
     expect(screen.getByText('2 selected')).toBeInTheDocument()
   })
@@ -325,15 +325,15 @@ describe('component: CourseAttendance', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     await userEvent.click(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
+      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-attendance.confirm-grading'))
+      screen.getByText(t('pages.course-attendance.confirm-grading')),
     )
 
     await waitForText('Modules page')
@@ -393,15 +393,15 @@ describe('component: CourseAttendance', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details`] },
     )
 
     await userEvent.click(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
+      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: /continue to grading attendees/i })
+      screen.getByRole('button', { name: /continue to grading attendees/i }),
     )
 
     await waitForText('course grading')

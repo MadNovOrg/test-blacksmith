@@ -52,7 +52,7 @@ const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>,
   mandatoryCourseMaterialsCostEnabled: boolean,
   mandatoryCourseMaterials: number,
-  currency: CurrencyEnum
+  currency: CurrencyEnum,
 ): Array<Course_Expenses_Insert_Input> => {
   const courseExpenses: Array<Course_Expenses_Insert_Input> = []
 
@@ -62,7 +62,7 @@ const prepareExpensesData = (
         type: CourseExpenseType.Materials,
         cost: getMandatoryCourseMaterialsCost(
           mandatoryCourseMaterials ?? 0,
-          currency
+          currency,
         ),
       },
     })
@@ -108,7 +108,7 @@ const prepareExpensesData = (
           }
 
           courseExpenses.push(expense)
-        }
+        },
       )
 
     if (accommodationNightsTotal > 0) {
@@ -165,10 +165,10 @@ export function useSaveCourse(): {
   const { isUKCountry } = useWorldCountries()
 
   const InternationalFinanceEnabled = useFeatureFlagEnabled(
-    'open-icm-course-international-finance'
+    'open-icm-course-international-finance',
   )
   const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
@@ -190,7 +190,7 @@ export function useSaveCourse(): {
 
   const isInternationalFlagEnabled = useMemo(
     () => Boolean(InternationalFinanceEnabled),
-    [InternationalFinanceEnabled]
+    [InternationalFinanceEnabled],
   )
 
   const courseHasManualPrice = courseWithManualPrice({
@@ -213,7 +213,7 @@ export function useSaveCourse(): {
   const allowCreateCourse = useMemo(
     () =>
       courseHasManualPrice || Boolean(courseData?.price) || courseWithNoPrice,
-    [courseHasManualPrice, courseData?.price, courseWithNoPrice]
+    [courseHasManualPrice, courseData?.price, courseWithNoPrice],
   )
 
   const calculateVATrate = useMemo(() => {
@@ -245,7 +245,7 @@ export function useSaveCourse(): {
       })
 
       const hasModerator = trainers.find(
-        t => t.type === Course_Trainer_Type_Enum.Moderator
+        t => t.type === Course_Trainer_Type_Enum.Moderator,
       )
 
       const leadTrainerMissing =
@@ -277,13 +277,13 @@ export function useSaveCourse(): {
       if (courseData.timeZone) {
         const scheduleStarDateTime = setDateTimeTimeZone(
           courseData.startDateTime,
-          courseData.timeZone.timeZoneId
+          courseData.timeZone.timeZoneId,
         )
         if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
 
         const scheduleEndDateTime = setDateTimeTimeZone(
           courseData.endDateTime,
-          courseData.timeZone.timeZoneId
+          courseData.timeZone.timeZoneId,
         )
         if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
       }
@@ -340,7 +340,7 @@ export function useSaveCourse(): {
           reaccreditation: courseData.reaccreditation,
           go1Integration: courseData.blendedLearning,
           ...([Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
-            courseData.type
+            courseData.type,
           )
             ? { conversion: courseData.conversion }
             : null),
@@ -437,7 +437,7 @@ export function useSaveCourse(): {
                     expenses,
                     mandatoryCourseMaterialsCostEnabled ?? false,
                     courseData.mandatoryCourseMaterials ?? 0,
-                    (courseData.priceCurrency as CurrencyEnum) ?? Currency.GBP
+                    (courseData.priceCurrency as CurrencyEnum) ?? Currency.GBP,
                   ),
                 },
               }

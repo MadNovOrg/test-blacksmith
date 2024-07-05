@@ -38,7 +38,7 @@ it('displays loading spinner while loading for course', () => {
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('progressbar')).toBeInTheDocument()
@@ -64,7 +64,7 @@ it('displays loading spinner while loading for module settings', () => {
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('progressbar')).toBeInTheDocument()
@@ -90,7 +90,7 @@ it('displays not found page if course is not found', () => {
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
@@ -121,11 +121,11 @@ it('displays an alert if there is an error fetching course', () => {
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    `"Internal error occurred."`
+    `"Internal error occurred."`,
   )
 })
 
@@ -151,11 +151,11 @@ it('displays an alert if there is an error fetching module settings', () => {
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    `"Internal error occurred."`
+    `"Internal error occurred."`,
   )
 })
 
@@ -206,11 +206,11 @@ it.each([
     render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByTestId('modules-alert')).toHaveTextContent(content)
-  }
+  },
 )
 
 it.each([
@@ -248,11 +248,11 @@ it.each([
     render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.queryByTestId('modules-alert')).not.toBeInTheDocument()
-  }
+  },
 )
 
 it('displays course information properly', () => {
@@ -297,23 +297,23 @@ it('displays course information properly', () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   expect(screen.getByText(course.name)).toBeInTheDocument()
   expect(screen.getByTestId('course-status-chip').textContent).toBe('Draft')
 
   expect(
-    screen.getByTestId('course-organization').textContent
+    screen.getByTestId('course-organization').textContent,
   ).toMatchInlineSnapshot(`"Organisation: Organization"`)
   expect(
-    screen.getByTestId('course-location').textContent
+    screen.getByTestId('course-location').textContent,
   ).toMatchInlineSnapshot(`"Location: Venue, City"`)
   expect(
-    screen.getByTestId('course-start-date').textContent
+    screen.getByTestId('course-start-date').textContent,
   ).toMatchInlineSnapshot(`"Starts: 28 July 2023, 10:00 AM"`)
   expect(
-    screen.getByTestId('course-end-date').textContent
+    screen.getByTestId('course-end-date').textContent,
   ).toMatchInlineSnapshot(`"Ends: 28 July 2023, 06:00 PM"`)
 })
 
@@ -352,7 +352,7 @@ it('displays mandatory modules as pre-selected and disabled', () => {
       <ICMCourseBuilderV2 />
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   const availableModules = screen.getByTestId('available-modules')
@@ -362,15 +362,15 @@ it('displays mandatory modules as pre-selected and disabled', () => {
     mandatoryModule.module.name,
     {
       exact: false,
-    }
+    },
   )
 
   expect(moduleGroupLabel).toBeDisabled()
 
   expect(
     within(selectedModules).queryByTestId(
-      `selected-module-group-${mandatoryModule.module.id}`
-    )
+      `selected-module-group-${mandatoryModule.module.id}`,
+    ),
   ).toBeInTheDocument()
 })
 
@@ -407,7 +407,7 @@ it('displays already saved modules as preselected', () => {
       <ICMCourseBuilderV2 />
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   const availableModules = screen.getByTestId('available-modules')
@@ -417,15 +417,15 @@ it('displays already saved modules as preselected', () => {
     moduleSetting.module.name,
     {
       exact: false,
-    }
+    },
   )
 
   expect(moduleGroupLabel).toBeChecked()
 
   expect(
     within(selectedModules).queryByTestId(
-      `selected-module-group-${moduleSetting.module.id}`
-    )
+      `selected-module-group-${moduleSetting.module.id}`,
+    ),
   ).toBeInTheDocument()
 })
 
@@ -467,13 +467,13 @@ it.each([
         <ICMCourseBuilderV2 />
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     expect(
-      screen.queryByTestId('course-estimated-duration')
+      screen.queryByTestId('course-estimated-duration'),
     ).not.toBeInTheDocument()
-  }
+  },
 )
 
 it.each([true, false])(
@@ -511,13 +511,13 @@ it.each([true, false])(
         <ICMCourseBuilderV2 />
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     expect(
-      screen.queryByTestId('course-estimated-duration')
+      screen.queryByTestId('course-estimated-duration'),
     ).not.toBeInTheDocument()
-  }
+  },
 )
 
 it.each([true, false])(
@@ -527,7 +527,7 @@ it.each([true, false])(
       buildModuleSetting({
         duration: 120,
         mandatory: true,
-      })
+      }),
     )
 
     const course = buildCourse({
@@ -562,15 +562,15 @@ it.each([true, false])(
         <ICMCourseBuilderV2 />
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     fireEvent.click(screen.getByTestId('submit-button'))
 
     expect(
-      screen.queryByTestId('time-commitment-dialog')
+      screen.queryByTestId('time-commitment-dialog'),
     ).not.toBeInTheDocument()
-  }
+  },
 )
 
 it.each([
@@ -609,7 +609,7 @@ it.each([
       <ICMCourseBuilderV2 />
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   expect(screen.getByTestId('course-estimated-duration')).toBeInTheDocument()

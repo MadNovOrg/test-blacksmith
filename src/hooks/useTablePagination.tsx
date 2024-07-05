@@ -72,11 +72,11 @@ export const useTablePagination = ({
 }: Props = {}) => {
   const [currentPage, setCurrentPage] = useQueryParam(
     `${id}-page`,
-    withDefault(NumberParam, 0)
+    withDefault(NumberParam, 0),
   )
   const [perPage, setPerPage] = useQueryParam(
     `${id}-perPage`,
-    withDefault(NumberParam, initialPerPage)
+    withDefault(NumberParam, initialPerPage),
   )
 
   const handlePerPageChange = useCallback(
@@ -84,7 +84,7 @@ export const useTablePagination = ({
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    [setPerPage, setCurrentPage]
+    [setPerPage, setCurrentPage],
   )
 
   const Pagination = useCallback(
@@ -109,7 +109,7 @@ export const useTablePagination = ({
         />
       )
     },
-    [currentPage, handlePerPageChange, perPage, setCurrentPage]
+    [currentPage, handlePerPageChange, perPage, setCurrentPage],
   )
 
   return {

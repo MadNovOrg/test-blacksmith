@@ -28,7 +28,7 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [orderDirection, setOrderDirection] = useState(OrderDirection.Desc)
   const [searchTerm, setSearchTerm] = useState('')
   const [featuredPodcast, setFeaturedPodcast] = React.useState<Podcast | null>(
-    null
+    null,
   )
 
   const scrollToContainer = useRef<HTMLElement>(null)

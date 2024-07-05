@@ -40,7 +40,7 @@ it('validates that at least one email has been entered', async () => {
   render(
     <Provider value={client}>
       <InviteUserToOrganization />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.click(screen.getByRole('button', { name: /invite user/i }))
@@ -63,7 +63,7 @@ it('validates that entered email is valid', async () => {
   render(
     <Provider value={client}>
       <InviteUserToOrganization />
-    </Provider>
+    </Provider>,
   )
 
   await userEvent.type(screen.getByLabelText(/work email/i), 'email@email.com ')
@@ -71,7 +71,7 @@ it('validates that entered email is valid', async () => {
   await userEvent.click(screen.getByRole('button', { name: /invite user/i }))
 
   expect(
-    screen.getByText(/please enter a valid email address/i)
+    screen.getByText(/please enter a valid email address/i),
   ).toBeInTheDocument()
 })
 
@@ -110,14 +110,14 @@ it('displays an error message that user already exist within organization', asyn
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/organisations/${orgId}/invite`] }
+    { initialEntries: [`/organisations/${orgId}/invite`] },
   )
 
   await userEvent.type(screen.getByLabelText(/work email/i), 'email@email.com')
   await userEvent.click(screen.getByRole('button', { name: /invite user/i }))
 
   expect(screen.getByTestId('error-alert').textContent).toMatchInlineSnapshot(
-    '"A user with this email address already exists within this organisation."'
+    '"A user with this email address already exists within this organisation."',
   )
 })
 
@@ -181,12 +181,12 @@ it('saves org invites and redirects back to the organization individuals tab', a
       </Routes>
     </Provider>,
     { auth: { activeRole: RoleName.TT_ADMIN } },
-    { initialEntries: [`/organisations/${orgId}/invite`] }
+    { initialEntries: [`/organisations/${orgId}/invite`] },
   )
 
   await userEvent.type(screen.getByLabelText(/work email/i), userEmail)
   await userEvent.click(
-    screen.getByLabelText(/organisation admin/i, { exact: false })
+    screen.getByLabelText(/organisation admin/i, { exact: false }),
   )
   await userEvent.click(screen.getByRole('button', { name: /invite user/i }))
 
@@ -230,11 +230,11 @@ it('allows an org admin to invite another org admin', async () => {
         managedOrgIds: [orgId],
       },
     },
-    { initialEntries: [`/organisations/${orgId}/invite`] }
+    { initialEntries: [`/organisations/${orgId}/invite`] },
   )
 
   expect(
-    screen.getByLabelText(/organisation admin/i, { exact: false })
+    screen.getByLabelText(/organisation admin/i, { exact: false }),
   ).toBeInTheDocument()
 })
 

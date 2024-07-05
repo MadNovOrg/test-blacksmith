@@ -83,7 +83,7 @@ export const dateInputValueFormat = (date: Date): string => {
 export const formatDateForDraft = (
   value: string | Date,
   wordToAppend: string,
-  t: TFunction
+  t: TFunction,
 ) => {
   const date = typeof value === 'string' ? new Date(value) : value
 
@@ -130,7 +130,7 @@ export enum LoadingStatus {
 
 export function getSWRLoadingStatus(
   data?: object,
-  error?: Error
+  error?: Error,
 ): LoadingStatus {
   let status: LoadingStatus = LoadingStatus.IDLE
 
@@ -186,7 +186,7 @@ export const isLastCourseDay = (course: Course): boolean => {
   if (
     isEqual(
       new Date(format(startDate, 'yyyy-mm-dd')),
-      new Date(format(endDate, 'yyyy-mm-dd'))
+      new Date(format(endDate, 'yyyy-mm-dd')),
     )
   ) {
     return courseStarted(course)
@@ -196,15 +196,15 @@ export const isLastCourseDay = (course: Course): boolean => {
 }
 
 export const getCourseLeadTrainer = find<Course_Trainer>(
-  propEq('type', Course_Trainer_Type_Enum.Leader)
+  propEq('type', Course_Trainer_Type_Enum.Leader),
 )
 
 export const getCourseAssistants = filter<Course_Trainer>(
-  propEq('type', Course_Trainer_Type_Enum.Assistant)
+  propEq('type', Course_Trainer_Type_Enum.Assistant),
 )
 
 export const getCourseModerator = find<Course_Trainer>(
-  propEq('type', Course_Trainer_Type_Enum.Moderator)
+  propEq('type', Course_Trainer_Type_Enum.Moderator),
 )
 
 export const getParticipantOrgIds = pipe<
@@ -218,7 +218,7 @@ export const getParticipantOrgIds = pipe<
 >(prop('profile.organizations'), map(prop('organization.id')))
 
 export const transformModulesToGroups = (
-  courseModules: NonNullish<Course_Participant_Module>[]
+  courseModules: NonNullish<Course_Participant_Module>[],
 ): Array<{
   id: string
   name: string
@@ -271,7 +271,7 @@ export const transformModulesToGroups = (
 
 export const generateCourseName = (
   courseData: Pick<Course, 'level' | 'reaccreditation'>,
-  t: TFunction
+  t: TFunction,
 ) => {
   const courseLevelLabel = t(`common.course-levels.${courseData.level}`)
 
@@ -285,7 +285,7 @@ export const generateBildCourseName = (
   courseData: Pick<Course, 'level' | 'reaccreditation' | 'conversion'> & {
     bildStrategies: Record<BildStrategies, boolean>
   },
-  t: TFunction
+  t: TFunction,
 ) => {
   if (
     courseData.level === Course_Level_Enum.BildIntermediateTrainer ||
@@ -303,7 +303,8 @@ export const generateBildCourseName = (
     return `${bildTrainerCourseName} ${suffix}`.trim()
   } else {
     const chosenStrategies = Object.keys(courseData.bildStrategies).filter(
-      strategy => courseData.bildStrategies[strategy as BildStrategies] === true
+      strategy =>
+        courseData.bildStrategies[strategy as BildStrategies] === true,
     )
 
     const strategyAbbreviations = chosenStrategies
@@ -327,7 +328,7 @@ export const requiredMsg = (t: TFunction, name: string) => {
 
 export const profileToInput = (
   course: Course,
-  type: Course_Trainer_Type_Enum
+  type: Course_Trainer_Type_Enum,
 ) => {
   return (p: Pick<SearchTrainer, 'id'>): SetCourseTrainerInput => ({
     course_id: course.id,
@@ -355,17 +356,17 @@ export function bildStrategiesToRecord(strategies: Course['bildStrategies']) {
 }
 
 export function bildStrategiesToArray(
-  strategies: Record<BildStrategies, boolean>
+  strategies: Record<BildStrategies, boolean>,
 ) {
   return Object.keys(strategies).filter(
-    strategyName => strategies[strategyName as BildStrategies]
+    strategyName => strategies[strategyName as BildStrategies],
   ) as BildStrategies[]
 }
 
 export const convertScheduleDateToLocalTime = (
   courseStartDate: string,
   courseEndDate: string,
-  timeZone = 'Europe/London'
+  timeZone = 'Europe/London',
 ) => {
   const timeZoneSchedule = {
     start: utcToZonedTime(new Date(courseStartDate), timeZone),
@@ -379,7 +380,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
   const timeZoneSchedule = convertScheduleDateToLocalTime(
     course.schedule[0].start,
     course.schedule[0].end,
-    course.schedule[0].timeZone
+    course.schedule[0].timeZone,
   )
 
   return {
@@ -426,7 +427,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
           rawOffset:
             getTimezoneOffset(
               course.schedule[0].timeZone,
-              new Date(course.schedule[0].start)
+              new Date(course.schedule[0].start),
             ) /
             1000 /
             60,
@@ -447,7 +448,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     usesAOL: Boolean(
       course.aolCostOfCourse !== null &&
         course.aolCostOfCourse !== undefined &&
-        course.aolCostOfCourse >= 0
+        course.aolCostOfCourse >= 0,
     ),
     aolCountry: course.aolCountry ?? null,
     aolRegion: course.aolRegion ?? null,
@@ -483,7 +484,7 @@ export const isValidUKPostalCode = (postcode: string) => {
 
 export const findCourseTrainer = <T extends { profile: Profile['id'] }>(
   trainers: T[] | undefined,
-  profileId: string
+  profileId: string,
 ): T | undefined => {
   return (trainers ?? []).find(t => t.profile.id === profileId)
 }
@@ -554,7 +555,7 @@ export function getInitialsFromName(name: string) {
  * Hence the forced type `as FieldError & FieldError[]` is used
  */
 export function getFieldError(
-  err: Merge<FieldError, (FieldError | undefined)[]>
+  err: Merge<FieldError, (FieldError | undefined)[]>,
 ) {
   const error = err as (FieldError & FieldError[]) | undefined
 
@@ -580,12 +581,12 @@ export const INVOICE_STATUS_COLOR: Record<
 
 // more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
 export function getProfileCertificationLevels(
-  certificates: { courseLevel: string; status: CertificateStatus }[]
+  certificates: { courseLevel: string; status: CertificateStatus }[],
 ): (Course_Level_Enum | CourseLevel | null)[] {
   const levels = []
 
   const advancedTrainer = certificates?.find(
-    c => c.courseLevel === Course_Level_Enum.AdvancedTrainer
+    c => c.courseLevel === Course_Level_Enum.AdvancedTrainer,
   )
   if (advancedTrainer) {
     levels.push(Course_Level_Enum.AdvancedTrainer)
@@ -602,7 +603,7 @@ export function getProfileCertificationLevels(
   //So here is just a logic to show the higher one treating BILD as separate certification
   if (
     certificates?.find(
-      c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer
+      c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer,
     )
   ) {
     levels.push(Course_Level_Enum.BildAdvancedTrainer)
@@ -643,7 +644,7 @@ export function getProfileCertificationLevels(
 
 export const getTimeDifferenceAndContext = (
   end: Date,
-  start: Date
+  start: Date,
 ): TimeDifferenceAndContext => {
   const result: TimeDifferenceAndContext = {
     count: differenceInDays(end, start) + 1,
@@ -668,34 +669,34 @@ export const getTimeDifferenceAndContext = (
 
 export const getCourseDurationMessage = (
   courseDuration: TimeDifferenceAndContext,
-  t: TFunction
+  t: TFunction,
 ) => {
   const { context, count } = courseDuration
 
   let courseDurationMessage
   if (context == 'days' && count === 1) {
     courseDurationMessage = t(
-      'pages.course-participants.course-duration_days_one'
+      'pages.course-participants.course-duration_days_one',
     )
   } else if (context == 'days') {
     courseDurationMessage = t(
       'pages.course-participants.course-duration_days_other',
-      { count }
+      { count },
     )
   } else if (context == 'hours' && count === 1) {
     courseDurationMessage = t(
       'pages.course-participants.course-duration_hours_one',
-      { count }
+      { count },
     )
   } else if (context == 'hours') {
     courseDurationMessage = t(
       'pages.course-participants.course-duration_hours_other',
-      { count }
+      { count },
     )
   } else if (context == 'minutes') {
     courseDurationMessage = t(
       'pages.course-participants.course-duration_minutes_other',
-      { count }
+      { count },
     )
   } else {
     courseDurationMessage = t('pages.course-participants.course-duration_none')
@@ -717,7 +718,7 @@ export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
     courseBeginsForMessage = t('pages.course-participants.course-begins-today')
   } else if (courseBeginsFor === -1) {
     courseBeginsForMessage = t(
-      'pages.course-participants.until-course-begins_days_one'
+      'pages.course-participants.until-course-begins_days_one',
     )
   } else {
     courseBeginsForMessage = t(
@@ -725,9 +726,9 @@ export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
       {
         count: differenceInCalendarDays(
           new Date(course.schedule[0].start),
-          now()
+          now(),
         ),
-      }
+      },
     )
   }
   return courseBeginsForMessage
@@ -737,7 +738,7 @@ export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
 
 export const getMandatoryCourseMaterialsCost = (
   mandatoryCourseMaterials: number,
-  currency: Currency
+  currency: Currency,
 ) => mandatoryCourseMaterials * MCMAmount[currency]
 
 export const getTrainerSubsistenceCost = (nights = 0, isUKCountry = true) =>
@@ -786,7 +787,7 @@ export const getCourseStatus = (courseData: {
   const courseEnded = isPast(new Date(courseData.schedule[0].end))
   const participant = courseData.participants[0]
   const evaluated = Boolean(
-    courseData.evaluation_answers_aggregate?.aggregate?.count
+    courseData.evaluation_answers_aggregate?.aggregate?.count,
   )
 
   let courseStatus: AllCourseStatuses = Course_Status_Enum.Scheduled
@@ -830,7 +831,7 @@ export function formatCurrency(
     amount: number
     currency?: Currency | string
   },
-  t: TFunction
+  t: TFunction,
 ) {
   return t('currency', { amount, currency: currency })
 }
@@ -850,7 +851,7 @@ export const GRACE_PERIOD_PER_LEVEL = {
 
 export function expiryDateWithGracePeriod(
   level: Course_Level_Enum,
-  expiryDate: Date
+  expiryDate: Date,
 ) {
   return addMonths(expiryDate, GRACE_PERIOD_PER_LEVEL[level])
 }
@@ -940,13 +941,13 @@ export const customFeeFormat = (num: number) => {
     fractionalPart = fractionalPart.slice(0, 2)
 
   return Number(
-    fractionalPart ? integerPart.concat('.', fractionalPart) : integerPart
+    fractionalPart ? integerPart.concat('.', fractionalPart) : integerPart,
   )
 }
 
 export const validUserSignature = (
   fullName?: string,
-  signature?: string
+  signature?: string,
 ): boolean => {
   if (fullName && signature) {
     const splitFullName = fullName
@@ -984,7 +985,7 @@ export function checkIsEmployerAOL(trainer_role_types: TrainerRoleType[]) {
 // Used to locally store organization data before account creation
 export let organizationData: InsertOrgLeadMutationVariables
 export const saveNewOrganizationDataInLocalState = (
-  organization: InsertOrgLeadMutationVariables
+  organization: InsertOrgLeadMutationVariables,
 ) => (organizationData = { ...organization })
 
 export const ALL_ORGS = 'all'

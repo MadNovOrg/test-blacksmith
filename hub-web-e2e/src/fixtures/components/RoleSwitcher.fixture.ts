@@ -10,7 +10,7 @@ export class RoleSwitcher {
     this.button = this.page.locator('data-testid=RoleSwitcher-btn')
     this.option = text =>
       this.page.locator(
-        `[data-testid="RoleSwitcher-otherRole"]:text-is("${text}")`
+        `[data-testid="RoleSwitcher-otherRole"]:text-is("${text}")`,
       )
   }
 

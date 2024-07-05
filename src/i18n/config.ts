@@ -82,7 +82,7 @@ function formatUnits() {
     lng?: string,
     options?: {
       fromUnit: convertUnits.Unit
-    }
+    },
   ) => {
     const toUnit = unitLocalesMap[lng || defaultLocale]
     const convertedValue = convertUnits(+value)

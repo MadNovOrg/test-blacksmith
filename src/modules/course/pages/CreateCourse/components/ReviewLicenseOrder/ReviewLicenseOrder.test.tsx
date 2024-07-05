@@ -40,11 +40,11 @@ describe('component: ReviewLicenseOrder', () => {
         <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
           <ReviewLicenseOrder />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"Course not found"`
+      `"Course not found"`,
     )
   })
 
@@ -86,47 +86,47 @@ describe('component: ReviewLicenseOrder', () => {
         >
           <ReviewLicenseOrder />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 
     expect(
-      screen.getByText(/blended learning - level one/i)
+      screen.getByText(/blended learning - level one/i),
     ).toBeInTheDocument()
 
     expect(
       screen.getByText(
         `${format(startDate, dateFormats.date_long)} - ${format(
           endDate,
-          dateFormats.date_long
-        )}`
-      )
+          dateFormats.date_long,
+        )}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
       screen.getByText(
         `${format(startDate, dateFormats.date_onlyTime)} - ${format(
           endDate,
-          dateFormats.date_onlyTime
-        )}`
-      )
+          dateFormats.date_onlyTime,
+        )}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(go1Licensing.invoiceDetails.billingAddress)
+      screen.getByText(go1Licensing.invoiceDetails.billingAddress),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(go1Licensing.invoiceDetails.email)
+      screen.getByText(go1Licensing.invoiceDetails.email),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(go1Licensing.invoiceDetails.firstName)
+      screen.getByText(go1Licensing.invoiceDetails.firstName),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(go1Licensing.invoiceDetails.surname)
+      screen.getByText(go1Licensing.invoiceDetails.surname),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(go1Licensing.invoiceDetails.phone)
+      screen.getByText(go1Licensing.invoiceDetails.phone),
     ).toBeInTheDocument()
   })
   // TODO: Fix this test as right now it fails after migrating useSaveCourse to urql
@@ -215,7 +215,7 @@ describe('component: ReviewLicenseOrder', () => {
             <Route path="/courses/:id/modules" element={<p>Modules page</p>} />
           </Routes>
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
     await userEvent.click(screen.getByText(/course builder/i))
 

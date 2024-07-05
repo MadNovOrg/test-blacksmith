@@ -31,28 +31,28 @@ export class CourseBuilderPage extends BasePage {
     this.availableModule = (name: string) =>
       this.page.locator(`[data-testid="available-modules"] >> text="${name}"`)
     this.availableModuleNames = this.page.locator(
-      '[data-testid="available-modules"] [data-testid="module-name"]'
+      '[data-testid="available-modules"] [data-testid="module-name"]',
     )
     this.availableModuleDurations = this.page.locator(
-      '[data-testid="available-modules"] [data-testid="module-duration"]'
+      '[data-testid="available-modules"] [data-testid="module-duration"]',
     )
     this.emptyModuleSlots = this.page.locator('data-testid=empty-slot')
     this.courseModulesArea = this.page.locator('data-testid=course-modules')
     this.selectedModuleNames = this.page.locator(
-      '[data-testid="selected-modules"] [data-testid="module-name"]'
+      '[data-testid="selected-modules"] [data-testid="module-name"]',
     )
     this.selectedModuleDurations = this.page.locator(
-      '[data-testid="selected-modules"] [data-testid="module-duration"]'
+      '[data-testid="selected-modules"] [data-testid="module-duration"]',
     )
     this.estimatedDuration = this.page.locator('data-testid=progress-bar-label')
     this.submitButton = this.page.locator('data-testid=submit-button')
     this.clearButton = this.page.locator('data-testid=clear-button')
     this.confirmWarningDialog = this.page.locator(
-      'data-testid=confirm-warning-dialog'
+      'data-testid=confirm-warning-dialog',
     )
     this.confirmDialogSubmitButton = 'data-testid=dialog-confirm-button'
     this.timeCommitmentDialog = this.page.locator(
-      'data-testid=time-commitment-dialog'
+      'data-testid=time-commitment-dialog',
     )
   }
 
@@ -85,7 +85,7 @@ export class CourseBuilderPage extends BasePage {
 
   async checkDraftTextAppeared() {
     await expect(this.draftText).toHaveText(
-      'Last modified less than a minute ago'
+      'Last modified less than a minute ago',
     )
   }
 

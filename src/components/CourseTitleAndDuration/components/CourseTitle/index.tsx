@@ -32,7 +32,7 @@ export const CourseTitle: React.FC<
 
   const difference = getTimeDifferenceAndContext(
     new Date(course.end),
-    new Date(course.start)
+    new Date(course.start),
   )
 
   return (

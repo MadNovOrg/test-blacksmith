@@ -20,7 +20,7 @@ describe('component: UserSelector', () => {
 
   it("doesn't display options initially", async () => {
     render(
-      <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
+      <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />,
     )
 
     await userEvent.click(screen.getByPlaceholderText('User email'))
@@ -52,20 +52,20 @@ describe('component: UserSelector', () => {
     render(
       <Provider value={client}>
         <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('User email'),
-      USER_SEARCH_EMAIL
+      USER_SEARCH_EMAIL,
     )
 
     await waitFor(() =>
       expect(
         within(screen.getByRole('listbox')).getByText(
-          `${USER_SEARCH_EMAIL}, ${USER_SEARCH_FULL_NAME}`
-        )
-      ).toBeInTheDocument()
+          `${USER_SEARCH_EMAIL}, ${USER_SEARCH_FULL_NAME}`,
+        ),
+      ).toBeInTheDocument(),
     )
   })
 
@@ -97,12 +97,12 @@ describe('component: UserSelector', () => {
           onEmailChange={noop}
           organisationId="1"
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('User email'),
-      USER_SEARCH_EMAIL
+      USER_SEARCH_EMAIL,
     )
 
     vi.runAllTimers()
@@ -111,12 +111,12 @@ describe('component: UserSelector', () => {
 
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(optionLabel)
+        within(screen.getByRole('listbox')).getByText(optionLabel),
       ).toBeInTheDocument()
     })
 
     await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(optionLabel)
+      within(screen.getByRole('listbox')).getByText(optionLabel),
     )
 
     await waitFor(() => {

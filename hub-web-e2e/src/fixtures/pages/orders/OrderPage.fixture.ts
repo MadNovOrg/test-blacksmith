@@ -22,13 +22,13 @@ export class OrderPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.exportWholePageButton = this.page.locator(
-      'button:has-text("Export whole page")'
+      'button:has-text("Export whole page")',
     )
     this.exportAllOrders = this.page.locator(
-      'button:has-text("Export all orders")'
+      'button:has-text("Export all orders")',
     )
     this.exportSelectedOrders = this.page.locator(
-      'button:has-text("Export selected")'
+      'button:has-text("Export selected")',
     )
   }
 
@@ -39,7 +39,7 @@ export class OrderPage extends BasePage {
   async checkOrderVisiblity(orders: OrderInfoFragment[]) {
     for (const order of orders) {
       await expect(
-        this.page.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
+        this.page.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`),
       ).toBeVisible()
     }
   }
@@ -48,7 +48,7 @@ export class OrderPage extends BasePage {
     const selectOrders = Math.ceil(orders.length / 2)
     for (let i = 0; i < selectOrders; i++) {
       await this.page.click(
-        `data-testid=${orders[i].id} >> data-testid=TableChecks-Row`
+        `data-testid=${orders[i].id} >> data-testid=TableChecks-Row`,
       )
     }
   }
@@ -106,16 +106,16 @@ export class OrderPage extends BasePage {
 
       expect(sheet[`A${cellIndex}`]?.v ?? null).toBe(order?.xeroInvoiceNumber)
       expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
-        order?.organization?.name
+        order?.organization?.name,
       )
       expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
-        order?.organization?.address?.line1
+        order?.organization?.address?.line1,
       )
       expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
-        order?.organization?.address?.city
+        order?.organization?.address?.city,
       )
       expect(sheet[`C${cellIndex}`]?.v ?? null).toContain(
-        order?.organization?.address?.postCode
+        order?.organization?.address?.postCode,
       )
 
       const paymentMethod = order?.paymentMethod
@@ -123,7 +123,7 @@ export class OrderPage extends BasePage {
         : 'error'
 
       expect(sheet[`D${cellIndex}`]?.v ?? null).toMatch(
-        new RegExp(paymentMethod)
+        new RegExp(paymentMethod),
       )
       expect(sheet[`E${cellIndex}`]?.v ?? 0).toBe(Number(order?.orderTotal))
 

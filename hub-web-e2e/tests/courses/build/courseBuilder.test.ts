@@ -16,7 +16,7 @@ for (const data of MODULES_SETUP) {
         data.course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
-        false
+        false,
       )
       await use(data.course)
       await API.course.deleteCourse(data.course.id)
@@ -48,7 +48,7 @@ for (const data of MODULES_SETUP) {
     const courseDetailsPage =
       await courseBuilderPage.clickConfirmWarningSubmitButton()
     await courseDetailsPage.checkSuccessMessage(
-      `You have successfully created your ${course.id} Course`
+      `You have successfully created your ${course.id} Course`,
     )
   })
 }

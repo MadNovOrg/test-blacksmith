@@ -35,7 +35,7 @@ export const OrgTypeSelector: FC<PropsWithChildren<Props>> = ({
     const orgTypesOptions = [...(data?.organization_type ?? [])]
 
     const otherOption = orgTypesOptions.findIndex(
-      option => option.name === 'Other'
+      option => option.name === 'Other',
     )
 
     if (otherOption && otherOption !== -1) {

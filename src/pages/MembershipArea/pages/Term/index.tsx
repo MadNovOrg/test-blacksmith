@@ -91,20 +91,20 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
       EbooksCategory: t('pages.membership.ebooks.search-placeholder'),
       WebinarsCategory: t('pages.membership.webinars.search-placeholder'),
       ResearchSummariesCategory: t(
-        'pages.membership.research-summaries.search-placeholder'
+        'pages.membership.research-summaries.search-placeholder',
       ),
       VideoSeriesCategory: t(
-        'pages.membership.video-series.search-placeholder'
+        'pages.membership.video-series.search-placeholder',
       ),
     }),
-    [t]
+    [t],
   )
 
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)
   const [pagination, setPagination] =
     useState<Pick<TermQueryVariables, 'first' | 'last' | 'before' | 'after'>>(
-      initialPagination
+      initialPagination,
     )
 
   const [{ data, fetching }] = useQuery<TermQuery, TermQueryVariables>({
@@ -230,10 +230,10 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           <Pagination
             hasNextPage={Boolean(
-              data.content.termNode.posts.pageInfo?.hasNextPage
+              data.content.termNode.posts.pageInfo?.hasNextPage,
             )}
             hasPreviousPage={Boolean(
-              data.content.termNode.posts.pageInfo?.hasPreviousPage
+              data.content.termNode.posts.pageInfo?.hasPreviousPage,
             )}
             onPrevClick={() => {
               scrollTo()
@@ -312,10 +312,10 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           <Pagination
             hasNextPage={Boolean(
-              data.content.termNode.ebooks.pageInfo?.hasNextPage
+              data.content.termNode.ebooks.pageInfo?.hasNextPage,
             )}
             hasPreviousPage={Boolean(
-              data.content.termNode.ebooks.pageInfo?.hasPreviousPage
+              data.content.termNode.ebooks.pageInfo?.hasPreviousPage,
             )}
             onPrevClick={() =>
               setPagination({
@@ -382,10 +382,10 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           <Pagination
             hasNextPage={Boolean(
-              data.content.termNode.webinars.pageInfo?.hasNextPage
+              data.content.termNode.webinars.pageInfo?.hasNextPage,
             )}
             hasPreviousPage={Boolean(
-              data.content.termNode.webinars.pageInfo?.hasPreviousPage
+              data.content.termNode.webinars.pageInfo?.hasPreviousPage,
             )}
             onPrevClick={() =>
               setPagination({
@@ -463,10 +463,10 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           <Pagination
             hasNextPage={Boolean(
-              data.content.termNode.researchSummaries.pageInfo?.hasNextPage
+              data.content.termNode.researchSummaries.pageInfo?.hasNextPage,
             )}
             hasPreviousPage={Boolean(
-              data.content.termNode.researchSummaries.pageInfo?.hasPreviousPage
+              data.content.termNode.researchSummaries.pageInfo?.hasPreviousPage,
             )}
             onPrevClick={() =>
               setPagination({
@@ -537,10 +537,10 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
 
           <Pagination
             hasNextPage={Boolean(
-              data.content.termNode.videoSeriesItems.pageInfo?.hasNextPage
+              data.content.termNode.videoSeriesItems.pageInfo?.hasNextPage,
             )}
             hasPreviousPage={Boolean(
-              data.content.termNode.videoSeriesItems.pageInfo?.hasPreviousPage
+              data.content.termNode.videoSeriesItems.pageInfo?.hasPreviousPage,
             )}
             onPrevClick={() =>
               setPagination({

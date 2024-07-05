@@ -35,12 +35,12 @@ export const CourseForBookingTile: React.FC<
 > = ({ course, variant = 'default', showDistance, distance }) => {
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
-    [residingCountryEnabled]
+    [residingCountryEnabled],
   )
 
   const { acl } = useAuth()
@@ -135,7 +135,7 @@ export const CourseForBookingTile: React.FC<
 
     if (isBild && acl.isInternalUser()) {
       return navigate(
-        `/registration?course_id=${course.id}&quantity=1&internal=true`
+        `/registration?course_id=${course.id}&quantity=1&internal=true`,
       )
     }
 
@@ -151,7 +151,7 @@ export const CourseForBookingTile: React.FC<
         ? `/waitlist?course_id=${course.id}`
         : `/registration?course_id=${course.id}&quantity=1${
             acl.isInternalUser() ? '&internal=true' : ''
-          }`
+          }`,
     )
   }
 

@@ -51,7 +51,7 @@ export const Certifications: React.FC<
   }, [])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [certificateType, setCertificateType] = useState<CertificateTypeEnum[]>(
-    []
+    [],
   )
   const [certificateStatus, setCertificateStatus] = useState<
     CertificateStatus[]

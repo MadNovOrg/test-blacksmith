@@ -29,14 +29,14 @@ export const ReviewLicenseOrder: React.FC<
   const { saveCourse, savingStatus } = useSaveCourse()
   const { addSnackbarMessage } = useSnackbar()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const hasSavingError = savingStatus === LoadingStatus.ERROR
 
   const { _t, t } = useScopedTranslation(
-    'pages.create-course.license-order-review'
+    'pages.create-course.license-order-review',
   )
   const navigate = useNavigate()
 
@@ -54,7 +54,7 @@ export const ReviewLicenseOrder: React.FC<
                 : courseData.endDateTime,
           }
         : {},
-    [courseData]
+    [courseData],
   )
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export const ReviewLicenseOrder: React.FC<
         {courseData ? (
           <InfoPanel
             title={`${_t('common.blended-learning')} - ${_t(
-              `common.course-levels.${courseData.courseLevel}`
+              `common.course-levels.${courseData.courseLevel}`,
             )}`}
           >
             <InfoRow
@@ -136,13 +136,13 @@ export const ReviewLicenseOrder: React.FC<
                     })} ${formatGMTDateTimeByTimeZone(
                       startDate as Date,
                       courseTimezone,
-                      false
+                      false,
                     )} - ${_t('dates.time', {
                       date: endDate,
                     })} ${formatGMTDateTimeByTimeZone(
                       endDate as Date,
                       courseTimezone,
-                      true
+                      true,
                     )} `
                   : _t('dates.timeFromTo', {
                       from: courseData.startDateTime,

@@ -62,18 +62,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
     expect(screen.getByText(t('common.transfer'))).toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -100,18 +100,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -147,18 +147,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -194,18 +194,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
     expect(screen.getByText(t('common.transfer'))).toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -241,18 +241,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -288,18 +288,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -335,18 +335,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.SALES_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
     expect(screen.getByText(t('common.transfer'))).toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -382,18 +382,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.SALES_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -429,18 +429,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.SALES_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -476,18 +476,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.SALES_REPRESENTATIVE,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.queryByText(t('common.cancel'))).not.toBeInTheDocument()
     expect(screen.getByText(t('common.replace'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.queryByText(t('common.resend-course-information'))
+      screen.queryByText(t('common.resend-course-information')),
     ).not.toBeInTheDocument()
   })
 
@@ -514,18 +514,18 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.SALES_REPRESENTATIVE,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.queryByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.queryByText(t('common.resend-course-information'))
+      screen.queryByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -561,14 +561,14 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TRAINER,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
     expect(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -597,18 +597,18 @@ describe(ManageAttendanceMenu.name, () => {
           isOrgAdmin: true,
           managedOrgIds: [defaultOrganizations[0].organization.id],
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.queryByText(t('common.resend-course-information'))
+      screen.queryByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -637,11 +637,11 @@ describe(ManageAttendanceMenu.name, () => {
           isOrgAdmin: true,
           managedOrgIds: [chance.guid()],
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByText(t('pages.course-participants.manage-attendance'))
+      screen.queryByText(t('pages.course-participants.manage-attendance')),
     ).not.toBeInTheDocument()
   })
 
@@ -670,18 +670,18 @@ describe(ManageAttendanceMenu.name, () => {
           isOrgAdmin: true,
           managedOrgIds: [defaultOrganizations[0].organization.id],
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.queryByText(t('common.replace'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.transfer'))).not.toBeInTheDocument()
     expect(
-      screen.queryByText(t('common.resend-course-information'))
+      screen.queryByText(t('common.resend-course-information')),
     ).toBeInTheDocument()
   })
 
@@ -721,11 +721,11 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     await userEvent.click(screen.getByText(t('common.cancel')))
@@ -733,7 +733,7 @@ describe(ManageAttendanceMenu.name, () => {
     expect(onRemoveMock).toHaveBeenCalledWith(actionableItem)
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     await userEvent.click(screen.getByText(t('common.replace')))
@@ -741,7 +741,7 @@ describe(ManageAttendanceMenu.name, () => {
     expect(onReplaceMock).toHaveBeenCalledWith(actionableItem)
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     await userEvent.click(screen.getByText(t('common.transfer')))
@@ -749,11 +749,11 @@ describe(ManageAttendanceMenu.name, () => {
     expect(onTransferMock).toHaveBeenCalledWith(actionableItem)
 
     await userEvent.click(
-      screen.getByText(t('pages.course-participants.manage-attendance'))
+      screen.getByText(t('pages.course-participants.manage-attendance')),
     )
 
     await userEvent.click(
-      screen.getByText(t('common.resend-course-information'))
+      screen.getByText(t('common.resend-course-information')),
     )
     expect(onResendCourseInformationMock).toHaveBeenCalledTimes(1)
     expect(onResendCourseInformationMock).toHaveBeenCalledWith(actionableItem)
@@ -794,31 +794,31 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: /manage attendance/i })
+      screen.getByRole('button', { name: /manage attendance/i }),
     )
 
     const actionsMenu = screen.getByRole('menu')
 
     expect(
-      within(actionsMenu).getByRole('menuitem', { name: /cancel/i })
+      within(actionsMenu).getByRole('menuitem', { name: /cancel/i }),
     ).toBeInTheDocument()
 
     expect(
-      within(actionsMenu).getByRole('menuitem', { name: /transfer/i })
+      within(actionsMenu).getByRole('menuitem', { name: /transfer/i }),
     ).toBeInTheDocument()
 
     expect(
       within(actionsMenu).queryByRole('menuitem', {
         name: /resent course instructions/i,
-      })
+      }),
     ).not.toBeInTheDocument()
 
     expect(
-      within(actionsMenu).queryByRole('button', { name: /replace/i })
+      within(actionsMenu).queryByRole('button', { name: /replace/i }),
     ).not.toBeInTheDocument()
   })
 
@@ -848,11 +848,11 @@ describe(ManageAttendanceMenu.name, () => {
         auth: {
           activeRole: RoleName.USER,
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByText(t('pages.course-participants.manage-attendance'))
+      screen.queryByText(t('pages.course-participants.manage-attendance')),
     ).not.toBeInTheDocument()
   })
 })

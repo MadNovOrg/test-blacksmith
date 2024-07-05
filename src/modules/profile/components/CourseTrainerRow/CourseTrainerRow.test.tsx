@@ -33,24 +33,26 @@ describe('CourseTrainerRow', () => {
         trainingLevel={trainingLevel}
         courseStatus={courseStatus}
         courseStartDate={startDate}
-      />
+      />,
     )
 
     const courseCodeLink = getByText(courseCode)
     expect(courseCodeLink).toBeInTheDocument()
     expect(courseCodeLink.closest('a')).toHaveAttribute(
       'href',
-      `/courses/${courseId}/details`
+      `/courses/${courseId}/details`,
     )
 
     const trainerTypeLabel = getByTestId('trainer-level')
     expect(trainerTypeLabel.textContent).toBe(
-      t(`components.trainer-avatar-group.${trainerTypeLabelMap[trainingLevel]}`)
+      t(
+        `components.trainer-avatar-group.${trainerTypeLabelMap[trainingLevel]}`,
+      ),
     )
 
     const courseStatusChip = getByTestId('course-status-chip')
     expect(courseStatusChip.textContent).toBe(
-      t(`course-statuses.${courseStatus}`)
+      t(`course-statuses.${courseStatus}`),
     )
 
     const courseStartDate = getByText('15 May 2024')

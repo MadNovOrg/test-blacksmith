@@ -31,7 +31,7 @@ test('request cancelling a course as org admin', async ({
   const orgAdminCoursesPage = new MyCoursesPage(page)
   await orgAdminCoursesPage.gotoManageCourses(`${course.id}`)
   const courseDetailsPage = await orgAdminCoursesPage.clickCourseDetailsPage(
-    course.id
+    course.id,
   )
   const requestCancellationPopUp =
     await courseDetailsPage.clickRequestCancellation()
@@ -48,7 +48,7 @@ test('request cancelling a course as org admin', async ({
   const adminCoursesPage = new MyCoursesPage(adminPage)
   await adminCoursesPage.goto(`${course.id}`)
   const adminCourseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
-    course.id
+    course.id,
   )
   const cancelEntireCoursePopUp =
     await adminCourseDetailsPage.approveCancellation()

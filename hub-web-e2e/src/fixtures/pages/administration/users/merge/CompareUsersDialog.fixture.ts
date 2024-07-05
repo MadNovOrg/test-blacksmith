@@ -7,7 +7,7 @@ export class CompareUsersDialog {
     user2: Locator
   }
   readonly confirmCheckbox = this.locator.getByLabel(
-    'I Confirm that I would like to merge these users'
+    'I Confirm that I would like to merge these users',
   )
   readonly cancelButton = this.locator.getByRole('button', { name: 'Cancel' })
   readonly continueButton = this.locator.getByRole('button', {

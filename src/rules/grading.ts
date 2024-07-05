@@ -6,7 +6,7 @@ import {
 
 export function getAvailableGrades(
   courseLevel: Course_Level_Enum,
-  deliveryType: Course_Delivery_Type_Enum
+  deliveryType: Course_Delivery_Type_Enum,
 ): Grade_Enum[] {
   if (
     (deliveryType === Course_Delivery_Type_Enum.Virtual &&

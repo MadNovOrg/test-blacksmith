@@ -73,7 +73,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   const orgAdminMode = mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
 
   const isInternationalAttendeeTransferEnabled = useFeatureFlagEnabled(
-    'international-attendee-transfer'
+    'international-attendee-transfer',
   )
 
   const { watch, control, register, formState, setValue } =

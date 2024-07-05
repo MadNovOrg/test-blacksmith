@@ -47,7 +47,7 @@ export const ChangePasswordPage = () => {
           .required(requiredMsg(t, 'common.confirm-password'))
           .oneOf([yup.ref('newPassword')], t('common.password-do-not-match')),
       }),
-    [t]
+    [t],
   )
 
   const {

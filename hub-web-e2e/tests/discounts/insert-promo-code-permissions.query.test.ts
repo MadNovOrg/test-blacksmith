@@ -34,7 +34,7 @@ const forbiddenRoles: HasuraRole[] = [
 
 function buildPromoCode(
   courseId: number,
-  createdBy: string
+  createdBy: string,
 ): UpsertPromoCodeMutationVariables {
   const uniquePart =
     new Date().getTime() + Math.random().toString(36).slice(2, 7)
@@ -72,7 +72,7 @@ allowedRoles.forEach(role => {
       {
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
-      }
+      },
     )
     expect(results?.insert_promo_code_one?.id).not.toBeNull()
     API.promoCode.remove(results.insert_promo_code_one?.id)
@@ -93,8 +93,8 @@ forbiddenRoles.forEach(role => {
         {
           'x-hasura-user-id': uuidv4(),
           'x-hasura-user-email': 'whatever',
-        }
-      )
+        },
+      ),
     ).rejects.toEqual(expect.any(Error))
   })
 })

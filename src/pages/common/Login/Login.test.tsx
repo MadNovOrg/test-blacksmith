@@ -26,7 +26,7 @@ describe('Login', () => {
     const email = screen.getByTestId('input-email')
     expect(email).toHaveValue('')
     expect(
-      screen.queryByText('Please enter your email')
+      screen.queryByText('Please enter your email'),
     ).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByTestId('login-submit'))
@@ -83,7 +83,7 @@ describe('Login', () => {
     fireEvent.click(screen.getByTestId('login-submit'))
 
     await waitForText(
-      'Email address or password was incorrect, please try again'
+      'Email address or password was incorrect, please try again',
     )
   })
 

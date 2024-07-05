@@ -26,7 +26,7 @@ describe('page: Podcast', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${PODCAST_ID}`] }
+      { initialEntries: [`/${PODCAST_ID}`] },
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -56,7 +56,7 @@ describe('page: Podcast', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${PODCAST_ID}`] }
+      { initialEntries: [`/${PODCAST_ID}`] },
     )
 
     expect(screen.getByText('Podcast not found')).toBeInTheDocument()
@@ -80,11 +80,11 @@ describe('page: Podcast', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/not-found`] }
+      { initialEntries: [`/not-found`] },
     )
 
     expect(
-      screen.getByText('There was an error loading the podcast')
+      screen.getByText('There was an error loading the podcast'),
     ).toBeInTheDocument()
   })
 
@@ -111,13 +111,13 @@ describe('page: Podcast', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${PODCAST_ID}`] }
+      { initialEntries: [`/${PODCAST_ID}`] },
     )
 
     expect(screen.getByText(podcast.name)).toBeInTheDocument()
     expect(screen.getByText(`by ${podcast.author}`)).toBeInTheDocument()
     expect(
-      screen.getByText(format(new Date(podcast.publishedDate), 'd MMMM yyyy'))
+      screen.getByText(format(new Date(podcast.publishedDate), 'd MMMM yyyy')),
     ).toBeInTheDocument()
   })
 
@@ -145,7 +145,7 @@ describe('page: Podcast', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${PODCAST_ID}`] }
+      { initialEntries: [`/${PODCAST_ID}`] },
     )
 
     await userEvent.click(screen.getByText('Podcasts'))
@@ -180,12 +180,12 @@ describe('page: Podcast', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${PODCAST_ID}`] }
+      { initialEntries: [`/${PODCAST_ID}`] },
     )
 
     recentPodcasts.forEach(podcast => {
       expect(
-        screen.getByTestId(`podcast-grid-item-${podcast.id}`)
+        screen.getByTestId(`podcast-grid-item-${podcast.id}`),
       ).toBeInTheDocument()
     })
   })

@@ -21,13 +21,13 @@ const test = base.extend<{
       const newCourse = UNIQUE_COURSE()
       const courseId = await API.course.insertCourse(
         newCourse,
-        users.trainer.email
+        users.trainer.email,
       )
       newCourse.id = courseId
       const newOrder = await UNIQUE_ORDER(
         users.userOrgAdmin,
         [users.user1],
-        newCourse
+        newCourse,
       )
       await API.order.insertOrder(newOrder)
       orders = await API.order.getOrders()

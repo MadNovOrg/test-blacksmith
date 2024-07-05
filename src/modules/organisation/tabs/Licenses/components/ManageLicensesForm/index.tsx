@@ -35,7 +35,7 @@ function schema(t: TFunction, currentBalance: number) {
         is: (type: string) => type === 'REMOVE',
         then: schema =>
           schema.max(currentBalance, value =>
-            t('error-amount-max', { max: value.max })
+            t('error-amount-max', { max: value.max }),
           ),
       })
       .required(t('erorr-amount-required')),

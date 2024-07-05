@@ -39,8 +39,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -51,8 +51,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 1,
@@ -60,7 +60,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 })),
     ).toEqual({
       min: 1,
       max: 1,
@@ -68,7 +68,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
     ).toEqual({
       min: 1,
       max: 2,
@@ -76,7 +76,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -96,8 +96,8 @@ describe('getRequiredTrainersV2', () => {
         getRequiredAssistants(
           extend({}, criteria, {
             maxParticipants: 23,
-          })
-        )
+          }),
+        ),
       ).toEqual({
         min: 1,
         max: 1,
@@ -108,8 +108,8 @@ describe('getRequiredTrainersV2', () => {
         getRequiredAssistants(
           extend({}, criteria, {
             maxParticipants: 24,
-          })
-        )
+          }),
+        ),
       ).toEqual({
         min: 1,
         max: 2,
@@ -117,7 +117,7 @@ describe('getRequiredTrainersV2', () => {
 
       // Above threshold
       expect(
-        getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
       ).toEqual({
         min: 2,
         max: 2,
@@ -125,7 +125,7 @@ describe('getRequiredTrainersV2', () => {
 
       // Next increment threshold
       expect(
-        getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 })),
       ).toEqual({
         min: 2,
         max: 3,
@@ -133,12 +133,12 @@ describe('getRequiredTrainersV2', () => {
 
       // Above next increment threshold
       expect(
-        getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 })),
       ).toEqual({
         min: 3,
         max: 3,
       })
-    }
+    },
   )
 
   it('test assist ratio value for Open Virtual Level 1 course', () => {
@@ -151,8 +151,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 23,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -163,8 +163,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 24,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 1,
@@ -172,7 +172,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 1,
       max: 1,
@@ -180,7 +180,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 })),
     ).toEqual({
       min: 1,
       max: 2,
@@ -188,7 +188,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -203,8 +203,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 7,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -215,8 +215,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 8,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 1,
@@ -224,7 +224,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 9 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 9 })),
     ).toEqual({
       min: 1,
       max: 1,
@@ -232,7 +232,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 16 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 16 })),
     ).toEqual({
       min: 1,
       max: 2,
@@ -240,7 +240,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -257,8 +257,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -269,8 +269,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 2,
@@ -278,7 +278,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -286,7 +286,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
     ).toEqual({
       min: 2,
       max: 3,
@@ -294,7 +294,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 3,
       max: 3,
@@ -311,8 +311,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -323,8 +323,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 2,
@@ -332,7 +332,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -340,7 +340,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
     ).toEqual({
       min: 2,
       max: 3,
@@ -348,7 +348,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 3,
       max: 3,
@@ -364,8 +364,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 15,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -376,8 +376,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 16,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 2,
@@ -385,7 +385,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -393,7 +393,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
     ).toEqual({
       min: 2,
       max: 3,
@@ -401,7 +401,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 3,
       max: 3,
@@ -418,8 +418,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 23,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -430,8 +430,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 24,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 2,
@@ -439,7 +439,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -447,7 +447,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 })),
     ).toEqual({
       min: 2,
       max: 3,
@@ -455,7 +455,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 })),
     ).toEqual({
       min: 3,
       max: 3,
@@ -472,8 +472,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 23,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -484,8 +484,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 24,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 2,
@@ -493,7 +493,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -501,7 +501,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 })),
     ).toEqual({
       min: 2,
       max: 3,
@@ -509,7 +509,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 })),
     ).toEqual({
       min: 3,
       max: 3,
@@ -525,8 +525,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 17,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -537,8 +537,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 18,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 1,
@@ -546,7 +546,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 19 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 19 })),
     ).toEqual({
       min: 1,
       max: 1,
@@ -554,7 +554,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 })),
     ).toEqual({
       min: 1,
       max: 2,
@@ -562,7 +562,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -578,8 +578,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 17,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -590,8 +590,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 18,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 2,
@@ -599,7 +599,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 19 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 19 })),
     ).toEqual({
       min: 2,
       max: 2,
@@ -607,7 +607,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 30 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 30 })),
     ).toEqual({
       min: 2,
       max: 3,
@@ -615,7 +615,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 31 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 31 })),
     ).toEqual({
       min: 3,
       max: 3,
@@ -636,8 +636,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -648,8 +648,8 @@ describe('getRequiredTrainersV2', () => {
       getRequiredAssistants(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 1,
@@ -657,7 +657,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 })),
     ).toEqual({
       min: 1,
       max: 1,
@@ -665,7 +665,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
     ).toEqual({
       min: 1,
       max: 2,
@@ -673,7 +673,7 @@ describe('getRequiredTrainersV2', () => {
 
     // Above next increment threshold
     expect(
-      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 }))
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
     ).toEqual({
       min: 2,
       max: 2,

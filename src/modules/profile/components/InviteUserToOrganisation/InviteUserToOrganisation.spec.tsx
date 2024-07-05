@@ -67,7 +67,7 @@ describe('InviteUserToOrganisation', () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
   }
 

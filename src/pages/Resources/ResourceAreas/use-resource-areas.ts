@@ -36,7 +36,7 @@ export const useResourceAreas = () => {
         }
         return acc
       },
-      {}
+      {},
     )
   }, [allResources, canAccessResource])
 

@@ -25,7 +25,7 @@ test.use({ storageState: stateFilePath('admin') })
 
 const removeLicenses = async (
   orgPage: AllOrganisations,
-  orgId: string
+  orgId: string,
 ): Promise<void> => {
   await orgPage.gotoOrganisation(orgId)
   await orgPage.clickBlendedLearningLicences()

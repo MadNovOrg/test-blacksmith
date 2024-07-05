@@ -93,7 +93,7 @@ async function seed() {
   `
   try {
     await Promise.all(
-      orders.map(order => hasuraClient.request(MUTATION, { input: order }))
+      orders.map(order => hasuraClient.request(MUTATION, { input: order })),
     )
   } catch (err) {
     // Hasura is returning an error but the action is successfully called

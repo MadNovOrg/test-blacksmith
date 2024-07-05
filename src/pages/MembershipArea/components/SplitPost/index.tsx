@@ -27,7 +27,7 @@ const SplitPostBox = styled(Box)<{ orientation: ImageOrientation }>(
     [theme.breakpoints.down('md')]: {
       display: 'block',
     },
-  })
+  }),
 )
 
 const ThumbnailBox = styled(Box, {

@@ -87,7 +87,7 @@ const MiscellaneousExpenseRow: FC<MiscellaneousExpenseRowProps> = ({
       amount: value ?? 0,
       currency,
     },
-    t
+    t,
   )
 
   return (

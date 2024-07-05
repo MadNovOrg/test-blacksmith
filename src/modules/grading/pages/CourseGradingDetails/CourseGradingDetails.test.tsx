@@ -30,7 +30,7 @@ describe('page: CourseGradingDetails', () => {
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
@@ -50,11 +50,11 @@ describe('page: CourseGradingDetails', () => {
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     expect(
-      screen.getByText('There was an error loading the course')
+      screen.getByText('There was an error loading the course'),
     ).toBeInTheDocument()
   })
 
@@ -72,7 +72,7 @@ describe('page: CourseGradingDetails', () => {
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -96,7 +96,7 @@ describe('page: CourseGradingDetails', () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     await userEvent.click(screen.getByText('Back to course details'))
@@ -118,14 +118,14 @@ describe('page: CourseGradingDetails', () => {
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     const subnav = screen.getByTestId('course-grading-details-nav')
 
     expect(within(subnav).getByText('Grading clearance')).toBeInTheDocument()
     expect(
-      within(subnav).getByText('Modules and Techniques')
+      within(subnav).getByText('Modules and Techniques'),
     ).toBeInTheDocument()
   })
 
@@ -147,7 +147,7 @@ describe('page: CourseGradingDetails', () => {
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     const subnav = screen.getByTestId('course-grading-details-nav')
@@ -178,7 +178,7 @@ describe('page: CourseGradingDetails', () => {
         </Route>
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details/modules`] }
+      { initialEntries: [`/${course.id}/grading-details/modules`] },
     )
 
     const subnav = screen.getByTestId('course-grading-details-nav')
@@ -186,7 +186,7 @@ describe('page: CourseGradingDetails', () => {
     const modulesNavItem = within(subnav).getByTestId('step-item-2')
 
     expect(
-      within(attendanceNavItem).getByTestId('CheckIcon')
+      within(attendanceNavItem).getByTestId('CheckIcon'),
     ).toBeInTheDocument()
     expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
   })
@@ -211,11 +211,11 @@ describe('page: CourseGradingDetails', () => {
         </Route>
       </Routes>,
       {},
-      { initialEntries: [`/${course.id}/grading-details`] }
+      { initialEntries: [`/${course.id}/grading-details`] },
     )
 
     expect(
-      screen.queryByTestId('course-grading-details-nav')
+      screen.queryByTestId('course-grading-details-nav'),
     ).not.toBeInTheDocument()
   })
 })

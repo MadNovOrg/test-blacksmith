@@ -52,7 +52,7 @@ export const getFormSchema = (t: TFunction) => {
     organization: yup.object<Pick<Organization, 'name' | 'id'>>().required(
       t('validation-errors.required-field', {
         name: t('components.org-selector.placeholder'),
-      })
+      }),
     ),
 
     otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {

@@ -45,7 +45,7 @@ describe('page: Orders filtering', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     await user.type(screen.getByPlaceholderText(/search/i), SEARCH_TEXT)
@@ -76,7 +76,7 @@ describe('page: Orders filtering', () => {
               },
             },
           },
-        ])
+        ]),
       )
     })
   })
@@ -95,7 +95,7 @@ describe('page: Orders filtering', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     const paymentMethodFilter = screen.getByTestId('payment-method')
@@ -109,7 +109,7 @@ describe('page: Orders filtering', () => {
           paymentMethod: {
             _in: [Payment_Methods_Enum.Cc],
           },
-        })
+        }),
       )
     })
   })
@@ -127,7 +127,7 @@ describe('page: Orders filtering', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     const paymentMethodFilter = screen.getByTestId('currency-filter')
@@ -141,7 +141,7 @@ describe('page: Orders filtering', () => {
           currency: {
             _in: [Currency.Gbp],
           },
-        })
+        }),
       )
     })
   })
@@ -160,7 +160,7 @@ describe('page: Orders filtering', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     const statusFilter = screen.getByTestId('status-filter')
@@ -186,7 +186,7 @@ describe('page: Orders filtering', () => {
               },
             },
           ],
-        })
+        }),
       )
     })
   })

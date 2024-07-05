@@ -48,7 +48,7 @@ export const CourseExceptionsLogTabs: FC<PropsWithChildren<unknown>> = () => {
     filterByCourseType: [],
   })
   const [activeTab, setActiveTab] = useState<TabsValues>(
-    Course_Audit_Type_Enum.Approved
+    Course_Audit_Type_Enum.Approved,
   )
   const { Pagination, limit, offset } = useTablePagination()
   const sorting = useTableSort('created_at', 'asc')
@@ -65,13 +65,13 @@ export const CourseExceptionsLogTabs: FC<PropsWithChildren<unknown>> = () => {
   const tabs: Tabs = [
     {
       label: t(
-        `pages.admin.course-exceptions-log.${Course_Audit_Type_Enum.Approved}`
+        `pages.admin.course-exceptions-log.${Course_Audit_Type_Enum.Approved}`,
       ),
       value: Course_Audit_Type_Enum.Approved,
     },
     {
       label: t(
-        `pages.admin.course-exceptions-log.${Course_Audit_Type_Enum.Rejected}`
+        `pages.admin.course-exceptions-log.${Course_Audit_Type_Enum.Rejected}`,
       ),
       value: Course_Audit_Type_Enum.Rejected,
     },

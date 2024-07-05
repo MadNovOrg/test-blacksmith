@@ -37,7 +37,7 @@ export type TrainerRatioCriteria = {
 export const ratio = (
   initialAssistants: number,
   threshold: number,
-  increment: number
+  increment: number,
 ): TrainerRatio => ({
   initialAssistants,
   threshold,
@@ -85,7 +85,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
 
   if (
     [IntermediateTrainer, Level_1, Level_2, FoundationTrainerPlus].includes(
-      courseLevel
+      courseLevel,
     )
   ) {
     return ratio(0, 12, 12)
@@ -105,7 +105,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
 }
 
 export const getRequiredAssistants = (
-  criteria: TrainerRatioCriteria
+  criteria: TrainerRatioCriteria,
 ): RequiredTrainers => {
   const ratio = getTrainerRatio(criteria)
   const { maxParticipants } = criteria

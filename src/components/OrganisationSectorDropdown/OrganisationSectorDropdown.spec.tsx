@@ -20,7 +20,7 @@ describe(OrganisationSectorDropdown.name, () => {
         register={{ ...register('sector') }}
         label={testLabel}
         value={''}
-      />
+      />,
     )
     expect(screen.getByText(testLabel)).toBeInTheDocument()
   })
@@ -30,7 +30,7 @@ describe(OrganisationSectorDropdown.name, () => {
       <OrganisationSectorDropdown
         register={{ ...register('sector') }}
         value={''}
-      />
+      />,
     )
     expect(screen.queryByText(sectorOption)).not.toBeInTheDocument()
     await userEvent.click(screen.getByRole('button'))

@@ -7,7 +7,7 @@ import { CreateCourseSteps } from '.'
 describe('component: CreateCourseSteps', () => {
   it('displays correct steps for OPEN course type', () => {
     render(
-      <CreateCourseSteps type={Course_Type_Enum.Open} completedSteps={[]} />
+      <CreateCourseSteps type={Course_Type_Enum.Open} completedSteps={[]} />,
     )
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
@@ -21,7 +21,7 @@ describe('component: CreateCourseSteps', () => {
 
   it('displays correct steps for CLOSED course type', () => {
     render(
-      <CreateCourseSteps type={Course_Type_Enum.Closed} completedSteps={[]} />
+      <CreateCourseSteps type={Course_Type_Enum.Closed} completedSteps={[]} />,
     )
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
@@ -35,7 +35,10 @@ describe('component: CreateCourseSteps', () => {
 
   it('displays correct steps for INDIRECT course type', () => {
     render(
-      <CreateCourseSteps type={Course_Type_Enum.Indirect} completedSteps={[]} />
+      <CreateCourseSteps
+        type={Course_Type_Enum.Indirect}
+        completedSteps={[]}
+      />,
     )
 
     expect(screen.getByText('Course details')).toBeInTheDocument()
@@ -53,7 +56,7 @@ describe('component: CreateCourseSteps', () => {
         type={Course_Type_Enum.Indirect}
         completedSteps={[]}
         blendedLearning
-      />
+      />,
     )
 
     expect(screen.getByText('Order details')).toBeInTheDocument()

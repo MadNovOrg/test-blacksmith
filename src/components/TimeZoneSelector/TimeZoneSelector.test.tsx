@@ -38,12 +38,12 @@ describe(`${TimeZoneSelector.name}`, () => {
         onChange={noop}
         value={{ timeZoneId: 'Europe/London', rawOffset: 0 }}
         code={'GB'}
-      />
+      />,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByDisplayValue('(GMT+00:00) Europe/London')
+        screen.getByDisplayValue('(GMT+00:00) Europe/London'),
       ).toBeDisabled()
     })
   })
@@ -67,7 +67,7 @@ describe(`${TimeZoneSelector.name}`, () => {
         onChange={noop}
         value={null}
         code={'US'}
-      />
+      />,
     )
 
     await waitFor(() => {
@@ -103,12 +103,12 @@ describe(`${TimeZoneSelector.name}`, () => {
         value={{ timeZoneId: 'America/New_York', rawOffset: -300 }}
         venue={testVenue}
         code={'US'}
-      />
+      />,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByDisplayValue('(GMT-05:00) America/New_York')
+        screen.getByDisplayValue('(GMT-05:00) America/New_York'),
       ).toBeDisabled()
     })
   })
@@ -145,7 +145,7 @@ describe(`${TimeZoneSelector.name}`, () => {
         venue={testVenue}
         code={'US'}
         ignoreVenue={true}
-      />
+      />,
     )
 
     await waitFor(() => {

@@ -28,7 +28,7 @@ export const MaxLengthPlugin: React.FC<Props> = ({ maxLength }) => {
       }
       const prevEditorState = editor.getEditorState()
       const prevTextContentSize = prevEditorState.read(() =>
-        rootNode.getTextContentSize()
+        rootNode.getTextContentSize(),
       )
       const textContentSize = rootNode.getTextContentSize()
       if (prevTextContentSize !== textContentSize) {

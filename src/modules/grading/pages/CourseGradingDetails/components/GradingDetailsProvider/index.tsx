@@ -22,7 +22,7 @@ type Context = {
 }
 
 const GradingDetailsContext = React.createContext<Context | undefined>(
-  undefined
+  undefined,
 )
 
 type Props = {
@@ -49,7 +49,7 @@ export const GradingDetailsProvider: React.FC<PropsWithChildren<Props>> = ({
       accreditedBy === Accreditors_Enum.Bild
         ? ['grading-clearance']
         : ['grading-clearance', 'modules'],
-    [accreditedBy]
+    [accreditedBy],
   )
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export const GradingDetailsProvider: React.FC<PropsWithChildren<Props>> = ({
         }
       },
     }),
-    [completedSteps, currentStepKey, navigate, navigateToCourse, steps]
+    [completedSteps, currentStepKey, navigate, navigateToCourse, steps],
   )
 
   return (

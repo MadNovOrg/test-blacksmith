@@ -64,7 +64,7 @@ export const TrainerFeedback = () => {
   const [{ data: questionsData }] = useQuery<GetCourseEvaluationQuestionsQuery>(
     {
       query: GET_COURSE_EVALUATION_QUESTIONS_QUERY,
-    }
+    },
   )
 
   const [{ data: evaluation }] = useQuery<
@@ -85,22 +85,22 @@ export const TrainerFeedback = () => {
   const questions = useMemo(() => {
     if (questionsData?.questions.length) {
       return questionsData?.questions.filter(
-        q => !['ATTENDEE_ADDITIONAL_COMMENTS'].includes(q.questionKey ?? '')
+        q => !['ATTENDEE_ADDITIONAL_COMMENTS'].includes(q.questionKey ?? ''),
       )
     }
   }, [questionsData?.questions])
 
   const { UNGROUPED: ungroupedQuestions } = groupBy(
     questions,
-    q => q.group || 'UNGROUPED'
+    q => q.group || 'UNGROUPED',
   )
 
   const signatureQuestion = useMemo(
     () =>
       questions?.find(
-        q => q.questionKey === 'SIGNATURE'
+        q => q.questionKey === 'SIGNATURE',
       ) as GetCourseEvaluationQuestionsQuery['questions'][0],
-    [questions]
+    [questions],
   )
 
   const schema = useMemo(() => {
@@ -114,7 +114,7 @@ export const TrainerFeedback = () => {
         obj[q.id] = s
           .required(t('course-evaluation.required-field'))
           .test(q.id, t('course-evaluation.invalid-signature'), signature =>
-            validUserSignature(profile?.fullName, signature)
+            validUserSignature(profile?.fullName, signature),
           )
       } else if (
         q.required &&
@@ -223,7 +223,7 @@ export const TrainerFeedback = () => {
               {ungroupedQuestions?.map(q => {
                 if (
                   booleanQuestionTypes.includes(
-                    q.type as Course_Evaluation_Question_Type_Enum
+                    q.type as Course_Evaluation_Question_Type_Enum,
                   )
                 ) {
                   const [value, reason = ''] = (values[q.id] ?? '').split('-')

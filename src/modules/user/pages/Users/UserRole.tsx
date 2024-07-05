@@ -14,7 +14,7 @@ const UserRole: React.FC<IUserRoleProps> = ({ user }) => {
     [RoleName.TRAINER, RoleName.USER].some(r => r === role)
 
   const isOrganisationAdmin = user.organizations.some(
-    organisation => organisation.isAdmin
+    organisation => organisation.isAdmin,
   )
 
   return (

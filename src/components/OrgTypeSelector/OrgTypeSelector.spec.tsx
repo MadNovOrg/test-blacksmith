@@ -21,7 +21,7 @@ describe(OrgTypeSelector.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <OrgTypeSelector value={''} disabled={false} sector="edu" />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {
@@ -35,13 +35,13 @@ describe(OrgTypeSelector.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <OrgTypeSelector value={''} disabled={false} sector="edu" />
-      </Provider>
+      </Provider>,
     )
     await userEvent.click(screen.getByRole('button'))
 
     expect(screen.queryByRole('option')).toBeInTheDocument()
     orgType.organization_type.map(org =>
-      expect(screen.getByText(org.name)).toBeInTheDocument()
+      expect(screen.getByText(org.name)).toBeInTheDocument(),
     )
   })
 })

@@ -15,10 +15,10 @@ export class ReviewAndConfirmPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.createCourseButton = this.page.locator(
-      '[data-testid="ReviewAndConfirm-submit"]'
+      '[data-testid="ReviewAndConfirm-submit"]',
     )
     this.courseBuilderButton = this.page.locator(
-      '[data-testid="courseBuilder-button"]'
+      '[data-testid="courseBuilder-button"]',
     )
     this.approveButton = this.page.locator('button:text("Approve")')
     this.courseName = this.page.locator('[data-testid=course-name]')

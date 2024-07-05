@@ -70,7 +70,7 @@ allowedRoles.forEach(role => {
     await courseDetailsPage.goto(`${course.id}`)
     await courseDetailsPage.clickGradingTab()
     const courseGradingPage = await courseDetailsPage.clickParticipantByGrade(
-      participants[0].id
+      participants[0].id,
     )
     await courseGradingPage.expectParticipantsToBeVisible([participants[0]])
     await courseGradingPage.clickCourseGradingMenu()
@@ -79,7 +79,7 @@ allowedRoles.forEach(role => {
     await courseGradingPage.clickConfirm()
     await courseGradingPage.expectParticipantsToHaveGrade(
       [participants[0]],
-      'Pass'
+      'Pass',
     )
   })
 })

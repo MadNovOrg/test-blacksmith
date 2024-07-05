@@ -94,7 +94,7 @@ describe(MergeUsersDialog.name, () => {
     client.executeMutation.mockImplementation(() =>
       fromValue<{ data: MergeUserMutation }>({
         data: mockClientValue as MergeUserMutation,
-      })
+      }),
     )
     return render(
       <Provider value={client as unknown as Client}>
@@ -104,7 +104,7 @@ describe(MergeUsersDialog.name, () => {
           profileId1={profileId1}
           profileId2={profileId2}
         />
-      </Provider>
+      </Provider>,
     )
   }
 

@@ -36,7 +36,7 @@ export const ModulesSelection = () => {
   const { id: courseId } = useParams()
   const navigate = useNavigate()
   const [savingSelectionStatus, setSavingSelectionStatus] = useState(
-    LoadingStatus.IDLE
+    LoadingStatus.IDLE,
   )
 
   const [{ data: saveModulesData }, saveModules] = useMutation<
@@ -77,7 +77,7 @@ export const ModulesSelection = () => {
     > = {}
     const rawStoredSelection = localStorage.getItem(STORAGE_KEY)
     const storedSelection: Record<string, boolean> = JSON.parse(
-      rawStoredSelection ?? '{}'
+      rawStoredSelection ?? '{}',
     )
 
     courseModules.forEach(courseModule => {
@@ -99,7 +99,7 @@ export const ModulesSelection = () => {
           storedSelection[courseModule.module.id] ??
           true,
         submodules: courseModules.find(
-          x => x.module.id === courseModule.module.id
+          x => x.module.id === courseModule.module.id,
         )?.module.submodules,
       })
     })
@@ -154,7 +154,7 @@ export const ModulesSelection = () => {
         localStorage.removeItem(STORAGE_KEY)
 
         navigate(
-          `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+          `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`,
         )
       }
     } catch (err) {

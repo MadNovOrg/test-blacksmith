@@ -22,19 +22,19 @@ export class CourseOrderDetailsPage extends BasePage {
     this.firstNameInput = this.page.locator('[data-testid="input-first-name"]')
     this.lastNameInput = this.page.locator('[data-testid="input-surname"]')
     this.organisationInput = this.page.locator(
-      '[data-testid="org-selector"] input'
+      '[data-testid="org-selector"] input',
     )
     this.emailInput = this.page.locator('[data-testid="input-email"]')
     this.phoneInput = this.page.locator('[data-testid="input-phone"]')
     this.purchaseOrderInput = this.page.locator('[data-testid="input-po"]')
     this.autocompleteLoading = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-loading'
+      '.MuiAutocomplete-popper .MuiAutocomplete-loading',
     )
     this.autocompleteOption = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-option'
+      '.MuiAutocomplete-popper .MuiAutocomplete-option',
     )
     this.reviewAndConfirmButton = this.page.locator(
-      '[data-testid="AssignTrainers-submit"]'
+      '[data-testid="AssignTrainers-submit"]',
     )
   }
 

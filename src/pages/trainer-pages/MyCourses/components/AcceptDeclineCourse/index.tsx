@@ -51,7 +51,7 @@ export const AcceptDeclineCourse: React.FC<
 
   const closeModal = useCallback(
     () => !saving && setAction(undefined),
-    [saving]
+    [saving],
   )
 
   const onSubmit = useCallback(async () => {

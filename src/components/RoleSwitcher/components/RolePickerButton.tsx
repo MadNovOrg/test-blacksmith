@@ -31,7 +31,7 @@ export const RolePickerButton = ({ setAnchorEl }: RolePickerButtonProps) => {
         only: auth.acl.isUserAndHaveUpToOneSubRole(),
         isOrgAdmin: auth.acl.hasOrgAdmin(),
       }),
-    [auth.acl, auth.activeRole]
+    [auth.acl, auth.activeRole],
   )
 
   return (

@@ -171,7 +171,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   })
 
   const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const profile = useMemo(() => data?.tempProfiles[0], [data?.tempProfiles])
@@ -238,7 +238,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
                 acc +
                 getTrainerSubsistenceCost(
                   e.accommodationNights,
-                  isUKCountry(course?.residingCountry)
+                  isUKCountry(course?.residingCountry),
                 ) +
                 e.accommodationCost * e.accommodationNights
               )
@@ -264,7 +264,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
 
       setAvailableSeats(
         profile.course.maxParticipants -
-          (profile?.course?.participants?.aggregate?.count ?? 0)
+          (profile?.course?.participants?.aggregate?.count ?? 0),
       )
 
       setCourse(profile.course)
@@ -349,7 +349,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       setPromoCodes(codes => [...codes, code])
       setBooking(b => ({ ...b, promoCodes: [...b.promoCodes, code.code] }))
     },
-    []
+    [],
   )
 
   const removePromo = useCallback<ContextType['removePromo']>(
@@ -359,7 +359,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         promoCodes: b.promoCodes.filter(c => c !== code),
       }))
     },
-    []
+    [],
   )
 
   const amounts: ContextType['amounts'] = useMemo(() => {
@@ -383,7 +383,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         mandatoryCourseMaterialsCost -
         Number(discount) -
         freeSpacesDiscount,
-      0
+      0,
     )
     const vat =
       ((subtotalDiscounted - mandatoryCourseMaterialsCost) * booking.vat) / 100
@@ -394,7 +394,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         ? round(
             stripeProcessingFeeRate.percent * subtotalDiscounted +
               stripeProcessingFeeRate.flat,
-            2
+            2,
           ) // Round cent precision
         : 0
 
@@ -493,7 +493,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       availableSeats,
       placeOrder,
       internalBooking,
-    ]
+    ],
   )
 
   if (!ready) {

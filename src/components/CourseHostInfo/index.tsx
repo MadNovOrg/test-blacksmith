@@ -18,7 +18,7 @@ export const CourseHostInfo: React.FC<React.PropsWithChildren<Props>> = ({
 
   const showOrganizationName = useMemo(
     () => courseType !== Course_Type_Enum.Open,
-    [courseType]
+    [courseType],
   )
 
   return (

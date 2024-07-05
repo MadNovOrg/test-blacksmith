@@ -51,11 +51,11 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
         onSendingCourseInformation={vitest.fn()}
         course={course}
       />,
-      { auth: { activeRole: role } }
+      { auth: { activeRole: role } },
     )
 
     expect(
-      screen.getByRole('button', { name: /mark attendance/i })
+      screen.getByRole('button', { name: /mark attendance/i }),
     ).toBeInTheDocument()
   })
 })
@@ -96,11 +96,11 @@ it('displays the mark attendance button if user is a lead trainer on the course'
     />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
-    }
+    },
   )
 
   expect(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   ).toBeInTheDocument()
 })
 
@@ -140,11 +140,11 @@ it('displays the mark attendance button if user is an assist trainer on the cour
     />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
-    }
+    },
   )
 
   expect(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   ).toBeInTheDocument()
 })
 
@@ -184,15 +184,15 @@ it("doesn't display the mark attendance button if user is a moderator on the cou
     />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
-    }
+    },
   )
 
   expect(
-    within(screen.getByRole('table')).queryByText(/attendance/i)
+    within(screen.getByRole('table')).queryByText(/attendance/i),
   ).not.toBeInTheDocument()
 
   expect(
-    screen.queryByRole('button', { name: /mark attendance/i })
+    screen.queryByRole('button', { name: /mark attendance/i }),
   ).not.toBeInTheDocument()
 })
 
@@ -226,11 +226,11 @@ it('displays the mark attendance button if course has ended', () => {
     />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
-    }
+    },
   )
 
   expect(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   ).toBeInTheDocument()
 })
 
@@ -273,11 +273,11 @@ it('marks the mark attendance button disabled if course ended and course status 
         course={course}
       />
     </Provider>,
-    { auth: { activeRole: RoleName.TT_ADMIN } }
+    { auth: { activeRole: RoleName.TT_ADMIN } },
   )
 
   expect(
-    screen.getByRole('button', { name: /mark attendance/i })
+    screen.getByRole('button', { name: /mark attendance/i }),
   ).toBeDisabled()
 })
 
@@ -311,7 +311,7 @@ it('toggles selected participant when main checkbox is clicked', async () => {
         onSendingCourseInformation={vitest.fn()}
         course={course}
       />
-    </Provider>
+    </Provider>,
   )
 
   const mainCheckbox = screen.getByTestId('TableChecks-Head')
@@ -323,8 +323,8 @@ it('toggles selected participant when main checkbox is clicked', async () => {
   participants.forEach(p => {
     expect(
       within(screen.getByTestId(`course-participant-row-${p.id}`)).getByTestId(
-        'TableChecks-Row'
-      )
+        'TableChecks-Row',
+      ),
     ).toBeChecked()
   })
 
@@ -335,8 +335,8 @@ it('toggles selected participant when main checkbox is clicked', async () => {
   participants.forEach(p => {
     expect(
       within(screen.getByTestId(`course-participant-row-${p.id}`)).getByTestId(
-        'TableChecks-Row'
-      )
+        'TableChecks-Row',
+      ),
     ).not.toBeChecked()
   })
 })
@@ -372,18 +372,18 @@ it('toggles the main checkbox as indeterminate when some participants are toggle
         course={course}
       />
     </Provider>,
-    { auth: { activeRole: RoleName.TT_ADMIN } }
+    { auth: { activeRole: RoleName.TT_ADMIN } },
   )
 
   await userEvent.click(
     within(
-      screen.getByTestId(`course-participant-row-${participants[0].id}`)
-    ).getByTestId('TableChecks-Row')
+      screen.getByTestId(`course-participant-row-${participants[0].id}`),
+    ).getByTestId('TableChecks-Row'),
   )
 
   expect(screen.getByTestId('TableChecks-Head')).toHaveAttribute(
     'data-indeterminate',
-    'true'
+    'true',
   )
 })
 
@@ -421,12 +421,12 @@ it("disables participant's checkbox when participant has been graded", () => {
         onSendingCourseInformation={vitest.fn()}
         course={course}
       />
-    </Provider>
+    </Provider>,
   )
 
   expect(
     within(
-      screen.getByTestId(`course-participant-row-${gradedParticipant.id}`)
-    ).getByTestId('TableChecks-Row')
+      screen.getByTestId(`course-participant-row-${gradedParticipant.id}`),
+    ).getByTestId('TableChecks-Row'),
   ).toBeDisabled()
 })

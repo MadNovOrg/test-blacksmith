@@ -29,8 +29,8 @@ describe('/', () => {
       expect(screen.getByTestId('profile-country-dialog')).toBeInTheDocument()
       expect(
         within(screen.getByTestId('profile-country-dialog')).getByText(
-          'Information Required'
-        )
+          'Information Required',
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -48,7 +48,7 @@ describe('/', () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId('profile-country-dialog')
+        screen.queryByTestId('profile-country-dialog'),
       ).not.toBeInTheDocument()
     })
   })
@@ -63,8 +63,8 @@ describe('/', () => {
       expect(screen.getByTestId('profile-country-dialog')).toBeInTheDocument()
       userEvent.click(
         within(screen.getByTestId('profile-country-dialog')).getByTestId(
-          'go-to-my-profile-page'
-        )
+          'go-to-my-profile-page',
+        ),
       )
       expect(mockNavigate).toHaveBeenCalledWith('/profile')
     })

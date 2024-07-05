@@ -65,8 +65,8 @@ indirectLevels.forEach(level => {
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
         MODULES_SETUP.filter(
-          setup => setup.name === 'level 2 f2f'
-        )[0].optionalModules.map(module => module.name)
+          setup => setup.name === 'level 2 f2f',
+        )[0].optionalModules.map(module => module.name),
       )
     }
     await courseBuilderPage.clickSubmitButton()
@@ -75,7 +75,7 @@ indirectLevels.forEach(level => {
     coursesListPage.waitForPageLoad()
     expect(page.url()).toContain(course.id.toString())
     console.log(
-      `Created indirect ${level} blended learning course as trainer with id ${course.id}`
+      `Created indirect ${level} blended learning course as trainer with id ${course.id}`,
     )
   })
 
@@ -101,8 +101,8 @@ indirectLevels.forEach(level => {
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
         MODULES_SETUP.filter(
-          setup => setup.name === 'level 2 f2f'
-        )[0].optionalModules.map(module => module.name)
+          setup => setup.name === 'level 2 f2f',
+        )[0].optionalModules.map(module => module.name),
       )
     }
     await courseBuilderPage.clickSubmitButton()
@@ -135,8 +135,8 @@ indirectLevels.forEach(level => {
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
         MODULES_SETUP.filter(
-          setup => setup.name === 'level 2 f2f reaccred'
-        )[0].optionalModules.map(module => module.name)
+          setup => setup.name === 'level 2 f2f reaccred',
+        )[0].optionalModules.map(module => module.name),
       )
     }
     await courseBuilderPage.clickSubmitButton()

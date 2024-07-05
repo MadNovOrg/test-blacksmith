@@ -4,7 +4,7 @@ import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
 export class InviteAttendeesPopUp extends BasePage {
   readonly emailInput = this.page.locator(
-    '[data-testid="modal-invites-emails"] input'
+    '[data-testid="modal-invites-emails"] input',
   )
   readonly sendButton = this.page.locator('data-testid=modal-invites-send')
   readonly error = this.page.locator('.Mui-error')

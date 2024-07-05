@@ -61,7 +61,7 @@ type Props = {
 }
 
 const courseTrainerToFormValues = (
-  trainers: CourseTrainer[] = []
+  trainers: CourseTrainer[] = [],
 ): FormValues => {
   const mappedTrainers = trainers.map(t => {
     return {
@@ -77,13 +77,13 @@ const courseTrainerToFormValues = (
 
   return {
     lead: mappedTrainers.filter(
-      t => t.type === Course_Trainer_Type_Enum.Leader
+      t => t.type === Course_Trainer_Type_Enum.Leader,
     ),
     assist: mappedTrainers.filter(
-      t => t.type === Course_Trainer_Type_Enum.Assistant
+      t => t.type === Course_Trainer_Type_Enum.Assistant,
     ),
     moderator: mappedTrainers.filter(
-      t => t.type === Course_Trainer_Type_Enum.Moderator
+      t => t.type === Course_Trainer_Type_Enum.Moderator,
     ),
   }
 }
@@ -115,7 +115,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
         isReaccreditation: isReAccreditation,
         isConversion,
       }),
-    [courseLevel, courseType, isReAccreditation, isConversion]
+    [courseLevel, courseType, isReAccreditation, isConversion],
   )
 
   const mandatoryModerator = useMemo(
@@ -126,7 +126,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
         isReaccreditation: isReAccreditation,
         isConversion,
       }),
-    [courseType, courseLevel, isReAccreditation, isConversion]
+    [courseType, courseLevel, isReAccreditation, isConversion],
   )
 
   const schema = useMemo(() => {
@@ -135,22 +135,22 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
         .array()
         .min(
           requiredLeaders.min,
-          t('pages.create-course.assign-trainers.lead-error-min')
+          t('pages.create-course.assign-trainers.lead-error-min'),
         )
         .max(
           requiredLeaders.max,
-          t('pages.create-course.assign-trainers.lead-error-max')
+          t('pages.create-course.assign-trainers.lead-error-max'),
         ),
       assist: yup.array().min(0),
       moderator: yup
         .array()
         .min(
           mandatoryModerator ? 1 : 0,
-          t('pages.create-course.assign-trainers.moderator-error-min')
+          t('pages.create-course.assign-trainers.moderator-error-min'),
         )
         .max(
           needsModerator ? 1 : 0,
-          t('pages.create-course.assign-trainers.moderator-error-max')
+          t('pages.create-course.assign-trainers.moderator-error-max'),
         ),
     })
   }, [
@@ -163,7 +163,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),
-    [trainers]
+    [trainers],
   )
 
   const form = useForm<FormValues>({
@@ -185,7 +185,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       setValue,
       formValues,
     }),
-    [formValues, reset, setValue]
+    [formValues, reset, setValue],
   )
 
   useEffect(() => {
@@ -195,15 +195,15 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   const notUsedElsewhere = useCallback(
     (value: string) => (matches: SearchTrainer[]) => {
       const possibleValues = ['lead', 'assist', 'moderator'].filter(
-        v => v !== value
+        v => v !== value,
       )
       const _trainers = possibleValues.flatMap(v =>
-        form.getValues(v as keyof FormValues)
+        form.getValues(v as keyof FormValues),
       )
       const ids = new Set(_trainers.map(t => t.id))
       return matches.filter(m => !ids.has(m.id))
     },
-    [form]
+    [form],
   )
 
   return (

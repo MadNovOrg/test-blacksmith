@@ -64,11 +64,11 @@ function crunchStats(profiles: OrganizationProfile[]) {
       active: getCountByStatus(CertificateStatus.Active, profiles ?? []),
       expiringSoon: getCountByStatus(
         CertificateStatus.ExpiringSoon,
-        profiles ?? []
+        profiles ?? [],
       ),
       expired: getCountByStatus(
         CertificateStatus.ExpiredRecently,
-        profiles ?? []
+        profiles ?? [],
       ),
       hold: getCountByStatus(CertificateStatus.OnHold, profiles ?? []),
       revoked: getCountByStatus(CertificateStatus.Revoked, profiles ?? []),
@@ -78,7 +78,7 @@ function crunchStats(profiles: OrganizationProfile[]) {
 
 function getCountByStatus(
   status: CertificateStatus,
-  profiles: OrganizationProfile[]
+  profiles: OrganizationProfile[],
 ) {
   return profiles.reduce(
     (acc, profile) => {
@@ -86,17 +86,17 @@ function getCountByStatus(
         profile.certificates as {
           courseLevel: string
           status: CertificateStatus
-        }[]
+        }[],
       )
       const certs = profile.certificates?.filter(
         certificate =>
           certificate?.status === status &&
-          levels.indexOf(certificate.courseLevel as CourseLevel) !== -1
+          levels.indexOf(certificate.courseLevel as CourseLevel) !== -1,
       )
       const enrolled = certs?.filter(cert =>
         profile.upcomingEnrollments?.some(
-          enrollment => enrollment?.courseLevel === cert?.courseLevel
-        )
+          enrollment => enrollment?.courseLevel === cert?.courseLevel,
+        ),
       )
       return {
         count: acc.count + Number(certs?.length ?? 0),
@@ -106,6 +106,6 @@ function getCountByStatus(
     {
       count: 0,
       enrolled: 0,
-    }
+    },
   )
 }

@@ -20,7 +20,7 @@ interface ICountryDropdownProps {
 }
 
 export const CountryDropdown = React.forwardRef(function CountryDropdown(
-  props: ICountryDropdownProps
+  props: ICountryDropdownProps,
 ) {
   const { t } = useScopedTranslation('components.venue-selector.modal.fields')
   const { required, error, errormessage, label } = props

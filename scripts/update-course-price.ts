@@ -110,7 +110,7 @@ const UPDATE_COURSE_PRICE_MUTATION = gql`
 async function updateCoursePrice() {
   try {
     const coursePrices: CoursePriceType = await hasuraClient.request(
-      GET_COURSE_PRICING_QUERY
+      GET_COURSE_PRICING_QUERY,
     )
 
     const coursePricesSchedule: CoursePriceSchedule =
@@ -170,7 +170,7 @@ async function updateCoursePrice() {
               includeVAT: true,
             }
             hasuraClient.request(UPDATE_COURSE_PRICE_MUTATION, variables)
-          })
+          }),
         )
         console.log('Course price update succefully')
       } catch (updatePriceError) {

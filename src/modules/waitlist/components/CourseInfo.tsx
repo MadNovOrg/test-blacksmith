@@ -45,7 +45,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
 
   const courseVenue = formatCourseVenue(
     course.deliveryType,
-    course.schedule.at(0)?.venue as Venue
+    course.schedule.at(0)?.venue as Venue,
   )
 
   return (

@@ -87,7 +87,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
 
     const myOrg = useMemo(
       () => profile?.organizations.map(org => org.organization),
-      [profile?.organizations]
+      [profile?.organizations],
     )
     const showTrainerNonAOLOrgs: boolean = showTrainerOrgOnly && !!profile
     const defaultOrg = useMemo(
@@ -95,7 +95,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         showTrainerOrgOnly && profile?.organizations.length === 1
           ? profile?.organizations[0]?.organization
           : undefined,
-      [profile?.organizations, showTrainerOrgOnly]
+      [profile?.organizations, showTrainerOrgOnly],
     )
 
     const [{ data: dfeOrgs, fetching: dfeFetching }] = useQuery<
@@ -175,7 +175,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     }
     const handleChange = (
       event: React.SyntheticEvent,
-      option: Option | null
+      option: Option | null,
     ) => {
       event.preventDefault()
       if (!autocompleteMode && (!isHubOrg(option) || isDfeSuggestion(option))) {
@@ -214,7 +214,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             ? [{ name: t('components.org-selector.request-creation-sub') }]
             : []),
         ],
-        'id'
+        'id',
       )
     }, [
       allowAdding,
@@ -267,7 +267,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         }
         return t(allowAdding ? 'create' : 'organisation-enquiry')
       },
-      [allowAdding, t]
+      [allowAdding, t],
     )
 
     return (
@@ -325,7 +325,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               return t(
                 allowAdding
                   ? 'components.org-selector.add-manually'
-                  : 'components.org-selector.request-creation'
+                  : 'components.org-selector.request-creation',
               )
             }
           }}

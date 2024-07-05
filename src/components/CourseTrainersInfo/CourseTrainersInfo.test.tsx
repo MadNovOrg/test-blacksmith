@@ -164,7 +164,7 @@ describe('component: CourseTrainersInfo', () => {
     render(
       <Provider value={client}>
         <CourseTrainersInfo canReInviteTrainer={true} trainers={trainers} />
-      </Provider>
+      </Provider>,
     )
 
     const resendTrainerInviteBtn = screen.getByText(t('resend-trainer-invite'))

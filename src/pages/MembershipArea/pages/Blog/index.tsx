@@ -25,7 +25,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [featuredPost, setFeaturedPost] = useState<PostSummaryFragment | null>(
-    null
+    null,
   )
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)

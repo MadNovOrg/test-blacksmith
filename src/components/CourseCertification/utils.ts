@@ -8,7 +8,7 @@ export const CertificateGracePeriod = {
 
 export function isCertificateOutsideGracePeriod(
   certificateExpiryDate: string,
-  courseLevel: string
+  courseLevel: string,
 ): boolean {
   const expiryDate = new Date(certificateExpiryDate)
   return isPast(
@@ -16,8 +16,8 @@ export function isCertificateOutsideGracePeriod(
       expiryDate,
       CertificateGracePeriod[
         courseLevel as keyof typeof CertificateGracePeriod
-      ] ?? 0
-    )
+      ] ?? 0,
+    ),
   )
 }
 
@@ -29,7 +29,7 @@ export const isValidCertificate = (certificate: {
     !isPast(new Date(certificate.expiryDate)) ||
     !isCertificateOutsideGracePeriod(
       certificate.expiryDate,
-      certificate.courseLevel
+      certificate.courseLevel,
     )
   )
 }

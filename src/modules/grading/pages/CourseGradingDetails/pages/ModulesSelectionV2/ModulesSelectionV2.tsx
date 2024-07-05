@@ -70,7 +70,7 @@ export const ModulesSelectionV2: React.FC = () => {
   const curriculum = useMemo(
     () =>
       savedCurriculum ?? getInitialCurriculum(courseData?.course?.curriculum),
-    [courseData?.course?.curriculum, savedCurriculum]
+    [courseData?.course?.curriculum, savedCurriculum],
   )
 
   const curriculumRef = useRef<unknown>()
@@ -96,7 +96,7 @@ export const ModulesSelectionV2: React.FC = () => {
 
     localStorage.setItem(
       `modules-selection-v2-${id}`,
-      JSON.stringify(curriculumRef.current)
+      JSON.stringify(curriculumRef.current),
     )
   }
 

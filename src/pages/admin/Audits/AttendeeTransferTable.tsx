@@ -96,7 +96,7 @@ export const AttendeeTransferTable: React.FC<
         exportRender: (log: AttendeeLogType) =>
           log.profile.organizations.reduce(
             (acc, orgMember) => `${acc}, ${orgMember.organization.name}`,
-            ''
+            '',
           ),
       },
       {
@@ -121,13 +121,13 @@ export const AttendeeTransferTable: React.FC<
         exportRender: (log: AttendeeLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
-    [t]
+    [t],
   )
 
   const renderExportData = useCallback(
     () =>
       getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
-    [cols, getUnpagedLogs]
+    [cols, getUnpagedLogs],
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {

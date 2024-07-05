@@ -81,7 +81,7 @@ export const ViewProfilePage: React.FC<
     orgId ?? undefined,
     acl.canViewCourseHistory() ||
       acl.canViewCourseAsAttendeeHistory() ||
-      callCourseHistory
+      callCourseHistory,
   )
 
   const allTrainerRoles = Object.values(TrainerRoleTypeName)
@@ -89,7 +89,7 @@ export const ViewProfilePage: React.FC<
     return (
       profile?.roles.some(({ role }) => role.name === RoleName.TRAINER) ||
       profile?.trainer_role_types.some(({ trainer_role_type: trainerRole }) =>
-        allTrainerRoles.includes(trainerRole.name as TrainerRoleTypeName)
+        allTrainerRoles.includes(trainerRole.name as TrainerRoleTypeName),
       )
     )
   }, [allTrainerRoles, profile?.roles, profile?.trainer_role_types])
@@ -103,7 +103,7 @@ export const ViewProfilePage: React.FC<
     }
     const coursesAsTrainer = profile?.courseAsTrainer
     const isTrainerOnVisitedCourse = coursesAsTrainer?.some(
-      course => Number(course.course_id) === Number(recentlyVisitedCourseId)
+      course => Number(course.course_id) === Number(recentlyVisitedCourseId),
     )
 
     return isTrainerOnVisitedCourse
@@ -163,7 +163,7 @@ export const ViewProfilePage: React.FC<
   const editProFilePath = orgId ? `./edit?orgId=${orgId}` : './edit'
 
   const certificatesToShow = (certifications ?? []).filter(
-    c => !c.participant || c.participant.grade !== Grade_Enum.Fail
+    c => !c.participant || c.participant.grade !== Grade_Enum.Fail,
   )
 
   const trainerViewProfile = isMyProfile
@@ -287,7 +287,7 @@ export const ViewProfilePage: React.FC<
                   sx={{ mt: 2 }}
                 >
                   {t(
-                    'pages.org-details.tabs.users.invite-individual-to-organization'
+                    'pages.org-details.tabs.users.invite-individual-to-organization',
                   )}
                 </Button>
               </Box>
@@ -436,7 +436,7 @@ export const ViewProfilePage: React.FC<
                             <Chip
                               key={role.name}
                               label={t(
-                                `pages.view-profile.roles.${role?.name}`
+                                `pages.view-profile.roles.${role?.name}`,
                               )}
                               color={getRoleColor(role.name)}
                               sx={{ marginRight: 1, marginBottom: 0.5 }}
@@ -447,11 +447,11 @@ export const ViewProfilePage: React.FC<
                               <Chip
                                 key={trainer_role_type.name}
                                 label={t(
-                                  `trainer-role-types.${trainer_role_type?.name}`
+                                  `trainer-role-types.${trainer_role_type?.name}`,
                                 )}
                                 sx={{ marginRight: 1, marginBottom: 0.5 }}
                               />
-                            )
+                            ),
                           )}
                         </Box>
                       </DetailsRow>
@@ -521,7 +521,7 @@ export const ViewProfilePage: React.FC<
                 sx={{ mr: 2 }}
                 component="a"
                 aria-label={`${t('pages.my-profile.manage-data')} (${t(
-                  'opens-new-window'
+                  'opens-new-window',
                 )})`}
               >
                 {t('pages.my-profile.manage-data')}

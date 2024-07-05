@@ -87,9 +87,9 @@ export const OrgSelectionToolbar: React.FC<
   const filtered = useMemo(
     () =>
       sorted.filter(org =>
-        org.name.toLowerCase().includes(query.toLowerCase())
+        org.name.toLowerCase().includes(query.toLowerCase()),
       ),
-    [query, sorted]
+    [query, sorted],
   )
 
   const moreMenuData = useMemo(() => {

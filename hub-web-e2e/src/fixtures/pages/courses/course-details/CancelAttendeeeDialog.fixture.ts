@@ -14,28 +14,28 @@ export class CancelAttendeeDialog extends BasePage {
   constructor(page: Page) {
     super(page)
     this.applyCancellationTermsRadioButton = this.page.locator(
-      '[data-testid="apply-cancellation-terms-radioButton"]'
+      '[data-testid="apply-cancellation-terms-radioButton"]',
     )
     this.customFeeRadioButton = this.page.locator(
-      '[data-testid="custom-fee-radioButton"]'
+      '[data-testid="custom-fee-radioButton"]',
     )
     this.noFeesRadioButton = this.page.locator(
-      '[data-testid="no-fees-radioButton"]'
+      '[data-testid="no-fees-radioButton"]',
     )
     this.cancelAttendeeButton = this.page.locator(
-      '[data-testid="cancelAttendee-button"]'
+      '[data-testid="cancelAttendee-button"]',
     )
     this.closeButton = this.page.locator('[data-testid="close-button"]')
     this.reasonForCancellationInput = this.page.locator(
-      '[data-testid="reasonForCancellation-input"] input'
+      '[data-testid="reasonForCancellation-input"] input',
     )
     this.confirmationCheckbox = this.page.locator(
-      '[data-testid="confirmation-checkbox"]'
+      '[data-testid="confirmation-checkbox"]',
     )
   }
 
   async cancelAttendeeWithNoteUsingUser(
-    note = 'Reason of removing the attendee'
+    note = 'Reason of removing the attendee',
   ) {
     await this.reasonForCancellationInput.type(note)
     await this.cancelAttendeeButton.click()

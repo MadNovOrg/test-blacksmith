@@ -12,7 +12,7 @@ export const InfoPanel: React.FC<
     titlePosition?: 'inside' | 'outside'
     renderContent?: (
       content: React.ReactNode,
-      props: BoxProps
+      props: BoxProps,
     ) => React.ReactNode
   }>
 > = ({ title, children, titlePosition = 'inside', renderContent, ...rest }) => {

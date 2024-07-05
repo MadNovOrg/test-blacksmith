@@ -44,7 +44,7 @@ export const InvoiceDetails: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography color={theme.palette.grey[600]}>{rowKey}</Typography>
             <Typography>{infoRows[rowKey]}</Typography>
           </ItemRow>
-        ) : null
+        ) : null,
       )}
     </>
   )

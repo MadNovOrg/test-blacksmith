@@ -57,7 +57,7 @@ const QuestionText = styled(Typography)(({ theme }) => ({
 const normalizeAnswers = (answers: GetEvaluationsSummaryQuery['answers']) => {
   const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
     answers,
-    a => a.question.group || 'UNGROUPED'
+    a => a.question.group || 'UNGROUPED',
   )
 
   const grouped = {} as CourseEvaluationGroupedQuestion
@@ -68,11 +68,11 @@ const normalizeAnswers = (answers: GetEvaluationsSummaryQuery['answers']) => {
 
   const { ANY_INJURIES: injuryQuestion = [], ...ungrouped } = groupBy(
     ungroupedAnswers,
-    a => a.question.questionKey
+    a => a.question.questionKey,
   )
 
   const injuryResponse = groupBy(injuryQuestion, a =>
-    a.answer?.startsWith('YES') ? 'YES' : 'NO'
+    a.answer?.startsWith('YES') ? 'YES' : 'NO',
   )
 
   return {
@@ -137,14 +137,14 @@ export const EvaluationSummary = () => {
     const { trainer, attendee } = groupBy(data?.answers, a =>
       course?.trainers?.find(t => t.profile.id === a.profile.id)
         ? 'trainer'
-        : 'attendee'
+        : 'attendee',
     )
 
     return {
       trainerAnswers: trainer?.sort(a =>
         a.question.type && booleanQuestionTypes.includes(a.question.type)
           ? -1
-          : 0
+          : 0,
       ),
       attendeeAnswers: attendee,
     }
@@ -166,13 +166,13 @@ export const EvaluationSummary = () => {
           archived: a.profile.archived,
         })) ?? []),
       ],
-      u => u.id
+      u => u.id,
     )
   }, [attendeeAnswers, trainerAnswers])
 
   const { grouped, ungrouped, injuryQuestion } = useMemo(
     () => normalizeAnswers(attendeeAnswers),
-    [attendeeAnswers]
+    [attendeeAnswers],
   )
   const { ungrouped: trainerUngrouped, injuryQuestion: trainerInjuryQuestion } =
     useMemo(() => normalizeAnswers(trainerAnswers), [trainerAnswers])
@@ -185,7 +185,7 @@ export const EvaluationSummary = () => {
         acl.isOrgAdmin()) ||
       (course?.type == Course_Type_Enum.Closed && acl.isBookingContact()) ||
       (course?.type == Course_Type_Enum.Indirect && acl.isOrgKeyContact()),
-    [acl, course]
+    [acl, course],
   )
 
   if (fetching) {
@@ -210,7 +210,7 @@ export const EvaluationSummary = () => {
                     <AttendeeMenu
                       options={attendees}
                       placeholder={t(
-                        'pages.course-details.tabs.evaluation.full-summary'
+                        'pages.course-details.tabs.evaluation.full-summary',
                       )}
                       onSelect={(id: string) => {
                         if (course?.trainers?.find(t => t.profile.id === id)) {
@@ -245,7 +245,7 @@ export const EvaluationSummary = () => {
                         sx={{ mb: 1 }}
                       >
                         {t(
-                          'pages.course-details.tabs.evaluation.attendee-feedback'
+                          'pages.course-details.tabs.evaluation.attendee-feedback',
                         )}
                       </Button>
                     )}
@@ -256,7 +256,7 @@ export const EvaluationSummary = () => {
                         sx={{ mb: 1 }}
                       >
                         {t(
-                          'pages.course-details.tabs.evaluation.trainer-feedback'
+                          'pages.course-details.tabs.evaluation.trainer-feedback',
                         )}
                       </Button>
                     )}
@@ -295,7 +295,7 @@ export const EvaluationSummary = () => {
                 <Box>
                   <Typography variant="h3" mt={4} mb={3} id="attendee-feedback">
                     {t(
-                      'pages.course-details.tabs.evaluation.attendee-feedback'
+                      'pages.course-details.tabs.evaluation.attendee-feedback',
                     )}
                   </Typography>
 

@@ -26,14 +26,14 @@ describe('component: ReschedulingTermsTable', () => {
 
       expect(within(fiftheen).getByText('2-4 weeks')).toBeInTheDocument()
       expect(
-        within(fiftheen).getByText('15% of payment due')
+        within(fiftheen).getByText('15% of payment due'),
       ).toBeInTheDocument()
 
       expect(
-        within(twentyfive).getByText('Less than 2 weeks')
+        within(twentyfive).getByText('Less than 2 weeks'),
       ).toBeInTheDocument()
       expect(
-        within(twentyfive).getByText('25% of payment due')
+        within(twentyfive).getByText('25% of payment due'),
       ).toBeInTheDocument()
     })
 
@@ -42,7 +42,7 @@ describe('component: ReschedulingTermsTable', () => {
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 5)}
           level={level}
-        />
+        />,
       )
 
       const free = screen.getByTestId('fee-row-0-fee')
@@ -55,7 +55,7 @@ describe('component: ReschedulingTermsTable', () => {
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 3)}
           level={level}
-        />
+        />,
       )
 
       const fiftheen = screen.getByTestId('fee-row-15-fee')
@@ -68,7 +68,7 @@ describe('component: ReschedulingTermsTable', () => {
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 1)}
           level={level}
-        />
+        />,
       )
 
       const twentyfive = screen.getByTestId('fee-row-25-fee')
@@ -84,7 +84,7 @@ describe('component: ReschedulingTermsTable', () => {
   ).forEach(trainerLevel => {
     it(`displays correct rows for ${trainerLevel} course level`, async () => {
       render(
-        <ReschedulingTermsTable startDate={new Date()} level={trainerLevel} />
+        <ReschedulingTermsTable startDate={new Date()} level={trainerLevel} />,
       )
 
       const free = screen.getByTestId('fee-row-0-fee-trainer')
@@ -96,7 +96,7 @@ describe('component: ReschedulingTermsTable', () => {
 
       expect(within(twentyfive).getByText('1-4 weeks')).toBeInTheDocument()
       expect(
-        within(twentyfive).getByText('25% of payment due')
+        within(twentyfive).getByText('25% of payment due'),
       ).toBeInTheDocument()
 
       expect(within(fifty).getByText('0-1 week')).toBeInTheDocument()
@@ -108,7 +108,7 @@ describe('component: ReschedulingTermsTable', () => {
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 5)}
           level={trainerLevel}
-        />
+        />,
       )
 
       const free = screen.getByTestId('fee-row-0-fee-trainer')
@@ -121,7 +121,7 @@ describe('component: ReschedulingTermsTable', () => {
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 3)}
           level={trainerLevel}
-        />
+        />,
       )
 
       const free = screen.getByTestId('fee-row-25-fee-trainer')
@@ -134,7 +134,7 @@ describe('component: ReschedulingTermsTable', () => {
         <ReschedulingTermsTable
           startDate={addDays(new Date(), 4)}
           level={trainerLevel}
-        />
+        />,
       )
 
       const free = screen.getByTestId('fee-row-50-fee-trainer')

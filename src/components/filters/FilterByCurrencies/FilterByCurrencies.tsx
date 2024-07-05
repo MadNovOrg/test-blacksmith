@@ -20,7 +20,7 @@ export const FilterByCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
       id: currency,
       title: t(`filters.${currency}`),
       selected: false,
-    }))
+    })),
   )
 
   const localOnChange = useCallback(
@@ -30,7 +30,7 @@ export const FilterByCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
         currencies: opts.flatMap(o => (o.selected ? o.id : [])) as Currency[],
       })
     },
-    [onChange]
+    [onChange],
   )
 
   return (

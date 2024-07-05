@@ -34,10 +34,10 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
     () =>
       yup.object({
         expenses: yup.lazy(obj =>
-          yup.object(mapValues(obj, () => makeSchema(t)))
+          yup.object(mapValues(obj, () => makeSchema(t))),
         ),
       }),
-    [t]
+    [t],
   )
 
   const form = useForm<FormValues>({
@@ -55,7 +55,7 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
               },
             ],
             miscellaneous: [],
-          }))
+          })),
         ),
     },
     resolver: yupResolver(schema),
@@ -69,7 +69,7 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
     if (formValues.expenses) {
       onChange(
         formValues.expenses as FormValues['expenses'],
-        form.formState.isValid
+        form.formState.isValid,
       )
     }
   }, [formValues, form.formState, onChange])

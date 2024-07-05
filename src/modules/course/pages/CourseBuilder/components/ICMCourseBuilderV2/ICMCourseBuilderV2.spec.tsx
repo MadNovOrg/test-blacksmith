@@ -59,7 +59,7 @@ it('toggles a module selection', async () => {
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   const selectedModules = screen.getByTestId('selected-modules')
@@ -71,7 +71,7 @@ it('toggles a module selection', async () => {
   await user.click(availableModule)
 
   expect(
-    within(selectedModules).getByText(moduleSetting.module.name)
+    within(selectedModules).getByText(moduleSetting.module.name),
   ).toBeInTheDocument()
 
   await user.click(availableModule)
@@ -79,7 +79,7 @@ it('toggles a module selection', async () => {
   expect(
     within(selectedModules).queryByText(moduleSetting.module.name, {
       exact: false,
-    })
+    }),
   ).not.toBeInTheDocument()
 })
 
@@ -117,19 +117,19 @@ it('resets the selection to the saved curriculum if a course has one when the cl
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   const selectedModules = screen.getByTestId('selected-modules')
 
   await user.click(
-    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false }),
   )
 
   expect(
     within(selectedModules).getByTestId(
-      `selected-module-group-${moduleSettingTwo.module.id}`
-    )
+      `selected-module-group-${moduleSettingTwo.module.id}`,
+    ),
   ).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: /clear/i }))
@@ -137,7 +137,7 @@ it('resets the selection to the saved curriculum if a course has one when the cl
   expect(
     within(selectedModules).queryByText(moduleSettingTwo.module.name, {
       exact: false,
-    })
+    }),
   ).not.toBeInTheDocument()
 })
 
@@ -175,33 +175,33 @@ it("resets the selection to mandatory modules if a course doesn't have curriculu
   render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
-    </Provider>
+    </Provider>,
   )
 
   const selectedModules = screen.getByTestId('selected-modules')
 
   await user.click(
-    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false }),
   )
 
   expect(
     within(selectedModules).getByTestId(
-      `selected-module-group-${moduleSettingTwo.module.id}`
-    )
+      `selected-module-group-${moduleSettingTwo.module.id}`,
+    ),
   ).toBeInTheDocument()
 
   await user.click(screen.getByRole('button', { name: /clear/i }))
 
   expect(
     within(selectedModules).queryByTestId(
-      `selected-module-group-${moduleSettingTwo.module.id}`
-    )
+      `selected-module-group-${moduleSettingTwo.module.id}`,
+    ),
   ).not.toBeInTheDocument()
 
   expect(
     within(selectedModules).getByTestId(
-      `selected-module-group-${moduleSettingOne.module.id}`
-    )
+      `selected-module-group-${moduleSettingOne.module.id}`,
+    ),
   ).toBeInTheDocument()
 })
 
@@ -261,11 +261,11 @@ it('saves modules and marks a course as draft when a module is selected', async 
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   await user.click(
-    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false }),
   )
 
   await waitFor(() => {
@@ -321,17 +321,17 @@ it.each([
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     await user.click(
-      screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+      screen.getByLabelText(moduleSettingTwo.module.name, { exact: false }),
     )
 
     await user.click(screen.getByRole('button', { name: /submit/i }))
 
     expect(screen.getByRole('dialog')).toBeInTheDocument()
-  }
+  },
 )
 
 // https://behaviourhub.atlassian.net/browse/TTHP-3619 - Advanced Trainer Re-accreditation
@@ -379,17 +379,17 @@ it.each([[Course_Level_Enum.AdvancedTrainer, true]])(
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     await user.click(
-      screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+      screen.getByLabelText(moduleSettingTwo.module.name, { exact: false }),
     )
 
     await user.click(screen.getByRole('button', { name: /submit/i }))
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-  }
+  },
 )
 
 it('validates that LEVEL_2 course has at least one purple module selected', async () => {
@@ -434,7 +434,7 @@ it('validates that LEVEL_2 course has at least one purple module selected', asyn
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   const submitButton = screen.getByRole('button', { name: /submit/i })
@@ -442,7 +442,7 @@ it('validates that LEVEL_2 course has at least one purple module selected', asyn
   expect(submitButton).toBeDisabled()
 
   await user.click(
-    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false })
+    screen.getByLabelText(moduleSettingTwo.module.name, { exact: false }),
   )
 
   expect(submitButton).toBeEnabled()
@@ -512,7 +512,7 @@ it('submits the modules and redirects to the course details page', async () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   const availableModules = screen.getByTestId('available-modules')
@@ -521,7 +521,7 @@ it('submits the modules and redirects to the course details page', async () => {
     moduleSetting.module.name,
     {
       exact: false,
-    }
+    },
   )
 
   await userEvent.click(moduleGroupLabel)
@@ -567,7 +567,7 @@ it('handles the selection of module groups that require others', async () => {
       <ICMCourseBuilderV2 />
     </Provider>,
     {},
-    { initialEntries: [`/courses/${course.id}/modules`] }
+    { initialEntries: [`/courses/${course.id}/modules`] },
   )
 
   const moduleLabel = screen.getByLabelText(moduleSettingOne.module.name, {
@@ -576,7 +576,7 @@ it('handles the selection of module groups that require others', async () => {
 
   const dependableModuleLabel = screen.getByLabelText(
     dependableModuleSetting.module.name,
-    { exact: true }
+    { exact: true },
   )
 
   const selectedModules = screen.getByTestId('selected-modules')
@@ -588,8 +588,8 @@ it('handles the selection of module groups that require others', async () => {
 
   expect(
     within(selectedModules).getByTestId(
-      `selected-module-group-${dependableModuleSetting.module.id}`
-    )
+      `selected-module-group-${dependableModuleSetting.module.id}`,
+    ),
   ).toBeInTheDocument()
 
   await user.click(moduleLabel)

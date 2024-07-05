@@ -32,11 +32,11 @@ test.fixme(
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto(`${course.id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-      course.id
+      course.id,
     )
     await courseDetailsPage.clickEditCourseButton()
     await courseDetailsPage.fillNotes('notes3')
     await courseDetailsPage.clickSaveButton()
     await courseDetailsPage.checkNotesOnCoursePage('notes3')
-  }
+  },
 )

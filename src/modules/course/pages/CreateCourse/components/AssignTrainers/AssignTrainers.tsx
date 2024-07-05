@@ -87,7 +87,7 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
 const now = new Date()
 
 const trainerInputToCourseTrainer = (
-  trainers: TrainerInput[] = []
+  trainers: TrainerInput[] = [],
 ): CourseTrainer[] =>
   trainers.map(t => ({
     profile: {
@@ -165,14 +165,14 @@ export const AssignTrainers = () => {
     if (!needsModerator) {
       if (
         trainers.some(
-          trainer => trainer.type === Course_Trainer_Type_Enum.Moderator
+          trainer => trainer.type === Course_Trainer_Type_Enum.Moderator,
         ) &&
         setTrainers
       ) {
         setTrainers(
           trainers.filter(
-            trainer => trainer.type !== Course_Trainer_Type_Enum.Moderator
-          )
+            trainer => trainer.type !== Course_Trainer_Type_Enum.Moderator,
+          ),
         )
       }
 
@@ -189,24 +189,24 @@ export const AssignTrainers = () => {
           lead.trainer_role_types.some(
             ({ trainer_role_type: role }) =>
               role?.name === TrainerRoleTypeName.SENIOR ||
-              role?.name === TrainerRoleTypeName.PRINCIPAL
-          )
-        )
+              role?.name === TrainerRoleTypeName.PRINCIPAL,
+          ),
+        ),
       )
       setIsETA(
         data.lead.some(lead =>
-          checkIsETA(lead.trainer_role_types as TrainerRoleType[])
-        )
+          checkIsETA(lead.trainer_role_types as TrainerRoleType[]),
+        ),
       )
       setIsEmployerAOL(
         data.lead.some(lead =>
-          checkIsEmployerAOL(lead.trainer_role_types as TrainerRoleType[])
-        )
+          checkIsEmployerAOL(lead.trainer_role_types as TrainerRoleType[]),
+        ),
       )
       setTrainers(formValuesToTrainerInput(data))
       setTrainersDataValid(isValid)
     },
-    [setTrainers]
+    [setTrainers],
   )
 
   const submit = useCallback(async () => {
@@ -274,7 +274,7 @@ export const AssignTrainers = () => {
           isEmployerAOL: isEmployerAOL,
           isUKCountry: isUKCountry(courseData.residingCountry),
         },
-        trainers
+        trainers,
       )
       if (
         courseData.type === Course_Type_Enum.Closed &&
@@ -319,7 +319,7 @@ export const AssignTrainers = () => {
         trainers.map(trainer => ({
           type: trainer.type,
           trainer_role_types: trainer.trainer_role_types,
-        }))
+        })),
       )
     )
   }, [acl, courseData, isUKCountry, trainers])
@@ -358,7 +358,7 @@ export const AssignTrainers = () => {
           requiredLeaders={requiredLeaders}
           bildStrategies={
             bildStrategiesToArray(
-              courseData.bildStrategies
+              courseData.bildStrategies,
             ) as unknown as BildStrategy[]
           }
           methodsRef={methods}
@@ -368,7 +368,7 @@ export const AssignTrainers = () => {
         {showTrainerRatioWarning ? (
           <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
             {t(
-              `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
+              `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
             )}
           </Alert>
         ) : null}

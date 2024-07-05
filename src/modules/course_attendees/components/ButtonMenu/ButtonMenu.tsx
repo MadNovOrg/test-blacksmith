@@ -21,7 +21,7 @@ export const ButtonMenu: React.FC<PropsWithChildren<Props>> = ({
   const open = Boolean(anchorEl)
 
   const handleMenuButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     setAnchorEl(event.currentTarget)
   }

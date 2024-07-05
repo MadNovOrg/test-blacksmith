@@ -10,11 +10,11 @@ import { Course, OrderCreation, User } from './types'
 export const UNIQUE_ORDER: (
   orderOwner: User,
   registrants: User[],
-  course?: Course
+  course?: Course,
 ) => Promise<OrderCreation> = async (
   orderOwner: User,
   registrants: User[],
-  course?: Course
+  course?: Course,
 ) => ({
   ...(course && { courseId: course.id }),
   billingAddress: 'Tankfield, Convent Hill, Tramore, Waterford, X91 PV08',
@@ -24,7 +24,7 @@ export const UNIQUE_ORDER: (
   billingPhone: '+44 07849 123456',
   clientPurchaseOrder: '12345',
   organizationId: await API.organization.getOrganizationId(
-    orderOwner.organization?.name ?? ''
+    orderOwner.organization?.name ?? '',
   ),
   paymentMethod: PaymentMethod.INVOICE,
   promoCodes: [],

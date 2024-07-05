@@ -46,7 +46,7 @@ it('validates at least one strategy is selected', async () => {
   render(
     <FormWrapper>
       <StrategyToggles courseLevel={Course_Level_Enum.BildRegular} />
-    </FormWrapper>
+    </FormWrapper>,
   )
 
   expect(screen.queryByText(/form is valid/i)).not.toBeInTheDocument()
@@ -62,7 +62,7 @@ it('deselects all strategies and disables toggles if course is trainer conversio
       <StrategyToggles
         courseLevel={Course_Level_Enum.BildIntermediateTrainer}
       />
-    </FormWrapper>
+    </FormWrapper>,
   )
 
   rerender(
@@ -71,7 +71,7 @@ it('deselects all strategies and disables toggles if course is trainer conversio
         courseLevel={Course_Level_Enum.BildIntermediateTrainer}
         isConversion={true}
       />
-    </FormWrapper>
+    </FormWrapper>,
   )
 
   expect(screen.getByLabelText(/primary/i)).toBeDisabled()
@@ -83,7 +83,7 @@ it('deselects all strategies and disables toggles if course is trainer conversio
         courseLevel={Course_Level_Enum.BildIntermediateTrainer}
         isConversion={false}
       />
-    </FormWrapper>
+    </FormWrapper>,
   )
 
   expect(screen.getByLabelText(/primary/i)).toBeDisabled()

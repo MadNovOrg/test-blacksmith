@@ -26,6 +26,6 @@ export function useImportUsersJobSubscription(jobId: string | null) {
       variables: jobId ? { id: jobId } : undefined,
       pause: !jobId,
     },
-    (_data, response) => response
+    (_data, response) => response,
   )
 }

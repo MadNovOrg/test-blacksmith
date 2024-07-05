@@ -42,7 +42,7 @@ describe(CourseWaitlist.name, () => {
     render(
       <Provider value={client}>
         <CourseWaitlist />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByTestId('course-info-skeleton')).toBeInTheDocument()
@@ -61,11 +61,11 @@ describe(CourseWaitlist.name, () => {
     render(
       <Provider value={client}>
         <CourseWaitlist />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"It seems like a course you're trying to join the waitlist for doesn't exist anymore."`
+      `"It seems like a course you're trying to join the waitlist for doesn't exist anymore."`,
     )
   })
 
@@ -108,7 +108,7 @@ describe(CourseWaitlist.name, () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/waitlist?course_id=${courseId}`] }
+      { initialEntries: [`/waitlist?course_id=${courseId}`] },
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -132,8 +132,8 @@ describe(CourseWaitlist.name, () => {
     expect(screen.getAllByText(startEndTimes)).toHaveLength(2)
     expect(
       screen.getByText(
-        `${name}, ${addressLineOne}, ${city}, ${postCode}, ${country}`
-      )
+        `${name}, ${addressLineOne}, ${city}, ${postCode}, ${country}`,
+      ),
     ).toBeInTheDocument()
     expect(screen.getByText(addressLineOne)).toBeInTheDocument()
     expect(screen.getByText(`${postCode}`)).toBeInTheDocument()
@@ -194,14 +194,14 @@ describe(CourseWaitlist.name, () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/waitlist?course_id=${courseId}`] }
+      { initialEntries: [`/waitlist?course_id=${courseId}`] },
     )
 
     await userEvent.type(screen.getByLabelText(/first name/i), 'John')
     await userEvent.type(screen.getByLabelText(/last name/i), 'Doe')
     await userEvent.type(
       screen.getByLabelText(/email/i),
-      'john.doe@example.com'
+      'john.doe@example.com',
     )
     await userEvent.type(screen.getByLabelText(/phone/i), '7999 999999')
     await userEvent.type(screen.getByLabelText(/organisation name/i), 'Org')
@@ -212,7 +212,7 @@ describe(CourseWaitlist.name, () => {
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"You’ve been added to the course waitlist."`
+        `"You’ve been added to the course waitlist."`,
       )
     })
   })

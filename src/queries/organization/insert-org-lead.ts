@@ -34,6 +34,6 @@ export const MUTATION = gql`
 
 export const useInsertNewOrganization = () => {
   return useMutation<InsertOrgLeadMutation, InsertOrgLeadMutationVariables>(
-    MUTATION
+    MUTATION,
   )
 }

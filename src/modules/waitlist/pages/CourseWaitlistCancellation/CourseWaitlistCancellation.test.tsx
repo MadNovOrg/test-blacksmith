@@ -38,12 +38,12 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         initialEntries: [
           `/waitlist-cancellation?course_id=${courseId}&s=${cancellationSecret}`,
         ],
-      }
+      },
     )
 
     // Assert
     expect(
-      screen.getByTestId('course-waitlist-cancellation-loading')
+      screen.getByTestId('course-waitlist-cancellation-loading'),
     ).toBeInTheDocument()
   })
 
@@ -64,14 +64,14 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/waitlist-cancellation`] }
+      { initialEntries: [`/waitlist-cancellation`] },
     )
 
     // Assert
     expect(
       screen.getByText(
-        /The required query parameters are missing or malformed/i
-      )
+        /The required query parameters are missing or malformed/i,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -104,13 +104,13 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         initialEntries: [
           `/waitlist-cancellation?course_id=${courseId}&s=${cancellationSecret}`,
         ],
-      }
+      },
     )
 
     // Assert
     await waitFor(() => {
       expect(
-        screen.getByText(/An error occurred. Please try again./i)
+        screen.getByText(/An error occurred. Please try again./i),
       ).toBeInTheDocument()
     })
   })
@@ -147,15 +147,15 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         initialEntries: [
           `/waitlist-cancellation?course_id=${courseId}&s=${cancellationSecret}`,
         ],
-      }
+      },
     )
 
     // Assert
     await waitFor(() => {
       expect(
         screen.getByText(
-          /This course is no longer available. You were removed from the waiting list./i
-        )
+          /This course is no longer available. You were removed from the waiting list./i,
+        ),
       ).toBeInTheDocument()
     })
     expect(true).toBeTruthy()
@@ -193,13 +193,13 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         initialEntries: [
           `/waitlist-cancellation?course_id=${courseId}&s=${cancellationSecret}`,
         ],
-      }
+      },
     )
 
     // Assert
     await waitFor(() => {
       expect(
-        screen.getByText(/You are not part of this course’s waiting list./i)
+        screen.getByText(/You are not part of this course’s waiting list./i),
       ).toBeInTheDocument()
     })
     expect(true).toBeTruthy()
@@ -234,13 +234,13 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         initialEntries: [
           `/waitlist-cancellation?course_id=${courseId}&s=${cancellationSecret}`,
         ],
-      }
+      },
     )
 
     // Assert
     await waitFor(() => {
       expect(
-        screen.getByText(/You’ve been removed from the course waiting list./i)
+        screen.getByText(/You’ve been removed from the course waiting list./i),
       ).toBeInTheDocument()
     })
   })

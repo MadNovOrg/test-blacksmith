@@ -51,7 +51,7 @@ export const TrainerExpenses = () => {
       setExpenses(data)
       setExpensesValid(isValid)
     },
-    [setExpenses]
+    [setExpenses],
   )
 
   if (!courseData) {

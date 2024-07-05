@@ -28,7 +28,7 @@ export const CreateCourseMenu = () => {
               label: t(`${type.toLowerCase()}-course-label`),
             },
           ]
-        : []
+        : [],
     )
   }, [acl, t])
 
@@ -37,7 +37,7 @@ export const CreateCourseMenu = () => {
   }
 
   const handleMenuButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     if (options.length === 1) {
       return navigate(`${CREATE_COURSE_PATH}?type=${options[0].key}`)

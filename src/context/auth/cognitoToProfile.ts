@@ -26,7 +26,7 @@ export type CognitoProfileDetails = {
  * Must be in a dedicated file for mock testing
  */
 export default async function (
-  user: CognitoUser
+  user: CognitoUser,
 ): Promise<CognitoProfileDetails> {
   const session = user.getSignInUserSession()
   if (!session) return {}
@@ -34,7 +34,7 @@ export default async function (
   const idToken = session.getIdToken()
   const token = idToken.getJwtToken()
   const claims = JSON.parse(
-    idToken.payload['https://hasura.io/jwt/claims'] ?? '{}'
+    idToken.payload['https://hasura.io/jwt/claims'] ?? '{}',
   ) as Claims
 
   const { profile } = await gqlRequest<

@@ -70,6 +70,6 @@ export async function introspection(role: `${RoleName}` | 'anonymous') {
     {
       ...headers,
       'x-hasura-role': role,
-    }
+    },
   )
 }

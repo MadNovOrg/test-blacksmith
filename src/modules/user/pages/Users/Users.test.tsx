@@ -122,25 +122,25 @@ describe('page: Users', () => {
     expect(within(columnHeaders[1]).getByText(_t('name'))).toBeInTheDocument()
     expect(within(columnHeaders[2]).getByText(_t('email'))).toBeInTheDocument()
     expect(
-      within(columnHeaders[3]).getByText(_t('residing-country'))
+      within(columnHeaders[3]).getByText(_t('residing-country')),
     ).toBeInTheDocument()
     expect(
-      within(columnHeaders[4]).getByText(_t('organization'))
+      within(columnHeaders[4]).getByText(_t('organization')),
     ).toBeInTheDocument()
     expect(within(columnHeaders[5]).getByText(_t('role'))).toBeInTheDocument()
     expect(
-      within(columnHeaders[6]).getByText(_t('trainer-type'))
+      within(columnHeaders[6]).getByText(_t('trainer-type')),
     ).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody.children).toHaveLength(1)
     expect(
-      within(tableBody).getByText(profile.fullName ?? '')
+      within(tableBody).getByText(profile.fullName ?? ''),
     ).toBeInTheDocument()
 
     expect(within(tableBody).getByText(profile.email ?? '')).toBeInTheDocument()
 
     expect(
-      within(tableBody).getByText(profile.organizations[0].organization.name)
+      within(tableBody).getByText(profile.organizations[0].organization.name),
     ).toBeInTheDocument()
     expect(within(tableBody).getByText('Individual')).toBeInTheDocument()
     expect(within(tableBody).getByText('Principal')).toBeInTheDocument()
@@ -167,7 +167,7 @@ describe('page: Users', () => {
           error: undefined,
           mutate: vi.fn(),
         }
-      }
+      },
     )
 
     render(<Users />)
@@ -176,7 +176,7 @@ describe('page: Users', () => {
     await userEvent.type(search, keyword)
     await waitFor(() => {
       expect(
-        screen.getByText(`${filteredProfile.fullName}`)
+        screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
     })
@@ -191,7 +191,7 @@ describe('page: Users', () => {
         const profiles =
           where?.roles?.role?.name?._in?.includes(RoleName.TRAINER) &&
           where?.trainer_role_types?.trainer_role_type?.name?._in?.includes(
-            TrainerRoleTypeName.PRINCIPAL
+            TrainerRoleTypeName.PRINCIPAL,
           )
             ? [filteredProfile]
             : [profile]
@@ -202,21 +202,21 @@ describe('page: Users', () => {
           error: undefined,
           mutate: vi.fn(),
         }
-      }
+      },
     )
 
     render(<Users />)
 
     await userEvent.click(
-      within(screen.getByTestId('FilterUserRole')).getByText('Trainer')
+      within(screen.getByTestId('FilterUserRole')).getByText('Trainer'),
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterTrainerType')).getByText('Principal')
+      within(screen.getByTestId('FilterTrainerType')).getByText('Principal'),
     )
 
     await waitFor(() => {
       expect(
-        screen.getByText(`${filteredProfile.fullName}`)
+        screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
     })
@@ -240,23 +240,23 @@ describe('page: Users', () => {
           error: undefined,
           mutate: vi.fn(),
         }
-      }
+      },
     )
 
     render(<Users />)
 
     await userEvent.click(
-      within(screen.getByTestId('FilterUserRole')).getByText('Trainer')
+      within(screen.getByTestId('FilterUserRole')).getByText('Trainer'),
     )
     await userEvent.click(
       within(screen.getByTestId('FilterUserRole')).getByText(
-        'Organisation Administrator'
-      )
+        'Organisation Administrator',
+      ),
     )
 
     await waitFor(() => {
       expect(
-        screen.getByText(`${filteredProfile.fullName}`)
+        screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
     })
@@ -280,7 +280,7 @@ describe('page: Users', () => {
           error: undefined,
           mutate: vi.fn(),
         }
-      }
+      },
     )
 
     render(<Users />)
@@ -289,7 +289,7 @@ describe('page: Users', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(`${filteredProfile.fullName}`)
+        screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
     })
@@ -310,7 +310,7 @@ describe('page: Users', () => {
           error: undefined,
           mutate: vi.fn(),
         }
-      }
+      },
     )
 
     render(<Users />)
@@ -319,7 +319,7 @@ describe('page: Users', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(`${filteredProfile.fullName}`)
+        screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
     })
@@ -336,7 +336,7 @@ describe('page: Users', () => {
         const conditions = where?._or ?? []
         console.log(
           'conditions-------------------------------------------',
-          conditions
+          conditions,
         )
         const profiles =
           conditions.length >= 3
@@ -351,7 +351,7 @@ describe('page: Users', () => {
           error: undefined,
           mutate: vi.fn(),
         }
-      }
+      },
     )
 
     render(<Users />)
@@ -360,7 +360,7 @@ describe('page: Users', () => {
     await userEvent.type(search, keyword)
     await waitFor(() => {
       expect(
-        screen.getByText(`${filteredProfile.fullName}`)
+        screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
     })
@@ -409,10 +409,10 @@ describe('page: Users', () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByLabelText(/merge selected/i)
+          screen.queryByLabelText(/merge selected/i),
         ).not.toBeInTheDocument()
       })
-    })
+    }),
   )
 
   it('renders merge user page with merge selected button disabled', async () => {
@@ -432,7 +432,7 @@ describe('page: Users', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/users/merge'] }
+      { initialEntries: ['/users/merge'] },
     )
 
     await waitFor(() => {

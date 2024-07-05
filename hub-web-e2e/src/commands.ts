@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 
 export function waitForGraphQLRequest(
   page: Page,
-  operationName: string
+  operationName: string,
 ): Promise<boolean> {
   return page
     .waitForRequest(request => {
@@ -30,7 +30,7 @@ export function waitForGraphQLRequest(
 */
 export async function waitForGraphQLResponse(
   page: Page,
-  keyToFind: string
+  keyToFind: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<{ [key: string]: any }> {
   const response = await page.waitForResponse(async response => {

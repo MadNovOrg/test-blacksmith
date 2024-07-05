@@ -32,7 +32,7 @@ export const CourseCertifications: React.FC<
           participant: { completed_evaluation: { _eq: true } },
         },
       },
-    }
+    },
   )
 
   return (

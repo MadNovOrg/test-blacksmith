@@ -14,28 +14,28 @@ export async function fillForm(data: Partial<FormData>) {
   if (data.amount) {
     await userEvent.type(
       screen.getByLabelText('Number of licences *'),
-      String(data.amount)
+      String(data.amount),
     )
   }
 
   if (data.invoiceId) {
     await userEvent.type(
       screen.getByLabelText('Invoice number *'),
-      data.invoiceId
+      data.invoiceId,
     )
   }
 
   if (data.note) {
     await userEvent.type(
       screen.getByLabelText('Add a note (optional)'),
-      data.note
+      data.note,
     )
   }
 
   if (data.licensePrice) {
     await userEvent.type(
       screen.getByLabelText('Price per licence *'),
-      String(data.licensePrice)
+      String(data.licensePrice),
     )
   }
 }

@@ -9,7 +9,7 @@ export type Questions = {
 export const fillEvaluationForm = async (
   page: Page,
   questions: Questions,
-  userType?: string
+  userType?: string,
 ) => {
   if (userType === 'user') {
     await expect(questions.rating.first()).toBeVisible()

@@ -38,7 +38,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
@@ -62,14 +62,14 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const tbl = screen.getByTestId('courses-table')
 
     expect(within(tbl).getByTestId('TableNoRows')).toBeInTheDocument()
     expect(
-      within(tbl).queryByTestId('fetching-courses')
+      within(tbl).queryByTestId('fetching-courses'),
     ).not.toBeInTheDocument()
     expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(0)
   })
@@ -94,7 +94,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const table = screen.getByTestId('courses-table')
@@ -104,7 +104,7 @@ describe('trainers-pages/MyCourses', () => {
     })
 
     expect(
-      within(table).queryByTestId('fetching-courses')
+      within(table).queryByTestId('fetching-courses'),
     ).not.toBeInTheDocument()
     expect(within(table).queryByTestId('TableNoRows')).not.toBeInTheDocument()
   })
@@ -129,7 +129,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const table = screen.getByTestId('courses-table')
@@ -166,7 +166,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const table = screen.getByTestId('courses-table')
@@ -204,7 +204,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const table = screen.getByTestId('courses-table')
@@ -214,7 +214,7 @@ describe('trainers-pages/MyCourses', () => {
     await waitFor(() => {
       expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
         'data-index',
-        '0'
+        '0',
       )
     })
   })
@@ -248,34 +248,34 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const coursesPagination = screen.getByTestId('courses-pagination')
 
     expect(
-      within(coursesPagination).getByLabelText('Go to previous page')
+      within(coursesPagination).getByLabelText('Go to previous page'),
     ).toBeDisabled()
 
     expect(
-      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`)
+      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`),
     ).toBeInTheDocument()
     expect(
-      screen.queryByTestId(`course-row-${secondBatch[0].id}`)
+      screen.queryByTestId(`course-row-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     await userEvent.click(
-      within(coursesPagination).getByLabelText('Go to next page')
+      within(coursesPagination).getByLabelText('Go to next page'),
     )
 
     await waitFor(() => {
       expect(
         screen.getByTestId(
-          `course-row-${secondBatch[firstBatch.length - 1].id}`
-        )
+          `course-row-${secondBatch[firstBatch.length - 1].id}`,
+        ),
       ).toBeInTheDocument()
       expect(
-        screen.queryByTestId(`course-row-${firstBatch[0].id}`)
+        screen.queryByTestId(`course-row-${firstBatch[0].id}`),
       ).not.toBeInTheDocument()
     })
   })
@@ -330,13 +330,13 @@ describe('trainers-pages/MyCourses', () => {
           profile: { id: TRAINER_PROFILE_ID },
         },
       },
-      { initialEntries: ['/courses'] }
+      { initialEntries: ['/courses'] },
     )
 
     await userEvent.click(
       within(screen.getByTestId(`course-row-${trainerCourse.id}`)).getByText(
-        trainerCourse.name
-      )
+        trainerCourse.name,
+      ),
     )
 
     expect(screen.getByText(/course builder/i)).toBeInTheDocument()
@@ -392,13 +392,13 @@ describe('trainers-pages/MyCourses', () => {
           profile: { id: TRAINER_PROFILE_ID },
         },
       },
-      { initialEntries: ['/courses'] }
+      { initialEntries: ['/courses'] },
     )
 
     await userEvent.click(
       within(screen.getByTestId(`course-row-${trainerCourse.id}`)).getByText(
-        trainerCourse.name
-      )
+        trainerCourse.name,
+      ),
     )
 
     expect(screen.getByText(/course builder/i)).toBeInTheDocument()

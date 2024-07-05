@@ -81,7 +81,7 @@ export const CreateOrganization = () => {
         navigate(`../${response.data.org?.id}`)
       }
     },
-    [executeMutation, isUKCountry, navigate, otherOrgType, xeroId]
+    [executeMutation, isUKCountry, navigate, otherOrgType, xeroId],
   )
 
   return (

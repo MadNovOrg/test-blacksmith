@@ -43,11 +43,11 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent(
-      'TT Employee'
+      'TT Employee',
     )
 
     const opsCheckbox = screen.getByLabelText('Operations')
@@ -81,11 +81,11 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent(
-      'Administrator'
+      'Administrator',
     )
   })
 
@@ -106,11 +106,11 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent(
-      'Individual'
+      'Individual',
     )
   })
 
@@ -131,17 +131,17 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent('Trainer')
     expect(
       screen.getByRole('button', {
         name: 'Principal',
-      })
+      }),
     ).toBeInTheDocument()
     expect(screen.getByTestId('bild-role-select')).toHaveTextContent(
-      'BILD senior'
+      'BILD senior',
     )
   })
   it('autoselects roles if available', async () => {
@@ -163,18 +163,18 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
     await userEvent.click(
       screen.getByRole('button', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     )
     // Assert
     expect(
       screen.getByRole('option', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     ).toHaveAttribute('aria-selected', 'true')
   })
   it('can select or deselect options from the dropdown', async () => {
@@ -196,33 +196,33 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
     // Assert
     await userEvent.click(
       screen.getByRole('button', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     )
     await userEvent.click(
       screen.getByRole('option', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     )
     expect(
       screen.getByRole('option', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     ).toHaveAttribute('aria-selected', 'false')
     await userEvent.click(
       screen.getByRole('option', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     )
     expect(
       screen.getByRole('option', {
         name: capitalize(TrainerRoleTypeName.PRINCIPAL),
-      })
+      }),
     ).toHaveAttribute('aria-selected', 'true')
   })
   it('allows deleting roles', async () => {
@@ -251,11 +251,11 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
     expect(screen.getAllByTestId('user-role-select')).toHaveLength(2)
     expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
-      'Individual'
+      'Individual',
     )
 
     await userEvent.click(screen.getAllByRole('button', { name: 'Remove' })[0])
@@ -263,7 +263,7 @@ describe('component: EditRoles', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
       expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
-        'Administrator'
+        'Administrator',
       )
     })
   })
@@ -285,17 +285,17 @@ describe('component: EditRoles', () => {
     render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
-      </FormWrapper>
+      </FormWrapper>,
     )
 
     expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Additional role' })
+      screen.getByRole('button', { name: 'Additional role' }),
     )
 
     await waitFor(() =>
-      expect(screen.getAllByTestId('user-role-select')).toHaveLength(2)
+      expect(screen.getAllByTestId('user-role-select')).toHaveLength(2),
     )
   })
 })

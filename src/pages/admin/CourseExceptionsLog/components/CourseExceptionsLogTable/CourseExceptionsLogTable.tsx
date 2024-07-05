@@ -59,23 +59,21 @@ export const CourseExceptionsLogTable: FC<Props> = ({
         sorting: true,
       },
     ],
-    [t]
+    [t],
   )
 
   return (
-    <>
-      <Table
-        data-testid="course-exceptions-log-table"
-        sx={{ minWidth: { xs: '100%', md: '700px' } }}
-      >
-        <TableHead
-          onRequestSort={sorting.onSort}
-          orderBy={sorting.by}
-          order={sorting.dir}
-          cols={cols}
-        />
-        <TableBody colSpan={cols.length} logs={logs} loading={loading} />
-      </Table>
-    </>
+    <Table
+      data-testid="course-exceptions-log-table"
+      sx={{ minWidth: { xs: '100%', md: '700px' } }}
+    >
+      <TableHead
+        onRequestSort={sorting.onSort}
+        orderBy={sorting.by}
+        order={sorting.dir}
+        cols={cols}
+      />
+      <TableBody colSpan={cols.length} logs={logs} loading={loading} />
+    </Table>
   )
 }

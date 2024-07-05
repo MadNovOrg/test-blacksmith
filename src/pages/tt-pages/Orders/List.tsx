@@ -86,7 +86,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
   const selectedOrders = useMemo(
     () => orders.filter(o => isSelected(o.id)),
-    [orders, isSelected]
+    [orders, isSelected],
   )
 
   const exportOrders = useCallback(
@@ -128,7 +128,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
       saveAs(new Blob([buffer]), 'orders.xlsx')
     },
-    [t]
+    [t],
   )
 
   return (

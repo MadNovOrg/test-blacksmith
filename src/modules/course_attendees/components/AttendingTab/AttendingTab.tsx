@@ -93,7 +93,7 @@ export const AttendingTab = ({
     acl.canGradeParticipants(course.trainers ?? []) && courseStarted(course)
 
   const isAttendanceDisabled = attendanceDisabledStatuses.includes(
-    course.status
+    course.status,
   )
 
   const {
@@ -116,7 +116,7 @@ export const AttendingTab = ({
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   const handleSortChange = useCallback(
@@ -128,7 +128,7 @@ export const AttendingTab = ({
         setSortColumn(columnName)
       }
     },
-    [sortColumn]
+    [sortColumn],
   )
 
   const { selected, checkbox, isSelected } = useTableChecks()
@@ -152,14 +152,14 @@ export const AttendingTab = ({
         !cp.profile.archived,
         acl.canManageParticipantAttendance(getParticipantOrgIds(cp), course),
       ].every(Boolean),
-    [acl, course]
+    [acl, course],
   )
 
   const cols = useMemo(
     () =>
       [
         checkbox.headCol(
-          courseParticipants?.filter(p => !p.grade).map(p => p.id) ?? []
+          courseParticipants?.filter(p => !p.grade).map(p => p.id) ?? [],
         ),
         {
           id: 'name',
@@ -197,7 +197,7 @@ export const AttendingTab = ({
           : null,
         canToggleAttendance ||
         (courseParticipants?.some(participant =>
-          canViewRowActions(participant)
+          canViewRowActions(participant),
         ) &&
           acl.isOrgAdmin())
           ? {
@@ -216,9 +216,9 @@ export const AttendingTab = ({
         acl.canManageParticipantAttendance(
           courseParticipants?.reduce(
             (acc, cp) => [...acc, ...getParticipantOrgIds(cp)],
-            [] as string[]
+            [] as string[],
           ) ?? [],
-          course
+          course,
         )
           ? {
               id: 'actions',
@@ -238,26 +238,26 @@ export const AttendingTab = ({
       acl,
       course,
       canViewRowActions,
-    ]
+    ],
   )
 
   const handleTransferAttendee = useCallback(
     (participant: CourseParticipant) => {
       navigate(`../transfer/${participant.id}`, { replace: true })
     },
-    [navigate]
+    [navigate],
   )
 
   const canToggleParticipantAttendance = useCallback(
     ({ grade }: CourseParticipant) =>
       canToggleAttendance && !isAttendanceDisabled && !grade,
-    [canToggleAttendance, isAttendanceDisabled]
+    [canToggleAttendance, isAttendanceDisabled],
   )
 
   const sendCourseInfo = useCallback(
     async (
       courseId: SendCourseInformationMutationVariables['courseId'],
-      attendeeIds: SendCourseInformationMutationVariables['attendeeIds']
+      attendeeIds: SendCourseInformationMutationVariables['attendeeIds'],
     ) => {
       setAttendeeToResendInfo(undefined)
       try {
@@ -276,7 +276,7 @@ export const AttendingTab = ({
         onSendingCourseInformation(false)
       }
     },
-    [onSendingCourseInformation, sendCourseInfoMutation]
+    [onSendingCourseInformation, sendCourseInfoMutation],
   )
 
   const rowActions = useMemo(
@@ -286,7 +286,7 @@ export const AttendingTab = ({
       onCancelClick: setAttendeeToCancel,
       onResendInformationClick: setAttendeeToResendInfo,
     }),
-    [handleTransferAttendee]
+    [handleTransferAttendee],
   )
 
   const isOpenTypeCourse = course.type === Course_Type_Enum.Open
@@ -340,7 +340,7 @@ export const AttendingTab = ({
                     >
                       {checkbox.rowCell(
                         courseParticipant.id,
-                        !canToggleParticipantAttendance(courseParticipant)
+                        !canToggleParticipantAttendance(courseParticipant),
                       )}
                       <TableCell>
                         <LinkToProfile
@@ -361,7 +361,7 @@ export const AttendingTab = ({
                         >
                           {courseParticipant.profile.email}
                           {courseParticipant.profile.contactDetails.map(
-                            (contact: Scalars['jsonb']) => contact.value
+                            (contact: Scalars['jsonb']) => contact.value,
                           )}
                         </LinkToProfile>
                       </TableCell>
@@ -378,7 +378,7 @@ export const AttendingTab = ({
                             <Typography key={org.organization.id}>
                               {org.organization.name}
                             </Typography>
-                          )
+                          ),
                         )}
                       </TableCell>
                       {isBlendedCourse && (
@@ -386,7 +386,7 @@ export const AttendingTab = ({
                           {courseParticipant.go1EnrolmentStatus && (
                             <Chip
                               label={t(
-                                `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`
+                                `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`,
                               )}
                               color={
                                 courseParticipant.go1EnrolmentStatus ===
@@ -513,11 +513,11 @@ export const AttendingTab = ({
             <ConfirmDialog
               open={Boolean(attendeeToResendInfo)}
               title={t(
-                'pages.course-participants.resend-course-info.modal.title'
+                'pages.course-participants.resend-course-info.modal.title',
               )}
               message={t(
                 'pages.course-participants.resend-course-info.modal.message',
-                { fullName: attendeeToResendInfo?.profile.fullName }
+                { fullName: attendeeToResendInfo?.profile.fullName },
               )}
               onCancel={() => setAttendeeToResendInfo(undefined)}
               onOk={() => sendCourseInfo(course.id, [attendeeToResendInfo?.id])}

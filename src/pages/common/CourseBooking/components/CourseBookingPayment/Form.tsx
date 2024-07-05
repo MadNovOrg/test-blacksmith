@@ -30,7 +30,7 @@ export const PaymentForm: React.FC<React.PropsWithChildren<Props>> = ({
   const [state, _setState] = useState<State>(initialState)
   const setState = useCallback(
     (next: Partial<State>) => _setState(prev => ({ ...prev, ...next })),
-    []
+    [],
   )
 
   const submitPayment = useCallback(async () => {

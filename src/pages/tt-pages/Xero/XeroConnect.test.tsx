@@ -45,12 +45,12 @@ describe('page: XeroConnect', () => {
     render(
       <Provider value={client as unknown as Client}>
         <XeroConnect />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId('XeroConnect-loading')
+        screen.queryByTestId('XeroConnect-loading'),
       ).not.toBeInTheDocument()
       expect(screen.queryByTestId('XeroConnect-connect')).toBeInTheDocument()
     })
@@ -75,12 +75,12 @@ describe('page: XeroConnect', () => {
     render(
       <Provider value={client as unknown as Client}>
         <XeroConnect />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId('XeroConnect-loading')
+        screen.queryByTestId('XeroConnect-loading'),
       ).not.toBeInTheDocument()
       expect(screen.queryByTestId('XeroConnect-connected')).toBeInTheDocument()
     })

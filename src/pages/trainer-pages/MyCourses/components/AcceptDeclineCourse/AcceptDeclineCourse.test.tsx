@@ -35,15 +35,15 @@ describe('AcceptDeclineCourse', () => {
             type: Course_Trainer_Type_Enum.Leader,
           }}
         />
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.queryByRole('button', { name: /accept/i })
+      screen.queryByRole('button', { name: /accept/i }),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByRole('button', { name: /decline/i })
+      screen.queryByRole('button', { name: /decline/i }),
     ).not.toBeInTheDocument()
 
     expect(screen.queryByText(/declined/i)).not.toBeInTheDocument()
@@ -64,15 +64,15 @@ describe('AcceptDeclineCourse', () => {
             type: Course_Trainer_Type_Enum.Leader,
           }}
         />
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.queryByRole('button', { name: /accept/i })
+      screen.queryByRole('button', { name: /accept/i }),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByRole('button', { name: /decline/i })
+      screen.queryByRole('button', { name: /decline/i }),
     ).not.toBeInTheDocument()
 
     expect(screen.getByText(/declined/i)).toBeInTheDocument()
@@ -93,7 +93,7 @@ describe('AcceptDeclineCourse', () => {
             type: Course_Trainer_Type_Enum.Leader,
           }}
         />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByRole('button', { name: /accept/i })).toBeInTheDocument()
@@ -143,7 +143,7 @@ describe('AcceptDeclineCourse', () => {
     render(
       <Provider value={client}>
         <AcceptDeclineCourse onUpdate={onUpdateMock} trainer={trainer} />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByRole('button', { name: /accept/i }))
@@ -153,13 +153,13 @@ describe('AcceptDeclineCourse', () => {
     await userEvent.click(
       within(confirmDialog).getByRole('button', {
         name: /continue to course builder/i,
-      })
+      }),
     )
 
     expect(onUpdateMock).toHaveBeenCalledTimes(1)
     expect(onUpdateMock).toHaveBeenCalledWith(
       trainer,
-      Course_Invite_Status_Enum.Accepted
+      Course_Invite_Status_Enum.Accepted,
     )
   })
 
@@ -203,7 +203,7 @@ describe('AcceptDeclineCourse', () => {
     render(
       <Provider value={client}>
         <AcceptDeclineCourse onUpdate={onUpdateMock} trainer={trainer} />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByRole('button', { name: /Decline/i }))
@@ -213,13 +213,13 @@ describe('AcceptDeclineCourse', () => {
     await userEvent.click(
       within(confirmDialog).getByRole('button', {
         name: /decline/i,
-      })
+      }),
     )
 
     expect(onUpdateMock).toHaveBeenCalledTimes(1)
     expect(onUpdateMock).toHaveBeenCalledWith(
       trainer,
-      Course_Invite_Status_Enum.Declined
+      Course_Invite_Status_Enum.Declined,
     )
   })
 
@@ -243,7 +243,7 @@ describe('AcceptDeclineCourse', () => {
           trainer={trainer}
           courseId={courseId}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByRole('button', { name: /Decline/i }))
@@ -253,7 +253,7 @@ describe('AcceptDeclineCourse', () => {
     await userEvent.click(
       within(confirmDialog).getByRole('button', {
         name: /cancel/i,
-      })
+      }),
     )
 
     expect(onUpdateMock).toHaveBeenCalledTimes(0)
@@ -282,7 +282,7 @@ describe('AcceptDeclineCourse', () => {
           trainer={trainer}
           courseId={courseId}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByRole('button', { name: /Decline/i }))
@@ -292,7 +292,7 @@ describe('AcceptDeclineCourse', () => {
     await userEvent.click(
       within(confirmDialog).getByRole('button', {
         name: /decline/i,
-      })
+      }),
     )
 
     expect(onUpdateMock).toHaveBeenCalledTimes(0)

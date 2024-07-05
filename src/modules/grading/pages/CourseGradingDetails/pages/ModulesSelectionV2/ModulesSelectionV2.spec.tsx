@@ -51,7 +51,7 @@ it('shows a spinner while loading course', () => {
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   expect(screen.getByRole('progressbar')).toBeInTheDocument()
@@ -99,7 +99,7 @@ it('stores curriculum selection to local storage when selection changes', async 
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   await user.click(screen.getByLabelText(module.lessons.items[0].name))
@@ -117,7 +117,7 @@ it('stores curriculum selection to local storage when selection changes', async 
           })),
         },
       },
-    ])
+    ]),
   )
 })
 
@@ -140,7 +140,7 @@ it('displays selection from the local storage if previous selection was saved', 
           })),
         },
       },
-    ])
+    ]),
   )
 
   const client = {
@@ -178,7 +178,7 @@ it('displays selection from the local storage if previous selection was saved', 
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   expect(screen.getByLabelText(module.lessons.items[0].name)).toBeChecked()
@@ -226,11 +226,11 @@ it('navigates to the grading clearance step when clicked on the back button', as
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   await user.click(
-    screen.getByRole('button', { name: /back to grading clearance/i })
+    screen.getByRole('button', { name: /back to grading clearance/i }),
   )
 
   expect(screen.getByText(/grading clearance page/i)).toBeInTheDocument()
@@ -316,11 +316,11 @@ it('saves modules selection when clicked on the submit button', async () => {
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   await user.click(
-    screen.getByRole('button', { name: /continue to grading attendees/i })
+    screen.getByRole('button', { name: /continue to grading attendees/i }),
   )
 
   expect(screen.getByText(/course details page/i)).toBeInTheDocument()
@@ -379,13 +379,13 @@ it('displays an alert if there is an error saving the selection', async () => {
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   await user.click(screen.getByLabelText(module.lessons.items[0].name))
 
   await user.click(
-    screen.getByRole('button', { name: /continue to grading attendees/i })
+    screen.getByRole('button', { name: /continue to grading attendees/i }),
   )
 
   expect(screen.getByTestId('saving-alert')).toBeInTheDocument()
@@ -440,7 +440,7 @@ it('pre-selects all of the modules when starting grading', () => {
       </GradingDetailsProvider>
     </Provider>,
     {},
-    { initialEntries: [`/courses/1/grading/details/modules`] }
+    { initialEntries: [`/courses/1/grading/details/modules`] },
   )
 
   const checkboxes = screen.getAllByRole('checkbox')

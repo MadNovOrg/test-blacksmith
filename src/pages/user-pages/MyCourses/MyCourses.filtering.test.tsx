@@ -52,18 +52,18 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.type(screen.getByPlaceholderText('Search'), KEYWORD)
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -104,23 +104,23 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One'),
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two'),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -159,7 +159,7 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.queryByTestId('FilterByCourseType')).not.toBeInTheDocument()
@@ -201,20 +201,22 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseStatus')).getByText('Unattended')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
+        'Unattended',
+      ),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -257,22 +259,22 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseStatus')).getByText(
-        'Info required'
-      )
+        'Info required',
+      ),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -333,22 +335,22 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseStatus')).getByText(
-        'Missing evaluation'
-      )
+        'Missing evaluation',
+      ),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${evaluatedCourse.id}`)
+        screen.queryByTestId(`course-row-${evaluatedCourse.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${unevaluatedCourse.id}`)
+        screen.getByTestId(`course-row-${unevaluatedCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -390,22 +392,22 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseStatus')).getByText(
-        'Awaiting grade'
-      )
+        'Awaiting grade',
+      ),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -451,20 +453,20 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseStatus')).getByText('Scheduled')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Scheduled'),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -510,20 +512,20 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseStatus')).getByText('Completed')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Completed'),
     )
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId(`course-row-${course.id}`)
+        screen.queryByTestId(`course-row-${course.id}`),
       ).not.toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${filteredCourse.id}`)
+        screen.getByTestId(`course-row-${filteredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -585,25 +587,27 @@ describe('user-pages/MyCourses', () => {
         <AttendeeCourses />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseStatus')).getByText('Unattended')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText(
+        'Unattended',
+      ),
     )
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseStatus')).getByText(
-        'Info required'
-      )
+        'Info required',
+      ),
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`course-row-${unattendedCourse.id}`)
+        screen.getByTestId(`course-row-${unattendedCourse.id}`),
       ).toBeInTheDocument()
 
       expect(
-        screen.getByTestId(`course-row-${infoRequiredCourse.id}`)
+        screen.getByTestId(`course-row-${infoRequiredCourse.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -613,7 +617,7 @@ describe('user-pages/MyCourses', () => {
 
     const buildTrainerCourseWithDates = (
       start: Date,
-      end: Date
+      end: Date,
     ): UserCoursesQuery['courses'][0] =>
       buildUserCourse({
         overrides: {
@@ -638,17 +642,17 @@ describe('user-pages/MyCourses', () => {
       // 15/01/2023 - 27/11/2023
       course_from_15_01_23_to_27_11_23 = buildTrainerCourseWithDates(
         new Date(2023, 0, 15),
-        new Date(2023, 10, 27)
+        new Date(2023, 10, 27),
       )
       // 13/03/2023 - 25/07/2023
       course_from_13_03_23_to_25_07_23 = buildTrainerCourseWithDates(
         new Date(2023, 2, 13),
-        new Date(2023, 6, 25)
+        new Date(2023, 6, 25),
       )
       // 22/03/2023 - 20/12/2023
       course_from_22_03_23_to_20_12_23 = buildTrainerCourseWithDates(
         new Date(2023, 2, 22),
-        new Date(2023, 11, 20)
+        new Date(2023, 11, 20),
       )
 
       allCourses = [
@@ -669,7 +673,7 @@ describe('user-pages/MyCourses', () => {
           const conditions = mainCondition ? mainCondition[1] : {}
           const filtered =
             conditions.schedule?._and?.filter(obj =>
-              Object.keys(obj).includes('start')
+              Object.keys(obj).includes('start'),
             ).length === 1 ?? false
 
           const courses = filtered
@@ -697,29 +701,29 @@ describe('user-pages/MyCourses', () => {
           <AttendeeCourses />
         </Provider>,
         {},
-        { initialEntries: ['/'] }
+        { initialEntries: ['/'] },
       )
 
       await waitFor(() => {
         expect(
           screen.getByTestId(
-            `course-row-${course_from_15_01_23_to_27_11_23.id}`
-          )
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_13_03_23_to_25_07_23.id}`
-          )
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_22_03_23_to_20_12_23.id}`
-          )
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`,
+          ),
         ).toBeInTheDocument()
       })
 
       const from = within(screen.getByTestId('date-range')).getByLabelText(
-        'From'
+        'From',
       )
       from.focus()
       await userEvent.paste('13/03/2023') // second course's start date
@@ -727,18 +731,18 @@ describe('user-pages/MyCourses', () => {
       await waitFor(() => {
         expect(
           screen.queryByTestId(
-            `course-row-${course_from_15_01_23_to_27_11_23.id}`
-          )
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`,
+          ),
         ).not.toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_13_03_23_to_25_07_23.id}`
-          )
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_22_03_23_to_20_12_23.id}`
-          )
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`,
+          ),
         ).toBeInTheDocument()
       })
     })
@@ -754,7 +758,7 @@ describe('user-pages/MyCourses', () => {
           const conditions = mainCondition ? mainCondition[1] : {}
           const filtered =
             conditions.schedule?._and?.filter(obj =>
-              Object.keys(obj).includes('end')
+              Object.keys(obj).includes('end'),
             ).length === 1 ?? false
 
           const courses = filtered
@@ -782,23 +786,23 @@ describe('user-pages/MyCourses', () => {
           <AttendeeCourses />
         </Provider>,
         {},
-        { initialEntries: ['/'] }
+        { initialEntries: ['/'] },
       )
       await waitFor(() => {
         expect(
           screen.getByTestId(
-            `course-row-${course_from_15_01_23_to_27_11_23.id}`
-          )
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_13_03_23_to_25_07_23.id}`
-          )
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_22_03_23_to_20_12_23.id}`
-          )
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`,
+          ),
         ).toBeInTheDocument()
       })
 
@@ -809,18 +813,18 @@ describe('user-pages/MyCourses', () => {
       await waitFor(() => {
         expect(
           screen.getByTestId(
-            `course-row-${course_from_15_01_23_to_27_11_23.id}`
-          )
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_13_03_23_to_25_07_23.id}`
-          )
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.queryByTestId(
-            `course-row-${course_from_22_03_23_to_20_12_23.id}`
-          )
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`,
+          ),
         ).not.toBeInTheDocument()
       })
     })
@@ -861,29 +865,29 @@ describe('user-pages/MyCourses', () => {
           <AttendeeCourses />
         </Provider>,
         {},
-        { initialEntries: ['/'] }
+        { initialEntries: ['/'] },
       )
 
       await waitFor(() => {
         expect(
           screen.getByTestId(
-            `course-row-${course_from_15_01_23_to_27_11_23.id}`
-          )
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_13_03_23_to_25_07_23.id}`
-          )
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_22_03_23_to_20_12_23.id}`
-          )
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`,
+          ),
         ).toBeInTheDocument()
       })
 
       const from = within(screen.getByTestId('date-range')).getByLabelText(
-        'From'
+        'From',
       )
       from.focus()
       await userEvent.paste('13/03/2023') // second course's start date
@@ -895,18 +899,18 @@ describe('user-pages/MyCourses', () => {
       await waitFor(() => {
         expect(
           screen.queryByTestId(
-            `course-row-${course_from_15_01_23_to_27_11_23.id}`
-          )
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`,
+          ),
         ).not.toBeInTheDocument()
         expect(
           screen.getByTestId(
-            `course-row-${course_from_13_03_23_to_25_07_23.id}`
-          )
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`,
+          ),
         ).toBeInTheDocument()
         expect(
           screen.queryByTestId(
-            `course-row-${course_from_22_03_23_to_20_12_23.id}`
-          )
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`,
+          ),
         ).not.toBeInTheDocument()
       })
     })

@@ -10,7 +10,7 @@ export class BookingDetailsPage extends BasePage {
     exact: true,
   })
   readonly promoCodeDiscountAmount = this.page.getByTestId(
-    'promo-code-discount'
+    'promo-code-discount',
   )
   readonly amountDue = this.page.getByTestId('amount-due')
 

@@ -17,7 +17,7 @@ describe('component: DialogExportBlended', () => {
     const onClose = vi.fn()
     render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
     expect(
-      screen.getByText('Export blended learning license summary')
+      screen.getByText('Export blended learning license summary'),
     ).toBeInTheDocument()
     expect(screen.getByText('Cancel')).toBeInTheDocument()
     expect(screen.getByText('Export')).toBeInTheDocument()
@@ -32,7 +32,7 @@ describe('component: DialogExportBlended', () => {
       async () => {
         await userEvent.click(screen.getByText('Export'))
       },
-      { timeout: 4000 }
+      { timeout: 4000 },
     )
 
     expect(screen.queryByText('Please insert dates')).toBeInTheDocument()

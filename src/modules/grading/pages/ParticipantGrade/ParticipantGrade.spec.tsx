@@ -55,11 +55,11 @@ describe('page: ParticipantGrade', () => {
         <ParticipantGrade />
       </Provider>,
       {},
-      { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
+      { initialEntries: [`/courses/course-id/grading/${participant.id}`] },
     )
 
     expect(
-      screen.getByText(participant.profile.fullName ?? '')
+      screen.getByText(participant.profile.fullName ?? ''),
     ).toBeInTheDocument()
     expect(screen.getByText('Pass')).toBeInTheDocument()
   })
@@ -118,38 +118,38 @@ describe('page: ParticipantGrade', () => {
         <ParticipantGrade />
       </Provider>,
       {},
-      { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
+      { initialEntries: [`/courses/course-id/grading/${participant.id}`] },
     )
 
     const firstModuleGroupElem = screen.getByTestId(
-      `graded-module-group-${firstModuleGroup.id}`
+      `graded-module-group-${firstModuleGroup.id}`,
     )
 
     const secondModuleGroupElem = screen.getByTestId(
-      `graded-module-group-${secondModuleGroup.id}`
+      `graded-module-group-${secondModuleGroup.id}`,
     )
 
     expect(
-      within(firstModuleGroupElem).getByText(gradingModules[1].module.name)
+      within(firstModuleGroupElem).getByText(gradingModules[1].module.name),
     ).toBeInTheDocument()
 
     expect(
-      within(firstModuleGroupElem).getByText('1 of 2 completed')
+      within(firstModuleGroupElem).getByText('1 of 2 completed'),
     ).toBeInTheDocument()
 
     const incompleteModulesElem =
       within(firstModuleGroupElem).getByTestId('incomplete-modules')
 
     expect(
-      within(incompleteModulesElem).getByText(gradingModules[0].module.name)
+      within(incompleteModulesElem).getByText(gradingModules[0].module.name),
     ).toBeInTheDocument()
 
     expect(
-      within(secondModuleGroupElem).queryByText('Incomplete')
+      within(secondModuleGroupElem).queryByText('Incomplete'),
     ).not.toBeInTheDocument()
 
     expect(
-      within(secondModuleGroupElem).getByText('1 of 1 completed')
+      within(secondModuleGroupElem).getByText('1 of 1 completed'),
     ).toBeInTheDocument()
   })
 
@@ -189,38 +189,38 @@ describe('page: ParticipantGrade', () => {
         <ParticipantGrade />
       </Provider>,
       {},
-      { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
+      { initialEntries: [`/courses/course-id/grading/${participant.id}`] },
     )
 
     const firstModuleElem = screen.getByTestId(
-      `graded-module-group-${firstModule.id}`
+      `graded-module-group-${firstModule.id}`,
     )
 
     const secondModuleElem = screen.getByTestId(
-      `graded-module-group-${secondModule.id}`
+      `graded-module-group-${secondModule.id}`,
     )
 
     expect(
-      within(firstModuleElem).getByText(coveredLesson.name)
+      within(firstModuleElem).getByText(coveredLesson.name),
     ).toBeInTheDocument()
 
     expect(
-      within(firstModuleElem).getByText('1 of 2 completed')
+      within(firstModuleElem).getByText('1 of 2 completed'),
     ).toBeInTheDocument()
 
     const incompleteModulesElem =
       within(firstModuleElem).getByTestId('incomplete-modules')
 
     expect(
-      within(incompleteModulesElem).getByText(notCoveredLesson.name)
+      within(incompleteModulesElem).getByText(notCoveredLesson.name),
     ).toBeInTheDocument()
 
     expect(
-      within(secondModuleElem).queryByText('Incomplete')
+      within(secondModuleElem).queryByText('Incomplete'),
     ).not.toBeInTheDocument()
 
     expect(
-      within(secondModuleElem).getByText('1 of 1 completed')
+      within(secondModuleElem).getByText('1 of 1 completed'),
     ).toBeInTheDocument()
   })
 
@@ -252,7 +252,7 @@ describe('page: ParticipantGrade', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/course-id/grading/participant-id`] }
+      { initialEntries: [`/courses/course-id/grading/participant-id`] },
     )
 
     await userEvent.click(screen.getByText('Back to course details'))

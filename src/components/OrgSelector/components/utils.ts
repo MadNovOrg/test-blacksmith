@@ -19,17 +19,17 @@ export const getSchema = ({
     organisationName: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.organisation-name'),
-      })
+      }),
     ),
     sector: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.sector'),
-      })
+      }),
     ),
     organisationType: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.organisation-type'),
-      })
+      }),
     ),
     orgTypeSpecifyOther: yup.string().when('specifyOther', {
       is: true,
@@ -37,9 +37,9 @@ export const getSchema = ({
         ot.required(
           t('validation-errors.required-field', {
             name: t(
-              'components.add-organisation.fields.organisation-specify-other'
+              'components.add-organisation.fields.organisation-specify-other',
             ),
-          })
+          }),
         ),
     }),
     organisationEmail: yup
@@ -47,20 +47,20 @@ export const getSchema = ({
       .required(
         t('validation-errors.required-field', {
           name: t('components.add-organisation.fields.organisation-email'),
-        })
+        }),
       )
       .email(t('validation-errors.email-invalid')),
     addressLine1: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.primary-address-line'),
-      })
+      }),
     ),
     addressLine2: yup.string(),
     city: yup.string().required(
       t('validation-errors.required-composed-field', {
         field1: t('pages.create-organization.fields.addresses.town'),
         field2: t('pages.create-organization.fields.addresses.city'),
-      })
+      }),
     ),
     ...(useInternationalCountriesSelector
       ? {
@@ -71,12 +71,12 @@ export const getSchema = ({
                   .required(
                     t('validation-errors.required-field', {
                       name: t('components.add-organisation.fields.postCode'),
-                    })
+                    }),
                   )
                   .test(
                     'is-uk-postcode',
                     t('validation-errors.invalid-postcode'),
-                    isValidUKPostalCode
+                    isValidUKPostalCode,
                   ),
               }
             : {
@@ -89,19 +89,19 @@ export const getSchema = ({
             .required(
               t('validation-errors.required-field', {
                 name: t('components.add-organisation.fields.postCode'),
-              })
+              }),
             )
             .test(
               'is-uk-postcode',
               t('validation-errors.invalid-postcode'),
-              isValidUKPostalCode
+              isValidUKPostalCode,
             ),
         }),
 
     country: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.country'),
-      })
+      }),
     ),
   })
 }

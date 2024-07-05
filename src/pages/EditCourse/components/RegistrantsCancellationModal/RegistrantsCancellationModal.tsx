@@ -26,12 +26,12 @@ export const RegistrantsCancellationModal: React.FC<
           startIcon={<Cancel color="error" />}
         >
           {t(
-            'pages.edit-course.registrants-cancellation-modal.proceed-with-cancellation'
+            'pages.edit-course.registrants-cancellation-modal.proceed-with-cancellation',
           )}
         </Button>
         <Button variant="contained" onClick={onTransfer}>
           {t(
-            'pages.edit-course.registrants-cancellation-modal.transfer-attendees-first'
+            'pages.edit-course.registrants-cancellation-modal.transfer-attendees-first',
           )}
         </Button>
       </Box>

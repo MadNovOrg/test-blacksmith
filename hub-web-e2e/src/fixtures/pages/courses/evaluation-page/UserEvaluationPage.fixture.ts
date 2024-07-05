@@ -18,18 +18,18 @@ export class UserEvaluationPage extends BasePage {
     this.courseId = courseId
 
     this.pageLoadedIndicator = this.page.locator(
-      'data-testid=course-evaluation-heading'
+      'data-testid=course-evaluation-heading',
     )
     this.successMessage = this.page.locator('data-testid=success-alert')
     this.submitEvaluationButton = this.page.locator(
-      'data-testid=submit-course-evaluation'
+      'data-testid=submit-course-evaluation',
     )
     this.signatureField = this.page.locator(
-      'data-testid=course-evaluation-signature'
+      'data-testid=course-evaluation-signature',
     )
     this.evaluateButton = this.page.locator('data-testid=evaluate-course-cta')
     this.evaluationCompleteMessage = this.page.locator(
-      'data-testid=evaluate-course-complete-message'
+      'data-testid=evaluate-course-complete-message',
     )
   }
 
@@ -50,7 +50,7 @@ export class UserEvaluationPage extends BasePage {
     await expect(this.successMessage).toHaveText(text as string)
     await expect(this.evaluateButton).toBeDisabled()
     await expect(this.evaluationCompleteMessage.locator('span')).toHaveText(
-      /^Complete/
+      /^Complete/,
     )
   }
 }

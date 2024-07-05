@@ -30,17 +30,17 @@ insertWaitlistTests.forEach(role => {
     const forbiddenFields = ['confirmed', 'created_at', 'id']
 
     const waitlistMutation = schema.__schema.mutationType.fields.find(
-      m => m.name === 'joinWaitlist'
+      m => m.name === 'joinWaitlist',
     )
     const insertWaitlistInput = schema.__schema.types.find(
-      o => o.name === 'JoinWaitlistInput'
+      o => o.name === 'JoinWaitlistInput',
     )
     const mutationFields = insertWaitlistInput?.inputFields.map(i => i.name)
     const hasAllowedFields = allowedFields.every(f =>
-      mutationFields?.includes(f)
+      mutationFields?.includes(f),
     )
     const hasForbiddenFields = forbiddenFields.some(f =>
-      mutationFields?.includes(f)
+      mutationFields?.includes(f),
     )
 
     expect(waitlistMutation).toBeTruthy()
@@ -70,15 +70,15 @@ selectWaitlistTests.forEach(role => {
     ]
 
     const waitlistsQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'waitlist'
+      f => f.name === 'waitlist',
     )
     const waitlistQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'waitlist_by_pk'
+      f => f.name === 'waitlist_by_pk',
     )
     const waitlistType = schema.__schema.types.find(f => f.name === 'waitlist')
     const waitlistFields = waitlistType?.fields.map(f => f.name)
     const hasAllowedFields = allowedFields.every(f =>
-      waitlistFields?.includes(f)
+      waitlistFields?.includes(f),
     )
 
     expect(waitlistQuery).toBeTruthy()
@@ -96,10 +96,10 @@ selectWaitlistNotAllowedTests.forEach(role => {
   test(`@query doesn't allow role ${role} to select waitlist`, async () => {
     const schema = await API.introspection.introspection(role)
     const waitlistsQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'waitlist'
+      f => f.name === 'waitlist',
     )
     const waitlistQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'waitlist_by_pk'
+      f => f.name === 'waitlist_by_pk',
     )
 
     expect(waitlistQuery).toBeFalsy()

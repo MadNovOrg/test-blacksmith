@@ -73,13 +73,13 @@ export const EvaluationSummaryTab: React.FC<
 
   const isCourseTrainer = useMemo(
     () => !!data?.trainers.find(t => t.profile.id === profileId),
-    [data, profileId]
+    [data, profileId],
   )
 
   //#TTHP-2016
   const isOpenCourseTrainer = useMemo(
     () => course.type === Course_Type_Enum.Open && isCourseTrainer,
-    [course, isCourseTrainer]
+    [course, isCourseTrainer],
   )
 
   const displayEvaluationColumn =
@@ -96,7 +96,7 @@ export const EvaluationSummaryTab: React.FC<
           ? { id: 'evaluation', label: t('evaluation') }
           : null,
       ].filter(Boolean),
-    [displayEvaluationColumn, t]
+    [displayEvaluationColumn, t],
   )
 
   const [isPDFExporting, setIsPDFExporting] = useState<boolean>(false)
@@ -110,7 +110,7 @@ export const EvaluationSummaryTab: React.FC<
       ) : (
         t('pages.course-details.tabs.evaluation.export-idle')
       ),
-    [isPDFExporting, courseId, profileId, t]
+    [isPDFExporting, courseId, profileId, t],
   )
 
   const [order] = useState<SortOrder>('asc')
@@ -121,29 +121,29 @@ export const EvaluationSummaryTab: React.FC<
   const findEvaluationForProfileId = useCallback(
     (id: string) =>
       data?.evaluations.find((e: Evaluation) => e.profile.id === id),
-    [data]
+    [data],
   )
 
   const didTrainerSubmitEvaluation = useMemo(
     () => !!findEvaluationForProfileId(profileId),
-    [findEvaluationForProfileId, profileId]
+    [findEvaluationForProfileId, profileId],
   )
 
   const leadTrainer = useMemo(
     () => data?.trainers.find(t => t.type === Course_Trainer_Type_Enum.Leader),
-    [data]
+    [data],
   )
 
   const assistTrainers = useMemo(
     () =>
       data?.trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant),
-    [data]
+    [data],
   )
 
   const moderatorTrainer = useMemo(
     () =>
       data?.trainers.find(t => t.type === Course_Trainer_Type_Enum.Moderator),
-    [data]
+    [data],
   )
 
   const isCourseCanBeEvaluated =
@@ -165,15 +165,15 @@ export const EvaluationSummaryTab: React.FC<
     (isCourseTrainer || leadTrainer?.profile.id === profileId)
 
   const leadTrainerEvaluation = data?.evaluations.filter(
-    e => e.profile.id === leadTrainer?.profile.id
+    e => e.profile.id === leadTrainer?.profile.id,
   )
 
   const assistTrainersEvaluations = data?.evaluations.filter(e =>
-    assistTrainers?.map(t => t.profile).some(p => p.id === e.profile.id)
+    assistTrainers?.map(t => t.profile).some(p => p.id === e.profile.id),
   )
 
   const moderatorTrainerEvaluations = data?.evaluations.filter(
-    e => e.profile.id === moderatorTrainer?.profile.id
+    e => e.profile.id === moderatorTrainer?.profile.id,
   )
 
   const attendeeEvaluations = data?.evaluations
@@ -182,7 +182,7 @@ export const EvaluationSummaryTab: React.FC<
         !leadTrainerEvaluation
           ?.concat(moderatorTrainerEvaluations ?? [])
           ?.concat(assistTrainersEvaluations ?? [])
-          ?.includes(e)
+          ?.includes(e),
     )
     .slice()
     .sort((a, b) => {
@@ -199,21 +199,21 @@ export const EvaluationSummaryTab: React.FC<
       assistTrainersEvaluations?.map(e => ({
         ...e,
         evaluationType: t(
-          'pages.course-details.tabs.evaluation.assist-trainer'
+          'pages.course-details.tabs.evaluation.assist-trainer',
         ),
-      })) ?? []
+      })) ?? [],
     )
     ?.concat(
       moderatorTrainerEvaluations?.map(e => ({
         ...e,
         evaluationType: t('pages.course-details.tabs.evaluation.moderator'),
-      })) ?? []
+      })) ?? [],
     )
     ?.concat(
       attendeeEvaluations?.map(e => ({
         ...e,
         evaluationType: '',
-      })) ?? []
+      })) ?? [],
     )
 
   return (
@@ -337,7 +337,7 @@ export const EvaluationSummaryTab: React.FC<
                         <Link
                           href={
                             data?.trainers.find(
-                              t => t.profile.id === e.profile.id
+                              t => t.profile.id === e.profile.id,
                             )
                               ? `../evaluation/submit?profile_id=${e.profile.id}`
                               : `../evaluation/view?profile_id=${e.profile.id}`
@@ -347,13 +347,13 @@ export const EvaluationSummaryTab: React.FC<
                           color="primary"
                         >
                           {t(
-                            'pages.course-details.tabs.evaluation.view-evaluation'
+                            'pages.course-details.tabs.evaluation.view-evaluation',
                           )}
                         </Link>
                       </TableCell>
                     ) : null}
                   </TableRow>
-                )
+                ),
               ) ??
                 (loading && (
                   <TableRow>

@@ -7,7 +7,7 @@ export const RatingProgress = styled(
     ...props
   }: Omit<LinearProgressProps, 'color'> & { color: string }) => (
     <LinearProgress {...props} />
-  )
+  ),
 )(({ color, theme }) => ({
   height: theme.spacing(2),
   backgroundColor: theme.palette.grey[100],

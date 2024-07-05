@@ -145,19 +145,19 @@ export default function useCourseInvites({
       const secondsUntilWeekAfterCourseEnded = courseEnd
         ? differenceInSeconds(
             new Date(
-              new Date(courseEnd).setDate(new Date(courseEnd).getDate() + 7)
+              new Date(courseEnd).setDate(new Date(courseEnd).getDate() + 7),
             ),
-            new Date()
+            new Date(),
           )
         : 0
 
       const expiresInSeconds = Math.max(
         ONE_WEEK_IN_SECONDS,
-        secondsUntilWeekAfterCourseEnded
+        secondsUntilWeekAfterCourseEnded,
       )
 
       const expiresInDate = new Date(
-        new Date().setSeconds(new Date().getSeconds() + expiresInSeconds)
+        new Date().setSeconds(new Date().getSeconds() + expiresInSeconds),
       )
 
       await recreateCourseInvite({
@@ -167,7 +167,7 @@ export default function useCourseInvites({
         expiresIn: expiresInDate,
       })
     },
-    [courseEnd, courseId, recreateCourseInvite]
+    [courseEnd, courseId, recreateCourseInvite],
   )
 
   // Save course invites
@@ -177,7 +177,7 @@ export default function useCourseInvites({
         invitesData?.courseInvites.filter(
           i =>
             i.status === Course_Invite_Status_Enum.Declined &&
-            emails.includes(i.email as string)
+            emails.includes(i.email as string),
         ) ?? []
 
       const recentInvitesEmails =
@@ -192,7 +192,7 @@ export default function useCourseInvites({
       const newEmails = emails.filter(
         email =>
           recentInvitesEmails?.includes(email) === false &&
-          !declinedInvites.some(i => i.email === email)
+          !declinedInvites.some(i => i.email === email),
       )
 
       if (!newEmails.length && !declinedInvites?.length) {
@@ -211,14 +211,14 @@ export default function useCourseInvites({
 
       await saveInvites({ invites })
     },
-    [invitesData?.courseInvites, saveInvites, resend, courseId, courseEnd]
+    [invitesData?.courseInvites, saveInvites, resend, courseId, courseEnd],
   )
 
   const cancel = useCallback(
     async (invite: GetCourseInvitesQuery['courseInvites'][0]) => {
       await cancelInvite({ inviteId: invite.id })
     },
-    [cancelInvite]
+    [cancelInvite],
   )
 
   return useMemo(
@@ -241,6 +241,6 @@ export default function useCourseInvites({
       resend,
       cancel,
       getInvites,
-    ]
+    ],
   )
 }

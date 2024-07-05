@@ -88,7 +88,7 @@ export function Filters({ onChange }: Props) {
       {
         id: AdminOnlyCourseStatus.CancellationRequested,
         title: t(
-          `course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`
+          `course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`,
         ),
         selected: false,
       },
@@ -120,12 +120,12 @@ export function Filters({ onChange }: Props) {
 
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
-    withDefault(BooleanParam, false)
+    withDefault(BooleanParam, false),
   )
 
   const [filterReaccreditation, setFilterReaccreditation] = useQueryParam(
     'reacc',
-    withDefault(BooleanParam, false)
+    withDefault(BooleanParam, false),
   )
 
   const [accreditedBy, setAccreditedBy] = useQueryParam(
@@ -134,12 +134,12 @@ export function Filters({ onChange }: Props) {
       () =>
         withDefault(
           createEnumArrayParam<Accreditors_Enum>(
-            Object.values(Accreditors_Enum)
+            Object.values(Accreditors_Enum),
           ),
-          [] as Accreditors_Enum[]
+          [] as Accreditors_Enum[],
         ),
-      []
-    )
+      [],
+    ),
   )
 
   const actionableStatuses = useMemo(() => {
@@ -178,11 +178,11 @@ export function Filters({ onChange }: Props) {
     (values: FilterOption<Accreditors_Enum>[]) => {
       setAccreditedBy(values.flatMap(value => (value.selected ? value.id : [])))
     },
-    [setAccreditedBy]
+    [setAccreditedBy],
   )
   const orgAdminFilterStatus = useMemo(() => {
     return orgAdminStatusOptions.flatMap(statusOption =>
-      statusOption.selected ? statusOption.id : []
+      statusOption.selected ? statusOption.id : [],
     ) as UserCourseStatus[]
   }, [orgAdminStatusOptions])
 

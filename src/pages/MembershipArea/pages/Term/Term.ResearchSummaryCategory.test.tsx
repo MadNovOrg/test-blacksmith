@@ -30,7 +30,7 @@ describe('page: Term - ResearchSummaryCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/term/research-summaries-category-id'] }
+      { initialEntries: ['/term/research-summaries-category-id'] },
     )
 
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
@@ -67,25 +67,25 @@ describe('page: Term - ResearchSummaryCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     researchSummaries.forEach(item => {
       const itemElement = screen.getByTestId(
-        `research-summary-grid-item-${item.id}`
+        `research-summary-grid-item-${item.id}`,
       )
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -127,17 +127,17 @@ describe('page: Term - ResearchSummaryCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search summaries'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`research-summary-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`research-summary-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -163,7 +163,7 @@ describe('page: Term - ResearchSummaryCategory', () => {
                     variables.orderDirection === OrderEnum.Asc
                       ? reversedResearchSummaries.slice(
                           0,
-                          DEFAULT_PAGINATION_LIMIT
+                          DEFAULT_PAGINATION_LIMIT,
                         )
                       : researchSummaries.slice(0, DEFAULT_PAGINATION_LIMIT),
                 },
@@ -181,19 +181,19 @@ describe('page: Term - ResearchSummaryCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     expect(
       screen.getByTestId(
-        `research-summary-grid-item-${researchSummaries[0].id}`
-      )
+        `research-summary-grid-item-${researchSummaries[0].id}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
       screen.queryByTestId(
-        `research-summary-grid-item-${reversedResearchSummaries[0].id}`
-      )
+        `research-summary-grid-item-${reversedResearchSummaries[0].id}`,
+      ),
     ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByTestId('order-menu-button'))
@@ -201,14 +201,14 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     expect(
       screen.queryByTestId(
-        `research-summary-grid-item-${researchSummaries[0].id}`
-      )
+        `research-summary-grid-item-${researchSummaries[0].id}`,
+      ),
     ).not.toBeInTheDocument()
 
     expect(
       screen.getByTestId(
-        `research-summary-grid-item-${reversedResearchSummaries[0].id}`
-      )
+        `research-summary-grid-item-${reversedResearchSummaries[0].id}`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -263,17 +263,17 @@ describe('page: Term - ResearchSummaryCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
-      screen.queryByTestId(`research-summary-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`research-summary-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`research-summary-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`research-summary-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
@@ -281,11 +281,11 @@ describe('page: Term - ResearchSummaryCategory', () => {
     await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
-      screen.getByTestId(`research-summary-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`research-summary-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`research-summary-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`research-summary-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('term-previous-page')).toBeDisabled()

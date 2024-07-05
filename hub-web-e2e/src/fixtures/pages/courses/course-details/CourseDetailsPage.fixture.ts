@@ -24,7 +24,7 @@ export class CourseDetailsPage extends BasePage {
   readonly attendeeRemoveButton: Locator
   readonly attendeesTable: UiTable
   readonly pendingAttendeesTable = new UiTable(
-    this.page.getByTestId('invites-table')
+    this.page.getByTestId('invites-table'),
   )
   readonly attendingTab: Locator
   readonly attendingText = this.page.getByTestId('attending')
@@ -63,46 +63,46 @@ export class CourseDetailsPage extends BasePage {
     this.pendingTab = this.page.locator('data-testid=tabPending')
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
     this.attendeesTable = new UiTable(
-      this.page.locator('data-testid=attending-table')
+      this.page.locator('data-testid=attending-table'),
     )
     this.editCourseButton = this.page.getByText('Edit course details')
     this.saveButton = this.page.locator('[data-testid="save-button"]')
     this.cancelCourseButton = this.page.locator(
-      '[data-testid="cancel-course-button"]'
+      '[data-testid="cancel-course-button"]',
     )
     this.additionalNotes = this.page.locator(
-      '[data-testid="additional-notes-label"]'
+      '[data-testid="additional-notes-label"]',
     )
     this.attendeeRemoveButton = this.page.locator(
-      '[data-testid="attendee-cancel"]'
+      '[data-testid="attendee-cancel"]',
     )
     this.manageAttendanceButtonSelector = '[data-testid=manage-attendance]'
     this.gradingTab = this.page.locator('data-testid=grading-tab')
 
     this.courseGradingNav = this.page.locator(
-      '[data-testid="course-grading-details-nav"]'
+      '[data-testid="course-grading-details-nav"]',
     )
     this.requestCancellationButton = this.page.locator(
-      '[data-testid="request-cancellation-button"]'
+      '[data-testid="request-cancellation-button"]',
     )
     this.cancellationRequestAlert = this.page.locator(
-      '[data-testid="cancellation-alert"]'
+      '[data-testid="cancellation-alert"]',
     )
     this.approveCancellationButton = this.page.locator(
-      '[data-testid="approve-cancellation-button"]'
+      '[data-testid="approve-cancellation-button"]',
     )
     this.certificationTab = this.page.locator(
-      '[data-testid=participant-course-certification]'
+      '[data-testid=participant-course-certification]',
     )
     this.certificateGrade = this.page.locator('[data-testid=certificate-grade]')
     this.searchTrainerInput = this.page.locator(
-      '[data-testid=SearchTrainers-input]'
+      '[data-testid=SearchTrainers-input]',
     )
     this.searchTrainerOption = this.page.locator(
-      '[data-testid=SearchTrainers-option]'
+      '[data-testid=SearchTrainers-option]',
     )
     this.gradeAllAttendees = this.page.locator(
-      '[data-testid=grade-all-attendees]'
+      '[data-testid=grade-all-attendees]',
     )
     this.noteInput = this.page.locator('[data-testid="notes-input"] >> input')
     this.startDateLabel = this.page.locator('[data-testid="startDate-label"]')
@@ -130,7 +130,7 @@ export class CourseDetailsPage extends BasePage {
   async checkAttendingText(numberOfAttendees: number, maxParticipants: number) {
     await this.page.reload()
     await expect(this.attendingText).toHaveText(
-      `${numberOfAttendees} of ${maxParticipants} attending`
+      `${numberOfAttendees} of ${maxParticipants} attending`,
     )
   }
 
@@ -190,7 +190,7 @@ export class CourseDetailsPage extends BasePage {
     await expect(infoIcon).toBeVisible()
     await expect(this.additionalNotes).toHaveAttribute(
       'aria-label',
-      `${inputtedNote}`
+      `${inputtedNote}`,
     )
   }
 
@@ -206,7 +206,7 @@ export class CourseDetailsPage extends BasePage {
   async clickManageAttendanceByAttendeeData(attendeeData: string) {
     await this.page
       .locator(
-        `[data-testid*="course-participant"]:has-text("${attendeeData}")`
+        `[data-testid*="course-participant"]:has-text("${attendeeData}")`,
       )
       .locator(this.manageAttendanceButtonSelector)
       .click()
@@ -231,8 +231,8 @@ export class CourseDetailsPage extends BasePage {
     await this.page.reload()
     await expect(
       this.page.locator(
-        `[data-testid*="course-participant-row"]:has-text("${user.givenName} ${user.familyName}")`
-      )
+        `[data-testid*="course-participant-row"]:has-text("${user.givenName} ${user.familyName}")`,
+      ),
     ).toBeVisible()
   }
 
@@ -251,7 +251,7 @@ export class CourseDetailsPage extends BasePage {
 
   async clickParticipantByGrade(id: string): Promise<CourseGradingPage> {
     await this.page.click(
-      `data-testid=attending-participant-row-${id} >> a:has-text("Grade")`
+      `data-testid=attending-participant-row-${id} >> a:has-text("Grade")`,
     )
     return new CourseGradingPage(this.page)
   }
@@ -292,18 +292,18 @@ export class CourseDetailsPage extends BasePage {
     //Check booking contact
     if (course.bookingContactProfile) {
       await expect(
-        this.page.getByText(course.bookingContactProfile?.email)
+        this.page.getByText(course.bookingContactProfile?.email),
       ).toBeVisible()
     }
 
     //Check organisation name
     await expect(
-      this.page.getByText(`Hosted by ${course.organization?.name}`)
+      this.page.getByText(`Hosted by ${course.organization?.name}`),
     ).toBeVisible()
 
     //Check max number of attendees
     await expect(
-      this.page.getByText(`${course.max_participants} attending`)
+      this.page.getByText(`${course.max_participants} attending`),
     ).toBeVisible()
 
     //Check course level
@@ -333,7 +333,7 @@ export class CourseDetailsPage extends BasePage {
 
     //Check max number of attendees
     await expect(
-      this.page.getByText(`${course.max_participants} attending`)
+      this.page.getByText(`${course.max_participants} attending`),
     ).toBeVisible()
 
     //Check course level

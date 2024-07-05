@@ -9,7 +9,7 @@ const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 let graphQLClient: GraphQLClient
 
 export const getClient = (
-  headers: MaybeFunction<HeadersInit | undefined> = {}
+  headers: MaybeFunction<HeadersInit | undefined> = {},
 ) => {
   let additionalHeaders = {}
   if (TEST_SETTINGS.role === 'tt-admin') {

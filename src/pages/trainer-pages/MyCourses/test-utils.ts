@@ -92,7 +92,7 @@ export const buildTrainerCourse = build<TrainerCourseQueryFragment>({
 
 export const buildTrainerCourseWithDates = (
   start: Date,
-  end: Date
+  end: Date,
 ): TrainerCourseQueryFragment =>
   buildTrainerCourse({
     overrides: {
@@ -110,7 +110,7 @@ export const buildTrainerCourseWithDates = (
   })
 
 export const buildCourseTrainer = (
-  overrides?: Partial<TrainerCourseFragment['trainers'][0]>
+  overrides?: Partial<TrainerCourseFragment['trainers'][0]>,
 ): TrainerCourseFragment['trainers'][0] => {
   return {
     id: chance.guid(),
@@ -121,7 +121,7 @@ export const buildCourseTrainer = (
 }
 
 export const buildActionableTrainerCourse = (
-  overrides?: Partial<TrainerCourseQueryFragment>
+  overrides?: Partial<TrainerCourseQueryFragment>,
 ) =>
   buildTrainerCourse({
     overrides: {
@@ -133,7 +133,7 @@ export const buildActionableTrainerCourse = (
 
 export const buildActionableTrainerCourseWithDates = (
   start: Date,
-  end: Date
+  end: Date,
 ): TrainerCourseQueryFragment =>
   buildActionableTrainerCourse({
     dates: {
@@ -166,22 +166,22 @@ const expectTableTo = async ({
   await waitFor(
     () => {
       expect(table.querySelectorAll('.MyCoursesRow')).toHaveLength(
-        include.length
+        include.length,
       )
 
       include.forEach(course => {
         expect(
-          within(table).getByTestId(`${rowIdPrefix}${course.id}`)
+          within(table).getByTestId(`${rowIdPrefix}${course.id}`),
         ).toBeInTheDocument()
       })
 
       exclude.forEach(course => {
         expect(
-          within(table).queryByTestId(`${rowIdPrefix}${course.id}`)
+          within(table).queryByTestId(`${rowIdPrefix}${course.id}`),
         ).not.toBeInTheDocument()
       })
     },
-    { timeout }
+    { timeout },
   )
 }
 

@@ -23,7 +23,7 @@ const levels = Object.values(Course_Level_Enum)
 
 const CourseLevelParam = withDefault(
   createEnumArrayParam<Course_Level_Enum>(levels),
-  [] as Course_Level_Enum[]
+  [] as Course_Level_Enum[],
 )
 
 export const FilterByCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
@@ -36,7 +36,7 @@ export const FilterByCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
 
   const allStatuses = useMemo(
     () => [...levels, ...customStatuses],
-    [customStatuses]
+    [customStatuses],
   )
 
   const levelOptions = useMemo(() => {
@@ -47,7 +47,7 @@ export const FilterByCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
           : {
               id: level,
               title: t(`course-levels.${level}`),
-            }
+            },
       )
       .filter(Boolean)
   }, [allStatuses, excludedStatuses, t])
@@ -66,7 +66,7 @@ export const FilterByCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

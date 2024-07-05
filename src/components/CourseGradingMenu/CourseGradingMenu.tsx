@@ -86,13 +86,15 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
   }, [t, courseDeliveryType, courseLevel])
 
   const [selectedIndex, setSelectedIndex] = React.useState<number>(
-    initialValue ? options.findIndex(option => option.key === initialValue) : -1
+    initialValue
+      ? options.findIndex(option => option.key === initialValue)
+      : -1,
   )
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: React.SetStateAction<number>,
-    key: Grade_Enum
+    key: Grade_Enum,
   ) => {
     setSelectedIndex(index)
     setAnchorEl(null)

@@ -16,7 +16,7 @@ describe('component: SnackbarMessage', () => {
       render(
         <SnackbarProvider>
           <SnackbarMessage messageKey="course-created" />
-        </SnackbarProvider>
+        </SnackbarProvider>,
       )
     })
 
@@ -32,7 +32,7 @@ describe('component: SnackbarMessage', () => {
       render(
         <SnackbarProvider initialMessages={initialMessages}>
           <SnackbarMessage messageKey="course-created" />
-        </SnackbarProvider>
+        </SnackbarProvider>,
       )
     })
 
@@ -49,7 +49,7 @@ describe('component: SnackbarMessage', () => {
     render(
       <SnackbarProvider initialMessages={initialMessages}>
         <SnackbarMessage messageKey="course-created" />
-      </SnackbarProvider>
+      </SnackbarProvider>,
     )
 
     act(() => {

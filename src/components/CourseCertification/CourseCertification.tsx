@@ -93,7 +93,7 @@ export const CourseCertification: React.FC<
     return (
       certificate?.participant?.certificateChanges.filter(
         change =>
-          change.type === Course_Certificate_Changelog_Type_Enum.PutOnHold
+          change.type === Course_Certificate_Changelog_Type_Enum.PutOnHold,
       ) ?? []
     )
   }, [certificate])

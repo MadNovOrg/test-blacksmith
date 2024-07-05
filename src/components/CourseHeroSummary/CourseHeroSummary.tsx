@@ -74,12 +74,12 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   isManaged = false,
 }) => {
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
-    [residingCountryEnabled]
+    [residingCountryEnabled],
   )
   const { t } = useTranslation()
 
@@ -94,7 +94,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
 
   const onCloseDeleteCourseDialog = useCallback(
     () => setOpenDeleteCourseDialog(false),
-    []
+    [],
   )
 
   const courseCancelled =
@@ -137,21 +137,21 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       acl.canEditCourses(course) &&
       !courseEnded(course) &&
       !courseCancelled,
-    [acl, course, courseCancelled]
+    [acl, course, courseCancelled],
   )
 
   const timeZoneSchedule = useMemo(
     () => ({
       start: utcToZonedTime(
         new Date(course.schedule[0].start),
-        course.schedule[0].timeZone ?? 'Europe/London'
+        course.schedule[0].timeZone ?? 'Europe/London',
       ),
       end: utcToZonedTime(
         new Date(course.schedule[0].end),
-        course.schedule[0].timeZone ?? 'Europe/London'
+        course.schedule[0].timeZone ?? 'Europe/London',
       ),
     }),
-    [course.schedule]
+    [course.schedule],
   )
 
   const theme = useTheme()
@@ -201,7 +201,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
         })
       }
     },
-    [geoCoordinates]
+    [geoCoordinates],
   )
 
   return (
@@ -383,7 +383,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                         })} ${formatGMTDateTimeByTimeZone(
                           course.schedule[0].start,
                           course.schedule[0].timeZone,
-                          true
+                          true,
                         )}`
                       : t('dates.withTime', { date: course.schedule[0].start })}
                   </Typography>
@@ -405,7 +405,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                         })} ${formatGMTDateTimeByTimeZone(
                           course.schedule[0].end,
                           course.schedule[0].timeZone,
-                          true
+                          true,
                         )}`
                       : t('dates.withTime', { date: course.schedule[0].end })}
                   </Typography>
@@ -446,7 +446,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 >
                   <ListItemText>
                     {`${t(
-                      'components.course-form.organization-key-contact-label'
+                      'components.course-form.organization-key-contact-label',
                     )}: `}
                     <ListItemText>
                       {acl.isInternalUser() &&
@@ -500,7 +500,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 <ListItemText data-testid="course-venue">
                   {formatCourseVenue(
                     course.deliveryType,
-                    course.schedule[0].venue as Venue
+                    course.schedule[0].venue as Venue,
                   )}
                 </ListItemText>
               </ListItem>

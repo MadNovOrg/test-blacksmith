@@ -25,10 +25,10 @@ export class UiTable {
   }
 
   async getHeaders(
-    options: { ignoreEmpty?: boolean } = { ignoreEmpty: false }
+    options: { ignoreEmpty?: boolean } = { ignoreEmpty: false },
   ): Promise<string[]> {
     const result = (await this.headers.allTextContents()).map(h =>
-      h.replace('sorted ascending', '')
+      h.replace('sorted ascending', ''),
     )
     return options.ignoreEmpty ? result.filter(h => h !== '') : result
   }
@@ -37,7 +37,7 @@ export class UiTable {
     options: { ignoreEmptyHeaders?: boolean; startsFromColumn?: number } = {
       ignoreEmptyHeaders: false,
       startsFromColumn: 0,
-    }
+    },
   ): Promise<CourseTableRow[]> {
     const result: CourseTableRow[] = []
     await this.root.scrollIntoViewIfNeeded()

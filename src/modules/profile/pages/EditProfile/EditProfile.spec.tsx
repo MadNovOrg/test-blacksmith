@@ -51,7 +51,7 @@ describe(EditProfilePage.name, () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     expect(screen.queryByText('Connect access')).toBeInTheDocument()
@@ -85,7 +85,7 @@ describe(EditProfilePage.name, () => {
         auth: {
           activeRole: RoleName.USER,
         },
-      }
+      },
     )
 
     expect(screen.queryByText('Connect access')).not.toBeInTheDocument()
@@ -104,10 +104,10 @@ describe(EditProfilePage.name, () => {
           auth: {
             activeRole: RoleName.USER,
           },
-        }
+        },
       )
       expect(screen.getByLabelText(field)).toHaveAttribute('disabled')
-    }
+    },
   )
   it.each([RoleName.SALES_ADMIN, RoleName.TT_OPS])(
     'should allow %s to remove user from organisation',
@@ -123,11 +123,11 @@ describe(EditProfilePage.name, () => {
           auth: {
             activeRole,
           },
-        }
+        },
       )
       const removeUserFromOrgButton = screen.getByText(t('common.leave'))
       expect(removeUserFromOrgButton).toBeInTheDocument()
       expect(removeUserFromOrgButton).not.toHaveAttribute('disabled')
-    }
+    },
   )
 })

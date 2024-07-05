@@ -84,7 +84,7 @@ export const StrategyAccordionSummary: React.FC<
               label={<Typography>{m.name}</Typography>}
               sx={{ width: '100%' }}
             />
-          ) : null
+          ) : null,
         )}
 
         <Box sx={{ mt: 2 }}>
@@ -96,7 +96,7 @@ export const StrategyAccordionSummary: React.FC<
                 group={g}
                 state={state}
               />
-            ) : null
+            ) : null,
           )}
         </Box>
       </AccordionDetails>

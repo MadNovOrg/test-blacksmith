@@ -80,7 +80,7 @@ export const AttendeesSection = ({ disabledFields, isCreation }: Props) => {
               label={t(
                 isOpenCourse
                   ? 'max-attendees-placeholder'
-                  : 'num-attendees-placeholder'
+                  : 'num-attendees-placeholder',
               )}
               variant="filled"
               fullWidth

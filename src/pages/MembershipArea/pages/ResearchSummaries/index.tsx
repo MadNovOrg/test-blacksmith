@@ -125,7 +125,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
             setSearchTerm(value)
           }}
           placeholder={t(
-            'pages.membership.research-summaries.search-placeholder'
+            'pages.membership.research-summaries.search-placeholder',
           )}
           value={searchTerm}
           InputProps={{ disableUnderline: true }}
@@ -195,7 +195,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
                         downloadLink={item.downloads?.file?.mediaItemUrl ?? ''}
                       >
                         {t(
-                          'pages.membership.research-summaries.download-button'
+                          'pages.membership.research-summaries.download-button',
                         )}
                       </DownloadButton>
                     }

@@ -52,10 +52,10 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
     () =>
       new Set(
         Object.keys(data ?? {}).filter(
-          key => data && !data[key as keyof typeof data]?.match(/^\s*$/)
-        )
+          key => data && !data[key as keyof typeof data]?.match(/^\s*$/),
+        ),
       ),
-    [data]
+    [data],
   )
 
   const disableCountryField = useMemo(() => {
@@ -74,7 +74,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   const { acl } = useAuth()
 
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
-    ADD_VENUE_MUTATION
+    ADD_VENUE_MUTATION,
   )
   const [trySubmit, setTrySubmit] = useState(false)
 
@@ -97,7 +97,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                 .test(
                   'is-uk-postcode',
                   t('common.validation-errors.invalid-postcode'),
-                  isValidUKPostalCode
+                  isValidUKPostalCode,
                 ),
             otherwise: schema =>
               schema.required(requiredMsg(t, 'addr.zipCode')),
@@ -151,7 +151,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           venue: {
             ...formData,
             country: getCountryNameByCode(
-              formData.country as WorldCountriesCodes
+              formData.country as WorldCountriesCodes,
             ),
             countryCode: formData.countryCode ?? formData.country,
           },
@@ -159,7 +159,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
         onSubmit(data?.venue)
       }
     },
-    [getCountryNameByCode, handleAddVenue, onSubmit, trigger]
+    [getCountryNameByCode, handleAddVenue, onSubmit, trigger],
   )
 
   return (
@@ -232,7 +232,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   required={!acl.isTTAdmin()}
                   error={fieldState.invalid}
                   label={t(
-                    'components.venue-selector.modal.fields.addressLineOne'
+                    'components.venue-selector.modal.fields.addressLineOne',
                   )}
                   helperText={errors.addressLineOne?.message}
                   {...field}
@@ -251,7 +251,7 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   fullWidth
                   variant="filled"
                   label={t(
-                    'components.venue-selector.modal.fields.addressLineTwo'
+                    'components.venue-selector.modal.fields.addressLineTwo',
                   )}
                   {...field}
                 />

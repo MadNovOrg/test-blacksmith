@@ -121,7 +121,7 @@ export const CourseCancellationRequestModal: React.FC<
           t('common.validation-errors.this-field-is-required')
         }
         label={t(
-          'pages.course-details.request-cancellation-modal.reason-for-request'
+          'pages.course-details.request-cancellation-modal.reason-for-request',
         )}
         inputProps={{
           sx: { height: 40 },
@@ -138,7 +138,7 @@ export const CourseCancellationRequestModal: React.FC<
       <Box mt={4}>
         <FormControlLabel
           label={t(
-            'pages.course-details.request-cancellation-modal.agree-terms-confirmation'
+            'pages.course-details.request-cancellation-modal.agree-terms-confirmation',
           )}
           control={<Checkbox />}
           data-testid="request-cancel-checkbox"

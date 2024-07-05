@@ -55,12 +55,12 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
       ...(searchResult.data?.courses ?? []),
       ...(searchResult.data?.selectedCourses ?? []),
     ],
-    [searchResult.data]
+    [searchResult.data],
   )
 
   const selected = useMemo(
     () => searchResult.data?.selectedCourses ?? [],
-    [searchResult]
+    [searchResult],
   )
 
   const courses = useMemo(() => {
@@ -94,7 +94,7 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const unselectCourse = (courseId: number) => {
     onCourseClick(
       { target: { value: `${courseId}` } } as unknown as React.SyntheticEvent,
-      false
+      false,
     )
   }
 

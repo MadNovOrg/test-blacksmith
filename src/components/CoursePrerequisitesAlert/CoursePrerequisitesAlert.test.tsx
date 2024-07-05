@@ -17,11 +17,11 @@ describe('component: CoursePrerequisitesAlert', () => {
   })
   it('renders component as expected when showaction is false', async () => {
     const { queryByTestId } = render(
-      <CoursePrerequisitesAlert showAction={false} />
+      <CoursePrerequisitesAlert showAction={false} />,
     )
 
     expect(
-      queryByTestId('go-to-profile-preferences-button')
+      queryByTestId('go-to-profile-preferences-button'),
     ).not.toBeInTheDocument()
   })
 })

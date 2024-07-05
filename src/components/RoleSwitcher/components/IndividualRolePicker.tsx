@@ -8,7 +8,7 @@ import { RoleName } from '@app/types'
 type IndividualRoleSwitcherProps = {
   anchor: [
     HTMLLIElement | null,
-    Dispatch<React.SetStateAction<HTMLLIElement | null>>
+    Dispatch<React.SetStateAction<HTMLLIElement | null>>,
   ]
   changeRole: (role: RoleName) => () => void
   roles: RoleName[]

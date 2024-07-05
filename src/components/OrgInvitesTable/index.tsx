@@ -42,14 +42,14 @@ export const OrgInvitesTable: React.FC<
     {
       limit: perPage,
       offset: perPage * currentPage,
-    }
+    },
   )
 
   const invitesByStatus = useMemo(() => {
     if (!invites) return []
     const byStatus = groupBy(
       invites,
-      inv => inv.status === Course_Invite_Status_Enum.Pending
+      inv => inv.status === Course_Invite_Status_Enum.Pending,
     )
     return [...(byStatus['true'] ?? []), ...(byStatus['false'] ?? [])]
   }, [invites])
@@ -59,7 +59,7 @@ export const OrgInvitesTable: React.FC<
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   return (
@@ -129,7 +129,7 @@ export const OrgInvitesTable: React.FC<
                   <TableCell>
                     <Chip
                       label={t(
-                        `pages.org-details.tabs.users.invite-status.${invite.status.toLowerCase()}`
+                        `pages.org-details.tabs.users.invite-status.${invite.status.toLowerCase()}`,
                       )}
                       color={
                         invite.status === Course_Invite_Status_Enum.Accepted

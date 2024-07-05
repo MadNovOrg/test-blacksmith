@@ -30,7 +30,7 @@ describe('page: ResetPasswordPage', () => {
     await waitForText('Please re-enter the new password')
     const error = await screen.findByTestId('reset-password-passcode-error')
     expect(error).toHaveTextContent(
-      'Please enter 6 digit passcode received in email'
+      'Please enter 6 digit passcode received in email',
     )
   })
 
@@ -46,6 +46,6 @@ async function fillCode(code: string) {
     code.split('').map((n, i) => {
       const iN = screen.getByTestId(`passcode-${i}`)
       return userEvent.type(iN, n)
-    })
+    }),
   )
 }

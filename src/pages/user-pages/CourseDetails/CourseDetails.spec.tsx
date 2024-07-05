@@ -102,7 +102,7 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     const changeMyAttendanceBtn = screen.getByTestId('change-my-attendance-btn')
@@ -110,7 +110,7 @@ describe(CourseDetails.name, () => {
     await user.click(changeMyAttendanceBtn)
 
     expect(
-      screen.getByTestId('change-my-attendance-modal-title')
+      screen.getByTestId('change-my-attendance-modal-title'),
     ).toHaveTextContent('Change my attendance')
   })
 
@@ -124,7 +124,7 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -145,7 +145,7 @@ describe(CourseDetails.name, () => {
         initialEntries: [
           `/courses/${course.id}/details?success=invite_accepted`,
         ],
-      }
+      },
     )
 
     expect(screen.getByTestId('success-alert')).toBeInTheDocument()
@@ -161,7 +161,7 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     expect(screen.getByLabelText('Course participant tabs')).toBeInTheDocument()
@@ -179,11 +179,11 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     expect(
-      screen.getByRole('button', { name: /available after course/i })
+      screen.getByRole('button', { name: /available after course/i }),
     ).toBeDisabled()
   })
 
@@ -211,11 +211,11 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     expect(
-      screen.getByRole('button', { name: /available after course/i })
+      screen.getByRole('button', { name: /available after course/i }),
     ).toBeDisabled()
   })
 
@@ -248,12 +248,12 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /evaluate course/i })
+        screen.getByRole('button', { name: /evaluate course/i }),
       ).toBeEnabled()
     })
   })
@@ -287,12 +287,12 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /evaluate course/i })
+        screen.getByRole('button', { name: /evaluate course/i }),
       ).toBeEnabled()
     })
   })
@@ -312,11 +312,11 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     expect(
-      screen.getByRole('button', { name: /evaluate course/i })
+      screen.getByRole('button', { name: /evaluate course/i }),
     ).toBeDisabled()
   })
 
@@ -351,7 +351,7 @@ describe(CourseDetails.name, () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     await userEvent.click(screen.getByText(/manage course/i))
@@ -382,15 +382,15 @@ describe(CourseDetails.name, () => {
         />
       </Routes>,
       {},
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     expect(
-      screen.getByRole('button', { name: /evaluate course/i })
+      screen.getByRole('button', { name: /evaluate course/i }),
     ).toBeDisabled()
 
     expect(
-      screen.getByText(/Please submit the Health & Safety Consent Form first/i)
+      screen.getByText(/Please submit the Health & Safety Consent Form first/i),
     ).toBeInTheDocument()
   })
 })

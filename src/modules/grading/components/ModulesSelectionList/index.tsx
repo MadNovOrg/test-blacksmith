@@ -62,7 +62,7 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
 
     moduleGroups.forEach(group => {
       const uncheckedModule = group.modules.find(
-        module => holds[module.id] === false
+        module => holds[module.id] === false,
       )
 
       if (!uncheckedModule) {
@@ -87,7 +87,7 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
     const moduleGroup = moduleGroups.find(group => group.id === groupId)
 
     const unCheckedGroupModules = moduleGroup?.modules.filter(
-      module => holds[module.id] === false
+      module => holds[module.id] === false,
     )
 
     const groupChecked = unCheckedGroupModules?.length === 0

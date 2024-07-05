@@ -54,22 +54,22 @@ describe('component: CourseGrading', () => {
     expect(within(columnHeaders[0]).getByText('Name')).toBeInTheDocument()
     expect(within(columnHeaders[1]).getByText('Email')).toBeInTheDocument()
     expect(
-      within(columnHeaders[2]).getByText('Organisation')
+      within(columnHeaders[2]).getByText('Organisation'),
     ).toBeInTheDocument()
     expect(within(columnHeaders[3]).getByText('Grade')).toBeInTheDocument()
 
     const gradeCells = screen.getAllByTestId(`grade-cell`)
 
     expect(
-      screen.getByText(participants[0].profile.fullName)
+      screen.getByText(participants[0].profile.fullName),
     ).toBeInTheDocument()
     expect(gradeCells[0]).toHaveTextContent('Fail View')
     expect(
-      screen.getByText(participants[1].profile.fullName)
+      screen.getByText(participants[1].profile.fullName),
     ).toBeInTheDocument()
     expect(gradeCells[1]).toHaveTextContent('Grade')
     expect(
-      screen.getByText(participants[2].profile.fullName)
+      screen.getByText(participants[2].profile.fullName),
     ).toBeInTheDocument()
     expect(gradeCells[2]).toHaveTextContent('Grade')
   })
@@ -100,7 +100,7 @@ describe('component: CourseGrading', () => {
         />
       </Routes>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
     const button = screen.getByRole('button', {
       name: 'Modify grading criteria',
@@ -108,7 +108,7 @@ describe('component: CourseGrading', () => {
     expect(button).toBeInTheDocument()
     await userEvent.click(button)
     await waitFor(() =>
-      expect(screen.getByText('Grading clearance')).toBeInTheDocument()
+      expect(screen.getByText('Grading clearance')).toBeInTheDocument(),
     )
   })
 
@@ -180,12 +180,12 @@ describe('component: CourseGrading', () => {
 
     participants.forEach(participant => {
       const row = screen.getByTestId(
-        `attending-participant-row-${participant.id}`
+        `attending-participant-row-${participant.id}`,
       )
 
       expect(within(row).getByText(/grade/i)).toHaveAttribute(
         'aria-disabled',
-        'true'
+        'true',
       )
     })
   })
@@ -212,7 +212,7 @@ describe('component: CourseGrading', () => {
     expect(
       screen.queryByRole('button', {
         name: 'Modify grading criteria',
-      })
+      }),
     ).not.toBeInTheDocument()
   })
 })

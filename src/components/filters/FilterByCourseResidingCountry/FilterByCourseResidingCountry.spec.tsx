@@ -50,7 +50,7 @@ describe(FilterByCourseResidingCountry.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {
@@ -68,7 +68,7 @@ describe(FilterByCourseResidingCountry.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {
@@ -91,7 +91,7 @@ describe(FilterByCourseResidingCountry.name, () => {
     render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {

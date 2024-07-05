@@ -31,7 +31,7 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
 
   const filterModules = (module: Module): Module => {
     const filteredModules = module.modules.filter(
-      obj1 => !module.groups?.some(obj2 => obj2.name === obj1.name)
+      obj1 => !module.groups?.some(obj2 => obj2.name === obj1.name),
     )
     return { modules: filteredModules, groups: module.groups }
   }
@@ -50,7 +50,7 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
               (acc: number, group: { modules: [{ name: string }] }) => {
                 return acc + group.modules.length
               },
-              0
+              0,
             )
           : 0
 
@@ -84,7 +84,7 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
                       <Typography mb={2} key={index}>
                         {module.name}
                       </Typography>
-                    )
+                    ),
                   )
                 : null}
 
@@ -104,7 +104,7 @@ export const BILDOverview: React.FC<React.PropsWithChildren<Props>> = ({
                             ))
                           : null}
                       </Box>
-                    )
+                    ),
                   )
                 : null}
             </AccordionDetails>

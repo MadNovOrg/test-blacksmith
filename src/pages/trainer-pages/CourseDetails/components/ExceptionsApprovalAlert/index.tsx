@@ -27,7 +27,7 @@ export const ExceptionsApprovalAlert: FC = () => {
   const { data: courseInfo } = useCourse(courseId ?? '')
   const [commentsModalOpen, setCommentsModalOpen] = useState<boolean>(false)
   const [modalAction, setModalAction] = useState<ExceptionsApprovalModalAction>(
-    Course_Audit_Type_Enum.Approved
+    Course_Audit_Type_Enum.Approved,
   )
   const [modalSubtitle, setModalSubtitle] = useState<string>('')
 
@@ -47,7 +47,7 @@ export const ExceptionsApprovalAlert: FC = () => {
       ?.filter(exception => !ignoreExceptions.includes(exception)) ?? []
 
   const handleModal: (
-    action: Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected
+    action: Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected,
   ) => void = action => {
     setModalAction(action)
     setModalSubtitle(
@@ -55,88 +55,86 @@ export const ExceptionsApprovalAlert: FC = () => {
         ? t('pages.create-course.exceptions.modal-subtitle-approve')
         : action === Course_Audit_Type_Enum.Rejected
         ? t('pages.create-course.exceptions.modal-subtitle-reject')
-        : ''
+        : '',
     )
     setCommentsModalOpen(true)
   }
   return exceptionsApprovalPending ? (
-    <>
-      <Alert
-        data-testid="exceptions-approval"
-        severity="warning"
-        variant="outlined"
-        sx={{
-          my: 2,
-          '&& .MuiAlert-message': {
-            width: '100%',
-          },
-        }}
+    <Alert
+      data-testid="exceptions-approval"
+      severity="warning"
+      variant="outlined"
+      sx={{
+        my: 2,
+        '&& .MuiAlert-message': {
+          width: '100%',
+        },
+      }}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="stretch"
+        gap={1}
+        flexDirection={isMobile ? 'column' : 'row'}
       >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="stretch"
-          gap={1}
-          flexDirection={isMobile ? 'column' : 'row'}
-        >
-          <Box>
-            <Typography variant="body1" fontWeight={600}>
-              {t('pages.create-course.exceptions.approval-header', {
-                count: courseExceptions.length,
-              })}
-            </Typography>
-            {!!courseExceptions.length && (
-              <ul>
-                {courseExceptions.map(exception => (
-                  <li key={exception}>
-                    {t(`pages.create-course.exceptions.type_${exception}`)}
-                  </li>
-                ))}
-              </ul>
-            )}
-            <Typography variant="body1" fontWeight={600}>
-              {t('pages.create-course.exceptions.approval-footer')}
-            </Typography>
-          </Box>
-          {acl.canApproveCourseExceptions() ? (
-            <>
-              <Box
-                display="flex"
-                flexDirection={isMobile ? 'column' : 'row'}
-                alignItems="center"
-              >
-                <Button
-                  variant="text"
-                  fullWidth={isMobile}
-                  onClick={() => handleModal(Course_Audit_Type_Enum.Rejected)}
-                  sx={{ px: 2 }}
-                >
-                  {t('common.reject')}
-                </Button>
-                <Button
-                  variant="contained"
-                  fullWidth={isMobile}
-                  onClick={() => handleModal(Course_Audit_Type_Enum.Approved)}
-                  sx={{ px: 7 }}
-                >
-                  {t('common.approve')}
-                </Button>
-              </Box>
-              <Dialog
-                subtitle={modalSubtitle}
-                open={commentsModalOpen}
-                onClose={() => setCommentsModalOpen(false)}
-              >
-                <ExceptionsApprovalModalContent
-                  action={modalAction}
-                  courseId={courseId}
-                  closeModal={() => setCommentsModalOpen(false)}
-                />
-              </Dialog>
-            </>
-          ) : null}
+        <Box>
+          <Typography variant="body1" fontWeight={600}>
+            {t('pages.create-course.exceptions.approval-header', {
+              count: courseExceptions.length,
+            })}
+          </Typography>
+          {!!courseExceptions.length && (
+            <ul>
+              {courseExceptions.map(exception => (
+                <li key={exception}>
+                  {t(`pages.create-course.exceptions.type_${exception}`)}
+                </li>
+              ))}
+            </ul>
+          )}
+          <Typography variant="body1" fontWeight={600}>
+            {t('pages.create-course.exceptions.approval-footer')}
+          </Typography>
         </Box>
-      </Alert>
-    </>
+        {acl.canApproveCourseExceptions() ? (
+          <>
+            <Box
+              display="flex"
+              flexDirection={isMobile ? 'column' : 'row'}
+              alignItems="center"
+            >
+              <Button
+                variant="text"
+                fullWidth={isMobile}
+                onClick={() => handleModal(Course_Audit_Type_Enum.Rejected)}
+                sx={{ px: 2 }}
+              >
+                {t('common.reject')}
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth={isMobile}
+                onClick={() => handleModal(Course_Audit_Type_Enum.Approved)}
+                sx={{ px: 7 }}
+              >
+                {t('common.approve')}
+              </Button>
+            </Box>
+            <Dialog
+              subtitle={modalSubtitle}
+              open={commentsModalOpen}
+              onClose={() => setCommentsModalOpen(false)}
+            >
+              <ExceptionsApprovalModalContent
+                action={modalAction}
+                courseId={courseId}
+                closeModal={() => setCommentsModalOpen(false)}
+              />
+            </Dialog>
+          </>
+        ) : null}
+      </Box>
+    </Alert>
   ) : null
 }

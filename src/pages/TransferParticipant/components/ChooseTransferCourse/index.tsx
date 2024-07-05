@@ -61,7 +61,7 @@ export const ChooseTransferCourse: React.FC<
         sorting: false,
       },
     ],
-    [t]
+    [t],
   )
 
   const handleCourseChosen = () => {

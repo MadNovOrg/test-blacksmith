@@ -30,7 +30,7 @@ describe('page: Term - EbookCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/term/ebook-category-id'] }
+      { initialEntries: ['/term/ebook-category-id'] },
     )
 
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
@@ -67,23 +67,23 @@ describe('page: Term - EbookCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     ebooks.forEach(item => {
       const itemElement = screen.getByTestId(`ebook-grid-item-${item.id}`)
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -124,17 +124,17 @@ describe('page: Term - EbookCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search ebooks'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`ebook-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`ebook-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -175,26 +175,26 @@ describe('page: Term - EbookCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     expect(
-      screen.getByTestId(`ebook-grid-item-${ebooks[0].id}`)
+      screen.getByTestId(`ebook-grid-item-${ebooks[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`ebook-grid-item-${ebooksPosts[0].id}`)
+      screen.queryByTestId(`ebook-grid-item-${ebooksPosts[0].id}`),
     ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByTestId('order-menu-button'))
     await userEvent.click(screen.getByText('Oldest'))
 
     expect(
-      screen.queryByTestId(`ebook-grid-item-${ebooks[0].id}`)
+      screen.queryByTestId(`ebook-grid-item-${ebooks[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`ebook-grid-item-${ebooksPosts[0].id}`)
+      screen.getByTestId(`ebook-grid-item-${ebooksPosts[0].id}`),
     ).toBeInTheDocument()
   })
 
@@ -249,17 +249,17 @@ describe('page: Term - EbookCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
-      screen.queryByTestId(`ebook-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`ebook-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`ebook-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`ebook-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
@@ -267,11 +267,11 @@ describe('page: Term - EbookCategory', () => {
     await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
-      screen.getByTestId(`ebook-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`ebook-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`ebook-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`ebook-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('term-previous-page')).toBeDisabled()

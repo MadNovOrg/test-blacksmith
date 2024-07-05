@@ -32,7 +32,7 @@ export type SnackbarState = {
 }
 
 const SnackbarContext = React.createContext<SnackbarState | undefined>(
-  undefined
+  undefined,
 )
 
 export const SnackbarProvider: React.FC<
@@ -41,7 +41,7 @@ export const SnackbarProvider: React.FC<
   }>
 > = ({ children, initialMessages }) => {
   const [messages, setMessages] = useState<SnackbarState['messages']>(
-    initialMessages ?? new Map()
+    initialMessages ?? new Map(),
   )
 
   const messagesRef = useRef(messages)
@@ -50,14 +50,14 @@ export const SnackbarProvider: React.FC<
     (key, options) => {
       setMessages(messages => new Map(messages.set(key, options)))
     },
-    []
+    [],
   )
 
   const getSnackbarMessage: SnackbarState['getSnackbarMessage'] = useCallback(
     key => {
       return messages.get(key)
     },
-    [messages]
+    [messages],
   )
 
   const removeSnackbarMessage: SnackbarState['removeSnackbarMessage'] =
@@ -78,7 +78,7 @@ export const SnackbarProvider: React.FC<
       removeSnackbarMessage,
       getSnackbarMessage,
     }),
-    [messages, addSnackbarMessage, removeSnackbarMessage, getSnackbarMessage]
+    [messages, addSnackbarMessage, removeSnackbarMessage, getSnackbarMessage],
   )
 
   return (

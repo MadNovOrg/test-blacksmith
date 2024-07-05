@@ -74,7 +74,7 @@ describe('page: TransferReview', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/review'] }
+      { initialEntries: ['/review'] },
     )
 
     await waitFor(() => {
@@ -137,7 +137,7 @@ describe('page: TransferReview', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/review'] }
+      { initialEntries: ['/review'] },
     )
 
     expect(screen.getByText('Apply transfer terms')).toBeInTheDocument()
@@ -145,9 +145,9 @@ describe('page: TransferReview', () => {
       within(screen.getByTestId('fee-type-panel')).getByText(
         `${getTransferTermsFee(
           new Date(fromCourse?.start ?? ''),
-          Course_Level_Enum.Level_1
-        )}% of payment due`
-      )
+          Course_Level_Enum.Level_1,
+        )}% of payment due`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -208,12 +208,12 @@ describe('page: TransferReview', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/review'] }
+      { initialEntries: ['/review'] },
     )
 
     expect(screen.getByText('Custom fee')).toBeInTheDocument()
     expect(
-      within(screen.getByTestId('fee-type-panel')).getByText('£50.00')
+      within(screen.getByTestId('fee-type-panel')).getByText('£50.00'),
     ).toBeInTheDocument()
   })
 
@@ -272,7 +272,7 @@ describe('page: TransferReview', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/review'] }
+      { initialEntries: ['/review'] },
     )
 
     expect(screen.queryByTestId('fee-type-panel')).not.toBeInTheDocument()
@@ -343,14 +343,14 @@ describe('page: TransferReview', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/review'] }
+      { initialEntries: ['/transfer/review'] },
     )
 
     await userEvent.click(screen.getByText(/confirm transfer/i))
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"There was an error transferring the participant"`
+        `"There was an error transferring the participant"`,
       )
     })
   })
@@ -462,7 +462,7 @@ describe('page: TransferReview', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/review'] }
+      { initialEntries: ['/transfer/review'] },
     )
 
     await userEvent.click(screen.getByText(/confirm transfer/i))

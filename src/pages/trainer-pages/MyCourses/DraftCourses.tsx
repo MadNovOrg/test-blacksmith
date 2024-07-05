@@ -66,7 +66,7 @@ export const DraftCourses: React.FC<React.PropsWithChildren<Props>> = ({
                 t(
                   isTrainer
                     ? 'pages.draft-courses.h1'
-                    : 'pages.draft-courses.h1'
+                    : 'pages.draft-courses.h1',
                 )}
             </Typography>
           </Box>

@@ -31,7 +31,7 @@ export const ICMGradedOnAccordion: React.FC<Props> = ({ participant }) => {
   const moduleGroups = useMemo(() => {
     if (participant?.gradingModules) {
       return transformModulesToGroups(
-        participant?.gradingModules as unknown as Course_Participant_Module[]
+        participant?.gradingModules as unknown as Course_Participant_Module[],
       )
     }
 
@@ -53,7 +53,7 @@ export const ICMGradedOnAccordion: React.FC<Props> = ({ participant }) => {
       {moduleGroups.map(group => {
         const groupedModules = groupBy(
           group.modules,
-          module => module.completed
+          module => module.completed,
         )
 
         const note = moduleGroupNotes.get(group.id)

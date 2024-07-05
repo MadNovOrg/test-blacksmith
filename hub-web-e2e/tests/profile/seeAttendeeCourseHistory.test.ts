@@ -24,7 +24,7 @@ const test = base.extend<{ courses: Course[] }>({
       courses[0].id,
       courses[1].id,
       users.user1.email,
-      'Reason'
+      'Reason',
     )
     await use(courses)
     for (const course of courses) {

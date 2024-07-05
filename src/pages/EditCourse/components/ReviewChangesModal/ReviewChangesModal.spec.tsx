@@ -14,7 +14,7 @@ describe('component: ReviewChangesModal', () => {
         open
         level={Course_Level_Enum.Level_1}
         priceCurrency={'GBP'}
-      />
+      />,
     )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
@@ -44,7 +44,7 @@ describe('component: ReviewChangesModal', () => {
         withFees
         priceCurrency={'GBP'}
         level={Course_Level_Enum.Level_1}
-      />
+      />,
     )
 
     expect(screen.getByTestId('course-diff-table')).toBeInTheDocument()
@@ -78,7 +78,7 @@ describe('component: ReviewChangesModal', () => {
         priceCurrency={'GBP'}
         withFees
         level={Course_Level_Enum.Level_1}
-      />
+      />,
     )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
@@ -115,7 +115,7 @@ describe('component: ReviewChangesModal', () => {
         withFees
         priceCurrency={'GBP'}
         level={Course_Level_Enum.Level_1}
-      />
+      />,
     )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
@@ -142,7 +142,7 @@ describe('component: ReviewChangesModal', () => {
         onCancel={onCancelMock}
         priceCurrency={'GBP'}
         level={Course_Level_Enum.Level_1}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByText(/close/i))
@@ -167,14 +167,14 @@ describe('component: ReviewChangesModal', () => {
         priceCurrency={'GBP'}
         open
         withFees
-      />
+      />,
     )
 
     await userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
     await userEvent.click(screen.getByLabelText(/apply rescheduling terms/i))
 
     await userEvent.click(
-      screen.getByText(/confirm changes/i, { selector: 'button' })
+      screen.getByText(/confirm changes/i, { selector: 'button' }),
     )
 
     await waitFor(() => {

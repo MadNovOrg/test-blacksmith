@@ -11,10 +11,10 @@ export class CancelEntireCoursePopUp extends BasePage {
     super(page)
     this.feeRadioButton = this.page.locator('text=Apply cancellation fee')
     this.cancelEntireCourseButton = this.page.locator(
-      'data-testid=cancel-entire-course-button'
+      'data-testid=cancel-entire-course-button',
     )
     this.cancelCourseCheckbox = this.page.locator(
-      '[data-testid="cancel-entire-course-checkbox"]'
+      '[data-testid="cancel-entire-course-checkbox"]',
     )
   }
 

@@ -88,7 +88,7 @@ export const CourseCancellationModal: React.FC<
   >(CANCEL_COURSE_MUTATION)
 
   const emailUpdatedCurrenciesEnabled = useFeatureFlagEnabled(
-    'email-updated-currencies'
+    'email-updated-currencies',
   )
 
   const schema = useMemo(() => {
@@ -103,14 +103,14 @@ export const CourseCancellationModal: React.FC<
         t('common.validation-errors.min-max-num-value', {
           min: 0,
           max: 9999.99,
-        })
+        }),
       )
       .max(
         9999.99,
         t('common.validation-errors.min-max-num-value', {
           min: 0,
           max: 9999.99,
-        })
+        }),
       )
       .required(t('common.validation-errors.this-field-is-required'))
 
@@ -220,13 +220,13 @@ export const CourseCancellationModal: React.FC<
         <>
           <Typography variant="body1" color="grey.600">
             {t(
-              'pages.edit-course.cancellation-modal.permanently-cancel-indirect-blended-course-first'
+              'pages.edit-course.cancellation-modal.permanently-cancel-indirect-blended-course-first',
             )}
           </Typography>
           <br />
           <Typography variant="body1" color="grey.600">
             {t(
-              'pages.edit-course.cancellation-modal.permanently-cancel-indirect-blended-course-second'
+              'pages.edit-course.cancellation-modal.permanently-cancel-indirect-blended-course-second',
             )}
           </Typography>
         </>
@@ -241,7 +241,7 @@ export const CourseCancellationModal: React.FC<
           {t('pages.edit-course.cancellation-modal.finance-invoice-changes')}
           {course.type === Course_Type_Enum.Open
             ? t(
-                'pages.edit-course.cancellation-modal.attendees-will-not-incur-cancellation-charges'
+                'pages.edit-course.cancellation-modal.attendees-will-not-incur-cancellation-charges',
               )
             : null}
         </Typography>
@@ -307,15 +307,11 @@ export const CourseCancellationModal: React.FC<
               inputProps={{ min: 0, max: 100 }}
               InputProps={{
                 endAdornment: (
-                  <React.Fragment>
-                    <Typography variant="body1" color="grey.600">
-                      {emailUpdatedCurrenciesEnabled && course.priceCurrency
-                        ? CurrenciesSymbols[
-                            course.priceCurrency as CurrencyCode
-                          ]
-                        : CurrenciesSymbols[defaultCurrency]}
-                    </Typography>
-                  </React.Fragment>
+                  <Typography variant="body1" color="grey.600">
+                    {emailUpdatedCurrenciesEnabled && course.priceCurrency
+                      ? CurrenciesSymbols[course.priceCurrency as CurrencyCode]
+                      : CurrenciesSymbols[defaultCurrency]}
+                  </Typography>
                 ),
               }}
             />
@@ -328,7 +324,7 @@ export const CourseCancellationModal: React.FC<
           required
           data-testid="cancel-course-dropdown"
           label={t(
-            'pages.edit-course.cancellation-modal.reason-for-cancellation'
+            'pages.edit-course.cancellation-modal.reason-for-cancellation',
           )}
           sx={{ mt: 4 }}
           variant="filled"
@@ -344,7 +340,7 @@ export const CourseCancellationModal: React.FC<
             setValue(
               'cancellationReason',
               e.target.value !== 'other' ? e.target.value : '',
-              { shouldValidate: isSubmitted }
+              { shouldValidate: isSubmitted },
             )
           }}
           fullWidth
@@ -371,7 +367,7 @@ export const CourseCancellationModal: React.FC<
             isIndirect
               ? t('pages.edit-course.cancellation-modal.specify-reason')
               : t(
-                  'pages.edit-course.cancellation-modal.reason-for-cancellation'
+                  'pages.edit-course.cancellation-modal.reason-for-cancellation',
                 )
           }
           inputProps={{
@@ -387,10 +383,10 @@ export const CourseCancellationModal: React.FC<
             label={
               isIndirectBlendedLearning
                 ? t(
-                    'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation-indirect-blended-learning'
+                    'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation-indirect-blended-learning',
                   )
                 : t(
-                    'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
+                    'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation',
                   )
             }
             control={<Checkbox />}

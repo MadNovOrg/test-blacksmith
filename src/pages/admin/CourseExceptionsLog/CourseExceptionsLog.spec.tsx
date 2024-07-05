@@ -22,16 +22,16 @@ describe('page: CourseExceptionsLog', () => {
   })
   it('should render the back button and the header', () => {
     expect(
-      screen.getByText(t('pages.admin.back-to-settings'))
+      screen.getByText(t('pages.admin.back-to-settings')),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(t('pages.admin.course-exceptions-log.title'))
+      screen.getByText(t('pages.admin.course-exceptions-log.title')),
     ).toBeInTheDocument()
   })
   it('should go back to settings', async () => {
     // Arrange
     const backToSettingsButton = screen.getByText(
-      t('pages.admin.back-to-settings')
+      t('pages.admin.back-to-settings'),
     )
     // Act
     await userEvent.click(backToSettingsButton)

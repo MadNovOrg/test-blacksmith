@@ -62,18 +62,20 @@ describe('CourseForm - closed BILD', () => {
 
     expect(
       screen.getByTestId(
-        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
-      )
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
       screen.getByTestId(
-        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
-      )
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-level-option-${Course_Level_Enum.BildRegular}`)
+      screen.getByTestId(
+        `course-level-option-${Course_Level_Enum.BildRegular}`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -98,17 +100,17 @@ describe('CourseForm - closed BILD', () => {
       expect(screen.getByLabelText(/non restrictive tertiary/i)).toBeDisabled()
 
       expect(
-        screen.getByLabelText(/restrictive tertiary intermediate/i)
+        screen.getByLabelText(/restrictive tertiary intermediate/i),
       ).toBeChecked()
       expect(
-        screen.getByLabelText(/restrictive tertiary intermediate/i)
+        screen.getByLabelText(/restrictive tertiary intermediate/i),
       ).toBeDisabled()
 
       expect(
-        screen.getByLabelText(/restrictive tertiary advanced/i)
+        screen.getByLabelText(/restrictive tertiary advanced/i),
       ).not.toBeChecked()
       expect(
-        screen.getByLabelText(/restrictive tertiary advanced/i)
+        screen.getByLabelText(/restrictive tertiary advanced/i),
       ).toBeDisabled()
     })
   })
@@ -134,17 +136,17 @@ describe('CourseForm - closed BILD', () => {
       expect(screen.getByLabelText(/non restrictive tertiary/i)).toBeDisabled()
 
       expect(
-        screen.getByLabelText(/restrictive tertiary intermediate/i)
+        screen.getByLabelText(/restrictive tertiary intermediate/i),
       ).toBeChecked()
       expect(
-        screen.getByLabelText(/restrictive tertiary intermediate/i)
+        screen.getByLabelText(/restrictive tertiary intermediate/i),
       ).toBeDisabled()
 
       expect(
-        screen.getByLabelText(/restrictive tertiary advanced/i)
+        screen.getByLabelText(/restrictive tertiary advanced/i),
       ).toBeChecked()
       expect(
-        screen.getByLabelText(/restrictive tertiary advanced/i)
+        screen.getByLabelText(/restrictive tertiary advanced/i),
       ).toBeDisabled()
     })
   })
@@ -330,18 +332,18 @@ describe('CourseForm - closed BILD', () => {
 
       expect(screen.getByLabelText(/virtual/i)).toBeEnabled()
       expect(screen.getByLabelText(/both/i)).toBeEnabled()
-    }
+    },
   )
 
   it("doesn't allow changing residing country", async () => {
     useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) => flag === 'course-residing-country'
+      (flag: string) => flag === 'course-residing-country',
     )
     renderForm(Course_Type_Enum.Closed)
     await selectBildCategory()
 
     expect(
-      screen.queryByLabelText(t('components.course-form.residing-country'))
+      screen.queryByLabelText(t('components.course-form.residing-country')),
     ).not.toBeInTheDocument()
   })
 })

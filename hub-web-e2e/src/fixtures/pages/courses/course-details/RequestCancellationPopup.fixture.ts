@@ -10,13 +10,13 @@ export class RequestCancellationPopup extends BasePage {
   constructor(page: Page) {
     super(page)
     this.reasonForCancellationInput = this.page.locator(
-      '[data-testid="cancel-course-reason"] input'
+      '[data-testid="cancel-course-reason"] input',
     )
     this.confirmCheckbox = this.page.locator(
-      'data-testid=request-cancel-checkbox'
+      'data-testid=request-cancel-checkbox',
     )
     this.confirmButton = this.page.locator(
-      'data-testid=request-cancel-submit-button'
+      'data-testid=request-cancel-submit-button',
     )
   }
   async addReasonForCancellation(text: string) {

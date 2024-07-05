@@ -42,7 +42,7 @@ export const Preview: React.FC = () => {
       email: string
       certificateNumber: string
     }[],
-    number
+    number,
   ] = useMemo(() => {
     if (!data || !config) {
       return [[], 0]

@@ -23,7 +23,7 @@ const certificateTypes = Object.values(CertificateTypeEnum)
 
 const CertificateTypeParam = withDefault(
   createEnumArrayParam<CertificateTypeEnum>(certificateTypes),
-  [] as CertificateTypeEnum[]
+  [] as CertificateTypeEnum[],
 )
 
 export const FilterByCertificateType: React.FC<
@@ -40,7 +40,7 @@ export const FilterByCertificateType: React.FC<
 
   const [selected, setSelected] = useQueryParam(
     'certificateType',
-    CertificateTypeParam
+    CertificateTypeParam,
   )
 
   const options = useMemo(() => {
@@ -56,7 +56,7 @@ export const FilterByCertificateType: React.FC<
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

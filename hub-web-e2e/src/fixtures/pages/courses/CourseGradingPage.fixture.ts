@@ -13,16 +13,16 @@ export class CourseGradingPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.confirmModules = this.page.locator(
-      'text=Confirm modules and physical techniques'
+      'text=Confirm modules and physical techniques',
     )
     this.continueToAttendees = this.page.locator(
-      'text=Continue to grading attendees'
+      'text=Continue to grading attendees',
     )
     this.gradingMenu = this.page.locator(
-      'data-testid=course-grading-menu-selected'
+      'data-testid=course-grading-menu-selected',
     )
     this.feedbackInput = this.page.locator(
-      'data-testid=feedback-input >> input'
+      'data-testid=feedback-input >> input',
     )
   }
 
@@ -33,7 +33,7 @@ export class CourseGradingPage extends BasePage {
   async expectParticipantsToBeVisible(participants: CourseParticipant[]) {
     for (const participant of participants) {
       await expect(
-        this.page.locator(`text=${participant.profile.fullName}`)
+        this.page.locator(`text=${participant.profile.fullName}`),
       ).toBeVisible()
     }
   }
@@ -65,14 +65,14 @@ export class CourseGradingPage extends BasePage {
 
   async expectParticipantsToHaveGrade(
     participants: CourseParticipant[],
-    grade: 'Pass' | 'Fail' | 'Observe only'
+    grade: 'Pass' | 'Fail' | 'Observe only',
   ) {
     await this.page.reload()
     for (const participant of participants) {
       await expect(
         this.page.locator(
-          `data-testid=attending-participant-row-${participant.id} >> text=${grade}`
-        )
+          `data-testid=attending-participant-row-${participant.id} >> text=${grade}`,
+        ),
       ).toBeVisible()
     }
   }

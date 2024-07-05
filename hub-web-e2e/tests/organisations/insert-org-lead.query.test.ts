@@ -36,7 +36,7 @@ allowedRoles.forEach(role => {
       runQueryAsRole(InsertOrgLeadMutation, buildMutationInput(), role, {
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
-      })
+      }),
     ).resolves.not.toThrow()
   })
 })

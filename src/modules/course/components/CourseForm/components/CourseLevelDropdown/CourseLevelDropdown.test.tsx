@@ -42,7 +42,7 @@ describe('component: CourseLevelDropdown', () => {
         courseType={Course_Type_Enum.Open}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await userEvent.click(screen.getByRole('button'))
@@ -52,13 +52,13 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.INTERMEDIATE_TRAINER'))
+      getOption(t('common.course-levels.INTERMEDIATE_TRAINER')),
     ).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.ADVANCED_TRAINER'))
+      getOption(t('common.course-levels.ADVANCED_TRAINER')),
     ).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.FOUNDATION_TRAINER_PLUS'))
+      getOption(t('common.course-levels.FOUNDATION_TRAINER_PLUS')),
     ).toBeInTheDocument()
   })
 
@@ -72,7 +72,7 @@ describe('component: CourseLevelDropdown', () => {
         courseType={Course_Type_Enum.Closed}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await userEvent.click(screen.getByRole('button'))
@@ -83,13 +83,13 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.INTERMEDIATE_TRAINER'))
+      getOption(t('common.course-levels.INTERMEDIATE_TRAINER')),
     ).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.ADVANCED_TRAINER'))
+      getOption(t('common.course-levels.ADVANCED_TRAINER')),
     ).toBeInTheDocument()
     expect(
-      screen.getByTestId('course-level-option-LEVEL_1_BS')
+      screen.getByTestId('course-level-option-LEVEL_1_BS'),
     ).toBeInTheDocument()
   })
 
@@ -101,7 +101,7 @@ describe('component: CourseLevelDropdown', () => {
         courseType={Course_Type_Enum.Indirect}
         courseAccreditor={Accreditors_Enum.Icm}
       />,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await userEvent.click(screen.getByRole('button'))
@@ -133,7 +133,7 @@ describe('component: CourseLevelDropdown', () => {
           ],
           activeCertificates: [Course_Level_Enum.IntermediateTrainer],
         },
-      }
+      },
     )
 
     await userEvent.click(screen.getByRole('button'))
@@ -144,7 +144,7 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_1_BS'))).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.ADVANCED'), true)
+      getOption(t('common.course-levels.ADVANCED'), true),
     ).not.toBeInTheDocument()
   })
 
@@ -161,7 +161,7 @@ describe('component: CourseLevelDropdown', () => {
           activeRole: RoleName.TRAINER,
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
-      }
+      },
     )
 
     await userEvent.click(screen.getByRole('button'))
@@ -187,7 +187,7 @@ describe('component: CourseLevelDropdown', () => {
           activeRole: RoleName.TRAINER,
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
         },
-      }
+      },
     )
 
     await userEvent.click(screen.getByRole('button'))

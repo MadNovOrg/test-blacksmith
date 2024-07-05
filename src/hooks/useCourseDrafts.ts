@@ -39,7 +39,7 @@ export function useCourseDrafts({ sorting, pagination }: Props) {
   })
 
   const mapDraftData = (
-    dataFromResponse?: GetCourseDraftsQuery['course_draft']
+    dataFromResponse?: GetCourseDraftsQuery['course_draft'],
   ) =>
     dataFromResponse?.map(d => ({
       id: d.id,
@@ -59,7 +59,7 @@ export function useCourseDrafts({ sorting, pagination }: Props) {
         ? data?.course_draft_aggregate.aggregate?.count
         : 0,
     }),
-    [data?.course_draft, data?.course_draft_aggregate, error, fetching]
+    [data?.course_draft, data?.course_draft_aggregate, error, fetching],
   )
 }
 

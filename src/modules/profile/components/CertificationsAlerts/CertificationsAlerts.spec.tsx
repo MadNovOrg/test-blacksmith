@@ -14,7 +14,7 @@ describe(CertificationsAlerts.name, () => {
         certificate={
           certificate as GetProfileDetailsQuery['certificates'][0] // buildCertificate uses types from @app/types 🙃
         }
-      />
+      />,
     )
   it('should render the component', () => {
     setup()
@@ -25,7 +25,7 @@ describe(CertificationsAlerts.name, () => {
     detail => {
       setup()
       expect(screen.getByText(detail)).toBeInTheDocument()
-    }
+    },
   )
   it('should render exired certificate correctly', () => {
     // Arrange

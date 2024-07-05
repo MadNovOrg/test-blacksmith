@@ -99,7 +99,7 @@ export const ICMGradingV2: React.FC<Props> = ({ course }) => {
   const canAddModuleNotes = acl.canAddModuleNotes(
     course.trainers
       .filter(t => t.type === Course_Trainer_Type_Enum.Leader)
-      .map(t => t.profile_id)
+      .map(t => t.profile_id),
   )
 
   const curriculum = useMemo(() => {

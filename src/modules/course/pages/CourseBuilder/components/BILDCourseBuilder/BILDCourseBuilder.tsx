@@ -65,11 +65,11 @@ function transformSelection(selectedModules: Record<string, boolean>) {
         const [groupName, moduleName] = parts
 
         const existingGroup = transformedSelection[strategyName].groups?.find(
-          group => group.name === groupName
+          group => group.name === groupName,
         )
 
         let group = transformedSelection[strategyName].groups?.find(
-          group => group.name === groupName
+          group => group.name === groupName,
         ) ?? {
           name: groupName,
           modules: [],
@@ -196,13 +196,13 @@ export const BILDCourseBuilder: React.FC<
     if (courseData.course.conversion) {
       return t(
         'pages.trainer-base.create-course.new-course.BILD-generic-description-hours',
-        { hours: duration }
+        { hours: duration },
       )
     }
 
     return t(
       'pages.trainer-base.create-course.new-course.BILD-generic-description',
-      { days: duration }
+      { days: duration },
     )
   }, [courseData, t])
 
@@ -221,7 +221,7 @@ export const BILDCourseBuilder: React.FC<
             courseStrategies: courseData.course.bildStrategies ?? [],
             allStrategies: bildStrategies,
           })
-        : {}
+        : {},
     )
     setDisabledStrategies(
       courseData?.course
@@ -229,7 +229,7 @@ export const BILDCourseBuilder: React.FC<
             courseLevel: courseData?.course?.level,
             courseStrategies: courseData?.course?.bildStrategies ?? [],
           })
-        : {}
+        : {},
     )
     setSubmitError(undefined)
   }, [bildStrategies, courseData?.course])
@@ -242,7 +242,9 @@ export const BILDCourseBuilder: React.FC<
 
   const courseStrategies = useMemo(() => {
     return bildStrategies.filter(s =>
-      courseData?.course?.bildStrategies?.find(cs => cs.strategyName === s.name)
+      courseData?.course?.bildStrategies?.find(
+        cs => cs.strategyName === s.name,
+      ),
     )
   }, [bildStrategies, courseData])
 
@@ -294,7 +296,7 @@ export const BILDCourseBuilder: React.FC<
       } else {
         const [moduleName] = parts
         const module = strategy.modules.modules?.find(
-          m => m.name === moduleName
+          m => m.name === moduleName,
         )
 
         if (!module) return
@@ -324,8 +326,8 @@ export const BILDCourseBuilder: React.FC<
         setSubmitError(
           t(
             'pages.trainer-base.create-course.new-course.strategy-validation-error',
-            { name: t(`common.bild-strategies.${strategyName}`) }
-          )
+            { name: t(`common.bild-strategies.${strategyName}`) },
+          ),
         )
         return
       }
@@ -402,8 +404,8 @@ export const BILDCourseBuilder: React.FC<
     if (moduleSettingsData?.moduleSettings.length) {
       setSelectedModules(
         moduleSettingsData.moduleSettings.filter(
-          moduleSetting => moduleSetting.mandatory
-        )
+          moduleSetting => moduleSetting.mandatory,
+        ),
       )
     }
   }, [moduleSettingsData])
@@ -459,7 +461,7 @@ export const BILDCourseBuilder: React.FC<
             <LeftPane data-testid="all-modules">
               <Typography variant="h3" mb={4}>
                 {t(
-                  'pages.trainer-base.create-course.new-course.modules-available'
+                  'pages.trainer-base.create-course.new-course.modules-available',
                 )}
               </Typography>
               <Box display="flex" flexDirection="column">
@@ -534,7 +536,7 @@ export const BILDCourseBuilder: React.FC<
                                       {t('minimum')}{' '}
                                       <span data-testid="module-duration">
                                         {formatDurationShort(
-                                          moduleSetting.duration
+                                          moduleSetting.duration,
                                         )}
                                       </span>
                                     </Typography>
@@ -559,7 +561,7 @@ export const BILDCourseBuilder: React.FC<
               >
                 <Typography variant="h3">
                   {t(
-                    'pages.trainer-base.create-course.new-course.course-summary'
+                    'pages.trainer-base.create-course.new-course.course-summary',
                   )}
                 </Typography>
                 {showDuration ? (
@@ -569,7 +571,7 @@ export const BILDCourseBuilder: React.FC<
                     </Typography>
                     <Typography variant="body2" px={1}>
                       {t(
-                        'pages.trainer-base.create-course.new-course.estimated-duration'
+                        'pages.trainer-base.create-course.new-course.estimated-duration',
                       )}
                     </Typography>
                   </Box>
@@ -595,7 +597,7 @@ export const BILDCourseBuilder: React.FC<
                       }
                       sx={{ order: s.sort }}
                     />
-                  ) : null
+                  ) : null,
                 )}
 
                 {selectedModules.map(moduleSetting => (
@@ -645,7 +647,7 @@ export const BILDCourseBuilder: React.FC<
                   sx={{ mb: 2 }}
                 >
                   {t(
-                    'pages.trainer-base.create-course.new-course.submit-course'
+                    'pages.trainer-base.create-course.new-course.submit-course',
                   )}
                 </Button>
                 <Button

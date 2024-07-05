@@ -45,7 +45,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [isManualFormError, setIsManualFormError] = useState(false)
 
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
-    'search-only-by-postcode-on-registration'
+    'search-only-by-postcode-on-registration',
   )
 
   const { t, _t } = useScopedTranslation('pages.onboarding')
@@ -150,7 +150,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         return
       }
     },
-    [setValue]
+    [setValue],
   )
 
   return (
@@ -215,7 +215,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                 if (code) {
                   setValue(
                     'country',
-                    getCountryLabel(code as WorldCountriesCodes) ?? ''
+                    getCountryLabel(code as WorldCountriesCodes) ?? '',
                   )
                   setValue('countryCode', code)
                 }
@@ -341,7 +341,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                         target="_blank"
                         rel="noreferrer"
                         aria-label={`${_t('terms-of-use')} (${_t(
-                          'opens-new-window'
+                          'opens-new-window',
                         )})`}
                       >
                         Terms of Use
@@ -353,7 +353,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                         target="_blank"
                         rel="noreferrer"
                         aria-label={`${_t('privacy-policy')} (${_t(
-                          'opens-new-window'
+                          'opens-new-window',
                         )})`}
                       >
                         Privacy Policy

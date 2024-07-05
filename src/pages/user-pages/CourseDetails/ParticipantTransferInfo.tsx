@@ -20,7 +20,7 @@ export const ParticipantTransferInfo: React.FC<
   }>
 > = ({ startDate, courseLevel, onAgreeTerms }) => {
   const { t } = useScopedTranslation(
-    'pages.course-details.change-my-attendance.transfer-info'
+    'pages.course-details.change-my-attendance.transfer-info',
   )
   const [agreeTerms, setAgreeTerms] = useState(false)
 

@@ -28,7 +28,7 @@ describe('page: VideoSeries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/video-series'] }
+      { initialEntries: ['/video-series'] },
     )
 
     expect(screen.getByTestId('featured-video-skeleton')).toBeInTheDocument()
@@ -58,29 +58,29 @@ describe('page: VideoSeries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/video-series'] }
+      { initialEntries: ['/video-series'] },
     )
 
     expect(
-      screen.queryByTestId('featured-video-skeleton')
+      screen.queryByTestId('featured-video-skeleton'),
     ).not.toBeInTheDocument()
     expect(
-      screen.queryByTestId('video-items-grid-skeleton')
+      screen.queryByTestId('video-items-grid-skeleton'),
     ).not.toBeInTheDocument()
 
     const featuredVideo = screen.getByTestId('featured-video-series-item')
 
     expect(
-      within(featuredVideo).getByText(videoItems[0].title ?? '')
+      within(featuredVideo).getByText(videoItems[0].title ?? ''),
     ).toBeInTheDocument()
 
     expect(within(featuredVideo).getByText('New video')).toBeInTheDocument()
 
     expect(
-      within(featuredVideo).getByAltText(videoItems[0].title ?? '')
+      within(featuredVideo).getByAltText(videoItems[0].title ?? ''),
     ).toHaveAttribute(
       'src',
-      videoItems[0].featuredImage?.node?.mediaItemUrl ?? ''
+      videoItems[0].featuredImage?.node?.mediaItemUrl ?? '',
     )
   })
 
@@ -108,13 +108,13 @@ describe('page: VideoSeries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/video-series'] }
+      { initialEntries: ['/video-series'] },
     )
 
     const featuredVideo = screen.getByTestId('featured-video-series-item')
 
     await userEvent.click(
-      within(featuredVideo).getByAltText(videoItems[0].title ?? '')
+      within(featuredVideo).getByAltText(videoItems[0].title ?? ''),
     )
 
     expect(screen.getByText('Video item page')).toBeInTheDocument()
@@ -143,25 +143,25 @@ describe('page: VideoSeries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/video-series'] }
+      { initialEntries: ['/video-series'] },
     )
 
     videoItems.forEach(item => {
       const itemElement = screen.getByTestId(
-        `video-series-grid-item-${item.id}`
+        `video-series-grid-item-${item.id}`,
       )
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -199,17 +199,17 @@ describe('page: VideoSeries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/video-series'] }
+      { initialEntries: ['/video-series'] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search videos'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`video-series-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`video-series-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -261,23 +261,23 @@ describe('page: VideoSeries', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/video-series'] }
+      { initialEntries: ['/video-series'] },
     )
 
     await userEvent.click(screen.getByTestId('video-series-next-page'))
 
     expect(
       within(screen.getByTestId('featured-video-series-item')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`video-series-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`video-series-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`video-series-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`video-series-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('video-series-next-page')).toBeDisabled()
@@ -286,16 +286,16 @@ describe('page: VideoSeries', () => {
 
     expect(
       within(screen.getByTestId('featured-video-series-item')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`video-series-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`video-series-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`video-series-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`video-series-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('video-series-previous-page')).toBeDisabled()

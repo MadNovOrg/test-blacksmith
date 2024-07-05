@@ -93,20 +93,20 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
   // - Closed course ICM residing country https://behaviourhub.atlassian.net/browse/TTHP-3529
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
-    'open-icm-course-international-finance'
+    'open-icm-course-international-finance',
   )
 
   const internationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect'
+    'international-indirect',
   )
 
   const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const isInternationalFinanceEnabled = useMemo(
     () => Boolean(openIcmInternationalFinanceEnabled),
-    [openIcmInternationalFinanceEnabled]
+    [openIcmInternationalFinanceEnabled],
   )
 
   const {
@@ -131,7 +131,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       formState,
       reset,
     }),
-    [trigger, formState, reset]
+    [trigger, formState, reset],
   )
 
   const values = watch()
@@ -155,7 +155,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
    */
   const showInternationalFinanceSection = useMemo(
     () => isInternationalFinanceEnabled && !isUKCountry(values.residingCountry),
-    [isInternationalFinanceEnabled, isUKCountry, values.residingCountry]
+    [isInternationalFinanceEnabled, isUKCountry, values.residingCountry],
   )
 
   // CLOSED course shows two fields by default: Sales Representative & Source
@@ -173,7 +173,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       values.accreditedBy,
       values.courseLevel,
       values.residingCountry,
-    ]
+    ],
   )
 
   const courseHasManualPrice = useMemo(() => {
@@ -233,7 +233,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
    */
   const showBILDcourseFinanceSection = useMemo(
     () => (isOpenCourse || isClosedCourse) && isBild,
-    [isBild, isClosedCourse, isOpenCourse]
+    [isBild, isClosedCourse, isOpenCourse],
   )
 
   const coursePrice = useCoursePrice({
@@ -257,11 +257,11 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffectOnce(() => {
     setValue(
       'residingCountry',
-      courseInput?.residingCountry ?? courseResidingCountry
+      courseInput?.residingCountry ?? courseResidingCountry,
     )
 
     const UKcountry = isUKCountry(
-      courseInput?.residingCountry ?? courseResidingCountry
+      courseInput?.residingCountry ?? courseResidingCountry,
     )
 
     if (isCreation && UKcountry) {
@@ -301,7 +301,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       allowCourseEditWithoutScheduledPrice(
         courseHasManualPrice ||
           (!courseHasManualPrice && Boolean(coursePrice)) ||
-          courseWithNoPrice
+          courseWithNoPrice,
       )
     }
   }, [
@@ -370,7 +370,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       .filter(el => !!el)
 
     elements.sort(
-      (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top
+      (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
     )
 
     if (elements.length > 0) {

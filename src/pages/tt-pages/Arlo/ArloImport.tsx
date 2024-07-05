@@ -73,7 +73,7 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
       interval: 5000,
       maxPolls: 30,
       onTimeout: () => setImportInProgress(false),
-    }
+    },
   )
 
   const handleFileChange = useCallback(
@@ -104,7 +104,7 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
         setImportInProgress(false)
       }
     },
-    [importCertificates, startPolling]
+    [importCertificates, startPolling],
   )
 
   const alertSeverity: AlertColor | undefined = useMemo(() => {
@@ -141,12 +141,10 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
         ) : null}
 
         {result?.invalid && result.invalidEntries?.length ? (
-          <>
-            <Alert severity="error" variant="outlined">
-              <Typography>Invalid entries:</Typography>
-              {result.invalidEntries.map(entry => `${entry?.email} \n`)}
-            </Alert>
-          </>
+          <Alert severity="error" variant="outlined">
+            <Typography>Invalid entries:</Typography>
+            {result.invalidEntries.map(entry => `${entry?.email} \n`)}
+          </Alert>
         ) : null}
 
         <input

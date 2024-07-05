@@ -19,7 +19,7 @@ export type CurrenciesLabels = keyof typeof CurrenciesCodes
 export type CurrencyCode = (typeof CurrenciesCodes)[CurrenciesLabels]
 
 export const CurrenciesSymbols = Object.fromEntries(
-  Object.entries(CurrenciesCodes).map(([label, code]) => [code, label])
+  Object.entries(CurrenciesCodes).map(([label, code]) => [code, label]),
 ) as {
   [key in CurrenciesLabels as (typeof CurrenciesCodes)[key]]: key
 }
@@ -32,7 +32,7 @@ const CurrencySelector = ({
   const { t } = useTranslation()
   const currencies = useMemo<CurrenciesLabels[]>(
     () => Object.keys(CurrenciesCodes) as CurrenciesLabels[],
-    []
+    [],
   )
 
   return (

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export function useGradingParticipants<T extends { id: string }>(
-  participants: T[]
+  participants: T[],
 ): T[] {
   const [searchParams] = useSearchParams()
 
@@ -16,7 +16,7 @@ export function useGradingParticipants<T extends { id: string }>(
     }
 
     return participants?.filter(participant =>
-      participantIds.has(participant.id)
+      participantIds.has(participant.id),
     )
   }, [participants, participantIds])
 

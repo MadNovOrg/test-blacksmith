@@ -54,7 +54,7 @@ describe('page: OrderDetails', () => {
   const courseStartDate = new Date('2023-01-25T08:00:00+00:00').toISOString()
   const courseEndDate = addHours(
     new Date('2023-01-25T08:00:00+00:00'),
-    8
+    8,
   ).toISOString()
 
   const baseCourse = {
@@ -114,7 +114,7 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
@@ -133,11 +133,11 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByText('Something wrong happened. Please try again later')
+      screen.getByText('Something wrong happened. Please try again later'),
     ).toBeInTheDocument()
   })
 
@@ -168,18 +168,18 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
     expect(
-      screen.getByTestId('order-course-title').textContent
+      screen.getByTestId('order-course-title').textContent,
     ).toMatchInlineSnapshot(`"Level One  - 8 hours "`)
     expect(
-      screen.getByTestId('order-course-duration').textContent
+      screen.getByTestId('order-course-duration').textContent,
     ).toMatchInlineSnapshot(
       `"${format(new Date(courseStartDate), 'd LLL yyyyhh:mm a')} - ${format(
         new Date(courseEndDate),
-        'hh:mm a'
-      )}(local time)"`
+        'hh:mm a',
+      )}(local time)"`,
     )
   })
 
@@ -260,36 +260,36 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const user1Row = screen.getByTestId(`order-registrant-0`)
     const mandatoryCourseMaterialsRow = screen.getByTestId(
-      `line-item-${CourseWorkbooks.Mandatory}`
+      `line-item-${CourseWorkbooks.Mandatory}`,
     )
     const freeCourseMaterialsRow = screen.getByTestId(
-      `line-item-${CourseWorkbooks.Free}`
+      `line-item-${CourseWorkbooks.Free}`,
     )
 
     expect(
-      within(user1Row).getByText(invoice.lineItems[0].description)
+      within(user1Row).getByText(invoice.lineItems[0].description),
     ).toBeInTheDocument()
     expect(
-      within(user1Row).getByText(formatCurrency(unitPrice))
+      within(user1Row).getByText(formatCurrency(unitPrice)),
     ).toBeInTheDocument()
     expect(
       within(mandatoryCourseMaterialsRow).getByText(
         t('pages.order-details.mandatory-course-materials', {
           count: invoice.lineItems[2].quantity,
-        })
-      )
+        }),
+      ),
     )
     expect(
       within(freeCourseMaterialsRow).getByText(
         t('pages.order-details.free-course-materials', {
           count: invoice.lineItems[3].quantity,
-        })
-      )
+        }),
+      ),
     )
   })
 
@@ -338,11 +338,11 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByText(`${formatCurrency(unitPrice)} per attendee`)
+      screen.getByText(`${formatCurrency(unitPrice)} per attendee`),
     ).toBeInTheDocument()
   })
 
@@ -407,16 +407,16 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const promoCodeRow = screen.getByTestId('order-promo-code')
 
     expect(
-      within(promoCodeRow).getByText(`Promo code: ${promoCode.code}`)
+      within(promoCodeRow).getByText(`Promo code: ${promoCode.code}`),
     ).toBeInTheDocument()
     expect(
-      within(promoCodeRow).getByText(formatCurrency(discountAmount))
+      within(promoCodeRow).getByText(formatCurrency(discountAmount)),
     ).toBeInTheDocument()
   })
 
@@ -462,7 +462,7 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const registrantRows = screen.getAllByTestId('registrants-details')
@@ -527,7 +527,7 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const subTotalRow = screen.getByTestId('order-subtotal')
@@ -538,18 +538,18 @@ describe('page: OrderDetails', () => {
     const amountDueRow = screen.getByTestId('order-amount-due')
 
     expect(
-      within(subTotalRow).getByText(formatCurrency(subtotal))
+      within(subTotalRow).getByText(formatCurrency(subtotal)),
     ).toBeInTheDocument()
     expect(within(vatRow).getByText(formatCurrency(vat))).toBeInTheDocument()
     expect(
-      within(totalRow).getByText(formatCurrency(total))
+      within(totalRow).getByText(formatCurrency(total)),
     ).toBeInTheDocument()
     expect(within(dueDateRow).getByText(/paid/i)).toBeInTheDocument()
     expect(
-      within(paidRow).getByText(formatCurrency(Number(invoice.amountPaid)))
+      within(paidRow).getByText(formatCurrency(Number(invoice.amountPaid))),
     ).toBeInTheDocument()
     expect(
-      within(amountDueRow).getByText(formatCurrency(Number(invoice.amountDue)))
+      within(amountDueRow).getByText(formatCurrency(Number(invoice.amountDue))),
     ).toBeInTheDocument()
   })
 
@@ -586,7 +586,7 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText(/pay by credit card/i)).toBeInTheDocument()
@@ -635,7 +635,7 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText(/sales person/i)).toBeInTheDocument()
@@ -715,30 +715,30 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const invoicedToRow = screen.getByTestId('order-invoiced-to')
 
     expect(
-      within(invoicedToRow).getByText(orderInfo?.organization.name ?? '')
+      within(invoicedToRow).getByText(orderInfo?.organization.name ?? ''),
     ).toBeInTheDocument()
 
     expect(
       within(invoicedToRow).getByText(
-        `${orderInfo?.billingGivenName} ${orderInfo?.billingFamilyName}`
-      )
+        `${orderInfo?.billingGivenName} ${orderInfo?.billingFamilyName}`,
+      ),
     ).toBeInTheDocument()
 
     expect(
-      within(invoicedToRow).getByText(orderInfo?.billingEmail ?? '')
+      within(invoicedToRow).getByText(orderInfo?.billingEmail ?? ''),
     ).toBeInTheDocument()
 
     expect(
-      within(invoicedToRow).getByText(orderInfo?.billingPhone ?? '')
+      within(invoicedToRow).getByText(orderInfo?.billingPhone ?? ''),
     ).toBeInTheDocument()
     expect(
-      within(invoicedToRow).getByTestId('contact-address')
+      within(invoicedToRow).getByTestId('contact-address'),
     ).toHaveTextContent(orderInfo?.billingAddress ?? '')
   })
 
@@ -793,16 +793,16 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const freeSpacesRow = screen.getByTestId('free-spaces-row')
 
     expect(
-      within(freeSpacesRow).getByText('Free spaces x 2')
+      within(freeSpacesRow).getByText('Free spaces x 2'),
     ).toBeInTheDocument()
     expect(
-      within(freeSpacesRow).getByText(formatCurrency(discountAmount))
+      within(freeSpacesRow).getByText(formatCurrency(discountAmount)),
     ).toBeInTheDocument()
     expect(screen.queryByTestId('order-promo-code')).not.toBeInTheDocument()
   })
@@ -871,18 +871,18 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const expensesRow = screen.getByTestId('expenses-row')
 
     expensesLineItems.forEach(expense => {
       expect(
-        within(expensesRow).getByText(expense.description ?? '')
+        within(expensesRow).getByText(expense.description ?? ''),
       ).toBeInTheDocument()
 
       expect(
-        within(expensesRow).getByText(formatCurrency(expense.lineAmount))
+        within(expensesRow).getByText(formatCurrency(expense.lineAmount)),
       ).toBeInTheDocument()
     })
   })
@@ -932,17 +932,17 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
 
     const regionInfo = screen.getByTestId('region-info')
 
     expect(within(regionInfo).getByText('-')).toBeInTheDocument()
     expect(
-      screen.getByText(t('pages.order-details.residing-country'))
+      screen.getByText(t('pages.order-details.residing-country')),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(getLabel(nonUKCountryCode) as string)
+      screen.getByText(getLabel(nonUKCountryCode) as string),
     ).toBeInTheDocument()
   })
   it('renders timezone details when feature flag is enabled', () => {
@@ -973,29 +973,29 @@ describe('page: OrderDetails', () => {
     render(
       <Provider value={client}>
         <OrderDetails />
-      </Provider>
+      </Provider>,
     )
     expect(
-      screen.getByTestId('order-course-title').textContent
+      screen.getByTestId('order-course-title').textContent,
     ).toMatchInlineSnapshot(`"Level One "`)
     expect(
-      screen.getByTestId('order-timezone-info').textContent
+      screen.getByTestId('order-timezone-info').textContent,
     ).toMatchInlineSnapshot(
       `"${format(
         new Date(courseStartDate),
-        'd MMMM yyyy, hh:mm a'
+        'd MMMM yyyy, hh:mm a',
       )} ${formatGMTDateTimeByTimeZone(
         courseStartDate,
         baseCourse.schedule[0].timezone,
-        false
+        false,
       )} - ${format(
         new Date(courseEndDate),
-        'd MMMM yyyy, hh:mm a'
+        'd MMMM yyyy, hh:mm a',
       )} ${formatGMTDateTimeByTimeZone(
         courseStartDate,
         baseCourse.schedule[0].timezone,
-        true
-      )}"`
+        true,
+      )}"`,
     )
   })
 })

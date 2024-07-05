@@ -51,7 +51,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
   const usesAOL =
     useWatch({ control, name: 'usesAOL' }) && isIndirectCourse && !isBild
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
-    courseType
+    courseType,
   )
   const showTrainerOrgOnly =
     !usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
@@ -99,7 +99,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
         })
       }
     },
-    [setValue]
+    [setValue],
   )
 
   const handleContactChange = useCallback(
@@ -131,7 +131,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
 
         setValue(`${field}.profileId`, isEmail ? undefined : value?.id)
       },
-    [contactData, setValue]
+    [contactData, setValue],
   )
 
   const onBlurUserSelector = useCallback(async () => {
@@ -142,7 +142,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
       const isNotAlreadyFetched = Boolean(
         !foundProfileData?.profiles.length ||
           (foundProfileData?.profiles.length &&
-            foundProfileData?.profiles[0].email !== contact?.email)
+            foundProfileData?.profiles[0].email !== contact?.email),
       )
 
       if (isValidEmail && isNotAlreadyFetched) {

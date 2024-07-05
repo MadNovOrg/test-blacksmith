@@ -33,7 +33,7 @@ export const useCoursePermissions = (
     | 'conversion'
     | 'reaccreditation'
     | 'accreditedBy'
-  > & { type: Course_Type_Enum }
+  > & { type: Course_Type_Enum },
 ) => {
   const {
     type,
@@ -58,7 +58,7 @@ export const useCoursePermissions = (
         type,
         courseLevel as Course_Level_Enum,
         deliveryType,
-        isBlended
+        isBlended,
       )
     : canBeReaccBild(type, bildStrategies, isBlended, conversion)
 
@@ -75,7 +75,7 @@ export const useCoursePermissions = (
     : canBeMixedBild(
         courseLevel as Course_Level_Enum,
         bildStrategies ? bildStrategiesToArray(bildStrategies) : [],
-        conversion
+        conversion,
       )
 
   const conversionEnabled =
@@ -89,9 +89,9 @@ export const useCoursePermissions = (
           TrainerRoleTypeName.EMPLOYER_AOL,
           TrainerRoleTypeName.PRINCIPAL,
           TrainerRoleTypeName.SENIOR,
-        ].includes(trainerRole.trainer_role_type.name)
+        ].includes(trainerRole.trainer_role_type.name),
       ),
-    [acl, profile?.trainer_role_types]
+    [acl, profile?.trainer_role_types],
   )
 
   return {

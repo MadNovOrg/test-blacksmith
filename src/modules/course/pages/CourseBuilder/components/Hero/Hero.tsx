@@ -38,7 +38,7 @@ export const Hero: React.FC<Props> = ({
                 date: formatDateForDraft(
                   course.updatedAt || new Date(),
                   t('common.ago'),
-                  t
+                  t,
                 ),
               })}
             </Typography>
@@ -57,7 +57,7 @@ export const Hero: React.FC<Props> = ({
         {showMandatoryNotice ? (
           <Typography variant="body2" mt={1} data-testid="mandatory-notice">
             {t(
-              'pages.trainer-base.create-course.new-course.mandatory-modules-notice'
+              'pages.trainer-base.create-course.new-course.mandatory-modules-notice',
             )}
           </Typography>
         ) : null}

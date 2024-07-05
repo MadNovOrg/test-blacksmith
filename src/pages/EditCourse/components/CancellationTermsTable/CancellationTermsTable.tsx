@@ -71,7 +71,7 @@ export const CancellationTermsTable: React.FC<
                     ? t(`pages.edit-course.cancellation-modal.terms.no-fee`)
                     : t(
                         `pages.edit-course.cancellation-modal.terms.percent-of-payment-due`,
-                        { percent: fee }
+                        { percent: fee },
                       )}
                 </Typography>
               </TableCell>

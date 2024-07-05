@@ -79,7 +79,7 @@ export const OrgInvitationPage = () => {
           headers: { 'x-auth': `Bearer ${tokenData?.token}` },
         },
       }),
-      [tokenData?.token]
+      [tokenData?.token],
     ),
   })
 
@@ -114,7 +114,7 @@ export const OrgInvitationPage = () => {
           `${isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`}`,
           {
             replace: true,
-          }
+          },
         )
       }
 
@@ -129,7 +129,7 @@ export const OrgInvitationPage = () => {
             fetchOptions: {
               headers: { 'x-auth': `Bearer ${tokenData.token}` },
             },
-          }
+          },
         )
         return navigate('/login?invitationDeclined=true')
       } catch (e) {

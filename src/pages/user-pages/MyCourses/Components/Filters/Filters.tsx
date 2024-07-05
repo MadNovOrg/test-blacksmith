@@ -63,7 +63,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
           {
             id: AttendeeOnlyCourseStatus.AwaitingGrade,
             title: t(
-              `course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`
+              `course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`,
             ),
             selected: false,
           },
@@ -80,7 +80,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
           {
             id: AdminOnlyCourseStatus.CancellationRequested,
             title: t(
-              `course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`
+              `course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`,
             ),
             selected: false,
           },
@@ -94,7 +94,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
           {
             id: AttendeeOnlyCourseStatus.InfoRequired,
             title: t(
-              `course-statuses.${AttendeeOnlyCourseStatus.InfoRequired}`
+              `course-statuses.${AttendeeOnlyCourseStatus.InfoRequired}`,
             ),
             selected: false,
           },
@@ -116,7 +116,7 @@ export function Filters({ forManaging = false, onChange }: Props) {
           {
             id: AttendeeOnlyCourseStatus.AwaitingGrade,
             title: t(
-              `course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`
+              `course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`,
             ),
             selected: false,
           },
@@ -131,9 +131,9 @@ export function Filters({ forManaging = false, onChange }: Props) {
   const statusFilter = useMemo(
     () =>
       statusOptions.flatMap(statusOption =>
-        statusOption.selected ? statusOption.id : []
+        statusOption.selected ? statusOption.id : [],
       ) as UserCourseStatus[],
-    [statusOptions]
+    [statusOptions],
   )
   useEffectOnce(() => {
     setFilterStatus(statusFilter)

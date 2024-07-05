@@ -17,7 +17,7 @@ export const Avatar: React.FC<React.PropsWithChildren<AvatarProps>> =
   React.forwardRef<HTMLDivElement, React.PropsWithChildren<AvatarProps>>(
     function AvatarInner(
       { name, src, size = 32, sx, className, imgProps, children, ...rest },
-      ref
+      ref,
     ) {
       const props = {
         src,
@@ -43,5 +43,5 @@ export const Avatar: React.FC<React.PropsWithChildren<AvatarProps>> =
           {children ? children : name ? null : <PersonIcon />}
         </MuiAvatar>
       )
-    }
+    },
   )

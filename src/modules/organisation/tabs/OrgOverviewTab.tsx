@@ -75,8 +75,8 @@ export const OrgOverviewTab: React.FC<
     'status',
     withDefault(
       createEnumArrayParam<CertificateStatus>(statuses),
-      [] as CertificateStatus[]
-    )
+      [] as CertificateStatus[],
+    ),
   )
 
   const {
@@ -123,7 +123,7 @@ export const OrgOverviewTab: React.FC<
           },
         ],
       },
-      UPCOMING_COURSES_LIMIT
+      UPCOMING_COURSES_LIMIT,
     )
 
   const levelsToShow = useMemo(() => {
@@ -161,7 +161,7 @@ export const OrgOverviewTab: React.FC<
         setCertificateStatus([])
       }
     },
-    [setCertificateStatus]
+    [setCertificateStatus],
   )
 
   const shouldShowLoader = coursesLoading || profilesFetching
@@ -231,7 +231,7 @@ export const OrgOverviewTab: React.FC<
                     }`,
                     {
                       count: profilesByLevel.get(courseLevel)?.length ?? 0,
-                    }
+                    },
                   )}
                   value={courseLevel ?? 'none'}
                 />

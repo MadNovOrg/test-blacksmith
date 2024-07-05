@@ -25,18 +25,18 @@ export class ResetPasswordPage extends BasePage {
     this.newPasswordInput = this.page.locator('#password')
     this.confirmPasswordInput = this.page.locator('#confirmPassword')
     this.confirmationCodeInputs = this.page.locator(
-      'input[data-testid*="passcode"]'
+      'input[data-testid*="passcode"]',
     )
     this.passwordErrorText = this.page.locator('#password-helper-text')
     this.resetPasswordButton = this.page.locator(
-      'button[data-testid="reset-password"]'
+      'button[data-testid="reset-password"]',
     )
     this.generalErrorText = this.page.locator('[data-testid="form-error"]')
   }
 
   async goto() {
     await super.goto(
-      `reset-password?email=abc@def.ghi&confirmation_code=123456`
+      `reset-password?email=abc@def.ghi&confirmation_code=123456`,
     )
   }
 
@@ -46,7 +46,7 @@ export class ResetPasswordPage extends BasePage {
 
   async submitPasswords(
     newPassword: string,
-    confirmPassword: string
+    confirmPassword: string,
   ): Promise<LoginPage> {
     await this.newPasswordInput.fill(newPassword)
     await this.confirmPasswordInput.fill(confirmPassword)

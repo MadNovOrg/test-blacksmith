@@ -114,11 +114,11 @@ export const Users = () => {
     const filterConditions: Record<string, object> = {}
 
     const selectedRoles = roleFilter.flatMap(item =>
-      item.selected ? item.id : []
+      item.selected ? item.id : [],
     )
 
     const selectedTrainerTypes = trainerTypeFilter.flatMap(item =>
-      item.selected ? item.id : []
+      item.selected ? item.id : [],
     )
 
     if (selectedRoles.length) {
@@ -557,7 +557,7 @@ export const Users = () => {
                                       return [...s, e.target.value]
                                     } else {
                                       return s.filter(
-                                        id => id !== e.target.value
+                                        id => id !== e.target.value,
                                       )
                                     }
                                   })
@@ -579,7 +579,7 @@ export const Users = () => {
                             <Typography variant="body2" color="secondary">
                               {user.countryCode
                                 ? getLabel(
-                                    user.countryCode as WorldCountriesCodes
+                                    user.countryCode as WorldCountriesCodes,
                                   )
                                 : ''}
                             </Typography>
@@ -616,7 +616,7 @@ export const Users = () => {
                                     }}
                                     size="small"
                                     label={t(
-                                      `trainer-role-types.${trainer_role_type.name}`
+                                      `trainer-role-types.${trainer_role_type.name}`,
                                     )}
                                     data-testid="trainer-role-type-chip"
                                   />

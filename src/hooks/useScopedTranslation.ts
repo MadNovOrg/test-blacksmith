@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const useScopedTranslation = (
-  scope: string
+  scope: string,
 ): { _t: TFunction; t: TFunction } => {
   const [ns, ...prefix] = scope.split('.')
   const { t: _t } = useTranslation()

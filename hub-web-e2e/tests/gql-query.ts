@@ -19,7 +19,7 @@ export async function runQueryAsRole<T>(
   query: string | TypedDocumentNode,
   variables: Variables,
   role: HasuraRole,
-  headers?: Variables
+  headers?: Variables,
 ) {
   const graphQLClient = new GraphQLClient(`${HASURA_BASE_URL}/v1/graphql`, {
     headers: {

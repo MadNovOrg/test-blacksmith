@@ -28,7 +28,7 @@ export function useUnevaluatedUserCourses(): {
 
   return {
     courses: data?.courses.filter(
-      course => course.evaluation_answers_aggregate.aggregate?.count === 0
+      course => course.evaluation_answers_aggregate.aggregate?.count === 0,
     ),
     error,
     status: getSWRLoadingStatus(data, error),

@@ -73,7 +73,7 @@ const Home: React.FC<React.PropsWithChildren<unknown>> = () => {
                   data.content.posts.nodes[0]?.excerpt ?? '',
                   {
                     allowedTags: [],
-                  }
+                  },
                 )}
                 orientation="left"
                 linkTo={`./blog/${data.content.posts.nodes[0]?.id}`}
@@ -180,7 +180,7 @@ const Home: React.FC<React.PropsWithChildren<unknown>> = () => {
                   data.content.videoSeriesItems.nodes[0]?.excerpt ?? '',
                   {
                     allowedTags: [],
-                  }
+                  },
                 )}
                 orientation="right"
                 linkTo={`./video-series/${data.content.videoSeriesItems.nodes[0]?.id}`}
@@ -428,14 +428,14 @@ const Home: React.FC<React.PropsWithChildren<unknown>> = () => {
                               }
                             >
                               {t(
-                                'pages.membership.research-summaries.download-button'
+                                'pages.membership.research-summaries.download-button',
                               )}
                             </DownloadButton>
                           }
                         />
                       </ContentGridItem>
                     )
-                  }
+                  },
                 )}
               </ContentGrid>
             </Box>

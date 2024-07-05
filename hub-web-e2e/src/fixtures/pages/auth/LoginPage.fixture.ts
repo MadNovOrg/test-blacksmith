@@ -24,11 +24,11 @@ export class LoginPage extends BasePage {
     this.passwordErrorText = this.page.locator('#password-helper-text')
     this.signInButton = this.page.locator('button[data-testid="login-submit"]')
     this.forgotPasswordLink = this.page.locator(
-      'a[data-testid="forgot-password-link"]'
+      'a[data-testid="forgot-password-link"]',
     )
     this.generalErrorText = this.page.locator('[data-testid="login-error"]')
     this.cookieConsentDeclinedButton = this.page.locator(
-      '#hs-eu-decline-button'
+      '#hs-eu-decline-button',
     )
   }
 

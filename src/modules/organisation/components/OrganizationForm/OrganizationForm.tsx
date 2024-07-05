@@ -106,7 +106,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const [isInUK, setIsInUK] = useState(true)
   const [specifyOtherOrgType, setSpecifyOtherOrgType] = useState<boolean>(false)
   const [sectorState, setSectorState] = useState<string | undefined | null>(
-    editOrgData?.sector
+    editOrgData?.sector,
   )
   const [orgTypeListLoaded, setOrgTypeListLoaded] = useState<boolean>(false)
   defaultValues.country =
@@ -114,7 +114,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
   const schema = useMemo(
     () => getFormSchema(t, _t, isInUK, addOrgCountriesSelectorEnabled),
-    [t, _t, isInUK, addOrgCountriesSelectorEnabled]
+    [t, _t, isInUK, addOrgCountriesSelectorEnabled],
   )
   const {
     control,
@@ -137,7 +137,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     (value: string) => {
       setValue('name', value ?? '', { shouldValidate: true })
     },
-    [setValue]
+    [setValue],
   )
 
   const onOrgSelected = useCallback(
@@ -146,7 +146,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
       if (!isEditMode && setXeroId) {
         setXeroId(
-          org && isXeroSuggestion(org) ? (org.xeroId as string) : undefined
+          org && isXeroSuggestion(org) ? (org.xeroId as string) : undefined,
         )
       }
 
@@ -159,7 +159,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
               key,
               org.ofstedLastInspection
                 ? new Date(org.ofstedLastInspection)
-                : null
+                : null,
             )
           }
           switch (key) {
@@ -178,7 +178,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                 key,
                 org.ofstedLastInspection
                   ? new Date(org.ofstedLastInspection)
-                  : null
+                  : null,
               )
             case 'ofstedRating':
               return orgDataMap.set(
@@ -187,7 +187,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   ? (ofstedRating[
                       org.ofstedRating as keyof typeof ofstedRating
                     ] as string)
-                  : ''
+                  : '',
               )
             case 'name':
               return orgDataMap.set(key, org.name)
@@ -202,7 +202,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
         await trigger()
       }
     },
-    [_t, isEditMode, setValue, setXeroId, trigger, values]
+    [_t, isEditMode, setValue, setXeroId, trigger, values],
   )
 
   useEffect(() => {
@@ -350,7 +350,8 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                           if (code) {
                             setValue(
                               'country',
-                              getCountryLabel(code as WorldCountriesCodes) ?? ''
+                              getCountryLabel(code as WorldCountriesCodes) ??
+                                '',
                             )
                             setValue('countryCode', code)
                             setIsInUK(isUKCountry(code))
@@ -650,7 +651,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     <TextField
                       id="headEmailAddress"
                       label={t(
-                        'fields.organisation-main-contact-email-address'
+                        'fields.organisation-main-contact-email-address',
                       )}
                       variant="filled"
                       error={!!errors.headEmailAddress}
@@ -730,7 +731,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                                       data-testid={`ofsted-rating-option-${option}`}
                                     >
                                       {_t(
-                                        `ofsted-rating.${option.toLowerCase()}`
+                                        `ofsted-rating.${option.toLowerCase()}`,
                                       )}
                                     </MenuItem>
                                   )
@@ -757,7 +758,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                                       helperText:
                                         errors.ofstedLastInspection?.message,
                                       label: t(
-                                        'fields.ofsted-last-inspection-date'
+                                        'fields.ofsted-last-inspection-date',
                                       ),
                                       variant: 'filled',
                                       fullWidth: true,

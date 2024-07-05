@@ -28,10 +28,10 @@ export const delay = (ms: number) =>
 
 export const getAdminIdToken: () => string = () => {
   const data = JSON.parse(
-    fs.readFileSync(stateFilePath('admin')).toString() ?? '{}'
+    fs.readFileSync(stateFilePath('admin')).toString() ?? '{}',
   )
   return data.origins[0].localStorage.filter((pair: KeyValue) =>
-    pair.name.endsWith('idToken')
+    pair.name.endsWith('idToken'),
   )[0].value
 }
 
@@ -43,7 +43,7 @@ export const sortModulesByName = (a: ModuleGroup, b: ModuleGroup) => {
 
 export const sortCoursesByAllFields = (
   a: CourseTableRow,
-  b: CourseTableRow
+  b: CourseTableRow,
 ) => {
   const strA = JSON.stringify(a)
   const strB = JSON.stringify(b)

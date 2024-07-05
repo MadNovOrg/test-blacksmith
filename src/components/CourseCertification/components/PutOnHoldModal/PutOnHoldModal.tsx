@@ -108,20 +108,20 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
             .min(
               yup.ref('dateFrom'),
               t(
-                'common.course-certificate.put-on-hold-modal.to-date-greater-error'
-              )
+                'common.course-certificate.put-on-hold-modal.to-date-greater-error',
+              ),
             ),
           reasonSelected: yup
             .string()
             .required(
               t(
-                'common.course-certificate.put-on-hold-modal.select-reason-error'
-              )
+                'common.course-certificate.put-on-hold-modal.select-reason-error',
+              ),
             ),
           note: yup
             .string()
             .required(
-              t('common.course-certificate.put-on-hold-modal.note-error')
+              t('common.course-certificate.put-on-hold-modal.note-error'),
             ),
         })
         .required()
@@ -160,7 +160,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
         const currentDate = new Date(Date.now())
         values.dateTo.setHours(
           currentDate.getHours(),
-          currentDate.getMinutes() + MINUTES_IN_FUTURE
+          currentDate.getMinutes() + MINUTES_IN_FUTURE,
         )
 
         insertCertificateChangelog({
@@ -184,7 +184,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
             if (edit) {
               timeDiff = differenceInDays(
                 dateTo,
-                new Date(lastChangelog?.payload?.expireDate)
+                new Date(lastChangelog?.payload?.expireDate),
               )
             } else {
               timeDiff = differenceInDays(dateTo, dateFrom)
@@ -252,7 +252,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           id="reasonSelected"
                           select
                           label={t(
-                            'common.course-certificate.put-on-hold-modal.select-reason'
+                            'common.course-certificate.put-on-hold-modal.select-reason',
                           )}
                           variant="filled"
                           data-testid="reason-input"
@@ -271,7 +271,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                               data-testid={`hold-reason-option-${level}`}
                             >
                               {t(
-                                `common.course-certificate.put-on-hold-modal.reasons.${level.toLocaleLowerCase()}`
+                                `common.course-certificate.put-on-hold-modal.reasons.${level.toLocaleLowerCase()}`,
                               )}
                             </MenuItem>
                           ))}
@@ -288,10 +288,10 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     >
                       {edit
                         ? t(
-                            'common.course-certificate.put-on-hold-modal.add-updated-notes'
+                            'common.course-certificate.put-on-hold-modal.add-updated-notes',
                           )
                         : t(
-                            'common.course-certificate.put-on-hold-modal.notes'
+                            'common.course-certificate.put-on-hold-modal.notes',
                           )}
                     </Typography>
                   </Grid>
@@ -307,7 +307,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           error={!!errors.note}
                           helperText={errors.note?.message}
                           label={t(
-                            'common.course-certificate.put-on-hold-modal.please-add-a-note'
+                            'common.course-certificate.put-on-hold-modal.please-add-a-note',
                           )}
                           {...field}
                         />

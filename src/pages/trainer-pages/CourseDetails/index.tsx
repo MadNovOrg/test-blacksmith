@@ -87,7 +87,7 @@ export const CourseDetails = () => {
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
 
   const [selectedTab, setSelectedTab] = useState(
-    initialTab ?? CourseDetailsTabs.ATTENDEES
+    initialTab ?? CourseDetailsTabs.ATTENDEES,
   )
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
     useState(false)
@@ -115,7 +115,7 @@ export const CourseDetails = () => {
 
   const { total: courseParticipantsTotal } = useCourseParticipants(
     Number(courseId),
-    { alwaysShowArchived: true }
+    { alwaysShowArchived: true },
   )
 
   const [{ data: dietaryAndDisabilitiesCount }, reexecuteDietaryQuery] =
@@ -153,7 +153,7 @@ export const CourseDetails = () => {
       acl.canEditCourses(course) &&
       !courseEnded(course) &&
       !courseCancelled,
-    [acl, course, courseCancelled]
+    [acl, course, courseCancelled],
   )
 
   const linkedOrderItem = useMemo(() => course?.orders?.[0]?.order, [course])
@@ -167,7 +167,7 @@ export const CourseDetails = () => {
       {
         interval: 2000,
         maxPolls: 5,
-      }
+      },
     )
 
   useEffect(() => {
@@ -187,7 +187,7 @@ export const CourseDetails = () => {
   const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
-    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended]
+    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended],
   )
 
   /**
@@ -213,7 +213,7 @@ export const CourseDetails = () => {
   // Maybe use urql's retryExchange instead of this
   const [startPolling, polling] = usePollQuery(
     () => Promise.resolve(mutate({ requestPolicy: 'network-only' })),
-    () => !!course?.status
+    () => !!course?.status,
   )
 
   const canRequestCancellation = useMemo(() => {
@@ -224,7 +224,7 @@ export const CourseDetails = () => {
       isPast(new Date(course?.schedule[0]?.end))
 
     const graduationFinished = !course?.courseParticipants?.some(
-      participant => !participant.grade
+      participant => !participant.grade,
     )
     const cancelRequested = Boolean(course?.cancellationRequest)
 
@@ -232,7 +232,7 @@ export const CourseDetails = () => {
       course?.status,
       courseEnded,
       graduationFinished,
-      cancelRequested
+      cancelRequested,
     )
     const hostingOrgId = course.organization?.id ?? ''
 
@@ -265,7 +265,7 @@ export const CourseDetails = () => {
 
   const showCourseBuilderOnEditPage = acl.canViewCourseBuilderOnEditPage(
     course,
-    course?.trainers ?? []
+    course?.trainers ?? [],
   )
 
   const shouldShowPreCourseMaterials =
@@ -410,9 +410,9 @@ export const CourseDetails = () => {
                               ?.count ?? 0) +
                               (dietaryAndDisabilitiesCount
                                 .trainerDietaryRestrictionsCount.aggregate
-                                ?.count ?? 0)
+                                ?.count ?? 0),
                           ),
-                        }
+                        },
                       )}
                       value={CourseDetailsTabs.DIETARY_REQUIREMENTS}
                       data-testid="dietary-requirements-tab"
@@ -432,9 +432,10 @@ export const CourseDetails = () => {
                               ?.participantDisabilitiesCount.aggregate?.count ??
                               0) +
                               (dietaryAndDisabilitiesCount
-                                .trainerDisabilitiesCount.aggregate?.count ?? 0)
+                                .trainerDisabilitiesCount.aggregate?.count ??
+                                0),
                           ),
-                        }
+                        },
                       )}
                       value={CourseDetailsTabs.DISABILITIES}
                       data-testid="disabilities-tab"
@@ -445,7 +446,7 @@ export const CourseDetails = () => {
                     .count ? (
                     <PillTab
                       label={t(
-                        'pages.course-details.tabs.certifications.title'
+                        'pages.course-details.tabs.certifications.title',
                       )}
                       value={CourseDetailsTabs.CERTIFICATIONS}
                       data-testid="certifications-tab"
@@ -454,7 +455,7 @@ export const CourseDetails = () => {
                   {showCourseOverview ? (
                     <PillTab
                       label={t(
-                        'pages.course-details.tabs.course-overview.title'
+                        'pages.course-details.tabs.course-overview.title',
                       )}
                       value={CourseDetailsTabs.COURSE_OVERVIEW}
                       data-testid="course-overview-tab"
@@ -464,7 +465,7 @@ export const CourseDetails = () => {
                   {shouldShowPreCourseMaterials && (
                     <PillTab
                       label={t(
-                        'pages.course-details.tabs.pre-course-materials.title'
+                        'pages.course-details.tabs.pre-course-materials.title',
                       )}
                       value={CourseDetailsTabs.PRE_COURSE_MATERIALS}
                       data-testid="pre-course-materials-tab"

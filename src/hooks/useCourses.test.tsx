@@ -54,7 +54,7 @@ describe('hook: useCourses', () => {
         }),
       {
         wrapper: Wrapper,
-      }
+      },
     )
 
     expect(whereClause).toMatchInlineSnapshot(`
@@ -142,7 +142,7 @@ describe('hook: useCourses', () => {
         }),
       {
         wrapper: Wrapper,
-      }
+      },
     )
 
     expect(whereClause).toMatchInlineSnapshot(`

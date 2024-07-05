@@ -144,6 +144,6 @@ export default function useOrgV2({
       fetching,
       reexecute,
     }),
-    [data, error, fetching, reexecute]
+    [data, error, fetching, reexecute],
   )
 }

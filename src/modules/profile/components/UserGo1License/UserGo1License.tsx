@@ -38,7 +38,7 @@ export const UserGo1License: React.FC<React.PropsWithChildren<Props>> = ({
 
   const expiresInMonths = differenceInCalendarMonths(
     new Date(expireDate),
-    new Date()
+    new Date(),
   )
 
   const deleteLicense = async () => {

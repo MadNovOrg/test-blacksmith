@@ -7,7 +7,7 @@ export class EditUserModal {
   constructor(page: Page) {
     this.page = page
     this.removeFromOrganisation = this.page.locator(
-      '[data-testid=remove-from-organization]'
+      '[data-testid=remove-from-organization]',
     )
   }
 

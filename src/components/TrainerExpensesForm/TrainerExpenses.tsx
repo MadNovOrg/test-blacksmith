@@ -66,7 +66,7 @@ export const makeSchema = (t: TFunction) =>
                 .required(t('pages.create-course.trainer-expenses.value-error'))
                 .min(
                   1,
-                  t('pages.create-course.trainer-expenses.negative-error')
+                  t('pages.create-course.trainer-expenses.negative-error'),
                 )
             }),
           flightDays: yup
@@ -75,19 +75,19 @@ export const makeSchema = (t: TFunction) =>
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', {
                 min: 0,
-              })
+              }),
             )
             .when('method', ([method], s) => {
               if (method === TransportMethod.FLIGHTS) {
                 return s
                   .required(
-                    t('pages.create-course.trainer-expenses.days-error')
+                    t('pages.create-course.trainer-expenses.days-error'),
                   )
                   .min(
                     1,
                     t('pages.create-course.trainer-expenses.num-error', {
                       min: 1,
-                    })
+                    }),
                   )
               }
               return s
@@ -103,11 +103,11 @@ export const makeSchema = (t: TFunction) =>
                 if (accommodationRequired && method !== TransportMethod.NONE) {
                   return s.min(
                     1,
-                    t('pages.create-course.trainer-expenses.negative-error')
+                    t('pages.create-course.trainer-expenses.negative-error'),
                   )
                 }
                 return s
-              }
+              },
             ),
           accommodationCost: yup
             .number()
@@ -119,18 +119,18 @@ export const makeSchema = (t: TFunction) =>
                   return s
                     .required(
                       t(
-                        'pages.create-course.trainer-expenses.accommodation-cost-error'
-                      )
+                        'pages.create-course.trainer-expenses.accommodation-cost-error',
+                      ),
                     )
                     .min(
                       0,
-                      t('pages.create-course.trainer-expenses.negative-error')
+                      t('pages.create-course.trainer-expenses.negative-error'),
                     )
                 }
                 return s
-              }
+              },
             ),
-        })
+        }),
       )
       .required(),
     miscellaneous: yup.array().of(
@@ -142,10 +142,10 @@ export const makeSchema = (t: TFunction) =>
           .number()
           .min(
             0,
-            t('pages.create-course.trainer-expenses.num-error', { min: 0 })
+            t('pages.create-course.trainer-expenses.num-error', { min: 0 }),
           )
           .typeError(
-            t('pages.create-course.trainer-expenses.num-error', { min: 0 })
+            t('pages.create-course.trainer-expenses.num-error', { min: 0 }),
           )
           .when('name', {
             is: '',
@@ -153,7 +153,7 @@ export const makeSchema = (t: TFunction) =>
             otherwise: s =>
               s.required(t('pages.create-course.trainer-expenses.value-error')),
           }),
-      })
+      }),
     ),
   })
 
@@ -185,7 +185,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
             ),
           }
         : {},
-    [shouldShowCurrency, priceCurrencySymbol]
+    [shouldShowCurrency, priceCurrencySymbol],
   )
 
   const schema = useMemo(() => makeSchema(t), [t])
@@ -242,7 +242,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                 >
                   <InputLabel>
                     {t(
-                      'pages.create-course.trainer-expenses.method-of-transport'
+                      'pages.create-course.trainer-expenses.method-of-transport',
                     )}
                   </InputLabel>
                   <Controller
@@ -252,7 +252,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                       <DropdownMenu<TransportMethod>
                         value={transportMethodToDropdownItem(field.value)}
                         items={Object.values(TransportMethod).map(
-                          transportMethodToDropdownItem
+                          transportMethodToDropdownItem,
                         )}
                         onChange={e => {
                           if (e.target.value === TransportMethod.NONE) {
@@ -276,7 +276,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                 <Grid item md={5} sm={12}>
                   <NumericTextField
                     label={t(
-                      `pages.create-course.trainer-expenses.value-label.${entry.method}`
+                      `pages.create-course.trainer-expenses.value-label.${entry.method}`,
                     )}
                     {...register(`transport.${idx}.value`, {
                       valueAsNumber: true,
@@ -341,7 +341,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                 <Grid item sm={4} md={2}>
                   <NumericTextField
                     label={t(
-                      `pages.create-course.trainer-expenses.value-label.${entry.method}-days`
+                      `pages.create-course.trainer-expenses.value-label.${entry.method}-days`,
                     )}
                     {...register(`transport.${idx}.flightDays`, {
                       valueAsNumber: true,
@@ -374,13 +374,13 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                         onChange={e => {
                           setValue(
                             `transport.${idx}.accommodationRequired`,
-                            e.target.checked
+                            e.target.checked,
                           )
                           if (e.target.checked) {
                             setValue(`transport.${idx}.accommodationNights`, 1)
                             setValue(
                               `transport.${idx}.accommodationCost`,
-                              DEFAULT_ACCOMMODATION_COST_PER_NIGHT
+                              DEFAULT_ACCOMMODATION_COST_PER_NIGHT,
                             )
                           } else {
                             setValue(`transport.${idx}.accommodationNights`, 0)
@@ -396,7 +396,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                       />
                     }
                     label={t(
-                      'pages.create-course.trainer-expenses.accommodation'
+                      'pages.create-course.trainer-expenses.accommodation',
                     )}
                   />
                 </Grid>
@@ -409,7 +409,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                 <Grid item md={6} sm={12}>
                   <NumericTextField
                     label={t(
-                      'pages.create-course.trainer-expenses.accommodation-nights'
+                      'pages.create-course.trainer-expenses.accommodation-nights',
                     )}
                     {...register(`transport.${idx}.accommodationNights`, {
                       valueAsNumber: true,
@@ -425,7 +425,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                       'data-testid': `trip-${idx}-accommodation-nights`,
                     }}
                     error={Boolean(
-                      getError(errors, idx, 'accommodationNights')
+                      getError(errors, idx, 'accommodationNights'),
                     )}
                   />
                   <FormHelperText error>
@@ -436,7 +436,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                 <Grid item md={5} sm={12}>
                   <NumericTextField
                     label={t(
-                      'pages.create-course.trainer-expenses.accommodation-cost'
+                      'pages.create-course.trainer-expenses.accommodation-cost',
                     )}
                     {...register(`transport.${idx}.accommodationCost`, {
                       valueAsNumber: true,
@@ -456,7 +456,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                   />
                   <Typography variant="caption">
                     {t(
-                      'pages.create-course.trainer-expenses.accommodation-caption'
+                      'pages.create-course.trainer-expenses.accommodation-caption',
                     )}
                   </Typography>
                   <FormHelperText error>
@@ -466,7 +466,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
               </Grid>
             ) : null}
           </Fragment>
-        ) : null
+        ) : null,
       )}
 
       {showAddTripButton ? (
@@ -546,7 +546,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
               </Button>
             </Grid>
           </Grid>
-        ) : null
+        ) : null,
       )}
 
       <Button

@@ -68,7 +68,7 @@ const test = base.extend<{
               { strategyName: BildStrategy.RestrictiveTertiaryAdvanced },
             ],
           },
-        })
+        }),
       ),
       insertCourse(
         buildCourseInput({
@@ -77,7 +77,7 @@ const test = base.extend<{
           level: Course_Level_Enum.BildIntermediateTrainer,
           deliveryType: Course_Delivery_Type_Enum.Mixed,
           conversion: true,
-        })
+        }),
       ),
       insertCourse(
         buildCourseInput({
@@ -85,7 +85,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Closed,
           level: Course_Level_Enum.BildAdvancedTrainer,
           deliveryType: Course_Delivery_Type_Enum.F2F,
-        })
+        }),
       ),
     ])
 
@@ -109,27 +109,27 @@ const test = base.extend<{
           buildCourseInput({
             level: Course_Level_Enum.Level_1,
             reaccreditation: true,
-          })
+          }),
         ),
         insertCourse(
           buildCourseInput({
             level: Course_Level_Enum.Level_2,
-          })
+          }),
         ),
         insertCourse(
           buildCourseInput({
             level: Course_Level_Enum.Advanced,
-          })
+          }),
         ),
         insertCourse(
           buildCourseInput({
             level: Course_Level_Enum.IntermediateTrainer,
-          })
+          }),
         ),
         insertCourse(
           buildCourseInput({
             level: Course_Level_Enum.AdvancedTrainer,
-          })
+          }),
         ),
       ])
 
@@ -185,7 +185,7 @@ test('returns correct course codes for ICM courses', async ({ icmCourses }) => {
 })
 
 function buildCourseInput(
-  overrides: Partial<Course_Insert_Input>
+  overrides: Partial<Course_Insert_Input>,
 ): Course_Insert_Input {
   return {
     name: 'Course name',

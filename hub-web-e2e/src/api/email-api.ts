@@ -20,7 +20,7 @@ const deleteEmail = async (email: string, id: string) => {
   const [inbox, domain] = email.split('@')
   const response = await axios.delete(
     `${baseUrl}/domains/${domain}/inboxes/${inbox}/messages/${id}`,
-    requestOptions
+    requestOptions,
   )
   if (response.status !== 200) {
     console.error(`[API] could not delete email: ${response.statusText}`)
@@ -30,7 +30,7 @@ const deleteEmail = async (email: string, id: string) => {
 const getEmail = async (
   inbox: string,
   domain: string,
-  id: string
+  id: string,
 ): Promise<Email> => {
   const url = `${baseUrl}/domains/${domain}/inboxes/${inbox}/messages/${id}`
   // Try to overcome any Mailinator API issues (e.g: 500s)
@@ -40,7 +40,7 @@ const getEmail = async (
     if (response.status === 200) {
       const body = response.data
       const htmlPart = (body.parts as Array<EmailPart>).find(part =>
-        part.headers['content-type'].startsWith('text/html')
+        part.headers['content-type'].startsWith('text/html'),
       )
       if (!htmlPart) {
         throw Error('Could not find html part of the email')
@@ -52,7 +52,7 @@ const getEmail = async (
       }
     } else {
       console.error(
-        `[API] error on reading email with ID ${id}: ${response.statusText}`
+        `[API] error on reading email with ID ${id}: ${response.statusText}`,
       )
     }
     triesLeft--
@@ -62,7 +62,7 @@ const getEmail = async (
 
 export const getLatestEmail = async (
   email: string,
-  subject?: string
+  subject?: string,
 ): Promise<Email> => {
   const [inbox, domain] = email.split('@')
   const url = `${baseUrl}/domains/${domain}/inboxes/${inbox}?limit=1`
@@ -90,6 +90,6 @@ export const getLatestEmail = async (
   } while (triesLeft > 0)
   const errorMessage = subject ? `with the subject "${subject}"` : ''
   throw new Error(
-    `[API] inbox for ${email} is empty or doesn't have any recent emails ${errorMessage}`
+    `[API] inbox for ${email} is empty or doesn't have any recent emails ${errorMessage}`,
   )
 }

@@ -52,13 +52,13 @@ describe('page: ReplaceParticipantDialog.', () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     expect(
       screen.getByLabelText(t('components.user-selector.placeholder'), {
         exact: false,
-      })
+      }),
     ).toBeInTheDocument()
 
     expect(
@@ -66,8 +66,8 @@ describe('page: ReplaceParticipantDialog.', () => {
         t('components.replace-participant.first-name-placeholder'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
@@ -75,28 +75,28 @@ describe('page: ReplaceParticipantDialog.', () => {
         t('components.replace-participant.surname-placeholder'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('line1'), { exact: false })
+      screen.queryByLabelText(t('line1'), { exact: false }),
     ).not.toBeInTheDocument()
     expect(screen.queryByLabelText(t('line2'))).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('city'), { exact: false })
+      screen.queryByLabelText(t('city'), { exact: false }),
     ).not.toBeInTheDocument()
 
     expect(
       screen.queryByLabelText(
         t('components.venue-selector.modal.fields.postCode'),
-        { exact: false }
-      )
+        { exact: false },
+      ),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('residing-country'), { exact: false })
+      screen.queryByLabelText(t('residing-country'), { exact: false }),
     ).not.toBeInTheDocument()
   })
 
@@ -122,13 +122,13 @@ describe('page: ReplaceParticipantDialog.', () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     expect(
       screen.getByLabelText(t('components.user-selector.placeholder'), {
         exact: false,
-      })
+      }),
     ).toBeInTheDocument()
 
     expect(
@@ -136,8 +136,8 @@ describe('page: ReplaceParticipantDialog.', () => {
         t('components.replace-participant.first-name-placeholder'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
@@ -145,28 +145,28 @@ describe('page: ReplaceParticipantDialog.', () => {
         t('components.replace-participant.surname-placeholder'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('line1'), { exact: false })
+      screen.getByLabelText(t('line1'), { exact: false }),
     ).toBeInTheDocument()
     expect(screen.getByLabelText(t('line2'))).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('city'), { exact: false })
+      screen.getByLabelText(t('city'), { exact: false }),
     ).toBeInTheDocument()
 
     expect(
       screen.getByLabelText(
         t('components.venue-selector.modal.fields.postCode'),
-        { exact: false }
-      )
+        { exact: false },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('residing-country'), { exact: false })
+      screen.getByLabelText(t('residing-country'), { exact: false }),
     ).toBeInTheDocument()
   })
 
@@ -192,13 +192,13 @@ describe('page: ReplaceParticipantDialog.', () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     expect(
       screen.getByLabelText(t('components.user-selector.placeholder'), {
         exact: false,
-      })
+      }),
     ).toBeInTheDocument()
 
     expect(
@@ -206,8 +206,8 @@ describe('page: ReplaceParticipantDialog.', () => {
         t('components.replace-participant.first-name-placeholder'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
@@ -215,28 +215,28 @@ describe('page: ReplaceParticipantDialog.', () => {
         t('components.replace-participant.surname-placeholder'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('line1'), { exact: false })
+      screen.queryByLabelText(t('line1'), { exact: false }),
     ).not.toBeInTheDocument()
     expect(screen.queryByLabelText(t('line2'))).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('city'), { exact: false })
+      screen.queryByLabelText(t('city'), { exact: false }),
     ).not.toBeInTheDocument()
 
     expect(
       screen.queryByLabelText(
         t('components.venue-selector.modal.fields.postCode'),
-        { exact: false }
-      )
+        { exact: false },
+      ),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('residing-country'), { exact: false })
+      screen.queryByLabelText(t('residing-country'), { exact: false }),
     ).not.toBeInTheDocument()
   })
 
@@ -262,14 +262,14 @@ describe('page: ReplaceParticipantDialog.', () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     const userSelector = screen.getByLabelText(
       t('components.user-selector.placeholder'),
       {
         exact: false,
-      }
+      },
     )
     await userEvent.type(userSelector, chance.email())
 
@@ -277,7 +277,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       t('components.replace-participant.first-name-placeholder'),
       {
         exact: false,
-      }
+      },
     )
     await userEvent.type(firstName, chance.name())
 
@@ -285,7 +285,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       t('components.replace-participant.surname-placeholder'),
       {
         exact: false,
-      }
+      },
     )
     await userEvent.type(surname, chance.name())
 
@@ -315,14 +315,14 @@ describe('page: ReplaceParticipantDialog.', () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     const userSelector = screen.getByLabelText(
       t('components.user-selector.placeholder'),
       {
         exact: false,
-      }
+      },
     )
     await userEvent.type(userSelector, chance.email())
 
@@ -330,7 +330,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       t('components.replace-participant.first-name-placeholder'),
       {
         exact: false,
-      }
+      },
     )
     await userEvent.type(firstName, chance.name())
 
@@ -338,7 +338,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       t('components.replace-participant.surname-placeholder'),
       {
         exact: false,
-      }
+      },
     )
     await userEvent.type(surname, chance.name())
 
@@ -346,13 +346,13 @@ describe('page: ReplaceParticipantDialog.', () => {
     expect(replaceBtn).toBeDisabled()
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
     await userEvent.type(textField, 'England')
@@ -374,7 +374,7 @@ describe('page: ReplaceParticipantDialog.', () => {
 
     const postCode = screen.getByLabelText(
       t('components.venue-selector.modal.fields.postCode'),
-      { exact: false }
+      { exact: false },
     )
     expect(postCode).toBeInTheDocument()
     await userEvent.type(postCode, 'WC2N 5DU')

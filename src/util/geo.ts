@@ -25,7 +25,7 @@ export const parsePoint = (str: string): Point | null => {
  */
 export const geoDistance = (
   coordsA: string,
-  coordsB: string
+  coordsB: string,
 ): number | null => {
   if (!coordsA || !coordsB) return null
   const pointA = parsePoint(coordsA)

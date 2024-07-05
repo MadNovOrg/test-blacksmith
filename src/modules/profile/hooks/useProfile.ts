@@ -110,7 +110,7 @@ export default function useProfile(
   courseId?: string,
   orgId?: string,
   withCourseHistory = false,
-  refreshProfileData = false
+  refreshProfileData = false,
 ) {
   const [{ data: getProfileResponse, error: getProfileError }, reexecuteQuery] =
     useQuery<GetProfileDetailsQuery, GetProfileDetailsQueryVariables>({
@@ -155,8 +155,8 @@ export default function useProfile(
           }
           return requiredCertificate.some(requiredLevel =>
             activeCertifications.some(
-              activeCert => requiredLevel === activeCert.courseLevel
-            )
+              activeCert => requiredLevel === activeCert.courseLevel,
+            ),
           )
             ? false
             : {
@@ -179,7 +179,7 @@ export default function useProfile(
       updateAvatarMutation({ avatar: JSON.stringify(avatar) })
       return avatarData?.updateAvatar
     },
-    [avatarData?.updateAvatar, profileId, updateAvatarMutation]
+    [avatarData?.updateAvatar, profileId, updateAvatarMutation],
   )
 
   const archive = useCallback(async () => {

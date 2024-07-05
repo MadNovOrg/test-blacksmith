@@ -100,7 +100,7 @@ export const ReplaceParticipantDialog: React.FC<
       course?.residingCountry,
       course?.type,
       isUKCountry,
-    ]
+    ],
   )
 
   const schema = yup.object({
@@ -117,7 +117,9 @@ export const ReplaceParticipantDialog: React.FC<
 
   const methods = useForm<InferType<typeof schema> | CombinedSchema>({
     resolver: yupResolver(
-      isAddressRequired ? schema.concat(participantPostalAddressSchema) : schema
+      isAddressRequired
+        ? schema.concat(participantPostalAddressSchema)
+        : schema,
     ),
     mode: 'all',
     defaultValues: {
@@ -191,7 +193,7 @@ export const ReplaceParticipantDialog: React.FC<
         firstName: profile?.givenName || '',
         surname: profile?.familyName || '',
       },
-      { shouldValidate: true }
+      { shouldValidate: true },
     )
     setNewAttendeeProfile({
       familyName: profile?.familyName,
@@ -294,7 +296,7 @@ export const ReplaceParticipantDialog: React.FC<
                   placeholder={t('first-name-placeholder')}
                   fullWidth
                   error={Boolean(
-                    methods.formState.errors.profile?.firstName?.message
+                    methods.formState.errors.profile?.firstName?.message,
                   )}
                   helperText={
                     methods.formState.errors.profile?.firstName?.message
@@ -309,7 +311,7 @@ export const ReplaceParticipantDialog: React.FC<
                   placeholder={t('surname-placeholder')}
                   fullWidth
                   error={Boolean(
-                    methods.formState.errors.profile?.surname?.message
+                    methods.formState.errors.profile?.surname?.message,
                   )}
                   helperText={
                     methods.formState.errors.profile?.surname?.message
@@ -357,7 +359,7 @@ export const ReplaceParticipantDialog: React.FC<
                           target="_blank"
                           rel="noreferrer"
                           aria-label={`${_t('terms-of-business')} (${t(
-                            'opens-new-window'
+                            'opens-new-window',
                           )})`}
                           href={`${
                             import.meta.env.VITE_BASE_WORDPRESS_URL

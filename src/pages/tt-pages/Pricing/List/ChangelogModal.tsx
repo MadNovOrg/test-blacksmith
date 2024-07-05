@@ -71,7 +71,7 @@ export const ChangelogModal = ({
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   return (
@@ -178,7 +178,7 @@ export const ChangelogModal = ({
               <TableNoRows
                 noRecords={!loading && !data?.course_pricing_changelog.length}
                 itemsName={t(
-                  'pages.course-pricing.modal-changelog-title'
+                  'pages.course-pricing.modal-changelog-title',
                 ).toLowerCase()}
                 colSpan={3}
               />

@@ -42,7 +42,7 @@ export const TestMemoryRouter: React.FC<PropsWithChildren<TestRouterProps>> = ({
 function render(
   ui: React.ReactElement,
   providers: DeepPartial<Providers> = {},
-  router: TestRouterProps = {}
+  router: TestRouterProps = {},
 ) {
   const context = deepmerge(defaultProviders, providers) as Providers
 
@@ -67,7 +67,7 @@ function render(
 function waitForCalls<T extends (...args: unknown[]) => unknown>(
   target: vi.MockedFunction<T> | vi.SpyInstance,
   calls = 1,
-  timeout?: number
+  timeout?: number,
 ): Promise<void> {
   return waitFor(() => expect(target).toHaveBeenCalledTimes(calls), {
     timeout,

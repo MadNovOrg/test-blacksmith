@@ -19,10 +19,10 @@ insertRoles.forEach(role => {
   test(`@query it doesn't allow role ${role} to insert a contact`, async () => {
     const schema = await API.introspection.introspection(role)
     const insertMutation = schema.__schema.mutationType.fields.find(
-      f => f.name === 'insert_xero_contact'
+      f => f.name === 'insert_xero_contact',
     )
     const insertOneMutation = schema.__schema.mutationType.fields.find(
-      f => f.name === 'insert_xero_contact_one'
+      f => f.name === 'insert_xero_contact_one',
     )
     test.expect(insertMutation).toBeFalsy()
     test.expect(insertOneMutation).toBeFalsy()
@@ -53,17 +53,17 @@ selectRoles.forEach(role => {
       'xeroId',
     ]
     const contactsQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_contact'
+      f => f.name === 'xero_contact',
     )
     const contactQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_contact_by_pk'
+      f => f.name === 'xero_contact_by_pk',
     )
     const contactType = schema.__schema.types.find(
-      f => f.name === 'xero_contact'
+      f => f.name === 'xero_contact',
     )
     const contactFields = contactType?.fields.map(f => f.name)
     const hasAllowedFields = allowedFields?.every(f =>
-      contactFields?.includes(f)
+      contactFields?.includes(f),
     )
     expect(contactQuery).toBeTruthy()
     expect(contactsQuery).toBeTruthy()
@@ -80,13 +80,13 @@ cannotSelectRoles.forEach(role => {
   test(`@query doesn't allow role ${role} to select a contact`, async () => {
     const schema = await API.introspection.introspection(role)
     const contactsQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_contact'
+      f => f.name === 'xero_contact',
     )
     const contactQuery = schema.__schema.queryType.fields.find(
-      f => f.name === 'xero_contact_by_pk'
+      f => f.name === 'xero_contact_by_pk',
     )
     const contactType = schema.__schema.types.find(
-      f => f.name === 'xero_contact'
+      f => f.name === 'xero_contact',
     )
     expect(contactsQuery).toBeFalsy()
     expect(contactQuery).toBeFalsy()

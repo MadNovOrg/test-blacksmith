@@ -85,7 +85,7 @@ export const getIndividualCourseStatuses = (
   status: Course_Status_Enum,
   ended: boolean,
   graded: boolean,
-  cancellationRequested: boolean
+  cancellationRequested: boolean,
 ) => {
   if (
     [Course_Status_Enum.Cancelled, Course_Status_Enum.Declined].includes(status)

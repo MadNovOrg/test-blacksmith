@@ -56,7 +56,7 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
         setApplyError('')
       }
     },
-    [applyError]
+    [applyError],
   )
 
   const handleCancel = () => {

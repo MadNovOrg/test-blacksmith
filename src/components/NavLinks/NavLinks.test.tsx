@@ -116,7 +116,7 @@ describe('component: NavLinks', () => {
     })
 
     expect(
-      screen.queryByRole('link', { name: t('common.resources') })
+      screen.queryByRole('link', { name: t('common.resources') }),
     ).not.toBeInTheDocument()
   })
 
@@ -147,7 +147,7 @@ describe('component: NavLinks', () => {
     })
 
     expect(
-      screen.getByRole('link', { name: t('common.resources') })
+      screen.getByRole('link', { name: t('common.resources') }),
     ).toBeInTheDocument()
 
     const knowledgeHubLink = screen.queryByRole('link', {
@@ -174,7 +174,7 @@ describe('component: NavLinks', () => {
     })
 
     expect(
-      screen.queryByRole('link', { name: t('common.resources') })
+      screen.queryByRole('link', { name: t('common.resources') }),
     ).not.toBeInTheDocument()
   })
 

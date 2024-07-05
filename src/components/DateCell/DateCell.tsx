@@ -14,7 +14,7 @@ export function DateCell({
   timeZone?: string
 }) {
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
   const isResidingCountryEnabled = !!residingCountryEnabled
   const { t } = useTranslation()
@@ -22,7 +22,7 @@ export function DateCell({
 
   const UTCDate = useMemo(
     () => utcToZonedTime(date, timeZone ?? 'Europe/London'),
-    [date, timeZone]
+    [date, timeZone],
   )
 
   return (

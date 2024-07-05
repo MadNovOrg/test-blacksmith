@@ -30,7 +30,7 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/term/tag-id'] }
+      { initialEntries: ['/term/tag-id'] },
     )
 
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
@@ -68,12 +68,12 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     const firstPost = screen.getByTestId(`webinar-grid-item-${webinars[0].id}`)
     await userEvent.click(
-      within(firstPost).getByAltText(webinars[0].title ?? '')
+      within(firstPost).getByAltText(webinars[0].title ?? ''),
     )
 
     expect(screen.getByText('Webinar page')).toBeInTheDocument()
@@ -110,23 +110,23 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     webinars.forEach(item => {
       const itemElement = screen.getByTestId(`webinar-grid-item-${item.id}`)
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -167,17 +167,17 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search webinars'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`webinar-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`webinar-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -218,26 +218,26 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     expect(
-      screen.getByTestId(`webinar-grid-item-${webinars[0].id}`)
+      screen.getByTestId(`webinar-grid-item-${webinars[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`webinar-grid-item-${reversedWebinars[0].id}`)
+      screen.queryByTestId(`webinar-grid-item-${reversedWebinars[0].id}`),
     ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByTestId('order-menu-button'))
     await userEvent.click(screen.getByText('Oldest'))
 
     expect(
-      screen.queryByTestId(`webinar-grid-item-${webinars[0].id}`)
+      screen.queryByTestId(`webinar-grid-item-${webinars[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`webinar-grid-item-${reversedWebinars[0].id}`)
+      screen.getByTestId(`webinar-grid-item-${reversedWebinars[0].id}`),
     ).toBeInTheDocument()
   })
 
@@ -292,17 +292,17 @@ describe('page: Term - WebinarsCategory', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/term/${category.id}`] }
+      { initialEntries: [`/term/${category.id}`] },
     )
 
     await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
-      screen.queryByTestId(`webinar-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`webinar-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`webinar-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`webinar-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
@@ -310,11 +310,11 @@ describe('page: Term - WebinarsCategory', () => {
     await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
-      screen.getByTestId(`webinar-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`webinar-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`webinar-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`webinar-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('term-previous-page')).toBeDisabled()

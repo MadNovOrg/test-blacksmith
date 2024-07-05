@@ -20,7 +20,7 @@ export class ProfilePage extends BasePage {
     this.editProfile = this.page.locator('data-testid=edit-profile')
     this.saveChanges = this.page.locator('data-testid=profile-save-changes')
     this.certificateButton = this.page.locator(
-      `[data-testid*=certificate] button`
+      `[data-testid*=certificate] button`,
     )
     this.phoneNumberField = this.page.locator('[data-testid="phone"]')
     this.jobTitleSelector = this.page.locator('data-testid=job-title-selector')
@@ -86,7 +86,7 @@ export class ProfilePage extends BasePage {
 
   async checkJobTitle(jobTitle: string) {
     await expect(this.page.locator('data-testid=profile-job-title')).toHaveText(
-      jobTitle
+      jobTitle,
     )
   }
 
@@ -109,16 +109,16 @@ export class ProfilePage extends BasePage {
 
   async clickRemoveLicenceById(licenseId: string) {
     await this.page.click(
-      `data-testid=go1-license-${licenseId} >> button:has-text("Remove")`
+      `data-testid=go1-license-${licenseId} >> button:has-text("Remove")`,
     )
     await expect(
-      this.page.locator(`data-testid=go1-license-${licenseId}`)
+      this.page.locator(`data-testid=go1-license-${licenseId}`),
     ).toHaveCount(0)
   }
 
   async checkCertificate(certificateId: string | null) {
     await expect(
-      this.page.locator(`data-testid=certificate-${certificateId}`)
+      this.page.locator(`data-testid=certificate-${certificateId}`),
     ).toBeVisible()
   }
 
@@ -131,7 +131,7 @@ export class ProfilePage extends BasePage {
     await expect(
       this.page
         .locator(`data-testid=course-row-${courseId}`)
-        .locator('data-testid=course-action')
+        .locator('data-testid=course-action'),
     ).toHaveText(action)
   }
 }

@@ -46,7 +46,7 @@ describe('page: BILDGrading', () => {
     render(
       <Provider value={client}>
         <BILDGrading course={course} />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByTestId('strategy-checkbox-PRIMARY')).toBeChecked()
@@ -118,7 +118,7 @@ describe('page: BILDGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${COURSE_ID}/grading`] }
+      { initialEntries: [`/courses/${COURSE_ID}/grading`] },
     )
 
     const submitButton = screen.getByRole('button', {
@@ -136,7 +136,7 @@ describe('page: BILDGrading', () => {
     expect(within(dialog).getByText(/grading confirmation/i)).toBeVisible()
 
     await userEvent.click(
-      within(dialog).getByRole('button', { name: /confirm/i })
+      within(dialog).getByRole('button', { name: /confirm/i }),
     )
 
     await waitFor(() => {
@@ -183,7 +183,7 @@ describe('page: BILDGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${COURSE_ID}/grading`] }
+      { initialEntries: [`/courses/${COURSE_ID}/grading`] },
     )
 
     const submitButton = screen.getByRole('button', {
@@ -201,12 +201,12 @@ describe('page: BILDGrading', () => {
     expect(within(dialog).getByText(/grading confirmation/i)).toBeVisible()
 
     await userEvent.click(
-      within(dialog).getByRole('button', { name: /confirm/i })
+      within(dialog).getByRole('button', { name: /confirm/i }),
     )
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"There was an error when grading."`
+        `"There was an error when grading."`,
       )
     })
   })
@@ -250,7 +250,7 @@ describe('page: BILDGrading', () => {
         initialEntries: [
           `/${course.id}/grading?participants=${participants[0].id}`,
         ],
-      }
+      },
     )
 
     expect(screen.getByLabelText(/notes/i)).toBeInTheDocument()
@@ -301,7 +301,7 @@ describe('page: BILDGrading', () => {
         initialEntries: [
           `/${course.id}/grading?participants=${participants[0].id}`,
         ],
-      }
+      },
     )
 
     expect(screen.getByLabelText(/notes/i)).toBeInTheDocument()
@@ -342,7 +342,7 @@ describe('page: BILDGrading', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/${course.id}/grading`] }
+      { initialEntries: [`/${course.id}/grading`] },
     )
 
     expect(screen.queryByLabelText(/notes/i)).not.toBeInTheDocument()
@@ -393,7 +393,7 @@ describe('page: BILDGrading', () => {
         initialEntries: [
           `/${course.id}/grading?participants=${participants[0].id}`,
         ],
-      }
+      },
     )
 
     expect(screen.queryByLabelText(/notes/i)).not.toBeInTheDocument()

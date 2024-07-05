@@ -66,7 +66,7 @@ export const ResetPasswordPage = () => {
             .required(t('validation-errors.confirm-password-required'))
             .oneOf(
               [yup.ref('password'), ''],
-              t('validation-errors.confirm-password-invalid')
+              t('validation-errors.confirm-password-invalid'),
             ),
           code: yup
             .string()
@@ -74,7 +74,7 @@ export const ResetPasswordPage = () => {
             .required(t('validation-errors.otp-required')),
         })
         .required(),
-    [t]
+    [t],
   )
 
   const {
@@ -113,7 +113,7 @@ export const ResetPasswordPage = () => {
         t(`pages.reset-password.auth-errors.${error.code}`) ||
           t(`pages.reset-password.auth-errors.UnknownError`, {
             email: data.email,
-          })
+          }),
       )
     }
   }

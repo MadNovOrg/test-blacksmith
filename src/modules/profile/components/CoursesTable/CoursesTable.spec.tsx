@@ -25,6 +25,6 @@ describe(CoursesTable.name, () => {
     'should render the table head cells: %s',
     cell => {
       expect(screen.getByText(cell)).toBeInTheDocument()
-    }
+    },
   )
 })

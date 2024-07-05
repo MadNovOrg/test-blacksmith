@@ -24,7 +24,7 @@ describe('TypeCell', () => {
 
   it('renders the correct course type', () => {
     const { getByText } = render(
-      <TypeCell course={course as unknown as TableCourse} />
+      <TypeCell course={course as unknown as TableCourse} />,
     )
     const courseTypeElement = getByText(t(`course-types.${course.type}`))
     expect(courseTypeElement).toBeInTheDocument()
@@ -32,7 +32,7 @@ describe('TypeCell', () => {
 
   it('renders the blended learning indicator if go1Integration is true', () => {
     const { getByText } = render(
-      <TypeCell course={course as unknown as TableCourse} />
+      <TypeCell course={course as unknown as TableCourse} />,
     )
     const blendedLearningElement = getByText(t('common.blended-learning'))
     expect(blendedLearningElement).toBeInTheDocument()
@@ -46,7 +46,7 @@ describe('TypeCell', () => {
     const { queryByText } = render(
       <TypeCell
         course={courseWithoutBlendedLearning as unknown as TableCourse}
-      />
+      />,
     )
     const blendedLearningElement = queryByText(t('common.blended-learning'))
     expect(blendedLearningElement).not.toBeInTheDocument()

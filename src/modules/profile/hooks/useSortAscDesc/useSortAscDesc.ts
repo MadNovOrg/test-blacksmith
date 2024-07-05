@@ -3,10 +3,10 @@ import { useState } from 'react'
 type orderDirection = 'asc' | 'desc'
 
 export const useSortAscDesc = (
-  defaultOrderDirection: orderDirection = 'desc'
+  defaultOrderDirection: orderDirection = 'desc',
 ) => {
   const [sortOrder, setSortOrder] = useState<orderDirection>(
-    defaultOrderDirection
+    defaultOrderDirection,
   )
 
   const handleSortToggle = () => {

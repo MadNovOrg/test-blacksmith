@@ -17,7 +17,7 @@ describe(ConfirmDialog.name, () => {
         message={message}
         onOk={vi.fn()}
         onCancel={vi.fn()}
-      />
+      />,
     )
     expect(screen.getByText('Dialog title')).toBeVisible()
     expect(screen.getByText('OK')).toBeVisible()

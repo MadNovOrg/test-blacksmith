@@ -6,7 +6,7 @@ import { ExpensesInput, NonNullish, TransportMethod } from '@app/types'
 type ExpensesErrors = FieldErrors<ExpensesInput>
 
 export function transportMethodToDropdownItem(
-  tm: TransportMethod
+  tm: TransportMethod,
 ): DropdownMenuItem<TransportMethod> {
   return {
     key: tm,
@@ -16,7 +16,7 @@ export function transportMethodToDropdownItem(
 
 function isTransportError(
   error: NonNullish<ExpensesErrors['transport']>[0],
-  field: string
+  field: string,
 ): field is
   | 'accommodationCost'
   | 'flightDays'
@@ -27,7 +27,7 @@ function isTransportError(
 
 function isMiscellaneousError(
   error: NonNullish<ExpensesErrors['miscellaneous']>[0],
-  field: string
+  field: string,
 ): field is 'name' | 'value' {
   return Boolean(error && field in error)
 }
@@ -35,7 +35,7 @@ function isMiscellaneousError(
 export function getError(
   errors: ExpensesErrors,
   idx: number,
-  field: string
+  field: string,
 ): string | null | undefined {
   let message: string | null | undefined = null
 

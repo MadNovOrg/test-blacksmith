@@ -16,7 +16,7 @@ export const getOrganizationId = async (name: string): Promise<string> => {
 }
 
 export async function insertOrganization(
-  input: Organization_Insert_Input
+  input: Organization_Insert_Input,
 ): Promise<string> {
   const mutation = gql`
     mutation InsertOrganization($object: organization_insert_input!) {
@@ -31,7 +31,7 @@ export async function insertOrganization(
 }
 
 export async function insertOrganizationMember(
-  input: Organization_Member_Insert_Input
+  input: Organization_Member_Insert_Input,
 ) {
   const mutation = gql`
     mutation InsertOrganizationMember(
@@ -59,13 +59,13 @@ export async function deleteOrganization(id: string): Promise<boolean> {
   const response: { delete_organization_by_pk: { id: boolean; name: string } } =
     await getClient().request(mutation, { id })
   console.log(
-    `Deleted "${response?.delete_organization_by_pk?.name}" successfully`
+    `Deleted "${response?.delete_organization_by_pk?.name}" successfully`,
   )
   return response?.delete_organization_by_pk?.id
 }
 
 export async function deleteOrganizationsWhere(
-  where: Organization_Bool_Exp
+  where: Organization_Bool_Exp,
 ): Promise<boolean> {
   const mutation = gql`
     mutation DeleteOrganizations($where: organization_bool_exp!) {

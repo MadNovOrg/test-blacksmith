@@ -73,18 +73,18 @@ export const GeneralDetailsSection = ({
   const { changeCountryOnCourseLevelChange } = useCourseFormEffects()
   const { t, _t } = useScopedTranslation('components.course-form')
   const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
-    'foundation-trainer-plus-course'
+    'foundation-trainer-plus-course',
   )
   const levelOneBSEnabled = useFeatureFlagEnabled('level-one-bs')
 
   const BSor3DaySRTEnabled =
     foundationTrainerPlusLevelEnabled || levelOneBSEnabled
   const isResidingCountryEnabled = !!useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect'
+    'international-indirect',
   )
 
   const courseType = useWatch({ control, name: 'type' }) as Course_Type_Enum
@@ -468,14 +468,15 @@ export const GeneralDetailsSection = ({
                   if (newCourseLevel === courseLevel) return
                   const countryToChangeTo = changeCountryOnCourseLevelChange(
                     newCourseLevel,
-                    residingCountry
+                    residingCountry,
                   )
                   field.onChange(event)
                   BSor3DaySRTEnabled &&
                     setValue('residingCountry', countryToChangeTo)
                   setValue(
                     'aolCountry',
-                    countryToChangeTo ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+                    countryToChangeTo ??
+                      Countries_Code.DEFAULT_RESIDING_COUNTRY,
                   )
                   resetSpecialInstructionsToDefault({
                     newCourseLevel,
@@ -575,7 +576,7 @@ export const GeneralDetailsSection = ({
 
           {isBild &&
           [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
-            courseType
+            courseType,
           ) &&
           courseLevel !== Course_Level_Enum.BildRegular ? (
             <Grid item>

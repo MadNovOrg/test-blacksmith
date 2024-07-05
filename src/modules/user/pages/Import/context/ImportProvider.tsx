@@ -30,7 +30,7 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate()
 
   const [currentStepKey, setCurrentStepKey] = useState<ImportSteps>(
-    ImportSteps.CHOOSE
+    ImportSteps.CHOOSE,
   )
 
   const [data, setData] = useState<ContextValue['data']>(null)
@@ -119,7 +119,7 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
         }
       }
     },
-    [navigate]
+    [navigate],
   )
 
   const fileChosen = useCallback<ContextValue['fileChosen']>(data => {
@@ -130,7 +130,7 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
     config => {
       setConfig(config)
     },
-    []
+    [],
   )
 
   const importStarted = useCallback<ContextValue['importStarted']>(jobId => {
@@ -161,7 +161,7 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
       importConfigured,
       importStarted,
       jobId,
-    ]
+    ],
   )
 
   return (

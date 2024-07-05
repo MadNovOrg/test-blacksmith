@@ -36,14 +36,14 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
       current: { t },
     },
   } = renderHook(() =>
-    useScopedTranslation('components.course-form.mandatory-course-materials')
+    useScopedTranslation('components.course-form.mandatory-course-materials'),
   )
 
   it('renders mandatory course materials component', async () => {
     renderForm(
       Course_Type_Enum.Closed,
       Course_Level_Enum.AdvancedTrainer,
-      RoleName.TT_ADMIN
+      RoleName.TT_ADMIN,
     )
     expect(screen.getByTestId('mandatory-course-materials')).toBeInTheDocument()
   })
@@ -52,7 +52,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     renderForm(
       Course_Type_Enum.Closed,
       Course_Level_Enum.AdvancedTrainer,
-      RoleName.TT_ADMIN
+      RoleName.TT_ADMIN,
     )
     const mcm = screen.getByTestId('mandatory-course-materials')
     await userEvent.type(mcm, '1')
@@ -65,14 +65,14 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     renderForm(
       Course_Type_Enum.Closed,
       Course_Level_Enum.AdvancedTrainer,
-      RoleName.TT_ADMIN
+      RoleName.TT_ADMIN,
     )
     expect(
-      screen.getByLabelText('Materials', { exact: false })
+      screen.getByLabelText('Materials', { exact: false }),
     ).toBeInTheDocument()
     await userEvent.type(
       screen.getByLabelText('Materials', { exact: false }),
-      '-1'
+      '-1',
     )
     await userEvent.type(screen.getByTestId('max-attendees'), '5')
     expect(screen.queryByText(t('errors.is-negative'))).toBeInTheDocument()
@@ -82,17 +82,17 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     renderForm(
       Course_Type_Enum.Closed,
       Course_Level_Enum.AdvancedTrainer,
-      RoleName.TT_ADMIN
+      RoleName.TT_ADMIN,
     )
 
     await userEvent.type(
       screen.getByLabelText('Materials', { exact: false }),
-      '6'
+      '6',
     )
 
     await userEvent.type(screen.getByTestId('max-attendees'), '5')
     expect(
-      screen.queryByText(t('errors.more-mcm-than-attendees-create'))
+      screen.queryByText(t('errors.more-mcm-than-attendees-create')),
     ).toBeInTheDocument()
   })
 
@@ -100,23 +100,23 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     renderForm(
       Course_Type_Enum.Closed,
       Course_Level_Enum.AdvancedTrainer,
-      RoleName.TT_ADMIN
+      RoleName.TT_ADMIN,
     )
     const maxAttendees = 5
     const mandatoryCourseMaterials = 2
 
     await userEvent.type(
       screen.getByLabelText('Number of attendees', { exact: false }),
-      maxAttendees.toString()
+      maxAttendees.toString(),
     )
     await userEvent.type(
       screen.getByLabelText('Materials', { exact: false }),
-      mandatoryCourseMaterials.toString()
+      mandatoryCourseMaterials.toString(),
     )
     expect(screen.getByTestId('free-course-materials').textContent).toEqual(
       t('amount-of-free-mcm', {
         count: maxAttendees - mandatoryCourseMaterials,
-      })
+      }),
     )
   })
 
@@ -138,18 +138,18 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -165,8 +165,8 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         t('panel-description', {
           mcmAmount: '£10',
           VAT: VAT,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -188,18 +188,18 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -215,8 +215,8 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         t('panel-description', {
           mcmAmount: '€12',
           VAT: VAT,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -238,18 +238,18 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -265,8 +265,8 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         t('panel-description', {
           mcmAmount: '$13',
           VAT: VAT,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -288,18 +288,18 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -315,8 +315,8 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         t('panel-description', {
           mcmAmount: 'NZD$20',
           VAT: VAT,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -338,18 +338,18 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -365,8 +365,8 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         t('panel-description', {
           mcmAmount: 'AUD$20',
           VAT: VAT,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 })

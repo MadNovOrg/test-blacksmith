@@ -35,7 +35,7 @@ describe('component: AssignTrainers', () => {
           <AssignTrainers />
         </CreateCourseProvider>
       </Provider>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await waitFor(() => {
@@ -61,7 +61,7 @@ describe('component: AssignTrainers', () => {
           <AssignTrainers />
         </CreateCourseProvider>
       </Provider>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await waitFor(() => {
@@ -87,7 +87,7 @@ describe('component: AssignTrainers', () => {
           <AssignTrainers />
         </CreateCourseProvider>
       </Provider>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      { auth: { activeRole: RoleName.TT_ADMIN } },
     )
 
     await waitFor(() => {
@@ -105,7 +105,7 @@ describe('component: AssignTrainers', () => {
 
     const assistHint = within(assist).getByTestId('AssignTrainers-assist-hint')
     expect(assistHint).toHaveTextContent(
-      'Assist trainer(s) may be required based on the number of attendees.'
+      'Assist trainer(s) may be required based on the number of attendees.',
     )
 
     const picked = within(assist).queryAllByTestId(selectedTestId)

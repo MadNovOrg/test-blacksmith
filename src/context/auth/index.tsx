@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         {
           token,
           role: data.activeRole,
-        }
+        },
       )
     }
   }, [])
@@ -111,7 +111,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         return { error: err as E }
       }
     },
-    [loadProfile]
+    [loadProfile],
   )
 
   const logout = useCallback(async () => {
@@ -147,7 +147,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       }))
       return activeRole
     },
-    [state]
+    [state],
   )
 
   const value = useMemo(() => {

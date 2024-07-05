@@ -21,9 +21,9 @@ type Props = {
 
 const CourseTrainerTypeParam = withDefault(
   createEnumArrayParam<Course_Trainer_Type_Enum>(
-    Array.from(Object.values(Course_Trainer_Type_Enum))
+    Array.from(Object.values(Course_Trainer_Type_Enum)),
   ),
-  [] as Course_Trainer_Type_Enum[]
+  [] as Course_Trainer_Type_Enum[],
 )
 
 export const FilterByTrainerCourseType: React.FC<
@@ -37,21 +37,21 @@ export const FilterByTrainerCourseType: React.FC<
       Course_Trainer_Type_Enum.Assistant,
       ...(includeModerator ? [Course_Trainer_Type_Enum.Moderator] : []),
     ],
-    [includeModerator]
+    [includeModerator],
   )
 
   const trainerTypeOptions = useMemo(() => {
     return courseTrainerTypes.map(trainerType => ({
       id: trainerType,
       title: t(
-        `common.course-trainer-types.${trainerType.toLocaleLowerCase()}`
+        `common.course-trainer-types.${trainerType.toLocaleLowerCase()}`,
       ),
     }))
   }, [courseTrainerTypes, t])
 
   const [selected, setSelected] = useQueryParam(
     'trainer',
-    CourseTrainerTypeParam
+    CourseTrainerTypeParam,
   )
 
   const options = useMemo(() => {
@@ -67,7 +67,7 @@ export const FilterByTrainerCourseType: React.FC<
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

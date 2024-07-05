@@ -114,15 +114,15 @@ describe('component: ModulesSelectionList', () => {
       <ModulesSelectionList
         moduleGroups={moduleGroups}
         onChange={onChangeMock}
-      />
+      />,
     )
 
     await userEvent.click(
-      screen.getByLabelText(moduleGroups[0].modules[0].name)
+      screen.getByLabelText(moduleGroups[0].modules[0].name),
     )
 
     expect(
-      screen.getByLabelText(moduleGroups[0].modules[0].name)
+      screen.getByLabelText(moduleGroups[0].modules[0].name),
     ).not.toBeChecked()
 
     expect(onChangeMock.mock.calls[0][0]).toEqual({
@@ -133,7 +133,7 @@ describe('component: ModulesSelectionList', () => {
     })
 
     await userEvent.click(
-      screen.getByLabelText(moduleGroups[0].modules[0].name)
+      screen.getByLabelText(moduleGroups[0].modules[0].name),
     )
 
     expect(screen.getByLabelText(moduleGroups[0].modules[0].name)).toBeChecked()
@@ -196,7 +196,7 @@ describe('component: ModulesSelectionList', () => {
       <ModulesSelectionList
         moduleGroups={moduleGroups}
         onChange={onChangeMock}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByLabelText(moduleGroups[1].name))
@@ -269,7 +269,7 @@ describe('component: ModulesSelectionList', () => {
     expect(screen.getByLabelText(moduleGroups[1].name)).not.toBeChecked()
     expect(screen.getByLabelText(moduleGroups[1].name)).toHaveAttribute(
       'data-indeterminate',
-      'true'
+      'true',
     )
   })
 })

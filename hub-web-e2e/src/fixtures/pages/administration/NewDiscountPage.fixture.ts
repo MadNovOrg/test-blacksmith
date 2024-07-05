@@ -5,7 +5,7 @@ import { BasePage } from '../BasePage.fixture'
 export class NewDiscountPage extends BasePage {
   readonly discountCodeInput = this.page.getByPlaceholder(/discount code/i)
   readonly discountCodeDescriptionInput = this.page.getByPlaceholder(
-    /description \(optional\)/i
+    /description \(optional\)/i,
   )
   readonly appliesToOptions: {
     allCourses: Locator
@@ -36,10 +36,10 @@ export class NewDiscountPage extends BasePage {
 
     this.usageCriteriaCheckboxes = {
       limitPerBooker: this.page.getByLabel(
-        /Limit to one time use per booker email/i
+        /Limit to one time use per booker email/i,
       ),
       limitUses: this.page.getByLabel(
-        /Limit number of bookings this discount can be used/i
+        /Limit number of bookings this discount can be used/i,
       ),
     }
   }

@@ -57,7 +57,7 @@ export const OrgStatsTiles: React.FC<
           count={total ?? 0}
           label={t('pages.org-details.tabs.overview.total-individuals')}
           tooltip={t(
-            'pages.org-details.tabs.overview.all-organisation-members'
+            'pages.org-details.tabs.overview.all-organisation-members',
           )}
         />
       </Grid>
@@ -73,7 +73,7 @@ export const OrgStatsTiles: React.FC<
             count: stats[orgId]?.certificates.active.enrolled,
           })}
           tooltip={t(
-            'pages.org-details.tabs.overview.members-with-active-certificates'
+            'pages.org-details.tabs.overview.members-with-active-certificates',
           )}
           onClick={() => onTileSelect(CertificateStatus.Active)}
           selected={selected.includes(CertificateStatus.Active)}
@@ -105,7 +105,7 @@ export const OrgStatsTiles: React.FC<
             count: stats[orgId]?.certificates.expiringSoon.enrolled,
           })}
           tooltip={t(
-            'pages.org-details.tabs.overview.members-with-certificates-to-expire'
+            'pages.org-details.tabs.overview.members-with-certificates-to-expire',
           )}
           onClick={() => onTileSelect(CertificateStatus.ExpiringSoon)}
           selected={selected.includes(CertificateStatus.ExpiringSoon)}
@@ -122,7 +122,7 @@ export const OrgStatsTiles: React.FC<
             count: stats[orgId]?.certificates.expired.enrolled,
           })}
           tooltip={t(
-            'pages.org-details.tabs.overview.members-with-expired-certificates'
+            'pages.org-details.tabs.overview.members-with-expired-certificates',
           )}
           onClick={() => onTileSelect(CertificateStatus.ExpiredRecently)}
           selected={selected.includes(CertificateStatus.ExpiredRecently)}

@@ -74,7 +74,7 @@ describe('component: CourseForm - OPEN', () => {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
-      })
+      }),
     )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
@@ -124,7 +124,7 @@ describe('component: CourseForm - OPEN', () => {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
-      })
+      }),
     )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
@@ -178,7 +178,7 @@ describe('component: CourseForm - OPEN', () => {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
-      })
+      }),
     )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
@@ -199,11 +199,11 @@ describe('component: CourseForm - OPEN', () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      })
+      }),
     )
 
     expect(
-      screen.queryByText(t('components.course-form.residing-country'))
+      screen.queryByText(t('components.course-form.residing-country')),
     ).not.toBeInTheDocument()
   })
 
@@ -220,13 +220,13 @@ describe('component: CourseForm - OPEN', () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
     await waitFor(() =>
       expect(
-        screen.queryByText(t('components.course-form.residing-country'))
-      ).toBeInTheDocument()
+        screen.queryByText(t('components.course-form.residing-country')),
+      ).toBeInTheDocument(),
     )
   })
 
@@ -244,18 +244,18 @@ describe('component: CourseForm - OPEN', () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -267,7 +267,7 @@ describe('component: CourseForm - OPEN', () => {
     await userEvent.click(countryOutOfUKs)
 
     const financeSection = screen.getByText(
-      t('components.course-form.finance-section-title')
+      t('components.course-form.finance-section-title'),
     )
     expect(financeSection).toBeInTheDocument()
   })
@@ -294,8 +294,8 @@ describe('component: CourseForm - OPEN', () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
-      )
+        },
+      ),
     )
 
     const financeSectionTitle = screen.queryByText('Finance')

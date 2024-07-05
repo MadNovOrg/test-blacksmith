@@ -4,5 +4,5 @@ import { CertificationsTable } from '@app/modules/profile/components/Certificati
 describe(CertificationsTable.name, () =>
   it('should pass', () => {
     expect(true).toBeTruthy()
-  })
+  }),
 )

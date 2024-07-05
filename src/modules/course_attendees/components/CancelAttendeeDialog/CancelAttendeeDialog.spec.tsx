@@ -17,7 +17,7 @@ describe(CancelAttendeeDialog.name, () => {
         course={mockCourse}
         onClose={vi.fn()}
         onSave={vi.fn()}
-      />
+      />,
     )
 
     expect(true).toBeTruthy()
@@ -44,7 +44,7 @@ describe(CancelAttendeeDialog.name, () => {
           auth: {
             activeRole: role,
           },
-        }
+        },
       )
 
       const customFeeRadio = screen.getByTestId('CUSTOM_FEE-radioButton')
@@ -52,6 +52,6 @@ describe(CancelAttendeeDialog.name, () => {
 
       expect(customFeeRadio).toBeEnabled()
       expect(noFeeRadio).toBeEnabled()
-    }
+    },
   )
 })

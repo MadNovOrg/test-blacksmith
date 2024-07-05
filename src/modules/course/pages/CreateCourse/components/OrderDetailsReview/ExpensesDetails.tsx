@@ -30,14 +30,14 @@ export const ExpensesDetails: FC<ExpensesDetailsProps> = ({
     const accommodationNights =
       expenses.transport.reduce(
         (acc, { accommodationNights: n }) => (n && n > 0 ? acc + n : acc),
-        0
+        0,
       ) ?? 0
 
     const accommodationCost =
       expenses.transport.reduce(
         (acc, { accommodationCost: c, accommodationNights: n }) =>
           n && c && n > 0 ? acc + n * c : acc,
-        0
+        0,
       ) ?? 0
 
     const aLabel = t('pages.create-course.trainer-expenses.accommodation')
@@ -50,13 +50,13 @@ export const ExpensesDetails: FC<ExpensesDetailsProps> = ({
     const sFormattedAmount = t('common.currency', {
       amount: getTrainerSubsistenceCost(
         accommodationNights,
-        isUKCountry(courseData?.residingCountry)
+        isUKCountry(courseData?.residingCountry),
       ),
       currency,
     })
     const sCaption = t(
       'pages.create-course.review-and-confirm.caption.accommodation',
-      { count: accommodationNights }
+      { count: accommodationNights },
     )
 
     return (

@@ -31,7 +31,7 @@ const test = base.extend<{
   noParticipantsCourseId: async ({}, use) => {
     const { id } = await insertCourse(
       COURSE_INPUT,
-      'trainer@teamteach.testinator.com'
+      'trainer@teamteach.testinator.com',
     )
 
     await use(id)
@@ -41,7 +41,7 @@ const test = base.extend<{
   courseWithParticipantsId: async ({}, use) => {
     const { id } = await insertCourse(
       COURSE_INPUT,
-      'trainer@teamteach.testinator.com'
+      'trainer@teamteach.testinator.com',
     )
 
     await insertCourseParticipants(id, [users.user1])
@@ -58,7 +58,7 @@ test("@query returns number of max participants if course doesn't have any parti
   const result = await runQueryAsRole<CourseFreeSlotsQuery>(
     QUERY,
     { id: noParticipantsCourseId },
-    RoleName.TT_ADMIN
+    RoleName.TT_ADMIN,
   )
 
   test
@@ -72,7 +72,7 @@ test('@query returns correct number of free slots if there are participants on t
   const result = await runQueryAsRole<CourseFreeSlotsQuery>(
     QUERY,
     { id: courseWithParticipantsId },
-    RoleName.TT_ADMIN
+    RoleName.TT_ADMIN,
   )
 
   test

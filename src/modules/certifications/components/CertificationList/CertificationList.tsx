@@ -75,7 +75,7 @@ export const CertificationList: React.FC<
 
   const selectedParticipants = useMemo(
     () => participants.filter(p => isSelected(p.id)),
-    [participants, isSelected]
+    [participants, isSelected],
   )
 
   const colsToShow: Set<string> = useMemo(() => new Set(columns), [columns])
@@ -90,8 +90,8 @@ export const CertificationList: React.FC<
     return [
       checkbox.headCol(
         participants.flatMap(p =>
-          p.certificate?.status === CertificateStatus.Revoked ? [] : [p.id]
-        )
+          p.certificate?.status === CertificateStatus.Revoked ? [] : [p.id],
+        ),
       ),
       ...col('name', { sorting: true }),
       ...col('contact', { sorting: true }),
@@ -136,7 +136,7 @@ export const CertificationList: React.FC<
         saveAs(await pdf(document).toBlob(), fileName)
       }
     },
-    []
+    [],
   )
 
   return (
@@ -189,8 +189,8 @@ export const CertificationList: React.FC<
               onClick={() => {
                 downloadCertificates(
                   participants.filter(
-                    p => p.certificate?.status !== CertificateStatus.Revoked
-                  ) ?? []
+                    p => p.certificate?.status !== CertificateStatus.Revoked,
+                  ) ?? [],
                 )
               }}
             >

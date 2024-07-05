@@ -76,7 +76,7 @@ import { AttendeeValidCertificate } from './AttendeeValidCertificate'
 const isAttendeeValidCertificateMandatory = (
   courseLevel?: Course_Level_Enum,
   courseType?: Course_Type_Enum,
-  courseResidingCountry?: string | null
+  courseResidingCountry?: string | null,
 ) =>
   courseType === Course_Type_Enum.Open &&
   courseResidingCountry?.includes('GB') &&
@@ -125,10 +125,10 @@ export const CourseBookingDetails: React.FC<
   >([])
   const navigate = useNavigate()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
   const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
@@ -152,14 +152,14 @@ export const CourseBookingDetails: React.FC<
         course?.deliveryType === Course_Delivery_Type_Enum.Virtual,
         course?.level === Course_Level_Enum.Level_1,
       ].every(el => el),
-    [course, residingCountryEnabled]
+    [course, residingCountryEnabled],
   )
 
   const { checkUKsCountryName, getLabel, isUKCountry } = useWorldCountries()
 
   const qtyOptions = useMemo(
     () => Array.from({ length: availableSeats }, (_, i) => i + 1),
-    [availableSeats]
+    [availableSeats],
   )
 
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
@@ -198,12 +198,12 @@ export const CourseBookingDetails: React.FC<
                         .test(
                           'is-uk-postcode',
                           t('validation-errors.invalid-postcode'),
-                          isValidUKPostalCode
+                          isValidUKPostalCode,
                         )
                     }),
                 }
               : {}),
-          })
+          }),
         )
         .length(yup.ref('quantity'), t('validation-errors.max-registrants'))
         .required(requiredMsg(t, 'emails')),
@@ -305,11 +305,11 @@ export const CourseBookingDetails: React.FC<
         ...participant,
         email: participant.email.trim().toLowerCase(),
       })),
-      'email'
+      'email',
     )
     const duplicatesParticipantsEmail = filter(
       groupedParticipantsByEmail,
-      groupedParticipantsByEmail => groupedParticipantsByEmail.length > 1
+      groupedParticipantsByEmail => groupedParticipantsByEmail.length > 1,
     )
 
     // Restrict if there are duplicated registrants
@@ -342,18 +342,18 @@ export const CourseBookingDetails: React.FC<
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
     course?.level,
     course?.type,
-    course?.residingCountry
+    course?.residingCountry,
   )
 
   useEffect(() => {
     setParticipantProfiles(
-      Array.from(Array(values.participants.length)).fill({})
+      Array.from(Array(values.participants.length)).fill({}),
     )
   }, [values.participants.length])
 
   const handleEmailSelector = async (
     profile: UserSelectorProfile,
-    index: number
+    index: number,
   ) => {
     const participants = participantsProfiles
     participants[index] = {}
@@ -370,7 +370,7 @@ export const CourseBookingDetails: React.FC<
     setValue(
       `participants.${index}`,
       { ...newParticipant },
-      { shouldValidate: false }
+      { shouldValidate: false },
     )
 
     participants[index] = {
@@ -389,7 +389,7 @@ export const CourseBookingDetails: React.FC<
         firstName: profile?.givenName || '',
         lastName: profile?.familyName || '',
       },
-      { shouldValidate: true }
+      { shouldValidate: true },
     )
     setBookingContactProfile({
       familyName: profile?.familyName,
@@ -438,7 +438,7 @@ export const CourseBookingDetails: React.FC<
     (index: number, field: keyof ParticipantInput) => {
       return errors.participants?.[index]?.[field]
     },
-    [errors.participants]
+    [errors.participants],
   )
 
   const courseVenue = course?.schedule[0].venue
@@ -463,21 +463,21 @@ export const CourseBookingDetails: React.FC<
 
       return checkUKsCountryName(values.participants[index].country)
     },
-    [checkUKsCountryName, values.participants]
+    [checkUKsCountryName, values.participants],
   )
 
   const onCountryChange = useCallback(
     async (index: number, countryCode: string | null) => {
       const postCode = values.participants[index].postCode
       const isPreviousCountryUKs = checkUKsCountryName(
-        values.participants[index].country
+        values.participants[index].country,
       )
 
       setValue(`participants.${index}.country`, getLabel(countryCode) ?? '')
       await trigger(`participants.${index}.country`)
 
       const isCurrentCountryUKs = checkUKsCountryName(
-        values.participants[index].country
+        values.participants[index].country,
       )
 
       if (
@@ -494,7 +494,7 @@ export const CourseBookingDetails: React.FC<
       setValue,
       trigger,
       values.participants,
-    ]
+    ],
   )
   const courseTimezone = useMemo(() => {
     return course?.schedule.length ? course?.schedule[0].timeZone : undefined
@@ -502,11 +502,11 @@ export const CourseBookingDetails: React.FC<
 
   const courseStartDate = useMemo(
     () => new Date(course?.dates.aggregate?.start?.date),
-    [course?.dates]
+    [course?.dates],
   )
   const courseEndDate = useMemo(
     () => new Date(course?.dates.aggregate?.end?.date),
-    [course?.dates]
+    [course?.dates],
   )
 
   const timeZoneScheduleDateTime = useMemo(() => {
@@ -551,13 +551,13 @@ export const CourseBookingDetails: React.FC<
                   })} ${formatGMTDateTimeByTimeZone(
                     timeZoneScheduleDateTime.courseStart,
                     courseTimezone,
-                    false
+                    false,
                   )} - ${t('dates.withTime', {
                     date: timeZoneScheduleDateTime.courseEnd,
                   })} ${formatGMTDateTimeByTimeZone(
                     timeZoneScheduleDateTime.courseEnd,
                     courseTimezone,
-                    true
+                    true,
                   )} `}
                 </Typography>
               ) : (
@@ -615,7 +615,7 @@ export const CourseBookingDetails: React.FC<
                   amount: new Big(amounts.courseCost).round(2).toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -631,11 +631,11 @@ export const CourseBookingDetails: React.FC<
                   {
                     amount: getMandatoryCourseMaterialsCost(
                       booking.quantity,
-                      booking.currency
+                      booking.currency,
                     ),
                     currency: booking.currency,
                   },
-                  t
+                  t,
                 )}
               </Typography>
             </Box>
@@ -654,7 +654,7 @@ export const CourseBookingDetails: React.FC<
                       .toNumber(),
                     currency: booking.currency,
                   },
-                  t
+                  t,
                 )}
               </Typography>
             </Box>
@@ -686,7 +686,7 @@ export const CourseBookingDetails: React.FC<
                       .toNumber(),
                     currency: booking.currency,
                   },
-                  t
+                  t,
                 )}
               </Typography>
             </Box>
@@ -702,7 +702,7 @@ export const CourseBookingDetails: React.FC<
                     .toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -717,7 +717,7 @@ export const CourseBookingDetails: React.FC<
                   amount: new Big(amounts.vat).round(2).toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -736,7 +736,7 @@ export const CourseBookingDetails: React.FC<
                   amount: new Big(amounts.total).round(2).toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -902,7 +902,7 @@ export const CourseBookingDetails: React.FC<
               values.participants.filter(
                 p =>
                   p.email.trim().toLocaleLowerCase() ===
-                  emailValue.trim().toLocaleLowerCase()
+                  emailValue.trim().toLocaleLowerCase(),
               ).length > 1
             return (
               <Box key={`participant-${index}`} display="flex" gap={1}>
@@ -943,7 +943,7 @@ export const CourseBookingDetails: React.FC<
                       fullWidth
                       required
                       disabled={Boolean(
-                        participantsProfiles[index]?.familyName
+                        participantsProfiles[index]?.familyName,
                       )}
                     />
                   </Grid>
@@ -984,7 +984,7 @@ export const CourseBookingDetails: React.FC<
                           error={!!getParticipantError(index, 'addressLine1')}
                           InputLabelProps={{
                             shrink: Boolean(
-                              values.participants[index].addressLine1
+                              values.participants[index].addressLine1,
                             ),
                           }}
                           helperText={
@@ -1005,7 +1005,7 @@ export const CourseBookingDetails: React.FC<
                           error={!!getParticipantError(index, 'addressLine2')}
                           InputLabelProps={{
                             shrink: Boolean(
-                              values.participants[index].addressLine2
+                              values.participants[index].addressLine2,
                             ),
                           }}
                           sx={{ bgcolor: 'grey.100' }}
@@ -1051,10 +1051,10 @@ export const CourseBookingDetails: React.FC<
                           label={
                             checkIsParticipantUKCountry(index)
                               ? t(
-                                  'components.venue-selector.modal.fields.postCode'
+                                  'components.venue-selector.modal.fields.postCode',
                                 )
                               : t(
-                                  'components.venue-selector.modal.fields.zipCode'
+                                  'components.venue-selector.modal.fields.zipCode',
                                 )
                           }
                           placeholder={
@@ -1073,7 +1073,7 @@ export const CourseBookingDetails: React.FC<
                           {...register(`participants.${index}.postCode`)}
                           InputLabelProps={{
                             shrink: Boolean(
-                              values.participants[index].postCode
+                              values.participants[index].postCode,
                             ),
                           }}
                           InputProps={
@@ -1096,7 +1096,7 @@ export const CourseBookingDetails: React.FC<
                         {isIntlEnabled ? (
                           <CountriesSelector
                             error={Boolean(
-                              getParticipantError(index, 'country')?.message
+                              getParticipantError(index, 'country')?.message,
                             )}
                             helperText={
                               getParticipantError(index, 'country')?.message ??

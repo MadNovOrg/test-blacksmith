@@ -52,7 +52,11 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED to be F2F', async () => {
     await waitFor(() =>
-      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(
+        type,
+        Course_Level_Enum.IntermediateTrainer,
+        RoleName.TT_ADMIN,
+      ),
     )
 
     await selectLevel(Course_Level_Enum.Advanced)
@@ -152,7 +156,11 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED+F2F to be Blended', async () => {
     await waitFor(() =>
-      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(
+        type,
+        Course_Level_Enum.IntermediateTrainer,
+        RoleName.TT_ADMIN,
+      ),
     )
 
     await selectLevel(Course_Level_Enum.Advanced)
@@ -285,7 +293,11 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('displays price field for a Level two blended closed course that has 8 or less participants', async () => {
     await waitFor(() =>
-      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm(
+        type,
+        Course_Level_Enum.IntermediateTrainer,
+        RoleName.TT_ADMIN,
+      ),
     )
 
     await selectLevel(Course_Level_Enum.Level_2)
@@ -345,7 +357,7 @@ describe('component: CourseForm - CLOSED', () => {
           activeCertificates: [Course_Level_Enum.Level_2],
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await selectLevel(Course_Level_Enum.Level_2)
@@ -359,18 +371,18 @@ describe('component: CourseForm - CLOSED', () => {
     await userEvent.clear(priceField)
 
     expect(
-      screen.getByText(/price per attendee must be a positive number/i)
+      screen.getByText(/price per attendee must be a positive number/i),
     ).toBeInTheDocument()
   })
 
   it('allows changing the residing country', async () => {
     useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) => flag === 'course-residing-country'
+      (flag: string) => flag === 'course-residing-country',
     )
     renderForm(type)
 
     expect(
-      screen.getByLabelText(t('components.course-form.residing-country'))
+      screen.getByLabelText(t('components.course-form.residing-country')),
     ).toBeInTheDocument()
   })
 })

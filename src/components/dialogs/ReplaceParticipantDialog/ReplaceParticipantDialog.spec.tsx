@@ -33,7 +33,7 @@ describe(ReplaceParticipantDialog.name, () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText(participant.fullName)).toBeInTheDocument()
@@ -59,7 +59,7 @@ describe(ReplaceParticipantDialog.name, () => {
           participant={participant}
           onClose={onCloseMock}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByText(/close/i))
@@ -108,12 +108,12 @@ describe(ReplaceParticipantDialog.name, () => {
           participant={participant}
           onSuccess={onSuccessMock}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText(/email/i),
-      'example@example.com'
+      'example@example.com',
     )
     await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
     await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
@@ -153,12 +153,12 @@ describe(ReplaceParticipantDialog.name, () => {
           participant={participant}
           onSuccess={onSuccessMock}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText(/email/i),
-      'example@example.com'
+      'example@example.com',
     )
     await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
     await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
@@ -170,7 +170,7 @@ describe(ReplaceParticipantDialog.name, () => {
     await waitFor(() => {
       expect(onSuccessMock).toHaveBeenCalledTimes(0)
       expect(
-        screen.getByTestId('error-alert').textContent
+        screen.getByTestId('error-alert').textContent,
       ).toMatchInlineSnapshot(`"There was an error replacing the participant."`)
     })
   })
@@ -193,12 +193,12 @@ describe(ReplaceParticipantDialog.name, () => {
           participant={participant}
           mode={Mode.ORG_ADMIN}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText(/email/i),
-      'example@example.com'
+      'example@example.com',
     )
     await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
     await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
@@ -241,7 +241,7 @@ describe(ReplaceParticipantDialog.name, () => {
     render(
       <Provider value={client}>
         <ReplaceParticipantDialog participant={participant} />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {

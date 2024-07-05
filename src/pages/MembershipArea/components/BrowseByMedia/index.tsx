@@ -81,7 +81,7 @@ export const BrowseByMedia: React.FC<React.PropsWithChildren<unknown>> = () => {
         />
         <MediaType
           label={t(
-            'pages.membership.components.browse-by-media.research-summaries'
+            'pages.membership.components.browse-by-media.research-summaries',
           )}
           linkTo="/membership/research-summaries"
           icon={styles => <ResearchSummaryIcon style={styles} />}

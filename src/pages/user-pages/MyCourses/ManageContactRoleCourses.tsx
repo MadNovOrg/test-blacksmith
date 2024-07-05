@@ -43,7 +43,7 @@ export const ManageContactRoleCourses: React.FC<
     },
     undefined,
     isBookingContact,
-    isOrgKeyContact
+    isOrgKeyContact,
   )
 
   useEffect(() => {
@@ -53,14 +53,14 @@ export const ManageContactRoleCourses: React.FC<
   const loading = status === LoadingStatus.FETCHING
 
   const isDateEmpty = Object.values(filters?.creation || {}).every(
-    x => x === undefined || x === null
+    x => x === undefined || x === null,
   )
 
   const filtered = Boolean(
     filters?.keyword ||
       filters?.statuses?.length ||
       filters?.levels?.length ||
-      !isDateEmpty
+      !isDateEmpty,
   )
 
   return (

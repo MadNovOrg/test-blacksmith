@@ -21,7 +21,7 @@ export const useTableChecks = <Entry extends ID>() => {
 
   const isSelected = useCallback(
     (entry: Entry) => selected.has(entry),
-    [selected]
+    [selected],
   )
 
   const headCol = useCallback(
@@ -43,7 +43,7 @@ export const useTableChecks = <Entry extends ID>() => {
         ),
       }
     },
-    [setSelected, selected.size]
+    [setSelected, selected.size],
   )
 
   const rowCell = useCallback(
@@ -59,7 +59,7 @@ export const useTableChecks = <Entry extends ID>() => {
         </TableCell>
       )
     },
-    [isSelected, setSelected]
+    [isSelected, setSelected],
   )
 
   return useMemo(
@@ -69,6 +69,6 @@ export const useTableChecks = <Entry extends ID>() => {
       isSelected,
       checkbox: { headCol, rowCell },
     }),
-    [selected, setSelected, headCol, rowCell, isSelected]
+    [selected, setSelected, headCol, rowCell, isSelected],
   )
 }

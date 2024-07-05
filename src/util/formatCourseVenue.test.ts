@@ -15,48 +15,48 @@ describe('formatCourseVenue utils', () => {
   const venueCity = 'New York'
   it('returns the "TBC" string if the venue is undefined and delivery type is F2F', () => {
     expect(formatCourseVenue(Course_Delivery_Type_Enum.F2F, undefined)).toBe(
-      tbcTranslation
+      tbcTranslation,
     )
   })
 
   it('returns the "TBC" string if the city and name are empty and delivery type is F2F', () => {
     const venue = {} as Venue
     expect(formatCourseVenue(Course_Delivery_Type_Enum.F2F, venue)).toBe(
-      tbcTranslation
+      tbcTranslation,
     )
   })
 
   it('returns the name if the city is undefined and delivery type is F2F', () => {
     const venue = { name: venueName } as Venue
     expect(formatCourseVenue(Course_Delivery_Type_Enum.F2F, venue)).toBe(
-      venueName
+      venueName,
     )
   })
 
   it('returns the city if the name is undefined and delivery type is F2F', () => {
     const venue = { city: venueCity } as Venue
     expect(formatCourseVenue(Course_Delivery_Type_Enum.F2F, venue)).toBe(
-      venueCity
+      venueCity,
     )
   })
 
   it('returns name and city are empty and delivery type is F2F', () => {
     const venue = { name: venueName, city: venueCity } as Venue
     expect(formatCourseVenue(Course_Delivery_Type_Enum.F2F, venue)).toBe(
-      `${venueName}, ${venueCity}`
+      `${venueName}, ${venueCity}`,
     )
   })
 
   it('returns name and city are empty and delivery type is MIXED', () => {
     const venue = { name: venueName, city: venueCity } as Venue
     expect(formatCourseVenue(Course_Delivery_Type_Enum.Mixed, venue)).toBe(
-      `${venueName}, ${venueCity}`
+      `${venueName}, ${venueCity}`,
     )
   })
 
   it('returns "Virtual" if delivery type is VIRTUAL', () => {
     expect(
-      formatCourseVenue(Course_Delivery_Type_Enum.Virtual, undefined)
+      formatCourseVenue(Course_Delivery_Type_Enum.Virtual, undefined),
     ).toBe(virtualTranslation)
   })
 })

@@ -9,7 +9,7 @@ import { getClient } from './client'
 
 export const getInviteId = async (
   courseId: number,
-  email: string
+  email: string,
 ): Promise<string> => {
   const query = gql`
     query GetInviteByEmail($courseId: Int!, $email: String!) {

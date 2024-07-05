@@ -61,7 +61,7 @@ export const IndividualsByLevelList: React.FC<
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   const cols = useMemo(() => {
@@ -109,7 +109,7 @@ export const IndividualsByLevelList: React.FC<
         <TableBody>
           {currentPageUsers.map(profile => {
             const certification = profile?.certificates?.find(
-              c => c?.courseLevel === courseLevel
+              c => c?.courseLevel === courseLevel,
             )
             const certificationStatus =
               certification?.status as CertificateStatus
@@ -183,7 +183,7 @@ export const IndividualsByLevelList: React.FC<
                         href={`/manage-courses/${profile.id}/${enrollment?.course?.id}/details`}
                       >
                         {`${t(
-                          `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`
+                          `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`,
                         )} ${enrollment?.course?.course_code}`}
                       </Link>
                     ))}

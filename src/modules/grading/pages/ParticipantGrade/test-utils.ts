@@ -7,7 +7,7 @@ import {
 import { chance } from '@test/index'
 
 export function buildGradedParticipant(
-  overrides?: Partial<NonNullable<GradedParticipantQuery['participant']>>
+  overrides?: Partial<NonNullable<GradedParticipantQuery['participant']>>,
 ): NonNullable<GradedParticipantQuery['participant']> {
   return {
     id: chance.guid(),

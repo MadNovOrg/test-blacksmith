@@ -40,7 +40,7 @@ export default function useAttendeeAuditLogs({
 } {
   const orderBy: GetAttendeeAuditLogsQueryVariables['orderBy'] = useMemo(
     () => buildNestedSort(sort.by, sort.dir ?? 'asc'),
-    [sort]
+    [sort],
   )
 
   const where: GetAttendeeAuditLogsQueryVariables['where'] = useMemo(() => {
@@ -64,7 +64,7 @@ export default function useAttendeeAuditLogs({
                 searchFields: { _ilike: `%${w}%` },
               })),
             }
-          : { searchFields: { _ilike: `%${query}%` } }
+          : { searchFields: { _ilike: `%${query}%` } },
       )
     }
     if (filter.courseType) {
@@ -89,11 +89,11 @@ export default function useAttendeeAuditLogs({
       client
         .query<GetAttendeeAuditLogsQuery, GetAttendeeAuditLogsQueryVariables>(
           GET_ATTENDEE_AUDIT_LOGS_QUERY,
-          { where, orderBy }
+          { where, orderBy },
         )
         .toPromise()
         .then(result => result?.data?.logs ?? []),
-    [client, where, orderBy]
+    [client, where, orderBy],
   )
 
   return useMemo(
@@ -110,6 +110,6 @@ export default function useAttendeeAuditLogs({
       error,
       fetching,
       getUnpagedLogs,
-    ]
+    ],
   )
 }

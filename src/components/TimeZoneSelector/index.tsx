@@ -75,7 +75,7 @@ const TimeZoneSelector = ({
             const timeZone = await getTimeZoneLatLng(
               coordinates[0],
               coordinates[1],
-              date
+              date,
             )
 
             if (timeZone) {
@@ -94,7 +94,7 @@ const TimeZoneSelector = ({
           setTimeZoneOptions(timeZones)
 
           const currentTimeZoneInOptions = timeZones.find(
-            zone => zone.timeZoneId === value?.timeZoneId
+            zone => zone.timeZoneId === value?.timeZoneId,
           )
 
           // The same time zone can have different GMT because of Day Save Time

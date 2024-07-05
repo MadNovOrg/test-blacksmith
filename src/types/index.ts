@@ -903,7 +903,7 @@ declare global {
             'expired-callback'?: () => void
             'error-callback'?: () => void
             action: string
-          }
+          },
         ) => number
       }
     }

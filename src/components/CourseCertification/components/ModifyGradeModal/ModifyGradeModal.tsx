@@ -137,7 +137,7 @@ const ModifyGradeModal: React.FC<
                 t('common.validation-errors.this-field-is-required')
               }
               placeholder={t(
-                'common.course-certificate.modify-grade-modal.please-add-a-note'
+                'common.course-certificate.modify-grade-modal.please-add-a-note',
               )}
               fullWidth
               value={note}
@@ -172,7 +172,7 @@ const ModifyGradeModal: React.FC<
             onClick={submitHandler}
           >
             {t(
-              'common.course-certificate.modify-grade-modal.confirm-modification'
+              'common.course-certificate.modify-grade-modal.confirm-modification',
             )}
           </Button>
         </Grid>

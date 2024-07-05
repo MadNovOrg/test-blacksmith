@@ -19,7 +19,7 @@ export const CourseGrading = () => {
   const { data: course, status } = useCourseGradingData(Number(courseId) ?? '')
 
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model'
+    'new-modules-data-model',
   )
 
   return (

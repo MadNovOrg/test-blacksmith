@@ -32,7 +32,7 @@ test('reset password @smoke', async ({ page }) => {
   await forgotPasswordPage.submitEmail(users.resetPassword.email)
   const email = await getLatestEmail(
     users.resetPassword.email,
-    'Team Teach Hub Password Reset'
+    'Team Teach Hub Password Reset',
   )
   const emailPage = new EmailPage(page)
   await emailPage.renderContent(email.html)
@@ -40,7 +40,7 @@ test('reset password @smoke', async ({ page }) => {
   await resetPasswordPage.checkPasscodeHasDigitsFromUrl()
   const loginPage = await resetPasswordPage.submitPasswords(
     newPassword,
-    newPassword
+    newPassword,
   )
   const homePage = await loginPage.logIn(users.resetPassword.email, newPassword)
   await homePage.userMenu.checkIsVisible()

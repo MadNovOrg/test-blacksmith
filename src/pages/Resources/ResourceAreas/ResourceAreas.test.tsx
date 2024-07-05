@@ -26,7 +26,7 @@ describe('page: ResourcesList', () => {
         auth: {
           activeRole: RoleName.USER,
         },
-      }
+      },
     )
 
     expect(screen.getByTestId('resources-list-skeleton')).toBeInTheDocument()
@@ -100,16 +100,16 @@ describe('page: ResourcesList', () => {
           ],
           activeRole: RoleName.USER,
         },
-      }
+      },
     )
 
     for (const item of resourceList) {
       expect(
-        screen.getByText(item.name ?? 'should not pass')
+        screen.getByText(item.name ?? 'should not pass'),
       ).toBeInTheDocument()
 
       expect(
-        screen.getByText(item.description ?? 'should not pass')
+        screen.getByText(item.description ?? 'should not pass'),
       ).toBeInTheDocument()
     }
   })
@@ -156,15 +156,15 @@ describe('page: ResourcesList', () => {
           ],
           activeRole: RoleName.USER,
         },
-      }
+      },
     )
 
     expect(
-      screen.getByText(level1Category.name ?? 'should not pass')
+      screen.getByText(level1Category.name ?? 'should not pass'),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByText(level2Category.name ?? 'should not pass')
+      screen.queryByText(level2Category.name ?? 'should not pass'),
     ).not.toBeInTheDocument()
   })
   ;[
@@ -238,16 +238,16 @@ describe('page: ResourcesList', () => {
             activeCertificates: [],
             activeRole: roleName,
           },
-        }
+        },
       )
 
       for (const item of resourceList) {
         expect(
-          screen.getByText(item.name ?? 'should not pass')
+          screen.getByText(item.name ?? 'should not pass'),
         ).toBeInTheDocument()
 
         expect(
-          screen.getByText(item.description ?? 'should not pass')
+          screen.getByText(item.description ?? 'should not pass'),
         ).toBeInTheDocument()
       }
     })

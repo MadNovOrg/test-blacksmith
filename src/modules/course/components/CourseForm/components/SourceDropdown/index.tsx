@@ -19,7 +19,7 @@ import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-source
 
 export const SourceDropdown = React.forwardRef(function SourceDropdown(
   props: SelectProps<Course_Source_Enum | ''>,
-  ref: React.Ref<HTMLSelectElement>
+  ref: React.Ref<HTMLSelectElement>,
 ) {
   const { t, _t } = useScopedTranslation('components.course-source-dropdown')
   const { required, error } = props

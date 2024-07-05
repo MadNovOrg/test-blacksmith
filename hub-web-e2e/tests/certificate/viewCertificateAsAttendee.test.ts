@@ -21,7 +21,7 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
     await API.course.insertCourseGradingForParticipants(
       course,
       [user],
-      Grade_Enum.Pass
+      Grade_Enum.Pass,
     )
     await API.course.insertCertificateForParticipants(course, [user])
     await use({ course: course, user: user })
@@ -38,7 +38,7 @@ test('attendee can view the certificate from the courses page @smoke', async ({
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto(`${certificate.course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-    certificate.course.id
+    certificate.course.id,
   )
   await courseDetailsPage.clickCertification()
   await courseDetailsPage.checkCertification('Pass')

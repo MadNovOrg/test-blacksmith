@@ -43,7 +43,7 @@ describe('OrderYourWorkbookAlert', () => {
     })
 
     const alertMessage = screen.queryByText(
-      content => content === ALERT_MESSAGE
+      content => content === ALERT_MESSAGE,
     )
 
     expect(alertMessage).toBeInTheDocument()
@@ -75,7 +75,7 @@ describe('OrderYourWorkbookAlert', () => {
   })
 
   const rolesWithoutTrainer = Object.values(RoleName).filter(
-    role => role !== RoleName.TRAINER
+    role => role !== RoleName.TRAINER,
   )
   rolesWithoutTrainer.forEach(role => {
     it(`hides the alert if the current user role is "${role}"`, async () => {
@@ -93,7 +93,7 @@ describe('OrderYourWorkbookAlert', () => {
   })
 
   const courseStatusWithoutScheduled = Object.values(Course_Status_Enum).filter(
-    status => status !== Course_Status_Enum.Scheduled
+    status => status !== Course_Status_Enum.Scheduled,
   )
   courseStatusWithoutScheduled.forEach(status => {
     it(`hides the alert if the course status is "${status}"`, async () => {

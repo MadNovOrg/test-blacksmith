@@ -41,7 +41,7 @@ describe(`Waitlist: ${Form.name}`, () => {
     render(
       <Provider value={client}>
         <Form onSuccess={vi.fn} saving={false} courseId={chance.integer()} />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByText(/join waiting list/i))
@@ -52,7 +52,7 @@ describe(`Waitlist: ${Form.name}`, () => {
       expect(screen.getByText(/please enter your email/i)).toBeInTheDocument()
       expect(screen.getByText(/phone is required/i)).toBeInTheDocument()
       expect(
-        screen.getByText(/organisation name is required/i)
+        screen.getByText(/organisation name is required/i),
       ).toBeInTheDocument()
       expect(screen.getByText(/recaptcha is required/i)).toBeInTheDocument()
     })
@@ -61,7 +61,7 @@ describe(`Waitlist: ${Form.name}`, () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/please enter a valid email address/i)
+        screen.getByText(/please enter a valid email address/i),
       ).toBeInTheDocument()
     })
   })
@@ -83,25 +83,25 @@ describe(`Waitlist: ${Form.name}`, () => {
           saving={false}
           courseId={chance.integer()}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByLabelText(/first name/i),
-      submittedData.firstName
+      submittedData.firstName,
     )
     await userEvent.type(
       screen.getByLabelText(/last name/i),
-      submittedData.surname
+      submittedData.surname,
     )
     await userEvent.type(
       screen.getByLabelText(/email/i),
-      submittedData.email ?? ''
+      submittedData.email ?? '',
     )
     await userEvent.type(screen.getByLabelText(/phone/i), '7999999999')
     await userEvent.type(
       screen.getByLabelText(/organisation name/i),
-      submittedData.orgName
+      submittedData.orgName,
     )
     await userEvent.click(screen.getByText(/join waiting list/i))
     await userEvent.click(screen.getByTestId('recaptcha-success'))
@@ -128,25 +128,25 @@ describe(`Waitlist: ${Form.name}`, () => {
     render(
       <Provider value={client}>
         <Form onSuccess={vi.fn()} saving={false} courseId={chance.integer()} />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByLabelText(/first name/i),
-      submittedData.firstName
+      submittedData.firstName,
     )
     await userEvent.type(
       screen.getByLabelText(/last name/i),
-      submittedData.surname
+      submittedData.surname,
     )
     await userEvent.type(
       screen.getByLabelText(/email/i),
-      submittedData.email ?? ''
+      submittedData.email ?? '',
     )
     await userEvent.type(screen.getByLabelText(/phone/i), submittedData.phone)
     await userEvent.type(
       screen.getByLabelText(/organisation name/i),
-      submittedData.orgName
+      submittedData.orgName,
     )
 
     await userEvent.click(screen.getByText(/join waiting list/i))

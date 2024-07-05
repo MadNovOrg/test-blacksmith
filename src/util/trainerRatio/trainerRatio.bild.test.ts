@@ -28,8 +28,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -40,8 +40,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 24,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -50,8 +50,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 13 })
-      )
+        extend({}, criteria, { numberParticipants: 13 }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -60,8 +60,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 24 })
-      )
+        extend({}, criteria, { numberParticipants: 24 }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -70,8 +70,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -91,8 +91,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -103,8 +103,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -113,8 +113,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 13 })
-      )
+        extend({}, criteria, { numberParticipants: 13 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -123,8 +123,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 24 })
-      )
+        extend({}, criteria, { numberParticipants: 24 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -133,8 +133,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 3,
       max: 3,
@@ -154,8 +154,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -166,8 +166,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -176,8 +176,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 13 })
-      )
+        extend({}, criteria, { numberParticipants: 13 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -186,8 +186,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 24 })
-      )
+        extend({}, criteria, { numberParticipants: 24 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -196,8 +196,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 3,
       max: 3,
@@ -217,8 +217,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -229,8 +229,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -239,8 +239,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 13 })
-      )
+        extend({}, criteria, { numberParticipants: 13 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -249,8 +249,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 24 })
-      )
+        extend({}, criteria, { numberParticipants: 24 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -259,8 +259,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 3,
       max: 3,
@@ -280,8 +280,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 23,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -292,8 +292,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 24,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -302,8 +302,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -312,8 +312,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 36 })
-      )
+        extend({}, criteria, { numberParticipants: 36 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -322,8 +322,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 37 })
-      )
+        extend({}, criteria, { numberParticipants: 37 }),
+      ),
     ).toEqual({
       min: 3,
       max: 3,
@@ -343,8 +343,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 23,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -355,8 +355,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 24,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -365,8 +365,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -375,8 +375,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 36 })
-      )
+        extend({}, criteria, { numberParticipants: 36 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,
@@ -385,8 +385,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 37 })
-      )
+        extend({}, criteria, { numberParticipants: 37 }),
+      ),
     ).toEqual({
       min: 3,
       max: 3,
@@ -409,8 +409,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           numberParticipants: 11,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -421,8 +421,8 @@ describe('getRequiredTrainers BILD', () => {
       getRequiredAssistantsBild(
         extend({}, criteria, {
           maxParticipants: 12,
-        })
-      )
+        }),
+      ),
     ).toEqual({
       min: 0,
       max: 0,
@@ -431,8 +431,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 13 })
-      )
+        extend({}, criteria, { numberParticipants: 13 }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -441,8 +441,8 @@ describe('getRequiredTrainers BILD', () => {
     // Next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 24 })
-      )
+        extend({}, criteria, { numberParticipants: 24 }),
+      ),
     ).toEqual({
       min: 1,
       max: 1,
@@ -451,8 +451,8 @@ describe('getRequiredTrainers BILD', () => {
     // Above next increment threshold
     expect(
       getRequiredAssistantsBild(
-        extend({}, criteria, { numberParticipants: 25 })
-      )
+        extend({}, criteria, { numberParticipants: 25 }),
+      ),
     ).toEqual({
       min: 2,
       max: 2,

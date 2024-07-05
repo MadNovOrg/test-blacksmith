@@ -57,6 +57,6 @@ describe('CertificateDocument', () => {
           fontFamily: 'Inter',
         })
       })
-    }
+    },
   )
 })

@@ -22,7 +22,7 @@ export const ResourcesList = ({ resources }: Props) => {
         .map(resource =>
           resource ? (
             <ResourceItemCard resource={resource} key={resource.id} />
-          ) : null
+          ) : null,
         )}
     </Stack>
   ) : null

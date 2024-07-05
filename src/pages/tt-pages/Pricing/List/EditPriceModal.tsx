@@ -63,7 +63,7 @@ export type EditPriceModalProps = {
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
   setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
   ) => void
 }
 
@@ -131,7 +131,7 @@ export const EditPriceModal = ({
         priceAmount: schedule.priceAmount,
         isNew: false,
       }
-    }
+    },
   )
   const [rows, setRows] = useState(initialRows)
 
@@ -145,10 +145,10 @@ export const EditPriceModal = ({
         t('pages.course-pricing.validation-errors.effective-from-valid'),
         value => {
           return value ? !isNaN(new Date(value).getDate()) : false
-        }
+        },
       )
       .required(
-        t('pages.course-pricing.validation-errors.effective-from-required')
+        t('pages.course-pricing.validation-errors.effective-from-required'),
       ),
     effectiveTo: yup
       .string()
@@ -157,29 +157,29 @@ export const EditPriceModal = ({
         t('pages.course-pricing.validation-errors.effective-to-valid'),
         value => {
           return value ? !isNaN(new Date(value)?.getDate()) : false
-        }
+        },
       )
       .test(
         'EffectiveToBeforeEffectiveFrom',
         t(
-          'pages.course-pricing.validation-errors.effective-date-valid-interval'
+          'pages.course-pricing.validation-errors.effective-date-valid-interval',
         ),
         (value, context) =>
           value
             ? zonedTimeToUtc(new Date(value), 'GMT') >=
               zonedTimeToUtc(new Date(context?.parent.effectiveFrom), 'GMT')
-            : false
+            : false,
       )
       .required(
-        t('pages.course-pricing.validation-errors.effective-to-required')
+        t('pages.course-pricing.validation-errors.effective-to-required'),
       ),
     priceAmount: yup
       .number()
       .positive(
-        t('pages.course-pricing.validation-errors.price-amount-positive')
+        t('pages.course-pricing.validation-errors.price-amount-positive'),
       )
       .required(
-        t('pages.course-pricing.validation-errors.price-amount-required')
+        t('pages.course-pricing.validation-errors.price-amount-required'),
       ),
   })
 
@@ -187,7 +187,7 @@ export const EditPriceModal = ({
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
-    event
+    event,
   ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true
@@ -233,7 +233,7 @@ export const EditPriceModal = ({
 
   const processRowUpdate = async (
     rowAfterChange: GridRowModel,
-    rowBeforeChange: GridRowModel
+    rowBeforeChange: GridRowModel,
   ) => {
     const validationResult = validateRow(rowAfterChange)
     if (validationResult instanceof ValidationError) {
@@ -248,11 +248,11 @@ export const EditPriceModal = ({
         authorId: profile?.id,
         effectiveFrom: zonedTimeToUtc(
           new Date(rowAfterChange.effectiveFrom),
-          'GMT'
+          'GMT',
         ),
         effectiveTo: zonedTimeToUtc(
           new Date(rowAfterChange.effectiveTo),
-          'GMT'
+          'GMT',
         ),
       })
       const updatedRow = {
@@ -261,7 +261,7 @@ export const EditPriceModal = ({
         id: createdCPS?.course_pricing_schedule?.id,
       }
       setRows(
-        rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
+        rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row)),
       )
       if (createdCPS) {
         onSave()
@@ -276,18 +276,18 @@ export const EditPriceModal = ({
         authorId: profile?.id,
         effectiveFrom: zonedTimeToUtc(
           new Date(rowAfterChange.effectiveFrom),
-          'GMT'
+          'GMT',
         ),
         effectiveTo: zonedTimeToUtc(
           new Date(rowAfterChange.effectiveTo),
-          'GMT'
+          'GMT',
         ),
       })
 
       if (data) onSave()
       const updatedRow = { ...rowAfterChange, isNew: false }
       setRows(
-        rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row))
+        rows.map(row => (row.id === rowAfterChange.id ? updatedRow : row)),
       )
       return updatedRow
     }

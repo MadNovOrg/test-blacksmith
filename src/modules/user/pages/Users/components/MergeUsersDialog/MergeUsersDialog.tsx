@@ -153,7 +153,7 @@ export const MergeUsersDialog: React.FC<Props> = ({
                 onChange={e => {
                   setPrimaryUser(e.target.value)
                   setMergeWith(
-                    e.target.value === profile1.id ? profile2.id : profile1.id
+                    e.target.value === profile1.id ? profile2.id : profile1.id,
                   )
                 }}
               >

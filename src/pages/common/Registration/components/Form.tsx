@@ -68,7 +68,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   quantity,
 }) => {
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
-    'search-only-by-postcode-on-registration'
+    'search-only-by-postcode-on-registration',
   )
 
   const { t } = useTranslation()
@@ -132,7 +132,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       }
       if (organizationData) {
         const { data: newOrganizationData } = await insertOrganisation(
-          organizationData
+          organizationData,
         )
         input = {
           ...input,
@@ -144,7 +144,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
       await gqlRequest<SignUpMutation, SignUpMutationVariables>(
         SIGN_UP_MUTATION,
-        { input }
+        { input },
       )
 
       await Auth.signUp({
@@ -182,7 +182,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         return
       }
     },
-    [setValue]
+    [setValue],
   )
 
   return (
@@ -292,7 +292,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             if (code) {
               setValue(
                 'country',
-                getCountryLabel(code as WorldCountriesCodes) ?? ''
+                getCountryLabel(code as WorldCountriesCodes) ?? '',
               )
               setValue('countryCode', code)
             }
@@ -418,7 +418,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('terms-of-use')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                     >
                       Terms of Use
@@ -430,7 +430,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('privacy-policy')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                     >
                       Privacy Policy

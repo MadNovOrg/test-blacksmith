@@ -20,7 +20,7 @@ describe('VenueCell', () => {
       ],
     }
     const { getByText } = render(
-      <VenueCell course={course as unknown as TableCourse} />
+      <VenueCell course={course as unknown as TableCourse} />,
     )
 
     const venueName = getByText('Conference Center')
@@ -44,7 +44,7 @@ describe('VenueCell', () => {
       ],
     }
     const { getByTestId } = render(
-      <VenueCell course={course as unknown as TableCourse} />
+      <VenueCell course={course as unknown as TableCourse} />,
     )
 
     const venueName = getByTestId('venue-name')

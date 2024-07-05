@@ -106,7 +106,7 @@ import { type CourseDiff, getChangedTrainers } from './shared'
 
 function assertCourseDataValid(
   data: CourseInput,
-  isValid: boolean
+  isValid: boolean,
 ): asserts data is ValidCourseInput {
   if (!isValid) {
     throw new Error()
@@ -156,7 +156,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const course = courseInfo?.course
   const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const courseInput: CourseInput | undefined = useMemo(() => {
@@ -182,11 +182,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const [{ error: updatingError, fetching: updatingCourse }, updateCourse] =
     useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(
-      UPDATE_COURSE_MUTATION
+      UPDATE_COURSE_MUTATION,
     )
   const [{ error: auditError, fetching: insertingAudit }, insertAudit] =
     useMutation<InsertCourseAuditMutation, InsertCourseAuditMutationVariables>(
-      INSERT_COURSE_AUDIT
+      INSERT_COURSE_AUDIT,
     )
 
   const participantsCount =
@@ -201,7 +201,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
       setCourseDataValid(Boolean(isValid))
     },
-    []
+    [],
   )
 
   const [{ fetching: notifyCourseEditLoading }, notifyCourseEdit] = useMutation<
@@ -222,7 +222,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       const { start: oldStart, end: oldEnd } = convertScheduleDateToLocalTime(
         course.schedule[0].start,
         course.schedule[0].end,
-        course.schedule[0].timeZone
+        course.schedule[0].timeZone,
       )
 
       const newStart = courseData.startDateTime
@@ -246,7 +246,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [course, courseData])
 
   const { strategies } = useBildStrategies(
-    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild)
+    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild),
   )
 
   const handleTrainersDataChange = useCallback(
@@ -254,7 +254,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       setTrainersData(data)
       setTrainersDataValid(isValid)
     },
-    []
+    [],
   )
 
   const getCourseName = useCallback(() => {
@@ -270,14 +270,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               boolean
             >,
           },
-          t
+          t,
         )
       : generateCourseName(
           {
             level: courseData?.courseLevel as Course_Level_Enum,
             reaccreditation: courseData?.reaccreditation as boolean,
           },
-          t
+          t,
         )
   }, [courseData, strategies, t])
 
@@ -311,7 +311,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ...trainersData.lead.map(t => ({
                 ...profileToInput(course, Course_Trainer_Type_Enum.Leader)(t),
                 status: trainersMap.get(t.id)?.status,
-              }))
+              })),
             )
           }
 
@@ -321,7 +321,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               type: t.type,
               status: t.status,
             })) ?? [],
-            trainers.map(t => ({ profile_id: t.profile_id, type: t.type }))
+            trainers.map(t => ({ profile_id: t.profile_id, type: t.type })),
           )
 
           const newVenueId =
@@ -359,13 +359,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           if (courseData.timeZone) {
             const scheduleStarDateTime = setDateTimeTimeZone(
               courseData.startDateTime,
-              courseData.timeZone.timeZoneId
+              courseData.timeZone.timeZoneId,
             )
             if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
 
             const scheduleEndDateTime = setDateTimeTimeZone(
               courseData.endDateTime,
-              courseData.timeZone.timeZoneId
+              courseData.timeZone.timeZoneId,
             )
             if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
           }
@@ -507,11 +507,11 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               oldEndDate: course.schedule[0].end,
               newStartDate: setDateTimeTimeZone(
                 courseData.startDateTime,
-                course.schedule[0].timeZone ?? UKTimezone
+                course.schedule[0].timeZone ?? UKTimezone,
               ),
               newEndDate: setDateTimeTimeZone(
                 courseData.endDateTime,
-                course.schedule[0].timeZone ?? UKTimezone
+                course.schedule[0].timeZone ?? UKTimezone,
               ),
               reason: reviewInput?.reason ?? '',
               ...(course.type === Course_Type_Enum.Closed && reviewInput
@@ -588,7 +588,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       canGoToCourseBuilder,
       navigate,
       courseInput?.id,
-    ]
+    ],
   )
 
   const handleReset = useCallback(() => {
@@ -617,7 +617,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       'reaccreditation',
       'conversion',
     ],
-    []
+    [],
   )
 
   const disabledFields = useMemo(() => {
@@ -645,20 +645,20 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       profile?.trainer_role_types.some(
         ({ trainer_role_type: role }) =>
           role.name === TrainerRoleTypeName.SENIOR ||
-          role.name === TrainerRoleTypeName.PRINCIPAL
+          role.name === TrainerRoleTypeName.PRINCIPAL,
       ) ?? false
     )
   }, [profile])
 
   const isETA = useMemo(() => {
     return checkIsETA(
-      profile?.trainer_role_types as unknown as TrainerRoleType[]
+      profile?.trainer_role_types as unknown as TrainerRoleType[],
     )
   }, [profile])
 
   const isEmployerAOL = useMemo(() => {
     return checkIsEmployerAOL(
-      profile?.trainer_role_types as unknown as TrainerRoleType[]
+      profile?.trainer_role_types as unknown as TrainerRoleType[],
     )
   }, [profile])
 
@@ -689,7 +689,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     course?.trainers?.find(
       t =>
         t.profile.id === profile?.id &&
-        t.type === Course_Trainer_Type_Enum.Leader
+        t.type === Course_Trainer_Type_Enum.Leader,
     )
 
   const editCourseValid = courseDataValid && trainersDataValid
@@ -741,7 +741,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             trainer_role_types: mod.trainer_role_types,
             levels: mod.levels,
           })),
-        ]
+        ],
       )
       if (
         canRescheduleCourseEndDate ||
@@ -810,7 +810,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           trainer_role_types: moderator.trainer_role_types,
           levels: moderator.levels,
         })),
-      ]
+      ],
     )
   }, [
     acl,
@@ -940,7 +940,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     bildStrategies={
                       courseData.bildStrategies
                         ? (bildStrategiesToArray(
-                            courseData.bildStrategies
+                            courseData.bildStrategies,
                           ) as unknown as BildStrategy[])
                         : undefined
                     }
@@ -957,7 +957,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 ) : showTrainerRatioWarning ? (
                   <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
                     {t(
-                      `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
+                      `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
                     )}
                   </Alert>
                 ) : null}

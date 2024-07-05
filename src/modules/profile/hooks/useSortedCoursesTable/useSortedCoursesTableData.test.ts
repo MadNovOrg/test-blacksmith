@@ -25,7 +25,7 @@ describe('useSortedCoursesTableData', () => {
     const { result } = renderHook(() =>
       useSortedCoursesTableData({
         profile: mockProfile as unknown as GetProfileDetailsQuery['profile'],
-      })
+      }),
     )
 
     expect(result.current.sortOrder).toBe('desc')
@@ -41,7 +41,7 @@ describe('useSortedCoursesTableData', () => {
     const { result } = renderHook(() =>
       useSortedCoursesTableData({
         profile: mockProfile as unknown as GetProfileDetailsQuery['profile'],
-      })
+      }),
     )
 
     act(() => {
@@ -50,7 +50,7 @@ describe('useSortedCoursesTableData', () => {
 
     expect(result.current.sortOrder).toBe('asc')
     expect(result.current.sortedData[0]).toEqual(
-      mockProfile.participantAudits[0]
+      mockProfile.participantAudits[0],
     )
 
     // Toggle sort order again
@@ -60,7 +60,7 @@ describe('useSortedCoursesTableData', () => {
 
     expect(result.current.sortOrder).toBe('desc')
     expect(result.current.sortedData[0]).toEqual(
-      mockProfile.participantAudits[1]
+      mockProfile.participantAudits[1],
     )
   })
 })

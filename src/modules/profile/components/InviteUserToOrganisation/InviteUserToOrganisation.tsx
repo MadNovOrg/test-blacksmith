@@ -79,7 +79,7 @@ export const InviteUserToOrganisation: React.FC<
             },
           }
         : {},
-    [acl, profile]
+    [acl, profile],
   )
 
   const [query, setQuery] = useState('')
@@ -103,16 +103,16 @@ export const InviteUserToOrganisation: React.FC<
             ? new Set(orgs?.orgs ?? [])
             : new Set(queriedData?.organization ?? [])),
         ],
-        'id'
+        'id',
       ),
-    [debouncedQuery, orgs?.orgs, queriedData?.organization]
+    [debouncedQuery, orgs?.orgs, queriedData?.organization],
   ) as GetOrganisationDetailsQuery['orgs']
 
   const { handleSubmit } = useForm<{ emails: string[] }>()
 
   const isUserAlreadyInOrganisation = (
     user: typeof userProfile,
-    orgId: string
+    orgId: string,
   ) => user.organizations.some(o => o.organization.id === orgId)
 
   useEffect(() => {
@@ -250,7 +250,7 @@ export const InviteUserToOrganisation: React.FC<
               {error
                 ? error
                 : errorOnInviteSave?.message.includes(
-                    SaveOrgInviteError.OrgMemberAlreadyExists
+                    SaveOrgInviteError.OrgMemberAlreadyExists,
                   )
                 ? t('pages.invite-to-org.duplicate-email')
                 : t('internal-error')}

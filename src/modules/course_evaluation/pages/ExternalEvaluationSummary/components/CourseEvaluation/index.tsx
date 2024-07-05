@@ -66,7 +66,7 @@ const booleanQuestionTypes = [
 ]
 
 function isAllRequired(
-  questions: GetCourseEvaluationQuestionsQuery['questions']
+  questions: GetCourseEvaluationQuestionsQuery['questions'],
 ) {
   return questions?.every(q => q.required) ?? false
 }
@@ -88,7 +88,7 @@ export const CourseEvaluation = () => {
       {
         query: GET_PARTICIPANT,
         variables: { profileId: profile?.id, courseId: Number(courseId) ?? 0 },
-      }
+      },
     )
 
   const [{ data: questionsData, fetching: questionsLoading }] =
@@ -132,9 +132,9 @@ export const CourseEvaluation = () => {
                 avatar: a.profile.avatar,
                 archived: a.profile.archived,
               },
-            ]
+            ],
       ) ?? [],
-      u => u.id
+      u => u.id,
     )
   }, [usersData, profile])
 
@@ -151,7 +151,7 @@ export const CourseEvaluation = () => {
               'ANY_INJURIES',
               'ISSUES_ARISING_FROM_COURSE',
               'TRAINER_COMMENTS',
-            ].includes(q.questionKey ?? '')
+            ].includes(q.questionKey ?? ''),
         )
       }
 
@@ -161,15 +161,15 @@ export const CourseEvaluation = () => {
 
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = useMemo(
     () => groupBy(questions, q => q.group || 'UNGROUPED'),
-    [questions]
+    [questions],
   )
 
   const signatureQuestion = useMemo(
     () =>
       questions?.find(
-        q => q.questionKey === 'SIGNATURE'
+        q => q.questionKey === 'SIGNATURE',
       ) as GetCourseEvaluationQuestionsQuery['questions'][0],
-    [questions]
+    [questions],
   )
 
   const schema = useMemo(() => {
@@ -182,7 +182,7 @@ export const CourseEvaluation = () => {
         obj[q.id] = s
           .required(t('course-evaluation.required-field'))
           .test(q.id, t('course-evaluation.invalid-signature'), signature =>
-            validUserSignature(profile?.fullName, signature)
+            validUserSignature(profile?.fullName, signature),
           )
       } else if (q.required) {
         obj[q.id] = s.required(t('course-evaluation.required-field'))
@@ -227,7 +227,7 @@ export const CourseEvaluation = () => {
       questionsLoading,
       courseStatus,
       participantDataLoading,
-    ]
+    ],
   )
 
   const courseHasStarted = course && courseStarted(course)
@@ -239,7 +239,7 @@ export const CourseEvaluation = () => {
       participantData && participantData?.course_participant?.length > 0
         ? participantData?.course_participant[0]
         : null,
-    [participantData]
+    [participantData],
   )
 
   const canSubmitFeedback =
@@ -322,14 +322,14 @@ export const CourseEvaluation = () => {
                                 `../../evaluation/submit?profile_id=${id}`,
                                 {
                                   replace: false,
-                                }
+                                },
                               )
                             } else {
                               navigate(
                                 `../../evaluation/view?profile_id=${id}`,
                                 {
                                   replace: true,
-                                }
+                                },
                               )
                             }
                           }}
@@ -370,7 +370,7 @@ export const CourseEvaluation = () => {
               {ungroupedQuestions?.map(q => {
                 if (
                   booleanQuestionTypes.includes(
-                    q.type as Course_Evaluation_Question_Type_Enum
+                    q.type as Course_Evaluation_Question_Type_Enum,
                   )
                 ) {
                   const value = (values[q.id] ?? '').split('-')
@@ -451,7 +451,7 @@ export const CourseEvaluation = () => {
                   />
                   <Alert severity="info" sx={{ mt: 2 }}>
                     {t(
-                      'components.course-form.name-and-surname-validation-info'
+                      'components.course-form.name-and-surname-validation-info',
                     )}
                   </Alert>
                 </>
@@ -496,7 +496,7 @@ export const CourseEvaluation = () => {
                     target="_blank"
                     href={`https://www.teamteach.com/policies-procedures/privacy-policy/`}
                     aria-label={`${t('privacy-policy')} (${t(
-                      'opens-new-window'
+                      'opens-new-window',
                     )})`}
                     rel="noreferrer"
                   />

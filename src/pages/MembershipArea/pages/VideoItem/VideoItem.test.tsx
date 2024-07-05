@@ -25,14 +25,14 @@ describe('page: VideoItem', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] },
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
     expect(screen.getByTestId('title-skeleton')).toBeInTheDocument()
     expect(screen.getByTestId('description-skeleton')).toBeInTheDocument()
     expect(
-      screen.getByTestId('related-video-items-skeleton')
+      screen.getByTestId('related-video-items-skeleton'),
     ).toBeInTheDocument()
   })
 
@@ -60,7 +60,7 @@ describe('page: VideoItem', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] },
     )
 
     expect(screen.getByText('Video series item not found')).toBeInTheDocument()
@@ -91,11 +91,11 @@ describe('page: VideoItem', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] },
     )
 
     expect(screen.getByTestId('video-item-title')).toHaveTextContent(
-      videoItem.title ?? ''
+      videoItem.title ?? '',
     )
 
     const description = screen.getByTestId('video-item-description').textContent
@@ -129,23 +129,23 @@ describe('page: VideoItem', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] },
     )
 
     recentItems.forEach(relatedItem => {
       const relatedItemEl = screen.getByTestId(
-        `video-series-grid-item-${relatedItem.id}`
+        `video-series-grid-item-${relatedItem.id}`,
       )
 
       expect(
-        within(relatedItemEl).getByText(relatedItem.title ?? '')
+        within(relatedItemEl).getByText(relatedItem.title ?? ''),
       ).toBeInTheDocument()
 
       expect(
-        within(relatedItemEl).getByAltText(relatedItem.title ?? '')
+        within(relatedItemEl).getByAltText(relatedItem.title ?? ''),
       ).toHaveAttribute(
         'src',
-        relatedItem.featuredImage?.node?.mediaItemUrl ?? ''
+        relatedItem.featuredImage?.node?.mediaItemUrl ?? '',
       )
     })
   })
@@ -177,14 +177,14 @@ describe('page: VideoItem', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] },
     )
 
     const button = screen.getByText('Download resource')
 
     expect(button).toHaveAttribute(
       'href',
-      videoItem.downloads?.file?.mediaItemUrl
+      videoItem.downloads?.file?.mediaItemUrl,
     )
   })
 })

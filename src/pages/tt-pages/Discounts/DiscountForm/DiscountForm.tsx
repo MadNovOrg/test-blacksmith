@@ -133,12 +133,12 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   })
   const [{ fetching: disablePromoCodeLoading }, disablePromoCodeMutation] =
     useMutation<DisablePromoCodeMutation, DisablePromoCodeMutationVariables>(
-      DISABLE_PROMO_CODE
+      DISABLE_PROMO_CODE,
     )
 
   const [{ fetching: upsertPromoCodeLoading }, upsertPromoCodeMutation] =
     useMutation<UpsertPromoCodeMutation, UpsertPromoCodeMutationVariables>(
-      UPSERT_PROMO_CODE
+      UPSERT_PROMO_CODE,
     )
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
         setValue('levels', promoCode.levels)
         setValue(
           'courses',
-          promoCode.courses.map(c => c.course?.id ?? 0)
+          promoCode.courses.map(c => c.course?.id ?? 0),
         )
         if (promoCode?.validFrom) {
           setValue('validFrom', new Date(promoCode.validFrom))

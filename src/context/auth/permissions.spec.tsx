@@ -30,7 +30,7 @@ describe(getACL.name, () => {
       | 'allowedRoles'
       | 'activeCertificates'
       | 'certificates'
-    >
+    >,
   ) => {
     const defaults = {
       loading: false,
@@ -240,7 +240,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.isAdmin()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -395,7 +395,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canSeeActionableCourseTable()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -420,7 +420,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canApproveCourseExceptions()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -501,7 +501,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewAdminPricing()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -526,7 +526,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canApproveDiscount()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -798,7 +798,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canEditProfiles()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is just a user`, () => {
@@ -851,7 +851,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewEmailContacts(courseType)).toBeFalsy()
-      }
+      },
     )
   })
 
@@ -1210,7 +1210,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canCreateCourse(Course_Type_Enum.Closed)).toBeTruthy()
-      }
+      },
     )
 
     it.each([[Course_Type_Enum.Closed], [Course_Type_Enum.Open]])(
@@ -1223,7 +1223,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canCreateCourse(courseType)).toBeTruthy()
-      }
+      },
     )
 
     it(`should return true when the activeRole is ${RoleName.TRAINER} and the course type is ${Course_Type_Enum.Indirect}`, () => {
@@ -1269,7 +1269,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canEditCourses(course)).toBeTruthy()
-      }
+      },
     )
 
     it.each([[Course_Type_Enum.Closed], [Course_Type_Enum.Open]])(
@@ -1287,7 +1287,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canEditCourses(course)).toBeTruthy()
-      }
+      },
     )
 
     it(`should return true when the activeRole is ${RoleName.TRAINER}, course type is ${Course_Type_Enum.Indirect} and active user is leader on a course`, () => {
@@ -1402,7 +1402,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canRevokeCert()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1427,7 +1427,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canHoldCert()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1452,7 +1452,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canOverrideGrades()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1477,7 +1477,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewXeroConnect()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1502,7 +1502,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewArloConnect()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1554,7 +1554,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canEditOrgUser()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return true when the user is org admin for an organization`, () => {
@@ -1630,7 +1630,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canCancelCourses()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1695,7 +1695,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canSeeWaitingLists()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1720,7 +1720,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canRescheduleWithoutWarning()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -1743,7 +1743,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect),
       ).toBeFalsy()
     })
 
@@ -1755,7 +1755,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect),
       ).toBeFalsy()
     })
 
@@ -1767,7 +1767,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect)
+        acl.canEditWithoutRestrictions(Course_Type_Enum.Indirect),
       ).toBeFalsy()
     })
 
@@ -1781,9 +1781,9 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(
-          acl.canEditWithoutRestrictions(Course_Type_Enum.Open)
+          acl.canEditWithoutRestrictions(Course_Type_Enum.Open),
         ).toBeTruthy()
-      }
+      },
     )
   })
 
@@ -1818,7 +1818,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeTruthy()
-      }
+      },
     )
 
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
@@ -1832,7 +1832,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeFalsy()
-      }
+      },
     )
 
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
@@ -1860,7 +1860,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeTruthy()
-      }
+      },
     )
 
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
@@ -1893,7 +1893,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeTruthy()
-      }
+      },
     )
 
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
@@ -1925,7 +1925,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeFalsy()
-      }
+      },
     )
 
     it.each([[RoleName.USER], [RoleName.TRAINER]])(
@@ -1957,7 +1957,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewResources()).toBeFalsy()
-      }
+      },
     )
 
     it.each([
@@ -1999,7 +1999,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewCourseHistory()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -2039,7 +2039,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canParticipateInCourses()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -2065,7 +2065,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canTransferParticipant([], course)).toBeTruthy()
-      }
+      },
     )
 
     it(`should return true when user is org admin for an organization`, () => {
@@ -2173,7 +2173,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canCancelParticipant([], course)).toBeTruthy()
-      }
+      },
     )
 
     it(`should return true when user is org admin for an organization`, () => {
@@ -2254,7 +2254,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canManageParticipantAttendance([managedOrgIds], course)
+        acl.canManageParticipantAttendance([managedOrgIds], course),
       ).toBeTruthy()
     })
   })
@@ -2290,7 +2290,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canManageParticipantAttendance([managedOrgIds], course)
+        acl.canManageParticipantAttendance([managedOrgIds], course),
       ).toBeTruthy()
     })
   })
@@ -2319,7 +2319,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canManageParticipantAttendance([managedOrgIds], course)
+        acl.canManageParticipantAttendance([managedOrgIds], course),
       ).not.toBeTruthy()
     })
   })
@@ -2360,7 +2360,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canManageParticipantAttendance([managedOrgIds], course)
+        acl.canManageParticipantAttendance([managedOrgIds], course),
       ).toBeTruthy()
     })
   })
@@ -2388,7 +2388,7 @@ describe(getACL.name, () => {
 
       // Act & Assert
       expect(
-        acl.canManageParticipantAttendance([managedOrgIds], course)
+        acl.canManageParticipantAttendance([managedOrgIds], course),
       ).not.toBeTruthy()
     })
   })
@@ -2414,7 +2414,7 @@ describe(getACL.name, () => {
             profile: { id: profileId },
             type: trainerType,
           },
-        ])
+        ]),
       ).toBeTruthy()
     })
 
@@ -2429,7 +2429,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canGradeParticipants([])).toBeTruthy()
-      }
+      },
     )
   })
 
@@ -2444,7 +2444,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canBuildCourse()).toBeTruthy()
-      }
+      },
     )
   })
 
@@ -2495,7 +2495,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canMergeProfiles()).toBeTruthy()
-      }
+      },
     )
   })
 
@@ -2510,7 +2510,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canArchiveProfile()).toBeTruthy()
-      }
+      },
     )
   })
 
@@ -2543,7 +2543,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canManageCert()).toBeTruthy()
-      }
+      },
     )
   })
 
@@ -2584,7 +2584,7 @@ describe(getACL.name, () => {
 
           // Act & Assert
           expect(acl.canCreateBildCourse(Course_Type_Enum.Closed)).toBeTruthy()
-        }
+        },
       )
     })
 
@@ -2615,7 +2615,7 @@ describe(getACL.name, () => {
           // Act & Assert
           expect(acl.canCreateBildCourse(Course_Type_Enum.Closed)).toBeTruthy()
         })
-      }
+      },
     )
   })
 
@@ -2670,7 +2670,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canDisableDiscounts()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -2699,7 +2699,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewCourseBuilderOnEditPage(course, []))
-      }
+      },
     )
     it('should return true if activerole is trainer and is lead trainer', () => {
       // Arrange
@@ -2730,7 +2730,7 @@ describe(getACL.name, () => {
             profile: { id: profileId },
             type: trainerType,
           },
-        ])
+        ]),
       ).toBeTruthy()
     })
     it('should return false if active role is trainer and is lead trainer, but grading is confirmed', () => {
@@ -2762,7 +2762,7 @@ describe(getACL.name, () => {
             profile: { id: profileId },
             type: trainerType,
           },
-        ])
+        ]),
       ).toBeFalsy()
     })
     it('should return false if activerole is trainer and is not the lead trainer', () => {
@@ -2791,7 +2791,7 @@ describe(getACL.name, () => {
             profile: { id: profileId },
             type: trainerType,
           },
-        ])
+        ]),
       ).toBeFalsy()
     })
     it('should return false if course is not icm', () => {
@@ -2833,7 +2833,7 @@ describe(getACL.name, () => {
 
         // Act & Assert
         expect(acl.canViewArchivedUsersCertificates()).toBeTruthy()
-      }
+      },
     )
 
     it(`should return false when the activeRole is any other`, () => {
@@ -2855,7 +2855,7 @@ describe(getACL.name, () => {
       })
 
       expect(acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels)).toEqual(
-        []
+        [],
       )
     })
 
@@ -2867,9 +2867,9 @@ describe(getACL.name, () => {
         })
 
         expect(
-          acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels)
+          acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels),
         ).toEqual(allLevels)
-      }
+      },
     )
 
     it.each(Object.values(Course_Level_Enum))(
@@ -2880,17 +2880,17 @@ describe(getACL.name, () => {
           activeCertificates: [activeCertificate],
         })
         const expected = Object.keys(
-          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[Course_Type_Enum.Open]
+          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[Course_Type_Enum.Open],
         ).filter(courseLevel =>
           REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[Course_Type_Enum.Open][
             courseLevel as Course_Level_Enum
-          ].includes(activeCertificate)
+          ].includes(activeCertificate),
         )
 
         expect(
-          acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels)
+          acl.allowedCourseLevels(Course_Type_Enum.Open, allLevels),
         ).toEqual(expected)
-      }
+      },
     )
   })
 })

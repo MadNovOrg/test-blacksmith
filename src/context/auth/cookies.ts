@@ -15,7 +15,7 @@ export interface ICookies {
   setCookie(
     name: string,
     value: string,
-    opts: SetCookieOptions | undefined
+    opts: SetCookieOptions | undefined,
   ): void
 
   deleteCookie(name: string, opts: DeleteCookieOptions | undefined): void
@@ -29,7 +29,7 @@ export const TTCookies: ICookies = {
 function setCookie(
   name: string,
   value: string,
-  opts: SetCookieOptions | undefined
+  opts: SetCookieOptions | undefined,
 ): void {
   Cookies.set(name, value, {
     secure: opts?.secure,
@@ -42,7 +42,7 @@ function setCookie(
 
 function deleteCookie(
   name: string,
-  opts: DeleteCookieOptions | undefined
+  opts: DeleteCookieOptions | undefined,
 ): void {
   Cookies.remove(name, {
     secure: opts?.secure,

@@ -152,13 +152,13 @@ export const OrgUsersTable: React.FC<
                 member.profile.certificates as {
                   courseLevel: string
                   status: CertificateStatus
-                }[]
+                }[],
               )
               const filteredCerts = member.profile.certificates.filter(
                 cert =>
                   certificateLevelsToDisplay.indexOf(
-                    cert.courseLevel as Course_Level_Enum
-                  ) >= 0
+                    cert.courseLevel as Course_Level_Enum,
+                  ) >= 0,
               )
               return (
                 <TableRow
@@ -214,7 +214,7 @@ export const OrgUsersTable: React.FC<
                           />
                           <Typography variant="body2" ml={1}>
                             {t(
-                              `common.certificates.${cert.courseLevel.toLowerCase()}`
+                              `common.certificates.${cert.courseLevel.toLowerCase()}`,
                             )}
                           </Typography>
                         </Box>
@@ -285,7 +285,7 @@ export const OrgUsersTable: React.FC<
           subtitle={
             <Typography color={theme.palette.grey[700]}>
               {t(
-                'pages.org-details.tabs.users.edit-user-modal.modification-info'
+                'pages.org-details.tabs.users.edit-user-modal.modification-info',
               )}
             </Typography>
           }

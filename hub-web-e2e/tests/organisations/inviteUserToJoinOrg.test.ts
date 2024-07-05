@@ -44,7 +44,7 @@ test('invite user to join organisation by admin', async ({
   const inviteePage = await browser.newPage()
   const email = await API.email.getLatestEmail(
     users.user1WithOrg.email,
-    'Team Teach Connect Organisation Invitation'
+    'Team Teach Connect Organisation Invitation',
   )
   const emailPage = new EmailPage(inviteePage)
   await emailPage.renderContent(email.html)
@@ -54,6 +54,6 @@ test('invite user to join organisation by admin', async ({
   await orgPage.goto(org.id)
   await orgPage.clickIndividualsTab()
   await orgPage.checkUserHasJoinedOrg(
-    `${users.user1WithOrg.givenName} ${users.user1WithOrg.familyName}`
+    `${users.user1WithOrg.givenName} ${users.user1WithOrg.familyName}`,
   )
 })

@@ -108,7 +108,7 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.queryByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
 
     expect(individualRolePicker).not.toBeInTheDocument()
@@ -142,7 +142,7 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.queryByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
 
     expect(individualRolePicker).not.toBeInTheDocument()
@@ -171,7 +171,7 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.getByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
     expect(individualRolePicker).toBeInTheDocument()
   })
@@ -200,7 +200,7 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.getByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
     expect(individualRolePicker).toBeInTheDocument()
   })
@@ -229,20 +229,20 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.getByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
     expect(individualRolePicker).toBeInTheDocument()
 
     await userEvent.click(individualRolePicker)
 
     const individualRoleMenu = screen.getByTestId(
-      'RoleSwitcher-list-individual'
+      'RoleSwitcher-list-individual',
     )
     const bookingContactMenuOption = screen.queryByTestId(
-      'Individual-role-booking-contact'
+      'Individual-role-booking-contact',
     )
     const organisationAdminMenuOption = screen.queryByTestId(
-      'Individual-role-organisation-admin'
+      'Individual-role-organisation-admin',
     )
 
     expect(individualRoleMenu).toBeInTheDocument()
@@ -274,23 +274,23 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.getByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
     expect(individualRolePicker).toBeInTheDocument()
 
     await userEvent.click(individualRolePicker)
 
     const individualRoleMenu = screen.getByTestId(
-      'RoleSwitcher-list-individual'
+      'RoleSwitcher-list-individual',
     )
     const bookingContactMenuOption = screen.queryByTestId(
-      'Individual-role-booking-contact'
+      'Individual-role-booking-contact',
     )
     const orgKeyContactContactMenuOption = screen.queryByTestId(
-      'Individual-role-organization-key-contact'
+      'Individual-role-organization-key-contact',
     )
     const organisationAdminMenuOption = screen.queryByTestId(
-      'Individual-role-organisation-admin'
+      'Individual-role-organisation-admin',
     )
 
     expect(individualRoleMenu).toBeInTheDocument()
@@ -323,7 +323,7 @@ describe('component: RoleSwitcher', () => {
     await userEvent.click(roleSwitcherBtn)
 
     const individualRolePicker = screen.getByTestId(
-      'RoleSwitcher-individual-arrow'
+      'RoleSwitcher-individual-arrow',
     )
 
     expect(individualRolePicker).toBeInTheDocument()

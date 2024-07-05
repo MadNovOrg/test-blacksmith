@@ -30,7 +30,7 @@ import { useGradedParticipant } from './hooks/useGradedParticipant'
 
 export const ParticipantGrade = () => {
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model'
+    'new-modules-data-model',
   )
   const { participantId, id: courseId } = useParams()
 

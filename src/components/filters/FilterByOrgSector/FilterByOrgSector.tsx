@@ -29,7 +29,7 @@ export const FilterByOrgSector: React.FC<React.PropsWithChildren<Props>> = ({
       setOptions(opts)
       onChange(opts.flatMap(o => (o.selected ? o.id : [])))
     },
-    [onChange]
+    [onChange],
   )
 
   return (

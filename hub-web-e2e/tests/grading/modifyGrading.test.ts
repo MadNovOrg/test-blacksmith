@@ -21,7 +21,7 @@ const test = base.extend<{ grade: { course: Course; user: User } }>({
       course,
       [user],
       Grade_Enum.Pass,
-      true
+      true,
     )
     await use({ course: course, user: user })
     await API.course.deleteCourse(course.id)

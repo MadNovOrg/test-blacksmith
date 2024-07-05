@@ -13,7 +13,7 @@ import {
 import { chance } from '@test/index'
 
 export function buildModuleGroup(
-  overrides?: Partial<ModuleGroupsQuery['groups'][0]>
+  overrides?: Partial<ModuleGroupsQuery['groups'][0]>,
 ): NonNullable<ModuleGroupsQuery['groups'][0]> {
   return {
     id: chance.guid(),
@@ -37,7 +37,7 @@ export function buildModuleGroup(
 }
 
 export function buildModule(
-  overrides?: Partial<ModuleFragment>
+  overrides?: Partial<ModuleFragment>,
 ): ModuleFragment {
   return {
     id: chance.guid(),
@@ -54,7 +54,7 @@ export function buildModule(
 }
 
 export function buildCourse(
-  overrides?: Partial<CourseToBuildQuery['course']>
+  overrides?: Partial<CourseToBuildQuery['course']>,
 ): NonNullable<CourseToBuildQuery['course']> {
   return {
     id: chance.integer(),
@@ -86,7 +86,7 @@ export function buildCourse(
 }
 
 export function buildModuleSetting(
-  overrides?: Partial<ModuleSettingsQuery['moduleSettings'][0]>
+  overrides?: Partial<ModuleSettingsQuery['moduleSettings'][0]>,
 ): ModuleSettingsQuery['moduleSettings'][0] {
   return {
     id: chance.guid(),

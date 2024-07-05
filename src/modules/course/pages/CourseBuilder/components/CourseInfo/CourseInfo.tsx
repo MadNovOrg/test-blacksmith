@@ -18,12 +18,12 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
   const { t } = useTranslation()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
-    [residingCountryEnabled]
+    [residingCountryEnabled],
   )
 
   const timeZoneScheduleDateTime = useMemo(() => {
@@ -59,7 +59,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
         <Box data-testid="course-organization">
           <Typography display="inline" variant="body2" fontWeight={600}>
             {`${t(
-              'pages.trainer-base.create-course.new-course.organization'
+              'pages.trainer-base.create-course.new-course.organization',
             )}: `}
           </Typography>
           <Typography display="inline" variant="body2">
@@ -91,7 +91,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
             isResidingCountryEnabled
               ? ` ${formatGMTDateTimeByTimeZone(
                   timeZoneScheduleDateTime.start,
-                  data.schedule[0].timeZone
+                  data.schedule[0].timeZone,
                 )}`
               : ''
           }`}
@@ -110,7 +110,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
             isResidingCountryEnabled
               ? ` ${formatGMTDateTimeByTimeZone(
                   timeZoneScheduleDateTime.end,
-                  data.schedule[0].timeZone
+                  data.schedule[0].timeZone,
                 )}`
               : ''
           }`}

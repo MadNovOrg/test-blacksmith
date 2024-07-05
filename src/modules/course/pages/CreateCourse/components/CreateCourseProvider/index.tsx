@@ -42,7 +42,7 @@ import { getCourseType } from './helpers'
 export { getCourseType }
 
 const CreateCourseContext = React.createContext<ContextValue | undefined>(
-  undefined
+  undefined,
 )
 
 export enum SaveDraftError {
@@ -73,22 +73,22 @@ export const CreateCourseProvider: React.FC<
   const { isUKCountry } = useWorldCountries()
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
-    initialValue?.courseData
+    initialValue?.courseData,
   )
   const [trainers, setTrainers] = useState<TrainerInput[]>(
-    initialValue?.trainers ?? []
+    initialValue?.trainers ?? [],
   )
   const [expenses, setExpenses] = useState<Record<string, ExpensesInput>>(
-    initialValue?.expenses ?? {}
+    initialValue?.expenses ?? {},
   )
   const [completedSteps, setCompletedSteps] = useState<StepsEnum[]>(
-    initialValue?.completedSteps ?? []
+    initialValue?.completedSteps ?? [],
   )
   const [currentStepKey, setCurrentStepKey] = useState<StepsEnum | null>(
-    initialValue?.currentStepKey ?? null
+    initialValue?.currentStepKey ?? null,
   )
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
-    initialValue?.go1Licensing ?? undefined
+    initialValue?.go1Licensing ?? undefined,
   )
   const [draftName, setDraftName] = useState<string | undefined>(undefined)
 
@@ -103,7 +103,7 @@ export const CreateCourseProvider: React.FC<
   >(initialValue?.invoiceDetails ?? undefined)
 
   const { strategies } = useBildStrategies(
-    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild)
+    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild),
   )
 
   const [, setCourseDraft] = useMutation<
@@ -117,8 +117,8 @@ export const CreateCourseProvider: React.FC<
         getCourseType(
           profile?.id ?? 'unknown',
           searchParams.get('type'),
-          pathname === '/courses/new'
-        )
+          pathname === '/courses/new',
+        ),
     )
   }, [courseData?.type, pathname, profile?.id, searchParams])
 
@@ -127,20 +127,20 @@ export const CreateCourseProvider: React.FC<
       t.trainer_role_types.some(
         ({ trainer_role_type: role }) =>
           role?.name === TrainerRoleTypeName.SENIOR ||
-          role?.name === TrainerRoleTypeName.PRINCIPAL
-      )
+          role?.name === TrainerRoleTypeName.PRINCIPAL,
+      ),
     )
   }, [trainers])
 
   const isETA = useMemo(() => {
     return trainers.some(t =>
-      checkIsETA(t.trainer_role_types as TrainerRoleType[])
+      checkIsETA(t.trainer_role_types as TrainerRoleType[]),
     )
   }, [trainers])
 
   const isEmployerAOL = useMemo(() => {
     return trainers.some(t =>
-      checkIsEmployerAOL(t.trainer_role_types as TrainerRoleType[])
+      checkIsEmployerAOL(t.trainer_role_types as TrainerRoleType[]),
     )
   }, [trainers])
 
@@ -157,7 +157,7 @@ export const CreateCourseProvider: React.FC<
         isEmployerAOL: isEmployerAOL,
         isUKCountry: isUKCountry(courseData.residingCountry),
       },
-      trainers
+      trainers,
     )
   }, [
     courseData,
@@ -180,7 +180,7 @@ export const CreateCourseProvider: React.FC<
       setInvoiceDetails(data.invoiceDetails ?? undefined)
       setTrainers(data.trainers ?? [])
     },
-    []
+    [],
   )
 
   const completeStep = useCallback(
@@ -189,7 +189,7 @@ export const CreateCourseProvider: React.FC<
         setCompletedSteps([...(completedSteps ?? []), step])
       }
     },
-    [completedSteps, setCompletedSteps]
+    [completedSteps, setCompletedSteps],
   )
 
   const courseName = useMemo(() => {
@@ -206,7 +206,7 @@ export const CreateCourseProvider: React.FC<
           conversion: courseData.conversion,
           bildStrategies: courseData.bildStrategies,
         },
-        t
+        t,
       )
     }
 
@@ -215,7 +215,7 @@ export const CreateCourseProvider: React.FC<
         level: courseData.courseLevel,
         reaccreditation: courseData.reaccreditation,
       },
-      t
+      t,
     )
   }, [courseData, strategies, t])
 
@@ -283,7 +283,7 @@ export const CreateCourseProvider: React.FC<
       setCourseDraft,
       courseType,
       draftId,
-    ]
+    ],
   )
 
   const value: ContextValue = useMemo(() => {
@@ -342,7 +342,7 @@ export function useCreateCourse() {
 
   if (context === undefined) {
     throw new Error(
-      'useCreateCourse must be used within a CreateCourseProvider'
+      'useCreateCourse must be used within a CreateCourseProvider',
     )
   }
 

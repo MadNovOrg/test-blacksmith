@@ -31,17 +31,17 @@ import { Welcome } from '@app/pages/Welcome/Welcome'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(
-  () => import('../modules/profile/routes/profile')
+  () => import('../modules/profile/routes/profile'),
 )
 const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
 const UserRoutes = React.lazy(() => import('./user-routes'))
 const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
 const UnverifiedRoutes = React.lazy(
-  () => import('../modules/profile/routes/unverified-routes')
+  () => import('../modules/profile/routes/unverified-routes'),
 )
 const SalesAdminRoutes = React.lazy(() => import('./sales-admin-routes'))
 const SalesRepresentativeRoute = React.lazy(
-  () => import('./sales-representative-routes')
+  () => import('./sales-representative-routes'),
 )
 const FinanceRoute = React.lazy(() => import('./finance-routes'))
 
@@ -140,78 +140,76 @@ function LoggedInRoutes() {
   const RouteComp = roleRoutesMap[activeRole]
 
   return (
-    <>
-      <Routes>
-        <Route
-          index
-          element={
-            <AppShell>
-              <Welcome />
-            </AppShell>
-          }
-        />
+    <Routes>
+      <Route
+        index
+        element={
+          <AppShell>
+            <Welcome />
+          </AppShell>
+        }
+      />
 
-        <Route
-          path="profile/*"
-          element={
-            <AppShell>
-              <ProfileRoutes />
-            </AppShell>
-          }
-        />
-        <Route
-          path="booking/*"
-          element={
-            <AppShell>
-              <CourseBookingPage />
-            </AppShell>
-          }
-        />
-        <Route
-          path="booking/done"
-          element={
-            <AppShell>
-              <CourseBookingDone />
-            </AppShell>
-          }
-        />
-        <Route
-          path="onboarding"
-          element={
-            <AppLayoutMinimal width={628}>
-              <Suspense fallback={<AppLoading />}>
-                <Onboarding />
-              </Suspense>
-            </AppLayoutMinimal>
-          }
-        />
+      <Route
+        path="profile/*"
+        element={
+          <AppShell>
+            <ProfileRoutes />
+          </AppShell>
+        }
+      />
+      <Route
+        path="booking/*"
+        element={
+          <AppShell>
+            <CourseBookingPage />
+          </AppShell>
+        }
+      />
+      <Route
+        path="booking/done"
+        element={
+          <AppShell>
+            <CourseBookingDone />
+          </AppShell>
+        }
+      />
+      <Route
+        path="onboarding"
+        element={
+          <AppLayoutMinimal width={628}>
+            <Suspense fallback={<AppLoading />}>
+              <Onboarding />
+            </Suspense>
+          </AppLayoutMinimal>
+        }
+      />
 
-        {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
-        <Route
-          path="registration"
-          element={
-            <AppShell>
-              <RegistrationPage />
-            </AppShell>
-          }
-        />
+      {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
+      <Route
+        path="registration"
+        element={
+          <AppShell>
+            <RegistrationPage />
+          </AppShell>
+        }
+      />
 
-        <Route
-          path="*"
-          element={
-            <AppShell>
-              <RouteComp />
-            </AppShell>
-          }
-        />
+      <Route
+        path="*"
+        element={
+          <AppShell>
+            <RouteComp />
+          </AppShell>
+        }
+      />
 
-        {!redirectFromLogin ? (
-          <Route path="login/*" element={<Navigate replace to="/" />} />
-        ) : null}
+      {!redirectFromLogin ? (
+        <Route path="login/*" element={<Navigate replace to="/" />} />
+      ) : null}
 
-        <Route path="logout" element={<LogoutPage />} />
-      </Routes>
-    </>
+      <Route path="logout" element={<LogoutPage />} />
+    </Routes>
   )
 }
 

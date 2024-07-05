@@ -128,7 +128,7 @@ describe('component: CreateCourseForm', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     expect(screen.queryByTestId('SearchTrainers-input')).toBeInTheDocument()
@@ -186,14 +186,14 @@ describe('component: CreateCourseForm', () => {
         />
       </Routes>,
       {},
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const searchTrainersInput = screen.getByTestId('SearchTrainers-input')
     expect(searchTrainersInput).toBeInTheDocument()
     expect(searchTrainersInput).toHaveAttribute(
       'placeholder',
-      'Search eligible trainers...'
+      'Search eligible trainers...',
     )
 
     await userEvent.type(searchTrainersInput, 'Trainer')
@@ -207,7 +207,7 @@ describe('component: CreateCourseForm', () => {
 
     expect(searchTrainersInput).toHaveAttribute(
       'placeholder',
-      'Search eligible trainers...'
+      'Search eligible trainers...',
     )
 
     await waitFor(() => {
@@ -219,8 +219,8 @@ describe('component: CreateCourseForm', () => {
     await waitFor(() =>
       expect(screen.getByTestId('SearchTrainers-input')).not.toHaveAttribute(
         'placeholder',
-        '(max allowed reached)'
-      )
+        '(max allowed reached)',
+      ),
     )
   })
 
@@ -268,7 +268,7 @@ describe('component: CreateCourseForm', () => {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const confirmations = [
@@ -284,14 +284,14 @@ describe('component: CreateCourseForm', () => {
     }
 
     await userEvent.click(
-      screen.getByRole('button', { name: /course builder/i })
+      screen.getByRole('button', { name: /course builder/i }),
     )
 
     const dialog = await screen.findByRole('dialog')
 
     expect(dialog).toBeInTheDocument()
     expect(dialog.textContent).toMatchInlineSnapshot(
-      `"No exceptions allowedThis course does not follow Team Teach training protocols, please review and amend the course date and/or trainer ratios before resubmitting."`
+      `"No exceptions allowedThis course does not follow Team Teach training protocols, please review and amend the course date and/or trainer ratios before resubmitting."`,
     )
   })
 
@@ -340,7 +340,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const healthLeaflet = screen.getByTestId('healthLeaflet')
@@ -412,7 +412,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const healthLeaflet = screen.getByTestId('healthLeaflet')
@@ -482,7 +482,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const healthLeaflet = screen.getByTestId('healthLeaflet')
@@ -561,7 +561,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const healthLeaflet = screen.getByTestId('healthLeaflet')
@@ -639,7 +639,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     const healthLeaflet = screen.getByTestId('healthLeaflet')
@@ -708,11 +708,11 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     expect(
-      screen.queryByText('Area Operating License (AOL)')
+      screen.queryByText('Area Operating License (AOL)'),
     ).not.toBeInTheDocument()
     expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
   })
@@ -761,17 +761,17 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=INDIRECT'] }
+      { initialEntries: ['/?type=INDIRECT'] },
     )
 
     expect(
-      screen.queryByText('Area Operating License (AOL)')
+      screen.queryByText('Area Operating License (AOL)'),
     ).toBeInTheDocument()
     const aolCheckbox = screen.getByTestId('aol-checkbox')
     await userEvent.click(aolCheckbox)
 
     expect(
-      screen.getByTestId('course-aol-region-select-England')
+      screen.getByTestId('course-aol-region-select-England'),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('aol-country-selector')).toBeInTheDocument()
@@ -853,7 +853,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -917,7 +917,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=OPEN'] }
+      { initialEntries: ['/?type=OPEN'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1006,7 +1006,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=OPEN'] }
+      { initialEntries: ['/?type=OPEN'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1112,7 +1112,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1218,7 +1218,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1319,7 +1319,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1425,7 +1425,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1508,7 +1508,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=OPEN'] }
+      { initialEntries: ['/?type=OPEN'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1520,7 +1520,7 @@ describe('component: CreateCourseForm', () => {
       // ensure price error banner is shown
       expect(errorBanner).toBeInTheDocument()
       expect(errorBanner).toHaveTextContent(
-        t('pages.create-course.no-course-price')
+        t('pages.create-course.no-course-price'),
       )
 
       // ensure it did not navigate away to the next step
@@ -1612,7 +1612,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1624,7 +1624,7 @@ describe('component: CreateCourseForm', () => {
       // ensure price error banner is shown
       expect(errorBanner).toBeInTheDocument()
       expect(errorBanner).toHaveTextContent(
-        t('pages.create-course.no-course-price')
+        t('pages.create-course.no-course-price'),
       )
 
       // ensure it did not navigate away to the next step
@@ -1716,7 +1716,7 @@ describe('component: CreateCourseForm', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: ['/?type=CLOSED'] }
+      { initialEntries: ['/?type=CLOSED'] },
     )
 
     const nextStepButton = screen.getByTestId('next-page-btn')
@@ -1728,7 +1728,7 @@ describe('component: CreateCourseForm', () => {
       // ensure price error banner is shown
       expect(errorBanner).toBeInTheDocument()
       expect(errorBanner).toHaveTextContent(
-        t('pages.create-course.no-course-price')
+        t('pages.create-course.no-course-price'),
       )
 
       // ensure it did not navigate away to the next step

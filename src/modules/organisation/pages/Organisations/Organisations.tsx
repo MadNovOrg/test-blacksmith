@@ -86,13 +86,13 @@ export const Organizations: React.FC<
         sorting: true,
       },
     ],
-    [t]
+    [t],
   )
   const [query, setQuery] = useQueryParam('query', withDefault(StringParam, ''))
   const [debouncedQuery] = useDebounce(query, 300)
   const [filterSector, setFilterSector] = useQueryParam(
     'sectors',
-    withDefault(ArrayParam, [])
+    withDefault(ArrayParam, []),
   )
 
   const [where, filtered] = useMemo(() => {
@@ -144,7 +144,7 @@ export const Organizations: React.FC<
     data?.orgs?.forEach(org => {
       lastActivity[org.id] = maxBy(
         org.members,
-        'profile.lastActivity'
+        'profile.lastActivity',
       )?.profile.lastActivity
     })
     return lastActivity
@@ -179,7 +179,7 @@ export const Organizations: React.FC<
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   const allOrganisationsData = [...(data?.orgs ?? [])]

@@ -27,7 +27,7 @@ type ActionableCoursesTableProps = {
   onAcceptedOrDeclined: (
     course: TableCourse,
     trainer: Trainer,
-    status: Course_Invite_Status_Enum
+    status: Course_Invite_Status_Enum,
   ) => void
   sorting?: ReturnType<typeof useTableSort>
 }
@@ -95,7 +95,7 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
               <>
                 {course.status &&
                 [Course_Status_Enum.ExceptionsApprovalPending].indexOf(
-                  course.status
+                  course.status,
                 ) !== -1 ? (
                   <CourseStatusChip status={course.status} hideIcon={true} />
                 ) : null}

@@ -40,7 +40,7 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
     >
       <StyledText variant="body1" fontWeight="600">
         {t(
-          'pages.course-details.tabs.grading.grading-details-confirmation.description'
+          'pages.course-details.tabs.grading.grading-details-confirmation.description',
         )}
       </StyledText>
       {!isOpenCourse ? (
@@ -48,7 +48,7 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
           <br />
           <br />
           {t(
-            'pages.course-details.tabs.grading.grading-details-confirmation.block-course-overivew-changes-info'
+            'pages.course-details.tabs.grading.grading-details-confirmation.block-course-overivew-changes-info',
           )}
         </StyledText>
       ) : null}
@@ -56,7 +56,7 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
         <li>
           <StyledText variant="body1" fontWeight="500">
             {t(
-              'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-criteria'
+              'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-criteria',
             )}
           </StyledText>
         </li>
@@ -64,7 +64,7 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
           <li>
             <StyledText variant="body1" fontWeight="500">
               {t(
-                'pages.course-details.tabs.grading.grading-details-confirmation.confirm-modules-and-techniques'
+                'pages.course-details.tabs.grading.grading-details-confirmation.confirm-modules-and-techniques',
               )}
             </StyledText>
           </li>
@@ -76,7 +76,7 @@ export const GradingDetailsAlert: React.FC<PropsWithChildren<Props>> = ({
             isOpenCourse
               ? 'please-note-warning-open-courses'
               : 'please-note-warning-closed-indirect-courses'
-          }`
+          }`,
         )}
       </StyledText>
       {children}

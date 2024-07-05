@@ -124,11 +124,11 @@ export const Importing: React.FC = () => {
                                 `steps.importing.not-imported-error-${notImported.reason}`,
                                 'steps.importing.not-imported-error',
                               ],
-                              { email: notImported.email }
+                              { email: notImported.email },
                             )}
                           </Typography>
                         )
-                      }
+                      },
                     )}
                   </Stack>
                 </AccordionDetails>
@@ -164,10 +164,10 @@ export const Importing: React.FC = () => {
                               {
                                 email: notImportedCertificate.email,
                                 number: notImportedCertificate.number,
-                              }
+                              },
                             )}
                           </Typography>
-                        )
+                        ),
                       )}
                     </Stack>
                   </AccordionDetails>

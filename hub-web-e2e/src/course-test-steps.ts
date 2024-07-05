@@ -13,7 +13,7 @@ import { StoredCredentialKey, stateFilePath } from './util'
 export async function closedCourseSteps(
   browser: Browser,
   course: Course,
-  user: StoredCredentialKey
+  user: StoredCredentialKey,
 ) {
   const context = await browser.newContext({
     storageState: stateFilePath(user),
@@ -38,7 +38,7 @@ export async function closedCourseSteps(
   ) {
     await assignTrainersPage.selectModerator(
       users.assistant2,
-      course.reaccreditation
+      course.reaccreditation,
     )
   }
   const trainerExpensesPage =
@@ -57,7 +57,7 @@ export async function closedCourseSteps(
 export async function openCourseSteps(
   browser: Browser,
   course: Course,
-  user: StoredCredentialKey
+  user: StoredCredentialKey,
 ) {
   const context = await browser.newContext({
     storageState: stateFilePath(user),
@@ -73,7 +73,7 @@ export async function openCourseSteps(
     course.accreditedBy === Accreditors_Enum.Icm
       ? users.trainer
       : users.bildSeniorTrainer,
-    course.accreditedBy
+    course.accreditedBy,
   )
   course.id = await assignTrainersPage.getCourseIdOnCreation()
   const courseDetailsPage = new CourseDetailsPage(page)

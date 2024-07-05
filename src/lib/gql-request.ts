@@ -14,7 +14,7 @@ type Opts = { token?: string; role?: RoleName; headers?: HeadersInit }
 export async function gqlRequest<T, V = Variables>(
   query: RequestDocument,
   variables?: V,
-  { token, role, headers }: Opts = {}
+  { token, role, headers }: Opts = {},
 ): Promise<T> {
   const requestHeaders = {
     ...(token ? { Authorization: `Bearer ${token}` } : undefined),

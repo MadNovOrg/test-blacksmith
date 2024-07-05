@@ -25,7 +25,7 @@ export const schema = yup.object({
     .test(
       'is-uk-postcode',
       t('validation-errors.invalid-postcode'),
-      isValidUKPostalCode
+      isValidUKPostalCode,
     ),
   inviteeCountry: yup.string().required(requiredMsg(t, 'country')),
   inviteeCountryCode: yup.string().nullable(),
@@ -43,7 +43,7 @@ export const ParticipantPostalAddressForm = () => {
   } = useFormContext<FormValues>()
   const values = getValues()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const { getLabel } = useWorldCountries()
@@ -52,7 +52,7 @@ export const ParticipantPostalAddressForm = () => {
     if (!values.inviteeCountry) return true
 
     return (Object.values(UKsCountriesCodes) as string[]).includes(
-      values.inviteeCountry
+      values.inviteeCountry,
     )
   }, [values.inviteeCountry])
 

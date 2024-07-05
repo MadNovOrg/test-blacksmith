@@ -17,18 +17,18 @@ export class CertificatePage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.certificateNumber = this.page.locator(
-      '[data-testid=certificate-number]'
+      '[data-testid=certificate-number]',
     )
     this.manageCertificateButton = this.page.locator(
-      '[data-testid=manage-certification-button]'
+      '[data-testid=manage-certification-button]',
     )
     this.putOnHoldMenuOption = this.page.locator(
-      '[data-testid=manage-certificate-hold-certificate]'
+      '[data-testid=manage-certificate-hold-certificate]',
     )
     this.onHoldAlert = this.page.locator('[data-testid=on-hold-alert]')
     this.viewDetails = this.page.locator('[data-testid=view-details]')
     this.revokeCertMenuOption = this.page.locator(
-      '[data-testid=manage-certificate-revoke-certificate]'
+      '[data-testid=manage-certificate-revoke-certificate]',
     )
     this.revokeCertAlert = this.page.locator('[data-testid=revoked-cert-alert]')
   }

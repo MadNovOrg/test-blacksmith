@@ -27,7 +27,7 @@ describe('page: Podcasts', () => {
         <Podcasts />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.getByTestId('featured-podcast-skeleton')).toBeInTheDocument()
@@ -52,7 +52,7 @@ describe('page: Podcasts', () => {
         <Podcasts />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.getByText('There are no podcasts yet.')).toBeInTheDocument()
@@ -78,18 +78,18 @@ describe('page: Podcasts', () => {
         <Podcasts />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     const featuredPodcast = screen.getByTestId('featured-podcast')
 
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
     expect(
-      within(featuredPodcast).getByText(podcasts[0].name)
+      within(featuredPodcast).getByText(podcasts[0].name),
     ).toBeInTheDocument()
     expect(within(featuredPodcast).getByText('New episode')).toBeInTheDocument()
     expect(
-      within(featuredPodcast).getByAltText(podcasts[0].name)
+      within(featuredPodcast).getByAltText(podcasts[0].name),
     ).toHaveAttribute('src', podcasts[0].thumbnail)
   })
 
@@ -116,7 +116,7 @@ describe('page: Podcasts', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     const featuredPodcast = screen.getByTestId('featured-podcast')
@@ -149,29 +149,29 @@ describe('page: Podcasts', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
-      screen.queryByTestId(`podcast-grid-item-${podcasts[0].id}`)
+      screen.queryByTestId(`podcast-grid-item-${podcasts[0].id}`),
     ).not.toBeInTheDocument()
 
     const paginatedPodcasts = podcasts.slice(1, DEFAULT_PAGINATION_LIMIT)
 
     paginatedPodcasts.forEach(podcast => {
       const podcastElement = screen.getByTestId(
-        `podcast-grid-item-${podcast.id}`
+        `podcast-grid-item-${podcast.id}`,
       )
 
       expect(within(podcastElement).getByText(podcast.name)).toBeInTheDocument()
       expect(within(podcastElement).getByAltText(podcast.name)).toHaveAttribute(
         'src',
-        podcast.thumbnail
+        podcast.thumbnail,
       )
       expect(
         within(podcastElement).getByText(
-          format(new Date(podcast.publishedDate), 'd MMMM yyyy')
-        )
+          format(new Date(podcast.publishedDate), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -199,11 +199,13 @@ describe('page: Podcasts', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.click(
-      within(screen.getByTestId('featured-podcast')).getByText(podcasts[0].name)
+      within(screen.getByTestId('featured-podcast')).getByText(
+        podcasts[0].name,
+      ),
     )
     expect(screen.getByText('Single podcast page')).toBeInTheDocument()
   })
@@ -211,11 +213,11 @@ describe('page: Podcasts', () => {
   it('paginates podcasts', async () => {
     const firstPodcastBatch = buildEntities(
       DEFAULT_PAGINATION_LIMIT + 1,
-      buildPodcast
+      buildPodcast,
     )
     const secondPodcastBatch = buildEntities(
       DEFAULT_PAGINATION_LIMIT,
-      buildPodcast
+      buildPodcast,
     )
 
     const client = {
@@ -242,7 +244,7 @@ describe('page: Podcasts', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(screen.getByText('1-12 of 20')).toBeInTheDocument()
@@ -252,14 +254,14 @@ describe('page: Podcasts', () => {
     const featuredPodcast = screen.getByTestId('featured-podcast')
 
     expect(
-      within(featuredPodcast).getByText(firstPodcastBatch[0].name)
+      within(featuredPodcast).getByText(firstPodcastBatch[0].name),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`podcast-grid-item-${firstPodcastBatch[1].id}`)
+      screen.queryByTestId(`podcast-grid-item-${firstPodcastBatch[1].id}`),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByTestId(`podcast-grid-item-${secondPodcastBatch[0].id}`)
+      screen.getByTestId(`podcast-grid-item-${secondPodcastBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByText('13-20 of 20')).toBeInTheDocument()
@@ -293,30 +295,34 @@ describe('page: Podcasts', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     expect(
-      within(screen.getByTestId('featured-podcast')).getByText(podcasts[0].name)
+      within(screen.getByTestId('featured-podcast')).getByText(
+        podcasts[0].name,
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`podcast-grid-item-${podcasts[1].id}`)
+      screen.getByTestId(`podcast-grid-item-${podcasts[1].id}`),
     ).toBeInTheDocument()
 
     await userEvent.click(screen.getByTestId('order-menu-button'))
     await userEvent.click(screen.getByText('Oldest'))
 
     expect(
-      within(screen.getByTestId('featured-podcast')).getByText(podcasts[0].name)
+      within(screen.getByTestId('featured-podcast')).getByText(
+        podcasts[0].name,
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`podcast-grid-item-${reversedPodcasts[0].id}`)
+      screen.getByTestId(`podcast-grid-item-${reversedPodcasts[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`podcast-grid-item-${podcasts[0].id}`)
+      screen.queryByTestId(`podcast-grid-item-${podcasts[0].id}`),
     ).not.toBeInTheDocument()
   })
 
@@ -350,17 +356,17 @@ describe('page: Podcasts', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search podcasts'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`podcast-grid-item-${filteredPodcast.id}`)
+        screen.getByTestId(`podcast-grid-item-${filteredPodcast.id}`),
       ).toBeInTheDocument()
     })
   })

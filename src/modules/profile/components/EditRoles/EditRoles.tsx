@@ -67,7 +67,7 @@ export function rolesFormSchema() {
             moderatorRole: yup.boolean(),
           })
           .required(),
-      })
+      }),
     )
     .required()
 }
@@ -98,10 +98,10 @@ export const EditRoles = () => {
         const showAddRoleButton =
           index < userRolesNames.length - 1 && index === fields.length - 1
         const selectedUserRole = watch(
-          `roles.${index}.userRole` as 'roles.0.userRole'
+          `roles.${index}.userRole` as 'roles.0.userRole',
         )
         const selectedEmployeeRoles = watch(
-          `roles.${index}.employeeRoles` as 'roles.0.employeeRoles'
+          `roles.${index}.employeeRoles` as 'roles.0.employeeRoles',
         )
 
         return (
@@ -147,7 +147,7 @@ export const EditRoles = () => {
                             value={roleName}
                             key={roleName}
                             disabled={fields.some(
-                              field => field.userRole === roleName
+                              field => field.userRole === roleName,
                             )}
                           >
                             {t(`pages.view-profile.roles.${roleName}`)}
@@ -348,7 +348,7 @@ export const EditRoles = () => {
                                             value =>
                                               value !==
                                               (e.target
-                                                .value as EmployeeRoleName)
+                                                .value as EmployeeRoleName),
                                           ),
                                         ]
                                         updatedRoles[index].salesRoles = []
@@ -359,8 +359,8 @@ export const EditRoles = () => {
                                             value =>
                                               value !==
                                               (e.target
-                                                .value as EmployeeRoleName)
-                                          )
+                                                .value as EmployeeRoleName),
+                                          ),
                                         )
                                       }
                                     }
@@ -400,7 +400,7 @@ export const EditRoles = () => {
                               <FormControlLabel
                                 key={roleName}
                                 label={t(
-                                  `pages.view-profile.roles.${roleName}`
+                                  `pages.view-profile.roles.${roleName}`,
                                 )}
                                 control={
                                   <Checkbox
@@ -418,8 +418,8 @@ export const EditRoles = () => {
                                           field.value.filter(
                                             value =>
                                               value !==
-                                              (e.target.value as RoleName)
-                                          )
+                                              (e.target.value as RoleName),
+                                          ),
                                         )
                                       }
                                     }}

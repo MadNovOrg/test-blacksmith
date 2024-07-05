@@ -43,7 +43,7 @@ const trainerCoursesList = Object.values(TrainerCoursesEnum)
 const nonTrainerCoursesList = Object.values(NonTrainerCoursesEnum)
 
 const courseCategoryUserAttends = (
-  participantCourses?: ICourseCategoryUserAttends[]
+  participantCourses?: ICourseCategoryUserAttends[],
 ): ICourseCategoryUserAttendsReturnType | null => {
   // return early if user doesn't attend any course
   if (participantCourses?.length === 0) {
@@ -52,14 +52,14 @@ const courseCategoryUserAttends = (
 
   const attendsNonTrainerCourse = participantCourses?.some(participantCourse =>
     nonTrainerCoursesList.includes(
-      participantCourse.course.level as NonTrainerCoursesEnum
-    )
+      participantCourse.course.level as NonTrainerCoursesEnum,
+    ),
   )
 
   const attendsTrainerCourse = participantCourses?.some(participantCourse =>
     trainerCoursesList.includes(
-      participantCourse.course.level as TrainerCoursesEnum
-    )
+      participantCourse.course.level as TrainerCoursesEnum,
+    ),
   )
 
   return {
@@ -69,7 +69,7 @@ const courseCategoryUserAttends = (
 }
 
 const onGoingTrainerCourseLevelsUserAttends = (
-  userCourses?: ICourseCategoryUserAttends[]
+  userCourses?: ICourseCategoryUserAttends[],
 ): (TrainerCoursesEnum | never[])[] | undefined => {
   const onGoingCourses = userCourses?.map(({ course }) => {
     const courseIsOngoing =
@@ -90,19 +90,19 @@ const onGoingTrainerCourseLevelsUserAttends = (
 }
 
 const trainerCourseProgress = (
-  participantCourses?: ICourseCategoryUserAttends[]
+  participantCourses?: ICourseCategoryUserAttends[],
 ): ITrainerCourseProgress | null => {
   const attendedTrainerCourses = participantCourses?.filter(attendedCourse =>
     trainerCoursesList.includes(
-      attendedCourse.course.level as TrainerCoursesEnum
-    )
+      attendedCourse.course.level as TrainerCoursesEnum,
+    ),
   )
 
   const started = attendedTrainerCourses?.some(participantCourse =>
-    isPast(parseISO(participantCourse.course.start ?? ''))
+    isPast(parseISO(participantCourse.course.start ?? '')),
   )
   const ended = attendedTrainerCourses?.some(participantCourse =>
-    isPast(parseISO(participantCourse.course.end ?? ''))
+    isPast(parseISO(participantCourse.course.end ?? '')),
   )
 
   return {
@@ -112,17 +112,18 @@ const trainerCourseProgress = (
 }
 
 const hasGotPassForTrainerCourse = (
-  coursesList?: ICourseCategoryUserAttends[]
+  coursesList?: ICourseCategoryUserAttends[],
 ): boolean | undefined => {
   const attendedTrainerCourses = coursesList?.filter(attendedCourse =>
     trainerCoursesList.includes(
-      attendedCourse.course.level as TrainerCoursesEnum
-    )
+      attendedCourse.course.level as TrainerCoursesEnum,
+    ),
   )
 
   return attendedTrainerCourses?.some(
     course =>
-      course.grade === Grade_Enum.Pass || course.grade === Grade_Enum.AssistOnly
+      course.grade === Grade_Enum.Pass ||
+      course.grade === Grade_Enum.AssistOnly,
   )
 }
 

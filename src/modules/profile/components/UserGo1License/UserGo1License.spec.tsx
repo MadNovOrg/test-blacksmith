@@ -33,17 +33,17 @@ describe('component: UserGo1License', () => {
     render(<UserGo1License license={go1License} editable={false} />)
 
     expect(screen.getByTestId('enrolled-on')).toHaveTextContent(
-      `Enrolled on ${format(enrolledDate, dateFormats.date_defaultShort)}`
+      `Enrolled on ${format(enrolledDate, dateFormats.date_defaultShort)}`,
     )
 
     expect(screen.getByTestId('expires-in')).toHaveTextContent(
       `Active until ${format(
         expiresDate,
-        dateFormats.date_defaultShort
+        dateFormats.date_defaultShort,
       )} (expires in ${differenceInCalendarMonths(
         expiresDate,
-        new Date()
-      )} months).`
+        new Date(),
+      )} months).`,
     )
 
     expect(screen.queryByText('Remove')).not.toBeInTheDocument()
@@ -62,7 +62,7 @@ describe('component: UserGo1License', () => {
             id: LICENSE_ID,
           },
         },
-      })
+      }),
     )
 
     const go1License = buildGo1License({ id: LICENSE_ID })
@@ -74,7 +74,7 @@ describe('component: UserGo1License', () => {
           editable
           onDeleted={handleDeletedMock}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByText('Remove'))
@@ -97,7 +97,7 @@ describe('component: UserGo1License', () => {
         error: new CombinedError({
           networkError: Error('Something went wrong'),
         }),
-      })
+      }),
     )
 
     const go1License = buildGo1License({ id: LICENSE_ID })
@@ -109,7 +109,7 @@ describe('component: UserGo1License', () => {
           editable
           onDeleted={handleDeletedMock}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByText('Remove'))

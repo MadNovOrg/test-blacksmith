@@ -32,10 +32,10 @@ export const OrderDetailsReview: React.FC = () => {
 
   const currency = courseData?.priceCurrency ?? defaultCurrency
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
   const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
@@ -47,7 +47,7 @@ export const OrderDetailsReview: React.FC = () => {
     ) {
       return getMandatoryCourseMaterialsCost(
         courseData?.mandatoryCourseMaterials,
-        currency as Currency
+        currency as Currency,
       )
     }
     return 0
@@ -77,7 +77,7 @@ export const OrderDetailsReview: React.FC = () => {
                 : courseData.endDateTime,
           }
         : {},
-    [courseData]
+    [courseData],
   )
   const trainerExpensesTotal = useMemo(() => {
     if (!expenses) {
@@ -97,7 +97,7 @@ export const OrderDetailsReview: React.FC = () => {
             Number((accommodationNights ?? 0) > 0) &&
             getTrainerSubsistenceCost(
               accommodationNights,
-              isUKCountry(courseData?.residingCountry)
+              isUKCountry(courseData?.residingCountry),
             )
 
           return new Big(acc)
@@ -105,13 +105,13 @@ export const OrderDetailsReview: React.FC = () => {
             .add(
               accommodationCost && accommodationNights
                 ? accommodationCost * accommodationNights
-                : 0
+                : 0,
             )
             .add(subsistenceCost)
             .round()
             .toNumber()
         },
-        0
+        0,
       )
 
       const miscellaneousCost =
@@ -121,7 +121,7 @@ export const OrderDetailsReview: React.FC = () => {
               .add(value ?? 0)
               .round()
               .toNumber(),
-          0
+          0,
         ) ?? 0
 
       result += transportCost + miscellaneousCost
@@ -137,7 +137,7 @@ export const OrderDetailsReview: React.FC = () => {
       }
 
       const courseBasePrice = new Big(courseData?.price ?? 0).times(
-        courseData.maxParticipants
+        courseData.maxParticipants,
       )
 
       const freeSpacesDiscount = new Big(courseData?.price ?? 0)
@@ -152,7 +152,7 @@ export const OrderDetailsReview: React.FC = () => {
       const vat = new Big(
         courseData.includeVAT || isUKCountry(courseData?.residingCountry)
           ? getVatAmount(subtotal.minus(courseMaterialsCost).toNumber())
-          : 0
+          : 0,
       )
       const amountDue = subtotal.add(vat)
 
@@ -202,13 +202,13 @@ export const OrderDetailsReview: React.FC = () => {
             })} ${formatGMTDateTimeByTimeZone(
               startDate as Date,
               courseTimezone,
-              false
+              false,
             )} - ${t('dates.withTime', {
               date: endDate,
             })} ${formatGMTDateTimeByTimeZone(
               endDate as Date,
               courseTimezone,
-              true
+              true,
             )} `}
           </Typography>
         ) : (
@@ -234,7 +234,7 @@ export const OrderDetailsReview: React.FC = () => {
         <Stack spacing={1}>
           <PageRow
             label={t(
-              'pages.create-course.review-and-confirm.sales-representative'
+              'pages.create-course.review-and-confirm.sales-representative',
             )}
             value={courseData?.salesRepresentative?.fullName}
             testId="sales-row"
@@ -279,7 +279,7 @@ export const OrderDetailsReview: React.FC = () => {
       <InfoPanel>
         <PageRow
           label={t(
-            'pages.create-course.review-and-confirm.trainer-expenses-total'
+            'pages.create-course.review-and-confirm.trainer-expenses-total',
           )}
           value={t('common.currency', {
             amount: trainerExpensesTotal,
@@ -304,7 +304,7 @@ export const OrderDetailsReview: React.FC = () => {
               'pages.create-course.review-and-confirm.mandatory-course-materials',
               {
                 count: courseData?.mandatoryCourseMaterials,
-              }
+              },
             )}
             value={t('common.currency', {
               amount: courseMaterialsCost,
@@ -317,7 +317,7 @@ export const OrderDetailsReview: React.FC = () => {
               'pages.create-course.review-and-confirm.free-course-materials',
               {
                 count: freeCourseMaterials,
-              }
+              },
             )}
             value={t('common.currency', {
               amount: 0,
@@ -352,7 +352,7 @@ export const OrderDetailsReview: React.FC = () => {
               courseData?.includeVAT ||
                 courseData?.accreditedBy === Accreditors_Enum.Bild
                 ? 'pages.create-course.review-and-confirm.vat'
-                : 'pages.create-course.review-and-confirm.no-vat'
+                : 'pages.create-course.review-and-confirm.no-vat',
             )}
             value={t('common.currency', { amount: vat, currency })}
             testId="vat-row"

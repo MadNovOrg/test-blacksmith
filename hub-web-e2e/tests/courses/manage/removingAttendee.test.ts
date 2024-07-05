@@ -49,20 +49,20 @@ for (const data of testData) {
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto(`${course.id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-      course.id
+      course.id,
     )
     await courseDetailsPage.checkAttendingText(
       usersArray.length,
-      course.max_participants
+      course.max_participants,
     )
     await courseDetailsPage.clickManageAttendanceByAttendeeData(
-      data.userToRemove.email
+      data.userToRemove.email,
     )
     const attendeeRemovingPopup = await courseDetailsPage.clickAttendeeRemove()
     await attendeeRemovingPopup.cancelAttendeeWithNoteUsingUser()
     await courseDetailsPage.checkAttendingText(
       usersArray.length - 1,
-      course.max_participants
+      course.max_participants,
     )
   })
 }

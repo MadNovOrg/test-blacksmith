@@ -34,7 +34,7 @@ describe('page: CourseDetails', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/course/${course.id}/details`] }
+      { initialEntries: [`/course/${course.id}/details`] },
     )
 
     // Assert

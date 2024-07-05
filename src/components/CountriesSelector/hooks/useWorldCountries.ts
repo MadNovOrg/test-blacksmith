@@ -176,7 +176,7 @@ export default function useWorldCountries() {
 
       return countries.getLabel(code)
     },
-    [countries]
+    [countries],
   )
 
   const countriesISOCodes: CountryISOCode[] = useMemo(
@@ -381,7 +381,7 @@ export default function useWorldCountries() {
       'ZM',
       'ZW',
     ],
-    []
+    [],
   )
 
   const countriesCodesWithUKs: WorldCountriesCodes[] = useMemo(
@@ -394,18 +394,23 @@ export default function useWorldCountries() {
         .filter(code => code !== 'GB')
         .sort((a, b) => getLabel(a)?.localeCompare(getLabel(b) ?? '') || 0),
     ],
-    [countriesISOCodes, getLabel]
+    [countriesISOCodes, getLabel],
   )
 
   const isUKCountry = useCallback(
     (
-      countryCode: CountryISOCode | UKsCountriesCode | string | null | undefined
+      countryCode:
+        | CountryISOCode
+        | UKsCountriesCode
+        | string
+        | null
+        | undefined,
     ) => {
       if (!countryCode) return false
 
       return Object.keys(UKsCountriesCodes).includes(countryCode)
     },
-    []
+    [],
   )
 
   const checkUKsCountryName = useCallback(
@@ -414,12 +419,12 @@ export default function useWorldCountries() {
 
       return (Object.values(UKsCountriesCodes) as string[]).includes(country)
     },
-    []
+    [],
   )
 
   const getUKCountryCodeByCountryName = useCallback((countryName: string) => {
     const found = Object.entries(UKsCountriesCodes).find(
-      ([_, value]) => value === countryName
+      ([_, value]) => value === countryName,
     )
 
     return found ? found[0] : undefined
@@ -438,7 +443,7 @@ export default function useWorldCountries() {
 
 export const getForeignScript = (text: string): ForeignScript | null => {
   const result = Object.keys(ForeignScriptRegex).find(script =>
-    ForeignScriptRegex[script as ForeignScript].test(text)
+    ForeignScriptRegex[script as ForeignScript].test(text),
   )
 
   if (!result) return null

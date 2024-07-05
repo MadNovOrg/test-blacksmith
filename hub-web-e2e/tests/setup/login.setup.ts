@@ -13,7 +13,7 @@ credentials.forEach(cred => {
     await loginPage.cookieConsentDeclinedButton.click()
     const myCoursesPage = await loginPage.logIn(
       users[cred.name].email,
-      users[cred.name].password
+      users[cred.name].password,
     )
 
     const STORAGE_KEY = 'residingCountryDialogWasDisplayed'
@@ -24,7 +24,7 @@ credentials.forEach(cred => {
       {
         name: STORAGE_KEY,
         value: 'true',
-      }
+      },
     )
 
     await myCoursesPage.userMenu.checkIsVisible()

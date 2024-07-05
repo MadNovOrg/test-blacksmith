@@ -29,7 +29,7 @@ export class CourseInvitationPage extends BasePage {
         waitForGraphQLResponse(this.page, 'invite', '"status": "ACCEPTED"'),
         expect(this.page.locator('.MuiAlert-message')).toContainText(
           'Your response has been sent',
-          { timeout: 120000 }
+          { timeout: 120000 },
         ),
       ])
     } else {
@@ -37,7 +37,7 @@ export class CourseInvitationPage extends BasePage {
         waitForGraphQLResponse(
           this.page,
           'acceptInvite',
-          '"status": "ACCEPTED"'
+          '"status": "ACCEPTED"',
         ),
         this.willAttendOption.click(),
         this.continueButton.click(),

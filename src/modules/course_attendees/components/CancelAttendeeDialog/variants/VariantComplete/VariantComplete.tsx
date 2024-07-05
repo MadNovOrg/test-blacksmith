@@ -52,7 +52,7 @@ export const VariantComplete = ({
 
   const { acl } = useAuth()
   const [feeType, setFeeType] = useState<CancellationFeeType>(
-    CancellationFeeType.ApplyCancellationTerms
+    CancellationFeeType.ApplyCancellationTerms,
   )
   const [confirmed, setConfirmed] = useState(false)
 
@@ -68,19 +68,19 @@ export const VariantComplete = ({
             t('common.validation-errors.min-max-num-value', {
               min: 0,
               max: 9999.99,
-            })
+            }),
           )
           .max(
             9999.99,
             t('common.validation-errors.min-max-num-value', {
               min: 0,
               max: 9999.99,
-            })
+            }),
           )
           .when('feeType', ([feeType], schema) => {
             return feeType === CancellationFeeType.CustomFee
               ? schema.required(
-                  t('common.validation-errors.this-field-is-required')
+                  t('common.validation-errors.this-field-is-required'),
                 )
               : schema
           }),
@@ -98,11 +98,11 @@ export const VariantComplete = ({
           .required(
             t('common.validation-errors.required-field', {
               name: t('common.cancellation-reason'),
-            })
+            }),
           )
           .max(
             300,
-            t('common.validation-errors.maximum-chars-limit', { number: 300 })
+            t('common.validation-errors.maximum-chars-limit', { number: 300 }),
           ),
         feeType: yup
           .mixed<CancellationFeeType>()
@@ -265,7 +265,7 @@ export const VariantComplete = ({
             error={!!errors.cancellationReason}
             helperText={<>{errors.cancellationReason?.message}</>}
             label={t(
-              'pages.edit-course.cancellation-modal.reason-for-cancellation'
+              'pages.edit-course.cancellation-modal.reason-for-cancellation',
             )}
             inputProps={{
               sx: { height: 20 },
@@ -279,7 +279,7 @@ export const VariantComplete = ({
               <FormControlLabel
                 data-testid="confirmation-checkbox"
                 label={t(
-                  'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
+                  'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation',
                 )}
                 control={<Checkbox />}
                 checked={confirmed}

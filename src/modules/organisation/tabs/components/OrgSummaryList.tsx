@@ -66,7 +66,7 @@ export const OrgSummaryList: React.FC<
       setCurrentPage(0)
       reexecute()
     },
-    [reexecute]
+    [reexecute],
   )
 
   return (

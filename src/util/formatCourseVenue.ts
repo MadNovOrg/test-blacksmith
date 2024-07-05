@@ -8,11 +8,11 @@ import {
 
 export function formatCourseVenue(
   deliveryType: Course_Delivery_Type_Enum,
-  venue?: Venue
+  venue?: Venue,
 ): string {
   if (
     [Course_Delivery_Type_Enum.F2F, Course_Delivery_Type_Enum.Mixed].includes(
-      deliveryType
+      deliveryType,
     )
   ) {
     if (venue?.name || venue?.city || venue?.country) {
@@ -37,7 +37,7 @@ export function formatCourseVenue(
 
 export function formatCourseVenueName(
   deliveryType: Course_Delivery_Type_Enum | CourseDeliveryType,
-  venueName?: string
+  venueName?: string,
 ): string {
   if (
     [

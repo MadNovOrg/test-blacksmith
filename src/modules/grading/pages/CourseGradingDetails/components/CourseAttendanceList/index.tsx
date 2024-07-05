@@ -140,7 +140,7 @@ export const CourseAttendanceList: React.FC<React.PropsWithChildren<Props>> = ({
           {attendance[participant.id] ? (
             <Chip
               label={t(
-                'pages.course-attendance.participant-attended-chip-label'
+                'pages.course-attendance.participant-attended-chip-label',
               )}
               color="success"
               sx={{
@@ -150,7 +150,7 @@ export const CourseAttendanceList: React.FC<React.PropsWithChildren<Props>> = ({
           ) : (
             <Chip
               label={t(
-                'pages.course-attendance.participant-not-attended-chip-label'
+                'pages.course-attendance.participant-not-attended-chip-label',
               )}
               color="error"
             />

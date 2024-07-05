@@ -26,11 +26,11 @@ it('disables submit button when code not entered', async () => {
         onClose={vi.fn}
         onSubmit={vi.fn}
       />
-    </Provider>
+    </Provider>,
   )
 
   expect(
-    screen.getByRole('button', { name: /add certificate/i })
+    screen.getByRole('button', { name: /add certificate/i }),
   ).toBeDisabled()
 })
 
@@ -49,7 +49,7 @@ it('calls a function when clicked on cancel button', async () => {
         onClose={vi.fn}
         onSubmit={vi.fn}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.click(screen.getByRole('button', { name: /cancel/i }))
@@ -88,7 +88,7 @@ it('imports legacy certificate', async () => {
         onClose={vi.fn}
         onSubmit={onSubmit}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -133,7 +133,7 @@ it('imports certificate for other user if profile id is passed', async () => {
         onSubmit={onSubmit}
         profileId="profile-id"
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -161,7 +161,7 @@ it('shows an alert when there is a generic error', async () => {
         onClose={vi.fn}
         onSubmit={onSubmit}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -170,7 +170,7 @@ it('shows an alert when there is a generic error', async () => {
   expect(onSubmit).not.toHaveBeenCalled()
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    '"There was an error importing certificate"'
+    '"There was an error importing certificate"',
   )
 })
 
@@ -199,7 +199,7 @@ it('shows an alert when the certificate has already been imported', async () => 
         onClose={vi.fn}
         onSubmit={onSubmit}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -208,7 +208,7 @@ it('shows an alert when the certificate has already been imported', async () => 
   expect(onSubmit).not.toHaveBeenCalled()
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    '"This certificate has already been imported"'
+    '"This certificate has already been imported"',
   )
 })
 
@@ -237,7 +237,7 @@ it("shows an alert when the certificate data doesn't match the profile", async (
         onClose={vi.fn}
         onSubmit={onSubmit}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -246,7 +246,7 @@ it("shows an alert when the certificate data doesn't match the profile", async (
   expect(onSubmit).not.toHaveBeenCalled()
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    '"Personal information on the certificate doesn\'t match profile\'s personal information"'
+    '"Personal information on the certificate doesn\'t match profile\'s personal information"',
   )
 })
 
@@ -275,7 +275,7 @@ it("shows an alert when the certificate level isn't supported", async () => {
         onClose={vi.fn}
         onSubmit={onSubmit}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -284,7 +284,7 @@ it("shows an alert when the certificate level isn't supported", async () => {
   expect(onSubmit).not.toHaveBeenCalled()
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    '"This certificate level isn\'t supported via Connect, please contact Team Teach"'
+    '"This certificate level isn\'t supported via Connect, please contact Team Teach"',
   )
 })
 
@@ -313,7 +313,7 @@ it("shows an alert when the certificate isn't found", async () => {
         onClose={vi.fn}
         onSubmit={onSubmit}
       />
-    </Provider>
+    </Provider>,
   )
 
   await user.type(screen.getByLabelText(/enter certificate number/i), 'code')
@@ -322,6 +322,6 @@ it("shows an alert when the certificate isn't found", async () => {
   expect(onSubmit).not.toHaveBeenCalled()
 
   expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-    '"We could not locate this certificate, please contact Team Teach."'
+    '"We could not locate this certificate, please contact Team Teach."',
   )
 })

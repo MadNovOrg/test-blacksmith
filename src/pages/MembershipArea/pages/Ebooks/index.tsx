@@ -26,7 +26,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] = useState<EbookSummaryFragment | null>(
-    null
+    null,
   )
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)

@@ -40,7 +40,7 @@ export const ExportBlendedDialog: React.FC<React.PropsWithChildren<Props>> = ({
       from: dateFilters?.filterStartDate?.toISOString(),
       to: dateFilters?.filterEndDate?.toISOString(),
     }),
-    [dateFilters]
+    [dateFilters],
   )
 
   const [{ data, fetching }, fetchHistory] = useQuery<
@@ -55,7 +55,7 @@ export const ExportBlendedDialog: React.FC<React.PropsWithChildren<Props>> = ({
   const fileName = useMemo(
     () =>
       `licenses-history-${dateFilters?.filterEndDate?.toDateString()}-${dateFilters?.filterStartDate?.toDateString()}.xlsx`,
-    [dateFilters]
+    [dateFilters],
   )
 
   useEffect(() => {
@@ -155,7 +155,7 @@ export const ExportBlendedDialog: React.FC<React.PropsWithChildren<Props>> = ({
             <FilterByDates
               onChange={onDatesChange}
               title={t(
-                'pages.admin.organizations.export.filter-by-captured-date'
+                'pages.admin.organizations.export.filter-by-captured-date',
               )}
               data-testid={'date-range'}
               queryParam={'date-range'}

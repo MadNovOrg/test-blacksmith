@@ -36,11 +36,11 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { acl } = useAuth()
   const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
-    'foundation-trainer-plus-course'
+    'foundation-trainer-plus-course',
   )
   const levelOneBSEnabled = !!useFeatureFlagEnabled('level-one-bs')
   const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect'
+    'international-indirect',
   )
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
           if (shouldNotIncludeLevelOneBS) return false
 
           return true
-        })
+        }),
       ),
     [
       acl,
@@ -77,7 +77,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
       foundationTrainerPlusLevelEnabled,
       levelOneBSEnabled,
       isInternationalIndirectEnabled,
-    ]
+    ],
   )
 
   const selected = value && levels.includes(value) ? value : levels[0]

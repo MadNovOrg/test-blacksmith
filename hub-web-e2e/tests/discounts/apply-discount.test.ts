@@ -15,7 +15,7 @@ const test = base.extend<{ courseId: number }>({
 
     const id = await API.course.insertCourse(
       openCourse,
-      'trainer@teamteach.testinator.com'
+      'trainer@teamteach.testinator.com',
     )
 
     await use(id)
@@ -39,18 +39,18 @@ test('should apply a discount when booking an OPEN course', async ({
   await bookingDetailsPage.goto(String(courseId))
 
   const originalPrice = parsePrice(
-    (await bookingDetailsPage.amountDue.textContent())!
+    (await bookingDetailsPage.amountDue.textContent())!,
   )
   await bookingDetailsPage.openPromoCodeFormButton.click()
   await bookingDetailsPage.promoCodeInput.fill(PROMO_CODE)
   await bookingDetailsPage.applyPromoCodeButton.click()
 
   const discount = parsePrice(
-    (await bookingDetailsPage.promoCodeDiscountAmount.textContent())!
+    (await bookingDetailsPage.promoCodeDiscountAmount.textContent())!,
   )
 
   const discountedPrice = parsePrice(
-    (await bookingDetailsPage.amountDue.textContent())!
+    (await bookingDetailsPage.amountDue.textContent())!,
   )
 
   expect(discount).toBe(originalPrice * 0.05)

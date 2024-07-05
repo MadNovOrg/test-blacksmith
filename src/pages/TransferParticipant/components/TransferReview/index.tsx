@@ -207,10 +207,10 @@ export const TransferReview: React.FC<
                     value={t(
                       `transfer-details.${getTransferTermsFee(
                         new Date(fromCourse?.start ?? ''),
-                        courseLevel
+                        courseLevel,
                       )}-fee${
                         isTrainTheTrainerCourse(courseLevel) ? '-trainer' : ''
-                      }`
+                      }`,
                     )}
                   />
                 </InfoPanel>
@@ -221,10 +221,10 @@ export const TransferReview: React.FC<
                       {t(
                         `transfer-details.${getTransferTermsFee(
                           new Date(fromCourse?.start ?? ''),
-                          courseLevel
+                          courseLevel,
                         )}-fee${
                           isTrainTheTrainerCourse(courseLevel) ? '-trainer' : ''
-                        }`
+                        }`,
                       )}
                     </Typography>
                   </InfoRow>

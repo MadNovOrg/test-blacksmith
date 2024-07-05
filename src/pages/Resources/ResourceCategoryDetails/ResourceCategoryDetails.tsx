@@ -40,7 +40,7 @@ export const ResourceCategoryDetails = () => {
       const childResourceNum = category?.children?.nodes?.length
         ? category.children.nodes.reduce(
             (acc, subCategory) => acc + countResources(subCategory),
-            0
+            0,
           )
         : 0
 
@@ -61,7 +61,7 @@ export const ResourceCategoryDetails = () => {
             `pages.browser-tab-titles.resources.${resourceCategory?.name
               ?.toLowerCase()
               .replace('&', 'and')
-              .replaceAll(' ', '-')}`
+              .replaceAll(' ', '-')}`,
           )}
         </title>
       </Helmet>
@@ -148,7 +148,7 @@ export const ResourceCategoryDetails = () => {
                                 resources={categoryLevelTwo?.resources?.nodes}
                               />
                             </Box>
-                          ) : null
+                          ) : null,
                       )}
                     </Box>
                   ))}

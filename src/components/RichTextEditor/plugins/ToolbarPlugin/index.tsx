@@ -88,7 +88,7 @@ export const ToobarPlugin: React.FC = () => {
         if ($isListNode(element)) {
           const parentList = $getNearestNodeOfType<ListNode>(
             anchorNode,
-            ListNode
+            ListNode,
           )
           const type = parentList
             ? parentList.getListType()
@@ -115,7 +115,7 @@ export const ToobarPlugin: React.FC = () => {
           setCanUndo(payload)
           return false
         },
-        COMMAND_PRIORITY_CRITICAL
+        COMMAND_PRIORITY_CRITICAL,
       ),
       editor.registerCommand<boolean>(
         CAN_REDO_COMMAND,
@@ -123,8 +123,8 @@ export const ToobarPlugin: React.FC = () => {
           setCanRedo(payload)
           return false
         },
-        COMMAND_PRIORITY_CRITICAL
-      )
+        COMMAND_PRIORITY_CRITICAL,
+      ),
     )
   }, [editor, updateToolbar])
 

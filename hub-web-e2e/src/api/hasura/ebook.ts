@@ -6,7 +6,7 @@ import { getClient } from './client'
 export async function getEbooks(first = 1000) {
   const response = await getClient().request<EbooksQuery, EbooksQueryVariables>(
     EBOOKS_QUERY,
-    { first }
+    { first },
   )
   if (response.content?.ebooks?.nodes?.length) {
     return response.content.ebooks.nodes

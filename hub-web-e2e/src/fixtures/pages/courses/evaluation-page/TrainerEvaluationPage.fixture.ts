@@ -20,22 +20,22 @@ export class TrainerEvaluationPage extends BasePage {
     this.courseId = courseId
     this.attendingTable = this.page.locator('[data-testid=attending-table]')
     this.pageLoadedIndicator = this.page.locator(
-      'data-testid=trainer-evaluation-title'
+      'data-testid=trainer-evaluation-title',
     )
     this.startEvaluationButton = this.page.locator(
-      'data-testid=trainer-evaluation-button'
+      'data-testid=trainer-evaluation-button',
     )
     this.evaluationPageLoadedIndicator = this.page.locator(
-      'data-testid=course-evaluation-heading'
+      'data-testid=course-evaluation-heading',
     )
     this.signatureField = this.page.locator(
-      'data-testid=course-evaluation-signature'
+      'data-testid=course-evaluation-signature',
     )
     this.submitEvaluationButton = this.page.locator(
-      'data-testid=submit-course-evaluation'
+      'data-testid=submit-course-evaluation',
     )
     this.viewSummaryEvaluationButton = this.page.locator(
-      'data-testid=view-summary-evaluation'
+      'data-testid=view-summary-evaluation',
     )
     this.PDFExportButton = this.page.locator('data-testid=export-summary')
   }

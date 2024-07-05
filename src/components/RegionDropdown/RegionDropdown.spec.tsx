@@ -21,7 +21,7 @@ describe(RegionDropdown.name, () => {
           onChange={noop}
           usesAOL={true}
           country={country}
-        />
+        />,
       )
     })
   })
@@ -31,17 +31,17 @@ describe(RegionDropdown.name, () => {
       const regions = getAOLRegions(country)
 
       await userEvent.click(
-        screen.getByTestId(`course-aol-region-select-${country}`)
+        screen.getByTestId(`course-aol-region-select-${country}`),
       )
 
       await waitFor(() => {
         expect(screen.queryAllByTestId('course-aol-region-option').length).toBe(
-          regions.length + 1
+          regions.length + 1,
         )
       })
 
       regions.forEach((region: string) =>
-        expect(getOption(region)).toBeInTheDocument()
+        expect(getOption(region)).toBeInTheDocument(),
       )
     })
   })

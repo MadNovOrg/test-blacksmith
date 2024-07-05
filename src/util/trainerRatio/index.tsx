@@ -30,7 +30,7 @@ export type RatioTrainerData = Pick<
 >[]
 
 export function getRequiredAssistants(
-  courseData: RatioCourseData & Pick<Course, 'type' | 'residingCountry'>
+  courseData: RatioCourseData & Pick<Course, 'type' | 'residingCountry'>,
 ): RequiredTrainers {
   if (courseData.accreditedBy === Accreditors_Enum.Icm) {
     return getRequiredAssistantsIcm({
@@ -55,7 +55,7 @@ export function getRequiredAssistants(
 }
 export function getRequiredLeads(
   courseType: Course_Type_Enum,
-  isTrainer: boolean
+  isTrainer: boolean,
 ): RequiredTrainers {
   const notLeadTrainerRequired =
     courseType === Course_Type_Enum.Open ||

@@ -127,11 +127,11 @@ export function useCoursePrice(courseData?: {
       courseData?.courseType,
       courseData?.reaccreditation,
       specialUKcondition,
-    ]
+    ],
   )
 
   return useMemo(
     () => extractCoursePrices(data?.coursePrice),
-    [data?.coursePrice, extractCoursePrices]
+    [data?.coursePrice, extractCoursePrices],
   )
 }

@@ -22,7 +22,7 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
   ...props
 }) => {
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const { t } = useTranslation()
@@ -30,7 +30,7 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
   const { isUKCountry } = useWorldCountries()
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
-    [residingCountryEnabled]
+    [residingCountryEnabled],
   )
 
   const timeZoneScheduleDateTime = useMemo(() => {
@@ -54,11 +54,11 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
                 'dates.time',
                 {
                   date: timeZoneScheduleDateTime.start,
-                }
+                },
               )} ${formatGMTDateTimeByTimeZone(
                 timeZoneScheduleDateTime.start,
                 timeZone,
-                true
+                true,
               )}`}
             </Typography>
             <Typography color="grey.700" {...props}>
@@ -66,11 +66,11 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
                 'dates.time',
                 {
                   date: timeZoneScheduleDateTime.end,
-                }
+                },
               )} ${formatGMTDateTimeByTimeZone(
                 timeZoneScheduleDateTime.end,
                 timeZone,
-                true
+                true,
               )}`}
             </Typography>
           </Box>

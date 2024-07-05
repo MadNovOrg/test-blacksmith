@@ -52,7 +52,7 @@ describe('CourseForm - indirect BILD', () => {
       await userEvent.click(screen.getByLabelText(/course category/i))
 
       expect(
-        within(screen.getByRole('listbox')).getByText(/bild/i)
+        within(screen.getByRole('listbox')).getByText(/bild/i),
       ).toBeInTheDocument()
     })
   })
@@ -70,7 +70,7 @@ describe('CourseForm - indirect BILD', () => {
     await userEvent.click(screen.getByLabelText(/course category/i))
 
     expect(
-      within(screen.getByRole('listbox')).getByText(/bild/i)
+      within(screen.getByRole('listbox')).getByText(/bild/i),
     ).toBeInTheDocument()
   })
 
@@ -87,7 +87,7 @@ describe('CourseForm - indirect BILD', () => {
     await userEvent.click(screen.getByLabelText(/course category/i))
 
     expect(
-      within(screen.getByRole('listbox')).getByText(/bild/i)
+      within(screen.getByRole('listbox')).getByText(/bild/i),
     ).toBeInTheDocument()
   })
 
@@ -107,18 +107,20 @@ describe('CourseForm - indirect BILD', () => {
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`
-      )
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`,
+      ),
     ).not.toBeInTheDocument()
 
     expect(
       screen.queryByTestId(
-        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`
-      )
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`,
+      ),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-level-option-${Course_Level_Enum.BildRegular}`)
+      screen.getByTestId(
+        `course-level-option-${Course_Level_Enum.BildRegular}`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -135,7 +137,7 @@ describe('CourseForm - indirect BILD', () => {
     await selectBildCategory()
 
     expect(
-      screen.getByLabelText(/restrictive tertiary advanced/i)
+      screen.getByLabelText(/restrictive tertiary advanced/i),
     ).toBeDisabled()
   })
 
@@ -152,7 +154,7 @@ describe('CourseForm - indirect BILD', () => {
     await selectBildCategory()
 
     expect(
-      screen.getByLabelText(/restrictive tertiary advanced/i)
+      screen.getByLabelText(/restrictive tertiary advanced/i),
     ).toBeEnabled()
   })
 
@@ -266,13 +268,13 @@ describe('CourseForm - indirect BILD', () => {
 
   it("doesn't allow changing residing country", async () => {
     useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) => flag === 'course-residing-country'
+      (flag: string) => flag === 'course-residing-country',
     )
     renderForm(Course_Type_Enum.Closed)
     await selectBildCategory()
 
     expect(
-      screen.queryByLabelText(t('components.course-form.residing-country'))
+      screen.queryByLabelText(t('components.course-form.residing-country')),
     ).not.toBeInTheDocument()
   })
 })

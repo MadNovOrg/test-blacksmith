@@ -65,7 +65,7 @@ export const ZoomMeetingSelector = ({
 
     const user =
       users?.find(
-        ({ id }) => id === (editMode ? startingProfileId : current)
+        ({ id }) => id === (editMode ? startingProfileId : current),
       ) ?? null
 
     setSelected(user)

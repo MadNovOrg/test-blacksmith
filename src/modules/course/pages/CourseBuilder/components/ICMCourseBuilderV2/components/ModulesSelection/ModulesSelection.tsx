@@ -67,7 +67,7 @@ export const ModulesSelection: React.FC<Props> = ({
         .filter(moduleSetting => moduleSetting.mandatory)
         .map(ms => ms.module.id),
       ...initialSelection,
-    ])
+    ]),
   )
 
   const initialSelectionRef = useRef(selectedIds)
@@ -91,13 +91,13 @@ export const ModulesSelection: React.FC<Props> = ({
   const estimatedDuration = useMemo(() => {
     const selectedGroups = Array.from(selectedIds)
       .map(id =>
-        availableModules.find(moduleSetting => moduleSetting.module.id === id)
+        availableModules.find(moduleSetting => moduleSetting.module.id === id),
       )
       .filter(isNotNullish)
 
     return selectedGroups.reduce(
       (acc, moduleSetting) => acc + (moduleSetting.duration ?? 0),
-      0
+      0,
     )
   }, [selectedIds, availableModules])
 
@@ -249,7 +249,7 @@ export const ModulesSelection: React.FC<Props> = ({
               </Typography>
               <Typography variant="body2" px={1}>
                 {t(
-                  'pages.trainer-base.create-course.new-course.estimated-duration'
+                  'pages.trainer-base.create-course.new-course.estimated-duration',
                 )}
               </Typography>
             </Box>

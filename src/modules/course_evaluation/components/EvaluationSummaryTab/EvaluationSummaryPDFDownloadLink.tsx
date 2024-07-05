@@ -112,20 +112,20 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
 
   const { trainerAnswers, grouped, ungrouped, injuryQuestion } = useMemo(() => {
     const { trainer, attendee } = groupBy(summaryResponseData?.answers, a =>
-      a.profile.id === profileId ? 'trainer' : 'attendee'
+      a.profile.id === profileId ? 'trainer' : 'attendee',
     )
 
     const trainerAnswers = trainer?.toSorted(a =>
       booleanQuestionTypes.includes(
-        a.question.type as unknown as Course_Evaluation_Question_Type_Enum
+        a.question.type as unknown as Course_Evaluation_Question_Type_Enum,
       )
         ? -1
-        : 0
+        : 0,
     )
 
     const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
       attendee,
-      a => a.question.group ?? 'UNGROUPED'
+      a => a.question.group ?? 'UNGROUPED',
     )
 
     const grouped = {} as CourseEvaluationGroupedQuestion
@@ -136,11 +136,11 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
 
     const { ANY_INJURIES: injuryQuestion = [], ...ungrouped } = groupBy(
       ungroupedAnswers,
-      a => a.question.questionKey
+      a => a.question.questionKey,
     )
 
     const injuryResponse = groupBy(injuryQuestion, a =>
-      a?.answer?.startsWith('YES') ? 'YES' : 'NO'
+      a?.answer?.startsWith('YES') ? 'YES' : 'NO',
     )
 
     return {
@@ -154,7 +154,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
                 (
                   ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) *
                   100
-                ).toFixed(1)
+                ).toFixed(1),
               )
             : 0,
         no:
@@ -163,7 +163,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
                 (
                   ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) *
                   100
-                ).toFixed(1)
+                ).toFixed(1),
               )
             : 0,
       },
@@ -172,7 +172,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
 
   const participants = useMemo(
     () => participantsData?.courseParticipants ?? [],
-    [participantsData]
+    [participantsData],
   )
 
   const course = courseData?.course

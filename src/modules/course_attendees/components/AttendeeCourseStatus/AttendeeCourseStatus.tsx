@@ -23,7 +23,7 @@ export const AttendeeCourseStatus: React.FC<
       ? course.participants?.at(0)
       : undefined
     const evaluated = Boolean(
-      course.evaluation_answers_aggregate?.aggregate?.count
+      course.evaluation_answers_aggregate?.aggregate?.count,
     )
 
     return getAttendeeCourseStatus({

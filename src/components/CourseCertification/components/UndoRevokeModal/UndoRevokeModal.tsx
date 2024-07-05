@@ -26,7 +26,7 @@ const UndoRevokeModal: React.FC<
   React.PropsWithChildren<UndoRevokeModalProps>
 > = ({ certificateId, participantId, onClose, onSuccess }) => {
   const { t, _t } = useScopedTranslation(
-    'common.course-certificate.undo-revoke-modal'
+    'common.course-certificate.undo-revoke-modal',
   )
   const [confirmed, setConfirmed] = useState(false)
 

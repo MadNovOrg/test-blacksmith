@@ -108,7 +108,7 @@ export const WaitlistTab = ({ course }: TabProperties) => {
       getWaitlist,
       hasCancellingError,
       t,
-    ]
+    ],
   )
 
   const cols = useMemo(() => {
@@ -155,7 +155,7 @@ export const WaitlistTab = ({ course }: TabProperties) => {
             noRecords={!isLoading && data.length === 0}
             filtered={false}
             itemsName={t(
-              'pages.course-details.tabs.waitlist.waitlist'
+              'pages.course-details.tabs.waitlist.waitlist',
             ).toLowerCase()}
             colSpan={cols.length}
           />

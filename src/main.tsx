@@ -33,10 +33,10 @@ Sentry.init({
   environment: import.meta.env.VITE_SENTRY_ENVIRONMENT,
   denyUrls: [/localhost/i, /127.0.0.1/],
   replaysSessionSampleRate: Number(
-    import.meta.env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE
+    import.meta.env.VITE_SENTRY_REPLAYS_SESSION_SAMPLE_RATE,
   ),
   replaysOnErrorSampleRate: Number(
-    import.meta.env.VITE_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE
+    import.meta.env.VITE_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE,
   ),
 })
 
@@ -85,5 +85,5 @@ root.render(
         </BrowserRouter>
       </ThemeProvider>
     </PostHogProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

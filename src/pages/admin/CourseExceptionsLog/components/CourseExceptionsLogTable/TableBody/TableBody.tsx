@@ -54,7 +54,7 @@ export const TableBody: FC<PropsWithChildren<Props>> = ({
             <ProfileWithAvatar
               useLink={true}
               profile={leadTrainer(
-                log.course.trainers as unknown as CourseTrainer[]
+                log.course.trainers as unknown as CourseTrainer[],
               )}
             />
           </TableCell>

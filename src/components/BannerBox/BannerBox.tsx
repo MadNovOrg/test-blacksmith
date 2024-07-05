@@ -16,5 +16,5 @@ export const BannerBox = styled(Box)<{ roundedCorners?: boolean }>(
       padding: theme.spacing(5),
       textAlign: 'center',
     },
-  })
+  }),
 )

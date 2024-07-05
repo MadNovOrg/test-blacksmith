@@ -39,7 +39,7 @@ test.describe(
       const trainerCoursesPage = new MyCoursesPage(page)
       await trainerCoursesPage.goto(`${course.id}`)
       const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
-        course.id
+        course.id,
       )
       await courseDetailsPage.goto(String(course.id))
       await expect(courseDetailsPage.inviteAttendeesButton).toBeVisible()
@@ -83,7 +83,7 @@ test.describe(
       const trainerCoursesPage = new MyCoursesPage(page)
       await trainerCoursesPage.goto(`${course.id}`)
       const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
-        course.id
+        course.id,
       )
       await courseDetailsPage.goto(String(course.id))
       await expect(courseDetailsPage.inviteAttendeesButton).toBeVisible()
@@ -106,7 +106,7 @@ test.describe(
       const trainerCoursesPage = new MyCoursesPage(page)
       await trainerCoursesPage.goto(`${course.id}`)
       const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
-        course.id
+        course.id,
       )
       await courseDetailsPage.goto(String(course.id))
 
@@ -119,7 +119,7 @@ test.describe(
 
       const user1InviteId = await API.invites.getInviteId(
         course.id,
-        users.user1.email
+        users.user1.email,
       )
 
       const user1Page = await browser
@@ -139,5 +139,5 @@ test.describe(
       await courseDetailsPage.checkAttendingTabText('Attending (1)')
       await expect(courseDetailsPage.attendeesTable.rows).toHaveCount(1)
     })
-  }
+  },
 )

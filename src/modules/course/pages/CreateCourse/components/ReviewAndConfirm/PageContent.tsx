@@ -10,11 +10,9 @@ export const PageContent = () => {
 
   if (pricing.error) {
     return (
-      <>
-        <Alert severity="error" data-testid="ReviewAndConfirm-alert-pricing">
-          {t('pages.create-course.review-and-confirm.pricing-fetching-error')}
-        </Alert>
-      </>
+      <Alert severity="error" data-testid="ReviewAndConfirm-alert-pricing">
+        {t('pages.create-course.review-and-confirm.pricing-fetching-error')}
+      </Alert>
     )
   }
 

@@ -58,7 +58,7 @@ const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { isUKCountry } = useWorldCountries()
   const { t, _t } = useScopedTranslation(
-    'pages.transfer-participant.transfer-details'
+    'pages.transfer-participant.transfer-details',
   )
 
   const { fromCourse, virtualCourseParticipantAdress } =

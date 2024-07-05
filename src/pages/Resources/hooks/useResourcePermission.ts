@@ -27,23 +27,23 @@ export function useResourcePermission() {
       return acl.isTrainer()
         ? !isCertificateOutsideGracePeriod(
             certificate.expiryDate,
-            certificate.courseLevel
+            certificate.courseLevel,
           )
         : isFuture(expirationDate)
     })
     .map(certificate => certificate.courseLevel)
 
   const attendedCourse = courseCategoryUserAttends(
-    profile?.courses as ICourseCategoryUserAttends[]
+    profile?.courses as ICourseCategoryUserAttends[],
   )
   const onGoingCoursesUserAttends = onGoingTrainerCourseLevelsUserAttends(
-    profile?.courses as ICourseCategoryUserAttends[]
+    profile?.courses as ICourseCategoryUserAttends[],
   )
   const courseProgress = trainerCourseProgress(
-    profile?.courses as ICourseCategoryUserAttends[]
+    profile?.courses as ICourseCategoryUserAttends[],
   )
   const hasPassed = hasGotPassForTrainerCourse(
-    profile?.courses as ICourseCategoryUserAttends[]
+    profile?.courses as ICourseCategoryUserAttends[],
   )
 
   const canAccessResource = useCallback(
@@ -51,7 +51,7 @@ export function useResourcePermission() {
       resourcePermissions: Pick<
         Resource_Resourcepermissions,
         'certificateLevels' | 'principalTrainer'
-      >
+      >,
     ) => {
       if (!resourcePermissions) {
         return false
@@ -72,7 +72,7 @@ export function useResourcePermission() {
 
       const hasPermissionByCourseCertificateLevel =
         listOfCertificatesNeededForAccess?.some(certificate =>
-          currentUserCertificates?.includes(certificate as Course_Level_Enum)
+          currentUserCertificates?.includes(certificate as Course_Level_Enum),
         )
       const hasPermissionByPrincipalTrainer =
         resourcePermissions.principalTrainer &&
@@ -104,8 +104,8 @@ export function useResourcePermission() {
         const hasAccessBasedOnCertificates = onGoingCoursesUserAttends?.some(
           course =>
             listOfCertificatesNeededForAccess?.includes(
-              course as TrainerCoursesEnum
-            )
+              course as TrainerCoursesEnum,
+            ),
         )
 
         if (hasAccessBasedOnCertificates) {
@@ -133,7 +133,7 @@ export function useResourcePermission() {
       currentUserCertificates,
       hasPassed,
       trainerRoles,
-    ]
+    ],
   )
 
   return canAccessResource

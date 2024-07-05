@@ -48,7 +48,7 @@ export const LicenseOrderDetails = () => {
     setShowDraftConfirmationDialog,
   } = useCreateCourse()
   const { t, _t } = useScopedTranslation(
-    'pages.create-course.license-order-details'
+    'pages.create-course.license-order-details',
   )
 
   const schema = useMemo(
@@ -56,7 +56,7 @@ export const LicenseOrderDetails = () => {
       yup.object({
         invoiceDetails: formSchema(_t),
       }),
-    [_t]
+    [_t],
   )
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export const LicenseOrderDetails = () => {
 
   const prices = calculateGo1LicenseCost(
     courseData?.maxParticipants ?? 0,
-    orgData?.organization_by_pk?.go1Licenses ?? 0
+    orgData?.organization_by_pk?.go1Licenses ?? 0,
   )
 
   const onSubmit: SubmitHandler<Inputs> = data => {

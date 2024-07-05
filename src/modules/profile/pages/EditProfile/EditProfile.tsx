@@ -173,7 +173,7 @@ export const EditProfilePage: React.FC<
     callProfileParams.courseId,
     callProfileParams.orgId,
     callProfileParams.userCourses,
-    callProfileParams.refreshProfileData
+    callProfileParams.refreshProfileData,
   )
 
   /**
@@ -213,7 +213,7 @@ export const EditProfilePage: React.FC<
       setDietaryRestrictionsRadioValue(
         restriction
           ? DietaryRestrictionRadioValues.YES
-          : DietaryRestrictionRadioValues.NO
+          : DietaryRestrictionRadioValues.NO,
       )
     }
     if ((disabilities || disabilities === '') && !disabilitiesRadioValue) {
@@ -222,7 +222,7 @@ export const EditProfilePage: React.FC<
           ? disabilities === ratherNotSayText
             ? DisabilitiesRadioValues.RATHER_NOT_SAY
             : DisabilitiesRadioValues.YES
-          : DisabilitiesRadioValues.NO
+          : DisabilitiesRadioValues.NO,
       )
     }
   }, [
@@ -235,18 +235,18 @@ export const EditProfilePage: React.FC<
   const formSchema = useMemo(() => {
     const disabilitiesSchema =
       disabilitiesRadioValue === DisabilitiesRadioValues.YES
-        ? yup
-            .string()
-            .required(
-              t('validation-errors.required-field', { name: t('disabilities') })
-            )
+        ? yup.string().required(
+            t('validation-errors.required-field', {
+              name: t('disabilities'),
+            }),
+          )
         : yup.string().nullable()
     const dietaryRestrictionsSchema =
       dietaryRestrictionsRadioValue === DietaryRestrictionRadioValues.YES
         ? yup.string().required(
             t('validation-errors.required-field', {
               name: t('dietary-restrictions'),
-            })
+            }),
           )
         : yup.string().nullable()
     return yup
@@ -255,18 +255,18 @@ export const EditProfilePage: React.FC<
         firstName: yup
           .string()
           .required(
-            t('validation-errors.required-field', { name: t('first-name') })
+            t('validation-errors.required-field', { name: t('first-name') }),
           ),
         surname: yup
           .string()
           .required(
-            t('validation-errors.required-field', { name: t('surname') })
+            t('validation-errors.required-field', { name: t('surname') }),
           ),
         countryCode: yup.string(),
         country: yup.string().required(
           t('validation-errors.required-field', {
             name: t('country'),
-          })
+          }),
         ),
         phone: schemas.phone(t),
         phoneCountryCode: yup.string().optional(),
@@ -277,7 +277,7 @@ export const EditProfilePage: React.FC<
         jobTitle: yup
           .string()
           .required(
-            t('validation-errors.required-field', { name: t('job-title') })
+            t('validation-errors.required-field', { name: t('job-title') }),
           ),
         otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
           return jobTitle === 'Other'
@@ -288,7 +288,7 @@ export const EditProfilePage: React.FC<
           yup.object({
             isAdmin: yup.boolean().required(),
             id: yup.string().required(),
-          })
+          }),
         ),
         organization: yup
           .object<Partial<Organization>>()
@@ -347,7 +347,7 @@ export const EditProfilePage: React.FC<
         return
       }
     },
-    [setValue]
+    [setValue],
   )
 
   const refreshData = useCallback(async () => {
@@ -395,7 +395,7 @@ export const EditProfilePage: React.FC<
           (formattedTrainerRoleTypes, obj) => {
             if (
               trainerRolesNames.includes(
-                obj.trainer_role_type.name as TrainerRoleTypeName
+                obj.trainer_role_type.name as TrainerRoleTypeName,
               )
             ) {
               formattedTrainerRoleTypes.trainerRole = [
@@ -404,7 +404,7 @@ export const EditProfilePage: React.FC<
               ]
             } else if (
               BILDRolesNames.includes(
-                obj.trainer_role_type.name as TrainerRoleTypeName
+                obj.trainer_role_type.name as TrainerRoleTypeName,
               )
             ) {
               formattedTrainerRoleTypes.BILDRole = obj.trainer_role_type.name
@@ -417,14 +417,14 @@ export const EditProfilePage: React.FC<
           },
           {
             ...defaultTrainerRoles,
-          }
+          },
         )
 
         const formattedRoles = [] as RolesFields
 
         profile.roles.map(obj => {
           const existingEmployeeRole = formattedRoles.find(
-            obj => obj.userRole === employeeRole.name
+            obj => obj.userRole === employeeRole.name,
           )
           if (obj.role.name === RoleName.TRAINER) {
             formattedRoles.push({
@@ -436,7 +436,7 @@ export const EditProfilePage: React.FC<
           } else if (isEmployeeRole(obj.role.name as EmployeeRoleName)) {
             if (existingEmployeeRole) {
               existingEmployeeRole.employeeRoles.push(
-                obj.role.name as EmployeeRoleName
+                obj.role.name as EmployeeRoleName,
               )
             } else {
               formattedRoles.push({
@@ -479,7 +479,7 @@ export const EditProfilePage: React.FC<
         if (
           !formattedRoles.length &&
           profile.roles.some(r =>
-            userSubRoles.includes(r.role.name as RoleName)
+            userSubRoles.includes(r.role.name as RoleName),
           )
         ) {
           formattedRoles.push({
@@ -516,7 +516,7 @@ export const EditProfilePage: React.FC<
       await updateOrgMember(orgAdmin)
       await refreshData()
     },
-    [updateOrgMember, refreshData]
+    [updateOrgMember, refreshData],
   )
 
   useEffect(() => {
@@ -583,8 +583,8 @@ export const EditProfilePage: React.FC<
               member: {
                 isAdmin,
               },
-            })
-          )
+            }),
+          ),
         )
       }
 
@@ -598,14 +598,14 @@ export const EditProfilePage: React.FC<
               obj.trainerRoles.BILDRole,
               obj.trainerRoles.moderatorRole
                 ? TrainerRoleTypeName.MODERATOR
-                : undefined
+                : undefined,
             )
           }
 
           updatedRoles.push(
             obj.userRole,
             ...(obj.employeeRoles as EmployeeRoleName[]),
-            ...(obj.salesRoles as RoleName[])
+            ...(obj.salesRoles as RoleName[]),
           )
         })
         const filteredRoles = systemRoles?.reduce(
@@ -619,7 +619,7 @@ export const EditProfilePage: React.FC<
 
             return filteredRoles
           },
-          [] as Profile_Role_Insert_Input[]
+          [] as Profile_Role_Insert_Input[],
         )
 
         /**
@@ -635,7 +635,7 @@ export const EditProfilePage: React.FC<
           [
             RoleName.BOOKING_CONTACT,
             RoleName.ORGANIZATION_KEY_CONTACT,
-          ].includes(roleData.role.name as RoleName)
+          ].includes(roleData.role.name as RoleName),
         )
 
         profilesIndividualSubRoles.forEach(roleData => {
@@ -659,7 +659,7 @@ export const EditProfilePage: React.FC<
             }
             return filteredTrainerRoleTypes
           },
-          [] as Profile_Trainer_Role_Type_Insert_Input[]
+          [] as Profile_Trainer_Role_Type_Insert_Input[],
         )
 
         await updateProfileRoles({
@@ -698,7 +698,7 @@ export const EditProfilePage: React.FC<
         },
       })
     },
-    [updateOrgMember]
+    [updateOrgMember],
   )
 
   const deleteOrgMember = useCallback(
@@ -708,7 +708,7 @@ export const EditProfilePage: React.FC<
       })
       setOrgToLeave(undefined)
     },
-    [removeOrgMember]
+    [removeOrgMember],
   )
 
   const handleAvatarUpload = useCallback(
@@ -722,7 +722,7 @@ export const EditProfilePage: React.FC<
         setAvatarError(
           t('avatar-too-large', {
             maxSize: maxAvatarFileSizeBytes / (1024 * 1024),
-          })
+          }),
         )
         return
       }
@@ -739,7 +739,7 @@ export const EditProfilePage: React.FC<
         setAvatarError(t('unknown-error'))
       }
     },
-    [setAvatarError, setValue, t, updateAvatar]
+    [setAvatarError, setValue, t, updateAvatar],
   )
   const loading = useMemo(
     () =>
@@ -756,7 +756,7 @@ export const EditProfilePage: React.FC<
       updateTrainerRolesFetching,
       updateOrgMemberFetching,
       removeOrgMemberFetching,
-    ]
+    ],
   )
 
   if (!profile || !systemRoles) return null
@@ -867,7 +867,7 @@ export const EditProfilePage: React.FC<
                     data-testid="edit-invite-user-to-org"
                   >
                     {t(
-                      'pages.org-details.tabs.users.invite-individual-to-organization'
+                      'pages.org-details.tabs.users.invite-individual-to-organization',
                     )}
                   </Button>
                 ) : undefined}
@@ -936,7 +936,7 @@ export const EditProfilePage: React.FC<
                           setValue(
                             'country',
                             getCountryLabel(code as WorldCountriesCodes) ?? '',
-                            { shouldValidate: true }
+                            { shouldValidate: true },
                           )
                           setValue('countryCode', code)
                           profile.countryCode = code
@@ -1029,7 +1029,7 @@ export const EditProfilePage: React.FC<
                     <RadioGroup
                       onChange={(_, newValue: string) => {
                         setDietaryRestrictionsRadioValue(
-                          newValue as DietaryRestrictionRadioValues
+                          newValue as DietaryRestrictionRadioValues,
                         )
                         setValue('dietaryRestrictions', '')
                       }}
@@ -1078,10 +1078,10 @@ export const EditProfilePage: React.FC<
                           'disabilities',
                           newValue === DisabilitiesRadioValues.RATHER_NOT_SAY
                             ? ratherNotSayText
-                            : ''
+                            : '',
                         )
                         setDisabilitiesRadioValue(
-                          newValue as DisabilitiesRadioValues
+                          newValue as DisabilitiesRadioValues,
                         )
                       }}
                       row={!isMobile}
@@ -1182,7 +1182,7 @@ export const EditProfilePage: React.FC<
                         error={errors.organization?.message}
                         isEditProfile={true}
                         userOrgIds={profile?.organizations.map(
-                          org => org.organization.id
+                          org => org.organization.id,
                         )}
                         value={
                           (values.organization as unknown as Pick<
@@ -1212,91 +1212,89 @@ export const EditProfilePage: React.FC<
                 </Grid>
 
                 {profile.organizations.length > 0 ? (
-                  <>
-                    <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                      {profile.organizations.map((orgMember, index) => {
-                        const isAdminEditable =
-                          acl.isTTAdmin() || orgMember.isAdmin
+                  <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+                    {profile.organizations.map((orgMember, index) => {
+                      const isAdminEditable =
+                        acl.isTTAdmin() || orgMember.isAdmin
 
-                        const editable = !id || isAdminEditable
+                      const editable = !id || isAdminEditable
 
-                        return (
-                          <Box key={orgMember.id}>
-                            <Grid
-                              container
-                              direction="row"
-                              justifyContent="space-between"
-                              align-items="stretch"
+                      return (
+                        <Box key={orgMember.id}>
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            align-items="stretch"
+                          >
+                            <Box>
+                              <Typography variant="body1" fontWeight="600">
+                                {orgMember.organization.name}
+                              </Typography>
+                            </Box>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              disabled={!acl.canEditOrgUser()}
+                              onClick={() => setOrgToLeave(orgMember)}
                             >
-                              <Box>
-                                <Typography variant="body1" fontWeight="600">
-                                  {orgMember.organization.name}
-                                </Typography>
-                              </Box>
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                disabled={!acl.canEditOrgUser()}
-                                onClick={() => setOrgToLeave(orgMember)}
-                              >
-                                {t('common.leave')}
-                              </Button>
-                            </Grid>
+                              {t('common.leave')}
+                            </Button>
+                          </Grid>
 
-                            <Autocomplete
-                              value={orgMember.position}
-                              disabled={!editable}
-                              options={allPositions}
-                              onChange={(_, value) =>
-                                updatePosition(orgMember, value ?? '')
-                              }
-                              renderInput={params => (
-                                <TextField
-                                  {...params}
-                                  fullWidth
-                                  variant="filled"
-                                  label={t('common.position')}
-                                  inputProps={{
-                                    ...params.inputProps,
-                                    sx: { height: 40 },
-                                  }}
-                                  sx={{ bgcolor: 'grey.100', my: 2 }}
-                                />
-                              )}
-                            />
-                            <FormControlLabel
-                              sx={{ py: 2 }}
-                              control={
-                                <Switch
-                                  disabled={!isAdminEditable}
-                                  checked={
-                                    values?.org && values?.org[index]
-                                      ? values?.org[index].isAdmin
-                                      : Boolean(orgMember.isAdmin)
-                                  }
-                                  onChange={e => {
-                                    setValue(
-                                      `org.${index}.isAdmin`,
-                                      e.target.checked
-                                    )
-                                    setValue(`org.${index}.id`, orgMember.id)
-                                  }}
-                                  sx={{ px: 2 }}
-                                />
-                              }
-                              label={
-                                <Typography variant="body1">
-                                  {t(
-                                    'pages.org-details.tabs.users.edit-user-modal.organization-admin'
-                                  )}
-                                </Typography>
-                              }
-                            />
-                          </Box>
-                        )
-                      })}
-                    </Box>
-                  </>
+                          <Autocomplete
+                            value={orgMember.position}
+                            disabled={!editable}
+                            options={allPositions}
+                            onChange={(_, value) =>
+                              updatePosition(orgMember, value ?? '')
+                            }
+                            renderInput={params => (
+                              <TextField
+                                {...params}
+                                fullWidth
+                                variant="filled"
+                                label={t('common.position')}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  sx: { height: 40 },
+                                }}
+                                sx={{ bgcolor: 'grey.100', my: 2 }}
+                              />
+                            )}
+                          />
+                          <FormControlLabel
+                            sx={{ py: 2 }}
+                            control={
+                              <Switch
+                                disabled={!isAdminEditable}
+                                checked={
+                                  values?.org && values?.org[index]
+                                    ? values?.org[index].isAdmin
+                                    : Boolean(orgMember.isAdmin)
+                                }
+                                onChange={e => {
+                                  setValue(
+                                    `org.${index}.isAdmin`,
+                                    e.target.checked,
+                                  )
+                                  setValue(`org.${index}.id`, orgMember.id)
+                                }}
+                                sx={{ px: 2 }}
+                              />
+                            }
+                            label={
+                              <Typography variant="body1">
+                                {t(
+                                  'pages.org-details.tabs.users.edit-user-modal.organization-admin',
+                                )}
+                              </Typography>
+                            }
+                          />
+                        </Box>
+                      )
+                    })}
+                  </Box>
                 ) : null}
               </Grid>
               <Grid

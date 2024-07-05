@@ -92,12 +92,12 @@ export const EditOrgUserModal: React.FC<
             <Box>
               <Typography variant="body1">
                 {t(
-                  'pages.org-details.tabs.users.edit-user-modal.organization-admin'
+                  'pages.org-details.tabs.users.edit-user-modal.organization-admin',
                 )}
               </Typography>
               <Typography variant="body2" color={theme.palette.grey[700]}>
                 {t(
-                  'pages.org-details.tabs.users.edit-user-modal.organization-admin-hint'
+                  'pages.org-details.tabs.users.edit-user-modal.organization-admin-hint',
                 )}
               </Typography>
             </Box>
@@ -123,7 +123,7 @@ export const EditOrgUserModal: React.FC<
           onClick={onRemove}
         >
           {t(
-            'pages.org-details.tabs.users.edit-user-modal.remove-from-organization'
+            'pages.org-details.tabs.users.edit-user-modal.remove-from-organization',
           )}
         </Button>
         <Box>

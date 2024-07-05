@@ -119,7 +119,7 @@ export const isCourseWithNoPrice = ({
 
 export function calculateGo1LicenseCost(
   numberOfLicenses: number,
-  licenseBalance: number
+  licenseBalance: number,
 ): Go1LicensingPrices {
   const fullPrice = new Big(numberOfLicenses).times(PRICE_PER_LICENSE)
   const allowancePrice =

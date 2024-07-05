@@ -40,14 +40,14 @@ describe('AvailableCourse', () => {
       const { result } = renderHook(() => useTranslation())
       await act(async () => {
         expect(
-          screen.getByText(result.current.t('pages.available-courses.title'))
+          screen.getByText(result.current.t('pages.available-courses.title')),
         ).toBeInTheDocument()
       })
     })
     it('should render the course level dropdown', async () => {
       const { result } = renderHook(() => useTranslation())
       const componentTitle = screen.getByText(
-        result.current.t('pages.available-courses.title')
+        result.current.t('pages.available-courses.title'),
       )
       expect(componentTitle).toBeInTheDocument()
     })
@@ -58,12 +58,14 @@ describe('AvailableCourse', () => {
     it('should handle no courses being found upon filtering', async () => {
       const { result } = renderHook(() => useTranslation())
       const courseLevelDropdown = screen.getByText(
-        result.current.t('course-level')
+        result.current.t('course-level'),
       )
       await userEvent.click(courseLevelDropdown)
       await userEvent.keyboard('{tab}{enter}')
       expect(
-        screen.getByText(result.current.t('pages.available-courses.no-results'))
+        screen.getByText(
+          result.current.t('pages.available-courses.no-results'),
+        ),
       ).toBeInTheDocument()
     })
   })

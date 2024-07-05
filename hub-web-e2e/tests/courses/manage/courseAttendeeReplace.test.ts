@@ -24,7 +24,7 @@ test(`replace an attendee on a course`, async ({ course, page }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.gotoManageCourses(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-    course.id
+    course.id,
   )
   await courseDetailsPage.clickManageAttendance()
   const replaceAttendeePopup = await courseDetailsPage.clickAttendeeReplace()

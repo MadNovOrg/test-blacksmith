@@ -28,7 +28,7 @@ function getRequestedRole() {
 }
 
 export async function fetchUserProfile(
-  user: CognitoUser
+  user: CognitoUser,
 ): Promise<Required<AuthState> | void> {
   try {
     const { profile, isOrgAdmin, managedOrgIds, claims, emailVerified } =
@@ -49,9 +49,9 @@ export async function fetchUserProfile(
           [
             RoleName.BOOKING_CONTACT,
             RoleName.ORGANIZATION_KEY_CONTACT,
-          ].includes(r)
-        )
-      )
+          ].includes(r),
+        ),
+      ),
     ) as Set<RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT>
 
     const defaultIndividualRole =
@@ -91,15 +91,15 @@ export async function fetchUserProfile(
       verified: emailVerified ?? false,
       loggedOut: false,
       trainerRoles: profile.trainerRoles?.map(
-        role => role.trainer_role_type.name
+        role => role.trainer_role_type.name,
       ),
       certificates,
       activeCertificates: certificates
         .filter(
           c =>
             !isPast(
-              expiryDateWithGracePeriod(c.courseLevel, new Date(c.expiryDate))
-            )
+              expiryDateWithGracePeriod(c.courseLevel, new Date(c.expiryDate)),
+            ),
         )
         .map(certificate => certificate.courseLevel),
     }

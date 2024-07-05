@@ -41,9 +41,9 @@ export const AutoRegisterPage: React.FC<
             headers: { 'x-auth': `Bearer ${token}` },
           },
         }),
-        [token]
+        [token],
       ),
-    }
+    },
   )
 
   const organizationData = data?.organization[0]

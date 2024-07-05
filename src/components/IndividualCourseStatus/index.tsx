@@ -33,7 +33,7 @@ export const IndividualCourseStatusChip: React.FC<
       ended,
       Boolean(participants.length) &&
         !participants?.some(participant => !participant.grade),
-      Boolean(course.cancellationRequest)
+      Boolean(course.cancellationRequest),
     )
   }, [course, ended, participants])
   return <CourseStatusChip status={mappedStatus} />

@@ -15,6 +15,6 @@ export const JOIN_WAITLIST = gql`
 
 export const useJoinWaitlist = () => {
   return useMutation<JoinWaitlistMutation, JoinWaitlistMutationVariables>(
-    JOIN_WAITLIST
+    JOIN_WAITLIST,
   )
 }

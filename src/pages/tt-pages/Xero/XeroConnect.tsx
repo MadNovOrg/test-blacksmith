@@ -40,7 +40,7 @@ export const XeroConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const consentUrl = useMemo(
     () => xeroConnectionStatus?.xeroConnect?.consentUrl,
-    [xeroConnectionStatus?.xeroConnect?.consentUrl]
+    [xeroConnectionStatus?.xeroConnect?.consentUrl],
   )
   const xeroCallback = useCallback(async () => {
     const { data: xeroCallback } = await xeroConnect({

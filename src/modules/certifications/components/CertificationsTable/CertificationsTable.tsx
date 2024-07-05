@@ -53,7 +53,7 @@ export const CertificationsTable: React.FC<
 
   const selectedCertificates = useMemo(
     () => certificates.filter(c => isSelected(c.id)),
-    [certificates, isSelected]
+    [certificates, isSelected],
   )
 
   const cols = useMemo(() => {
@@ -64,8 +64,8 @@ export const CertificationsTable: React.FC<
           c.status === CertificateStatus.Revoked ||
           c.participant?.grade === Grade_Enum.Fail
             ? []
-            : [c.id]
-        )
+            : [c.id],
+        ),
       ),
       { id: 'name', label: _t('name'), sorting: true },
       { id: 'certificate', label: _t('certificate') },
@@ -106,7 +106,7 @@ export const CertificationsTable: React.FC<
         saveAs(await pdf(document).toBlob(), fileName)
       }
     },
-    []
+    [],
   )
 
   return (
@@ -145,8 +145,8 @@ export const CertificationsTable: React.FC<
               onClick={() => {
                 downloadCertificates(
                   certificates.filter(
-                    c => c.status !== CertificateStatus.Revoked
-                  ) ?? []
+                    c => c.status !== CertificateStatus.Revoked,
+                  ) ?? [],
                 )
               }}
             >
@@ -192,7 +192,7 @@ export const CertificationsTable: React.FC<
                       disableLink={Boolean(
                         !acl.canViewProfiles() ||
                           (c.profile?.archived &&
-                            !acl.canViewArchivedProfileData())
+                            !acl.canViewArchivedProfileData()),
                       )}
                     />
                   </TableCell>

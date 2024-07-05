@@ -52,7 +52,7 @@ describe(OrganizationForm.name, () => {
         onSubmit={submitMock}
         isEditMode={true}
         editOrgData={editOrgData}
-      />
+      />,
     )
     expect(screen.getByTestId('name')).toHaveValue(editOrgData.name)
   })
@@ -63,8 +63,8 @@ describe(OrganizationForm.name, () => {
       screen.getByText(
         _t('validation-errors.required-field', {
           name: t('fields.organization-name'),
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -72,13 +72,13 @@ describe(OrganizationForm.name, () => {
     render(<OrganizationForm onSubmit={submitMock} />)
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
     await userEvent.type(textField, 'Albania')
@@ -123,18 +123,18 @@ describe(OrganizationForm.name, () => {
     render(
       <Provider value={client}>
         <OrganizationForm onSubmit={submitMock} />
-      </Provider>
+      </Provider>,
     )
 
     // Organisation address
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
     await userEvent.type(textField, 'England')
@@ -212,7 +212,7 @@ describe(OrganizationForm.name, () => {
       t('fields.organisation-main-contact-email-address'),
       {
         exact: false,
-      }
+      },
     )
     expect(headEmail).toBeInTheDocument()
 
@@ -235,7 +235,7 @@ describe(OrganizationForm.name, () => {
       t('fields.ofsted-last-inspection-date'),
       {
         exact: false,
-      }
+      },
     )
     expect(lastInspectionDate).toBeInTheDocument()
 
@@ -263,18 +263,18 @@ describe(OrganizationForm.name, () => {
     render(
       <Provider value={client}>
         <OrganizationForm onSubmit={submitMock} />
-      </Provider>
+      </Provider>,
     )
 
     // Organisation address
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
     await userEvent.type(textField, 'Albania')
@@ -302,7 +302,7 @@ describe(OrganizationForm.name, () => {
       t('fields.addresses.postalAndZipCode'),
       {
         exact: false,
-      }
+      },
     )
     expect(zipCode).toBeInTheDocument()
 
@@ -355,7 +355,7 @@ describe(OrganizationForm.name, () => {
       t('fields.organisation-main-contact-email-address'),
       {
         exact: false,
-      }
+      },
     )
     expect(headEmail).toBeInTheDocument()
 
@@ -368,7 +368,7 @@ describe(OrganizationForm.name, () => {
       t('fields.local-authority'),
       {
         exact: false,
-      }
+      },
     )
     expect(localAuthority).not.toBeInTheDocument()
 
@@ -381,7 +381,7 @@ describe(OrganizationForm.name, () => {
       t('fields.ofsted-last-inspection-date'),
       {
         exact: false,
-      }
+      },
     )
     expect(lastInspectionDate).not.toBeInTheDocument()
 

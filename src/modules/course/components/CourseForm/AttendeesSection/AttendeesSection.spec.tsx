@@ -17,17 +17,17 @@ describe(`component: ${AttendeesSection.name}`, () => {
 
     await userEvent.type(
       screen.getByLabelText('Minimum', { exact: false }),
-      '6'
+      '6',
     )
     await userEvent.type(
       screen.getByLabelText('Maximum', { exact: false }),
-      '5'
+      '5',
     )
 
     expect(
       screen.getByText(
-        'Minimum number of attendees must be less than the maximum number of attendees'
-      )
+        'Minimum number of attendees must be less than the maximum number of attendees',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -36,13 +36,13 @@ describe(`component: ${AttendeesSection.name}`, () => {
 
     await userEvent.type(
       screen.getByLabelText('Minimum', { exact: false }),
-      '0'
+      '0',
     )
 
     expect(
       await screen.findByText(
-        'Minimum number of attendees must be a positive number'
-      )
+        'Minimum number of attendees must be a positive number',
+      ),
     ).toBeInTheDocument()
   })
 
@@ -50,7 +50,7 @@ describe(`component: ${AttendeesSection.name}`, () => {
     renderForm(Course_Type_Enum.Closed)
 
     expect(
-      screen.queryByLabelText('Minimum', { exact: false })
+      screen.queryByLabelText('Minimum', { exact: false }),
     ).not.toBeInTheDocument()
   })
 
@@ -58,7 +58,7 @@ describe(`component: ${AttendeesSection.name}`, () => {
     renderForm(Course_Type_Enum.Indirect)
 
     expect(
-      screen.queryByLabelText('Minimum', { exact: false })
+      screen.queryByLabelText('Minimum', { exact: false }),
     ).not.toBeInTheDocument()
   })
 })

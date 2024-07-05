@@ -27,13 +27,13 @@ export class CourseEvaluationPage {
 
     this.questions = {
       rating: this.page.page.locator(
-        'data-testid=course-evaluation-rating-question'
+        'data-testid=course-evaluation-rating-question',
       ),
       boolean: this.page.page.locator(
-        'data-testid=course-evaluation-boolean-question'
+        'data-testid=course-evaluation-boolean-question',
       ),
       text: this.page.page.locator(
-        'data-testid=course-evaluation-text-question'
+        'data-testid=course-evaluation-text-question',
       ),
     }
   }

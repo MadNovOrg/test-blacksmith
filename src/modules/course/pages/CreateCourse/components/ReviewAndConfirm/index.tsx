@@ -84,7 +84,7 @@ export const ReviewAndConfirm = () => {
       getOrderReduced({
         requestPolicy: 'network-only',
       }),
-    () => !!orderCompleted?.order?.xeroInvoiceNumber
+    () => !!orderCompleted?.order?.xeroInvoiceNumber,
   )
 
   useEffect(() => {

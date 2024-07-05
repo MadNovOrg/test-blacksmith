@@ -10,14 +10,12 @@ const TitleSlot = () => <Typography variant="h3">A generic title</Typography>
 const SubtitleSlot = () => <Typography>A generic subtitle</Typography>
 
 const ContentSlot = () => (
-  <>
-    <Typography>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo officia iusto
-      rerum dolorem alias ab a, veritatis facere repellendus nesciunt blanditiis
-      praesentium delectus magnam harum cum tempora, voluptatum, provident
-      officiis.
-    </Typography>
-  </>
+  <Typography>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo officia iusto
+    rerum dolorem alias ab a, veritatis facere repellendus nesciunt blanditiis
+    praesentium delectus magnam harum cum tempora, voluptatum, provident
+    officiis.
+  </Typography>
 )
 
 const ActionsSlot = () => (

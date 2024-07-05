@@ -66,18 +66,18 @@ describe('page: Onboarding', () => {
         <Onboarding />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.clear(
-      screen.getByLabelText(t('first-name'), { exact: false })
+      screen.getByLabelText(t('first-name'), { exact: false }),
     )
     await userEvent.clear(screen.getByLabelText(t('surname'), { exact: false }))
     await userEvent.clear(screen.getByLabelText(t('phone'), { exact: false }))
     await userEvent.clear(screen.getByLabelText(t('dob'), { exact: false }))
 
     await userEvent.click(
-      screen.getByRole('button', { name: /update information/i })
+      screen.getByRole('button', { name: /update information/i }),
     )
 
     await waitFor(() => {
@@ -86,20 +86,20 @@ describe('page: Onboarding', () => {
           t('components.course-enquiry-form.required-first-name'),
           {
             exact: false,
-          }
-        )
+          },
+        ),
       ).toBeInTheDocument()
       expect(screen.getByText(/Surname is required/i)).toBeInTheDocument()
       expect(screen.getByText(/Phone is required/i)).toBeInTheDocument()
       expect(
-        screen.getByText(/organisation is a required field/i)
+        screen.getByText(/organisation is a required field/i),
       ).toBeInTheDocument()
 
       expect(
-        screen.getByText(t('pages.onboarding.tcs-required'))
+        screen.getByText(t('pages.onboarding.tcs-required')),
       ).toBeInTheDocument()
       expect(
-        screen.getByText(t('validation-errors.date-required'))
+        screen.getByText(t('validation-errors.date-required')),
       ).toBeInTheDocument()
     })
   })
@@ -122,34 +122,34 @@ describe('page: Onboarding', () => {
         <Onboarding />
       </Provider>,
       { auth: { reloadCurrentProfile: reloadProfileMock } },
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
 
     await userEvent.type(
       screen.getByLabelText(t('first-name'), { exact: false }),
-      'John'
+      'John',
     )
     await userEvent.type(
       screen.getByLabelText(t('surname'), { exact: false }),
-      'Doe'
+      'Doe',
     )
     await userEvent.type(
       screen.getByLabelText(t('phone'), { exact: false }),
-      VALID_PHONE_NUMBER
+      VALID_PHONE_NUMBER,
     )
 
     await userEvent.type(
       screen.getByLabelText(t('dob'), { exact: false }),
-      '20/03/1990'
+      '20/03/1990',
     )
 
     await userEvent.type(
       screen.getByLabelText(/organisation name/i, { exact: false }),
-      'Organisation'
+      'Organisation',
     )
 
     await userEvent.click(
-      screen.getByLabelText(t('job-title'), { exact: false })
+      screen.getByLabelText(t('job-title'), { exact: false }),
     )
     await userEvent.click(screen.getByTestId('job-position-Other'))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
@@ -157,12 +157,12 @@ describe('page: Onboarding', () => {
     await userEvent.click(screen.getByLabelText(/I accept/i))
 
     await userEvent.click(
-      screen.getByText(t('pages.onboarding.submit-btn-text'))
+      screen.getByText(t('pages.onboarding.submit-btn-text')),
     )
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"${t('pages.onboarding.error-saving')}"`
+        `"${t('pages.onboarding.error-saving')}"`,
       )
       expect(reloadProfileMock).not.toHaveBeenCalled()
     })
@@ -179,14 +179,14 @@ describe('page: Onboarding', () => {
         <Onboarding />
       </Provider>,
       {},
-      { initialEntries: ['/'] }
+      { initialEntries: ['/'] },
     )
     await waitFor(() => {
       expect(
-        screen.getByLabelText(t('first-name'), { exact: false })
+        screen.getByLabelText(t('first-name'), { exact: false }),
       ).toHaveValue(defaultProfile.givenName)
       expect(screen.getByLabelText(t('surname'), { exact: false })).toHaveValue(
-        defaultProfile.familyName
+        defaultProfile.familyName,
       )
     })
   })
@@ -207,7 +207,7 @@ describe('page: Onboarding', () => {
           variables.input.profileId === profileId &&
             variables.input.givenName === defaultProfile.givenName &&
             variables.input.familyName === defaultProfile.familyName &&
-            variables.input.phone
+            variables.input.phone,
         )
 
         return fromValue<{ data: UpdateProfileMutation }>({
@@ -232,34 +232,34 @@ describe('page: Onboarding', () => {
           profile: { id: profileId },
         },
       },
-      { initialEntries: ['/onboarding'] }
+      { initialEntries: ['/onboarding'] },
     )
 
     await waitFor(() => {
       expect(
-        screen.getByLabelText(t('first-name'), { exact: false })
+        screen.getByLabelText(t('first-name'), { exact: false }),
       ).toHaveValue(defaultProfile.givenName)
       expect(screen.getByLabelText(t('surname'), { exact: false })).toHaveValue(
-        defaultProfile.familyName
+        defaultProfile.familyName,
       )
     })
 
     await userEvent.type(
       screen.getByLabelText(t('phone'), { exact: false }),
-      phone
+      phone,
     )
     await userEvent.type(
       screen.getByLabelText(t('dob'), { exact: false }),
-      '20/03/1990'
+      '20/03/1990',
     )
 
     await userEvent.type(
       screen.getByLabelText(/organisation name/i, { exact: false }),
-      'Organisation'
+      'Organisation',
     )
 
     await userEvent.click(
-      screen.getByLabelText(t('job-title'), { exact: false })
+      screen.getByLabelText(t('job-title'), { exact: false }),
     )
     await userEvent.click(screen.getByTestId(/job-position-Other/i))
     await userEvent.type(screen.getByTestId('other-job-title-input'), 'Admin')
@@ -267,7 +267,7 @@ describe('page: Onboarding', () => {
     await userEvent.click(screen.getByLabelText(/I accept/i))
 
     await userEvent.click(
-      screen.getByText(t('pages.onboarding.submit-btn-text'))
+      screen.getByText(t('pages.onboarding.submit-btn-text')),
     )
 
     await waitFor(() => {

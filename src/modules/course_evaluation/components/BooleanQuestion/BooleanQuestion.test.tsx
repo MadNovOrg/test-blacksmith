@@ -52,7 +52,7 @@ describe('BooleanQuestion component', () => {
           reason={reason}
           infoText={infoText}
         />
-      </FormWrapper>
+      </FormWrapper>,
     )
     userEvent.click(screen.getByTestId('rating-yes'))
     expect(screen.getByTestId('rating-boolean-reason-yes')).toBeInTheDocument()
@@ -71,7 +71,7 @@ describe('BooleanQuestion component', () => {
           reason={reason}
           infoText={infoText}
         />
-      </FormWrapper>
+      </FormWrapper>,
     )
     userEvent.click(screen.getByTestId('rating-no'))
     expect(screen.getByTestId('rating-boolean-reason-no')).toBeInTheDocument()

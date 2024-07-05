@@ -117,13 +117,13 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
         currentPage,
       },
       orgId,
-    }
+    },
   )
 
   const filtered = Boolean(
     Object.values(filters ?? {}).some(
-      filter => (Array.isArray(filter) && filter.length) || Boolean(filter)
-    )
+      filter => (Array.isArray(filter) && filter.length) || Boolean(filter),
+    ),
   )
 
   useEffect(() => {
@@ -159,7 +159,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       window.history.replaceState(
         null,
         document.title,
-        window.location.pathname
+        window.location.pathname,
       )
     }
   }, [addSnackbarMessage, locationState])
@@ -172,7 +172,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     (
       course: { id: number },
       trainer: { type: Course_Trainer_Type_Enum },
-      status: Course_Invite_Status_Enum
+      status: Course_Invite_Status_Enum,
     ) => {
       const isAccepted = status === Course_Invite_Status_Enum.Accepted
 
@@ -192,7 +192,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
         refetchActionableCourses({ requestPolicy: 'network-only' })
       }
     },
-    [mutate, navigate, refetchActionableCourses]
+    [mutate, navigate, refetchActionableCourses],
   )
 
   const fetchingCourses = loading || fetchingActionableCourses

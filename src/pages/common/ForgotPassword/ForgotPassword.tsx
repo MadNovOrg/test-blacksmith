@@ -24,7 +24,7 @@ export const ForgotPasswordPage = () => {
       yup.object({
         email: schemas.email(t).required(t('validation-errors.email-required')),
       }),
-    [t]
+    [t],
   )
 
   const {
@@ -53,7 +53,7 @@ export const ForgotPasswordPage = () => {
       // so we use backend API to do it
       const result = await gqlRequest<ResendPasswordMutation>(
         RESEND_PASSWORD_MUTATION,
-        { email: data.email }
+        { email: data.email },
       )
       if (result?.resendPassword) {
         navigate('/login?passwordResent=true')

@@ -112,7 +112,7 @@ export const CourseReschedulingTable: React.FC<
         exportRender: (log: CourseLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
-    [t]
+    [t],
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {
@@ -127,7 +127,7 @@ export const CourseReschedulingTable: React.FC<
   const renderExportData = useCallback(
     () =>
       getUnpagedLogs().then(logs => getExportDataRenderFunction(cols, logs)()),
-    [cols, getUnpagedLogs]
+    [cols, getUnpagedLogs],
   )
 
   return (

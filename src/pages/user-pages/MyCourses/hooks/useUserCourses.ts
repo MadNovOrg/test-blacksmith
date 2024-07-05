@@ -53,7 +53,7 @@ export function useUserCourses(
   pagination?: { perPage: number; currentPage: number },
   orgId?: string,
   bookingContactOnly?: boolean,
-  orgKeyContactOnly?: boolean
+  orgKeyContactOnly?: boolean,
 ): {
   courses?: UserCoursesQuery['courses']
   error?: Error
@@ -76,7 +76,7 @@ export function useUserCourses(
       const individualsStatusesConditions =
         getIndividualsCourseStatusesConditions(
           dateRef.current,
-          forOpenCourseBookingContact
+          forOpenCourseBookingContact,
         )
 
       return {
@@ -208,42 +208,42 @@ export function useUserCourses(
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.InfoRequired)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.INFO_REQUIRED
+        courseStatusConditionsMap.INFO_REQUIRED,
       )
     }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.NotAttended)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.NOT_ATTENDED
+        courseStatusConditionsMap.NOT_ATTENDED,
       )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.EvaluationMissing)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.EVALUATION_MISSING
+        courseStatusConditionsMap.EVALUATION_MISSING,
       )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.Scheduled)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.SCHEDULED
+        courseStatusConditionsMap.SCHEDULED,
       )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.Completed)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.COMPLETED
+        courseStatusConditionsMap.COMPLETED,
       )
     }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.AwaitingGrade)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.AWAITING_GRADE
+        courseStatusConditionsMap.AWAITING_GRADE,
       )
     }
 
@@ -252,14 +252,14 @@ export function useUserCourses(
     ) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.CANCELLATION_REQUESTED
+        courseStatusConditionsMap.CANCELLATION_REQUESTED,
       )
     }
 
     if (filters?.statuses?.includes(Course_Status_Enum.Cancelled)) {
       filterConditions = deepmerge(
         filterConditions,
-        courseStatusConditionsMap.CANCELLED
+        courseStatusConditionsMap.CANCELLED,
       )
     }
 
@@ -401,7 +401,7 @@ export function useUserCourses(
       status: getSWRLoadingStatus(data, error),
       total: data?.course_aggregate.aggregate?.count,
     }),
-    [data, error]
+    [data, error],
   )
 }
 

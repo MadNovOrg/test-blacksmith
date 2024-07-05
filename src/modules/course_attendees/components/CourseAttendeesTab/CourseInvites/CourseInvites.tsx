@@ -51,7 +51,7 @@ export const CourseInvites = ({
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
   const allowAddAttendeesAfterCourseEnded = useFeatureFlagEnabled(
-    'invite-attendees-after-course-ended'
+    'invite-attendees-after-course-ended',
   )
 
   const theme = useTheme()
@@ -100,7 +100,7 @@ export const CourseInvites = ({
   const onEmailsChange = (
     ev: React.SyntheticEvent<Element, Event>,
     value: (string | string[])[],
-    reason: string
+    reason: string,
   ) => {
     setError('')
 
@@ -199,7 +199,7 @@ export const CourseInvites = ({
         }}
       />
     ),
-    [t]
+    [t],
   )
 
   const allowInvites =
@@ -232,7 +232,7 @@ export const CourseInvites = ({
 
       const attendeesData = [
         Object.values(
-          t('pages.blended-learning-attendees-cols', { returnObjects: true })
+          t('pages.blended-learning-attendees-cols', { returnObjects: true }),
         ),
         ...exportedData.attendees.map(attendee => {
           return [
@@ -259,7 +259,7 @@ export const CourseInvites = ({
       const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
 
       const [currentDate, currentTime] = formatDateTime(
-        new Date().toISOString()
+        new Date().toISOString(),
       ).split(',')
 
       const fileNameDate = currentDate.replaceAll('/', '.')
@@ -267,8 +267,8 @@ export const CourseInvites = ({
       saveAs(
         new Blob([buffer]),
         `Blended Learning Progress Report ${fileNameDate.concat(
-          currentTime
-        )}.xlsx`
+          currentTime,
+        )}.xlsx`,
       )
     }
   }, [data, reexecuteQuery, t])
@@ -304,7 +304,7 @@ export const CourseInvites = ({
                 sx={{ ml: 2 }}
                 onClick={() => {
                   navigate(
-                    `/registration?course_id=${course.id}&quantity=1&internal=true`
+                    `/registration?course_id=${course.id}&quantity=1&internal=true`,
                   )
                 }}
                 disabled={invitesLeft === 0}

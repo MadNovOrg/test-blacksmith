@@ -109,7 +109,7 @@ export const useOrganisationProfiles = ({
       (data?.profiles?.profilesByLevel ?? []).map(profile => [
         profile?.level,
         profile?.profiles,
-      ])
+      ]),
     )
 
     if (withUpcomingEnrollmentsOnly)
@@ -123,13 +123,13 @@ export const useOrganisationProfiles = ({
       data?.profiles?.profilesByOrganisation?.map(profile => [
         profile?.orgId,
         profile?.profiles,
-      ])
+      ]),
     )
 
     if (withUpcomingEnrollmentsOnly)
       return filterOrganisationProfilesById(
         orgs as profilesByLevelType,
-        profilesByLvl as profilesByLevelType
+        profilesByLvl as profilesByLevelType,
       )
 
     return orgs
@@ -146,6 +146,6 @@ export const useOrganisationProfiles = ({
       error,
       fetching,
     }),
-    [error, fetching, profilesByLvl, profilesByOrganisation]
+    [error, fetching, profilesByLvl, profilesByOrganisation],
   )
 }

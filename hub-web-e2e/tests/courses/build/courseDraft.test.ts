@@ -19,7 +19,7 @@ const test = base.extend<{ course: Course }>({
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED,
-      false
+      false,
     )
     await use(course)
     await API.course.deleteCourse(course.id)

@@ -57,7 +57,9 @@ describe('component: OrgSelector', () => {
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
     await userEvent.click(
-      screen.getByPlaceholderText('Start typing organisation', { exact: false })
+      screen.getByPlaceholderText('Start typing organisation', {
+        exact: false,
+      }),
     )
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
@@ -83,22 +85,22 @@ describe('component: OrgSelector', () => {
       <Provider value={client}>
         <OrgSelector onChange={noop} />
       </Provider>,
-      { auth: { profile } }
+      { auth: { profile } },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Start typing organisation', {
         exact: false,
       }),
-      ORG_SEARCH_NAME
+      ORG_SEARCH_NAME,
     )
 
     vi.runAllTimers()
 
     await waitFor(() =>
       expect(
-        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
-      ).toBeInTheDocument()
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME),
+      ).toBeInTheDocument(),
     )
   })
 
@@ -131,26 +133,26 @@ describe('component: OrgSelector', () => {
       <Provider value={client}>
         <OrgSelector onChange={noop} />
       </Provider>,
-      { auth: { profile } }
+      { auth: { profile } },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Start typing organisation', {
         exact: false,
       }),
-      'Org'
+      'Org',
     )
 
     vi.runAllTimers()
 
     await waitFor(() => {
       const myOrgsGroup = screen.getByTestId(
-        'org-selector-result-group-My organisations'
+        'org-selector-result-group-My organisations',
       )
       expect(myOrgsGroup).toBeInTheDocument()
       within(myOrgsGroup).getByTestId(`org-selector-result-${orgs[0].id}`)
       const foundInHubGroup = screen.getByTestId(
-        'org-selector-result-group-Found in Team Teach Connect'
+        'org-selector-result-group-Found in Team Teach Connect',
       )
       expect(foundInHubGroup).toBeInTheDocument()
       within(foundInHubGroup).getByTestId(`org-selector-result-${orgs[1].id}`)
@@ -179,26 +181,26 @@ describe('component: OrgSelector', () => {
       <Provider value={client}>
         <OrgSelector onChange={onChangeMock} />
       </Provider>,
-      { auth: { profile } }
+      { auth: { profile } },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Start typing organisation', {
         exact: false,
       }),
-      ORG_SEARCH_NAME
+      ORG_SEARCH_NAME,
     )
 
     vi.runAllTimers()
 
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME),
       ).toBeInTheDocument()
     })
 
     await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+      within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME),
     )
 
     await waitFor(() => {
@@ -233,25 +235,25 @@ describe('component: OrgSelector', () => {
           countryCode="GB-ENG"
         />
       </Provider>,
-      { auth: { profile } }
+      { auth: { profile } },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Start typing organisation', {
         exact: false,
       }),
-      'Test'
+      'Test',
     )
 
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME),
       ).toBeInTheDocument()
 
       expect(screen.getByTestId('new-organisation')).toBeInTheDocument()
 
       expect(screen.getByTestId('new-organisation')).toHaveTextContent(
-        'Organisation Enquiry'
+        'Organisation Enquiry',
       )
     })
   })
@@ -282,19 +284,19 @@ describe('component: OrgSelector', () => {
           countryCode="AT"
         />
       </Provider>,
-      { auth: { profile } }
+      { auth: { profile } },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Start typing organisation', {
         exact: false,
       }),
-      'Test'
+      'Test',
     )
 
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME),
       ).toBeInTheDocument()
 
       expect(screen.getByTestId('new-organisation')).toBeInTheDocument()
@@ -331,13 +333,13 @@ describe('component: OrgSelector', () => {
       <Provider value={client}>
         <OrgSelector onChange={() => vi.fn()} allowAdding={true} />
       </Provider>,
-      { auth: { profile } }
+      { auth: { profile } },
     )
     await userEvent.type(
       screen.getByPlaceholderText('Start typing organisation', {
         exact: false,
       }),
-      'Test'
+      'Test',
     )
     await waitFor(() => {
       const createButton = screen.getByText(t('create'))

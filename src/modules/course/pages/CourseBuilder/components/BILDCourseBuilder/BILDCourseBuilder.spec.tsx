@@ -103,7 +103,7 @@ describe('component: BILDCourseBuilder', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${courseId}/modules`] }
+      { initialEntries: [`/courses/${courseId}/modules`] },
     )
 
     expect(screen.getByText('Modules Available')).toBeInTheDocument()
@@ -119,7 +119,7 @@ describe('component: BILDCourseBuilder', () => {
 
     expect(within(rightPane).getByLabelText('Module AA')).toBeInTheDocument()
     expect(
-      within(rightPane).queryByLabelText('Module BB')
+      within(rightPane).queryByLabelText('Module BB'),
     ).not.toBeInTheDocument()
 
     await userEvent.click(within(leftPane).getByLabelText('Module BB'))
@@ -127,7 +127,7 @@ describe('component: BILDCourseBuilder', () => {
     expect(within(rightPane).queryByLabelText('Module BB')).toBeInTheDocument()
 
     await userEvent.click(
-      within(leftPane).getByLabelText('Group 1', { exact: false })
+      within(leftPane).getByLabelText('Group 1', { exact: false }),
     )
 
     expect(within(rightPane).queryByLabelText('Module CC')).toBeInTheDocument()
@@ -135,22 +135,22 @@ describe('component: BILDCourseBuilder', () => {
 
     await userEvent.click(
       within(leftPane).getByTestId(
-        `strategy-${BildStrategies.RestrictiveTertiaryIntermediate}`
-      )
+        `strategy-${BildStrategies.RestrictiveTertiaryIntermediate}`,
+      ),
     )
 
     await userEvent.click(within(leftPane).getByTestId(`expand-button-Group 2`))
 
     expect(
       within(leftPane).queryByTestId(
-        `module-${BildStrategies.RestrictiveTertiaryIntermediate}.Group 2.Module EE`
-      )
+        `module-${BildStrategies.RestrictiveTertiaryIntermediate}.Group 2.Module EE`,
+      ),
     ).toBeInTheDocument()
 
     await userEvent.click(
       within(leftPane).getByTestId(
-        `module-${BildStrategies.RestrictiveTertiaryIntermediate}.Group 2.Module EE`
-      )
+        `module-${BildStrategies.RestrictiveTertiaryIntermediate}.Group 2.Module EE`,
+      ),
     )
 
     expect(within(rightPane).queryByLabelText('Module EE')).toBeInTheDocument()
@@ -248,7 +248,7 @@ describe('component: BILDCourseBuilder', () => {
           </Routes>
         </Provider>,
         {},
-        { initialEntries: [`/courses/${courseId}/modules`] }
+        { initialEntries: [`/courses/${courseId}/modules`] },
       )
 
       const leftPane = screen.getByTestId('all-modules')
@@ -263,7 +263,7 @@ describe('component: BILDCourseBuilder', () => {
       const allSelectedModules = within(rightPane).getAllByLabelText(/module/i)
 
       expect(allSelectedModules).toHaveLength(6)
-    }
+    },
   )
 
   it.each([
@@ -351,12 +351,12 @@ describe('component: BILDCourseBuilder', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${courseId}/modules`] }
+      { initialEntries: [`/courses/${courseId}/modules`] },
     )
 
     expect(screen.queryByText(/estimated duration/i)).not.toBeInTheDocument()
     expect(
-      screen.queryByText(/\bminimum\s+(\d{3,})\s+hours\b/i)
+      screen.queryByText(/\bminimum\s+(\d{3,})\s+hours\b/i),
     ).not.toBeInTheDocument()
 
     expect(screen.queryByText(/\b(\d+)\s+mins\b/i)).not.toBeInTheDocument()
@@ -375,7 +375,7 @@ function buildStrategy(overrides?: Partial<Strategies[0]>): Strategies[0] {
 }
 
 function buildBILDModuleGroup(
-  overrides?: Partial<BILDModuleGroup>
+  overrides?: Partial<BILDModuleGroup>,
 ): BILDModuleGroup {
   return {
     name: chance.word(),

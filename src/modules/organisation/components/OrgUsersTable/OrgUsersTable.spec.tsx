@@ -29,7 +29,7 @@ describe(OrgUsersTable.name, () => {
     render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
-      </Provider>
+      </Provider>,
     )
 
     const membersTable = screen.getByTestId('organisation-members')
@@ -58,13 +58,13 @@ describe(OrgUsersTable.name, () => {
     render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
-      </Provider>
+      </Provider>,
     )
 
     const membersTable = screen.getByTestId('organisation-members')
 
     expect(
-      within(membersTable).getByText(/no users at this time/i)
+      within(membersTable).getByText(/no users at this time/i),
     ).toBeInTheDocument()
   })
 
@@ -120,19 +120,19 @@ describe(OrgUsersTable.name, () => {
     render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
-      </Provider>
+      </Provider>,
     )
 
     const regularMemberRow = screen.getByTestId(
-      `org-member-row-${regularMember.id}`
+      `org-member-row-${regularMember.id}`,
     )
 
     const certificatesCell = within(regularMemberRow).getByTestId(
-      'member-certificates'
+      'member-certificates',
     )
 
     const adminMemberRow = screen.getByTestId(
-      `org-member-row-${adminMember.id}`
+      `org-member-row-${adminMember.id}`,
     )
 
     members.forEach(member => {
@@ -140,37 +140,37 @@ describe(OrgUsersTable.name, () => {
 
       expect(
         within(memberRow).getByText(
-          member.profile.fullName ?? 'should not pass'
-        )
+          member.profile.fullName ?? 'should not pass',
+        ),
       ).toBeInTheDocument()
 
       expect(
-        within(memberRow).getByTestId('member-last-activity')
+        within(memberRow).getByTestId('member-last-activity'),
       ).toHaveTextContent(
-        format(new Date(member.profile.lastActivity), dateFormats.date_default)
+        format(new Date(member.profile.lastActivity), dateFormats.date_default),
       )
 
       expect(
-        within(memberRow).getByTestId('member-created-at')
+        within(memberRow).getByTestId('member-created-at'),
       ).toHaveTextContent(
-        format(new Date(member.profile.createdAt), dateFormats.date_default)
+        format(new Date(member.profile.createdAt), dateFormats.date_default),
       )
     })
 
     expect(
-      within(regularMemberRow).getByText(/no permissions/i)
+      within(regularMemberRow).getByText(/no permissions/i),
     ).toBeInTheDocument()
 
     expect(
-      within(regularMemberRow).getByTestId('CheckCircleIcon')
+      within(regularMemberRow).getByTestId('CheckCircleIcon'),
     ).toBeInTheDocument()
 
     expect(certificatesCell.textContent).toMatchInlineSnapshot(
-      `"ActiveLevel One"`
+      `"ActiveLevel One"`,
     )
 
     expect(
-      within(adminMemberRow).getByText(/organisation admin/i)
+      within(adminMemberRow).getByText(/organisation admin/i),
     ).toBeInTheDocument()
   })
 
@@ -207,27 +207,27 @@ describe(OrgUsersTable.name, () => {
     render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
-      </Provider>
+      </Provider>,
     )
 
     const membersTable = screen.getByTestId('organisation-members')
 
     expect(
-      screen.getByTestId(`org-member-row-${firstMember.id}`)
+      screen.getByTestId(`org-member-row-${firstMember.id}`),
     ).toHaveAttribute('data-index', '0')
 
     expect(
-      screen.getByTestId(`org-member-row-${secondMember.id}`)
+      screen.getByTestId(`org-member-row-${secondMember.id}`),
     ).toHaveAttribute('data-index', '1')
 
     await userEvent.click(within(membersTable).getByText(/name/i))
 
     expect(
-      screen.getByTestId(`org-member-row-${firstMember.id}`)
+      screen.getByTestId(`org-member-row-${firstMember.id}`),
     ).toHaveAttribute('data-index', '1')
 
     expect(
-      screen.getByTestId(`org-member-row-${secondMember.id}`)
+      screen.getByTestId(`org-member-row-${secondMember.id}`),
     ).toHaveAttribute('data-index', '0')
   })
 
@@ -264,7 +264,7 @@ describe(OrgUsersTable.name, () => {
     render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
-      </Provider>
+      </Provider>,
     )
 
     const membersTable = screen.getByTestId('organisation-members')
@@ -274,21 +274,21 @@ describe(OrgUsersTable.name, () => {
     await userEvent.click(lastActivityTableHead)
 
     expect(
-      screen.getByTestId(`org-member-row-${firstMember.id}`)
+      screen.getByTestId(`org-member-row-${firstMember.id}`),
     ).toHaveAttribute('data-index', '0')
 
     expect(
-      screen.getByTestId(`org-member-row-${secondMember.id}`)
+      screen.getByTestId(`org-member-row-${secondMember.id}`),
     ).toHaveAttribute('data-index', '1')
 
     await userEvent.click(lastActivityTableHead)
 
     expect(
-      screen.getByTestId(`org-member-row-${firstMember.id}`)
+      screen.getByTestId(`org-member-row-${firstMember.id}`),
     ).toHaveAttribute('data-index', '1')
 
     expect(
-      screen.getByTestId(`org-member-row-${secondMember.id}`)
+      screen.getByTestId(`org-member-row-${secondMember.id}`),
     ).toHaveAttribute('data-index', '0')
   })
 
@@ -325,7 +325,7 @@ describe(OrgUsersTable.name, () => {
     render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
-      </Provider>
+      </Provider>,
     )
 
     const membersTable = screen.getByTestId('organisation-members')
@@ -334,21 +334,21 @@ describe(OrgUsersTable.name, () => {
     await userEvent.click(createdAtTableHead)
 
     expect(
-      screen.getByTestId(`org-member-row-${firstMember.id}`)
+      screen.getByTestId(`org-member-row-${firstMember.id}`),
     ).toHaveAttribute('data-index', '0')
 
     expect(
-      screen.getByTestId(`org-member-row-${secondMember.id}`)
+      screen.getByTestId(`org-member-row-${secondMember.id}`),
     ).toHaveAttribute('data-index', '1')
 
     await userEvent.click(createdAtTableHead)
 
     expect(
-      screen.getByTestId(`org-member-row-${firstMember.id}`)
+      screen.getByTestId(`org-member-row-${firstMember.id}`),
     ).toHaveAttribute('data-index', '1')
 
     expect(
-      screen.getByTestId(`org-member-row-${secondMember.id}`)
+      screen.getByTestId(`org-member-row-${secondMember.id}`),
     ).toHaveAttribute('data-index', '0')
   })
 
@@ -378,14 +378,14 @@ describe(OrgUsersTable.name, () => {
         auth: {
           activeRole: RoleName.SALES_REPRESENTATIVE,
         },
-      }
+      },
     )
 
     expect(
       within(screen.getByTestId(`org-member-row-${member.id}`)).queryByRole(
         'button',
-        { name: /edit/i }
-      )
+        { name: /edit/i },
+      ),
     ).not.toBeInTheDocument()
   })
   ;[RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].forEach(
@@ -416,17 +416,17 @@ describe(OrgUsersTable.name, () => {
             auth: {
               activeRole: roleName,
             },
-          }
+          },
         )
 
         expect(
           within(screen.getByTestId(`org-member-row-${member.id}`)).getByRole(
             'button',
-            { name: /edit/i }
-          )
+            { name: /edit/i },
+          ),
         ).toBeInTheDocument()
       })
-    }
+    },
   )
 
   it('displays the actions column to an org admin', () => {
@@ -458,14 +458,14 @@ describe(OrgUsersTable.name, () => {
           isOrgAdmin: true,
           managedOrgIds: [orgId],
         },
-      }
+      },
     )
 
     expect(
       within(screen.getByTestId(`org-member-row-${member.id}`)).getByRole(
         'button',
-        { name: /edit/i }
-      )
+        { name: /edit/i },
+      ),
     ).toBeInTheDocument()
   })
 
@@ -498,26 +498,26 @@ describe(OrgUsersTable.name, () => {
           isOrgAdmin: true,
           managedOrgIds: [orgId],
         },
-      }
+      },
     )
 
     await userEvent.click(
       within(screen.getByTestId(`org-member-row-${member.id}`)).getByRole(
         'button',
-        { name: /edit/i }
-      )
+        { name: /edit/i },
+      ),
     )
 
     const dialog = screen.getByRole('dialog')
 
     expect(
       within(dialog).getByText(
-        `Modify permissions for ${member.profile.fullName}`
-      )
+        `Modify permissions for ${member.profile.fullName}`,
+      ),
     ).toBeInTheDocument()
 
     await userEvent.click(
-      within(dialog).getByRole('button', { name: /cancel/i })
+      within(dialog).getByRole('button', { name: /cancel/i }),
     )
 
     await waitFor(() => {
@@ -527,7 +527,7 @@ describe(OrgUsersTable.name, () => {
 })
 
 function buildMemberProfile(
-  overrides?: Partial<OrgMembersQuery['members'][0]['profile']>
+  overrides?: Partial<OrgMembersQuery['members'][0]['profile']>,
 ): OrgMembersQuery['members'][0]['profile'] {
   return {
     id: chance.guid(),
@@ -541,7 +541,7 @@ function buildMemberProfile(
 }
 
 function buildOrganizationMember(
-  overrides?: Partial<OrgMembersQuery['members'][0]>
+  overrides?: Partial<OrgMembersQuery['members'][0]>,
 ): OrgMembersQuery['members'][0] {
   return {
     id: chance.guid(),

@@ -59,7 +59,7 @@ export const DisabilitiesTab: FC<PropsWithChildren<{ courseId: number }>> = ({
           sorting: false,
         },
       ].filter(Boolean),
-    [t]
+    [t],
   )
   return (
     <>
@@ -98,7 +98,7 @@ export const DisabilitiesTab: FC<PropsWithChildren<{ courseId: number }>> = ({
                     <Typography key={org.organization.id}>
                       {org.organization.name}
                     </Typography>
-                  )
+                  ),
                 )}
               </TableCell>
               <TableCell>

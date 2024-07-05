@@ -50,14 +50,14 @@ export type TrainerData = {
 }[]
 
 export const isOutsideOfNoticePeriod = (
-  courseData: Pick<CourseData, 'startDateTime'>
+  courseData: Pick<CourseData, 'startDateTime'>,
 ) => {
   return differenceInDays(courseData.startDateTime, new Date()) < 4 * 7
 }
 
 export const isLeadTrainerInGracePeriod = (
   courseData: Pick<CourseData, 'courseLevel' | 'type'>,
-  trainers: TrainerData
+  trainers: TrainerData,
 ) => {
   const leader = trainers.find(t => {
     return t.type === Course_Trainer_Type_Enum.Leader
@@ -68,22 +68,22 @@ export const isLeadTrainerInGracePeriod = (
       courseData.courseLevel
     ]
   const matchingLevels = (leader.levels ?? []).filter(
-    l => allowedLevels.indexOf(l.courseLevel as Course_Level_Enum) != -1
+    l => allowedLevels.indexOf(l.courseLevel as Course_Level_Enum) != -1,
   )
   const result = !matchingLevels.some(level =>
-    isFuture(new Date(level.expiryDate))
+    isFuture(new Date(level.expiryDate)),
   )
   return result
 }
 
 export const isTrainersRatioNotMet = (
   courseData: RatioCourseData,
-  trainers: RatioTrainerData
+  trainers: RatioTrainerData,
 ) => {
   const { min } = getRequiredAssistants(courseData)
   const { min: minLead } = getRequiredLeads(
     courseData.type,
-    courseData.isTrainer
+    courseData.isTrainer,
   )
   const { min: minModerator } = getRequiredModerators(courseData)
 
@@ -114,7 +114,7 @@ export const isAdvisedTimeExceeded = (courseData: CourseData) => {
 export function checkCourseDetailsForExceptions(
   courseData: CourseData,
   trainerData: TrainerData,
-  ignoreExceptions: Course_Exception_Enum[] = []
+  ignoreExceptions: Course_Exception_Enum[] = [],
 ): Course_Exception_Enum[] {
   const exceptions: Course_Exception_Enum[] = []
 
@@ -127,7 +127,7 @@ export function checkCourseDetailsForExceptions(
 
   if (
     !ignoreExceptions.includes(
-      Course_Exception_Enum.LeadTrainerInGracePeriod
+      Course_Exception_Enum.LeadTrainerInGracePeriod,
     ) &&
     isLeadTrainerInGracePeriod(courseData, trainerData)
   ) {
@@ -151,7 +151,7 @@ export function checkCourseDetailsForExceptions(
       trainerData.map(t => ({
         type: t.type,
         trainer_role_types: t.trainer_role_types,
-      }))
+      })),
     )
   ) {
     exceptions.push(Course_Exception_Enum.TrainerRatioNotMet)
@@ -162,7 +162,7 @@ export function checkCourseDetailsForExceptions(
 
 export function shouldGoIntoExceptionApproval(
   acl: ReturnType<typeof getACL>,
-  type: Course_Type_Enum
+  type: Course_Type_Enum,
 ) {
   return !acl.isTTAdmin() && type !== Course_Type_Enum.Open
 }

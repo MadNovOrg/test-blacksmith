@@ -17,7 +17,7 @@ describe('component: DrawerMenu', () => {
     expect(closeButton).toBeInTheDocument()
     await waitFor(() => fireEvent.click(closeButton))
     await waitFor(() =>
-      expect(screen.queryByTestId('drawer-menu')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('drawer-menu')).not.toBeInTheDocument(),
     )
   })
 })

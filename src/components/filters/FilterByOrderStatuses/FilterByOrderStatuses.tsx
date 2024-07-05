@@ -27,7 +27,7 @@ export const FilterByOrderStatuses: React.FC<
       .reduce((res: FilterOption[], entry: FilterOption) => {
         if (usedTitles.includes(entry.title)) {
           const previousEntry = res.find(
-            e => e.title === entry.title
+            e => e.title === entry.title,
           ) as FilterOption
           previousEntry.id += `,${entry.id}`
         } else {
@@ -47,11 +47,11 @@ export const FilterByOrderStatuses: React.FC<
       setOptions(opts)
       onChange({
         statuses: opts.flatMap(o =>
-          o.selected ? o.id.split(',') : []
+          o.selected ? o.id.split(',') : [],
         ) as Xero_Invoice_Status_Enum[],
       })
     },
-    [onChange]
+    [onChange],
   )
 
   return (

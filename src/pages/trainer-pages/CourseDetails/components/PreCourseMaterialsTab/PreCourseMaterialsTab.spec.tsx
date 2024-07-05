@@ -44,12 +44,12 @@ describe(`component: ${PreCourseMaterialsTab.name}`, () => {
             activeRole: RoleName.TT_ADMIN,
           },
         },
-        { initialEntries: [`/courses/${course.id}/details`] }
+        { initialEntries: [`/courses/${course.id}/details`] },
       )
 
       // Assert
       expect(screen.getByTestId('pre-course-materials-tab')).toBeInTheDocument()
-    }
+    },
   )
 
   it('should not display the pre-course materials tab for other levels', () => {
@@ -77,12 +77,12 @@ describe(`component: ${PreCourseMaterialsTab.name}`, () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
 
     // Assert
     expect(
-      screen.queryByTestId('pre-course-materials-tab')
+      screen.queryByTestId('pre-course-materials-tab'),
     ).not.toBeInTheDocument()
   })
 })

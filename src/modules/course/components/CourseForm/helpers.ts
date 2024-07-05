@@ -41,7 +41,7 @@ export function isEndDateTimeBeforeStartDateTime(
   startDate: Date | null,
   startTime: string,
   endDate: Date | null,
-  endTime: string
+  endTime: string,
 ) {
   if (isValid(startDate) && startTime && isValid(endDate) && endTime) {
     const startDateTime = makeDate(startDate, startTime)
@@ -57,7 +57,7 @@ export function isEndDateTimeBeforeStartDateTime(
 
 export function getLevels(
   courseType: Course_Type_Enum,
-  courseAccreditor: Accreditors_Enum
+  courseAccreditor: Accreditors_Enum,
 ) {
   const types = {
     [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Open}`]: () => {
@@ -121,7 +121,7 @@ export enum Countries_Code {
 export function canBeBlendedBild(
   courseType: Course_Type_Enum,
   courseLevel: Course_Level_Enum | CourseLevel | '',
-  strategies: Record<BildStrategies, boolean> | null
+  strategies: Record<BildStrategies, boolean> | null,
 ): boolean {
   if (!strategies) {
     return false
@@ -136,7 +136,7 @@ export function canBeBlendedBild(
     return false
 
   const selectedStrategies = Object.keys(strategies).filter(
-    strategy => strategies[strategy as BildStrategies] === true
+    strategy => strategies[strategy as BildStrategies] === true,
   )
 
   switch (courseType) {
@@ -152,7 +152,7 @@ export function canBeBlendedBild(
 export function canBeBlended(
   courseType: Course_Type_Enum,
   courseLevel: Course_Level_Enum | CourseLevel | '',
-  deliveryType: Course_Delivery_Type_Enum
+  deliveryType: Course_Delivery_Type_Enum,
 ) {
   const isF2F = deliveryType === Course_Delivery_Type_Enum.F2F
   const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
@@ -222,7 +222,7 @@ export function canBeReaccBild(
   courseType: Course_Type_Enum,
   strategies: Record<BildStrategies, boolean> | null,
   blended: boolean,
-  conversion: boolean
+  conversion: boolean,
 ): boolean {
   switch (courseType) {
     case Course_Type_Enum.Indirect: {
@@ -230,7 +230,7 @@ export function canBeReaccBild(
         return false
       }
       const selectedStrategies = Object.keys(strategies).filter(
-        strategy => strategies[strategy as BildStrategies] === true
+        strategy => strategies[strategy as BildStrategies] === true,
       )
 
       return selectedStrategies.length > 0
@@ -251,7 +251,7 @@ export function canBeReacc(
   courseType: Course_Type_Enum,
   courseLevel: Course_Level_Enum | '',
   deliveryType: Course_Delivery_Type_Enum,
-  blended: boolean
+  blended: boolean,
 ) {
   const isF2F = deliveryType === Course_Delivery_Type_Enum.F2F
   const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
@@ -367,7 +367,7 @@ export function canBeF2FBild() {
 export function canBeMixedBild(
   courseLevel: Course_Level_Enum | '',
   selectedStrategies: BildStrategies[],
-  isConversion: boolean
+  isConversion: boolean,
 ): boolean {
   if (courseLevel === Course_Level_Enum.BildRegular) {
     return selectedStrategies.includes(BildStrategies.Primary)
@@ -381,7 +381,7 @@ export function canBeMixedBild(
 export function canBeVirtualBild(
   courseType: Course_Type_Enum,
   strategies: Record<BildStrategies, boolean> | null,
-  isConversion: boolean
+  isConversion: boolean,
 ): boolean {
   if (isConversion) {
     return true
@@ -391,7 +391,7 @@ export function canBeVirtualBild(
   }
 
   const selectedStrategies = Object.keys(strategies).filter(
-    strategy => strategies[strategy as BildStrategies] === true
+    strategy => strategies[strategy as BildStrategies] === true,
   )
 
   switch (courseType) {
@@ -410,7 +410,7 @@ export function canBeVirtualBild(
 
 export function canBeF2F(
   courseType: Course_Type_Enum,
-  courseLevel: Course_Level_Enum | ''
+  courseLevel: Course_Level_Enum | '',
 ) {
   const types = {
     [Course_Type_Enum.Open]: () => {
@@ -459,7 +459,7 @@ export function canBeF2F(
 
 export function canBeMixed(
   courseType: Course_Type_Enum,
-  courseLevel: Course_Level_Enum | ''
+  courseLevel: Course_Level_Enum | '',
 ) {
   const types = {
     [Course_Type_Enum.Open]: () => {
@@ -502,7 +502,7 @@ export function canBeMixed(
 
 export function canBeVirtual(
   courseType: Course_Type_Enum,
-  courseLevel: Course_Level_Enum | ''
+  courseLevel: Course_Level_Enum | '',
 ) {
   const types = {
     [Course_Type_Enum.Open]: () => {
@@ -532,7 +532,7 @@ export function canBeVirtual(
 
 export function canBeConversion(
   isReaccred: boolean,
-  courseLevel: CourseInput['courseLevel']
+  courseLevel: CourseInput['courseLevel'],
 ) {
   if (isReaccred || !courseLevel) {
     return false
@@ -557,7 +557,7 @@ export function getDefaultSpecialInstructions(
   deliveryType: Course_Delivery_Type_Enum,
   reaccreditation: boolean,
   conversion: boolean,
-  t: TFunction
+  t: TFunction,
 ) {
   const keyPrefixPath =
     'components.course-form.special-instructions.instructions'
@@ -614,7 +614,7 @@ export function hasRenewalCycle({
   return (
     [Course_Type_Enum.Open, Course_Type_Enum.Closed].includes(courseType) &&
     [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
-      courseLevel
+      courseLevel,
     ) &&
     getYear(startDate) > 2023
   )

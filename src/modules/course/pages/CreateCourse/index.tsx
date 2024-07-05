@@ -24,9 +24,9 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
       getCourseType(
         profile?.id ?? 'unknown',
         searchParams.get('type'),
-        pathname === '/courses/new'
+        pathname === '/courses/new',
       ),
-    [pathname, profile, searchParams]
+    [pathname, profile, searchParams],
   )
   return (
     <CreateCourseProvider

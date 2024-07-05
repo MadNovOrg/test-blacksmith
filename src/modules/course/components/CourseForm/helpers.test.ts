@@ -42,8 +42,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         null,
         validStartTime,
         validEndDate,
-        validEndTime
-      )
+        validEndTime,
+      ),
     ).toBeFalsy()
   })
 
@@ -53,8 +53,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         new Date(''),
         validStartTime,
         validEndDate,
-        validEndTime
-      )
+        validEndTime,
+      ),
     ).toBeFalsy()
   })
 
@@ -64,8 +64,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         '',
         validEndDate,
-        validEndTime
-      )
+        validEndTime,
+      ),
     ).toBeFalsy()
   })
 
@@ -75,8 +75,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         validStartTime,
         null,
-        validEndTime
-      )
+        validEndTime,
+      ),
     ).toBeFalsy()
   })
 
@@ -86,8 +86,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         validStartTime,
         new Date(''),
-        validEndTime
-      )
+        validEndTime,
+      ),
     ).toBeFalsy()
   })
 
@@ -97,8 +97,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         validStartTime,
         validEndDate,
-        ''
-      )
+        '',
+      ),
     ).toBeFalsy()
   })
 
@@ -108,8 +108,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         validStartTime,
         subDays(validStartDate, 1),
-        validEndTime
-      )
+        validEndTime,
+      ),
     ).toBeTruthy()
   })
 
@@ -119,8 +119,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         validStartTime,
         validStartDate,
-        validStartTime
-      )
+        validStartTime,
+      ),
     ).toBeTruthy()
   })
 
@@ -130,8 +130,8 @@ describe('isEndDateTimeBeforeStartDateTime', () => {
         validStartDate,
         '9:00',
         validStartDate,
-        '8:59'
-      )
+        '8:59',
+      ),
     ).toBeTruthy()
   })
 })

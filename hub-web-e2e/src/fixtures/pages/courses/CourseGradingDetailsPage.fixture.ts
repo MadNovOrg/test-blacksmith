@@ -12,7 +12,7 @@ export class CourseGradingDetailsPage extends BasePage {
     super(page)
     this.confirmModules = this.page.locator('text=Confirm Grading')
     this.continueToAttendees = this.page.locator(
-      'text=Continue to grading attendees'
+      'text=Continue to grading attendees',
     )
   }
 

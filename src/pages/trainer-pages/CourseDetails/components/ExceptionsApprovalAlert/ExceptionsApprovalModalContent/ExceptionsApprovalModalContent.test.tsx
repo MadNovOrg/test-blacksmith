@@ -45,7 +45,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
           courseId={String(course.id)}
           closeModal={closeModalMock}
         />
-      </Provider>
+      </Provider>,
     )
   beforeAll(() => {
     useCourseMocked.mockReturnValue({
@@ -57,7 +57,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
   it('should render the ExceptionsApprovalModalContent component', () => {
     setup({})
     expect(
-      screen.getByTestId('exceptions-approval-modal-content')
+      screen.getByTestId('exceptions-approval-modal-content'),
     ).toBeInTheDocument()
   })
   it('should set the comment correclty', () => {
@@ -82,8 +82,8 @@ describe('component: ExceptionsApprovalModalContent', () => {
     setup({ action: Course_Audit_Type_Enum.Rejected })
     expect(
       screen.getByText(
-        t('pages.create-course.exceptions.course-rejection-warning')
-      )
+        t('pages.create-course.exceptions.course-rejection-warning'),
+      ),
     ).toBeInTheDocument()
   })
   it('should click the submit button and handle the Approve action', async () => {
@@ -106,7 +106,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
           courseId={String(course.id)}
           closeModal={closeModalMock}
         />
-      </Provider>
+      </Provider>,
     )
     const input = screen.getByDisplayValue('') as HTMLInputElement
     const testValue = 'TEST'
@@ -136,7 +136,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
           courseId={String(course.id)}
           closeModal={closeModalMock}
         />
-      </Provider>
+      </Provider>,
     )
     const input = screen.getByDisplayValue('') as HTMLInputElement
     const testValue = 'TEST'
@@ -155,14 +155,14 @@ describe('component: ExceptionsApprovalModalContent', () => {
     await userEvent.click(screen.getByText(t('common.submit')))
     expect(input).toHaveAttribute('aria-invalid', 'true')
     expect(
-      screen.getByText(t('pages.create-course.exceptions.reason-required'))
+      screen.getByText(t('pages.create-course.exceptions.reason-required')),
     ).toBeInTheDocument()
   })
   it('should fail if no reason is provided', async () => {
     setup({})
     await userEvent.click(screen.getByText(t('common.submit')))
     expect(
-      screen.getByText(t('pages.create-course.exceptions.reason-required'))
+      screen.getByText(t('pages.create-course.exceptions.reason-required')),
     ).toBeInTheDocument()
   })
 })

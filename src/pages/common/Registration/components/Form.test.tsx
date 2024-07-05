@@ -115,7 +115,7 @@ describe('Form', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/Password must be at least 8 characters/)
+        screen.getByText(/Password must be at least 8 characters/),
       ).toBeInTheDocument()
     })
   })
@@ -166,7 +166,7 @@ describe('Form', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/please enter your date of birth/i)
+        screen.getByText(/please enter your date of birth/i),
       ).toBeInTheDocument()
     })
   })
@@ -213,7 +213,7 @@ describe('Form', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(/Accepting our T&C is required/)
+        screen.getByText(/Accepting our T&C is required/),
       ).toBeInTheDocument()
     })
   })
@@ -222,7 +222,7 @@ describe('Form', () => {
     render(<Form {...defaultProps} />)
 
     await userEvent.click(
-      screen.getByRole('button', { name: /create account/i })
+      screen.getByRole('button', { name: /create account/i }),
     )
 
     expect(screen.getByText(/recaptcha is required/i)).toBeInTheDocument()
@@ -265,7 +265,7 @@ describe('Form', () => {
       const errorMessageField = screen.getByTestId('signup-form-error')
       expect(errorMessageField).toBeInTheDocument()
       expect(errorMessageField).toHaveTextContent(
-        'An error occurred. Please try again.'
+        'An error occurred. Please try again.',
       )
     })
   })
@@ -309,7 +309,7 @@ describe('Form', () => {
       const errorMessageField = screen.getByTestId('signup-form-error')
       expect(errorMessageField).toBeInTheDocument()
       expect(errorMessageField).toHaveTextContent(
-        'An account with the given email already exists.'
+        'An account with the given email already exists.',
       )
     })
   })
@@ -354,7 +354,7 @@ describe('Form', () => {
     await userEvent.type(screen.getByTestId('input-surname'), 'testSurname')
     await userEvent.type(
       screen.getByTestId('input-email'),
-      'joHn.DOE@exAmple.com '
+      'joHn.DOE@exAmple.com ',
     )
     await userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     await userEvent.type(screen.getByTestId('input-phone'), '1234567890')
@@ -382,7 +382,7 @@ describe('Form', () => {
           input: expect.objectContaining({
             email: 'john.doe@example.com',
           }),
-        })
+        }),
       )
     })
   })

@@ -21,7 +21,7 @@ export function isTrainTheTrainerCourse(courseLevel: Course_Level_Enum) {
 
 export const getTransferTermsFee = (
   startDate: Date,
-  courseLevel: Course_Level_Enum
+  courseLevel: Course_Level_Enum,
 ): 0 | 15 | 25 | 50 => {
   const diffInWeeks = differenceInWeeks(startDate, new Date())
   const isTrainTheTrainerLevel = isTrainTheTrainerCourse(courseLevel)

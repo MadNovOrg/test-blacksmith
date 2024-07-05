@@ -10,7 +10,7 @@ describe(Dialog.name, () => {
     const { queryByTestId } = render(
       <Dialog open={false} onClose={vi.fn()}>
         <p data-testid="dialog-children">test</p>
-      </Dialog>
+      </Dialog>,
     )
 
     // Assert
@@ -22,7 +22,7 @@ describe(Dialog.name, () => {
     const { queryByTestId } = render(
       <Dialog open={true} onClose={vi.fn()}>
         <p data-testid="dialog-children">test</p>
-      </Dialog>
+      </Dialog>,
     )
 
     // Assert
@@ -38,7 +38,7 @@ describe(Dialog.name, () => {
         onClose={vi.fn()}
       >
         <p data-testid="dialog-children">test</p>
-      </Dialog>
+      </Dialog>,
     )
 
     // Assert
@@ -48,7 +48,7 @@ describe(Dialog.name, () => {
   it('should render close button by default', async () => {
     // Act
     const { queryByTestId } = render(
-      <Dialog open={true} onClose={vi.fn()}></Dialog>
+      <Dialog open={true} onClose={vi.fn()}></Dialog>,
     )
 
     // Assert
@@ -61,7 +61,7 @@ describe(Dialog.name, () => {
 
     // Act
     const { getByTestId } = render(
-      <Dialog open={true} onClose={onClose}></Dialog>
+      <Dialog open={true} onClose={onClose}></Dialog>,
     )
 
     const closeBtn = getByTestId('dialog-close')
@@ -74,7 +74,7 @@ describe(Dialog.name, () => {
   it('should not render close button when showClose is false', async () => {
     // Act
     const { queryByTestId } = render(
-      <Dialog open={true} showClose={false} onClose={vi.fn()}></Dialog>
+      <Dialog open={true} showClose={false} onClose={vi.fn()}></Dialog>,
     )
 
     // Assert
@@ -94,7 +94,7 @@ describe(Dialog.name, () => {
           slots={{
             Title: () => <TitleSlot />,
           }}
-        ></Dialog>
+        ></Dialog>,
       )
 
       // Assert
@@ -113,7 +113,7 @@ describe(Dialog.name, () => {
           slots={{
             Subtitle: () => <SubtitleSlot />,
           }}
-        ></Dialog>
+        ></Dialog>,
       )
 
       // Assert
@@ -132,7 +132,7 @@ describe(Dialog.name, () => {
           slots={{
             Content: () => <ContentSlot />,
           }}
-        ></Dialog>
+        ></Dialog>,
       )
 
       // Assert
@@ -156,7 +156,7 @@ describe(Dialog.name, () => {
           slots={{
             Actions: () => <ActionsSlot />,
           }}
-        ></Dialog>
+        ></Dialog>,
       )
 
       // Assert

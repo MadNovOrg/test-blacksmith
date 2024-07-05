@@ -17,24 +17,22 @@ export const GradingFeedbackInput: React.FC<Props> = ({ onChange }) => {
   }, [feedback, onChange])
 
   return (
-    <>
-      <Box
-        sx={{
-          backgroundColor: theme.palette.common.white,
-          borderBottom: `2px solid ${theme.palette.grey[500]}`,
-          padding: theme.spacing(1, 2),
-          marginBottom: theme.spacing(3),
-          borderRadius: '2px',
-        }}
-      >
-        <InputBase
-          placeholder={t('pages.course-grading.feedback-field-placeholder')}
-          value={feedback}
-          onChange={e => setFeedback(e.target.value)}
-          sx={{ display: 'block' }}
-          data-testid="feedback-input"
-        />
-      </Box>
-    </>
+    <Box
+      sx={{
+        backgroundColor: theme.palette.common.white,
+        borderBottom: `2px solid ${theme.palette.grey[500]}`,
+        padding: theme.spacing(1, 2),
+        marginBottom: theme.spacing(3),
+        borderRadius: '2px',
+      }}
+    >
+      <InputBase
+        placeholder={t('pages.course-grading.feedback-field-placeholder')}
+        value={feedback}
+        onChange={e => setFeedback(e.target.value)}
+        sx={{ display: 'block' }}
+        data-testid="feedback-input"
+      />
+    </Box>
   )
 }

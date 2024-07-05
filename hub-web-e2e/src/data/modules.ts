@@ -1016,7 +1016,7 @@ const MODULES_BY_LEVEL: Map<Course_Level_Enum, string[]> = new Map()
   ])
 
 export const getModulesByLevel: (level: Course_Level_Enum) => string[] = (
-  level: Course_Level_Enum
+  level: Course_Level_Enum,
 ) => {
   const moduleNames = MODULES_BY_LEVEL.get(level)
   if (!moduleNames) {

@@ -39,7 +39,7 @@ describe(DietaryRequirementsTab.name, () => {
       current: { t },
     },
   } = renderHook(() =>
-    useScopedTranslation('pages.course-details.tabs.dietary-requirements')
+    useScopedTranslation('pages.course-details.tabs.dietary-requirements'),
   )
   beforeEach(() => {
     render(
@@ -55,7 +55,7 @@ describe(DietaryRequirementsTab.name, () => {
         <Route path="/organisations/:id" element={<></>} />
       </Routes>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
-      { initialEntries: [`/courses/${course.id}/details`] }
+      { initialEntries: [`/courses/${course.id}/details`] },
     )
   })
   it('renders DietaryRequirementsTab component', () => {
@@ -65,20 +65,20 @@ describe(DietaryRequirementsTab.name, () => {
     'renders column %s',
     column => {
       expect(screen.queryByText(column)).toBeInTheDocument()
-    }
+    },
   )
   it.each([profile.fullName, profile.email, profile.dietaryRestrictions])(
     'correctly renders the course participant dietary data',
     profileInfo => {
       expect(screen.queryByText(profileInfo as string)).toBeInTheDocument()
-    }
+    },
   )
   it('sets the href on the organization link correctly', async () => {
     expect(
-      screen.getByTestId('dietary-requirements-organization')
+      screen.getByTestId('dietary-requirements-organization'),
     ).toHaveAttribute(
       'href',
-      `/organisations/${profile.organizations[0].organization.id}`
+      `/organisations/${profile.organizations[0].organization.id}`,
     )
   })
 })

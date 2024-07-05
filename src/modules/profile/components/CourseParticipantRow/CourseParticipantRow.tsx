@@ -78,7 +78,7 @@ export const CourseParticipantRow = ({
     ])
 
     const active = ![CourseStatus.Cancelled, CourseStatus.Declined].includes(
-      courseStatus
+      courseStatus,
     )
 
     return {

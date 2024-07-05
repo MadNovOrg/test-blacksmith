@@ -135,48 +135,46 @@ const TTAdminRoutes = () => {
       </Route>
 
       {acl.canViewAdmin() ? (
-        <>
-          <Route path="admin">
-            <Route index element={<AdminPage />} />
-            <Route path="contacts" element={<Contacts />} />
-            <Route path="users/*" element={<UserRoutes />} />
+        <Route path="admin">
+          <Route index element={<AdminPage />} />
+          <Route path="contacts" element={<Contacts />} />
+          <Route path="users/*" element={<UserRoutes />} />
 
-            {acl.canViewAdminPricing() ? (
-              <Route path="pricing">
-                <Route index element={<PricingList />} />
-              </Route>
-            ) : null}
+          {acl.canViewAdminPricing() ? (
+            <Route path="pricing">
+              <Route index element={<PricingList />} />
+            </Route>
+          ) : null}
 
-            {acl.canViewAdminDiscount() ? (
-              <Route path="discounts">
-                <Route index element={<DiscountsList />} />
-                <Route path="new" element={<DiscountForm />} />
-                <Route path="edit/:id" element={<DiscountForm />} />
-              </Route>
-            ) : null}
+          {acl.canViewAdminDiscount() ? (
+            <Route path="discounts">
+              <Route index element={<DiscountsList />} />
+              <Route path="new" element={<DiscountForm />} />
+              <Route path="edit/:id" element={<DiscountForm />} />
+            </Route>
+          ) : null}
 
-            {acl.canViewXeroConnect() ? (
-              <Route path="xero">
-                <Route index element={<Navigate replace to="connect" />} />
-                <Route path="connect" element={<XeroConnect />} />
-              </Route>
-            ) : null}
+          {acl.canViewXeroConnect() ? (
+            <Route path="xero">
+              <Route index element={<Navigate replace to="connect" />} />
+              <Route path="connect" element={<XeroConnect />} />
+            </Route>
+          ) : null}
 
-            {acl.canViewArloConnect() ? (
-              <Route path="arlo">
-                <Route index element={<Navigate replace to="connect" />} />
-                <Route path="connect" element={<ArloConnect />} />
-                <Route path="import" element={<ArloImport />} />
-              </Route>
-            ) : null}
+          {acl.canViewArloConnect() ? (
+            <Route path="arlo">
+              <Route index element={<Navigate replace to="connect" />} />
+              <Route path="connect" element={<ArloConnect />} />
+              <Route path="import" element={<ArloImport />} />
+            </Route>
+          ) : null}
 
-            <Route
-              path="course-exceptions-log"
-              element={<CourseExceptionsLog />}
-            />
-            <Route path="audit" element={<AuditsPage />} />
-          </Route>
-        </>
+          <Route
+            path="course-exceptions-log"
+            element={<CourseExceptionsLog />}
+          />
+          <Route path="audit" element={<AuditsPage />} />
+        </Route>
       ) : null}
 
       <Route path="resources/*" element={<ResourcesRoutes />} />

@@ -55,10 +55,10 @@ export const CourseBookingReview: React.FC<
   const { isUKCountry } = useWorldCountries()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
   const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
   const [accept, setAccept] = useState(false)
   const [creatingOrder, setCreatingOrder] = useState(false)
@@ -109,7 +109,7 @@ export const CourseBookingReview: React.FC<
 
       if (
         (err as Error)?.message?.includes(
-          'A user is already registered on the course'
+          'A user is already registered on the course',
         )
       ) {
         const [, emails] = (err as Error)?.message?.split('Email(s): ') || []
@@ -127,7 +127,7 @@ export const CourseBookingReview: React.FC<
         setError({ key: 'pages.book-course.xero-error-creating-order' })
       } else {
         setError(
-          errorMessage || { key: 'pages.book-course.error-creating-order' }
+          errorMessage || { key: 'pages.book-course.error-creating-order' },
         )
       }
 
@@ -151,11 +151,11 @@ export const CourseBookingReview: React.FC<
 
   const courseStartDate = useMemo(
     () => new Date(course?.dates.aggregate?.start?.date),
-    [course?.dates]
+    [course?.dates],
   )
   const courseEndDate = useMemo(
     () => new Date(course?.dates.aggregate?.end?.date),
-    [course?.dates]
+    [course?.dates],
   )
 
   const timeZoneScheduleDateTime = useMemo(() => {
@@ -212,7 +212,7 @@ export const CourseBookingReview: React.FC<
                   {formatGMTDateTimeByTimeZone(
                     timeZoneScheduleDateTime.courseStart,
                     courseTimezone,
-                    true
+                    true,
                   )}
                 </Typography>
                 <Typography gutterBottom color="grey.700">
@@ -223,7 +223,7 @@ export const CourseBookingReview: React.FC<
                   {formatGMTDateTimeByTimeZone(
                     timeZoneScheduleDateTime.courseEnd,
                     courseTimezone,
-                    true
+                    true,
                   )}
                 </Typography>
               </>
@@ -248,7 +248,7 @@ export const CourseBookingReview: React.FC<
               {t('pages.book-course.venue')}:{' '}
               {formatCourseVenue(
                 course?.deliveryType as Course_Delivery_Type_Enum,
-                course?.schedule[0].venue as Venue
+                course?.schedule[0].venue as Venue,
               )}
             </Typography>
           </Box>
@@ -360,11 +360,11 @@ export const CourseBookingReview: React.FC<
                   {
                     amount: getMandatoryCourseMaterialsCost(
                       booking.quantity,
-                      booking.currency
+                      booking.currency,
                     ),
                     currency: booking.currency,
                   },
-                  t
+                  t,
                 )}
               </Typography>
             </Box>
@@ -381,7 +381,7 @@ export const CourseBookingReview: React.FC<
                   amount: new Big(amounts.trainerExpenses).round(2).toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -414,7 +414,7 @@ export const CourseBookingReview: React.FC<
                     .toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -427,7 +427,7 @@ export const CourseBookingReview: React.FC<
                 amount: new Big(amounts.subtotalDiscounted).round(2).toNumber(),
                 currency: booking.currency,
               },
-              t
+              t,
             )}
           </Typography>
         </Box>
@@ -442,7 +442,7 @@ export const CourseBookingReview: React.FC<
                 amount: new Big(amounts.vat).round(2).toNumber(),
                 currency: booking.currency,
               },
-              t
+              t,
             )}
           </Typography>
         </Box>
@@ -459,7 +459,7 @@ export const CourseBookingReview: React.FC<
                     .toNumber(),
                   currency: booking.currency,
                 },
-                t
+                t,
               )}
             </Typography>
           </Box>
@@ -475,7 +475,7 @@ export const CourseBookingReview: React.FC<
                 amount: new Big(amounts.total).round(2).toNumber(),
                 currency: booking.currency,
               },
-              t
+              t,
             )}
           </Typography>
         </Box>
@@ -506,7 +506,7 @@ export const CourseBookingReview: React.FC<
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('terms-of-use')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                       href={`${
                         import.meta.env.VITE_BASE_TEAMTEACH
@@ -518,7 +518,7 @@ export const CourseBookingReview: React.FC<
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('privacy-policy')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                       href={`${
                         import.meta.env.VITE_BASE_TEAMTEACH
@@ -531,7 +531,7 @@ export const CourseBookingReview: React.FC<
                       rel="noreferrer"
                       sx={{ color: 'blue' }}
                       aria-label={`${t('more-information')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                       href={`${import.meta.env.VITE_INFO_URL}`}
                     />
@@ -549,7 +549,7 @@ export const CourseBookingReview: React.FC<
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('terms-of-use')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                       href={`${
                         import.meta.env.VITE_BASE_TEAMTEACH
@@ -561,7 +561,7 @@ export const CourseBookingReview: React.FC<
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('privacy-policy')} (${t(
-                        'opens-new-window'
+                        'opens-new-window',
                       )})`}
                       href={`${
                         import.meta.env.VITE_BASE_TEAMTEACH

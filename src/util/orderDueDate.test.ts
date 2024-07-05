@@ -81,7 +81,7 @@ describe('orderDueDate utils', () => {
       const result = isOrderDueDateImmediate(
         creationDate,
         startDate,
-        PaymentMethod.Cc
+        PaymentMethod.Cc,
       )
 
       expect(result).toBe(true)

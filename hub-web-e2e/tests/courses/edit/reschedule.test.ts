@@ -35,7 +35,7 @@ const testDataMovingEarlier = [
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
-        InviteStatus.ACCEPTED
+        InviteStatus.ACCEPTED,
       )
       return course
     },
@@ -97,7 +97,7 @@ const testDataMovingEarlier = [
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
-        true
+        true,
       )
       return course
     },
@@ -146,7 +146,7 @@ const testDataMovingEarlier = [
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
-        InviteStatus.ACCEPTED
+        InviteStatus.ACCEPTED,
       )
       return course
     },
@@ -177,18 +177,18 @@ for (const data of testDataMovingEarlier) {
 
     const formattedStartDate = format(
       course.schedule[0].start,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
     const formattedEndDate = format(
       course.schedule[0].end,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
 
     await expect(await courseDetailsPage.startDateLabel).toContainText(
-      formattedStartDate
+      formattedStartDate,
     )
     await expect(await courseDetailsPage.endDateLabel).toContainText(
-      formattedEndDate
+      formattedEndDate,
     )
     await courseDetailsPage.clickEditCourseButton()
     await createCoursePage.setStartDateTime(data.newStartDate)
@@ -196,7 +196,7 @@ for (const data of testDataMovingEarlier) {
     await createCoursePage.clickSaveChangesButton()
     await confirmRescheduleModal.confirmChange(
       'trainer availability',
-      course.type
+      course.type,
     )
 
     if (data.user === 'trainer') {
@@ -206,18 +206,18 @@ for (const data of testDataMovingEarlier) {
 
     const formattedNewStartDate = format(
       data.newStartDate,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
     const formattedNewEndDate = format(
       data.newEndDate,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
 
     await expect(await courseDetailsPage.startDateLabel).toContainText(
-      formattedNewStartDate
+      formattedNewStartDate,
     )
     await expect(await courseDetailsPage.endDateLabel).toContainText(
-      formattedNewEndDate
+      formattedNewEndDate,
     )
   })
 }
@@ -238,7 +238,7 @@ const testDataMovingLater = [
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
-        InviteStatus.ACCEPTED
+        InviteStatus.ACCEPTED,
       )
       return course
     },
@@ -300,7 +300,7 @@ const testDataMovingLater = [
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
-        true
+        true,
       )
       return course
     },
@@ -323,7 +323,7 @@ const testDataMovingLater = [
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
-        InviteStatus.ACCEPTED
+        InviteStatus.ACCEPTED,
       )
       return course
     },
@@ -352,18 +352,18 @@ for (const data of testDataMovingLater) {
 
     const formattedStartDate = format(
       course.schedule[0].start,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
     const formattedEndDate = format(
       course.schedule[0].end,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
 
     await expect(await courseDetailsPage.startDateLabel).toContainText(
-      formattedStartDate
+      formattedStartDate,
     )
     await expect(await courseDetailsPage.endDateLabel).toContainText(
-      formattedEndDate
+      formattedEndDate,
     )
     await courseDetailsPage.clickEditCourseButton()
     await createCoursePage.setStartDateTime(data.newStartDate)
@@ -371,11 +371,11 @@ for (const data of testDataMovingLater) {
     await createCoursePage.clickSaveChangesButton()
     const formattedNewStartDate = format(
       data.newStartDate,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
     const formattedNewEndDate = format(
       data.newEndDate,
-      courseDetailsPage.dateFormat
+      courseDetailsPage.dateFormat,
     )
 
     if (data.user === 'trainer') {
@@ -384,10 +384,10 @@ for (const data of testDataMovingLater) {
     }
 
     await expect(await courseDetailsPage.startDateLabel).toContainText(
-      formattedNewStartDate
+      formattedNewStartDate,
     )
     await expect(await courseDetailsPage.endDateLabel).toContainText(
-      formattedNewEndDate
+      formattedNewEndDate,
     )
   })
 }

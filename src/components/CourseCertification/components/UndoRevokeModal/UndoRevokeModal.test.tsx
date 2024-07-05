@@ -28,10 +28,10 @@ describe('UndoRevokeModal', () => {
           certificateId={certificateId}
           participantId={participantId}
         />
-      </Provider>
+      </Provider>,
     )
     expect(
-      screen.getByText(/user will regain full access/i)
+      screen.getByText(/user will regain full access/i),
     ).toBeInTheDocument()
 
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled()
@@ -51,7 +51,7 @@ describe('UndoRevokeModal', () => {
           certificateId={certificateId}
           participantId={participantId}
         />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(screen.getByRole('checkbox'))

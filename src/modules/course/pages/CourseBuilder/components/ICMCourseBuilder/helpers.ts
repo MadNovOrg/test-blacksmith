@@ -27,7 +27,7 @@ export const getMinimumTimeCommitment = ({
 
 export function filterModuleGroups(
   groups: ModuleGroupsQuery['groups'],
-  config: { level: Course_Level_Enum; type: Course_Type_Enum }
+  config: { level: Course_Level_Enum; type: Course_Type_Enum },
 ) {
   return groups
     .filter(group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0)

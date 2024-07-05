@@ -69,7 +69,7 @@ export const LoginPage = () => {
             .required(t('validation-errors.password-required')),
         })
         .required(),
-    [t]
+    [t],
   )
 
   const {
@@ -113,7 +113,7 @@ export const LoginPage = () => {
     setIsLoading(false)
     setLoginError(
       t(`pages.login.auth-errors.${error.code}`) ||
-        t(`pages.login.auth-errors.UnknownError`)
+        t(`pages.login.auth-errors.UnknownError`),
     )
   }
 

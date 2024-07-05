@@ -39,7 +39,7 @@ export const ResourceItemCard = ({ resource }: Props) => {
   const { t } = useTranslation()
 
   const [resourceItem, setResourceItem] = useState<IResourceTypeItem | null>(
-    null
+    null,
   )
 
   const resourceType = resource.resourceAttachment?.resourcetype

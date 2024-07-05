@@ -74,7 +74,7 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
   // these fields are only shown for International Courses
   const showCurrencyAndVATfields = useMemo(
     () => !isUKCountry(residingCountry),
-    [isUKCountry, residingCountry]
+    [isUKCountry, residingCountry],
   )
 
   return (

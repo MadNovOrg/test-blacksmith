@@ -22,13 +22,13 @@ export function getPreselectedModules({
 
   const hasPrimary = courseStrategies.some(s => s.strategyName === 'PRIMARY')
   const hasSecondary = courseStrategies.some(
-    s => s.strategyName === 'SECONDARY'
+    s => s.strategyName === 'SECONDARY',
   )
 
   if (isTrainerLevelCourse) {
     courseStrategies.forEach(courseStrategy => {
       const strategy = allStrategies.find(
-        s => s.name === courseStrategy.strategyName
+        s => s.name === courseStrategy.strategyName,
       )
 
       strategy?.modules.modules?.forEach(module => {
@@ -97,10 +97,10 @@ export function getDisabledStrategies({
 
   return {
     [BildStrategies.Primary]: courseStrategies.some(
-      s => s.strategyName === BildStrategies.Primary
+      s => s.strategyName === BildStrategies.Primary,
     ),
     [BildStrategies.Secondary]: courseStrategies.some(
-      s => s.strategyName === BildStrategies.Secondary
+      s => s.strategyName === BildStrategies.Secondary,
     ),
   }
 }

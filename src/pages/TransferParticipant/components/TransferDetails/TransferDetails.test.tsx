@@ -98,7 +98,7 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/details'] }
+      { initialEntries: ['/details'] },
     )
 
     await waitFor(() => {
@@ -164,13 +164,13 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     await userEvent.click(
       screen.getByText(
-        t('pages.transfer-participant.transfer-details.back-btn-label')
-      )
+        t('pages.transfer-participant.transfer-details.back-btn-label'),
+      ),
     )
 
     await waitFor(() => {
@@ -244,13 +244,13 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     await userEvent.click(
       screen.getByLabelText(
-        t('pages.transfer-participant.transfer-details.apply-terms-option')
-      )
+        t('pages.transfer-participant.transfer-details.apply-terms-option'),
+      ),
     )
 
     expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
@@ -260,8 +260,8 @@ describe('page: TransferDetails', () => {
 
     await userEvent.click(
       screen.getByText(
-        t('pages.transfer-participant.transfer-details.next-btn-label')
-      )
+        t('pages.transfer-participant.transfer-details.next-btn-label'),
+      ),
     )
 
     await waitFor(() => {
@@ -335,17 +335,17 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     await userEvent.click(
       screen.getByLabelText(
-        t('pages.transfer-participant.review-transfer.custom-fee')
-      )
+        t('pages.transfer-participant.review-transfer.custom-fee'),
+      ),
     )
     await userEvent.type(
       screen.getByLabelText(t('components.fees-form.custom-fee-label')),
-      '50'
+      '50',
     )
 
     const transferReasonField = screen.getByTestId('reasonForTransfer-input')
@@ -355,8 +355,8 @@ describe('page: TransferDetails', () => {
 
     await userEvent.click(
       screen.getByText(
-        t('pages.transfer-participant.transfer-details.next-btn-label')
-      )
+        t('pages.transfer-participant.transfer-details.next-btn-label'),
+      ),
     )
 
     await waitFor(() => {
@@ -419,19 +419,19 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     await userEvent.click(
       screen.getByLabelText(
-        t('pages.transfer-participant.review-transfer.custom-fee')
-      )
+        t('pages.transfer-participant.review-transfer.custom-fee'),
+      ),
     )
 
     expect(
       screen.getByText(
-        t('pages.transfer-participant.transfer-details.next-btn-label')
-      )
+        t('pages.transfer-participant.transfer-details.next-btn-label'),
+      ),
     ).toBeDisabled()
   })
 
@@ -494,23 +494,23 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     await waitFor(() => {
       expect(
         screen.queryByLabelText(
-          t('pages.transfer-participant.transfer-details.apply-terms-option')
-        )
+          t('pages.transfer-participant.transfer-details.apply-terms-option'),
+        ),
       ).not.toBeInTheDocument()
 
       expect(
         screen.queryByLabelText(
-          t('pages.transfer-participant.review-transfer.custom-fee')
-        )
+          t('pages.transfer-participant.review-transfer.custom-fee'),
+        ),
       ).not.toBeInTheDocument()
       expect(
-        screen.queryByLabelText(t('components.fees-form.no-fee-option'))
+        screen.queryByLabelText(t('components.fees-form.no-fee-option')),
       ).not.toBeInTheDocument()
 
       expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
@@ -588,27 +588,27 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     expect(
-      screen.getByTestId('order-course-duration').textContent
+      screen.getByTestId('order-course-duration').textContent,
     ).toMatchInlineSnapshot(
       `"${t('dates.defaultShort', { date: toCourse.startDate })}${t(
-        'pages.course-participants.course-beggins'
+        'pages.course-participants.course-beggins',
       )} ${t('dates.time', {
         date: utcToZonedTime(toCourse.startDate, toCourseTimezone),
       })} ${formatGMTDateTimeByTimeZone(
         toCourse.startDate,
         toCourseTimezone,
-        true
+        true,
       )}${t('pages.course-participants.course-ends')} ${t('dates.time', {
         date: utcToZonedTime(toCourse.endDate, toCourseTimezone),
       })} ${formatGMTDateTimeByTimeZone(
         toCourse.endDate,
         toCourseTimezone,
-        true
-      )}"`
+        true,
+      )}"`,
     )
   })
 
@@ -681,27 +681,27 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     expect(
-      screen.getByTestId('order-course-duration').textContent
+      screen.getByTestId('order-course-duration').textContent,
     ).toMatchInlineSnapshot(
       `"${t('dates.defaultShort', { date: toCourse.startDate })}${t(
-        'pages.course-participants.course-beggins'
+        'pages.course-participants.course-beggins',
       )} ${t('dates.time', {
         date: utcToZonedTime(toCourse.startDate, defaultTimeZone),
       })} ${formatGMTDateTimeByTimeZone(
         toCourse.startDate,
         defaultTimeZone,
-        true
+        true,
       )}${t('pages.course-participants.course-ends')} ${t('dates.time', {
         date: utcToZonedTime(toCourse.endDate, defaultTimeZone),
       })} ${formatGMTDateTimeByTimeZone(
         toCourse.endDate,
         defaultTimeZone,
-        true
-      )}"`
+        true,
+      )}"`,
     )
   })
 
@@ -774,27 +774,27 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     expect(
-      screen.getByLabelText(t('line1'), { exact: false })
+      screen.getByLabelText(t('line1'), { exact: false }),
     ).toBeInTheDocument()
     expect(screen.getByLabelText(t('line2'))).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('city'), { exact: false })
+      screen.getByLabelText(t('city'), { exact: false }),
     ).toBeInTheDocument()
 
     expect(
       screen.getByLabelText(
         t('components.venue-selector.modal.fields.postCode'),
-        { exact: false }
-      )
+        { exact: false },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByLabelText(t('residing-country'), { exact: false })
+      screen.getByLabelText(t('residing-country'), { exact: false }),
     ).toBeInTheDocument()
   })
 
@@ -867,17 +867,17 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     const noFeeCheckbox = screen.getByLabelText(
-      t('components.fees-form.no-fee-option')
+      t('components.fees-form.no-fee-option'),
     )
     await userEvent.click(noFeeCheckbox)
 
     const reason = screen.getByLabelText(
       t('pages.edit-course.transfer.reason-for-transfer'),
-      { exact: false }
+      { exact: false },
     )
     await userEvent.type(reason, 'Reason')
 
@@ -894,19 +894,19 @@ describe('page: TransferDetails', () => {
 
     const postCode = screen.getByLabelText(
       t('components.venue-selector.modal.fields.postCode'),
-      { exact: false }
+      { exact: false },
     )
     expect(postCode).toBeInTheDocument()
     await userEvent.type(postCode, 'WC2N 5DU')
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
     await userEvent.type(textField, 'England')
@@ -988,17 +988,17 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     const noFeeCheckbox = screen.getByLabelText(
-      t('components.fees-form.no-fee-option')
+      t('components.fees-form.no-fee-option'),
     )
     await userEvent.click(noFeeCheckbox)
 
     const reason = screen.getByLabelText(
       t('pages.edit-course.transfer.reason-for-transfer'),
-      { exact: false }
+      { exact: false },
     )
     await userEvent.type(reason, 'Reason')
 
@@ -1013,18 +1013,18 @@ describe('page: TransferDetails', () => {
 
     const postCode = screen.getByLabelText(
       t('components.venue-selector.modal.fields.postCode'),
-      { exact: false }
+      { exact: false },
     )
     expect(postCode).toBeInTheDocument()
 
     const countriesSelector = screen.getByTestId(
-      'countries-selector-autocomplete'
+      'countries-selector-autocomplete',
     )
     expect(countriesSelector).toBeInTheDocument()
     countriesSelector.focus()
 
     const textField = within(countriesSelector).getByTestId(
-      'countries-selector-input'
+      'countries-selector-input',
     )
     expect(textField).toBeInTheDocument()
 
@@ -1101,17 +1101,17 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     const noFeeCheckbox = screen.getByLabelText(
-      t('components.fees-form.no-fee-option')
+      t('components.fees-form.no-fee-option'),
     )
     await userEvent.click(noFeeCheckbox)
 
     const reason = screen.getByLabelText(
       t('pages.edit-course.transfer.reason-for-transfer'),
-      { exact: false }
+      { exact: false },
     )
     await userEvent.type(reason, 'Reason')
 
@@ -1188,27 +1188,27 @@ describe('page: TransferDetails', () => {
         </TransferParticipantProvider>
       </Provider>,
       {},
-      { initialEntries: ['/transfer/participant-id/details'] }
+      { initialEntries: ['/transfer/participant-id/details'] },
     )
 
     expect(
-      screen.queryByLabelText(t('line1'), { exact: false })
+      screen.queryByLabelText(t('line1'), { exact: false }),
     ).not.toBeInTheDocument()
     expect(screen.queryByLabelText(t('line2'))).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('city'), { exact: false })
+      screen.queryByLabelText(t('city'), { exact: false }),
     ).not.toBeInTheDocument()
 
     expect(
       screen.queryByLabelText(
         t('components.venue-selector.modal.fields.postCode'),
-        { exact: false }
-      )
+        { exact: false },
+      ),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.queryByLabelText(t('residing-country'), { exact: false })
+      screen.queryByLabelText(t('residing-country'), { exact: false }),
     ).not.toBeInTheDocument()
   })
 })

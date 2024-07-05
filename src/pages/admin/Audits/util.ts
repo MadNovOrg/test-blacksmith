@@ -5,7 +5,7 @@ import {
 
 export const getExportDataRenderFunction = <T>(
   cols: { label: string; exportRender: (o: T) => string }[],
-  logs: T[]
+  logs: T[],
 ) => {
   return () => {
     return [
@@ -24,7 +24,7 @@ export const getCourseInvoice = (log: CourseLogType) => {
   }
   if (log.xero_invoice_number) {
     return log.course?.orders?.find(
-      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number
+      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number,
     )
   } else {
     return log.course?.orders[0]
@@ -36,7 +36,7 @@ export const getAttendeeInvoice = (log: AttendeeLogType) => {
   }
   if (log.xero_invoice_number) {
     return log.course?.orders?.find(
-      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number
+      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number,
     )
   } else {
     return log.course?.orders[0]

@@ -82,7 +82,7 @@ export const Contacts: React.FC<
         label: 'Role',
       },
     ],
-    [t]
+    [t],
   )
   const roleOptions = useMemo<FilterOption[]>(() => {
     return Object.values([
@@ -116,7 +116,7 @@ export const Contacts: React.FC<
     const obj: Record<string, object> = {}
 
     const selectedRoles = roleFilter.flatMap(item =>
-      item.selected ? item.id : []
+      item.selected ? item.id : [],
     )
 
     if (selectedRoles.length) {
@@ -166,7 +166,7 @@ export const Contacts: React.FC<
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   return (

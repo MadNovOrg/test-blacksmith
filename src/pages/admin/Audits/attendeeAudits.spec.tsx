@@ -76,7 +76,7 @@ describe('Attendee Audit Logs', () => {
       // Assert
       expect(screen.getAllByRole('row')).toHaveLength(2)
       expect(
-        screen.getByRole('cell', { name: 'XERO_INVOICE_NUMBER' })
+        screen.getByRole('cell', { name: 'XERO_INVOICE_NUMBER' }),
       ).toBeInTheDocument()
     })
 
@@ -197,7 +197,7 @@ describe('Attendee Audit Logs', () => {
       // Assert
       expect(screen.getAllByRole('row')).toHaveLength(2)
       expect(
-        screen.getByRole('cell', { name: 'TT-0022580' })
+        screen.getByRole('cell', { name: 'TT-0022580' }),
       ).toBeInTheDocument()
     })
   })
@@ -218,7 +218,7 @@ describe('Attendee Audit Logs', () => {
       // Assert
       expect(screen.getAllByRole('row')).toHaveLength(2)
       expect(
-        screen.getByRole('cell', { name: 'XERO_INVOICE_NUMBER' })
+        screen.getByRole('cell', { name: 'XERO_INVOICE_NUMBER' }),
       ).toBeInTheDocument()
     })
   })

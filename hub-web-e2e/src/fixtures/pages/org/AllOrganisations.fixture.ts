@@ -55,15 +55,15 @@ export class AllOrganisations extends BasePage {
   constructor(page: Page) {
     super(page)
     this.addNewOrganisation = this.page.locator(
-      '[data-testid="add-new-org-button"]'
+      '[data-testid="add-new-org-button"]',
     )
     this.autocompleteOption = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-option'
+      '.MuiAutocomplete-popper .MuiAutocomplete-option',
     )
     this.blendedLicences = this.page.locator('data-testid=org-blended-licences')
     this.city = this.page.locator('[data-testid="city"]')
     this.country = this.page.locator(
-      '[data-testid="countries-selector-autocomplete"] input'
+      '[data-testid="countries-selector-autocomplete"] input',
     )
     this.email = this.page.locator('data-testid=org-email')
     this.exportHistory = this.page.locator('data-testid=export-history')
@@ -73,46 +73,46 @@ export class AllOrganisations extends BasePage {
     this.licencesRemaining = this.page.locator('data-testid=licenses-remaining')
     this.line1 = this.page.locator('[data-testid="addr-line1"]')
     this.manageRemainingLicences = this.page.locator(
-      'data-testid=manage-remaining-licences'
+      'data-testid=manage-remaining-licences',
     )
     this.numberOfLicences = this.page.locator('text=Number of licences *')
     this.organisationName = this.page.locator('[data-testid="org-name"] input')
     this.organisationSummaryTable = this.page.locator(
-      '[data-testid="organisation-summary-table"]'
+      '[data-testid="organisation-summary-table"]',
     )
     this.phone = this.page.locator('data-testid=org-phone')
     this.postCode = this.page.locator('[data-testid="postCode"]')
     this.removeCheckbox = this.page.locator(
-      'data-testid=licence-remove-checkbox'
+      'data-testid=licence-remove-checkbox',
     )
     this.saveDetails = this.page.locator('data-testid=licence-save-details')
     this.saveOrganisation = this.page.locator(
-      '[data-testid="create-org-form-submit-btn"]'
+      '[data-testid="create-org-form-submit-btn"]',
     )
     this.sector = this.page.locator('data-testid=sector-select')
     this.seeAllOrgs = this.page.locator('[data-testid="see-all-organisations"]')
     this.seeAllCourses = this.page.locator('[data-testId="see-all-courses"]')
     this.searchAvailableCourses = this.page.locator(
-      '[data-testid="FilterSearch-Input"]'
+      '[data-testid="FilterSearch-Input"]',
     )
     this.bookNow = this.page.locator('button:has-text("Book now")')
     this.joinWaitingList = this.page.locator(
-      'button:has-text("Join waiting list")'
+      'button:has-text("Join waiting list")',
     )
     this.trustName = this.page.locator('[data-testid="trust-name"]')
     this.workEmail = this.page.locator('[data-testid="input-admin-email"]')
     this.individualsTab = this.page.locator('[data-testid="org-individuals"]')
     this.inviteUserButton = this.page.locator(
-      '[data-testid="invite-user-to-org"]'
+      '[data-testid="invite-user-to-org"]',
     )
     this.inviteOrgWorkEmail = this.page.locator('text=Work email *')
     this.confirmInviteUsers = this.page.locator(
-      '[data-testid="invite-user-submit-btn"]'
+      '[data-testid="invite-user-submit-btn"]',
     )
     this.orgTable = this.page.locator('tbody tr >> nth=0')
     this.editUserButton = this.page.locator('[data-testid=edit-user-button]')
     this.organisationMembersTable = this.page.locator(
-      '[data-testid=organisation-members]'
+      '[data-testid=organisation-members]',
     )
     this.organisationTitle = this.page.locator('[data-testid=org-title]')
     this.type = this.page.locator('data-testid=org-type-selector')
@@ -210,7 +210,7 @@ export class AllOrganisations extends BasePage {
   }
   async findNewOrg() {
     await expect(this.organisationSummaryTable).toContainText(
-      this.inputtedOrgName
+      this.inputtedOrgName,
     )
     await this.page
       .getByRole('link', { name: this.inputtedOrgName })
@@ -326,11 +326,11 @@ export class AllOrganisations extends BasePage {
   async checkOrganisationUserExists(user: User, exists: boolean) {
     if (exists) {
       await expect(this.organisationMembersTable).toContainText(
-        `${user.givenName} ${user.familyName}`
+        `${user.givenName} ${user.familyName}`,
       )
     } else {
       await expect(this.organisationMembersTable).not.toContainText(
-        `${user.givenName} ${user.familyName}`
+        `${user.givenName} ${user.familyName}`,
       )
     }
   }

@@ -63,9 +63,9 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const org = useMemo(
     () =>
       [...(allOrgs?.orgs ?? []), ...(allOrgs?.specificOrg ?? [])].find(
-        o => o.id === id
+        o => o.id === id,
       ),
-    [allOrgs, id]
+    [allOrgs, id],
   )
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
   const [selectedTab, setSelectedTab] = useState(
-    initialTab || OrgDashboardTabs.OVERVIEW
+    initialTab || OrgDashboardTabs.OVERVIEW,
   )
 
   return (

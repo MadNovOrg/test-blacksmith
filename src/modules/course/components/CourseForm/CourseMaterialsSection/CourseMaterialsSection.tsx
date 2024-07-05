@@ -16,7 +16,7 @@ type Props = {
 
 export const CourseMaterialsSection = ({ isCreation }: Props) => {
   const { t } = useScopedTranslation(
-    'components.course-form.mandatory-course-materials'
+    'components.course-form.mandatory-course-materials',
   )
   const {
     register,
@@ -40,7 +40,7 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
         setEnableEditMCM(false)
         setValue(
           'mandatoryCourseMaterials',
-          initialMandatoryCourseMaterials.current
+          initialMandatoryCourseMaterials.current,
         )
       } else {
         setEnableEditMCM(true)

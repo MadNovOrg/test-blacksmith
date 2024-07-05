@@ -20,7 +20,7 @@ describe('AddOrg component', () => {
     },
   } = renderHook(() => useTranslation())
   const labels = Object.values(
-    t('components.add-organisation.fields', { returnObjects: true })
+    t('components.add-organisation.fields', { returnObjects: true }),
   )
   it.each([
     t('components.add-organisation.component-title'),
@@ -30,7 +30,7 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.zipCode') &&
         label !== t('components.add-organisation.fields.postCode') &&
         label !==
-          t('components.add-organisation.fields.organisation-specify-other')
+          t('components.add-organisation.fields.organisation-specify-other'),
     ),
   ])('renders % field', async field => {
     useFeatureFlagEnabled('add-organization-country')
@@ -40,7 +40,7 @@ describe('AddOrg component', () => {
         countryCode={'GB-ENG'}
         onSuccess={vi.fn()}
         onClose={vi.fn()}
-      />
+      />,
     )
     expect(screen.getByText(field)).toBeInTheDocument()
   })
@@ -53,7 +53,7 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.postCode') &&
         label !== t('components.add-organisation.fields.zipCode') &&
         label !==
-          t('components.add-organisation.fields.organisation-specify-other')
+          t('components.add-organisation.fields.organisation-specify-other'),
     ),
   ])('renders % field', async field => {
     useFeatureFlagEnabled('add-organization-country')
@@ -63,7 +63,7 @@ describe('AddOrg component', () => {
         countryCode={'RO'}
         onSuccess={vi.fn()}
         onClose={vi.fn()}
-      />
+      />,
     )
     expect(screen.getByText(field)).toBeInTheDocument()
   })
@@ -75,7 +75,7 @@ describe('AddOrg component', () => {
         countryCode={'GB-ENG'}
         onSuccess={vi.fn()}
         onClose={vi.fn()}
-      />
+      />,
     )
 
     expect(screen.getByText('Add Organisation')).toBeInTheDocument()
@@ -84,7 +84,7 @@ describe('AddOrg component', () => {
 
     fireEvent.mouseOver(tooltipElement)
     const tooltipMessage = await screen.findByText(
-      t('common.post-code-tooltip')
+      t('common.post-code-tooltip'),
     )
     expect(tooltipMessage).toBeInTheDocument()
   })

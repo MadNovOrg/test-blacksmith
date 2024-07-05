@@ -60,23 +60,23 @@ export const getFormSchema = (
   t: TFunction,
   _t: TFunction,
   isInUK: boolean,
-  addOrgCountriesSelectorEnabled: boolean
+  addOrgCountriesSelectorEnabled: boolean,
 ) =>
   yup.object({
     name: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.organization-name'),
-      })
+      }),
     ),
     sector: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.organization-sector'),
-      })
+      }),
     ),
     organisationType: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.organization-type'),
-      })
+      }),
     ),
     orgTypeSpecifyOther: yup.string().when('organisationType', {
       is: (value: string) => value && value.toLocaleLowerCase() === 'other',
@@ -84,21 +84,21 @@ export const getFormSchema = (
         schema.required(
           _t('validation-errors.required-field', {
             name: t('fields.organisation-specify-other'),
-          })
+          }),
         ),
     }),
 
     orgPhone: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.organization-phone'),
-      })
+      }),
     ),
     orgEmail: yup
       .string()
       .required(
         _t('validation-errors.required-field', {
           name: t('fields.organization-email'),
-        })
+        }),
       )
       .email(_t('validation-errors.email-invalid')),
     website: yup.string(),
@@ -109,19 +109,19 @@ export const getFormSchema = (
     addressLine1: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.addresses.line1'),
-      })
+      }),
     ),
     addressLine2: yup.string(),
     city: yup.string().required(
       _t('validation-errors.required-composed-field', {
         field1: t('fields.addresses.town'),
         field2: t('fields.addresses.city'),
-      })
+      }),
     ),
     country: yup.string().required(
       _t('validation-errors.required-field', {
         name: t('fields.addresses.country'),
-      })
+      }),
     ),
     ...(addOrgCountriesSelectorEnabled
       ? {
@@ -132,12 +132,12 @@ export const getFormSchema = (
                   .required(
                     _t('validation-errors.required-field', {
                       name: t('fields.addresses.postcode'),
-                    })
+                    }),
                   )
                   .test(
                     'is-uk-postcode',
                     _t('validation-errors.invalid-postcode'),
-                    isValidUKPostalCode
+                    isValidUKPostalCode,
                   ),
               }
             : {
@@ -150,12 +150,12 @@ export const getFormSchema = (
             .required(
               _t('validation-errors.required-field', {
                 name: t('fields.addresses.postcode'),
-              })
+              }),
             )
             .test(
               'is-uk-postcode',
               _t('validation-errors.invalid-postcode'),
-              isValidUKPostalCode
+              isValidUKPostalCode,
             ),
         }),
   })
@@ -169,7 +169,7 @@ const isEnrollmentEndDateInFuture = (enrollment: Maybe<UpcominEnrollment>) => {
 export type profilesByLevelType = Map<CourseLevel, OrganizationProfile[]>
 
 export const filterProfilesByEnrollments = (
-  profilesByLevel: profilesByLevelType
+  profilesByLevel: profilesByLevelType,
 ) => {
   const filteredProfilesByLevel: profilesByLevelType = new Map()
 
@@ -177,7 +177,7 @@ export const filterProfilesByEnrollments = (
     const notEndedCourses = profiles.map(profile => ({
       ...profile,
       upcomingEnrollments: profile?.upcomingEnrollments?.filter(enrollment =>
-        isEnrollmentEndDateInFuture(enrollment)
+        isEnrollmentEndDateInFuture(enrollment),
       ),
     }))
 
@@ -191,7 +191,7 @@ export const filterProfilesByEnrollments = (
 
 export const filterOrganisationProfilesById = (
   profilesByOrganisation: profilesByLevelType,
-  profilesByLvl: profilesByLevelType
+  profilesByLvl: profilesByLevelType,
 ) => {
   const filteredOrganisations: profilesByLevelType = new Map()
 
@@ -207,7 +207,7 @@ export const filterOrganisationProfilesById = (
 
   profilesByOrganisation.forEach((profiles, level) => {
     const filteredProfiles = profiles.filter(profile =>
-      idsInProfiles?.has(profile.id)
+      idsInProfiles?.has(profile.id),
     )
 
     if (filteredProfiles.length) {

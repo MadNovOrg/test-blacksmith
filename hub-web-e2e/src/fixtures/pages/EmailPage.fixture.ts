@@ -19,7 +19,7 @@ export class EmailPage {
     this.registerNowButton = this.page.locator('text="Register Now"')
     this.acceptInviteButton = this.page.locator('text="Accept/Deny"')
     this.confirmAttendanceButton = this.page.locator(
-      'text="Confirm attendance"'
+      'text="Confirm attendance"',
     )
   }
 

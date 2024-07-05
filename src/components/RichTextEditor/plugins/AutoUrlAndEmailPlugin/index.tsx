@@ -11,7 +11,7 @@ const EMAIL_REGEX =
 
 const createLinkMatcherWithRegExp = (
   regExp: RegExp,
-  urlTransformer: (text: string) => string = text => text
+  urlTransformer: (text: string) => string = text => text,
 ) => {
   return (text: string) => {
     const match = regExp.exec(text)

@@ -73,7 +73,7 @@ type Props = {
 
 export const useOrgInvites = (
   orgId: string,
-  { limit, offset, where }: Props
+  { limit, offset, where }: Props,
 ) => {
   const [{ data, error, fetching }, mutate] = useQuery<
     GetOrgInvitesQuery,
@@ -100,7 +100,7 @@ export const useOrgInvites = (
       })
       mutate()
     },
-    [mutate, resendOrgInvite]
+    [mutate, resendOrgInvite],
   )
 
   const cancel = useCallback(
@@ -110,7 +110,7 @@ export const useOrgInvites = (
       })
       mutate()
     },
-    [deleteOrgInvite, mutate]
+    [deleteOrgInvite, mutate],
   )
 
   return useMemo(
@@ -131,6 +131,6 @@ export const useOrgInvites = (
       error,
       fetching,
       mutate,
-    ]
+    ],
   )
 }

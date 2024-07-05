@@ -8,7 +8,7 @@ import {
 import { getClient } from './client'
 
 export async function insertGo1HistoryEvent(
-  event: Go1_Licenses_History_Set_Input
+  event: Go1_Licenses_History_Set_Input,
 ): Promise<{ id: string }> {
   const mutation = gql`
     mutation InsertLicenseHistoryEvent(

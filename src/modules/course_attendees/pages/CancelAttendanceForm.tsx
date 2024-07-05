@@ -53,7 +53,7 @@ export const CancelAttendanceForm: React.FC<
       <Box mt={4}>
         <FormControlLabel
           label={t(
-            'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
+            'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation',
           )}
           control={
             <Checkbox checked={agreeTerms} onChange={onAgreeTermsChange} />

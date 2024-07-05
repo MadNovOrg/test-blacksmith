@@ -81,7 +81,7 @@ describe('component: CourseForm', () => {
           auth: {
             activeCertificates: [Course_Level_Enum.IntermediateTrainer],
           },
-        }
+        },
       )
     })
 
@@ -94,12 +94,12 @@ describe('component: CourseForm', () => {
 
     const startDate = format(new Date(schedule.start), INPUT_DATE_FORMAT)
     expect(screen.getByLabelText('Start date', { exact: false })).toHaveValue(
-      startDate
+      startDate,
     )
 
     const startTime = format(new Date(schedule.start), INPUT_TIME_FORMAT)
     expect(screen.getByLabelText('Start time', { exact: false })).toHaveValue(
-      startTime
+      startTime,
     )
 
     const min = screen.getByTestId('min-attendees').querySelector('input')

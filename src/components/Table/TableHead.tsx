@@ -39,7 +39,7 @@ export const TableHead: React.FC<React.PropsWithChildren<TableHeadProps>> = ({
 }) => {
   const createSortHandler = useCallback(
     (col: Col) => () => onRequestSort(col.id),
-    [onRequestSort]
+    [onRequestSort],
   )
 
   return (

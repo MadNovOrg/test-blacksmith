@@ -30,12 +30,12 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
   const levels = isBSEnabled
     ? Object.values(Course_Level_Enum)
     : Object.values(Course_Level_Enum).filter(
-        level => level !== Course_Level_Enum.Level_1Bs
+        level => level !== Course_Level_Enum.Level_1Bs,
       )
 
   const onSelected = (
     ev: React.SyntheticEvent,
-    selected: Course_Level_Enum[]
+    selected: Course_Level_Enum[],
   ) => {
     onChange({ target: { value: selected } })
   }

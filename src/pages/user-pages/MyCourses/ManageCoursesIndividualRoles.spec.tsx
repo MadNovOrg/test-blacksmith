@@ -48,9 +48,9 @@ describe('Booking contact and Org key contact manage courses page', () => {
       await userEvent.click(statusFilter)
 
       expect(
-        within(statusFilter).getByText(t(`course-statuses.${status}`))
+        within(statusFilter).getByText(t(`course-statuses.${status}`)),
       ).toBeInTheDocument()
-    }
+    },
   )
 
   it('display cancel requested courses for booking contact and org key contact', async () => {
@@ -88,7 +88,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.BOOKING_CONTACT } }
+      { auth: { activeRole: RoleName.BOOKING_CONTACT } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -96,16 +96,16 @@ describe('Booking contact and Org key contact manage courses page', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`)
-      )
+        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`),
+      ),
     )
 
     expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`)
-      )
+        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -153,7 +153,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.BOOKING_CONTACT } }
+      { auth: { activeRole: RoleName.BOOKING_CONTACT } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -161,28 +161,28 @@ describe('Booking contact and Org key contact manage courses page', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+      ),
     )
 
     expect(
-      screen.getByTestId(`course-row-${courses[0].id}`)
+      screen.getByTestId(`course-row-${courses[0].id}`),
     ).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${courses[0].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-row-${courses[1].id}`)
+      screen.getByTestId(`course-row-${courses[1].id}`),
     ).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${courses[1].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -211,7 +211,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
 
         const scheduledCondition =
           orCondition[0]?.status?._nin?.includes(
-            Course_Status_Enum.Cancelled
+            Course_Status_Enum.Cancelled,
           ) &&
           orCondition[0]?.status?._nin?.includes(Course_Status_Enum.Declined) &&
           Boolean(orCondition[0]?.schedule?.end?._gt)
@@ -235,7 +235,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses isBookingContact={true} />
       </Provider>,
-      { auth: { activeRole: RoleName.BOOKING_CONTACT } }
+      { auth: { activeRole: RoleName.BOOKING_CONTACT } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -243,16 +243,16 @@ describe('Booking contact and Org key contact manage courses page', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+      ),
     )
 
     expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -310,7 +310,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses isBookingContact={true} />
       </Provider>,
-      { auth: { activeRole: RoleName.BOOKING_CONTACT } }
+      { auth: { activeRole: RoleName.BOOKING_CONTACT } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -318,16 +318,16 @@ describe('Booking contact and Org key contact manage courses page', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`)
-      )
+        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
+      ),
     )
 
     expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`)
-      )
+        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -357,13 +357,13 @@ describe('Booking contact and Org key contact manage courses page', () => {
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.BOOKING_CONTACT } }
+      { auth: { activeRole: RoleName.BOOKING_CONTACT } },
     )
 
     expect(
       within(screen.getByTestId(`course-row-${courses[0].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Completed}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Completed}`),
+      ),
     ).toBeInTheDocument()
   })
 })

@@ -42,7 +42,7 @@ export const OrderMenu: React.FC<React.PropsWithChildren<Props>> = ({
   const handleMenuItemClick = (
     _event: unknown,
     index: React.SetStateAction<number>,
-    key: OrderDirection
+    key: OrderDirection,
   ) => {
     setSelectedIndex(index)
     setAnchorEl(null)

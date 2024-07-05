@@ -42,7 +42,7 @@ describe('page: AcceptInvite', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/accept-invite/${INVITE_ID}?courseId=${COURSE_ID}`] }
+      { initialEntries: [`/accept-invite/${INVITE_ID}?courseId=${COURSE_ID}`] },
     )
 
     await waitForText(COURSE_ID)
@@ -69,11 +69,11 @@ describe('page: AcceptInvite', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/accept-invite/course-id`] }
+      { initialEntries: [`/accept-invite/course-id`] },
     )
 
     await waitForText(
-      'There was an error accepting the invite. Please try again later.'
+      'There was an error accepting the invite. Please try again later.',
     )
   })
 })

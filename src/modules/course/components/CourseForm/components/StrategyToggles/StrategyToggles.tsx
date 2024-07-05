@@ -20,17 +20,17 @@ export const schema = yup.object({
 
 export function validateStrategies(
   s: yup.Schema<InferType<typeof schema>>,
-  t: TFunction
+  t: TFunction,
 ) {
   return s.test(
     'strategies-selected',
     t('components.course-form.bild-strategies-required'),
     strategies => {
       const selectedStrategies = Object.keys(strategies).filter(
-        name => strategies[name as BildStrategies]
+        name => strategies[name as BildStrategies],
       )
       return selectedStrategies.length > 0
-    }
+    },
   )
 }
 
@@ -66,7 +66,7 @@ export const StrategyToggles: React.FC<Props> = ({
       [
         Course_Level_Enum.BildIntermediateTrainer,
         Course_Level_Enum.BildAdvancedTrainer,
-      ].includes(courseLevel as Course_Level_Enum)
+      ].includes(courseLevel as Course_Level_Enum),
   )
 
   const isDisabled = isTrainerLevel || isConversion || disabled
@@ -145,7 +145,7 @@ export const StrategyToggles: React.FC<Props> = ({
                   />
                 }
                 label={t(
-                  `common.bild-strategies.${BildStrategies.NonRestrictiveTertiary}`
+                  `common.bild-strategies.${BildStrategies.NonRestrictiveTertiary}`,
                 )}
               />
             </FormGroup>
@@ -168,7 +168,7 @@ export const StrategyToggles: React.FC<Props> = ({
                   />
                 }
                 label={t(
-                  `common.bild-strategies.${BildStrategies.RestrictiveTertiaryIntermediate}`
+                  `common.bild-strategies.${BildStrategies.RestrictiveTertiaryIntermediate}`,
                 )}
               />
             </FormGroup>
@@ -191,7 +191,7 @@ export const StrategyToggles: React.FC<Props> = ({
                   />
                 }
                 label={t(
-                  `common.bild-strategies.${BildStrategies.RestrictiveTertiaryAdvanced}`
+                  `common.bild-strategies.${BildStrategies.RestrictiveTertiaryAdvanced}`,
                 )}
               />
             </FormGroup>

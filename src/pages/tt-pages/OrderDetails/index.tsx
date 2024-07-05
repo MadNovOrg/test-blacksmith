@@ -72,7 +72,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const [{ data, fetching }] = useCourseOrders({ orderId: id ?? '' })
@@ -90,7 +90,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const mainCourse = useMemo(
     () => (courses?.length ? courses[0] : null),
-    [courses]
+    [courses],
   )
 
   const invoice = order?.invoice
@@ -102,7 +102,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const registrantsLineItems = useMemo(() => {
     return mainCourse?.name
       ? invoice?.lineItems?.filter((li: XeroLineItem) =>
-          isRegistrantLineItem(li, mainCourse.level)
+          isRegistrantLineItem(li, mainCourse.level),
         )
       : []
   }, [invoice, mainCourse])
@@ -113,12 +113,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const promoCode = promoCodes.length ? promoCodes[0] : null
   const phone = invoice?.contact.phones?.find(
-    (p: XeroPhone) => p?.phoneType === XeroPhoneType.Default
+    (p: XeroPhone) => p?.phoneType === XeroPhoneType.Default,
   )
 
   const [discountAmount, discountLineItem] = useMemo(() => {
     const discountLineItem = invoice?.lineItems?.find((li: XeroLineItem) =>
-      isDiscountLineItem(li)
+      isDiscountLineItem(li),
     )
 
     return [discountLineItem?.lineAmount ?? 0, discountLineItem]
@@ -130,7 +130,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
 
     const processingFeeLineItem = invoice?.lineItems?.find((li: XeroLineItem) =>
-      isProcessingFeeLineItem(li)
+      isProcessingFeeLineItem(li),
     )
 
     if (!processingFeeLineItem) {
@@ -161,7 +161,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       ]
         .filter(Boolean)
         .join(', '),
-    []
+    [],
   )
 
   const invoicedToInfo = useMemo(() => {
@@ -218,9 +218,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
           course?.type === Course_Type_Enum.Open &&
           course.deliveryType === Course_Delivery_Type_Enum.Virtual &&
           course.level === Course_Level_Enum.Level_1 &&
-          registrants.length
+          registrants.length,
       ),
-    [courses, registrants.length]
+    [courses, registrants.length],
   )
 
   const expensesLineItems =
@@ -283,7 +283,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     href={xeroInvoiceUrl}
                     target="_blank"
                     aria-label={`${t('view-in-xero')} (${_t(
-                      'opens-new-window'
+                      'opens-new-window',
                     )})`}
                   >
                     {t('view-in-xero')}
@@ -307,10 +307,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           : undefined
 
                         const courseStart = new Date(
-                          course?.dates.aggregate?.start?.date
+                          course?.dates.aggregate?.start?.date,
                         )
                         const courseEnd = new Date(
-                          course?.dates.aggregate?.end?.date
+                          course?.dates.aggregate?.end?.date,
                         )
                         const timeZoneScheduleDateTime = () => {
                           if (!courseTimezone) return { courseStart, courseEnd }
@@ -318,11 +318,11 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           return {
                             courseStart: utcToZonedTime(
                               courseStart,
-                              courseTimezone
+                              courseTimezone,
                             ),
                             courseEnd: utcToZonedTime(
                               courseEnd,
-                              courseTimezone
+                              courseTimezone,
                             ),
                           }
                         }
@@ -367,7 +367,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                   {formatGMTDateTimeByTimeZone(
                                     timeZoneScheduleDateTime().courseStart,
                                     courseTimezone,
-                                    false
+                                    false,
                                   )}{' '}
                                   -{' '}
                                   {_t('dates.withTime', {
@@ -376,7 +376,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                   {formatGMTDateTimeByTimeZone(
                                     timeZoneScheduleDateTime().courseEnd,
                                     courseTimezone,
-                                    true
+                                    true,
                                   )}
                                 </Typography>
                               ) : null}
@@ -423,14 +423,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                 })}
                               </Typography>
                             </ItemRow>
-                          )
+                          ),
                         )}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
                   {registrants.some(
                     (registrant: CreateOrderParticipantInput) =>
-                      registrant.postCode
+                      registrant.postCode,
                   ) ? (
                     <DetailsItemBox data-testid="registrants-details">
                       <Stack spacing={2}>
@@ -440,7 +440,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               <ItemRow key={index}>
                                 <Typography color="grey.700">
                                   {` Address: ${getRegistrantPostalAddress(
-                                    registrant
+                                    registrant,
                                   )}`}
                                 </Typography>
                               </ItemRow>
@@ -623,7 +623,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         </Typography>
                         <Chip
                           label={_t(
-                            `common.filters.${invoice?.status ?? 'UNKNOWN'}`
+                            `common.filters.${invoice?.status ?? 'UNKNOWN'}`,
                           )}
                           color={statusColor}
                           size="small"

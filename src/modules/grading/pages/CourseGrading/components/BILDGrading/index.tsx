@@ -81,7 +81,7 @@ export const BILDGrading: FC<Props> = ({ course }) => {
 
       saveBildGrades({
         participantIds: filteredCourseParticipants.map(
-          participant => participant.id
+          participant => participant.id,
         ),
         grade,
         modules: filteredCourseParticipants.map(participant => ({
@@ -102,7 +102,7 @@ export const BILDGrading: FC<Props> = ({ course }) => {
   const canAddModuleNotes = acl.canAddModuleNotes(
     course.trainers
       .filter(t => t.type === Course_Trainer_Type_Enum.Leader)
-      .map(t => t.profile_id)
+      .map(t => t.profile_id),
   )
 
   return (

@@ -64,7 +64,7 @@ export const CourseGrading: React.FC<
   })
 
   const participantsWithoutGrades = (participants ?? []).filter(
-    participant => !participant.grade
+    participant => !participant.grade,
   )
 
   const canEditGradingDetails = !course.gradingStarted
@@ -94,9 +94,9 @@ export const CourseGrading: React.FC<
                   setSelectedParticipants(() =>
                     event.target.checked
                       ? participantsWithoutGrades.map(
-                          participant => participant.id
+                          participant => participant.id,
                         )
-                      : []
+                      : [],
                   )
                 }}
               />
@@ -140,7 +140,7 @@ export const CourseGrading: React.FC<
         setSortColumn(columnName)
       }
     },
-    [sortColumn]
+    [sortColumn],
   )
 
   const handleParticipantSelection = useCallback(
@@ -148,10 +148,10 @@ export const CourseGrading: React.FC<
       setSelectedParticipants(prevState =>
         checked
           ? [...prevState, participantId]
-          : prevState.filter(id => id !== participantId)
+          : prevState.filter(id => id !== participantId),
       )
     },
-    []
+    [],
   )
 
   useEffectOnce(() => {
@@ -191,7 +191,7 @@ export const CourseGrading: React.FC<
                     startIcon={<Edit fontSize="small" />}
                   >
                     {t(
-                      'pages.course-details.tabs.grading.modify-grading-details'
+                      'pages.course-details.tabs.grading.modify-grading-details',
                     )}
                   </Button>
                 ) : null}
@@ -247,8 +247,8 @@ export const CourseGrading: React.FC<
                             `/courses/${
                               course.id
                             }/grading?participants=${selectedParticipants.join(
-                              ','
-                            )}`
+                              ',',
+                            )}`,
                           )
                         }
                       >
@@ -269,7 +269,7 @@ export const CourseGrading: React.FC<
                         data-testid="grade-all-attendees"
                       >
                         {t(
-                          'pages.course-details.tabs.grading.grade-all-attendees'
+                          'pages.course-details.tabs.grading.grade-all-attendees',
                         )}
                       </Button>
                     </Grid>
@@ -294,12 +294,12 @@ export const CourseGrading: React.FC<
                           <TableCell>
                             <Checkbox
                               checked={selectedParticipants.includes(
-                                courseParticipant.id
+                                courseParticipant.id,
                               )}
                               onChange={event =>
                                 handleParticipantSelection(
                                   courseParticipant.id,
-                                  event.target.checked
+                                  event.target.checked,
                                 )
                               }
                               disabled={Boolean(courseParticipant.grade)}
@@ -327,7 +327,7 @@ export const CourseGrading: React.FC<
                           >
                             {courseParticipant.profile.email}
                             {courseParticipant.profile.contactDetails.map(
-                              contact => contact.value
+                              contact => contact.value,
                             )}
                           </LinkToProfile>
                         </TableCell>
@@ -394,7 +394,7 @@ export const CourseGrading: React.FC<
                 >
                   <Typography variant="body1" fontWeight={600}>
                     {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grade'
+                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grade',
                     )}
                   </Typography>
                 </Button>

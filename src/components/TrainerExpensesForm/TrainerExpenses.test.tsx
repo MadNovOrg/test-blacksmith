@@ -50,7 +50,7 @@ const makeTrainers = ({
 const selectTransportMethod = async (
   pid: string,
   index: number,
-  option: TransportMethod
+  option: TransportMethod,
 ) => {
   const s = screen.getByTestId(`trainer-${pid}`)
 
@@ -73,7 +73,7 @@ const fillValueForTrip = async (pid: string, index: number, value: string) => {
 const fillFlightDaysForTrip = async (
   pid: string,
   index: number,
-  value: string
+  value: string,
 ) => {
   const s = screen.getByTestId(`trainer-${pid}`)
 
@@ -85,7 +85,7 @@ const fillFlightDaysForTrip = async (
 const fillAccommodationNightsForTrip = async (
   pid: string,
   index: number,
-  value: string
+  value: string,
 ) => {
   const s = screen.getByTestId(`trainer-${pid}`)
 
@@ -112,7 +112,7 @@ const toggleAccommodation = async (pid: string, index: number) => {
   const s = screen.getByTestId(`trainer-${pid}`)
 
   const toggleSwitch = within(
-    within(s).getByTestId(`accommodation-${index}-switch`)
+    within(s).getByTestId(`accommodation-${index}-switch`),
   ).getByRole('checkbox')
   await userEvent.click(toggleSwitch)
 }
@@ -125,8 +125,8 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
       trainer.fullName as string,
       {
         exact: false,
-      }
-    )
+      },
+    ),
   ).toBeVisible()
 
   await selectTransportMethod(pid, 0, TransportMethod.CAR)
@@ -134,32 +134,32 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByLabelText(
       'Total mileage',
-      { exact: false }
-    )
+      { exact: false },
+    ),
   ).toBeVisible()
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId(
-      'accommodation-0-switch'
-    )
+      'accommodation-0-switch',
+    ),
   ).toBeVisible()
 
   await act(async () => {
     await fillValueForTrip(pid, 0, '777')
   })
   expect(
-    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-0-input')
+    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-0-input'),
   ).toHaveValue(777)
 
   await act(async () => {
     await addNewTrip(pid)
   })
   expect(
-    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-1-dropdown')
+    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-1-dropdown'),
   ).toBeVisible()
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByText('None', {
       exact: false,
-    })
+    }),
   ).toBeVisible()
 
   await selectTransportMethod(pid, 1, TransportMethod.FLIGHTS)
@@ -167,12 +167,12 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
   await fillFlightDaysForTrip(pid, 1, '3')
 
   expect(
-    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-1-input')
+    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-1-input'),
   ).toHaveValue(123.53)
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId(
-      'trip-1-flight-days'
-    )
+      'trip-1-flight-days',
+    ),
   ).toHaveValue(3)
 
   await addNewTrip(pid)
@@ -183,37 +183,37 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
 
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId(
-      'accommodation-2-switch'
-    )
+      'accommodation-2-switch',
+    ),
   ).toBeVisible()
   expect(
-    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-2-input')
+    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-2-input'),
   ).toHaveValue(0.99)
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId(
-      'trip-2-accommodation-nights'
-    )
+      'trip-2-accommodation-nights',
+    ),
   ).toHaveValue(2)
 
   await act(async () => {
     await deleteTrip(pid, 1)
   })
   expect(
-    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-0-dropdown')
+    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-0-dropdown'),
   ).toBeVisible()
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).queryByTestId(
-      'trip-1-dropdown'
-    )
+      'trip-1-dropdown',
+    ),
   ).toBeNull()
   expect(
-    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-2-dropdown')
+    within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-2-dropdown'),
   ).toBeVisible()
 
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).queryByText('Flight', {
       exact: false,
-    })
+    }),
   ).toBeNull()
 }
 
@@ -222,8 +222,8 @@ const setup = (trainers: TrainerInput[]) =>
     render(
       <CreateCourseProvider courseType={Course_Type_Enum.Closed}>
         <TrainerExpensesForm trainers={trainers} />
-      </CreateCourseProvider>
-    )
+      </CreateCourseProvider>,
+    ),
   )
 
 describe('component: TrainerExpensesForm', () => {

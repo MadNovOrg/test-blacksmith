@@ -23,11 +23,11 @@ describe('component: CourseAttendanceList', () => {
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}
-      />
+      />,
     )
 
     await userEvent.click(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
+      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
     )
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
@@ -35,8 +35,8 @@ describe('component: CourseAttendanceList', () => {
     expect(screen.getByText('1 selected')).toBeInTheDocument()
     expect(
       within(
-        screen.getByTestId(`participant-attendance-${participants[0].id}`)
-      ).getByText(t('pages.course-attendance.participant-attended-chip-label'))
+        screen.getByTestId(`participant-attendance-${participants[0].id}`),
+      ).getByText(t('pages.course-attendance.participant-attended-chip-label')),
     ).toBeInTheDocument()
   })
 
@@ -51,11 +51,11 @@ describe('component: CourseAttendanceList', () => {
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}
-      />
+      />,
     )
 
     await userEvent.click(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
+      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
     )
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
@@ -63,10 +63,10 @@ describe('component: CourseAttendanceList', () => {
     expect(screen.getByText('0 selected')).toBeInTheDocument()
     expect(
       within(
-        screen.getByTestId(`participant-attendance-${participants[0].id}`)
+        screen.getByTestId(`participant-attendance-${participants[0].id}`),
       ).getByText(
-        t('pages.course-attendance.participant-not-attended-chip-label')
-      )
+        t('pages.course-attendance.participant-not-attended-chip-label'),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -82,7 +82,7 @@ describe('component: CourseAttendanceList', () => {
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByLabelText('Select all'))
@@ -109,7 +109,7 @@ describe('component: CourseAttendanceList', () => {
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByLabelText('Deselect all'))

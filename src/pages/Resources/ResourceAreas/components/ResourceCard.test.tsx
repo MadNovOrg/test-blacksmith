@@ -12,7 +12,7 @@ describe('component: ResourceCard', () => {
         title="foo"
         description="bar"
         icon={<TopicOutlinedIcon />}
-      />
+      />,
     )
 
     expect(screen.getByText('foo')).toBeInTheDocument()

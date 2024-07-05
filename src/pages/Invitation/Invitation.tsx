@@ -59,11 +59,11 @@ export const InvitationPage = () => {
   const { t } = useTranslation()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
-    [residingCountryEnabled]
+    [residingCountryEnabled],
   )
   const navigate = useNavigate()
   const theme = useTheme()
@@ -110,14 +110,14 @@ export const InvitationPage = () => {
           headers: { 'x-auth': `Bearer ${tokenData?.token}` },
         },
       }),
-      [tokenData?.token]
+      [tokenData?.token],
     ),
   })
   const [
     { error: declineInvitationError, fetching: declineInvitationLoading },
     declineInvitation,
   ] = useMutation<DeclineInviteMutation, DeclineInviteMutationVariables>(
-    DECLINE_INVITE_MUTATION
+    DECLINE_INVITE_MUTATION,
   )
 
   const invite = useMemo(() => {
@@ -132,11 +132,11 @@ export const InvitationPage = () => {
 
   const courseName = useMemo(
     () => (invite ? invite.courseName : null),
-    [invite]
+    [invite],
   )
   const courseDescription = useMemo(
     () => (invite ? invite.description : null),
-    [invite]
+    [invite],
   )
   const startDate = useMemo(() => {
     if (invite) {
@@ -160,15 +160,15 @@ export const InvitationPage = () => {
 
   const courseTrainerName = useMemo(
     () => (invite ? invite.trainerName : null),
-    [invite]
+    [invite],
   )
   const courseVenueName = useMemo(
     () => (invite ? invite.venueName : undefined),
-    [invite]
+    [invite],
   )
   const courseDeliveryType = useMemo(
     () => (invite ? invite.deliveryType : null),
-    [invite]
+    [invite],
   )
 
   const courseHasBegun = startDate
@@ -215,7 +215,9 @@ export const InvitationPage = () => {
 
       await declineInvitation(
         { note },
-        { fetchOptions: { headers: { 'x-auth': `Bearer ${tokenData.token}` } } }
+        {
+          fetchOptions: { headers: { 'x-auth': `Bearer ${tokenData.token}` } },
+        },
       )
 
       getInviteData()
@@ -301,7 +303,7 @@ export const InvitationPage = () => {
             <Chip
               label={t(
                 'pages.course-participants.until-course-begins',
-                startsIn
+                startsIn,
               )}
             />
           ) : null}
@@ -321,7 +323,7 @@ export const InvitationPage = () => {
                         ? ` ${formatGMTDateTimeByTimeZone(
                             startDate,
                             invite.timeZone ?? 'Europe/London',
-                            true
+                            true,
                           )}`
                         : ''
                     }`}
@@ -334,7 +336,7 @@ export const InvitationPage = () => {
                         ? ` ${formatGMTDateTimeByTimeZone(
                             endDate as Date,
                             invite.timeZone ?? 'Europe/London',
-                            true
+                            true,
                           )}`
                         : ''
                     }`}
@@ -365,7 +367,7 @@ export const InvitationPage = () => {
               <Typography variant="body2" fontWeight="600">
                 {formatCourseVenueName(
                   courseDeliveryType as CourseDeliveryType,
-                  courseVenueName
+                  courseVenueName,
                 )}
               </Typography>
               <Typography variant="body2">

@@ -24,7 +24,7 @@ export const LicensesHistoryTable: React.FC<React.PropsWithChildren<Props>> = ({
   children,
 }) => {
   const { t, _t } = useScopedTranslation(
-    'pages.org-details.tabs.licenses.table'
+    'pages.org-details.tabs.licenses.table',
   )
 
   const cols = useMemo(
@@ -39,7 +39,7 @@ export const LicensesHistoryTable: React.FC<React.PropsWithChildren<Props>> = ({
         sorting: false,
       },
     ],
-    [t]
+    [t],
   )
 
   return (

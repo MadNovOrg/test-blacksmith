@@ -48,15 +48,15 @@ export const OrgIndividualsTab: React.FC<
 
   const initialTab = searchParams.get('subtab') as OrgIndividualsSubtabs | null
   const [selectedTab, setSelectedTab] = useState(
-    initialTab || OrgIndividualsSubtabs.USERS
+    initialTab || OrgIndividualsSubtabs.USERS,
   )
   const statuses = Object.values(CertificateStatus) as CertificateStatus[]
   const [certificateStatus, setCertificateStatus] = useQueryParam(
     'status',
     withDefault(
       createEnumArrayParam<CertificateStatus>(statuses),
-      [] as CertificateStatus[]
-    )
+      [] as CertificateStatus[],
+    ),
   )
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export const OrgIndividualsTab: React.FC<
         setCertificateStatus([])
       }
     },
-    [setCertificateStatus]
+    [setCertificateStatus],
   )
 
   return (
@@ -154,7 +154,7 @@ export const OrgIndividualsTab: React.FC<
                     data-testid="invite-user-to-org"
                   >
                     {t(
-                      'pages.org-details.tabs.users.invite-individual-to-organization'
+                      'pages.org-details.tabs.users.invite-individual-to-organization',
                     )}
                   </Button>
                 ) : undefined}

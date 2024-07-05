@@ -54,7 +54,7 @@ test('Should not allow creating a discount code that already exists', async ({
   await newDiscountPage.discountCodeInput.fill(existingCode)
 
   const errorText = newDiscountPage.page.getByText(
-    'This code has already been used'
+    'This code has already been used',
   )
   await errorText.waitFor({ state: 'visible' })
 

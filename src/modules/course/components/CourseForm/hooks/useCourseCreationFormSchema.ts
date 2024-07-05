@@ -50,33 +50,33 @@ export const useCourseCreationFormSchema = ({
   const { countriesCodesWithUKs, isUKCountry } = useWorldCountries()
 
   const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
-    'open-icm-course-international-finance'
+    'open-icm-course-international-finance',
   )
 
   const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const internationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect'
+    'international-indirect',
   )
 
   const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const isInternationalFinanceEnabled = useMemo(
     () => Boolean(openIcmInternationalFinanceEnabled),
-    [openIcmInternationalFinanceEnabled]
+    [openIcmInternationalFinanceEnabled],
   )
 
   const isResidingCountryEnabled = useMemo(
     () => residingCountryEnabled,
-    [residingCountryEnabled]
+    [residingCountryEnabled],
   )
 
   const isCourseInUK = isUKCountry(
-    courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY
+    courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY,
   )
 
   const residingCountry = internationalIndirectEnabled
@@ -90,7 +90,7 @@ export const useCourseCreationFormSchema = ({
   const isIndirectCourse = courseType === Course_Type_Enum.Indirect
   const hasMinParticipants = courseType === Course_Type_Enum.Open
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
-    courseType
+    courseType,
   )
 
   const formSchema = useMemo(
@@ -128,7 +128,7 @@ export const useCourseCreationFormSchema = ({
                   .min(0, t('components.course-form.free-spaces-required'))
                   .max(
                     yup.ref('maxParticipants', {}),
-                    t('components.course-form.free-spaces-less-equal')
+                    t('components.course-form.free-spaces-less-equal'),
                   )
                   .required(t('components.course-form.free-spaces-required')),
                 salesRepresentative: yup.object().required(),
@@ -171,9 +171,9 @@ export const useCourseCreationFormSchema = ({
                     requiredMsg(t, 'components.course-form.residing-country'),
                     value => {
                       return countriesCodesWithUKs.includes(
-                        value as WorldCountriesCodes
+                        value as WorldCountriesCodes,
                       )
-                    }
+                    },
                   ),
               }
             : {}),
@@ -210,7 +210,7 @@ export const useCourseCreationFormSchema = ({
                 )
                   return !isBefore(value, courseInput?.startDate)
                 if (value) return !isPast(value)
-              }
+              },
             )
             .required(t('components.course-form.start-date-required')),
           startTime: yup
@@ -225,7 +225,7 @@ export const useCourseCreationFormSchema = ({
               t('components.course-form.end-date-in-the-past'),
               value => {
                 if (value) return !isPast(value)
-              }
+              },
             )
             .required(t('components.course-form.end-date-required')),
           endTime: yup
@@ -236,17 +236,17 @@ export const useCourseCreationFormSchema = ({
                 minParticipants: yup
                   .number()
                   .typeError(
-                    t('components.course-form.min-participants-required')
+                    t('components.course-form.min-participants-required'),
                   )
                   .positive(
-                    t('components.course-form.min-participants-positive')
+                    t('components.course-form.min-participants-positive'),
                   )
                   .required(
-                    t('components.course-form.min-participants-required')
+                    t('components.course-form.min-participants-required'),
                   )
                   .max(
                     yup.ref('maxParticipants', {}),
-                    t('components.course-form.min-participants-less-than')
+                    t('components.course-form.min-participants-less-than'),
                   ),
               }
             : null),
@@ -266,7 +266,7 @@ export const useCourseCreationFormSchema = ({
               'attendees-exceeded',
               isCreation
                 ? t(
-                    'components.course-form.attendees-number-exceeds-trainer-ratio-message'
+                    'components.course-form.attendees-number-exceeds-trainer-ratio-message',
                   )
                 : `${t('components.course-form.max-participants-exceeded')} ${
                     courseInput?.maxParticipants
@@ -291,7 +291,7 @@ export const useCourseCreationFormSchema = ({
                 } else {
                   return true
                 }
-              }
+              },
             ),
           usesAOL: yup.boolean(),
           aolCountry: yup
@@ -311,7 +311,7 @@ export const useCourseCreationFormSchema = ({
           courseCost: yup
             .number()
             .typeError(
-              t('components.course-form.course-cost-positive-number-error')
+              t('components.course-form.course-cost-positive-number-error'),
             )
 
             .when('usesAOL', {
@@ -319,13 +319,13 @@ export const useCourseCreationFormSchema = ({
               then: schema =>
                 schema
                   .required(
-                    t('components.course-form.course-cost-required-error')
+                    t('components.course-form.course-cost-required-error'),
                   )
                   .min(
                     0,
                     t(
-                      'components.course-form.course-cost-positive-number-error'
-                    )
+                      'components.course-form.course-cost-positive-number-error',
+                    ),
                   ),
               otherwise: schema =>
                 schema
@@ -333,8 +333,8 @@ export const useCourseCreationFormSchema = ({
                   .nullable()
                   .positive(
                     t(
-                      'components.course-form.course-cost-positive-number-error'
-                    )
+                      'components.course-form.course-cost-positive-number-error',
+                    ),
                   ),
             }),
           specialInstructions: yup.string().nullable().default(''),
@@ -345,27 +345,27 @@ export const useCourseCreationFormSchema = ({
                   .number()
                   .typeError(
                     t(
-                      'components.course-form.mandatory-course-materials.errors.is-required'
-                    )
+                      'components.course-form.mandatory-course-materials.errors.is-required',
+                    ),
                   )
                   .required(
                     t(
-                      'components.course-form.mandatory-course-materials.errors.is-required'
-                    )
+                      'components.course-form.mandatory-course-materials.errors.is-required',
+                    ),
                   )
                   .min(
                     0,
                     t(
-                      'components.course-form.mandatory-course-materials.errors.is-negative'
-                    )
+                      'components.course-form.mandatory-course-materials.errors.is-negative',
+                    ),
                   )
                   .max(
                     yup.ref('maxParticipants', {}),
                     t(
                       `components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-${
                         isCreation ? 'create' : 'edit'
-                      }`
-                    )
+                      }`,
+                    ),
                   ),
               }
             : null),
@@ -376,7 +376,7 @@ export const useCourseCreationFormSchema = ({
                 accreditedBy === Accreditors_Enum.Bild && conversion === false,
               then: s => validateStrategies(s, t),
               otherwise: s => s,
-            }
+            },
           ),
           conversion: yup.boolean(),
           renewalCycle: renewalCycleSchema.when(['startDate', 'courseLevel'], {
@@ -451,7 +451,7 @@ export const useCourseCreationFormSchema = ({
       trainerRatioNotMet,
       courseType,
       isUKCountry,
-    ]
+    ],
   )
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
     () => ({
@@ -566,7 +566,7 @@ export const useCourseCreationFormSchema = ({
       isCourseInUK,
       isResidingCountryEnabled,
       residingCountry,
-    ]
+    ],
   )
 
   const methods = useForm<CourseInput>({

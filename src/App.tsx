@@ -16,21 +16,19 @@ function App() {
   useConfigureSentryTags()
 
   return (
-    <>
-      <GQLProvider>
-        <>
-          <CssBaseline />
-          <SnackbarProvider>
-            <ScrollToTop />
-            <Helmet
-              defaultTitle={t('pages.browser-tab-titles.main-title')}
-              titleTemplate={`%s - ${t('pages.browser-tab-titles.main-title')}`}
-            />
-            <AppRoutes />
-          </SnackbarProvider>
-        </>
-      </GQLProvider>
-    </>
+    <GQLProvider>
+      <>
+        <CssBaseline />
+        <SnackbarProvider>
+          <ScrollToTop />
+          <Helmet
+            defaultTitle={t('pages.browser-tab-titles.main-title')}
+            titleTemplate={`%s - ${t('pages.browser-tab-titles.main-title')}`}
+          />
+          <AppRoutes />
+        </SnackbarProvider>
+      </>
+    </GQLProvider>
   )
 }
 

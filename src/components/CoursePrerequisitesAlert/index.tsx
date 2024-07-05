@@ -114,7 +114,7 @@ export const CoursePrerequisitesAlert: React.FC<
                           }}
                         >
                           <span>{`${levelsPart} ${t(
-                            'missing-certification'
+                            'missing-certification',
                           )} `}</span>
                           {courseId ? (
                             t('this-course')

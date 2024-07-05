@@ -9,7 +9,7 @@ import { Course_Status_Enum as CourseStatuses } from '@app/generated/graphql'
 import { chance, render, screen } from '@test/index'
 
 const buildCourseForIndividualStatusChip = (
-  overrides?: Partial<CourseStatusDetails>
+  overrides?: Partial<CourseStatusDetails>,
 ): CourseStatusDetails => ({
   cancellationRequest: null,
   schedule: [
@@ -29,8 +29,8 @@ const statusesExceptCancelledAndDeclined = Object.keys(CourseStatuses)
   .filter(
     el =>
       ![CourseStatuses.Cancelled, CourseStatuses.Declined].includes(
-        el as CourseStatuses
-      )
+        el as CourseStatuses,
+      ),
   )
   .map(el => [el])
 
@@ -42,7 +42,7 @@ test.each([[CourseStatuses.Cancelled], [CourseStatuses.Declined]])(
     render(<IndividualCourseStatusChip course={course} participants={[]} />)
 
     expect(screen.getByText(/Cancelled/i)).toBeInTheDocument()
-  }
+  },
 )
 
 test.each(statusesExceptCancelledAndDeclined)(
@@ -56,7 +56,7 @@ test.each(statusesExceptCancelledAndDeclined)(
     render(<IndividualCourseStatusChip course={course} participants={[]} />)
 
     expect(screen.getByText(/Cancellation requested/i)).toBeInTheDocument()
-  }
+  },
 )
 
 it('shows completed status if course has missing evaluation', () => {
@@ -86,7 +86,7 @@ it('shows awaiting grade status if course has missing graduation', () => {
     <IndividualCourseStatusChip
       course={course}
       participants={[{ grade: null, healthSafetyConsent: true }]}
-    />
+    />,
   )
 
   expect(screen.getByText(/Awaiting grade/i)).toBeInTheDocument()

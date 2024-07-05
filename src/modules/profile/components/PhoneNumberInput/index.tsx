@@ -49,7 +49,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   // example: +44-1481 (Guernsey), +44-1624 (Isle of Man), +44-1534 (Jersey)
   const checkError = (
     changeInfo: MuiTelInputInfo,
-    parsedPhone?: PhoneNumber
+    parsedPhone?: PhoneNumber,
   ) => {
     if (
       changeInfo.countryCode &&
@@ -71,7 +71,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
       onChange={(phoneNumber, changeInfo) => {
         const parsedPhone = parsePhoneNumberFromString(
           phoneNumber,
-          changeInfo.countryCode ?? (DEFAULT_PHONE_COUNTRY as CountryCode)
+          changeInfo.countryCode ?? (DEFAULT_PHONE_COUNTRY as CountryCode),
         )
 
         checkError(changeInfo, parsedPhone)

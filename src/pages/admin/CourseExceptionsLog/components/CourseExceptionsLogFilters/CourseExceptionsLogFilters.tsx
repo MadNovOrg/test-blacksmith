@@ -44,7 +44,7 @@ export const CourseExceptionsLogFilters: FC<PropsWithChildren<Props>> = ({
       <FilterByDates
         onChange={useCallback(
           (from, to) => onChange({ source: 'dates', value: [from, to] }),
-          [onChange]
+          [onChange],
         )}
         title={t('pages.audits.filter-by-event-date')}
         data-testid={'date-range'}
@@ -53,14 +53,14 @@ export const CourseExceptionsLogFilters: FC<PropsWithChildren<Props>> = ({
       <FilterByCourseLevel
         onChange={useCallback(
           level => onChange({ source: 'course-level', value: level }),
-          [onChange]
+          [onChange],
         )}
       />
       <FilterByCourseType
         courseTypeBlacklist={Course_Type_Enum.Open}
         onChange={useCallback(
           type => onChange({ source: 'course-type', value: type }),
-          [onChange]
+          [onChange],
         )}
       />
     </Stack>

@@ -76,7 +76,7 @@ export const PricingList: React.FC = () => {
 
   const columns = useMemo(
     () => ['course', 'type', 'attributes', 'modified', 'price', 'actions'],
-    []
+    [],
   )
 
   const colsToShow: Set<string> = useMemo(() => new Set(columns), [columns])

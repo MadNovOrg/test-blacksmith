@@ -20,7 +20,7 @@ export const FilterByPaymentMethods: React.FC<
       id: pm,
       title: t(`filters.${pm}`),
       selected: false,
-    }))
+    })),
   )
 
   const localOnChange = useCallback(
@@ -28,11 +28,11 @@ export const FilterByPaymentMethods: React.FC<
       setOptions(opts)
       onChange({
         paymentMethods: opts.flatMap(o =>
-          o.selected ? o.id : []
+          o.selected ? o.id : [],
         ) as Payment_Methods_Enum[],
       })
     },
-    [onChange]
+    [onChange],
   )
 
   return (

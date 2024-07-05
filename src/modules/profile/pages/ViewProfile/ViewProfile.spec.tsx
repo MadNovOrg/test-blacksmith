@@ -37,7 +37,7 @@ describe('page: ViewProfile', () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
+        },
       )
 
       expect(screen.queryByTestId('delete-profile-button')).toBeInTheDocument()
@@ -66,7 +66,7 @@ describe('page: ViewProfile', () => {
           auth: {
             activeRole: RoleName.TT_ADMIN,
           },
-        }
+        },
       )
 
       expect(screen.queryByTestId('delete-profile-button')).toBeNull()
@@ -95,7 +95,7 @@ describe('page: ViewProfile', () => {
           auth: {
             activeRole: RoleName.TRAINER,
           },
-        }
+        },
       )
 
       expect(screen.queryByTestId('delete-profile-button')).toBeNull()
@@ -124,7 +124,7 @@ describe('page: ViewProfile', () => {
           auth: {
             activeRole: RoleName.TRAINER,
           },
-        }
+        },
       )
 
       expect(screen.queryByTestId('delete-profile-button')).toBeNull()

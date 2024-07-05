@@ -10,7 +10,7 @@ describe('QuestionGroup component', () => {
     const description = 'my description'
     const error = 'test error'
     render(
-      <QuestionGroup title={title} description={description} error={error} />
+      <QuestionGroup title={title} description={description} error={error} />,
     )
     expect(screen.getByText('my title')).toBeInTheDocument()
     expect(screen.getByText('my description')).toBeInTheDocument()

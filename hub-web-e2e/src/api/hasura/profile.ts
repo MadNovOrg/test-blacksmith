@@ -60,7 +60,7 @@ export const insertDummyUserProfile = async () => {
   try {
     const response = await client.request<InsertProfileResponse>(
       INSERT_DUMMY_PROFILE,
-      userDataPayload
+      userDataPayload,
     )
 
     const profileId = response.insert_profile_one.id

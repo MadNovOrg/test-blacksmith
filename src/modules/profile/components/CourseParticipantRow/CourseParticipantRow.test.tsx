@@ -15,7 +15,7 @@ describe('CourseParticipantRow', () => {
 
   it('renders course name as link if showLink is true', () => {
     const { getByTestId } = render(
-      <CourseParticipantRow courseInfo={courseInfo} isInternalUser={true} />
+      <CourseParticipantRow courseInfo={courseInfo} isInternalUser={true} />,
     )
     const courseNameLink = getByTestId('course-name').querySelector('a')
     expect(courseNameLink).toBeInTheDocument()
@@ -30,7 +30,7 @@ describe('CourseParticipantRow', () => {
           courseStatus: Course_Status_Enum.Cancelled,
         }}
         isInternalUser={false}
-      />
+      />,
     )
     const courseNameLink = getByTestId('course-name').querySelector('a')
     expect(courseNameLink).not.toBeInTheDocument()
@@ -38,7 +38,7 @@ describe('CourseParticipantRow', () => {
 
   it('renders correct course action label', () => {
     const { getByTestId } = render(
-      <CourseParticipantRow courseInfo={courseInfo} />
+      <CourseParticipantRow courseInfo={courseInfo} />,
     )
     const courseAction = getByTestId('course-action')
     expect(courseAction.textContent).toBe('Attended')
@@ -46,7 +46,7 @@ describe('CourseParticipantRow', () => {
 
   it('renders correct course start date', () => {
     const { getByText } = render(
-      <CourseParticipantRow courseInfo={courseInfo} />
+      <CourseParticipantRow courseInfo={courseInfo} />,
     )
     const courseStartDate = getByText('15 May 2024')
     expect(courseStartDate).toBeInTheDocument()
@@ -59,7 +59,7 @@ describe('CourseParticipantRow', () => {
           ...courseInfo,
           courseStatus: undefined,
         }}
-      />
+      />,
     )
     expect(container.firstChild).toBeNull()
   })

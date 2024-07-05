@@ -69,7 +69,7 @@ type Props = {
 
 export const getIndividualsCourseStatusesConditions = (
   currentDate: string,
-  forOpenCourseBookingContact?: { profileId?: string }
+  forOpenCourseBookingContact?: { profileId?: string },
 ): Record<OrgAdminCourseStatuses, Course_Bool_Exp> => {
   const cancelledStatuses = [
     Course_Status_Enum.Cancelled,
@@ -208,7 +208,7 @@ export const getIndividualsCourseStatusesConditions = (
 export const filtersToWhereClause = (
   where: Course_Bool_Exp,
   isInternalUser: boolean,
-  filters?: CoursesFilters
+  filters?: CoursesFilters,
 ) => {
   if (filters?.levels?.length) {
     where.level = { _in: filters.levels }
@@ -341,7 +341,7 @@ export const filtersToWhereClause = (
 
 export const useCourses = (
   role: RoleName,
-  { sorting, filters, pagination, orgId }: Props
+  { sorting, filters, pagination, orgId }: Props,
 ) => {
   const { acl, organizationIds, profile } = useAuth()
   const dateRef = useRef(new Date().toISOString())
@@ -421,21 +421,21 @@ export const useCourses = (
       if (filters?.statuses?.includes(Course_Status_Enum.Scheduled)) {
         orgAdminStatusCondition = deepmerge(
           orgAdminStatusCondition,
-          orgAdminCourseStatusConditionsMap.SCHEDULED
+          orgAdminCourseStatusConditionsMap.SCHEDULED,
         )
       }
 
       if (filters?.statuses?.includes(Course_Status_Enum.Completed)) {
         orgAdminStatusCondition = deepmerge(
           orgAdminStatusCondition,
-          orgAdminCourseStatusConditionsMap.COMPLETED
+          orgAdminCourseStatusConditionsMap.COMPLETED,
         )
       }
 
       if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.AwaitingGrade)) {
         orgAdminStatusCondition = deepmerge(
           orgAdminStatusCondition,
-          orgAdminCourseStatusConditionsMap.AWAITING_GRADE
+          orgAdminCourseStatusConditionsMap.AWAITING_GRADE,
         )
       }
 
@@ -444,14 +444,14 @@ export const useCourses = (
       ) {
         orgAdminStatusCondition = deepmerge(
           orgAdminStatusCondition,
-          orgAdminCourseStatusConditionsMap.CANCELLATION_REQUESTED
+          orgAdminCourseStatusConditionsMap.CANCELLATION_REQUESTED,
         )
       }
 
       if (filters?.statuses?.includes(Course_Status_Enum.Cancelled)) {
         orgAdminStatusCondition = deepmerge(
           orgAdminStatusCondition,
-          orgAdminCourseStatusConditionsMap.CANCELLED
+          orgAdminCourseStatusConditionsMap.CANCELLED,
         )
       }
 
@@ -461,7 +461,7 @@ export const useCourses = (
       }
     } else {
       const regularStatuses = filters?.statuses?.filter(s =>
-        Object.values(Course_Status_Enum).includes(s as Course_Status_Enum)
+        Object.values(Course_Status_Enum).includes(s as Course_Status_Enum),
       )
       if (regularStatuses?.length) {
         obj.status = {
@@ -537,7 +537,7 @@ export const useCourses = (
       mutate: () => refetch({ requestPolicy: 'network-only' }),
       total: data?.course_aggregate.aggregate?.count,
     }),
-    [data, error, status, refetch]
+    [data, error, status, refetch],
   )
 }
 

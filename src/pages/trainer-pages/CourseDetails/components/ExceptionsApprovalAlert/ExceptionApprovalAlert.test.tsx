@@ -59,7 +59,7 @@ describe('component: ExceptionsApprovalAlert', () => {
       </Provider>,
       {
         auth: { activeRole },
-      }
+      },
     )
   }
 
@@ -82,8 +82,8 @@ describe('component: ExceptionsApprovalAlert', () => {
     await userEvent.click(screen.getByText(t('common.reject')))
     expect(
       screen.getByText(
-        t('pages.create-course.exceptions.modal-subtitle-reject')
-      )
+        t('pages.create-course.exceptions.modal-subtitle-reject'),
+      ),
     ).toBeInTheDocument()
   })
   it('should open the course approval modal', async () => {
@@ -91,8 +91,8 @@ describe('component: ExceptionsApprovalAlert', () => {
     await userEvent.click(screen.getByText(t('common.approve')))
     expect(
       screen.getByText(
-        t('pages.create-course.exceptions.modal-subtitle-approve')
-      )
+        t('pages.create-course.exceptions.modal-subtitle-approve'),
+      ),
     ).toBeInTheDocument()
   })
 })

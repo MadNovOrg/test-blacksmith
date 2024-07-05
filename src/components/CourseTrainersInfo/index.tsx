@@ -120,52 +120,48 @@ const ListItemWrapper: React.FC<
   }
 
   return (
-    <>
-      <Box display="flex" alignItems="center">
-        {enableLinks ? (
-          <div onClick={handleNavigateToProfile} data-testid="link-to-profile">
-            <Link>
-              <ListItemTranslated
-                i18nKey={i18nKey}
-                fullName={courseTrainer.profile.fullName || ''}
-              />
-            </Link>
-          </div>
-        ) : (
-          <ListItemTranslated
-            i18nKey={i18nKey}
-            fullName={courseTrainer.profile.fullName || ''}
-          />
-        )}
-        <Tooltip
-          title={
-            reInvited ? Course_Invite_Status_Enum.Pending : courseTrainer.status
-          }
-        >
-          <CircleIcon
-            sx={{
-              color: statusColor,
-              height: 18,
-              width: 18,
-            }}
-          />
-        </Tooltip>
-        {courseTrainer.status === Course_Invite_Status_Enum.Declined &&
-        canReInviteTrainer &&
-        !reInvited ? (
-          <Button
-            disabled={fetching}
-            variant="text"
-            color="primary"
-            onClick={reInvite}
-          >
-            <Trans
-              i18nKey={'pages.course-participants.resend-trainer-invite'}
+    <Box display="flex" alignItems="center">
+      {enableLinks ? (
+        <div onClick={handleNavigateToProfile} data-testid="link-to-profile">
+          <Link>
+            <ListItemTranslated
+              i18nKey={i18nKey}
+              fullName={courseTrainer.profile.fullName || ''}
             />
-          </Button>
-        ) : null}
-      </Box>
-    </>
+          </Link>
+        </div>
+      ) : (
+        <ListItemTranslated
+          i18nKey={i18nKey}
+          fullName={courseTrainer.profile.fullName || ''}
+        />
+      )}
+      <Tooltip
+        title={
+          reInvited ? Course_Invite_Status_Enum.Pending : courseTrainer.status
+        }
+      >
+        <CircleIcon
+          sx={{
+            color: statusColor,
+            height: 18,
+            width: 18,
+          }}
+        />
+      </Tooltip>
+      {courseTrainer.status === Course_Invite_Status_Enum.Declined &&
+      canReInviteTrainer &&
+      !reInvited ? (
+        <Button
+          disabled={fetching}
+          variant="text"
+          color="primary"
+          onClick={reInvite}
+        >
+          <Trans i18nKey={'pages.course-participants.resend-trainer-invite'} />
+        </Button>
+      ) : null}
+    </Box>
   )
 }
 
@@ -190,7 +186,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
 
   const courseLeadTrainer = useMemo(
     () => getCourseLeadTrainer(trainers ?? []),
-    [trainers]
+    [trainers],
   )
 
   const [courseAssistants, numberOfAssistants] = useMemo(() => {
@@ -203,7 +199,7 @@ export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
 
   const courseModerator = useMemo(
     () => getCourseModerator(trainers ?? []),
-    [trainers]
+    [trainers],
   )
 
   const canEnableLinks = (trainer: Course_Trainer) => {

@@ -24,7 +24,7 @@ const test = base.extend<{ course: Course }>({
     await API.course.insertCourseGradingForParticipants(
       course,
       [users.user1],
-      Grade_Enum.Pass
+      Grade_Enum.Pass,
     )
     await use(course)
     await API.course.deleteCourse(course.id)

@@ -77,7 +77,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     await waitFor(() => {
@@ -109,17 +109,17 @@ describe('trainers-pages/MyCourses', () => {
       // 15/01/2023 - 27/11/2023
       course_from_15_01_23_to_27_11_23 = buildTrainerCourseWithDates(
         new Date(2023, 0, 15),
-        new Date(2023, 10, 27)
+        new Date(2023, 10, 27),
       )
       // 13/03/2023 - 25/07/2023
       course_from_13_03_23_to_25_07_23 = buildTrainerCourseWithDates(
         new Date(2023, 2, 13),
-        new Date(2023, 6, 25)
+        new Date(2023, 6, 25),
       )
       // 22/03/2023 - 20/12/2023
       course_from_22_03_23_to_20_12_23 = buildTrainerCourseWithDates(
         new Date(2023, 2, 22),
-        new Date(2023, 11, 20)
+        new Date(2023, 11, 20),
       )
 
       allCourses = [
@@ -138,7 +138,7 @@ describe('trainers-pages/MyCourses', () => {
         }) => {
           const conditions =
             variables.where?.schedule?._and?.filter(obj =>
-              Object.keys(obj).includes('start')
+              Object.keys(obj).includes('start'),
             ).length === 1 ?? false
 
           const courses = conditions
@@ -164,7 +164,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const table = screen.getByTestId('courses-table')
@@ -178,7 +178,7 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       const from = within(screen.getByTestId('date-range')).getByLabelText(
-        'From'
+        'From',
       )
 
       from.focus()
@@ -203,7 +203,7 @@ describe('trainers-pages/MyCourses', () => {
         }) => {
           const conditions =
             variables.where?.schedule?._and?.filter(obj =>
-              Object.keys(obj).includes('end')
+              Object.keys(obj).includes('end'),
             ).length === 1 ?? false
 
           const courses = conditions
@@ -229,7 +229,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const table = screen.getByTestId('courses-table')
@@ -288,7 +288,7 @@ describe('trainers-pages/MyCourses', () => {
       render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
-        </Provider>
+        </Provider>,
       )
 
       const table = screen.getByTestId('courses-table')
@@ -302,7 +302,7 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       const from = within(screen.getByTestId('date-range')).getByLabelText(
-        'From'
+        'From',
       )
       from.focus()
       await userEvent.paste('13/03/2023') // second course's start date
@@ -355,7 +355,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const table = screen.getByTestId('courses-table')
@@ -406,14 +406,14 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level One'),
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two')
+      within(screen.getByTestId('FilterByCourseLevel')).getByText('Level Two'),
     )
 
     const table = screen.getByTestId('courses-table')
@@ -456,14 +456,14 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseType')).getByText('Open')
+      within(screen.getByTestId('FilterByCourseType')).getByText('Open'),
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseType')).getByText('Closed')
+      within(screen.getByTestId('FilterByCourseType')).getByText('Closed'),
     )
 
     const table = screen.getByTestId('courses-table')
@@ -486,7 +486,7 @@ describe('trainers-pages/MyCourses', () => {
       }) => {
         const courses =
           variables.where?.status?._in?.includes(
-            Course_Status_Enum.Scheduled
+            Course_Status_Enum.Scheduled,
           ) && variables.where.status._in.includes(Course_Status_Enum.Completed)
             ? [filteredCourse]
             : [course]
@@ -507,14 +507,14 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseStatus')).getByText('Scheduled')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Scheduled'),
     )
     await userEvent.click(
-      within(screen.getByTestId('FilterByCourseStatus')).getByText('Completed')
+      within(screen.getByTestId('FilterByCourseStatus')).getByText('Completed'),
     )
 
     const table = screen.getByTestId('courses-table')
@@ -536,7 +536,7 @@ describe('trainers-pages/MyCourses', () => {
         variables: TrainerCoursesQueryVariables
       }) => {
         const courses = variables.where?.deliveryType?._in?.includes(
-          Course_Delivery_Type_Enum.Virtual
+          Course_Delivery_Type_Enum.Virtual,
         )
           ? [filteredCourse]
           : [course]
@@ -557,13 +557,13 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseDeliveryType')).getByText(
-        'Virtual'
-      )
+        'Virtual',
+      ),
     )
     const table = screen.getByTestId('courses-table')
     await expectCourseTableTo({
@@ -610,13 +610,13 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     await userEvent.click(
       within(screen.getByTestId('FilterByCourseStatus')).getByText(
-        'Cancellation requested'
-      )
+        'Cancellation requested',
+      ),
     )
 
     const table = screen.getByTestId('courses-table')
@@ -657,7 +657,7 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const table = screen.getByTestId('courses-table')
@@ -667,7 +667,7 @@ describe('trainers-pages/MyCourses', () => {
     await waitFor(() => {
       expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
         'data-index',
-        '0'
+        '0',
       )
     })
   })
@@ -701,34 +701,34 @@ describe('trainers-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
-      </Provider>
+      </Provider>,
     )
 
     const coursesPagination = screen.getByTestId('courses-pagination')
 
     expect(
-      within(coursesPagination).getByLabelText('Go to previous page')
+      within(coursesPagination).getByLabelText('Go to previous page'),
     ).toBeDisabled()
 
     expect(
-      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`)
+      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`),
     ).toBeInTheDocument()
     expect(
-      screen.queryByTestId(`course-row-${secondBatch[0].id}`)
+      screen.queryByTestId(`course-row-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     await userEvent.click(
-      within(coursesPagination).getByLabelText('Go to next page')
+      within(coursesPagination).getByLabelText('Go to next page'),
     )
 
     await waitFor(() => {
       expect(
         screen.getByTestId(
-          `course-row-${secondBatch[firstBatch.length - 1].id}`
-        )
+          `course-row-${secondBatch[firstBatch.length - 1].id}`,
+        ),
       ).toBeInTheDocument()
       expect(
-        screen.queryByTestId(`course-row-${firstBatch[0].id}`)
+        screen.queryByTestId(`course-row-${firstBatch[0].id}`),
       ).not.toBeInTheDocument()
     })
   })
@@ -758,7 +758,7 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
     )
 
     const table = screen.getByTestId('courses-table')
@@ -793,7 +793,7 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
     )
 
     const table = screen.getByTestId('courses-table')
@@ -828,7 +828,7 @@ describe('trainers-pages/MyCourses', () => {
         auth: {
           activeRole: RoleName.TRAINER,
         },
-      }
+      },
     )
 
     const table = screen.getByTestId('courses-table')
@@ -856,7 +856,7 @@ describe('trainers-pages/MyCourses', () => {
     await userEvent.click(statusFilter)
 
     expect(
-      within(statusFilter).getByText(t(`course-statuses.${status}`))
+      within(statusFilter).getByText(t(`course-statuses.${status}`)),
     ).toBeInTheDocument()
   })
 
@@ -895,7 +895,7 @@ describe('trainers-pages/MyCourses', () => {
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -903,16 +903,16 @@ describe('trainers-pages/MyCourses', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`)
-      )
+        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`),
+      ),
     )
 
     expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`)
-      )
+        t(`course-statuses.${AdminOnlyCourseStatus.CancellationRequested}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -956,7 +956,7 @@ describe('trainers-pages/MyCourses', () => {
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -964,28 +964,28 @@ describe('trainers-pages/MyCourses', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+      ),
     )
 
     expect(
-      screen.getByTestId(`course-row-${courses[0].id}`)
+      screen.getByTestId(`course-row-${courses[0].id}`),
     ).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${courses[0].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`course-row-${courses[1].id}`)
+      screen.getByTestId(`course-row-${courses[1].id}`),
     ).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${courses[1].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Cancelled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Cancelled}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -1028,7 +1028,7 @@ describe('trainers-pages/MyCourses', () => {
 
         const scheduledCondition =
           orCondition[0]?.status?._nin?.includes(
-            Course_Status_Enum.Cancelled
+            Course_Status_Enum.Cancelled,
           ) &&
           orCondition[0]?.status?._nin?.includes(Course_Status_Enum.Declined) &&
           Boolean(orCondition[0]?.schedule?.end?._gt)
@@ -1050,7 +1050,7 @@ describe('trainers-pages/MyCourses', () => {
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -1058,20 +1058,20 @@ describe('trainers-pages/MyCourses', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+      ),
     )
 
     expect(
       within(screen.getByTestId(`course-row-${courses[0].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+      ),
     ).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${courses[1].id}`)).getByText(
-        t(`course-statuses.${Course_Status_Enum.Scheduled}`)
-      )
+        t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -1126,7 +1126,7 @@ describe('trainers-pages/MyCourses', () => {
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
-      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } }
+      { auth: { activeRole: RoleName.USER, isOrgAdmin: true } },
     )
 
     const statusFilter = screen.getByTestId('FilterByCourseStatus')
@@ -1134,16 +1134,16 @@ describe('trainers-pages/MyCourses', () => {
 
     await userEvent.click(
       within(statusFilter).getByText(
-        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`)
-      )
+        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
+      ),
     )
 
     expect(screen.getByTestId(`course-row-${course.id}`)).toBeInTheDocument()
 
     expect(
       within(screen.getByTestId(`course-row-${course.id}`)).getByText(
-        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`)
-      )
+        t(`course-statuses.${AttendeeOnlyCourseStatus.AwaitingGrade}`),
+      ),
     ).toBeInTheDocument()
   })
 })

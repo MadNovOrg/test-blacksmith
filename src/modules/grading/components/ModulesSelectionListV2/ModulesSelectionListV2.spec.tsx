@@ -14,15 +14,15 @@ it('renders module and lessons within modules', () => {
   render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${module.id}`)
+    screen.getByTestId(`module-group-${module.id}`),
   ).getByTestId('accordion-summary')
 
   expect(
-    within(moduleAccordion).getByLabelText(module.name)
+    within(moduleAccordion).getByLabelText(module.name),
   ).toBeInTheDocument()
 
   expect(
-    screen.getByLabelText(module.lessons.items[0].name)
+    screen.getByLabelText(module.lessons.items[0].name),
   ).toBeInTheDocument()
 })
 
@@ -56,7 +56,7 @@ it('toggles whole module when module is clicked', async () => {
   render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${module.id}`)
+    screen.getByTestId(`module-group-${module.id}`),
   ).getByTestId('accordion-summary')
 
   const moduleCheckbox = within(moduleAccordion).getByLabelText('Theory')
@@ -94,7 +94,7 @@ it('marks module as indeterminate if only some lessons are checked within the mo
   render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${module.id}`)
+    screen.getByTestId(`module-group-${module.id}`),
   ).getByTestId('accordion-summary')
 
   const moduleCheckbox = within(moduleAccordion).getByLabelText(module.name)
@@ -121,7 +121,7 @@ it('disables whole module if module is mandatory', () => {
   render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${module.id}`)
+    screen.getByTestId(`module-group-${module.id}`),
   ).getByTestId('accordion-summary')
 
   const moduleCheckbox = within(moduleAccordion).getByLabelText(module.name)
@@ -258,7 +258,7 @@ it('calls onChange whenever a module is toggled', async () => {
   ])
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${module.id}`)
+    screen.getByTestId(`module-group-${module.id}`),
   ).getByTestId('accordion-summary')
 
   await user.click(within(moduleAccordion).getByLabelText(module.name))

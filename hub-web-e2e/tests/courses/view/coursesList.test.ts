@@ -11,7 +11,7 @@ import { stateFilePath } from '@qa/util'
 
 const deleteCourses = async (courses: Course[]) => {
   const deletePromises = courses.map(course =>
-    API.course.deleteCourse(course.id)
+    API.course.deleteCourse(course.id),
   )
   await Promise.all(deletePromises)
 }
@@ -22,7 +22,7 @@ const test = base.extend<{
   courses: async ({}, use) => {
     const courses = await API.course.makeSureTrainerHasCourses(
       COURSES_TO_VIEW,
-      users.trainerWithOrg.email
+      users.trainerWithOrg.email,
     )
     await use(courses)
     await deleteCourses(courses)

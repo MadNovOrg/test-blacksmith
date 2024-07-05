@@ -35,7 +35,7 @@ export const FilterByCourseResidingCountry: React.FC<
   const { countriesCodesWithUKs } = useWorldCountries()
   const CourseResidingCountryParam = withDefault(
     createEnumArrayParam<string>(countriesCodesWithUKs),
-    [] as string[]
+    [] as string[],
   )
   const [venueCountries, setVenueCountries] = useState<string[]>([])
   const [residingCountries, setResidingCountries] = useState<string[]>([])
@@ -61,12 +61,12 @@ export const FilterByCourseResidingCountry: React.FC<
       CourseResidingCountries?.course?.length > 0
     ) {
       setResidingCountries(
-        CourseResidingCountries.course.map(c => c?.residingCountry ?? '')
+        CourseResidingCountries.course.map(c => c?.residingCountry ?? ''),
       )
     }
     if (CourseVenueCountries && CourseVenueCountries?.venue?.length > 0) {
       setVenueCountries(
-        CourseVenueCountries.venue.map(c => c?.countryCode ?? '')
+        CourseVenueCountries.venue.map(c => c?.countryCode ?? ''),
       )
     }
   }, [
@@ -91,14 +91,14 @@ export const FilterByCourseResidingCountry: React.FC<
               id: c,
               title: getCountryLabel(c) ?? '',
             }
-          : { id: '', title: '' }
+          : { id: '', title: '' },
       )
       .filter(c => c.title)
   }, [countries, getCountryLabel])
 
   const [selected, setSelected] = useQueryParam(
     'country',
-    CourseResidingCountryParam
+    CourseResidingCountryParam,
   )
 
   const options = useMemo(() => {
@@ -114,7 +114,7 @@ export const FilterByCourseResidingCountry: React.FC<
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

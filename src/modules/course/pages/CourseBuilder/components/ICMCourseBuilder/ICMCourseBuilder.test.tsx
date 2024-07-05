@@ -74,7 +74,7 @@ describe('component: CourseBuilder', () => {
         {},
         {
           initialEntries: [`/courses/${course.id}/modules`],
-        }
+        },
       )
 
       expect(screen.getByText(levelOneInfoMessage)).toBeInTheDocument()
@@ -113,7 +113,7 @@ describe('component: CourseBuilder', () => {
         {},
         {
           initialEntries: [`/courses/${course.id}/modules`],
-        }
+        },
       )
 
       expect(screen.queryByText(levelTwoInfoMessage)).not.toBeInTheDocument()
@@ -128,11 +128,11 @@ describe('component: CourseBuilder', () => {
     render(
       <Provider value={client}>
         <ICMCourseBuilder />
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByRole('progressbar', { name: /course fetching/i })
+      screen.getByRole('progressbar', { name: /course fetching/i }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
@@ -159,7 +159,7 @@ describe('component: CourseBuilder', () => {
     render(
       <Provider value={client}>
         <ICMCourseBuilder />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText(/course not found/i)).toBeInTheDocument()
@@ -187,12 +187,12 @@ describe('component: CourseBuilder', () => {
     render(
       <Provider value={client}>
         <ICMCourseBuilder />
-      </Provider>
+      </Provider>,
     )
 
     const alert = screen.getByRole('alert')
     expect(alert.textContent).toMatchInlineSnapshot(
-      `"Internal error occurred."`
+      `"Internal error occurred."`,
     )
   })
 
@@ -238,23 +238,23 @@ describe('component: CourseBuilder', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
     expect(screen.getByTestId('course-status-chip').textContent).toBe('Draft')
 
     expect(
-      screen.getByTestId('course-organization').textContent
+      screen.getByTestId('course-organization').textContent,
     ).toMatchInlineSnapshot(`"Organisation: Organization"`)
     expect(
-      screen.getByTestId('course-location').textContent
+      screen.getByTestId('course-location').textContent,
     ).toMatchInlineSnapshot(`"Location: Venue, City"`)
     expect(
-      screen.getByTestId('course-start-date').textContent
+      screen.getByTestId('course-start-date').textContent,
     ).toMatchInlineSnapshot(`"Starts: 28 July 2023, 10:00 AM"`)
     expect(
-      screen.getByTestId('course-end-date').textContent
+      screen.getByTestId('course-end-date').textContent,
     ).toMatchInlineSnapshot(`"Ends: 28 July 2023, 06:00 PM"`)
   })
 
@@ -325,7 +325,7 @@ describe('component: CourseBuilder', () => {
     render(
       <Provider value={client}>
         <ICMCourseBuilder />
-      </Provider>
+      </Provider>,
     )
 
     const availableModules = screen.getByTestId('available-modules')
@@ -335,19 +335,19 @@ describe('component: CourseBuilder', () => {
       moduleGroup.name,
       {
         exact: false,
-      }
+      },
     )
 
     expect(
       within(selectedModules).queryByTestId(
-        `selected-module-group-${moduleGroup.id}`
-      )
+        `selected-module-group-${moduleGroup.id}`,
+      ),
     ).not.toBeInTheDocument()
 
     await userEvent.click(moduleGroupLabel)
 
     expect(
-      within(selectedModules).getByText(moduleGroup.name)
+      within(selectedModules).getByText(moduleGroup.name),
     ).toBeInTheDocument()
 
     await waitFor(() => {
@@ -419,7 +419,7 @@ describe('component: CourseBuilder', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     const availableModules = screen.getByTestId('available-modules')
@@ -429,13 +429,13 @@ describe('component: CourseBuilder', () => {
       moduleGroup.name,
       {
         exact: false,
-      }
+      },
     )
 
     expect(
       within(selectedModules).queryByTestId(
-        `selected-module-group-${moduleGroup.id}`
-      )
+        `selected-module-group-${moduleGroup.id}`,
+      ),
     ).not.toBeInTheDocument()
 
     await userEvent.click(moduleGroupLabel)
@@ -444,7 +444,7 @@ describe('component: CourseBuilder', () => {
     const timeCommitmentDialog = screen.getByTestId('time-commitment-dialog')
 
     await userEvent.click(
-      within(timeCommitmentDialog).getByText(/submit course/i)
+      within(timeCommitmentDialog).getByText(/submit course/i),
     )
 
     await waitFor(() => {
@@ -482,7 +482,7 @@ describe('component: CourseBuilder', () => {
         <ICMCourseBuilder />
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     const availableModules = screen.getByTestId('available-modules')
@@ -492,15 +492,15 @@ describe('component: CourseBuilder', () => {
       moduleGroup.name,
       {
         exact: false,
-      }
+      },
     )
 
     expect(moduleGroupLabel).toBeDisabled()
 
     expect(
       within(selectedModules).queryByTestId(
-        `selected-module-group-${moduleGroup.id}`
-      )
+        `selected-module-group-${moduleGroup.id}`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -544,7 +544,7 @@ describe('component: CourseBuilder', () => {
         <ICMCourseBuilder />
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     const availableModules = screen.getByTestId('available-modules')
@@ -554,7 +554,7 @@ describe('component: CourseBuilder', () => {
       'Personal Safety',
       {
         exact: false,
-      }
+      },
     )
     fireEvent.click(personalSafetyLabel)
 
@@ -562,15 +562,15 @@ describe('component: CourseBuilder', () => {
       'Physical Warm Up',
       {
         exact: false,
-      }
+      },
     )
     expect(physicalWarmUpLabel).toBeChecked()
     expect(physicalWarmUpLabel).toBeDisabled()
 
     expect(
       within(selectedModules).queryByTestId(
-        `selected-module-group-physical-warm-up`
-      )
+        `selected-module-group-physical-warm-up`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -614,7 +614,7 @@ describe('component: CourseBuilder', () => {
         <ICMCourseBuilder />
       </Provider>,
       {},
-      { initialEntries: [`/courses/${course.id}/modules`] }
+      { initialEntries: [`/courses/${course.id}/modules`] },
     )
 
     const availableModules = screen.getByTestId('available-modules')
@@ -624,15 +624,15 @@ describe('component: CourseBuilder', () => {
       moduleGroup.name,
       {
         exact: false,
-      }
+      },
     )
 
     expect(moduleGroupLabel).toBeChecked()
 
     expect(
       within(selectedModules).queryByTestId(
-        `selected-module-group-${moduleGroup.id}`
-      )
+        `selected-module-group-${moduleGroup.id}`,
+      ),
     ).toBeInTheDocument()
   })
 
@@ -743,7 +743,7 @@ describe('component: CourseBuilder', () => {
           </Routes>
         </Provider>,
         {},
-        { initialEntries: [`/courses/${course.id}/modules`] }
+        { initialEntries: [`/courses/${course.id}/modules`] },
       )
 
       const availableModules = screen.getByTestId('available-modules')
@@ -753,27 +753,27 @@ describe('component: CourseBuilder', () => {
         moduleGroup.name,
         {
           exact: false,
-        }
+        },
       )
 
       expect(moduleGroupLabel).toBeDisabled()
 
       expect(
         within(selectedModules).queryByTestId(
-          `selected-module-group-${moduleGroup.id}`
-        )
+          `selected-module-group-${moduleGroup.id}`,
+        ),
       ).toBeInTheDocument()
 
       await userEvent.click(screen.getByRole('button', { name: /submit/i }))
 
       const timeCommitmentDialog = screen.getByTestId('time-commitment-dialog')
       await userEvent.click(
-        within(timeCommitmentDialog).getByText(/submit course/i)
+        within(timeCommitmentDialog).getByText(/submit course/i),
       )
 
       await waitFor(() => {
         expect(screen.getByText(/course details/i)).toBeInTheDocument()
       })
-    }
+    },
   )
 })

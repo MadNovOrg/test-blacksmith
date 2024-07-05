@@ -97,10 +97,10 @@ export const CertificationsTable: FC<
                             <Typography mt={1} variant="body2" color="grey.700">
                               {certificateExpired(certificate.expiryDate ?? '')
                                 ? `${formatDistanceToNow(
-                                    new Date(certificate.expiryDate)
+                                    new Date(certificate.expiryDate),
                                   )} ${t('common.ago')}`
                                 : new Date(
-                                    certificate.expiryDate
+                                    certificate.expiryDate,
                                   ).toLocaleDateString('en-GB')}
                             </Typography>
                           )}

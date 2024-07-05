@@ -45,7 +45,7 @@ describe('page: ModulesSelection', () => {
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] },
     )
 
     expect(screen.getByTestId('modules-fetching')).toBeInTheDocument()
@@ -75,16 +75,16 @@ describe('page: ModulesSelection', () => {
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] },
     )
 
     courseModules.forEach(courseModule => {
       const moduleGroup = screen.getByTestId(
-        `module-group-${courseModule.module.moduleGroup.id}`
+        `module-group-${courseModule.module.moduleGroup.id}`,
       )
 
       expect(
-        within(moduleGroup).getByLabelText(courseModule.module.name)
+        within(moduleGroup).getByLabelText(courseModule.module.name),
       ).toBeChecked()
     })
 
@@ -117,19 +117,19 @@ describe('page: ModulesSelection', () => {
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] },
     )
 
     const mandatoryModuleGroup = screen.getByTestId(
-      `module-group-${courseModules[0].module.moduleGroup.id}`
+      `module-group-${courseModules[0].module.moduleGroup.id}`,
     )
 
     expect(
-      within(mandatoryModuleGroup).getByLabelText(courseModules[0].module.name)
+      within(mandatoryModuleGroup).getByLabelText(courseModules[0].module.name),
     ).toBeChecked()
 
     expect(
-      within(mandatoryModuleGroup).getByLabelText(courseModules[0].module.name)
+      within(mandatoryModuleGroup).getByLabelText(courseModules[0].module.name),
     ).toBeDisabled()
 
     expect(useCourseModulesMock).toHaveBeenCalledWith(COURSE_ID)
@@ -159,13 +159,13 @@ describe('page: ModulesSelection', () => {
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] },
     )
 
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
 
     const storedSelection = localStorage.getItem(
-      `modules-selection-${COURSE_ID}`
+      `modules-selection-${COURSE_ID}`,
     )
 
     expect(JSON.parse(storedSelection ?? '')).toEqual({
@@ -195,7 +195,7 @@ describe('page: ModulesSelection', () => {
         [courseModules[0].module.id]: false,
         [courseModules[1].module.id]: true,
         [courseModules[2].module.id]: true,
-      })
+      }),
     )
 
     render(
@@ -208,11 +208,11 @@ describe('page: ModulesSelection', () => {
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] },
     )
 
     expect(
-      screen.getByLabelText(courseModules[0].module.name)
+      screen.getByLabelText(courseModules[0].module.name),
     ).not.toBeChecked()
     expect(screen.getByLabelText(courseModules[1].module.name)).toBeChecked()
     expect(screen.getByLabelText(courseModules[2].module.name)).toBeChecked()
@@ -254,7 +254,7 @@ describe('page: ModulesSelection', () => {
         </GradingDetailsProvider>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] },
     )
 
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
@@ -279,7 +279,7 @@ describe('page: ModulesSelection', () => {
         </Routes>
       </GradingDetailsProvider>,
       {},
-      { initialEntries: ['/details', '/details/modules'] }
+      { initialEntries: ['/details', '/details/modules'] },
     )
 
     await userEvent.click(screen.getByText('Back to grading clearance'))

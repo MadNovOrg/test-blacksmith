@@ -29,7 +29,7 @@ describe('CourseParticipantAuditRow', () => {
       <CourseParticipantAuditRow
         isInternalUser={false}
         courseInfo={courseInfo}
-      />
+      />,
     )
     const courseNameLink = getByTestId('course-name').querySelector('a')
     expect(courseNameLink).toBeInTheDocument()
@@ -41,7 +41,7 @@ describe('CourseParticipantAuditRow', () => {
       <CourseParticipantAuditRow
         isInternalUser={true}
         courseInfo={courseInfo}
-      />
+      />,
     )
     const courseNameLink = getByTestId('course-name').querySelector('a')
     expect(courseNameLink).not.toBeInTheDocument()
@@ -54,11 +54,11 @@ describe('CourseParticipantAuditRow', () => {
           isInternalUser={true}
           courseInfo={courseInfo}
         />
-      </I18nextProvider>
+      </I18nextProvider>,
     )
     const courseAction = getByTestId('course-action')
     expect(courseAction.textContent).toBe(
-      t(`participant-audit-types.CANCELLATION`)
+      t(`participant-audit-types.CANCELLATION`),
     )
   })
 
@@ -69,7 +69,7 @@ describe('CourseParticipantAuditRow', () => {
           isInternalUser={true}
           courseInfo={courseInfo}
         />
-      </I18nextProvider>
+      </I18nextProvider>,
     )
     const courseStartDate = getByTestId('course-date')
     expect(courseStartDate.textContent).toBe('15 May 2024')

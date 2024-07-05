@@ -57,7 +57,7 @@ describe('component: CourseHeroSummary', () => {
     })
 
     expect(
-      screen.getByText(t('pages.course-participants.course-began'))
+      screen.getByText(t('pages.course-participants.course-began')),
     ).toBeInTheDocument()
   })
 
@@ -79,7 +79,7 @@ describe('component: CourseHeroSummary', () => {
     })
 
     expect(
-      screen.getByText(t('pages.course-participants.course-begins-today'))
+      screen.getByText(t('pages.course-participants.course-begins-today')),
     ).toBeInTheDocument()
   })
 
@@ -98,8 +98,8 @@ describe('component: CourseHeroSummary', () => {
 
     expect(
       screen.getByText(
-        t('pages.course-participants.until-course-begins_days_one')
-      )
+        t('pages.course-participants.until-course-begins_days_one'),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -124,8 +124,8 @@ describe('component: CourseHeroSummary', () => {
       screen.getByText(
         t('pages.course-participants.until-course-begins_days_other', {
           count: 2,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -147,7 +147,7 @@ describe('component: CourseHeroSummary', () => {
     })
 
     expect(
-      screen.getByText(t('pages.course-participants.course-ended'))
+      screen.getByText(t('pages.course-participants.course-ended')),
     ).toBeInTheDocument()
   })
 
@@ -212,7 +212,7 @@ describe('component: CourseHeroSummary', () => {
     })
 
     expect(
-      screen.getByText(t('pages.course-participants.trainer'))
+      screen.getByText(t('pages.course-participants.trainer')),
     ).toBeInTheDocument()
   })
 
@@ -222,7 +222,7 @@ describe('component: CourseHeroSummary', () => {
     render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByTestId('course-venue')).toHaveTextContent(
-      `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.addressLineOne}, ${course.schedule[0].venue?.city}, ${course.schedule[0].venue?.postCode}, ${course.schedule[0].venue?.country}`
+      `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.addressLineOne}, ${course.schedule[0].venue?.city}, ${course.schedule[0].venue?.postCode}, ${course.schedule[0].venue?.country}`,
     )
   })
 
@@ -243,8 +243,8 @@ describe('component: CourseHeroSummary', () => {
       screen.getByText(
         t('pages.course-participants.company-host', {
           companyName: 'London First School',
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
 
@@ -270,19 +270,19 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(t('components.course-form.contact-person-label'), {
         exact: false,
-      })
+      }),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.bookingContact?.email as string)
+      screen.getByText(course.bookingContact?.email as string),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.bookingContact?.fullName as string)
+      screen.getByText(course.bookingContact?.fullName as string),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.bookingContact?.fullName as string).closest('a')
+      screen.getByText(course.bookingContact?.fullName as string).closest('a'),
     ).toBeNull()
   })
 
@@ -296,19 +296,19 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(t('components.course-form.contact-person-label'), {
         exact: false,
-      })
+      }),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.bookingContact?.email as string)
+      screen.getByText(course.bookingContact?.email as string),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.bookingContact?.fullName as string)
+      screen.getByText(course.bookingContact?.fullName as string),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.bookingContact?.fullName as string).closest('a')
+      screen.getByText(course.bookingContact?.fullName as string).closest('a'),
     ).not.toBeNull()
   })
 
@@ -333,19 +333,19 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(t('components.course-form.contact-person-label'), {
         exact: false,
-      })
+      }),
     ).toBeInTheDocument()
 
     expect(screen.getByText(inviteData.email)).toBeInTheDocument()
 
     expect(
-      screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`)
+      screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`),
     ).toBeInTheDocument()
 
     expect(
       screen
         .getByText(`${inviteData.firstName} ${inviteData.lastName}`)
-        .closest('a')
+        .closest('a'),
     ).toBeNull()
   })
 
@@ -361,22 +361,22 @@ describe('component: CourseHeroSummary', () => {
         t('components.course-form.organization-key-contact-label'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.organizationKeyContact?.email as string)
+      screen.getByText(course.organizationKeyContact?.email as string),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.organizationKeyContact?.fullName as string)
+      screen.getByText(course.organizationKeyContact?.fullName as string),
     ).toBeInTheDocument()
 
     expect(
       screen
         .getByText(course.organizationKeyContact?.fullName as string)
-        .closest('a')
+        .closest('a'),
     ).not.toBeNull()
   })
 
@@ -392,22 +392,22 @@ describe('component: CourseHeroSummary', () => {
         t('components.course-form.organization-key-contact-label'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.organizationKeyContact?.email as string)
+      screen.getByText(course.organizationKeyContact?.email as string),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText(course.organizationKeyContact?.fullName as string)
+      screen.getByText(course.organizationKeyContact?.fullName as string),
     ).toBeInTheDocument()
 
     expect(
       screen
         .getByText(course.organizationKeyContact?.fullName as string)
-        .closest('a')
+        .closest('a'),
     ).toBeNull()
   })
 
@@ -434,20 +434,20 @@ describe('component: CourseHeroSummary', () => {
         t('components.course-form.organization-key-contact-label'),
         {
           exact: false,
-        }
-      )
+        },
+      ),
     ).toBeInTheDocument()
 
     expect(screen.getByText(inviteData.email)).toBeInTheDocument()
 
     expect(
-      screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`)
+      screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`),
     ).toBeInTheDocument()
 
     expect(
       screen
         .getByText(`${inviteData.firstName} ${inviteData.lastName}`)
-        .closest('a')
+        .closest('a'),
     ).toBeNull()
   })
 
@@ -465,7 +465,7 @@ describe('component: CourseHeroSummary', () => {
               <button data-testid="back-button">Back Button</button>
             ),
           }}
-        />
+        />,
       )
 
       expect(screen.getByTestId('back-button')).toBeInTheDocument()
@@ -484,7 +484,7 @@ describe('component: CourseHeroSummary', () => {
               <button data-testid="edit-button">Edit Button</button>
             ),
           }}
-        />
+        />,
       )
 
       expect(screen.getByTestId('edit-button')).toBeInTheDocument()
@@ -501,7 +501,7 @@ describe('component: CourseHeroSummary', () => {
           slots={{
             OrderItem: () => <div>Order: TT-123</div>,
           }}
-        />
+        />,
       )
 
       expect(screen.getByTestId('order-item')).toBeInTheDocument()

@@ -7,7 +7,7 @@ describe('RevokeCertModal', () => {
   const onSuccessMock = vi.fn()
 
   const setup = (
-    props: { certificateId?: string; participantId?: string } = {}
+    props: { certificateId?: string; participantId?: string } = {},
   ) => {
     return render(
       <RevokeCertModal
@@ -15,7 +15,7 @@ describe('RevokeCertModal', () => {
         onSuccess={onSuccessMock}
         certificateId={props.certificateId || chance.guid()}
         participantId={props.participantId || chance.guid()}
-      />
+      />,
     )
   }
 
@@ -23,7 +23,7 @@ describe('RevokeCertModal', () => {
     setup()
 
     expect(
-      screen.getByText(/user will no longer have access to the certificate/i)
+      screen.getByText(/user will no longer have access to the certificate/i),
     ).toBeInTheDocument()
 
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled()
@@ -45,7 +45,7 @@ describe('RevokeCertModal', () => {
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled()
     await userEvent.type(
       screen.getByLabelText(/specify reason/i),
-      'some reason'
+      'some reason',
     )
 
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeEnabled()

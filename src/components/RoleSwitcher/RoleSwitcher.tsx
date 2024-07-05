@@ -24,14 +24,14 @@ export const RoleSwitcher = () => {
       auth.individualAllowedRoles?.size
         ? Array.from(auth.individualAllowedRoles)
         : [],
-    [auth.individualAllowedRoles]
+    [auth.individualAllowedRoles],
   )
 
   const getRoleForPicker = useCallback(
     (role: RoleName) => {
       if (
         [RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT].includes(
-          role
+          role,
         ) &&
         auth.acl.isUserAndHaveUpToOneSubRole()
       ) {
@@ -40,7 +40,7 @@ export const RoleSwitcher = () => {
 
       return role
     },
-    [auth.acl]
+    [auth.acl],
   )
 
   const getRoleOnChange = useCallback(
@@ -57,7 +57,7 @@ export const RoleSwitcher = () => {
 
       return role
     },
-    [arrayIndividualAllowedRoles, auth.acl]
+    [arrayIndividualAllowedRoles, auth.acl],
   )
 
   const roles = useMemo(() => {
@@ -74,7 +74,7 @@ export const RoleSwitcher = () => {
 
     const all = [
       ...availableRoles.filter(role =>
-        [...(auth?.allowedRoles ?? new Set())].includes(role)
+        [...(auth?.allowedRoles ?? new Set())].includes(role),
       ),
     ]
 
@@ -142,7 +142,7 @@ export const RoleSwitcher = () => {
             >
               {t(`components.role-switcher.${role}`) || role}
             </MenuItem>
-          )
+          ),
         )}
       </Menu>
       {!auth.acl.isUserAndHaveUpToOneSubRole() ? (

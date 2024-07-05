@@ -50,13 +50,13 @@ it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
         onSendingCourseInformation={vitest.fn()}
         course={course}
       />,
-      { auth: { activeRole: role } }
+      { auth: { activeRole: role } },
     )
 
     expect(
-      within(screen.getByRole('table')).getByText('Attendance')
+      within(screen.getByRole('table')).getByText('Attendance'),
     ).toBeInTheDocument()
-  }
+  },
 )
 
 it('displays the attendance column if user is a lead trainer on the course', () => {
@@ -95,11 +95,11 @@ it('displays the attendance column if user is a lead trainer on the course', () 
     />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
-    }
+    },
   )
 
   expect(
-    within(screen.getByRole('table')).getByText('Attendance')
+    within(screen.getByRole('table')).getByText('Attendance'),
   ).toBeInTheDocument()
 })
 
@@ -139,11 +139,11 @@ it('displays the attendance column if user is an assist trainer on the course', 
     />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
-    }
+    },
   )
 
   expect(
-    within(screen.getByRole('table')).getByText('Attendance')
+    within(screen.getByRole('table')).getByText('Attendance'),
   ).toBeInTheDocument()
 })
 
@@ -183,11 +183,11 @@ it("doesn't display the attendance column if user is a moderator on the course",
     />,
     {
       auth: { activeRole: RoleName.TRAINER, profile: { id: trainerProfileId } },
-    }
+    },
   )
 
   expect(
-    within(screen.getByRole('table')).queryByText('Attendance')
+    within(screen.getByRole('table')).queryByText('Attendance'),
   ).not.toBeInTheDocument()
 })
 
@@ -221,11 +221,11 @@ it('displays the attendance column if course has ended', () => {
     />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
-    }
+    },
   )
 
   expect(
-    within(screen.getByRole('table')).getByText('Attendance')
+    within(screen.getByRole('table')).getByText('Attendance'),
   ).toBeInTheDocument()
 })
 
@@ -264,13 +264,13 @@ it('marks attendance chip disabled if participant has been graded', () => {
     />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
-    }
+    },
   )
 
   expect(
     within(
-      screen.getByTestId(`course-participant-row-${participant.id}`)
-    ).getByRole('button', { name: /attended/i })
+      screen.getByTestId(`course-participant-row-${participant.id}`),
+    ).getByRole('button', { name: /attended/i }),
   ).toHaveAttribute('aria-disabled', 'true')
 })
 
@@ -310,13 +310,13 @@ it('marks attendance chip disabled if participant did not attend, course ended a
     />,
     {
       auth: { activeRole: RoleName.TT_ADMIN },
-    }
+    },
   )
 
   expect(
     within(
-      screen.getByTestId(`course-participant-row-${participant.id}`)
-    ).getByRole('button', { name: /did not attend/i })
+      screen.getByTestId(`course-participant-row-${participant.id}`),
+    ).getByRole('button', { name: /did not attend/i }),
   ).toHaveAttribute('aria-disabled', 'true')
 })
 
@@ -363,13 +363,13 @@ it.each([
       />,
       {
         auth: { activeRole: RoleName.TT_ADMIN },
-      }
+      },
     )
 
     expect(
       within(
-        screen.getByTestId(`course-participant-row-${participant.id}`)
-      ).getByRole('button', { name: /did not attend/i })
+        screen.getByTestId(`course-participant-row-${participant.id}`),
+      ).getByRole('button', { name: /did not attend/i }),
     ).toHaveAttribute('aria-disabled', 'true')
-  }
+  },
 )

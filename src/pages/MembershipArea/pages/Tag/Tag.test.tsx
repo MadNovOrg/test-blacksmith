@@ -30,7 +30,7 @@ describe('page: Tag', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/blog/tag/tag-id'] }
+      { initialEntries: ['/blog/tag/tag-id'] },
     )
 
     expect(screen.getByTestId('posts-items-grid-skeleton')).toBeInTheDocument()
@@ -64,7 +64,7 @@ describe('page: Tag', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/tag/${tag.id}`] }
+      { initialEntries: [`/tag/${tag.id}`] },
     )
 
     const firstPost = screen.getByTestId(`post-grid-item-${posts[0].id}`)
@@ -100,23 +100,23 @@ describe('page: Tag', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/tag/${tag.id}`] }
+      { initialEntries: [`/tag/${tag.id}`] },
     )
 
     posts.forEach(item => {
       const itemElement = screen.getByTestId(`post-grid-item-${item.id}`)
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -153,17 +153,17 @@ describe('page: Tag', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/tag/${tag.id}`] }
+      { initialEntries: [`/tag/${tag.id}`] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search posts'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`post-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`post-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -200,26 +200,26 @@ describe('page: Tag', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/tag/${tag.id}`] }
+      { initialEntries: [`/tag/${tag.id}`] },
     )
 
     expect(
-      screen.getByTestId(`post-grid-item-${posts[0].id}`)
+      screen.getByTestId(`post-grid-item-${posts[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`post-grid-item-${reversedPosts[0].id}`)
+      screen.queryByTestId(`post-grid-item-${reversedPosts[0].id}`),
     ).not.toBeInTheDocument()
 
     await userEvent.click(screen.getByTestId('order-menu-button'))
     await userEvent.click(screen.getByText('Oldest'))
 
     expect(
-      screen.queryByTestId(`post-grid-item-${posts[0].id}`)
+      screen.queryByTestId(`post-grid-item-${posts[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`post-grid-item-${reversedPosts[0].id}`)
+      screen.getByTestId(`post-grid-item-${reversedPosts[0].id}`),
     ).toBeInTheDocument()
   })
 
@@ -270,17 +270,17 @@ describe('page: Tag', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/tag/${tag.id}`] }
+      { initialEntries: [`/tag/${tag.id}`] },
     )
 
     await userEvent.click(screen.getByTestId('posts-next-page'))
 
     expect(
-      screen.queryByTestId(`post-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`post-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`post-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`post-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('posts-next-page')).toBeDisabled()
@@ -288,11 +288,11 @@ describe('page: Tag', () => {
     await userEvent.click(screen.getByTestId('posts-previous-page'))
 
     expect(
-      screen.getByTestId(`post-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`post-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`post-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`post-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('posts-previous-page')).toBeDisabled()

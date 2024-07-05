@@ -61,11 +61,11 @@ export const StrategyAccordion: React.FC<
   const { allSelected, someSelected } = useMemo(() => {
     const arr =
       modules.groups?.flatMap(g =>
-        g.modules.map(m => `${name}.${g.name}.${m.name}`)
+        g.modules.map(m => `${name}.${g.name}.${m.name}`),
       ) ?? []
 
     const keys = (modules.modules?.map(m => `${name}.${m.name}`) ?? []).concat(
-      arr
+      arr,
     )
 
     const allSelected = keys.every(k => state[k])

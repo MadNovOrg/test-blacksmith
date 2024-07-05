@@ -119,7 +119,7 @@ export const ICMCourseBuilder: React.FC<
             level: courseData?.course?.level,
           })
         : null,
-    [moduleGroupsData, courseData]
+    [moduleGroupsData, courseData],
   )
 
   const purpleModuleIds = useMemo(
@@ -127,7 +127,7 @@ export const ICMCourseBuilder: React.FC<
       modulesData
         ?.filter(module => module.color === Color_Enum.Purple)
         .map(m => m.id),
-    [modulesData]
+    [modulesData],
   )
 
   const mandatoryGroups = useMemo(() => {
@@ -138,7 +138,7 @@ export const ICMCourseBuilder: React.FC<
     if (
       courseData.course.type === Course_Type_Enum.Open &&
       [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
-        courseData.course.level
+        courseData.course.level,
       )
     ) {
       return modulesData.map(group => ({ ...group, mandatory: true }))
@@ -277,7 +277,7 @@ export const ICMCourseBuilder: React.FC<
     if (!courseData?.course) return ''
 
     const mappedCourseDescription = mapCourseLevelToDescription(
-      courseData.course
+      courseData.course,
     )
 
     if (!mappedCourseDescription) return ''
@@ -286,7 +286,7 @@ export const ICMCourseBuilder: React.FC<
       `pages.trainer-base.create-course.new-course.${mappedCourseDescription.translationKey}`,
       {
         duration: mappedCourseDescription.duration,
-      }
+      },
     )
   }, [courseData, t, mapCourseLevelToDescription])
 
@@ -328,7 +328,7 @@ export const ICMCourseBuilder: React.FC<
     if (courseData?.course) {
       const selectedGroups =
         modulesData?.filter(group =>
-          selectedIdsRef.current.includes(group.id)
+          selectedIdsRef.current.includes(group.id),
         ) ?? []
 
       saveModules({
@@ -337,7 +337,7 @@ export const ICMCourseBuilder: React.FC<
           moduleGroup.modules.map(module => ({
             courseId: courseData?.course?.id,
             moduleId: module.id,
-          }))
+          })),
         ),
       })
 
@@ -365,12 +365,12 @@ export const ICMCourseBuilder: React.FC<
             moduleGroup.modules.map(module => ({
               courseId: courseData?.course?.id,
               moduleId: module.id,
-            }))
+            })),
           ),
         })
       }
     },
-    [courseData?.course, modulesData, saveDraft, saveModules]
+    [courseData?.course, modulesData, saveDraft, saveModules],
   )
 
   const submitButtonHandler = useCallback(() => {
@@ -434,7 +434,7 @@ export const ICMCourseBuilder: React.FC<
       estimatedDurationRef.current = [...selectedGroups].reduce(
         (sum, module) =>
           sum + (module?.duration?.aggregate?.sum?.duration ?? 0),
-        0
+        0,
       )
     }
   }, [initialGroups, mandatoryGroups, modulesData])
@@ -488,7 +488,7 @@ export const ICMCourseBuilder: React.FC<
                       duration: maxDuration
                         ? `${maxDuration / 60} hours`
                         : '0 hours',
-                    }
+                    },
                   ),
               }}
             />
@@ -512,7 +512,7 @@ export const ICMCourseBuilder: React.FC<
                     {t(
                       `pages.trainer-base.create-course.new-course.${
                         courseBuilderWarning[courseData.course.level]
-                      }`
+                      }`,
                     )}
                   </Alert>
                 ) : null,
@@ -531,21 +531,21 @@ export const ICMCourseBuilder: React.FC<
               {
                 hours: Math.max(
                   minimumTimeCommitment,
-                  Math.ceil((estimatedDurationRef.current ?? 0) / 60)
+                  Math.ceil((estimatedDurationRef.current ?? 0) / 60),
                 ),
-              }
+              },
             )}
             {editMode ? (
               <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
                 {t(
-                  'pages.trainer-base.create-course.new-course.time-commitment-warning'
+                  'pages.trainer-base.create-course.new-course.time-commitment-warning',
                 )}
               </Alert>
             ) : null}
           </>
         }
         title={t(
-          'pages.trainer-base.create-course.new-course.time-commitment-title'
+          'pages.trainer-base.create-course.new-course.time-commitment-title',
         )}
         okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
         data-testid="time-commitment-dialog"

@@ -107,7 +107,7 @@ export function SearchTrainers({
   const renderOption = (
     props: HTMLAttributes<HTMLLIElement>,
     option: SearchTrainer,
-    _state: AutocompleteRenderOptionState
+    _state: AutocompleteRenderOptionState,
   ) => {
     const trainerRoles = option.trainer_role_types
       ?.map(obj => t(`trainer-role-types.${obj.trainer_role_type?.name}`))
@@ -157,7 +157,7 @@ export function SearchTrainers({
       onChange({ target: { value: newSelection } })
       setQuery('')
     },
-    [isControlled, max, onChange, selected]
+    [isControlled, max, onChange, selected],
   )
 
   const noOptionsText = useMemo(() => {
@@ -171,7 +171,7 @@ export function SearchTrainers({
     options.filter(
       option =>
         option.fullName?.toLowerCase().includes(query.toLowerCase()) ||
-        option.email?.toLowerCase().includes(query.toLowerCase())
+        option.email?.toLowerCase().includes(query.toLowerCase()),
     )
 
   return (
@@ -263,7 +263,7 @@ function renderTextField({
 
 function renderSelected(
   selected: SearchTrainer[],
-  getTagProps: AutocompleteRenderGetTagProps
+  getTagProps: AutocompleteRenderGetTagProps,
 ) {
   return selected.map((s, index) => (
     <Chip

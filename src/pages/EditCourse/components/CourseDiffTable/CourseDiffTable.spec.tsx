@@ -10,7 +10,7 @@ describe(CourseDiffTable.name, () => {
       current: { t, _t },
     },
   } = renderHook(() =>
-    useScopedTranslation('pages.edit-course.review-changes-modal')
+    useScopedTranslation('pages.edit-course.review-changes-modal'),
   )
   const newValue = new Date()
   const oldValue = new Date()
@@ -24,7 +24,7 @@ describe(CourseDiffTable.name, () => {
             oldValue: [oldValue, oldValue],
           },
         ]}
-      />
+      />,
     )
   })
   it('should render the component', () => {
@@ -34,7 +34,7 @@ describe(CourseDiffTable.name, () => {
     [t('col-property'), t('col-old-value'), t('col-new-value')].forEach(
       cell => {
         expect(screen.queryAllByText(cell)[0]).toBeInTheDocument()
-      }
+      },
     ))
   it('shows dates correctly', () => {
     const formatedDate = `${_t('dates.longWithTime', {

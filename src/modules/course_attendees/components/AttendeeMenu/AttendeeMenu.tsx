@@ -35,7 +35,7 @@ export const AttendeeMenu: React.FC<
 
   const selected = useMemo(
     () => (value ? options.find(o => o.id === value) : null),
-    [options, value]
+    [options, value],
   )
 
   return (

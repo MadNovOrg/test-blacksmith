@@ -25,7 +25,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   allowancePrice,
 }) => {
   const { t, _t } = useScopedTranslation(
-    'pages.create-course.license-order-details'
+    'pages.create-course.license-order-details',
   )
 
   const licensesLeft =

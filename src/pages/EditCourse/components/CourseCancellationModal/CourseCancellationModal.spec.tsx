@@ -38,14 +38,14 @@ describe(CourseCancellationModal.name, () => {
     //Assert
     expect(
       screen.getByText(
-        t('pages.edit-course.cancellation-modal.permanently-cancel-course')
-      )
+        t('pages.edit-course.cancellation-modal.permanently-cancel-course'),
+      ),
     ).toBeInTheDocument()
 
     expect(
       screen.queryByText(
-        t('pages.edit-course.cancellation-modal.finance-invoice-changes')
-      )
+        t('pages.edit-course.cancellation-modal.finance-invoice-changes'),
+      ),
     ).not.toBeInTheDocument()
   })
   it('should render the radio group if course type is CLOSED', () => {
@@ -62,10 +62,10 @@ describe(CourseCancellationModal.name, () => {
       setup(Course_Type_Enum.Closed)
       expect(
         screen.getByLabelText(
-          t(`pages.edit-course.cancellation-modal.${radioValue}`)
-        )
+          t(`pages.edit-course.cancellation-modal.${radioValue}`),
+        ),
       ).toBeInTheDocument()
-    }
+    },
   )
   it('should correctly select a radiobox', () => {
     // Act
@@ -76,7 +76,7 @@ describe(CourseCancellationModal.name, () => {
     radioGroup.forEach(async radioButton => {
       await userEvent.click(radioButton)
       await waitFor(() =>
-        expect(radioButton).toHaveAttribute('selected', 'true')
+        expect(radioButton).toHaveAttribute('selected', 'true'),
       )
     })
   })
@@ -90,7 +90,7 @@ describe(CourseCancellationModal.name, () => {
     //Act
     setup(Course_Type_Enum.Indirect)
     const specifyReasonInput = screen.getByLabelText(
-      `${t('pages.edit-course.cancellation-modal.specify-reason')} *`
+      `${t('pages.edit-course.cancellation-modal.specify-reason')} *`,
     )
     await userEvent.type(specifyReasonInput, cancellationReason)
     //Assert

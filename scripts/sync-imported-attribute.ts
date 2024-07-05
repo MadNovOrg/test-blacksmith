@@ -62,7 +62,7 @@ async function syncImportedAttribute() {
     users?.forEach(
       (user: { Attributes: { Name: string; Value: string }[] }) => {
         const userImported = user.Attributes.find(
-          a => a.Name === 'custom:imported' && a.Value === 'true'
+          a => a.Name === 'custom:imported' && a.Value === 'true',
         )
 
         if (userImported) {
@@ -70,7 +70,7 @@ async function syncImportedAttribute() {
 
           importedSubs.push(sub)
         }
-      }
+      },
     )
 
     if (importedSubs.length) {
@@ -88,7 +88,7 @@ async function syncImportedAttribute() {
         console.log(
           `marked ${hasuraResponse.update_profile.returning
             ?.map(p => p.email)
-            .join(', ')} as imported`
+            .join(', ')} as imported`,
         )
       }
     } else {
@@ -102,7 +102,7 @@ async function syncImportedAttribute() {
   console.log(
     `Done 🎉 ${totalSynced} ${
       totalSynced === 1 ? 'user' : 'users'
-    } marked as imported in our database 👋`
+    } marked as imported in our database 👋`,
   )
   process.exit(0)
 }

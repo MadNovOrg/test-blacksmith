@@ -60,11 +60,11 @@ describe('component: LicenseOrderDetails', () => {
         <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
           <LicenseOrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('license-order-details-not-found').textContent
+      screen.getByTestId('license-order-details-not-found').textContent,
     ).toMatchInlineSnapshot(`"Course not found"`)
   })
 
@@ -90,11 +90,11 @@ describe('component: LicenseOrderDetails', () => {
         >
           <LicenseOrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(
-      screen.getByTestId('license-order-details-not-found').textContent
+      screen.getByTestId('license-order-details-not-found').textContent,
     ).toMatchInlineSnapshot(`"Course not found"`)
   })
 
@@ -123,7 +123,7 @@ describe('component: LicenseOrderDetails', () => {
         >
           <LicenseOrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByTestId('amount-due')).toBeInTheDocument()
@@ -160,7 +160,7 @@ describe('component: LicenseOrderDetails', () => {
         >
           <LicenseOrderDetails />
         </CreateCourseProvider>
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByText('Review & confirm')).toBeDisabled()
@@ -170,7 +170,7 @@ describe('component: LicenseOrderDetails', () => {
     await userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
     await userEvent.type(
       screen.getByLabelText('Email *'),
-      'john.doe@example.com'
+      'john.doe@example.com',
     )
     await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
       delay: 100,
@@ -217,7 +217,7 @@ describe('component: LicenseOrderDetails', () => {
         </CreateCourseProvider>
       </Provider>,
       {},
-      { initialEntries: ['/license-order-details'] }
+      { initialEntries: ['/license-order-details'] },
     )
 
     await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
@@ -225,7 +225,7 @@ describe('component: LicenseOrderDetails', () => {
     await userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
     await userEvent.type(
       screen.getByLabelText('Email *'),
-      'john.doe@example.com'
+      'john.doe@example.com',
     )
     await userEvent.type(screen.getByLabelText('Phone *'), '1234567890')
 
@@ -237,7 +237,7 @@ describe('component: LicenseOrderDetails', () => {
       {
         timeout: 2000,
         interval: 300,
-      }
+      },
     )
 
     await userEvent.click(screen.getByText('Review & confirm'))

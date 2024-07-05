@@ -30,7 +30,7 @@ export const FilterByPromoCodeStatus: React.FC<
       setOptions(opts)
       onChange(opts.flatMap(o => (o.selected ? o.id : [])))
     },
-    [onChange]
+    [onChange],
   )
 
   return (

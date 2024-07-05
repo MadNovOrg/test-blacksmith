@@ -44,11 +44,11 @@ export class MyCoursesPage extends BasePage {
     this.createCourseMenu = new CreateCourseMenu(this.page)
     this.submitButton = this.page.locator('[data-testid="submit-button"]')
     this.dialogueConfirmButton = this.page.locator(
-      '[data-testid="dialog-confirm-button"]'
+      '[data-testid="dialog-confirm-button"]',
     )
     this.proceedButton = this.page.locator('[data-testid="proceed-button"]')
     this.modalSubmitButton = this.page.locator(
-      '[data-testid="AcceptDeclineCourse-modalSubmit"]'
+      '[data-testid="AcceptDeclineCourse-modalSubmit"]',
     )
   }
 
@@ -80,14 +80,14 @@ export class MyCoursesPage extends BasePage {
       Course_Level_Enum.Advanced,
       Course_Level_Enum.AdvancedTrainer,
       Course_Level_Enum.IntermediateTrainer,
-    ]
+    ],
   ) {
     const tableRows = await this.coursesTable.getRows()
     let allRowsContainCourseCode = true
     const mapCourseTypesToShortResult = mapCourseTypesToShort()
     for (const row of tableRows) {
       const shortCodes = courseTypes.map(
-        type => mapCourseTypesToShortResult[type]
+        type => mapCourseTypesToShortResult[type],
       )
       if (!shortCodes.some(code => code && row.Name.includes(code))) {
         allRowsContainCourseCode = false
@@ -103,7 +103,7 @@ export class MyCoursesPage extends BasePage {
 
   async checkNumberOfTableRows(numberOfRows: number) {
     await expect(
-      this.tableRoot.locator('[data-testid*="course-row"]')
+      this.tableRoot.locator('[data-testid*="course-row"]'),
     ).toHaveCount(numberOfRows)
   }
 
@@ -119,7 +119,7 @@ export class MyCoursesPage extends BasePage {
   async clickCourse(courseId: number): Promise<CourseBuilderPage> {
     await this.tableRoot
       .locator(
-        `[data-testid=course-row-${courseId}] [data-testid=course-title]`
+        `[data-testid=course-row-${courseId}] [data-testid=course-title]`,
       )
       .click()
     return new CourseBuilderPage(this.page)
@@ -134,14 +134,14 @@ export class MyCoursesPage extends BasePage {
 
   async checkCourseStatus(courseId: number, status: string) {
     const courseStatusChip = this.page.locator(
-      `[data-testid="course-row-${courseId}"] [data-testid="course-status-chip"] span`
+      `[data-testid="course-row-${courseId}"] [data-testid="course-status-chip"] span`,
     )
     await expect(courseStatusChip).toHaveText(status)
   }
 
   async checkCourseStartDatePresence() {
     const startDateLocator = this.page.locator(
-      '[data-testid="courseBegins-label"]'
+      '[data-testid="courseBegins-label"]',
     )
 
     await expect(startDateLocator).toContainText('days until course begins')
@@ -150,20 +150,20 @@ export class MyCoursesPage extends BasePage {
   async checkCourseWaitingApproval(courseId: number) {
     await expect(
       this.page.locator(
-        `[data-testid="actionable-courses-table"] [data-testid="actionable-course-${courseId}"]`
-      )
+        `[data-testid="actionable-courses-table"] [data-testid="actionable-course-${courseId}"]`,
+      ),
     ).toBeVisible()
   }
   async checkAllCourses(courseId: number) {
     await expect(
-      this.page.locator(`[data-testid=course-row-${courseId}]`)
+      this.page.locator(`[data-testid=course-row-${courseId}]`),
     ).toBeVisible()
   }
 
   async acceptCourse(courseId: number) {
     await this.page
       .locator(
-        `[data-testid=actionable-course-${courseId}] [data-testid=AcceptDeclineCourse-acceptBtn]`
+        `[data-testid=actionable-course-${courseId}] [data-testid=AcceptDeclineCourse-acceptBtn]`,
       )
       .click()
   }

@@ -17,7 +17,7 @@ export const CourseDiffTable: React.FC<React.PropsWithChildren<Props>> = ({
   diff,
 }) => {
   const { t, _t } = useScopedTranslation(
-    'pages.edit-course.review-changes-modal'
+    'pages.edit-course.review-changes-modal',
   )
 
   const cells = [t('col-property'), t('col-old-value'), t('col-new-value')]
@@ -41,7 +41,7 @@ export const CourseDiffTable: React.FC<React.PropsWithChildren<Props>> = ({
               {Array.isArray(d.oldValue)
                 ? `${_t('dates.longWithTime', { date: d.oldValue[0] })} - ${_t(
                     'dates.longWithTime',
-                    { date: d.oldValue[1] }
+                    { date: d.oldValue[1] },
                   )}`
                 : d.oldValue}
             </TableCell>
@@ -49,7 +49,7 @@ export const CourseDiffTable: React.FC<React.PropsWithChildren<Props>> = ({
               {Array.isArray(d.newValue)
                 ? `${_t('dates.longWithTime', { date: d.newValue[0] })} - ${_t(
                     'dates.longWithTime',
-                    { date: d.newValue[1] }
+                    { date: d.newValue[1] },
                   )}`
                 : d.newValue}
             </TableCell>

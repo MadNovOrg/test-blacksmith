@@ -48,7 +48,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   const [{ data: organisationData, fetching: loading }, insertOrganisation] =
     useInsertNewOrganization()
   const addOrgCountriesSelectorEnabled = useFeatureFlagEnabled(
-    'add-organization-country'
+    'add-organization-country',
   )
 
   const { pathname } = useLocation()
@@ -136,7 +136,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   useEffect(() => {
     setSpecifyOther(
       values.sector !== 'other' &&
-        values.organisationType?.toLocaleLowerCase() === 'other'
+        values.organisationType?.toLocaleLowerCase() === 'other',
     )
   }, [setSpecifyOther, specifyOther, values.organisationType, values.sector])
 
@@ -159,7 +159,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                   if (code) {
                     setValue(
                       'country',
-                      getCountryLabel(code as WorldCountriesCodes) ?? ''
+                      getCountryLabel(code as WorldCountriesCodes) ?? '',
                     )
                     setValue('countryCode', code)
                     setIsInUK(isUKCountry(code as CountryCode))
@@ -221,7 +221,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             <TextField
               id={'postCode'}
               label={_t(
-                'pages.create-organization.fields.addresses.postalAndZipCode'
+                'pages.create-organization.fields.addresses.postalAndZipCode',
               )}
               variant="filled"
               error={!!errors.postCode}

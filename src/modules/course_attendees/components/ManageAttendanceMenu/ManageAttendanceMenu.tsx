@@ -36,7 +36,7 @@ export const ManageAttendanceMenu = <
   T extends Pick<CourseParticipant, 'attended' | 'course' | 'profile'> & {
     course: Pick<Course, 'accreditedBy'>
     profile: Pick<Profile, 'organizations'>
-  }
+  },
 >({
   onCancelClick,
   onReplaceClick,
@@ -83,7 +83,7 @@ export const ManageAttendanceMenu = <
       onResendInformationClick,
       onTransferClick,
       t,
-    ]
+    ],
   )
 
   const actionPermissions = useMemo(
@@ -134,7 +134,7 @@ export const ManageAttendanceMenu = <
               !courseEnded(course)) ||
               (courseEnded(course) &&
                 !courseParticipant.attended &&
-                acl.canReplaceParticipantAfterCourseEnded())
+                acl.canReplaceParticipantAfterCourseEnded()),
           ),
         ],
         [
@@ -144,7 +144,7 @@ export const ManageAttendanceMenu = <
           }),
           constant(
             acl.canSendCourseInformation(participantOrgIds, course) &&
-              !courseEnded(course)
+              !courseEnded(course),
           ),
         ],
         [
@@ -156,7 +156,7 @@ export const ManageAttendanceMenu = <
         ],
         [stubTrue, constant(false)],
       ]),
-    [acl, course, courseParticipant.attended, participantOrgIds]
+    [acl, course, courseParticipant.attended, participantOrgIds],
   )
 
   const allowedActions = useMemo(() => {
@@ -170,7 +170,7 @@ export const ManageAttendanceMenu = <
           })
             ? action
             : null
-        }
+        },
       )
       .filter(Boolean)
   }, [actionPermissions, actions, course.type])

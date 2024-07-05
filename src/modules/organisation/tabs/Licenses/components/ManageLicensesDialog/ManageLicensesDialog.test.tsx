@@ -33,7 +33,7 @@ describe('ManageLicensesDialog', () => {
             success: true,
           },
         },
-      })
+      }),
     )
 
     render(
@@ -53,7 +53,7 @@ describe('ManageLicensesDialog', () => {
             fullName,
           },
         },
-      }
+      },
     )
 
     await fillForm({ amount, type: Type.ADD, invoiceId })
@@ -81,7 +81,7 @@ describe('ManageLicensesDialog', () => {
             success: true,
           },
         },
-      })
+      }),
     )
 
     render(
@@ -101,7 +101,7 @@ describe('ManageLicensesDialog', () => {
             fullName,
           },
         },
-      }
+      },
     )
 
     await fillForm({
@@ -134,7 +134,7 @@ describe('ManageLicensesDialog', () => {
             success: false,
           },
         },
-      })
+      }),
     )
     render(
       <Provider value={client as unknown as Client}>
@@ -153,7 +153,7 @@ describe('ManageLicensesDialog', () => {
             fullName,
           },
         },
-      }
+      },
     )
 
     await fillForm({
@@ -170,7 +170,7 @@ describe('ManageLicensesDialog', () => {
       expect(client.executeMutation).toHaveBeenCalledTimes(1)
       expect(onSaveMock).not.toHaveBeenCalled()
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"There was an error removing licences, please try again later."`
+        `"There was an error removing licences, please try again later."`,
       )
     })
   })
@@ -193,7 +193,7 @@ describe('ManageLicensesDialog', () => {
             error: Go1ChangeError.InvoiceNotAuthorized,
           },
         },
-      })
+      }),
     )
 
     render(
@@ -213,7 +213,7 @@ describe('ManageLicensesDialog', () => {
             fullName,
           },
         },
-      }
+      },
     )
 
     await fillForm({
@@ -230,7 +230,7 @@ describe('ManageLicensesDialog', () => {
       expect(client.executeMutation).toHaveBeenCalledTimes(1)
       expect(onSaveMock).not.toHaveBeenCalled()
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"Invoice must be authorised in Xero before issuing a refund."`
+        `"Invoice must be authorised in Xero before issuing a refund."`,
       )
     })
   })
@@ -274,7 +274,7 @@ describe('ManageLicensesDialog', () => {
             fullName,
           },
         },
-      }
+      },
     )
 
     await fillForm({
@@ -289,7 +289,7 @@ describe('ManageLicensesDialog', () => {
     await waitFor(() => {
       expect(onSaveMock).not.toHaveBeenCalled()
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-        `"Unable to issue a credit note, the invoice has already been paid."`
+        `"Unable to issue a credit note, the invoice has already been paid."`,
       )
     })
   })

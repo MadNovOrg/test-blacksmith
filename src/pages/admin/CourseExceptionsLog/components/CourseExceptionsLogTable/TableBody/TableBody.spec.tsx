@@ -18,21 +18,21 @@ describe('component: TableBody', () => {
     render(
       <Table>
         <TableBody colSpan={7} loading={loading} logs={logs} />
-      </Table>
+      </Table>,
     )
 
   it('should render the component', () => {
     setup()
     expect(
-      screen.getByTestId('course-exceptions-log-table-body')
+      screen.getByTestId('course-exceptions-log-table-body'),
     ).toBeInTheDocument()
   })
   it('should render logs', () => {
     setup()
     logsMock.map(log =>
       expect(
-        screen.getByText(log.authorizedBy.fullName as string)
-      ).toBeInTheDocument()
+        screen.getByText(log.authorizedBy.fullName as string),
+      ).toBeInTheDocument(),
     )
   })
   it('should render the loading spinner if in loading state', () => {
@@ -45,8 +45,8 @@ describe('component: TableBody', () => {
       screen.getByText(
         t(`components.table-no-rows.noRecords-first`, {
           itemsName: t('components.table-no-rows.itemsName'),
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
   })
   it('should render valid anchor elements', () => {
@@ -60,11 +60,11 @@ describe('component: TableBody', () => {
     courseDetails.map(course => {
       // Assert
       expect(
-        screen.getByRole('link', { name: course.name })
+        screen.getByRole('link', { name: course.name }),
       ).toBeInTheDocument()
       expect(screen.getByRole('link', { name: course.name })).toHaveAttribute(
         'href',
-        `/courses/${course.id}/details`
+        `/courses/${course.id}/details`,
       )
     })
   })
@@ -74,21 +74,21 @@ describe('component: TableBody', () => {
     setup()
     // Assert
     expect(
-      screen.getByRole('link', { name: log.course.course_code as string })
+      screen.getByRole('link', { name: log.course.course_code as string }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: log.course.course_code as string })
+      screen.getByRole('link', { name: log.course.course_code as string }),
     ).toHaveAttribute('href', `/courses/${log.course.id}/details`)
 
     expect(
       screen.getByRole('link', {
         name: log.course.organization?.name as string,
-      })
+      }),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('link', {
         name: log.course.organization?.name as string,
-      })
+      }),
     ).toHaveAttribute('href', `/organisations/${log.course.organization?.id}`)
   })
 })

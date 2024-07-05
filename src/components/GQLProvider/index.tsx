@@ -52,7 +52,7 @@ export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           getAuth: getJWT,
           didAuthError: ({ error }) => {
             return error.graphQLErrors.some(
-              e => e.extensions?.code === 'invalid-jwt'
+              e => e.extensions?.code === 'invalid-jwt',
             )
           },
           addAuthToOperation({ operation, authState }) {

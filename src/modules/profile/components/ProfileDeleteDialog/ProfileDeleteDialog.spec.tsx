@@ -19,7 +19,7 @@ describe('DeleteUsersDialog', () => {
   mockClient.executeMutation.mockImplementation(() =>
     fromValue<{ data: DeleteProfileMutation }>({
       data: { deleteUser: { success: true } },
-    })
+    }),
   )
   const profileId = chance.guid()
   const onCloseMock = vi.fn()
@@ -44,7 +44,7 @@ describe('DeleteUsersDialog', () => {
           onSuccess={onSuccessMock}
           profileId={profileId}
         />
-      </Provider>
+      </Provider>,
     )
   }
 
@@ -86,7 +86,7 @@ describe('DeleteUsersDialog', () => {
             error: 'some error' as DeleteUserError,
           },
         },
-      })
+      }),
     )
     setup(client)
 
@@ -96,7 +96,7 @@ describe('DeleteUsersDialog', () => {
 
     waitFor(() => {
       expect(
-        screen.getByText(/An error occurred while deleting the user./i)
+        screen.getByText(/An error occurred while deleting the user./i),
       ).toBeInTheDocument()
     })
   })

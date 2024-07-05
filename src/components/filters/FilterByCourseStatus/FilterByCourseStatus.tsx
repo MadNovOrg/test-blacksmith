@@ -21,7 +21,7 @@ type Props = {
 
 // Todo VenueMissing status is using on backend so this is the reason still need to keep this value.
 const statuses = Object.values(
-  omit(Course_Status_Enum, 'VenueMissing')
+  omit(Course_Status_Enum, 'VenueMissing'),
 ) as string[]
 
 export const FilterByCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
@@ -33,7 +33,7 @@ export const FilterByCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
 
   const allStatuses = useMemo(
     () => [...statuses, ...customStatuses],
-    [customStatuses]
+    [customStatuses],
   )
   const statusOptions = useMemo(() => {
     return allStatuses
@@ -44,14 +44,14 @@ export const FilterByCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
               id: status,
               title: t(`course-statuses.${status}`),
               selected: false,
-            }
+            },
       )
       .filter(Boolean)
   }, [allStatuses, excludedStatuses, t])
 
   const [selected, setSelected] = useQueryParam(
     'status',
-    withDefault(createEnumArrayParam<string>(allStatuses), [] as string[])
+    withDefault(createEnumArrayParam<string>(allStatuses), [] as string[]),
   )
 
   const options = useMemo(() => {
@@ -67,7 +67,7 @@ export const FilterByCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

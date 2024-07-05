@@ -48,9 +48,9 @@ export const useSpecialInstructions = ({
         deliveryType,
         reaccreditation,
         conversion,
-        t
+        t,
       ),
-    [courseLevel, courseType, deliveryType, t, reaccreditation, conversion]
+    [courseLevel, courseType, deliveryType, t, reaccreditation, conversion],
   )
 
   const resetSpecialInstructionsToDefault = useCallback(
@@ -71,7 +71,7 @@ export const useSpecialInstructions = ({
         newCourseDeliveryType,
         newCourseReacc,
         newCourseConversion,
-        t
+        t,
       )
 
       setValue('specialInstructions', newSpecialInstructions)
@@ -85,7 +85,7 @@ export const useSpecialInstructions = ({
       isCreation,
       setValue,
       t,
-    ]
+    ],
   )
 
   return { defaultSpecialInstructions, resetSpecialInstructionsToDefault }

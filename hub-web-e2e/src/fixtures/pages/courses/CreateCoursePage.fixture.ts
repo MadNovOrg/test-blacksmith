@@ -87,102 +87,102 @@ export class CreateCoursePage extends BasePage {
 
     this.go1Checkbox = this.page.locator('input[name="blendedLearning"]')
     this.reaccreditationCheckbox = this.page.locator(
-      'input[name="reaccreditation"]'
+      'input[name="reaccreditation"]',
     )
     this.conversionCheckbox = this.page.locator('input[name="conversion"]')
     this.bildStrategyPrimaryCheckbox = this.page.locator(
-      `input[name="bildStrategies.${BildStrategies.Primary}"]`
+      `input[name="bildStrategies.${BildStrategies.Primary}"]`,
     )
     this.bildStrategySecondaryCheckbox = this.page.locator(
-      `input[name="bildStrategies.${BildStrategies.Secondary}"]`
+      `input[name="bildStrategies.${BildStrategies.Secondary}"]`,
     )
     this.bildStrategyNonRTCheckbox = this.page.locator(
-      `input[name="bildStrategies.${BildStrategies.NonRestrictiveTertiary}"]`
+      `input[name="bildStrategies.${BildStrategies.NonRestrictiveTertiary}"]`,
     )
     this.bildStrategyRTIntermediateCheckbox = this.page.locator(
-      `input[name="bildStrategies.${BildStrategies.RestrictiveTertiaryIntermediate}"]`
+      `input[name="bildStrategies.${BildStrategies.RestrictiveTertiaryIntermediate}"]`,
     )
     this.bildStrategyPRTAdvancedCheckbox = this.page.locator(
-      `input[name="bildStrategies.${BildStrategies.RestrictiveTertiaryAdvanced}"]`
+      `input[name="bildStrategies.${BildStrategies.RestrictiveTertiaryAdvanced}"]`,
     )
 
     this.deliveryTypeRadioButton = (type: string) =>
       this.page.locator(`input[name="delivery-type-radio"][value="${type}"]`)
     this.venueInput = this.page.locator('[data-testid="venue-selector"] input')
     this.organisationInput = this.page.locator(
-      '[data-testid="org-selector"] input'
+      '[data-testid="org-selector"] input',
     )
     this.contactInput = this.page.locator('[data-testid="user-selector"] input')
     this.autocompleteLoading = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-loading'
+      '.MuiAutocomplete-popper .MuiAutocomplete-loading',
     )
     this.autocompleteOption = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-option'
+      '.MuiAutocomplete-popper .MuiAutocomplete-option',
     )
     this.startDateInput = this.page.locator(
-      '[data-testid="Start date-datePicker-textField"] input'
+      '[data-testid="Start date-datePicker-textField"] input',
     )
     this.startTimeInput = this.page.locator('[data-testid="start-time"] input')
     this.endDateInput = this.page.locator(
-      '[data-testid="End date-datePicker-textField"] input'
+      '[data-testid="End date-datePicker-textField"] input',
     )
     this.endTimeInput = this.page.locator('[data-testid="end-time"] input')
     this.minAttendeesInput = this.page.locator(
-      '[data-testid="min-attendees"] input'
+      '[data-testid="min-attendees"] input',
     )
     this.maxAttendeesInput = this.page.locator(
-      '[data-testid="max-attendees"] input'
+      '[data-testid="max-attendees"] input',
     )
     this.mandatoryCourseMaterialsInput = this.page.locator(
-      '[data-testid="mandatory-course-materials"] input'
+      '[data-testid="mandatory-course-materials"] input',
     )
     this.freeCourseMaterialsLabel = this.page.locator(
-      '[data-testid-"free-course-materials"'
+      '[data-testid-"free-course-materials"',
     )
     this.acknowledgeCheckboxes = this.page.locator(
-      '[data-testid="acknowledge-checks"] input'
+      '[data-testid="acknowledge-checks"] input',
     )
     this.nextPageButton = this.page.locator('data-testid=next-page-btn')
     this.orderDetailsButton = this.page.locator('[data-testid="next-page-btn"]')
     this.freeSpacesInput = this.page.locator(
-      '[data-testid="free-spaces"] input'
+      '[data-testid="free-spaces"] input',
     )
     this.salesPersonInput = this.page.locator(
-      '[data-testid="profile-selector-sales-representative"] input'
+      '[data-testid="profile-selector-sales-representative"] input',
     )
     this.sourceDropdown = this.page.locator('[data-testid="source-dropdown"]')
     this.sourceOption = (source: Course_Source_Enum) => {
       return this.page.locator(`[data-testid="source-option-${source}"]`)
     }
     this.specialInstructions = this.page.locator(
-      'data-testid=course-form-special-instructions'
+      'data-testid=course-form-special-instructions',
     )
     this.specialInstructionsDetails = this.page.locator(
-      '[data-testid=course-form-special-instructions-details]'
+      '[data-testid=course-form-special-instructions-details]',
     )
     this.parkingInstructions = this.page.locator(
-      'data-testid=course-form-parking-instructions'
+      'data-testid=course-form-parking-instructions',
     )
     this.parkingInstructionsDetails = this.page.locator(
-      '[data-testid=course-form-parking-instructions-details]'
+      '[data-testid=course-form-parking-instructions-details]',
     )
     this.bookingFirstName = this.page.locator(
-      'input[name="bookingContact.firstName"]'
+      'input[name="bookingContact.firstName"]',
     )
     this.bookingLastName = this.page.locator(
-      'input[name="bookingContact.lastName"]'
+      'input[name="bookingContact.lastName"]',
     )
     this.orgKeyContactFirstName = this.page.locator(
-      'input[name="organizationKeyContact.firstName"]'
+      'input[name="organizationKeyContact.firstName"]',
     )
     this.orgKeyContactLastName = this.page.locator(
-      'input[name="organizationKeyContact.lastName"]'
+      'input[name="organizationKeyContact.lastName"]',
     )
     this.priceInput = this.page.locator('[data-testid="price-input"]')
     this.renewalCycle = this.page.locator('[data-testid]="renewal-cycle"')
     this.saveChangesButton = this.page.locator('[data-testid="save-button"]')
     this.exceptionsConfirmButton = this.page.locator(
-      '[data-testid="proceed-button"]'
+      '[data-testid="proceed-button"]',
     )
     this.proceedButton = this.page.locator('[data-testid="proceed-button"]')
   }
@@ -231,7 +231,7 @@ export class CreateCoursePage extends BasePage {
   async selectVenue(venue: string) {
     await this.venueInput.fill(venue)
     await this.page.waitForResponse(
-      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200,
     )
     await this.autocompleteOption.locator(`text=${venue}`).first().click()
   }
@@ -264,7 +264,7 @@ export class CreateCoursePage extends BasePage {
   async selectSalesPerson(name: string) {
     await this.salesPersonInput.fill(name)
     await this.page.waitForResponse(
-      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200,
     )
     await this.salesPersonInput.click()
     await expect(this.autocompleteLoading).toHaveCount(0)
@@ -333,7 +333,7 @@ export class CreateCoursePage extends BasePage {
     const response = await this.page.waitForResponse(
       res =>
         res.request().url().includes('/graphql') &&
-        (res.request().postData() as string).includes('insert_course')
+        (res.request().postData() as string).includes('insert_course'),
     )
     const data = await response.json()
     return {
@@ -356,7 +356,7 @@ export class CreateCoursePage extends BasePage {
   }
 
   async setSpecialInstructions(
-    instructions = 'Some special instructions for the course'
+    instructions = 'Some special instructions for the course',
   ) {
     await this.specialInstructions.click()
     await this.specialInstructionsDetails.locator('button').click()
@@ -460,7 +460,7 @@ export class CreateCoursePage extends BasePage {
     if (
       [Course_Type_Enum.Open, Course_Type_Enum.Closed].includes(course.type) &&
       [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
-        course.level
+        course.level,
       )
     ) {
       await this.selectCertificateDuration(Course_Renewal_Cycle_Enum.One)
@@ -474,7 +474,7 @@ export class CreateCoursePage extends BasePage {
     ) {
       await this.freeSpacesInput.fill(course.freeSpaces.toString())
       await this.selectSalesPerson(
-        `${course.salesRepresentative.givenName} ${course.salesRepresentative.familyName}`
+        `${course.salesRepresentative.givenName} ${course.salesRepresentative.familyName}`,
       )
       await this.selectSource(course.source)
     }

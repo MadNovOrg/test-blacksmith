@@ -30,31 +30,31 @@ export class AssignTrainersPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.trainerInput = this.page.locator(
-      '[data-testid="AssignTrainers-lead"] [data-testid="SearchTrainers-input"]'
+      '[data-testid="AssignTrainers-lead"] [data-testid="SearchTrainers-input"]',
     )
     this.assistantInput = this.page.locator(
-      '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-input"]'
+      '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-input"]',
     )
     this.moderatorInput = this.page.locator(
-      '[data-testid="AssignTrainers-moderator"] [data-testid="SearchTrainers-input"]'
+      '[data-testid="AssignTrainers-moderator"] [data-testid="SearchTrainers-input"]',
     )
     this.autocompleteLoading = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-loading'
+      '.MuiAutocomplete-popper .MuiAutocomplete-loading',
     )
     this.autocompleteOptions = this.page.locator(
-      '.MuiAutocomplete-popper .MuiAutocomplete-option'
+      '.MuiAutocomplete-popper .MuiAutocomplete-option',
     )
     this.selectedTrainer = this.page.locator(
-      '[data-testid="AssignTrainers-lead"] [data-testid="SearchTrainers-selected"]'
+      '[data-testid="AssignTrainers-lead"] [data-testid="SearchTrainers-selected"]',
     )
     this.selectedAssistants = this.page.locator(
-      '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-selected"]'
+      '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-selected"]',
     )
     this.trainerExpensesButton = this.page.locator(
-      '[data-testid="AssignTrainers-submit"]:text("Trainer expenses")'
+      '[data-testid="AssignTrainers-submit"]:text("Trainer expenses")',
     )
     this.createCourseButton = this.page.locator(
-      '[data-testid="AssignTrainers-submit"]:text("Create course")'
+      '[data-testid="AssignTrainers-submit"]:text("Create course")',
     )
     this.proceedButton = this.page.locator('data-testid=proceed-button')
   }
@@ -71,7 +71,7 @@ export class AssignTrainersPage extends BasePage {
 
   async selectTrainer(
     trainer: User,
-    accreditedBy: Accreditors_Enum = Accreditors_Enum.Icm
+    accreditedBy: Accreditors_Enum = Accreditors_Enum.Icm,
   ) {
     const searchStrings = ['SearchTrainer', 'LEADER']
     await this.trainerInput.click()
@@ -81,7 +81,7 @@ export class AssignTrainersPage extends BasePage {
       const request = route.request()
       if (
         searchStrings.every(str =>
-          JSON.stringify(request.postDataJSON()).includes(str)
+          JSON.stringify(request.postDataJSON()).includes(str),
         )
       ) {
         await route.fulfill({
@@ -104,7 +104,7 @@ export class AssignTrainersPage extends BasePage {
   async selectAssistantTrainer(trainer: User) {
     await this.assistantInput.fill(trainer.givenName)
     await this.page.waitForResponse(
-      resp => resp.url().includes('/v1/graphql') && resp.status() === 200
+      resp => resp.url().includes('/v1/graphql') && resp.status() === 200,
     )
     await this.assistantInput.click()
     await expect(this.autocompleteLoading).toHaveCount(0)
@@ -122,7 +122,7 @@ export class AssignTrainersPage extends BasePage {
         const request = route.request()
         if (
           searchStrings.every(str =>
-            JSON.stringify(request.postDataJSON()).includes(str)
+            JSON.stringify(request.postDataJSON()).includes(str),
           )
         ) {
           await route.fulfill({

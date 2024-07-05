@@ -51,9 +51,9 @@ export default function useActionableCourses({
     () =>
       intersection(
         statuses,
-        filters?.statuses as unknown as Course_Status_Enum[]
+        filters?.statuses as unknown as Course_Status_Enum[],
       ),
-    [filters, statuses]
+    [filters, statuses],
   )
 
   // If the user wants to filter by status ("filters.statuses.length > 0")
@@ -64,7 +64,7 @@ export default function useActionableCourses({
       filters?.statuses &&
       filters.statuses.length > 0 &&
       commonStatuses.length === 0,
-    [commonStatuses.length, filters]
+    [commonStatuses.length, filters],
   )
 
   const where = useMemo(() => {
@@ -79,7 +79,7 @@ export default function useActionableCourses({
       const specificOrg = { organization: { id: { _eq: orgId } } }
       if (orgId === ALL_ORGS) {
         conditions.push(
-          acl.canSeeActionableCourseTable() ? allAvailableOrgs : onlyUserOrgs
+          acl.canSeeActionableCourseTable() ? allAvailableOrgs : onlyUserOrgs,
         )
       } else {
         conditions.push(specificOrg)
@@ -95,7 +95,7 @@ export default function useActionableCourses({
     let statusCondition: Course_Bool_Exp = {
       status: {
         _in: allowedStatuses.filter(
-          s => s !== Course_Status_Enum.TrainerMissing
+          s => s !== Course_Status_Enum.TrainerMissing,
         ),
       },
     }
@@ -118,7 +118,7 @@ export default function useActionableCourses({
 
     const filterStatusIsActionable: boolean | undefined =
       filters?.statuses?.some(status =>
-        Object.values(statuses).includes(status as Course_Status_Enum)
+        Object.values(statuses).includes(status as Course_Status_Enum),
       )
 
     if (

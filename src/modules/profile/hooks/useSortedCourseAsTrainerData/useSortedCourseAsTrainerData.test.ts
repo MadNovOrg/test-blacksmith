@@ -20,7 +20,7 @@ describe('useSortedCourseAsTrainerData', () => {
     const { result } = renderHook(() =>
       useSortedCourseAsTrainerData({
         profile: mockProfile as unknown as GetProfileDetailsQuery['profile'],
-      })
+      }),
     )
 
     expect(result.current.sortOrder).toBe('desc')
@@ -34,7 +34,7 @@ describe('useSortedCourseAsTrainerData', () => {
     const { result } = renderHook(() =>
       useSortedCourseAsTrainerData({
         profile: mockProfile as unknown as GetProfileDetailsQuery['profile'],
-      })
+      }),
     )
 
     act(() => {
@@ -43,7 +43,7 @@ describe('useSortedCourseAsTrainerData', () => {
 
     expect(result.current.sortOrder).toBe('asc')
     expect(result.current.sortedCourses[0]).toEqual(
-      mockProfile.courseAsTrainer[0]
+      mockProfile.courseAsTrainer[0],
     )
 
     act(() => {
@@ -52,7 +52,7 @@ describe('useSortedCourseAsTrainerData', () => {
 
     expect(result.current.sortOrder).toBe('desc')
     expect(result.current.sortedCourses[0]).toEqual(
-      mockProfile.courseAsTrainer[1]
+      mockProfile.courseAsTrainer[1],
     )
   })
 })

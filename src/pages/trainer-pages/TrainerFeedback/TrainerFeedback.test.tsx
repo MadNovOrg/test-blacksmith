@@ -117,7 +117,7 @@ describe('TrainerFeedback component', () => {
     render(
       <Provider value={client}>
         <TrainerFeedback />
-      </Provider>
+      </Provider>,
     )
     expect(screen.getByText('Trainer summary evaluation')).toBeInTheDocument()
   })

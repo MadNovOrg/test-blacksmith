@@ -23,7 +23,7 @@ const types = Object.values(Course_Type_Enum)
 
 const CourseTypeParam = withDefault(
   createEnumArrayParam<Course_Type_Enum>(types),
-  [] as Course_Type_Enum[]
+  [] as Course_Type_Enum[],
 )
 
 export const FilterByCourseType: React.FC<React.PropsWithChildren<Props>> = ({
@@ -64,7 +64,7 @@ export const FilterByCourseType: React.FC<React.PropsWithChildren<Props>> = ({
       setSelected(sel)
       onChange(sel)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

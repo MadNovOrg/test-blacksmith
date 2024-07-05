@@ -21,7 +21,11 @@ describe('component: AttendeeMenu', () => {
     const placeholder = 'Placeholder text for attendee menu'
     const value = 'value'
     render(
-      <AttendeeMenu options={options} placeholder={placeholder} value={value} />
+      <AttendeeMenu
+        options={options}
+        placeholder={placeholder}
+        value={value}
+      />,
     )
     expect(screen.getByText('Placeholder text for attendee menu')).toBeVisible()
   })

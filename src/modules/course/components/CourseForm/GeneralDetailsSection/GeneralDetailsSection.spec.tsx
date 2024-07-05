@@ -15,7 +15,7 @@ const { t } = getI18n()
 const levelOneInfoMessage = t(`components.course-form.course-level-one-info`)
 
 const blendedLearningInfoMessage = t(
-  `components.course-form.blended-learning-price-label`
+  `components.course-form.blended-learning-price-label`,
 )
 
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
@@ -50,7 +50,7 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
     await userEvent.paste('08:00 AM')
 
     expect(
-      screen.getByText('End date must be after the start date')
+      screen.getByText('End date must be after the start date'),
     ).toBeInTheDocument()
   })
 
@@ -115,7 +115,7 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
     renderForm(Course_Type_Enum.Indirect)
 
     expect(
-      screen.queryByLabelText(/certificate duration/i)
+      screen.queryByLabelText(/certificate duration/i),
     ).not.toBeInTheDocument()
   })
 
@@ -143,7 +143,7 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
       await selectLevel(courseLevel)
 
       expect(screen.getByLabelText(/certificate duration/i)).toBeInTheDocument()
-    }
+    },
   )
 
   it.each([[Course_Type_Enum.Open], [Course_Type_Enum.Closed]])(
@@ -160,8 +160,8 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
       await userEvent.paste('31/12/2023')
 
       expect(
-        screen.queryByLabelText(/certificate duration/i)
+        screen.queryByLabelText(/certificate duration/i),
       ).not.toBeInTheDocument()
-    }
+    },
   )
 })

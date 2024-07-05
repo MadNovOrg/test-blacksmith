@@ -30,8 +30,8 @@ describe(CancellationTermsTable.name, () => {
       //Assert
       expect(
         screen.getByText(
-          t(`pages.edit-course.cancellation-modal.terms.${term}`)
-        )
+          t(`pages.edit-course.cancellation-modal.terms.${term}`),
+        ),
       ).toBeInTheDocument()
       expect(
         screen.getByText(
@@ -39,11 +39,11 @@ describe(CancellationTermsTable.name, () => {
             `pages.edit-course.cancellation-modal.terms.percent-of-payment-due`,
             {
               percent: fee,
-            }
-          )
-        )
+            },
+          ),
+        ),
       ).toBeInTheDocument()
-    }
+    },
   )
   it.each(Object.entries(TERMS).filter(([_, fee]) => fee === 0))(
     'maps terms with fee equal to 0 correctly -> term: %s',
@@ -51,13 +51,15 @@ describe(CancellationTermsTable.name, () => {
       //Assert
       expect(
         screen.getByText(
-          t(`pages.edit-course.cancellation-modal.terms.${term}`)
-        )
+          t(`pages.edit-course.cancellation-modal.terms.${term}`),
+        ),
       ).toBeInTheDocument()
 
       expect(
-        screen.getByText(t(`pages.edit-course.cancellation-modal.terms.no-fee`))
+        screen.getByText(
+          t(`pages.edit-course.cancellation-modal.terms.no-fee`),
+        ),
       ).toBeInTheDocument()
-    }
+    },
   )
 })

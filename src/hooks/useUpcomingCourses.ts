@@ -10,7 +10,7 @@ import { QUERY } from '@app/queries/courses/get-upcoming-courses'
 export default function useUpcomingCourses(
   profileId?: string,
   courseFilter?: Course_Bool_Exp,
-  limit?: number
+  limit?: number,
 ) {
   const [{ data, error, fetching, stale }, mutate] = useQuery<
     GetUpcomingCoursesQuery,

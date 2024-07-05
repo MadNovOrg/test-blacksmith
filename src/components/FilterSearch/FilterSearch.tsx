@@ -36,7 +36,7 @@ export const FilterSearch: React.FC<React.PropsWithChildren<Props>> = ({
   const handleChange = useCallback(
     (ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
       setValue(ev.target.value),
-    [setValue]
+    [setValue],
   )
   const handleClear = useCallback(() => setValue(''), [setValue])
 

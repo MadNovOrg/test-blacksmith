@@ -29,7 +29,7 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
   } = useFormContext<CourseInput>()
   const { t } = useScopedTranslation('components.course-form')
   const isResidingCountryEnabled = !!useFeatureFlagEnabled(
-    'course-residing-country'
+    'course-residing-country',
   )
 
   const deliveryType = useWatch({ control, name: 'deliveryType' })
@@ -58,7 +58,7 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
     (zone: TimeZoneDataType | null) => {
       setValue('timeZone', zone ?? undefined, { shouldValidate: true })
     },
-    [setValue]
+    [setValue],
   )
 
   return (

@@ -29,15 +29,15 @@ test('course evaluation as user', async ({ browser, course }) => {
   const userEvaluationPage = new CourseEvaluationPage(
     userPage,
     'user',
-    `${course.id}`
+    `${course.id}`,
   )
   await userEvaluationPage.goto()
   await userEvaluationPage.randomlyEvaluate(
-    `${users.user1.givenName} ${users.user1.familyName}`
+    `${users.user1.givenName} ${users.user1.familyName}`,
   )
   await userEvaluationPage.submitEvaluation()
   await userEvaluationPage.checkSubmission(
-    'Your course evaluation has been submitted.'
+    'Your course evaluation has been submitted.',
   )
 
   const trainerContext = await browser.newContext({
@@ -47,13 +47,13 @@ test('course evaluation as user', async ({ browser, course }) => {
   const trainerEvaluationPage = new CourseEvaluationPage(
     trainerPage,
     'trainer',
-    `${course.id}`
+    `${course.id}`,
   )
   await trainerEvaluationPage.goto()
   await trainerEvaluationPage.checkSubmissionIsAvailable()
   await trainerEvaluationPage.checkPDFExportIsNotAvailable()
   await trainerEvaluationPage.randomlyEvaluate(
-    `${users.trainer.givenName} ${users.trainer.familyName}`
+    `${users.trainer.givenName} ${users.trainer.familyName}`,
   )
   await trainerEvaluationPage.submitEvaluation()
   await trainerEvaluationPage.checkSubmission()

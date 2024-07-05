@@ -23,7 +23,7 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/blog/post-id'] }
+      { initialEntries: ['/blog/post-id'] },
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -56,7 +56,7 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${post.id}`] }
+      { initialEntries: [`/${post.id}`] },
     )
 
     await userEvent.click(screen.getByText('Blog'))
@@ -83,7 +83,7 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/blog/not-found`] }
+      { initialEntries: [`/blog/not-found`] },
     )
 
     expect(screen.getByText('Post not found')).toBeInTheDocument()
@@ -118,12 +118,12 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/blog/${post.id}`] }
+      { initialEntries: [`/blog/${post.id}`] },
     )
 
     expect(screen.getByTestId('post-title')).toHaveTextContent(post.title ?? '')
     expect(screen.getByTestId('post-description')).toHaveTextContent(
-      post.excerpt ?? ''
+      post.excerpt ?? '',
     )
     expect(screen.getByText('by John Doe')).toBeInTheDocument()
 
@@ -133,7 +133,7 @@ describe('page: Post', () => {
 
     expect(screen.getByAltText(post.title ?? '')).toHaveAttribute(
       'src',
-      post.featuredImage?.node?.mediaItemUrl ?? ''
+      post.featuredImage?.node?.mediaItemUrl ?? '',
     )
   })
 
@@ -162,18 +162,18 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/blog/${post.id}`] }
+      { initialEntries: [`/blog/${post.id}`] },
     )
 
     recentPosts.forEach(post => {
       const recentPostEl = screen.getByTestId(`posts-grid-item-${post.id}`)
 
       expect(
-        within(recentPostEl).getByText(post.title ?? '')
+        within(recentPostEl).getByText(post.title ?? ''),
       ).toBeInTheDocument()
 
       expect(
-        within(recentPostEl).getByAltText(post.title ?? '')
+        within(recentPostEl).getByAltText(post.title ?? ''),
       ).toHaveAttribute('src', post.featuredImage?.node?.mediaItemUrl ?? '')
     })
   })
@@ -211,7 +211,7 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/blog/${post.id}`] }
+      { initialEntries: [`/blog/${post.id}`] },
     )
 
     expect(screen.queryByText('John Doe')).not.toBeInTheDocument()
@@ -250,7 +250,7 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/blog/${post.id}`] }
+      { initialEntries: [`/blog/${post.id}`] },
     )
 
     expect(screen.getByText('by John Doe')).toBeInTheDocument()
@@ -290,7 +290,7 @@ describe('page: Post', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/blog/${post.id}`] }
+      { initialEntries: [`/blog/${post.id}`] },
     )
 
     expect(screen.getByText('by Kirk Douglas')).toBeInTheDocument()

@@ -8,7 +8,7 @@ const _render = (tr: React.ReactElement) => {
   render(
     <table>
       <tbody>{tr}</tbody>
-    </table>
+    </table>,
   )
 }
 

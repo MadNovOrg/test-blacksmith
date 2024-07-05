@@ -53,7 +53,7 @@ export const ModifyAttendanceModal: React.FC<
   })
 
   const [selectedAction, setSelectedAction] = useState<ACTION_TYPE>(
-    ACTION_TYPE.CANCEL
+    ACTION_TYPE.CANCEL,
   )
 
   const handleAgreeTerms = (actionType: ACTION_TYPE, isChecked: boolean) => {
@@ -131,14 +131,14 @@ export const ModifyAttendanceModal: React.FC<
               <FormControlLabel
                 value={ACTION_TYPE.CANCEL}
                 label={t(
-                  'pages.course-details.change-my-attendance.cancel-my-attendance'
+                  'pages.course-details.change-my-attendance.cancel-my-attendance',
                 )}
                 control={<Radio />}
               />
               <FormControlLabel
                 value={ACTION_TYPE.TRANSFER}
                 label={t(
-                  'pages.course-details.change-my-attendance.transfer-to-another-course'
+                  'pages.course-details.change-my-attendance.transfer-to-another-course',
                 )}
                 control={<Radio />}
               />
@@ -206,7 +206,7 @@ export const ModifyAttendanceModal: React.FC<
               href="../transfer"
             >
               {t(
-                'pages.course-details.change-my-attendance.transfer-info.transfer-btn-text'
+                'pages.course-details.change-my-attendance.transfer-info.transfer-btn-text',
               )}
             </Button>
           )}

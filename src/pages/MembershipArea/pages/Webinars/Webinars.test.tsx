@@ -28,7 +28,7 @@ describe('page: Webinars', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/webinars'] }
+      { initialEntries: ['/webinars'] },
     )
 
     expect(screen.getByTestId('featured-webinar-skeleton')).toBeInTheDocument()
@@ -58,29 +58,29 @@ describe('page: Webinars', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/webinars'] }
+      { initialEntries: ['/webinars'] },
     )
 
     expect(
-      screen.queryByTestId('featured-webinar-skeleton')
+      screen.queryByTestId('featured-webinar-skeleton'),
     ).not.toBeInTheDocument()
     expect(
-      screen.queryByTestId('webinars-grid-skeleton')
+      screen.queryByTestId('webinars-grid-skeleton'),
     ).not.toBeInTheDocument()
 
     const featuredWebinar = screen.getByTestId('featured-webinar')
 
     expect(
-      within(featuredWebinar).getByText(webinars[0].title ?? '')
+      within(featuredWebinar).getByText(webinars[0].title ?? ''),
     ).toBeInTheDocument()
 
     expect(within(featuredWebinar).getByText('New webinar')).toBeInTheDocument()
 
     expect(
-      within(featuredWebinar).getByAltText(webinars[0].title ?? '')
+      within(featuredWebinar).getByAltText(webinars[0].title ?? ''),
     ).toHaveAttribute(
       'src',
-      webinars[0].featuredImage?.node?.mediaItemUrl ?? ''
+      webinars[0].featuredImage?.node?.mediaItemUrl ?? '',
     )
   })
 
@@ -108,13 +108,13 @@ describe('page: Webinars', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/webinars'] }
+      { initialEntries: ['/webinars'] },
     )
 
     const featuredWebinar = screen.getByTestId('featured-webinar')
 
     await userEvent.click(
-      within(featuredWebinar).getByAltText(webinars[0].title ?? '')
+      within(featuredWebinar).getByAltText(webinars[0].title ?? ''),
     )
 
     expect(screen.getByText('Webinar page')).toBeInTheDocument()
@@ -143,23 +143,23 @@ describe('page: Webinars', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/webinars'] }
+      { initialEntries: ['/webinars'] },
     )
 
     webinars.forEach(item => {
       const itemElement = screen.getByTestId(`webinar-grid-item-${item.id}`)
 
       expect(
-        within(itemElement).getByText(item.title ?? '')
+        within(itemElement).getByText(item.title ?? ''),
       ).toBeInTheDocument()
       expect(
-        within(itemElement).getByAltText(item.title ?? '')
+        within(itemElement).getByAltText(item.title ?? ''),
       ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
 
       expect(
         within(itemElement).getByText(
-          format(new Date(item.date ?? ''), 'd MMMM yyyy')
-        )
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
       ).toBeInTheDocument()
     })
   })
@@ -192,17 +192,17 @@ describe('page: Webinars', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/webinars'] }
+      { initialEntries: ['/webinars'] },
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search webinars'),
-      SEARCH_TERM
+      SEARCH_TERM,
     )
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`webinar-grid-item-${filteredItem.id}`)
+        screen.getByTestId(`webinar-grid-item-${filteredItem.id}`),
       ).toBeInTheDocument()
     })
   })
@@ -250,23 +250,23 @@ describe('page: Webinars', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: ['/webinars'] }
+      { initialEntries: ['/webinars'] },
     )
 
     await userEvent.click(screen.getByTestId('webinars-next-page'))
 
     expect(
       within(screen.getByTestId('featured-webinar')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`webinar-grid-item-${firstBatch[0].id}`)
+      screen.queryByTestId(`webinar-grid-item-${firstBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`webinar-grid-item-${secondBatch[0].id}`)
+      screen.getByTestId(`webinar-grid-item-${secondBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(screen.getByTestId('webinars-next-page')).toBeDisabled()
@@ -275,16 +275,16 @@ describe('page: Webinars', () => {
 
     expect(
       within(screen.getByTestId('featured-webinar')).getByText(
-        firstBatch[0].title ?? ''
-      )
+        firstBatch[0].title ?? '',
+      ),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByTestId(`webinar-grid-item-${firstBatch[0].id}`)
+      screen.getByTestId(`webinar-grid-item-${firstBatch[0].id}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByTestId(`webinar-grid-item-${secondBatch[0].id}`)
+      screen.queryByTestId(`webinar-grid-item-${secondBatch[0].id}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByTestId('webinars-previous-page')).toBeDisabled()

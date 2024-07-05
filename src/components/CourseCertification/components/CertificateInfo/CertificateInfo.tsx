@@ -79,19 +79,19 @@ export const CertificateInfo: React.FC<
   const { acl } = useAuth()
 
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model'
+    'new-modules-data-model',
   )
 
   const filterModules = (strategy: Strategy): Strategy => {
     const filteredModules = strategy.modules?.filter(
-      obj1 => !strategy.groups?.some(obj2 => obj2.name === obj1.name)
+      obj1 => !strategy.groups?.some(obj2 => obj2.name === obj1.name),
     )
     return { modules: filteredModules, groups: strategy.groups }
   }
 
   const moduleGroupsWithModules = courseParticipant
     ? transformModulesToGroups(
-        courseParticipant.gradingModules as Course_Participant_Module[]
+        courseParticipant.gradingModules as Course_Participant_Module[],
       )
     : null
 
@@ -392,10 +392,10 @@ export const CertificateInfo: React.FC<
                 key={moduleGroupWithModules.id}
                 moduleGroupName={moduleGroupWithModules.name}
                 completedModules={moduleGroupWithModules.modules.filter(
-                  module => module.completed
+                  module => module.completed,
                 )}
                 uncompletedModules={moduleGroupWithModules.modules.filter(
-                  module => !module.completed
+                  module => !module.completed,
                 )}
               />
             )
@@ -429,13 +429,13 @@ export const CertificateInfo: React.FC<
                   <Stack spacing={1.5} mb={2}>
                     {strategyModules[strategyName].modules?.length
                       ? filterModules(
-                          strategyModules[strategyName]
+                          strategyModules[strategyName],
                         ).modules?.map(
                           (bildModule: { name: string }, index: number) => (
                             <Typography mb={2} key={index}>
                               {bildModule.name}
                             </Typography>
-                          )
+                          ),
                         )
                       : null}
                   </Stack>

@@ -32,7 +32,7 @@ export const TransferTermsTable: React.FC<React.PropsWithChildren<Props>> = ({
   courseLevel,
 }) => {
   const { t } = useScopedTranslation(
-    'pages.transfer-participant.transfer-details'
+    'pages.transfer-participant.transfer-details',
   )
 
   const applicableFee = getTransferTermsFee(startDate, courseLevel)

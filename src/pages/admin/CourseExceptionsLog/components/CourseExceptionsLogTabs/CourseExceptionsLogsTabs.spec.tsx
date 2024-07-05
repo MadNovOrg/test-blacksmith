@@ -27,11 +27,11 @@ describe('component: CourseExceptionsLogsTabs', () => {
   it(`should display ${Course_Audit_Type_Enum.Approved} and ${Course_Audit_Type_Enum.Rejected} tabs`, () => {
     expect(screen.getAllByRole('tab')[0]).toHaveTextContent(
       Course_Audit_Type_Enum.Approved.charAt(0).toUpperCase() +
-        Course_Audit_Type_Enum.Approved.slice(1).toLowerCase()
+        Course_Audit_Type_Enum.Approved.slice(1).toLowerCase(),
     )
     expect(screen.getAllByRole('tab')[1]).toHaveTextContent(
       Course_Audit_Type_Enum.Rejected.charAt(0).toUpperCase() +
-        Course_Audit_Type_Enum.Rejected.slice(1).toLowerCase()
+        Course_Audit_Type_Enum.Rejected.slice(1).toLowerCase(),
     )
   })
   it('should set the active tab', async () => {

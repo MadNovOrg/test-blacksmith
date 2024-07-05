@@ -51,7 +51,7 @@ describe(DeleteOrgModal.name, () => {
           open={true}
           org={org}
         />
-      </Provider>
+      </Provider>,
     )
 
     const sanitizedOrgName = sanitize(org.name)
@@ -61,8 +61,8 @@ describe(DeleteOrgModal.name, () => {
         t('confirm-deleting', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
     expect(screen.getByTestId('delete-org-btn')).toBeInTheDocument()
   })
@@ -95,7 +95,7 @@ describe(DeleteOrgModal.name, () => {
           open={true}
           org={org}
         />
-      </Provider>
+      </Provider>,
     )
 
     const sanitizedOrgName = sanitize(org.name)
@@ -105,8 +105,8 @@ describe(DeleteOrgModal.name, () => {
         t('cannot-be-deleted', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
 
     expect(
@@ -114,8 +114,8 @@ describe(DeleteOrgModal.name, () => {
         t('confirm-deleting', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
-        })
-      )
+        }),
+      ),
     ).not.toBeInTheDocument()
 
     expect(screen.queryByTestId('delete-org-btn')).not.toBeInTheDocument()
@@ -149,7 +149,7 @@ describe(DeleteOrgModal.name, () => {
           open={true}
           org={org}
         />
-      </Provider>
+      </Provider>,
     )
 
     const sanitizedOrgName = sanitize(org.name)
@@ -159,14 +159,14 @@ describe(DeleteOrgModal.name, () => {
         t('cannot-be-deleted', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
-        })
-      )
+        }),
+      ),
     ).toBeInTheDocument()
 
     expect(getByText(t('count-members', { num: 1 }))).toBeInTheDocument()
     expect(getByText(t('count-orders', { num: 1 }))).toBeInTheDocument()
     expect(
-      screen.queryByText(t('count-courses', { num: 0 }))
+      screen.queryByText(t('count-courses', { num: 0 })),
     ).not.toBeInTheDocument()
 
     expect(
@@ -174,8 +174,8 @@ describe(DeleteOrgModal.name, () => {
         t('confirm-deleting', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
-        })
-      )
+        }),
+      ),
     ).not.toBeInTheDocument()
     expect(screen.queryByTestId('delete-org-btn')).not.toBeInTheDocument()
   })

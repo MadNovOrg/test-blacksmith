@@ -18,12 +18,12 @@ describe(`${AdminPage.name}`, () => {
     const hubAdminLinks = Object.values(
       t(`pages.admin.connect-settings`, {
         returnObjects: true,
-      })
+      }),
     )
       .slice(1)
       .map(
         (l: { title: string; description: string }) =>
-          `${l.title}${l.description}`
+          `${l.title}${l.description}`,
       )
 
     // Act
@@ -35,7 +35,7 @@ describe(`${AdminPage.name}`, () => {
 
     // Assert
     expect(
-      screen.getByText(t('pages.admin.connect-settings.title'))
+      screen.getByText(t('pages.admin.connect-settings.title')),
     ).toBeInTheDocument()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(hubAdminLinks.length)
@@ -52,18 +52,18 @@ describe(`${AdminPage.name}`, () => {
 
     // Assert
     expect(
-      screen.getByText(t('pages.admin.connect-settings.title'))
+      screen.getByText(t('pages.admin.connect-settings.title')),
     ).toBeInTheDocument()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(3)
     expect(links[0]).toHaveTextContent(
-      t(`pages.admin.connect-settings.users.title`)
+      t(`pages.admin.connect-settings.users.title`),
     )
     expect(links[1]).toHaveTextContent(
-      t(`pages.admin.connect-settings.organisations.title`)
+      t(`pages.admin.connect-settings.organisations.title`),
     )
     expect(links[2]).toHaveTextContent(
-      t(`pages.admin.connect-settings.course-exceptions-log.title`)
+      t(`pages.admin.connect-settings.course-exceptions-log.title`),
     )
   })
 })

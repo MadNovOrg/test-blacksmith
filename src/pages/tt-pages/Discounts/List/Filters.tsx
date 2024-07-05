@@ -20,22 +20,22 @@ export const Filters: React.FC<React.PropsWithChildren<Props>> = ({
       setSearch(term)
       onChange({ code: term })
     },
-    [onChange]
+    [onChange],
   )
 
   const onDatesChange = useCallback(
     (from?: Date, to?: Date) => onChange({ from, to }),
-    [onChange]
+    [onChange],
   )
 
   const onTypeChange = useCallback(
     (selected: string[]) => onChange({ type: selected }),
-    [onChange]
+    [onChange],
   )
 
   const onStatusChange = useCallback(
     (selected: string[]) => onChange({ status: selected }),
-    [onChange]
+    [onChange],
   )
 
   return (

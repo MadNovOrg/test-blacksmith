@@ -44,7 +44,7 @@ describe('page: AutoRegister', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/auto-register?token=${chance.guid()}`] }
+      { initialEntries: [`/auto-register?token=${chance.guid()}`] },
     )
 
     const pageTitle = t(`common.create-free-account`)
@@ -84,7 +84,7 @@ describe('page: AutoRegister', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/auto-register?token=${chance.guid()}`] } // set token
+      { initialEntries: [`/auto-register?token=${chance.guid()}`] }, // set token
     )
 
     const suspenseLoadingSelector = screen.queryByTestId('suspense-loading')
@@ -120,7 +120,7 @@ describe('page: AutoRegister', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/auto-register`] } // don't pass any token
+      { initialEntries: [`/auto-register`] }, // don't pass any token
     )
 
     const suspenseLoadingSelector = screen.getByTestId('suspense-loading')
@@ -158,7 +158,7 @@ describe('page: AutoRegister', () => {
         initialEntries: [
           `/auto-register?token=${chance.guid()}&orgId=${chance.guid()}`,
         ],
-      } // set token
+      }, // set token
     )
 
     const suspenseLoadingSelector = screen.getByTestId('suspense-loading')
@@ -207,7 +207,7 @@ describe('page: AutoRegister', () => {
         initialEntries: [
           `/auto-register?token=${chance.guid()}&orgId=${orgId}`,
         ],
-      }
+      },
     )
 
     const autoRegisterFormSelector = screen.queryByTestId('auto-register-form')

@@ -18,7 +18,7 @@ const types = Object.values(CourseState)
 
 const CourseStateParam = withDefault(
   createEnumArrayParam<CourseState>(types),
-  [] as CourseState[]
+  [] as CourseState[],
 )
 
 export const FilterByCourseState: React.FC<Props> = ({ onChange }) => {
@@ -38,7 +38,7 @@ export const FilterByCourseState: React.FC<Props> = ({ onChange }) => {
       setSelected(newSelection)
       onChange(newSelection)
     },
-    [onChange, setSelected]
+    [onChange, setSelected],
   )
 
   useEffectOnce(() => {

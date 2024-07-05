@@ -11,7 +11,7 @@ describe('component: Avatar', () => {
     const avatar = container.querySelector('.MuiAvatar-root')
     expect(avatar).toBeInTheDocument()
     expect(
-      within(avatar as HTMLElement).getByTestId('PersonIcon')
+      within(avatar as HTMLElement).getByTestId('PersonIcon'),
     ).toBeInTheDocument()
   })
 

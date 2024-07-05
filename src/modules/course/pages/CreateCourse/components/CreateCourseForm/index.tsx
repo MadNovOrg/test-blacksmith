@@ -62,7 +62,7 @@ import { NoExceptionsDialog } from '../NoExceptionsDialog'
 
 function assertCourseDataValid(
   data: CourseInput,
-  isValid: boolean
+  isValid: boolean,
 ): asserts data is ValidCourseInput {
   if (!isValid) {
     throw new Error()
@@ -85,7 +85,7 @@ export const CreateCourseForm = () => {
   const { isUKCountry } = useWorldCountries()
 
   const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect'
+    'international-indirect',
   )
   const { savingStatus, saveCourse, allowCreateCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
@@ -156,20 +156,20 @@ export const CreateCourseForm = () => {
       profile?.trainer_role_types.some(
         ({ trainer_role_type: role }) =>
           role.name === TrainerRoleTypeName.SENIOR ||
-          role.name === TrainerRoleTypeName.PRINCIPAL
+          role.name === TrainerRoleTypeName.PRINCIPAL,
       ) ?? false
     )
   }, [profile])
 
   const isETA = useMemo(() => {
     return checkIsETA(
-      profile?.trainer_role_types as unknown as TrainerRoleType[]
+      profile?.trainer_role_types as unknown as TrainerRoleType[],
     )
   }, [profile])
 
   const isEmployerAOL = useMemo(() => {
     return checkIsEmployerAOL(
-      profile?.trainer_role_types as unknown as TrainerRoleType[]
+      profile?.trainer_role_types as unknown as TrainerRoleType[],
     )
   }, [profile])
 
@@ -183,7 +183,7 @@ export const CreateCourseForm = () => {
       : consentFlags
 
     const hasCheckedAllFlags = Object.values(evaluatedFlag).every(
-      flag => flag === true
+      flag => flag === true,
     )
 
     return hasCheckedAllFlags && courseDataValid
@@ -231,7 +231,7 @@ export const CreateCourseForm = () => {
       consentFlags.needsAnalysis,
       displayConnectFeeCondition,
       isBILDcourse,
-    ]
+    ],
   )
 
   const handleNextStepButtonClick = async () => {
@@ -278,7 +278,7 @@ export const CreateCourseForm = () => {
             trainer_role_types: profile.trainer_role_types,
           },
         ],
-        ignoreExceptions
+        ignoreExceptions,
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return
@@ -288,7 +288,7 @@ export const CreateCourseForm = () => {
 
   const handleConsentFlagChange = (
     flag: keyof typeof consentFlags,
-    checked: boolean
+    checked: boolean,
   ) => {
     setConsentFlags({
       ...consentFlags,
@@ -314,7 +314,7 @@ export const CreateCourseForm = () => {
 
       setCourseDataValid(Boolean(isValid))
     },
-    [setCourseData]
+    [setCourseData],
   )
 
   useEffect(() => {
@@ -352,7 +352,7 @@ export const CreateCourseForm = () => {
           type: Course_Trainer_Type_Enum.Assistant,
           trainer_role_types: assistant.trainer_role_types,
           levels: assistant.levels,
-        }))
+        })),
       )
     )
   }, [acl, assistants, courseData, isUKCountry])
@@ -412,7 +412,7 @@ export const CreateCourseForm = () => {
                 bildStrategies={
                   courseData?.bildStrategies
                     ? (bildStrategiesToArray(
-                        courseData?.bildStrategies
+                        courseData?.bildStrategies,
                       ) as unknown as BildStrategy[])
                     : []
                 }
@@ -422,7 +422,7 @@ export const CreateCourseForm = () => {
               {showTrainerRatioWarning ? (
                 <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
                   {t(
-                    `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`
+                    `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
                   )}
                 </Alert>
               ) : null}
@@ -430,7 +430,7 @@ export const CreateCourseForm = () => {
               {courseData?.type === Course_Type_Enum.Indirect && (
                 <Alert severity="info" sx={{ mt: 2 }}>
                   {t(
-                    'components.course-form.indirect-course-assist-trainer-info'
+                    'components.course-form.indirect-course-assist-trainer-info',
                   )}
                 </Alert>
               )}
@@ -461,7 +461,7 @@ export const CreateCourseForm = () => {
                     onChange={e =>
                       handleConsentFlagChange(
                         'practiceProtocols',
-                        e.target.checked
+                        e.target.checked,
                       )
                     }
                   />
@@ -499,7 +499,7 @@ export const CreateCourseForm = () => {
                   }
                   label={
                     t(
-                      'pages.create-course.form.connect-fee-notification'
+                      'pages.create-course.form.connect-fee-notification',
                     ) as string
                   }
                   data-testid="connectFee"
@@ -515,7 +515,7 @@ export const CreateCourseForm = () => {
                       onChange={e =>
                         handleConsentFlagChange(
                           'needsAnalysis',
-                          e.target.checked
+                          e.target.checked,
                         )
                       }
                     />

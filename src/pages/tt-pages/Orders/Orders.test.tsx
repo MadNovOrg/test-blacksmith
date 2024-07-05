@@ -47,21 +47,21 @@ describe('page: Orders', () => {
     const tableRow = screen.getByTestId(order.id)
 
     expect(
-      within(tableRow).getByText(order.xeroInvoiceNumber ?? '')
+      within(tableRow).getByText(order.xeroInvoiceNumber ?? ''),
     ).toBeInTheDocument()
 
     expect(
-      within(tableRow).getByText(order.courses[0].course?.course_code ?? '')
+      within(tableRow).getByText(order.courses[0].course?.course_code ?? ''),
     ).toBeInTheDocument()
     expect(
-      within(tableRow).getByText(order.organization.name)
+      within(tableRow).getByText(order.organization.name),
     ).toBeInTheDocument()
     expect(within(tableRow).getByText(/draft/i)).toBeInTheDocument()
     expect(
-      within(tableRow).getByText(formatCurrency(order.invoice?.amountDue))
+      within(tableRow).getByText(formatCurrency(order.invoice?.amountDue)),
     ).toBeInTheDocument()
     expect(
-      within(tableRow).getByText(formatCurrency(order.invoice?.total))
+      within(tableRow).getByText(formatCurrency(order.invoice?.total)),
     ).toBeInTheDocument()
     expect(within(tableRow).getByText(/invoice/i)).toBeInTheDocument()
   })
@@ -90,7 +90,7 @@ describe('page: Orders', () => {
     render(
       <Provider value={client}>
         <Orders />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByTestId(firstBatch[0].id)).toBeInTheDocument()

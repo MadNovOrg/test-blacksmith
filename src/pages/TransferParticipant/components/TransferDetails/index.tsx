@@ -55,11 +55,11 @@ export const TransferDetails: React.FC<
           .required(
             _t('common.validation-errors.required-field', {
               name: _t('common.transfer-reason'),
-            })
+            }),
           )
           .max(
             300,
-            _t('common.validation-errors.maximum-chars-limit', { number: 300 })
+            _t('common.validation-errors.maximum-chars-limit', { number: 300 }),
           ),
       })
       .required()
@@ -77,7 +77,7 @@ export const TransferDetails: React.FC<
   })
 
   const { t } = useScopedTranslation(
-    'pages.transfer-participant.transfer-details'
+    'pages.transfer-participant.transfer-details',
   )
 
   const courseStartDate = useMemo(() => {
@@ -115,7 +115,7 @@ export const TransferDetails: React.FC<
         isValid,
       })
     },
-    []
+    [],
   )
 
   if (!toCourse || !fromCourse) {
@@ -126,7 +126,9 @@ export const TransferDetails: React.FC<
     setReason(data.transferReason)
     feesChosen(
       formData.feeType,
-      isNaN(Number(formData.customFee)) ? undefined : Number(formData.customFee)
+      isNaN(Number(formData.customFee))
+        ? undefined
+        : Number(formData.customFee),
     )
     if (isAddressInfoRequired({ fromCourse, toCourse })) {
       setParticipantPostalAddress({

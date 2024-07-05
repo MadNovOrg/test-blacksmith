@@ -49,14 +49,14 @@ export const useWaitlist = ({
 }: UseWaitlistProps) => {
   const orderBy: GetWaitlistQueryVariables['orderBy'] = useMemo(
     () => (sort.by ? { [sort.by]: sort.dir } : undefined),
-    [sort]
+    [sort],
   )
 
   const where: GetWaitlistQueryVariables['where'] = useMemo(
     () => ({
       courseId: { _eq: courseId },
     }),
-    [courseId]
+    [courseId],
   )
 
   const [{ data, error, fetching }, mutate] = useQuery<
@@ -82,6 +82,6 @@ export const useWaitlist = ({
       error,
       fetching,
       mutate,
-    ]
+    ],
   )
 }

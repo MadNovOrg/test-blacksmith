@@ -21,7 +21,7 @@ export const useCourseFormEffects = () => {
   const changeCountryOnCourseLevelChange = useCallback(
     (
       newCourseLevel: string,
-      courseResidingCountry: string = Countries_Code.DEFAULT_RESIDING_COUNTRY
+      courseResidingCountry: string = Countries_Code.DEFAULT_RESIDING_COUNTRY,
     ) => {
       if (wasCountryAlreadyChanged) return courseResidingCountry
 
@@ -47,7 +47,7 @@ export const useCourseFormEffects = () => {
 
       return Countries_Code.DEFAULT_RESIDING_COUNTRY
     },
-    [wasCountryAlreadyChanged, acl, isIndirectCourse, profile?.countryCode]
+    [wasCountryAlreadyChanged, acl, isIndirectCourse, profile?.countryCode],
   )
 
   return {

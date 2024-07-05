@@ -12,7 +12,7 @@ export function useRouteMatch(routes: Route[]) {
     const pattern = routes[i].id
     const possibleMatch = matchPath(
       { path: pattern, caseSensitive: false, end: false },
-      pathname
+      pathname,
     )
 
     if (possibleMatch !== null) {

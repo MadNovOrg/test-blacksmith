@@ -105,7 +105,7 @@ export const EditOrgDetails: React.FC<
       await updateOrganisation(orgDataToBeUpdated)
       navigate('..?tab=DETAILS')
     },
-    [id, isUKCountry, navigate, updateOrganisation]
+    [id, isUKCountry, navigate, updateOrganisation],
   )
 
   if (!org) return null

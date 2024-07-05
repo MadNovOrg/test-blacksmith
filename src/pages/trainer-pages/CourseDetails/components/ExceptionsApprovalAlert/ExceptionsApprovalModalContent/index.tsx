@@ -119,7 +119,7 @@ export const ExceptionsApprovalModalContent: FC<
             })
           } else
             console.error(
-              'Provided "action" prop is not of Course_Audit_Type_Enum type'
+              'Provided "action" prop is not of Course_Audit_Type_Enum type',
             )
         } catch (e: unknown) {
           console.error(e)
@@ -139,7 +139,7 @@ export const ExceptionsApprovalModalContent: FC<
         closeModal,
         addSnackbarMessage,
         t,
-      ]
+      ],
     )
 
   useEffect(() => {

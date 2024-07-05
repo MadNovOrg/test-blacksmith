@@ -23,7 +23,7 @@ export default function useCourseParticipants(
     pagination?: { limit: number; offset: number }
     where?: Course_Participant_Bool_Exp
     alwaysShowArchived?: boolean
-  }
+  },
 ): {
   data?: ResponseType['courseParticipants']
   error?: Error
@@ -73,7 +73,7 @@ export default function useCourseParticipants(
                     organizations: {
                       organization_id: {
                         _in: profile?.organizations.map(
-                          org => org.organization.id
+                          org => org.organization.id,
                         ),
                       },
                     },

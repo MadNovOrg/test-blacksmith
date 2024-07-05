@@ -48,7 +48,7 @@ export default function useCourseAuditLogs({
 } {
   const orderBy: GetCourseAuditLogsQueryVariables['orderBy'] = useMemo(
     () => buildNestedSort(sort.by, sort.dir ?? 'asc'),
-    [sort]
+    [sort],
   )
 
   const where: GetCourseAuditLogsQueryVariables['where'] = useMemo(() => {
@@ -70,7 +70,7 @@ export default function useCourseAuditLogs({
                 searchFields: { _ilike: `%${w}%` },
               })),
             }
-          : { searchFields: { _ilike: `%${query}%` } }
+          : { searchFields: { _ilike: `%${query}%` } },
       )
     }
     if (filter.filterByCertificateLevel?.length) {
@@ -116,11 +116,11 @@ export default function useCourseAuditLogs({
       client
         .query<GetCourseAuditLogsQuery, GetCourseAuditLogsQueryVariables>(
           GET_COURSE_AUDIT_LOGS_QUERY,
-          { where, orderBy, fromExceptionsLog }
+          { where, orderBy, fromExceptionsLog },
         )
         .toPromise()
         .then(result => result?.data?.logs ?? []),
-    [client, where, orderBy, fromExceptionsLog]
+    [client, where, orderBy, fromExceptionsLog],
   )
 
   return useMemo(
@@ -137,6 +137,6 @@ export default function useCourseAuditLogs({
       error,
       fetching,
       getUnpagedLogs,
-    ]
+    ],
   )
 }

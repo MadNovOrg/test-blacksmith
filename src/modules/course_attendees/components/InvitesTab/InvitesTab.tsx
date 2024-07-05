@@ -61,7 +61,7 @@ export const InvitesTab = ({
 
   const courseEndDate = useMemo(
     () => (course?.schedule.length ? course?.schedule[0].end : undefined),
-    [course?.schedule]
+    [course?.schedule],
   )
 
   const { data, fetching, total, resend, cancel } = useCourseInvites({
@@ -86,12 +86,12 @@ export const InvitesTab = ({
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
     },
-    []
+    [],
   )
 
   const handleSortChange = useCallback(
     () => setOrder(prevState => (prevState === 'asc' ? 'desc' : 'asc')),
-    []
+    [],
   )
 
   const cols = useMemo(
@@ -129,11 +129,11 @@ export const InvitesTab = ({
           sorting: false,
         },
       ].filter(Boolean),
-    [t, inviteStatus, isClosedIndirectCourse]
+    [t, inviteStatus, isClosedIndirectCourse],
   )
 
   const handleResendInvite = async (
-    invite: GetCourseInvitesQuery['courseInvites'][0]
+    invite: GetCourseInvitesQuery['courseInvites'][0],
   ) => {
     await resend(invite)
     setSnackbarMessage(t('pages.course-participants.invite-sent'))
@@ -141,7 +141,7 @@ export const InvitesTab = ({
   }
 
   const handleCancelInvite = async (
-    invite: GetCourseInvitesQuery['courseInvites'][0]
+    invite: GetCourseInvitesQuery['courseInvites'][0],
   ) => {
     await cancel(invite)
     setSnackbarMessage(t('pages.course-participants.invite-cancelled'))
@@ -196,7 +196,7 @@ export const InvitesTab = ({
                         acl.canInviteAttendees(
                           course.type,
                           course.status,
-                          course
+                          course,
                         ) && (
                           <>
                             <Button
@@ -253,7 +253,7 @@ export const InvitesTab = ({
             >
               <Typography variant="body1" color="grey.600">
                 {t(
-                  `pages.course-participants.none-${inviteStatus.toLocaleLowerCase()}-message`
+                  `pages.course-participants.none-${inviteStatus.toLocaleLowerCase()}-message`,
                 )}
               </Typography>
             </Box>

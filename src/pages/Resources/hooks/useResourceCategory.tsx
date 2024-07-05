@@ -17,7 +17,7 @@ export type ResourceCategory = NonNullable<
 
 export function useResourceCategory(
   id: string | undefined,
-  searchTerm?: string
+  searchTerm?: string,
 ) {
   const [{ data, error, fetching }] = useQuery<
     ResourceDetailsQuery,
@@ -41,10 +41,10 @@ export function useResourceCategory(
       data?.content?.resourceCategory && canAccessCategory
         ? filterCategoryResources(
             data.content.resourceCategory,
-            canAccessResource
+            canAccessResource,
           )
         : null,
-    [canAccessCategory, canAccessResource, data?.content?.resourceCategory]
+    [canAccessCategory, canAccessResource, data?.content?.resourceCategory],
   )
 
   return [
@@ -65,7 +65,7 @@ export function useResourceCategory(
 
 function filterCategoryResources(
   resourceCategory: ResourceCategory,
-  canAccessResource: ReturnType<typeof useResourcePermission>
+  canAccessResource: ReturnType<typeof useResourcePermission>,
 ): ResourceCategory {
   if (!resourceCategory?.id) {
     return undefined
@@ -81,14 +81,14 @@ function filterCategoryResources(
           nodes: resourceCategory.resources.nodes.filter(
             resource =>
               resource?.resourcePermissions &&
-              canAccessResource(resource.resourcePermissions)
+              canAccessResource(resource.resourcePermissions),
           ),
         }
       : undefined,
     children: {
       nodes: resourceCategory.children?.nodes
         ?.map(childCategory =>
-          filterCategoryResources(childCategory, canAccessResource)
+          filterCategoryResources(childCategory, canAccessResource),
         )
         .filter(isNotNullish),
     },

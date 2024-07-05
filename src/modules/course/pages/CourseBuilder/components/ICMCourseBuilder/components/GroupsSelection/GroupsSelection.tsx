@@ -79,7 +79,7 @@ const GroupsSelection: React.FC<Props> = ({
   const [selectedIds, setSelectedIds] = useState<string[]>(
     !initialGroups.length
       ? mandatoryGroups.map(group => group.id)
-      : initialGroups.map(group => group.id)
+      : initialGroups.map(group => group.id),
   )
 
   const hideAsterisk = useMemo(() => {
@@ -87,7 +87,7 @@ const GroupsSelection: React.FC<Props> = ({
   }, [type])
 
   const previousIds = usePrevious(
-    selectedIds.length ? selectedIds : mandatoryGroups.map(group => group.id)
+    selectedIds.length ? selectedIds : mandatoryGroups.map(group => group.id),
   )
 
   const availableGroupsMap = useMemo(() => {
@@ -113,7 +113,7 @@ const GroupsSelection: React.FC<Props> = ({
 
     return [...selectedGroups].reduce(
       (sum, module) => sum + (module?.duration?.aggregate?.sum?.duration ?? 0),
-      0
+      0,
     )
   }, [selectedIds, availableGroupsMap])
 
@@ -126,7 +126,7 @@ const GroupsSelection: React.FC<Props> = ({
       const group = availableGroupsMap.get(id)
       if (group?.requires) {
         group.requires.forEach((requiredId: string) =>
-          initialDynamicMandatoryIdsSet.add(requiredId)
+          initialDynamicMandatoryIdsSet.add(requiredId),
         )
       }
     })
@@ -262,7 +262,7 @@ const GroupsSelection: React.FC<Props> = ({
                             <span data-testid="module-duration">
                               {formatDurationShort(
                                 moduleGroup.duration.aggregate?.sum?.duration ??
-                                  0
+                                  0,
                               )}
                             </span>
                           </Typography>
@@ -328,7 +328,7 @@ const GroupsSelection: React.FC<Props> = ({
               </Typography>
               <Typography variant="body2" px={1}>
                 {t(
-                  'pages.trainer-base.create-course.new-course.estimated-duration'
+                  'pages.trainer-base.create-course.new-course.estimated-duration',
                 )}
               </Typography>
             </Box>
@@ -388,7 +388,7 @@ const GroupsSelection: React.FC<Props> = ({
                           <span data-testid="module-duration">
                             {formatDurationShort(
                               selectedGroup.duration.aggregate?.sum?.duration ??
-                                0
+                                0,
                             )}
                           </span>
                         </Typography>

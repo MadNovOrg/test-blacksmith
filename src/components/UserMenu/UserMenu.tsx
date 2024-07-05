@@ -26,7 +26,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate()
   const { profile, logout, acl, verified } = useAuth()
   const [anchorElUser, setAnchorElUser] = useState<HTMLButtonElement | null>(
-    null
+    null,
   )
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -58,7 +58,7 @@ const test = base.extend<{
           ...UNIQUE_COURSE(),
           type: Course_Type_Enum.Open,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
@@ -66,21 +66,21 @@ const test = base.extend<{
           type: Course_Type_Enum.Closed,
           source: Course_Source_Enum.EmailEnquiryCentral,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: Course_Type_Enum.Indirect,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: Course_Type_Enum.Open,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
@@ -88,7 +88,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Closed,
           source: Course_Source_Enum.EmailEnquiryCentral,
         },
-        users.trainerWithOrg.email
+        users.trainerWithOrg.email,
       ),
       API.course.insertCourse(
         {
@@ -96,7 +96,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Open,
           status: Course_Status_Enum.ConfirmModules,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
@@ -104,7 +104,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Open,
           status: Course_Status_Enum.Scheduled,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
@@ -112,7 +112,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Open,
           status: Course_Status_Enum.TrainerMissing,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
@@ -120,7 +120,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Open,
           status: Course_Status_Enum.TrainerPending,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
       API.course.insertCourse(
         {
@@ -128,7 +128,7 @@ const test = base.extend<{
           type: Course_Type_Enum.Open,
           status: Course_Status_Enum.TrainerDeclined,
         },
-        users.trainer.email
+        users.trainer.email,
       ),
     ])
     await use({
@@ -174,17 +174,17 @@ allowedRoles.forEach(role => {
       runQueryAsRole<AdminCourseQuery>(
         ADMIN_COURSE_QUERY,
         { id: courseIds.openCourseId },
-        role
+        role,
       ),
       runQueryAsRole<AdminCourseQuery>(
         ADMIN_COURSE_QUERY,
         { id: courseIds.closedCourseId },
-        role
+        role,
       ),
       runQueryAsRole<AdminCourseQuery>(
         ADMIN_COURSE_QUERY,
         { id: courseIds.indirectCourseId },
-        role
+        role,
       ),
     ])
     expect(openCourse?.course_by_pk?.id).toEqual(courseIds.openCourseId)
@@ -202,13 +202,13 @@ test('@query trainer can select only courses where they are a trainer', async ({
       TRAINER_COURSE_QUERY,
       { id: courseIds.trainerCourseId },
       RoleName.TRAINER,
-      { 'x-hasura-user-id': profileId }
+      { 'x-hasura-user-id': profileId },
     ),
     runQueryAsRole<TrainerCourseQuery>(
       TRAINER_COURSE_QUERY,
       { id: courseIds.notTrainerCourseId },
       RoleName.TRAINER,
-      { 'x-hasura-user-id': profileId }
+      { 'x-hasura-user-id': profileId },
     ),
   ])
   test.expect(trainerCourse.course_by_pk?.id).toEqual(courseIds.trainerCourseId)
@@ -233,7 +233,7 @@ restrictedRoles.forEach(role => {
           courseIds.indirectCourseId,
         ],
       },
-      role
+      role,
     )
     const fetchedCoursesIds = courses.course.map(c => c.id)
     test

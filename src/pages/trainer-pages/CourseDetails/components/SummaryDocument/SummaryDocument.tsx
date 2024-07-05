@@ -328,7 +328,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
 
   const groupedCourseModules = groupBy(
     courseModules,
-    a => a.module.moduleGroup?.name
+    a => a.module.moduleGroup?.name,
   )
   const moduleGroups = Object.keys(groupedCourseModules)
 
@@ -352,11 +352,11 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const assistTrainers = course?.trainers?.filter(
-    t => t.type === CourseTrainerTypes.Assistant
+    t => t.type === CourseTrainerTypes.Assistant,
   )
 
   const moderators = course?.trainers?.filter(
-    t => t.type === CourseTrainerTypes.Moderator
+    t => t.type === CourseTrainerTypes.Moderator,
   )
 
   const foreignFontsStyles = useMemo(() => {
@@ -465,7 +465,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                 {course.schedule[0].venue
                   ? formatCourseVenue(
                       course.deliveryType,
-                      course.schedule[0].venue as Venue
+                      course.schedule[0].venue as Venue,
                     )
                   : null}
               </Text>
@@ -480,7 +480,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                 moduleGroups.map(
                   groupName =>
                     groupedCourseModules[groupName].some(
-                      ({ covered }) => !!covered
+                      ({ covered }) => !!covered,
                     ) && (
                       <View key={groupName} wrap={false}>
                         <Text style={[styles.largerText, styles.bold]}>
@@ -498,7 +498,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                             ))}
                         />
                       </View>
-                    )
+                    ),
                 )
               ) : (
                 <FlexGroup
@@ -515,7 +515,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                                 <Text key={module.name} style={[styles.text]}>
                                   {module.name}
                                 </Text>
-                              )
+                              ),
                             )
                           : null}
 
@@ -551,7 +551,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                                     </View>
                                   </Fragment>
                                 )
-                              }
+                              },
                             )
                           : null}
                       </View>
@@ -586,7 +586,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                     >
                       {archived ? t('common.archived-profile') : name}
                     </Text>
-                  )
+                  ),
                 )}
               />
             </View>
@@ -715,7 +715,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                     <View wrap={false} key={a.id}>
                       <Text style={styles.largerText}>
                         {t(
-                          `course-evaluation.questions.${a.question.questionKey}`
+                          `course-evaluation.questions.${a.question.questionKey}`,
                         )}
                       </Text>
 
@@ -767,7 +767,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                     <View wrap={false} key={a.id}>
                       <Text style={styles.largerText}>
                         {t(
-                          `course-evaluation.questions.${a.question.questionKey}`
+                          `course-evaluation.questions.${a.question.questionKey}`,
                         )}
                       </Text>
 

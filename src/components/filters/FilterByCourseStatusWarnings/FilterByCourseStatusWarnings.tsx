@@ -22,7 +22,7 @@ export const FilterByCourseStatusWarnings: React.FC<
 
   const [filterWarningStatuses, setFilterWarningStatuses] = useQueryParam(
     'warnings',
-    withDefault(BooleanParam, false)
+    withDefault(BooleanParam, false),
   )
 
   const warningValues = useMemo(
@@ -33,7 +33,7 @@ export const FilterByCourseStatusWarnings: React.FC<
       Course_Status_Enum.GradeMissing,
       Course_Status_Enum.TrainerPending,
     ],
-    []
+    [],
   )
 
   const handledChange = useCallback(
@@ -41,7 +41,7 @@ export const FilterByCourseStatusWarnings: React.FC<
       setFilterWarningStatuses(selected)
       onChange(selected ? warningValues : [])
     },
-    [onChange, setFilterWarningStatuses, warningValues]
+    [onChange, setFilterWarningStatuses, warningValues],
   )
 
   useEffectOnce(() => {

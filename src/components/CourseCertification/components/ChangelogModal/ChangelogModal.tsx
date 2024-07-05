@@ -98,16 +98,16 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
                 ].includes(changelog.type) && (
                   <Typography variant="caption">
                     {t(
-                      `components.changelog-modal.${changelog.type.toLowerCase()}`
+                      `components.changelog-modal.${changelog.type.toLowerCase()}`,
                     )}
                   </Typography>
                 )}
                 {[Course_Certificate_Changelog_Type_Enum.PutOnHold].includes(
-                  changelog.type
+                  changelog.type,
                 ) && (
                   <Typography variant="caption">
                     {t(
-                      `components.changelog-modal.${changelog.type.toLowerCase()}`
+                      `components.changelog-modal.${changelog.type.toLowerCase()}`,
                     )}
                   </Typography>
                 )}

@@ -11,22 +11,22 @@ type Props = { onChange: (next: Record<string, unknown>) => void }
 export const Filters: React.FC<Props> = ({ onChange }) => {
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
-    withDefault(BooleanParam, false)
+    withDefault(BooleanParam, false),
   )
 
   const [filterReaccreditation, setFilterReaccreditation] = useQueryParam(
     'reacc',
-    withDefault(BooleanParam, false)
+    withDefault(BooleanParam, false),
   )
 
   const onLevelsChange = useCallback(
     (selected: string[]) => onChange({ levels: selected }),
-    [onChange]
+    [onChange],
   )
 
   const onTypeChange = useCallback(
     (selected: string[]) => onChange({ type: selected }),
-    [onChange]
+    [onChange],
   )
 
   const onBlendedChange = useCallback(
@@ -34,7 +34,7 @@ export const Filters: React.FC<Props> = ({ onChange }) => {
       onChange({ blended: selected })
       setFilterBlendedLearning(selected)
     },
-    [onChange, setFilterBlendedLearning]
+    [onChange, setFilterBlendedLearning],
   )
 
   const onReaccreditationChange = useCallback(
@@ -42,7 +42,7 @@ export const Filters: React.FC<Props> = ({ onChange }) => {
       onChange({ reaccreditation: selected })
       setFilterReaccreditation(selected)
     },
-    [onChange, setFilterReaccreditation]
+    [onChange, setFilterReaccreditation],
   )
 
   return (

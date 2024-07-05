@@ -55,34 +55,34 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
 
     const coveredModuleGroup = screen.getByTestId(
-      `module-group-${courseModules[0].module.moduleGroup.id}`
+      `module-group-${courseModules[0].module.moduleGroup.id}`,
     )
 
     expect(
-      within(coveredModuleGroup).getByLabelText(courseModules[0].module.name)
+      within(coveredModuleGroup).getByLabelText(courseModules[0].module.name),
     ).toBeChecked()
 
     expect(
       screen.queryByTestId(
-        `module-group-${courseModules[1].module.moduleGroup.id}`
-      )
+        `module-group-${courseModules[1].module.moduleGroup.id}`,
+      ),
     ).not.toBeInTheDocument()
 
     const attendedParticipant = courseParticipants[1]
     const notAttendedParticipant = courseParticipants[0]
 
     expect(
-      screen.getByText(`${attendedParticipant.profile.fullName}`)
+      screen.getByText(`${attendedParticipant.profile.fullName}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByText(`${notAttendedParticipant.profile.fullName}`)
+      screen.queryByText(`${notAttendedParticipant.profile.fullName}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByText('All attendees')).toBeInTheDocument()
@@ -118,34 +118,34 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
 
     const coveredModuleGroup = screen.getByTestId(
-      `module-group-${courseModules[0].module.moduleGroup.id}`
+      `module-group-${courseModules[0].module.moduleGroup.id}`,
     )
 
     expect(
-      within(coveredModuleGroup).getByLabelText(courseModules[0].module.name)
+      within(coveredModuleGroup).getByLabelText(courseModules[0].module.name),
     ).toBeChecked()
 
     expect(
       screen.queryByTestId(
-        `module-group-${courseModules[1].module.moduleGroup.id}`
-      )
+        `module-group-${courseModules[1].module.moduleGroup.id}`,
+      ),
     ).not.toBeInTheDocument()
 
     const attendedParticipant = courseParticipants[1]
     const notAttendedParticipant = courseParticipants[0]
 
     expect(
-      screen.getByText(`${attendedParticipant.profile.fullName}`)
+      screen.getByText(`${attendedParticipant.profile.fullName}`),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByText(`${notAttendedParticipant.profile.fullName}`)
+      screen.queryByText(`${notAttendedParticipant.profile.fullName}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByText('All attendees')).toBeInTheDocument()
@@ -185,7 +185,7 @@ describe('page: CourseGrading', () => {
         initialEntries: [
           `/${COURSE_ID}/grading?participants=${courseParticipants[0].id},${courseParticipants[1].id}`,
         ],
-      }
+      },
     )
 
     const selectedParticipants = [courseParticipants[0], courseParticipants[1]]
@@ -193,12 +193,12 @@ describe('page: CourseGrading', () => {
 
     selectedParticipants.forEach(participant => {
       expect(
-        screen.getByText(`${participant.profile.fullName}`)
+        screen.getByText(`${participant.profile.fullName}`),
       ).toBeInTheDocument()
     })
 
     expect(
-      screen.queryByText(`${notSelectedParticipant.profile.fullName}`)
+      screen.queryByText(`${notSelectedParticipant.profile.fullName}`),
     ).not.toBeInTheDocument()
 
     expect(screen.getByText('2 attendee(s)')).toBeInTheDocument()
@@ -234,7 +234,7 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     await selectGradingOption('Pass')
@@ -276,7 +276,7 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     await selectGradingOption('Pass')
@@ -323,7 +323,7 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     expect(screen.getByText('Submit')).toBeDisabled()
@@ -409,7 +409,7 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
@@ -457,7 +457,7 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
@@ -510,7 +510,7 @@ describe('page: CourseGrading', () => {
         </Routes>
       </Provider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
+      { initialEntries: [`/${COURSE_ID}/grading`] },
     )
 
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
@@ -521,7 +521,7 @@ describe('page: CourseGrading', () => {
     await userEvent.click(screen.getByText('Confirm'))
 
     expect(
-      screen.getByTestId('saving-grading-error-alert').textContent
+      screen.getByTestId('saving-grading-error-alert').textContent,
     ).toMatchInlineSnapshot('"There was an error when grading."')
   })
 
@@ -562,7 +562,7 @@ describe('page: CourseGrading', () => {
         initialEntries: [
           `/${COURSE_ID}/grading?participants=${participant.id}`,
         ],
-      }
+      },
     )
 
     expect(screen.getAllByLabelText(/notes/i)).toBeTruthy()
@@ -609,7 +609,7 @@ describe('page: CourseGrading', () => {
         initialEntries: [
           `/${COURSE_ID}/grading?participants=${participant.id}`,
         ],
-      }
+      },
     )
 
     expect(screen.getAllByLabelText(/notes/i)).toBeTruthy()
@@ -653,7 +653,7 @@ describe('page: CourseGrading', () => {
       {},
       {
         initialEntries: [`/${COURSE_ID}/grading`],
-      }
+      },
     )
 
     expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)
@@ -701,7 +701,7 @@ describe('page: CourseGrading', () => {
         initialEntries: [
           `/${COURSE_ID}/grading?participants=${participant.id}`,
         ],
-      }
+      },
     )
 
     expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)

@@ -49,7 +49,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new`] }
+      { initialEntries: [`/courses/new`] },
     )
 
     const subnav = screen.getByTestId('create-course-nav')
@@ -74,7 +74,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new/assign-trainers`] }
+      { initialEntries: [`/courses/new/assign-trainers`] },
     )
 
     const subnav = screen.getByTestId('create-course-nav')
@@ -108,7 +108,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new/assign-trainers`] }
+      { initialEntries: [`/courses/new/assign-trainers`] },
     )
 
     const subnav = screen.getByTestId('create-course-nav')
@@ -116,7 +116,7 @@ describe('page: CreateCourse', () => {
     const modulesNavItem = within(subnav).getByTestId('step-item-2')
 
     expect(
-      within(attendanceNavItem).getByTestId('CheckIcon')
+      within(attendanceNavItem).getByTestId('CheckIcon'),
     ).toBeInTheDocument()
     expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
   })
@@ -135,7 +135,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] },
     )
 
     expect(screen.getByText('Open course creation')).toBeInTheDocument()
@@ -155,7 +155,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] },
     )
 
     expect(screen.getByText('Closed course creation')).toBeInTheDocument()
@@ -175,7 +175,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] },
     )
 
     expect(screen.getByText('Course creation')).toBeInTheDocument()
@@ -195,7 +195,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] },
     )
 
     const nav = screen.getByTestId('create-course-nav')
@@ -217,7 +217,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TT_OPS,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] },
     )
 
     const nav = screen.getByTestId('create-course-nav')
@@ -239,7 +239,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TRAINER,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -259,7 +259,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Open}`] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -279,7 +279,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.TRAINER,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -299,7 +299,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Closed}`] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -319,7 +319,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.SALES_ADMIN,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -339,7 +339,7 @@ describe('page: CreateCourse', () => {
           activeRole: RoleName.USER,
         },
       },
-      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] }
+      { initialEntries: [`/courses/new?type=${Course_Type_Enum.Indirect}`] },
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()

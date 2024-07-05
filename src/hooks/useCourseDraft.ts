@@ -39,7 +39,7 @@ export function useCourseDraft(draftId?: string): UseCourseDraft {
       data?.course_draft_by_pk?.updatedAt,
       error,
       fetching,
-    ]
+    ],
   )
 
   return courseDraftData

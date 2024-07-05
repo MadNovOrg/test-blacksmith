@@ -28,7 +28,7 @@ export type OrgMemberType = {
 
 export const avatarSize = 220
 export const maxAvatarFileSizeBytes = Number.parseInt(
-  import.meta.env.VITE_PROFILE_AVATAR_MAX_SIZE_BYTES ?? 0
+  import.meta.env.VITE_PROFILE_AVATAR_MAX_SIZE_BYTES ?? 0,
 )
 
 export type UserRoleName = RoleName | 'tt-employee'

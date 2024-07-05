@@ -13,7 +13,7 @@ const test = base.extend<{ courseId: number }>({
     openCourse.type = Course_Type_Enum.Open
     const { id } = await insertCourse(
       openCourse,
-      'trainer@teamteach.testinator.com'
+      'trainer@teamteach.testinator.com',
     )
     await use(id)
     await deleteCourse(id)

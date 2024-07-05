@@ -23,7 +23,7 @@ describe('page: ResourceCategoryDetails', () => {
     render(
       <Provider value={client}>
         <ResourceCategoryDetails />
-      </Provider>
+      </Provider>,
     )
 
     expect(screen.getByTestId('resource-category-skeleton')).toBeInTheDocument()
@@ -61,19 +61,19 @@ describe('page: ResourceCategoryDetails', () => {
             },
           ],
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByTestId('resource-category-skeleton')
+      screen.queryByTestId('resource-category-skeleton'),
     ).not.toBeInTheDocument()
     expect(screen.queryByTestId('resources-skeleton')).not.toBeInTheDocument()
 
     expect(
-      screen.getByText(resourceCategory?.name ?? 'should fail')
+      screen.getByText(resourceCategory?.name ?? 'should fail'),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(resourceCategory?.description ?? 'should fail')
+      screen.getByText(resourceCategory?.description ?? 'should fail'),
     ).toBeInTheDocument()
   })
 
@@ -140,17 +140,17 @@ describe('page: ResourceCategoryDetails', () => {
             },
           ],
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByText(level1Resource.title ?? '')
+      screen.queryByText(level1Resource.title ?? ''),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByText(advancedModulesResource.title ?? '')
+      screen.getByText(advancedModulesResource.title ?? ''),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(intermediateTrainerResource.title ?? '')
+      screen.getByText(intermediateTrainerResource.title ?? ''),
     ).toBeInTheDocument()
   })
 
@@ -195,14 +195,14 @@ describe('page: ResourceCategoryDetails', () => {
         auth: {
           trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByText(level1Resource.title ?? '')
+      screen.queryByText(level1Resource.title ?? ''),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByText(principalTrainerResource.title ?? '')
+      screen.getByText(principalTrainerResource.title ?? ''),
     ).toBeInTheDocument()
   })
 
@@ -237,7 +237,7 @@ describe('page: ResourceCategoryDetails', () => {
         auth: {
           activeCertificates: [Course_Level_Enum.Level_1],
         },
-      }
+      },
     )
 
     expect(screen.getByText(/not found/i)).toBeInTheDocument()
@@ -291,14 +291,14 @@ describe('page: ResourceCategoryDetails', () => {
           auth: {
             activeRole: roleName,
           },
-        }
+        },
       )
 
       expect(
-        screen.getByText(level1Resource.title ?? 'should fail')
+        screen.getByText(level1Resource.title ?? 'should fail'),
       ).toBeInTheDocument()
       expect(
-        screen.getByText(principalTrainerResource.title ?? 'should fail')
+        screen.getByText(principalTrainerResource.title ?? 'should fail'),
       ).toBeInTheDocument()
     })
   })
@@ -370,19 +370,19 @@ describe('page: ResourceCategoryDetails', () => {
           activeRole: RoleName.TRAINER,
           trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByText(level1Resource.title ?? 'should fail')
+      screen.queryByText(level1Resource.title ?? 'should fail'),
     ).not.toBeInTheDocument()
 
     expect(
-      screen.getByText(firstLevelNestingCategory.name ?? 'should fail')
+      screen.getByText(firstLevelNestingCategory.name ?? 'should fail'),
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByText(secondLevelNestingCategory.name ?? 'should fail')
+      screen.queryByText(secondLevelNestingCategory.name ?? 'should fail'),
     ).not.toBeInTheDocument()
   })
 
@@ -436,11 +436,11 @@ describe('page: ResourceCategoryDetails', () => {
           activeRole: RoleName.TRAINER,
           trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
         },
-      }
+      },
     )
 
     expect(
-      screen.getByText(childCategory.name ?? 'should fail')
+      screen.getByText(childCategory.name ?? 'should fail'),
     ).toBeInTheDocument()
 
     expect(screen.queryByText(/no resources found/i)).not.toBeInTheDocument()
@@ -490,11 +490,11 @@ describe('page: ResourceCategoryDetails', () => {
           activeRole: RoleName.TRAINER,
           trainerRoles: [TrainerRoleTypeName.PRINCIPAL],
         },
-      }
+      },
     )
 
     expect(
-      screen.queryByText(childCategory.name ?? 'should fail')
+      screen.queryByText(childCategory.name ?? 'should fail'),
     ).not.toBeInTheDocument()
 
     expect(screen.getByText(/no resources found/i)).toBeInTheDocument()
@@ -502,7 +502,7 @@ describe('page: ResourceCategoryDetails', () => {
 })
 
 function buildResourceCategory(
-  overrides?: Partial<ResourceCategory>
+  overrides?: Partial<ResourceCategory>,
 ): NonNullable<ResourceCategory> {
   return {
     id: chance.guid(),
@@ -513,7 +513,7 @@ function buildResourceCategory(
 }
 
 function buildResource(
-  overrides?: Partial<ResourceSummaryFragment>
+  overrides?: Partial<ResourceSummaryFragment>,
 ): ResourceSummaryFragment {
   return {
     id: chance.guid(),

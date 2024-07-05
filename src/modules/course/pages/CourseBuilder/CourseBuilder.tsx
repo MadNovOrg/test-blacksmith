@@ -20,7 +20,7 @@ import { ICMCourseBuilderV2 } from './components/ICMCourseBuilderV2/ICMCourseBui
 
 export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model'
+    'new-modules-data-model',
   )
   const { t } = useTranslation()
   const { id: courseId } = useParams()

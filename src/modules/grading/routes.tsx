@@ -10,7 +10,7 @@ import { ParticipantGrade } from './pages/ParticipantGrade/ParticipantGrade'
 
 export const GradingRoutes: React.FC = () => {
   const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model'
+    'new-modules-data-model',
   )
 
   return (

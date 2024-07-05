@@ -12,7 +12,7 @@ export class CreateCourseMenu {
   constructor(page: Page) {
     this.page = page
     this.createCourseButton = this.page.locator(
-      'data-testid=create-course-menu-button'
+      'data-testid=create-course-menu-button',
     )
     this.option = text => this.page.locator(`data-testid=${text}`)
   }
@@ -23,7 +23,7 @@ export class CreateCourseMenu {
   }
 
   async selectCreateCourseOption(
-    type: Course_Type_Enum
+    type: Course_Type_Enum,
   ): Promise<CreateCoursePage> {
     await this.createCourseButton.click()
     await this.option(`create-course-${type}`).click()

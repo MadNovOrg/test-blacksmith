@@ -61,17 +61,17 @@ it('displays course name, course participants who attended and covered course mo
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   expect(screen.getByText(course.name)).toBeInTheDocument()
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${curriculum[0].id}`)
+    screen.getByTestId(`module-group-${curriculum[0].id}`),
   ).getByTestId('accordion-summary')
 
   expect(
-    within(moduleAccordion).getByLabelText(curriculum[0].name)
+    within(moduleAccordion).getByLabelText(curriculum[0].name),
   ).toBeChecked()
 
   expect(screen.getByLabelText(coveredLesson.name)).toBeChecked()
@@ -81,11 +81,11 @@ it('displays course name, course participants who attended and covered course mo
   const notAttendedParticipant = courseParticipants[0]
 
   expect(
-    screen.getByText(`${attendedParticipant.profile.fullName}`)
+    screen.getByText(`${attendedParticipant.profile.fullName}`),
   ).toBeInTheDocument()
 
   expect(
-    screen.queryByText(`${notAttendedParticipant.profile.fullName}`)
+    screen.queryByText(`${notAttendedParticipant.profile.fullName}`),
   ).not.toBeInTheDocument()
 
   expect(screen.getByText('All attendees')).toBeInTheDocument()
@@ -117,18 +117,18 @@ it("doesn't display already graded participants", () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   const attendedParticipant = courseParticipants[1]
   const notAttendedParticipant = courseParticipants[0]
 
   expect(
-    screen.getByText(`${attendedParticipant.profile.fullName}`)
+    screen.getByText(`${attendedParticipant.profile.fullName}`),
   ).toBeInTheDocument()
 
   expect(
-    screen.queryByText(`${notAttendedParticipant.profile.fullName}`)
+    screen.queryByText(`${notAttendedParticipant.profile.fullName}`),
   ).not.toBeInTheDocument()
 
   expect(screen.getByText('All attendees')).toBeInTheDocument()
@@ -165,7 +165,7 @@ it('displays selected participants from query param', () => {
       initialEntries: [
         `/${COURSE_ID}/grading?participants=${courseParticipants[0].id},${courseParticipants[1].id}`,
       ],
-    }
+    },
   )
 
   const selectedParticipants = [courseParticipants[0], courseParticipants[1]]
@@ -173,12 +173,12 @@ it('displays selected participants from query param', () => {
 
   selectedParticipants.forEach(participant => {
     expect(
-      screen.getByText(`${participant.profile.fullName}`)
+      screen.getByText(`${participant.profile.fullName}`),
     ).toBeInTheDocument()
   })
 
   expect(
-    screen.queryByText(`${notSelectedParticipant.profile.fullName}`)
+    screen.queryByText(`${notSelectedParticipant.profile.fullName}`),
   ).not.toBeInTheDocument()
 
   expect(screen.getByText('2 attendee(s)')).toBeInTheDocument()
@@ -223,7 +223,7 @@ it('displays confirmation modal when clicked on submit button', async () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   await selectGradingOption('Pass')
@@ -235,7 +235,7 @@ it('displays confirmation modal when clicked on submit button', async () => {
   expect(within(dialog).getByText(/grading confirmation/i)).toBeInTheDocument()
 
   expect(
-    within(dialog).getByRole('button', { name: /cancel/i })
+    within(dialog).getByRole('button', { name: /cancel/i }),
   ).toBeInTheDocument()
 
   expect(screen.getByText('Confirm')).toBeInTheDocument()
@@ -280,7 +280,7 @@ it('closes modal when saving is not confirmed', async () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   await selectGradingOption('Pass')
@@ -292,7 +292,7 @@ it('closes modal when saving is not confirmed', async () => {
   await user.click(within(dialog).getByRole('button', { name: /cancel/i }))
 
   expect(
-    within(dialog).queryByRole('button', { name: /grading confirmation/i })
+    within(dialog).queryByRole('button', { name: /grading confirmation/i }),
   ).not.toBeInTheDocument()
 })
 
@@ -336,7 +336,7 @@ it("disables save button if a grading option isn't selected", () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled()
@@ -421,17 +421,17 @@ it('saves grades for participants when an intent for saving is confirmed', async
       initialEntries: [
         `/${COURSE_ID}/grading?participants=${courseParticipants[1].id}`,
       ],
-    }
+    },
   )
 
   await user.type(screen.getAllByLabelText(/notes/i)[0], 'Note for a module')
 
   const moduleToDeselectAccordion = within(
-    screen.getByTestId(`module-group-${moduleToDeselect.id}`)
+    screen.getByTestId(`module-group-${moduleToDeselect.id}`),
   ).getByTestId('accordion-summary')
 
   await user.click(
-    within(moduleToDeselectAccordion).getByLabelText(moduleToDeselect.name)
+    within(moduleToDeselectAccordion).getByLabelText(moduleToDeselect.name),
   )
 
   await selectGradingOption('Non-Physical Pass')
@@ -482,7 +482,7 @@ it('displays loading state while saving grades', async () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   await selectGradingOption('Non-Physical Pass')
@@ -538,7 +538,7 @@ it('displays an alert if there was an error saving grades', async () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   await selectGradingOption('Non-Physical Pass')
@@ -547,7 +547,7 @@ it('displays an alert if there was an error saving grades', async () => {
   await user.click(screen.getByRole('button', { name: /confirm/i }))
 
   expect(
-    screen.getByTestId('saving-grading-error-alert').textContent
+    screen.getByTestId('saving-grading-error-alert').textContent,
   ).toMatchInlineSnapshot('"There was an error when grading."')
 })
 
@@ -582,7 +582,7 @@ it('displays module notes field when grading an individual participant as an adm
     { auth: { activeRole: RoleName.TT_ADMIN } },
     {
       initialEntries: [`/${COURSE_ID}/grading?participants=${participant.id}`],
-    }
+    },
   )
 
   expect(screen.getAllByLabelText(/notes/i)).toBeTruthy()
@@ -623,7 +623,7 @@ it('displays module notes field when grading an individual participant as a lead
     { auth: { activeRole: RoleName.TRAINER, profile: { id: PROFILE_ID } } },
     {
       initialEntries: [`/${COURSE_ID}/grading?participants=${participant.id}`],
-    }
+    },
   )
 
   expect(screen.getAllByLabelText(/notes/i)).toBeTruthy()
@@ -671,7 +671,7 @@ it("doesn't display module notes field when grading in bulk", () => {
     {},
     {
       initialEntries: [`/${COURSE_ID}/grading`],
-    }
+    },
   )
 
   expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)
@@ -710,7 +710,7 @@ it("doesn't display module notes field when grading as an assistant trainer", ()
     { auth: { activeRole: RoleName.TRAINER, profile: { id: PROFILE_ID } } },
     {
       initialEntries: [`/${COURSE_ID}/grading?participants=${participant.id}`],
-    }
+    },
   )
 
   expect(screen.queryAllByLabelText(/notes/i)).toHaveLength(0)
@@ -757,17 +757,17 @@ it("doesn't display modules that don't have any covered lessons", () => {
     { auth: { activeRole: RoleName.TRAINER, profile: { id: PROFILE_ID } } },
     {
       initialEntries: [`/${COURSE_ID}/grading?participants=${participant.id}`],
-    }
+    },
   )
 
   expect(screen.queryByLabelText(notCoveredModule.name)).not.toBeInTheDocument()
 
   const moduleAccordion = within(
-    screen.getByTestId(`module-group-${coveredModule.id}`)
+    screen.getByTestId(`module-group-${coveredModule.id}`),
   ).getByTestId('accordion-summary')
 
   expect(
-    within(moduleAccordion).getByLabelText(coveredModule.name)
+    within(moduleAccordion).getByLabelText(coveredModule.name),
   ).toBeChecked()
 })
 
@@ -797,10 +797,10 @@ it("displays proper message when course doesn't have modules", () => {
       </Routes>
     </Provider>,
     {},
-    { initialEntries: [`/${COURSE_ID}/grading`] }
+    { initialEntries: [`/${COURSE_ID}/grading`] },
   )
 
   expect(
-    screen.getByText(`There are no modules for this course.`)
+    screen.getByText(`There are no modules for this course.`),
   ).toBeInTheDocument()
 })

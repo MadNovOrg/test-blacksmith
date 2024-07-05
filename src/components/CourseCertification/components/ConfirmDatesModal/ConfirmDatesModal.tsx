@@ -57,7 +57,7 @@ const ConfirmDatesModal: React.FC<
             <TableRow>
               <TableCell>
                 {t(
-                  `common.course-certificate.put-on-hold-modal.reasons.${reasonSelected.toLocaleLowerCase()}`
+                  `common.course-certificate.put-on-hold-modal.reasons.${reasonSelected.toLocaleLowerCase()}`,
                 )}
               </TableCell>
               <TableCell>

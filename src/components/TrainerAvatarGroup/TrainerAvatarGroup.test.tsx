@@ -49,10 +49,10 @@ describe('component: TrainerAvatarGroup', () => {
     render(<TrainerAvatarGroup trainers={trainers} />)
 
     const leadTrainerNode = screen.getByTestId(
-      `trainer-avatar-${leadTrainer.id}`
+      `trainer-avatar-${leadTrainer.id}`,
     )
     const assistTrainerNode = screen.getByTestId(
-      `trainer-avatar-${assistTrainer.id}`
+      `trainer-avatar-${assistTrainer.id}`,
     )
 
     expect(leadTrainerNode).toHaveTextContent('JD')

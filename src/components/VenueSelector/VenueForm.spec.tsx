@@ -24,7 +24,7 @@ const venueDetails = {
 
 const setup = (
   overrides: Partial<VenueFormProps> = {},
-  data?: Omit<Venue, 'id'>
+  data?: Omit<Venue, 'id'>,
 ) =>
   render(
     <VenueForm
@@ -38,7 +38,7 @@ const setup = (
     />,
     {
       auth: { activeRole: RoleName.TRAINER },
-    }
+    },
   )
 
 describe('component: VenueForm', () => {
@@ -80,12 +80,12 @@ describe('component: VenueForm', () => {
         {
           courseResidingCountry: code,
         },
-        venueDetails
+        venueDetails,
       )
 
       expect(getByLabelText(/country/i)).toHaveValue(country)
       expect(getByLabelText(/country/i)).toBeDisabled()
-    }
+    },
   )
 
   it('should make the venue country pre-selected with England and the field editable when international flag is disabled', () => {
@@ -107,7 +107,7 @@ describe('component: VenueForm', () => {
       />,
       {
         auth: { activeRole: RoleName.TRAINER },
-      }
+      },
     )
 
     expect(getByLabelText(/country/i)).toHaveValue('England')
@@ -126,7 +126,7 @@ describe('component: VenueForm', () => {
       />,
       {
         auth: { activeRole: RoleName.TRAINER },
-      }
+      },
     )
 
     expect(getByLabelText(/country/i)).toHaveValue('England')
@@ -145,7 +145,7 @@ describe('component: VenueForm', () => {
       />,
       {
         auth: { activeRole: RoleName.TRAINER },
-      }
+      },
     )
 
     expect(getByLabelText(/country/i)).toHaveValue('England')

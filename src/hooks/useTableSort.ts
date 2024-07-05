@@ -11,15 +11,15 @@ export type Sorting = ReturnType<typeof useTableSort>
 export const useTableSort = (
   defaultSortBy = '',
   defaultSortDir: SortOrder = 'asc',
-  id = 'tbl'
+  id = 'tbl',
 ) => {
   const [by, setSortBy] = useQueryParam(
     `${id}-by`,
-    withDefault(StringParam, defaultSortBy)
+    withDefault(StringParam, defaultSortBy),
   )
   const [dir, setSortDir] = useQueryParam(
     `${id}-dir`,
-    withDefault(StringParam, defaultSortDir)
+    withDefault(StringParam, defaultSortDir),
   )
 
   const onSort = useCallback(
@@ -27,11 +27,11 @@ export const useTableSort = (
       setSortDir(dir => (col !== by ? 'asc' : dir === 'asc' ? 'desc' : 'asc'))
       setSortBy(col)
     },
-    [setSortBy, setSortDir, by]
+    [setSortBy, setSortDir, by],
   )
 
   return useMemo(
     () => ({ by, dir: dir as SortOrder, onSort }),
-    [by, dir, onSort]
+    [by, dir, onSort],
   )
 }

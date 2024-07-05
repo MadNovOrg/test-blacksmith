@@ -51,17 +51,17 @@ describe('component: ProfileSelector', () => {
     render(
       <Provider value={client}>
         <ProfileSelector onChange={noop} orgId={ORG_ID} />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search for a profile'),
-      SEARCH_NAME
+      SEARCH_NAME,
     )
 
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(SEARCH_NAME)
+        within(screen.getByRole('listbox')).getByText(SEARCH_NAME),
       ).toBeInTheDocument()
     })
   })
@@ -89,22 +89,22 @@ describe('component: ProfileSelector', () => {
     render(
       <Provider value={client}>
         <ProfileSelector onChange={onChangeMock} orgId={ORG_ID} />
-      </Provider>
+      </Provider>,
     )
 
     await userEvent.type(
       screen.getByPlaceholderText('Search for a profile'),
-      SEARCH_NAME
+      SEARCH_NAME,
     )
 
     await waitFor(() => {
       expect(
-        within(screen.getByRole('listbox')).getByText(SEARCH_NAME)
+        within(screen.getByRole('listbox')).getByText(SEARCH_NAME),
       ).toBeInTheDocument()
     })
 
     await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(SEARCH_NAME)
+      within(screen.getByRole('listbox')).getByText(SEARCH_NAME),
     )
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)

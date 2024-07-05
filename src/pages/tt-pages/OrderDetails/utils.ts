@@ -17,7 +17,7 @@ export enum CourseWorkbooks {
 
 export function isRegistrantLineItem(
   lineItem: OnlyXeroDescription | null,
-  courseLevel: string
+  courseLevel: string,
 ) {
   return (
     lineItem?.description?.includes(t(`course-levels.${courseLevel}`)) &&
@@ -34,26 +34,26 @@ export function isDiscountLineItem(lineItem: OnlyXeroDescription | null) {
 }
 
 export function isProcessingFeeLineItem(
-  lineItem: Pick<XeroLineItem, 'itemCode'> | null
+  lineItem: Pick<XeroLineItem, 'itemCode'> | null,
 ) {
   return lineItem?.itemCode === 'CREDIT CARD FEE'
 }
 
 export function isMandatoryCourseMaterials(
-  lineItem: Pick<XeroLineItem, 'itemCode'> | null
+  lineItem: Pick<XeroLineItem, 'itemCode'> | null,
 ) {
   return lineItem?.itemCode === CourseWorkbooks.Mandatory
 }
 
 export function isFreeCourseMaterials(
-  lineItem: Pick<XeroLineItem, 'itemCode'> | null
+  lineItem: Pick<XeroLineItem, 'itemCode'> | null,
 ) {
   return lineItem?.itemCode === CourseWorkbooks.Free
 }
 
 export function getTrainerExpensesLineItems(
   lineItems: XeroInvoiceSummaryFragment['lineItems'],
-  courseLevel: string
+  courseLevel: string,
 ) {
   return lineItems.filter(lineItem => {
     return (
@@ -79,7 +79,7 @@ export function formatContactAddress(address: XeroAddress) {
 
 export function extractEmails(text: string) {
   const matches = text.match(
-    /([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+    /([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi,
   )
 
   return matches

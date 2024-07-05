@@ -31,7 +31,7 @@ allowedRoles.forEach(role => {
     const adminCoursesPage = new MyCoursesPage(page)
     await adminCoursesPage.goto(`${course.id}`)
     const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
-      course.id
+      course.id,
     )
     await courseDetailsPage.clickEditCourseButton()
     const cancelPopup = await courseDetailsPage.clickCancelCourseButton()

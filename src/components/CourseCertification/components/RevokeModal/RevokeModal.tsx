@@ -27,7 +27,7 @@ const RevokeCertModal: React.FC<
   React.PropsWithChildren<RevokeCertModalProps>
 > = ({ certificateId, participantId, onClose, onSuccess }) => {
   const { t, _t } = useScopedTranslation(
-    'common.course-certificate.revoke-cert-modal'
+    'common.course-certificate.revoke-cert-modal',
   )
   const [reason, setReason] = useState('')
   const [confirmed, setConfirmed] = useState(false)

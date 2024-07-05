@@ -26,7 +26,7 @@ export default function useCourse(courseId: string): {
   const { acl, activeRole, profile } = useAuth()
 
   const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost'
+    'mandatory-course-materials-cost',
   )
 
   const [{ data, error }, mutate] = useQuery<
@@ -59,7 +59,7 @@ export default function useCourse(courseId: string): {
       const hasAcceptedInvite = data?.course?.trainers?.find(
         t =>
           t.profile.id === profile?.id &&
-          t.status === Course_Invite_Status_Enum.Accepted
+          t.status === Course_Invite_Status_Enum.Accepted,
       )
 
       Object.assign(courseData, {

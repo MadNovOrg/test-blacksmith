@@ -14,10 +14,10 @@ export async function insertOrder(input: OrderCreation): Promise<string> {
   try {
     const response = await getClient().request<{ order: { id: string } }>(
       CREATE_ORDER,
-      { input: input }
+      { input: input },
     )
     console.log(
-      `Inserted order with ID "${response?.order.id}" for course "${input.courseId}"`
+      `Inserted order with ID "${response?.order.id}" for course "${input.courseId}"`,
     )
     return response?.order.id
   } catch (error) {
@@ -31,11 +31,11 @@ export async function getOrders(
     offset: 0,
     orderBy: [],
     where: {},
-  }
+  },
 ): Promise<OrderInfoFragment[]> {
   const response = await getClient().request<OrdersQuery, OrdersQueryVariables>(
     GET_ORDERS,
-    variables
+    variables,
   )
   const orders = response.order ?? []
   const filteredOrders = orders.filter(order => order !== null)

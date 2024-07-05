@@ -47,7 +47,7 @@ allowedRoles.forEach(role => {
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.gotoManageCourses(`${courses[0].id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-      courses[0].id
+      courses[0].id,
     )
     await courseDetailsPage.clickManageAttendance()
     const courseTransferPage = await courseDetailsPage.clickAttendeeTransfer()
@@ -59,7 +59,7 @@ allowedRoles.forEach(role => {
     await courseTransferPage.clickConfirmTransfer()
     await myCoursesPage.gotoManageCourses(`${courses[1].id}`)
     const courseDetailsPage1 = await myCoursesPage.clickCourseDetailsPage(
-      courses[1].id
+      courses[1].id,
     )
     await courseDetailsPage1.checkAttendeeExists(users.user1WithOrg)
   })

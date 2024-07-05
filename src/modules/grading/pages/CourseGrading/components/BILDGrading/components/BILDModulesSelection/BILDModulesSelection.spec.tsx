@@ -24,51 +24,55 @@ describe(BILDModulesSelection.name, () => {
         strategyModules={strategyModules}
         onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     const primaryStrategyAccordion = screen.getByTestId(
-      'strategy-accordion-PRIMARY'
+      'strategy-accordion-PRIMARY',
     )
 
     expect(
-      within(primaryStrategyAccordion).getByTestId('strategy-checkbox-PRIMARY')
+      within(primaryStrategyAccordion).getByTestId('strategy-checkbox-PRIMARY'),
     ).toBeChecked()
 
     expect(
-      within(primaryStrategyAccordion).getByTestId('strategy-checkbox-PRIMARY')
+      within(primaryStrategyAccordion).getByTestId('strategy-checkbox-PRIMARY'),
     ).toBeDisabled()
 
     expect(
-      within(primaryStrategyAccordion).getByLabelText('Module name')
+      within(primaryStrategyAccordion).getByLabelText('Module name'),
     ).toBeChecked()
 
     expect(
-      within(primaryStrategyAccordion).getByLabelText('Module name')
+      within(primaryStrategyAccordion).getByLabelText('Module name'),
     ).toBeDisabled()
 
     const secondaryStrategyAccordion = screen.getByTestId(
-      'strategy-accordion-SECONDARY'
+      'strategy-accordion-SECONDARY',
     )
 
     expect(
       within(secondaryStrategyAccordion).getByTestId(
-        'strategy-checkbox-SECONDARY'
-      )
+        'strategy-checkbox-SECONDARY',
+      ),
     ).toBeChecked()
 
     expect(
       within(secondaryStrategyAccordion).getByTestId(
-        'strategy-checkbox-SECONDARY'
-      )
+        'strategy-checkbox-SECONDARY',
+      ),
     ).toBeDisabled()
 
     expect(
-      within(secondaryStrategyAccordion).getByLabelText('Module within a group')
+      within(secondaryStrategyAccordion).getByLabelText(
+        'Module within a group',
+      ),
     ).toBeChecked()
 
     expect(
-      within(secondaryStrategyAccordion).getByLabelText('Module within a group')
+      within(secondaryStrategyAccordion).getByLabelText(
+        'Module within a group',
+      ),
     ).toBeDisabled()
   })
 
@@ -85,13 +89,13 @@ describe(BILDModulesSelection.name, () => {
         strategyModules={strategyModules}
         onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByLabelText('First module'))
 
     expect(
-      screen.getByTestId('strategy-checkbox-NON_TERTIARY_RESTRICTED')
+      screen.getByTestId('strategy-checkbox-NON_TERTIARY_RESTRICTED'),
     ).toHaveAttribute('data-indeterminate', 'true')
   })
 
@@ -108,11 +112,11 @@ describe(BILDModulesSelection.name, () => {
         strategyModules={strategyModules}
         onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     const strategyCheckbox = screen.getByTestId(
-      'strategy-checkbox-NON_TERTIARY_RESTRICTED'
+      'strategy-checkbox-NON_TERTIARY_RESTRICTED',
     )
 
     await userEvent.click(strategyCheckbox)
@@ -139,7 +143,7 @@ describe(BILDModulesSelection.name, () => {
         strategyModules={strategyModules}
         onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     const module = screen.getByLabelText(/first module/i)
@@ -169,7 +173,7 @@ describe(BILDModulesSelection.name, () => {
         strategyModules={strategyModules}
         onChange={vi.fn()}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     const mandatoryModule = screen.getByLabelText(/first module/i)
@@ -207,7 +211,7 @@ describe(BILDModulesSelection.name, () => {
         strategyModules={strategyModules}
         onChange={onChangeMock}
         courseType={Course_Type_Enum.Open}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByLabelText(/second module/i))
@@ -254,7 +258,7 @@ describe(BILDModulesSelection.name, () => {
           strategyModules={strategyModules}
           onChange={vi.fn()}
           courseType={courseType}
-        />
+        />,
       )
 
       const mandatoryModules = screen.getAllByLabelText(/first module/i)
@@ -268,6 +272,6 @@ describe(BILDModulesSelection.name, () => {
         expect(module).toBeChecked()
         expect(module).toBeDisabled()
       })
-    }
+    },
   )
 })

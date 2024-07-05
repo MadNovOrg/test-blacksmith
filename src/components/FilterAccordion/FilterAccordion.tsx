@@ -42,9 +42,9 @@ export const FilterAccordion = <T,>({
   const handleChange = (item: FilterOption<T>) =>
     onChange(
       options.map(o =>
-        o.id === item.id ? { ...o, selected: !item.selected } : o
+        o.id === item.id ? { ...o, selected: !item.selected } : o,
       ),
-      item
+      item,
     )
 
   // When options change, shouldExpand changes between true <-> false, and MUI doesn’t like
@@ -54,7 +54,7 @@ export const FilterAccordion = <T,>({
     () =>
       Object.values(options).some(val => val.selected === true) ||
       defaultExpanded,
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   )
 
   return (
