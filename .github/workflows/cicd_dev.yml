@@ -75,8 +75,13 @@ jobs:
         run: |
           pnpm test:coverage --shard ${{ matrix.shard }}/${{ strategy.job-total }}
           mv coverage/coverage-final.json coverage/coverage-shard${SHARD_NUMBER}.json
-          npx nyc merge ./coverage ./coverage/coverage-final.json
-          npx nyc report -t coverage --report-dir coverage --reporter=lcov
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-shard${{ matrix.shard }}
+          path: coverage
+
   sonar-analysis:
     name: Build and analyze
     needs: [test]
@@ -85,6 +90,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Download Coverage
+        uses: actions/download-artifact@v4
+        with:
+          path: coverage
+      - name: Merge Coverage
+        run: |
+          npx nyc merge ./coverage ./coverage/coverage-final.json
+          npx nyc report -t coverage --report-dir coverage --reporter=lcov
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
