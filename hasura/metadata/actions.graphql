@@ -1,25 +1,17 @@
 type Mutation {
-  acceptOrgInvite(
-    profileId: String!
-  ): AcceptOrgInviteOutput
+  acceptOrgInvite(profileId: String!): AcceptOrgInviteOutput
 }
 
 type Mutation {
-  approveCourse(
-    input: ApproveCourseInput!
-  ): ApproveCourseOutput!
+  approveCourse(input: ApproveCourseInput!): ApproveCourseOutput!
 }
 
 type Mutation {
-  arloCallback(
-    input: ArloCallbackInput!
-  ): ArloCallbackOutput
+  arloCallback(input: ArloCallbackInput!): ArloCallbackOutput
 }
 
 type Query {
-  canApplyPromoCode(
-    input: CanApplyPromoCodeInput!
-  ): CanApplyPromoCodeOutput!
+  canApplyPromoCode(input: CanApplyPromoCodeInput!): CanApplyPromoCodeOutput!
 }
 
 type Mutation {
@@ -39,9 +31,7 @@ type Mutation {
 }
 
 type Mutation {
-  cancelMyselfFromCourse(
-    courseId: Int!
-  ): Boolean
+  cancelMyselfFromCourse(courseId: Int!): Boolean
 }
 
 type Mutation {
@@ -51,9 +41,7 @@ type Mutation {
 }
 
 type Mutation {
-  createOrder(
-    input: CreateOrderInput!
-  ): CreateOrderOutput
+  createOrder(input: CreateOrderInput!): CreateOrderOutput
 }
 
 type Mutation {
@@ -64,46 +52,31 @@ type Mutation {
 }
 
 type Mutation {
-  createUser(
-    input: CreateAppUserInput!
-  ): CreateUserOutput!
+  createUser(input: CreateAppUserInput!): CreateUserOutput!
 }
 
 type Mutation {
-  curriculumSync(
-    input: CurriculumSyncInput!
-  ): CurriculumSyncOutput!
+  curriculumSync(input: CurriculumSyncInput!): CurriculumSyncOutput!
 }
 
 type Mutation {
-  declineInvite(
-    note: String
-  ): DeclineInviteOutput
+  declineInvite(note: String): DeclineInviteOutput
 }
 
 type Mutation {
-  declineOrgInvite(
-    inviteId: uuid!
-  ): Boolean
+  declineOrgInvite(inviteId: uuid!): Boolean
 }
 
 type Mutation {
-  deleteMeeting(
-    meetingId: String!
-  ): DeleteMeetingOutput!
+  deleteMeeting(meetingId: String!): DeleteMeetingOutput!
 }
 
 type Mutation {
-  deleteOrganisation(
-    orgId: uuid!
-  ): DeleteOrganisationOutput
+  deleteOrganisation(orgId: uuid!): DeleteOrganisationOutput
 }
 
 type Mutation {
-  deleteUser(
-    profileId: uuid!
-    dryRun: Boolean
-  ): DeleteUserOutput!
+  deleteUser(profileId: uuid!, dryRun: Boolean): DeleteUserOutput!
 }
 
 type Query {
@@ -124,9 +97,7 @@ type Query {
 }
 
 type Query {
-  getCoursePricing(
-    input: GetCoursePricingInput!
-  ): GetCoursePricingOutput
+  getCoursePricing(input: GetCoursePricingInput!): GetCoursePricingOutput
 }
 
 type Query {
@@ -144,27 +115,19 @@ type Query {
 }
 
 type Query {
-  getXeroInvoicesForOrders(
-    invoiceNumbers: [String!]!
-  ): [XeroInvoice]!
+  getXeroInvoicesForOrders(invoiceNumbers: [String!]!): [XeroInvoice]!
 }
 
 type Mutation {
-  go1LicensesChange(
-    input: Go1LicensesChangeInput!
-  ): Go1LicensesChangeOutput
+  go1LicensesChange(input: Go1LicensesChangeInput!): Go1LicensesChangeOutput
 }
 
 type Mutation {
-  gradedOnSync(
-    input: GradedOnSyncInput!
-  ): GradedOnSyncOutput
+  gradedOnSync(input: GradedOnSyncInput!): GradedOnSyncOutput
 }
 
 type Mutation {
-  importArloCertificates(
-    report: String!
-  ): ImportArloCertificatesOutput
+  importArloCertificates(report: String!): ImportArloCertificatesOutput
 }
 
 type Mutation {
@@ -174,9 +137,7 @@ type Mutation {
 }
 
 type Mutation {
-  importUsers(
-    input: ImportUsersInput!
-  ): ImportUsersOutput
+  importUsers(input: ImportUsersInput!): ImportUsersOutput
 }
 
 type Query {
@@ -190,9 +151,7 @@ type Query {
 }
 
 type Mutation {
-  joinWaitlist(
-    input: JoinWaitlistInput!
-  ): JoinWaitlistOutput!
+  joinWaitlist(input: JoinWaitlistInput!): JoinWaitlistOutput!
 }
 
 type Query {
@@ -200,10 +159,7 @@ type Query {
 }
 
 type Mutation {
-  mergeUser(
-    primaryUser: uuid!
-    mergeWith: uuid!
-  ): MergeUserOutput!
+  mergeUser(primaryUser: uuid!, mergeWith: uuid!): MergeUserOutput!
 }
 
 type Mutation {
@@ -214,45 +170,31 @@ type Mutation {
 }
 
 type Mutation {
-  plansCreate(
-    data: PlansCreateInput!
-  ): PlansCreateResult
+  plansCreate(data: PlansCreateInput!): PlansCreateResult
 }
 
 type Query {
-  podcast(
-    id: ID!
-  ): PodcastPayload
+  podcast(id: ID!): PodcastPayload
 }
 
 type Query {
-  podcasts(
-    input: PodcastsInput
-  ): PodcastsPayload
+  podcasts(input: PodcastsInput): PodcastsPayload
 }
 
 type Mutation {
-  rejectCourse(
-    input: RejectCourseInput!
-  ): RejectCourseOutput
+  rejectCourse(input: RejectCourseInput!): RejectCourseOutput
 }
 
 type Mutation {
-  replaceParticipant(
-    input: ReplaceParticipantInput!
-  ): ReplaceParticipantOutput
+  replaceParticipant(input: ReplaceParticipantInput!): ReplaceParticipantOutput
 }
 
 type Mutation {
-  resendPassword(
-    email: String!
-  ): Boolean
+  resendPassword(email: String!): Boolean
 }
 
 type Mutation {
-  saveOrgInvites(
-    invites: [SaveOrgInviteInput!]!
-  ): SampleOutput
+  saveOrgInvites(invites: [SaveOrgInviteInput!]!): SampleOutput
 }
 
 type Mutation {
@@ -260,9 +202,7 @@ type Mutation {
 }
 
 type Query {
-  searchTrainers(
-    input: SearchTrainersInput!
-  ): [SearchTrainer]
+  searchTrainers(input: SearchTrainersInput!): [SearchTrainer]
 }
 
 type Mutation {
@@ -273,9 +213,7 @@ type Mutation {
 }
 
 type Mutation {
-  signUp(
-    input: SignUpInput!
-  ): SignUpOutput
+  signUp(input: SignUpInput!): SignUpOutput
 }
 
 type Mutation {
@@ -285,39 +223,27 @@ type Mutation {
 }
 
 type Mutation {
-  transferParticipant(
-    input: TransferInput!
-  ): TransferParticipantOutput
+  transferParticipant(input: TransferInput!): TransferParticipantOutput
 }
 
 type Mutation {
-  updateAvatar(
-    avatar: bytea!
-  ): UpdateAvatarResponse
+  updateAvatar(avatar: bytea!): UpdateAvatarResponse
 }
 
 type Mutation {
-  updateUserProfile(
-    input: UpdateUserProfileInput!
-  ): Boolean
+  updateUserProfile(input: UpdateUserProfileInput!): Boolean
 }
 
 type Mutation {
-  upsertZoomMeeting(
-    input: UpsertZoomMeetingInput
-  ): UpsertZoomMeetingPayload
+  upsertZoomMeeting(input: UpsertZoomMeetingInput): UpsertZoomMeetingPayload
 }
 
 type Mutation {
-  verifyUser(
-    inviteId: uuid!
-  ): Boolean
+  verifyUser(inviteId: uuid!): Boolean
 }
 
 type Mutation {
-  xeroCallback(
-    input: XeroCallbackInput!
-  ): XeroCallbackOutput
+  xeroCallback(input: XeroCallbackInput!): XeroCallbackOutput
 }
 
 type Query {
@@ -325,9 +251,7 @@ type Query {
 }
 
 type Query {
-  xeroContactSearch(
-    input: XeroContactSearchInput!
-  ): XeroContactSearchOutput
+  xeroContactSearch(input: XeroContactSearchInput!): XeroContactSearchOutput
 }
 
 type Mutation {
@@ -335,9 +259,7 @@ type Mutation {
 }
 
 type Query {
-  xeroInvoicesStatus(
-    input: XeroInvoicesStatusInput!
-  ): XeroInvoicesStatusOutput
+  xeroInvoicesStatus(input: XeroInvoicesStatusInput!): XeroInvoicesStatusOutput
 }
 
 type Query {
@@ -604,9 +526,18 @@ input PlansCreateInput {
 
 input UpsertZoomMeetingInput {
   id: Float
-  """ ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z' """ startTime: String
-  """ Timezone string, e.g. Europe/London """ timezone: String
-  """ Optional user id to create the meeting for """ userId: String
+  """
+  ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z'
+  """
+  startTime: String
+  """
+  Timezone string, e.g. Europe/London
+  """
+  timezone: String
+  """
+  Optional user id to create the meeting for
+  """
+  userId: String
 }
 
 input GetTrainersLevelsInput {
@@ -988,6 +919,8 @@ type SearchTrainer {
   id: uuid!
   fullName: String!
   email: String!
+  translatedGivenName: String
+  translatedFamilyName: String
   avatar: String
   trainer_role_types: [TrainerRoleType!]!
   levels: [CourseCertificateLevel!]!
@@ -1494,4 +1427,3 @@ type InvalidEntries {
 }
 
 scalar Date
-

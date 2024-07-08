@@ -41,6 +41,8 @@ export const SEARCH_TRAINERS = gql`
   fragment SearchTrainerDetails on SearchTrainer {
     id
     fullName
+    translatedGivenName
+    translatedFamilyName
     avatar
     email
     levels {

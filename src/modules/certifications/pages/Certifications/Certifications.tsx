@@ -73,18 +73,26 @@ export const Certifications: React.FC<
 
     if (keyword) {
       const query = keyword?.trim()
+      const words = query
+        .split(' ')
+        .filter(w => Boolean(w))
+        .map(w => w.trim())
+
+      console.log('words', words)
 
       const ilike = { _ilike: `%${query}%` }
+
       conditions.push({
         _or: [
           {
             profile: {
-              _or: [
-                { fullName: ilike },
-                { familyName: ilike },
-                { translatedFamilyName: ilike },
-                { translatedGivenName: ilike },
-              ],
+              _and: words.map(w => ({
+                _or: [
+                  { fullName: { _ilike: `%${w}%` } },
+                  { translatedFamilyName: { _ilike: `%${w}%` } },
+                  { translatedGivenName: { _ilike: `%${w}%` } },
+                ],
+              })),
             },
           },
           { course: { course_code: ilike } },

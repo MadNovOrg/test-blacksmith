@@ -167,12 +167,33 @@ export function SearchTrainers({
     return ''
   }, [loading, t, query])
 
-  const filterOptionsByNameOrEmail = (options: SearchTrainer[]) =>
-    options.filter(
-      option =>
-        option.fullName?.toLowerCase().includes(query.toLowerCase()) ||
-        option.email?.toLowerCase().includes(query.toLowerCase()),
-    )
+  const filterOptions = (options: SearchTrainer[]) => {
+    const words = query
+      .split(' ')
+      .filter(Boolean)
+      .map(w => w.toLowerCase().trim())
+
+    return options.filter(option => {
+      const concatenatedNames = option.fullName
+        .replace(/\s/g, '')
+        .toLowerCase()
+        .concat(
+          option.translatedFamilyName
+            ? option.translatedFamilyName.replace(/\s/g, '').toLowerCase()
+            : '',
+        )
+        .concat(
+          option.translatedGivenName
+            ? option.translatedGivenName.replace(/\s/g, '').toLowerCase()
+            : '',
+        )
+
+      return (
+        option.email?.toLowerCase().includes(query.toLowerCase()) ||
+        words.every(word => concatenatedNames.includes(word))
+      )
+    })
+  }
 
   return (
     <Autocomplete
@@ -186,7 +207,7 @@ export function SearchTrainers({
       renderOption={renderOption}
       options={options}
       filterSelectedOptions={true}
-      filterOptions={filterOptionsByNameOrEmail}
+      filterOptions={filterOptions}
       getOptionLabel={t => t.fullName ?? ''}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       onChange={onSelected}
