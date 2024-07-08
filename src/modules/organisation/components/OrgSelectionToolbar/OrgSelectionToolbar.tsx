@@ -20,6 +20,7 @@ import { useDebounce } from 'use-debounce'
 import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { useAuth } from '@app/context/auth'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import { RoleName } from '@app/types'
 
 import useOrganisationByName from '../../hooks/useOrganisationByName'
 
@@ -58,7 +59,14 @@ export const OrgSelectionToolbar: React.FC<
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 
+  const contact = useMemo(() => {
+    if (acl.isBookingContact()) return RoleName.BOOKING_CONTACT
+    if (acl.isOrgKeyContact()) return RoleName.ORGANIZATION_KEY_CONTACT
+  }, [acl])
+
   const { data } = useOrgV2({
+    contact,
+    profileEmail: profile?.email,
     profileId: profile?.id,
     shallow: true,
     showAll: acl.canViewAllOrganizations(),

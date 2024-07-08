@@ -1,5 +1,5 @@
 import { Alert, CircularProgress, Container, Stack } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -9,41 +9,66 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
-import { ManageContactRoleCourses } from '@app/pages/user-pages/MyCourses/ManageContactRoleCourses'
+import {
+  ManageContactRoleCourses,
+  ManageContactRoleCoursesProps,
+} from '@app/pages/user-pages/MyCourses/ManageContactRoleCourses'
 import { RoleName } from '@app/types'
 
 export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { orgId: id } = useParams()
-  const { profile, acl, activeRole } = useAuth()
+  const { profile, acl } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
   const orgId = id ?? undefined
 
+  const contact = useMemo(() => {
+    if (acl.isBookingContact()) return RoleName.BOOKING_CONTACT
+    if (acl.isOrgKeyContact()) return RoleName.ORGANIZATION_KEY_CONTACT
+  }, [acl])
+
   const { data: allOrgs } = useOrgV2({
+    contact,
+    profileEmail: profile?.email,
     profileId: profile?.id,
-    showAll: acl.canViewAllOrganizations(),
     shallow: true,
+    showAll: acl.canViewAllOrganizations(),
   })
   const { data, fetching, error } = useOrgV2({
+    contact,
     orgId,
     profileId: profile?.id,
-    showAll: acl.canViewAllOrganizations(),
     shallow: true,
+    showAll: acl.canViewAllOrganizations(),
   })
-  const navigateToOrgCourses =
-    allOrgs &&
-    allOrgs.orgs.length === 1 &&
-    activeRole &&
-    ![RoleName.BOOKING_CONTACT, RoleName.ORGANIZATION_KEY_CONTACT].includes(
-      activeRole,
-    )
+  const navigateToOrgCourses = allOrgs && allOrgs.orgs.length === 1
 
   useEffect(() => {
     if (navigateToOrgCourses) {
       navigate('/manage-courses/' + allOrgs.orgs[0].id)
     }
   }, [allOrgs, navigate, navigateToOrgCourses])
+
+  const manageCoursesComponent = useMemo(() => {
+    if (!contact)
+      return (
+        <TrainerCourses
+          title={t('courses')}
+          orgId={orgId}
+          showAvailableCoursesButton={true}
+        />
+      )
+
+    const contactManageCoursesProps: ManageContactRoleCoursesProps = {
+      orgId,
+      ...(acl.isBookingContact()
+        ? { isBookingContact: true }
+        : { isOrgKeyContact: true }),
+    }
+
+    return <ManageContactRoleCourses {...contactManageCoursesProps} />
+  }, [acl, contact, orgId, t])
 
   return (
     <FullHeightPageLayout pb={3}>
@@ -70,19 +95,7 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
               </Alert>
             ) : null}
 
-            {data && !fetching && !error ? (
-              acl.isBookingContact() ? (
-                <ManageContactRoleCourses isBookingContact={true} />
-              ) : acl.isOrgKeyContact() ? (
-                <ManageContactRoleCourses isOrgKeyContact={true} />
-              ) : (
-                <TrainerCourses
-                  title={t('courses')}
-                  orgId={orgId}
-                  showAvailableCoursesButton={true}
-                />
-              )
-            ) : null}
+            {data && !fetching && !error ? manageCoursesComponent : null}
           </Container>
         )}
       </>

@@ -13,14 +13,15 @@ import { FilterDrawer } from './Components/FilterDrawer'
 import { Filters } from './Components/Filters'
 import { useUserCourses, CoursesFilters } from './hooks/useUserCourses'
 
-type ManageContactRoleCoursesProps = {
-  isOrgKeyContact?: boolean
+export type ManageContactRoleCoursesProps = {
   isBookingContact?: boolean
+  isOrgKeyContact?: boolean
+  orgId?: string
 }
 
 export const ManageContactRoleCourses: React.FC<
   React.PropsWithChildren<ManageContactRoleCoursesProps>
-> = ({ isOrgKeyContact, isBookingContact }) => {
+> = ({ isOrgKeyContact, isBookingContact, orgId }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -41,7 +42,7 @@ export const ManageContactRoleCourses: React.FC<
       perPage,
       currentPage,
     },
-    undefined,
+    orgId,
     isBookingContact,
     isOrgKeyContact,
   )
@@ -57,9 +58,9 @@ export const ManageContactRoleCourses: React.FC<
   )
 
   const filtered = Boolean(
-    filters?.keyword ||
-      filters?.statuses?.length ||
-      filters?.levels?.length ||
+    filters?.keyword ??
+      filters?.statuses?.length ??
+      filters?.levels?.length ??
       !isDateEmpty,
   )
 

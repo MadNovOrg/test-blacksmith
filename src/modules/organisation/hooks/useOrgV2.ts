@@ -2,8 +2,10 @@ import { useMemo } from 'react'
 import { gql, useQuery } from 'urql'
 
 import {
+  Course_Type_Enum,
   GetOrganisationDetailsQuery,
   GetOrganisationDetailsQueryVariables,
+  Organization_Bool_Exp,
 } from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
 import {
@@ -11,7 +13,9 @@ import {
   ORGANIZATION,
   ESTABLISHMENT,
 } from '@app/queries/fragments'
+import { RoleName } from '@app/types'
 import { ALL_ORGS } from '@app/util'
+
 export const GET_ORGANISATION_DETAILS_QUERY = gql`
   ${SHALLOW_ORGANIZATION}
   ${ORGANIZATION}
@@ -77,56 +81,97 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
   }
 `
 type UseOrgV2Input = {
-  orgId?: string
-  shallow?: boolean
-  showAll?: boolean
-  profileId?: string
+  contact?: RoleName.BOOKING_CONTACT | RoleName.ORGANIZATION_KEY_CONTACT
   limit?: number
   offset?: number
-  specificOrgId?: string
-  withSpecificOrganisation?: boolean
-  where?: Record<string, unknown>
+  orgId?: string
+  profileEmail?: string
+  profileId?: string
+  shallow?: boolean
+  showAll?: boolean
   sorting?: Sorting
-  withMembers?: boolean
+  specificOrgId?: string
+  where?: Record<string, unknown>
   withAggregateData?: boolean
+  withMembers?: boolean
+  withSpecificOrganisation?: boolean
   withDfEEstablishment?: boolean
 }
 
 export default function useOrgV2({
-  orgId = ALL_ORGS,
-  shallow = false,
-  showAll,
-  profileId,
+  contact,
   limit = 24,
   offset,
-  specificOrgId,
-  withSpecificOrganisation,
-  where,
+  orgId = ALL_ORGS,
+  profileEmail,
+  profileId,
+  shallow = false,
+  showAll,
   sorting,
-  withMembers = false,
+  specificOrgId,
+  where,
   withAggregateData = false,
+  withMembers = false,
+  withSpecificOrganisation,
   withDfEEstablishment = false,
 }: UseOrgV2Input) {
-  let conditions
+  let conditions: Organization_Bool_Exp = {}
   if (orgId !== ALL_ORGS) {
     conditions = { id: { _eq: orgId } }
   } else {
     withAggregateData = false
 
-    conditions = showAll
-      ? {}
-      : {
-          members: {
-            _and: [
-              {
-                profile_id: {
-                  _eq: profileId,
-                },
+    if (showAll) {
+      conditions = {}
+    } else if (!contact) {
+      conditions = {
+        members: {
+          _and: [
+            {
+              profile_id: {
+                _eq: profileId,
               },
-              { isAdmin: { _eq: true } },
-            ],
-          },
-        }
+            },
+            { isAdmin: { _eq: true } },
+          ],
+        },
+      }
+    } else {
+      switch (contact) {
+        case RoleName.BOOKING_CONTACT:
+          conditions = {
+            organization_courses: {
+              _or: [
+                { bookingContact: { id: { _eq: profileId } } },
+                {
+                  _and: [
+                    { type: { _eq: Course_Type_Enum.Open } },
+                    {
+                      participants: {
+                        order: {
+                          bookingContact: {
+                            _contains: {
+                              email: profileEmail,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          }
+          break
+        case RoleName.ORGANIZATION_KEY_CONTACT:
+          conditions = {
+            organization_courses: {
+              organizationKeyContact: { id: { _eq: profileId } },
+            },
+          }
+          break
+      }
+    }
   }
 
   const orderBy = sorting ? { [sorting.by]: sorting.dir } : undefined

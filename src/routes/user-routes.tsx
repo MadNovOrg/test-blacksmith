@@ -96,26 +96,31 @@ const UserRoutes = () => {
 
       {acl.isBookingContact() || acl.isOrgKeyContact() ? (
         <Route path="manage-courses">
-          <Route index element={<ManageCourses />} />
-          <Route path=":id">
-            <Route
-              path="details"
-              element={<CourseDetails bookingOnly={true} />}
-            />
-            <Route path="evaluation">
-              <Route path="summary" element={<EvaluationSummary />} />
-            </Route>
+          <Route index element={<Navigate replace to="all" />} />
 
-            {acl.isBookingContact() ? (
+          <Route path=":orgId">
+            <Route index element={<ManageCourses />} />
+
+            <Route path=":id">
               <Route
-                path="transfer/:participantId"
-                element={<UserTransferParticipant />}
-              >
-                <Route index element={<ChooseTransferCourse />} />
-                <Route path="details" element={<TransferDetails />} />
-                <Route path="review" element={<TransferReview />} />
+                path="details"
+                element={<CourseDetails bookingOnly={true} />}
+              />
+              <Route path="evaluation">
+                <Route path="summary" element={<EvaluationSummary />} />
               </Route>
-            ) : null}
+
+              {acl.isBookingContact() ? (
+                <Route
+                  path="transfer/:participantId"
+                  element={<UserTransferParticipant />}
+                >
+                  <Route index element={<ChooseTransferCourse />} />
+                  <Route path="details" element={<TransferDetails />} />
+                  <Route path="review" element={<TransferReview />} />
+                </Route>
+              ) : null}
+            </Route>
           </Route>
         </Route>
       ) : null}

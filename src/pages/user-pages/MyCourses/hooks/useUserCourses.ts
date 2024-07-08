@@ -162,8 +162,11 @@ export function useUserCourses(
     }, [bookingContactOnly, forContactRole, profile?.id, unevaluatedIds])
 
   const where = useMemo(() => {
-    let userConditions: Course_Bool_Exp = bookingContactOnly
-      ? {
+    let userConditions: Course_Bool_Exp = {}
+
+    switch (true) {
+      case bookingContactOnly:
+        userConditions = {
           _or: [
             { bookingContact: { id: { _eq: profile?.id } } },
             {
@@ -184,15 +187,21 @@ export function useUserCourses(
             },
           ],
         }
-      : orgKeyContactOnly
-      ? { organizationKeyContact: { id: { _eq: profile?.id } } }
-      : {
+        break
+      case orgKeyContactOnly:
+        userConditions = {
+          organizationKeyContact: { id: { _eq: profile?.id } },
+        }
+        break
+      default:
+        userConditions = {
           participants: { profile_id: { _eq: profile?.id } },
         }
+    }
 
     let filterConditions: Course_Bool_Exp = {}
     // if orgId is defined then provide all available courses within that org, only if I have an admin role
-    if (orgId) {
+    if (orgId && !bookingContactOnly && !orgKeyContactOnly) {
       const allAvailableOrgs = {}
       const onlyUserOrgs = acl.isOrgAdmin()
         ? { organization: { id: { _in: organizationIds } } }
@@ -202,6 +211,12 @@ export function useUserCourses(
         userConditions = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
       } else {
         userConditions = specificOrg
+      }
+    } else if (orgId) {
+      if (orgId !== ALL_ORGS) {
+        userConditions = deepmerge(userConditions, {
+          organization: { id: { _eq: orgId } },
+        })
       }
     }
 
