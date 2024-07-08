@@ -341,28 +341,28 @@ export const useCourseCreationFormSchema = ({
           parkingInstructions: yup.string().nullable().default(''),
           ...(isClosedCourse && mandatoryCourseMaterialsCostEnabled
             ? {
-                mandatoryCourseMaterials: yup
+                freeCourseMaterials: yup
                   .number()
                   .typeError(
                     t(
-                      'components.course-form.mandatory-course-materials.errors.is-required',
+                      'components.course-form.free-course-materials.errors.is-required',
                     ),
                   )
                   .required(
                     t(
-                      'components.course-form.mandatory-course-materials.errors.is-required',
+                      'components.course-form.free-course-materials.errors.is-required',
                     ),
                   )
                   .min(
                     0,
                     t(
-                      'components.course-form.mandatory-course-materials.errors.is-negative',
+                      'components.course-form.free-course-materials.errors.is-negative',
                     ),
                   )
                   .max(
                     yup.ref('maxParticipants', {}),
                     t(
-                      `components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-${
+                      `components.course-form.free-course-materials.errors.more-fcm-than-attendees-${
                         isCreation ? 'create' : 'edit'
                       }`,
                     ),
@@ -497,7 +497,7 @@ export const useCourseCreationFormSchema = ({
         : '17:00',
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
-      mandatoryCourseMaterials: courseInput?.mandatoryCourseMaterials ?? null,
+      freeCourseMaterials: courseInput?.freeCourseMaterials ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
       usesAOL: courseInput?.usesAOL ?? false,
       aolCountry:
@@ -543,10 +543,11 @@ export const useCourseCreationFormSchema = ({
       courseInput?.endDateTime,
       courseInput?.minParticipants,
       courseInput?.maxParticipants,
-      courseInput?.mandatoryCourseMaterials,
+      courseInput?.freeCourseMaterials,
       courseInput?.freeSpaces,
       courseInput?.usesAOL,
       courseInput?.aolCountry,
+      courseInput?.residingCountry,
       courseInput?.aolRegion,
       courseInput?.courseCost,
       courseInput?.accountCode,
@@ -560,12 +561,11 @@ export const useCourseCreationFormSchema = ({
       courseInput?.timeZone,
       courseInput?.includeVAT,
       courseInput?.renewalCycle,
-      courseInput?.residingCountry,
+      residingCountry,
       courseType,
       isCreation,
       isCourseInUK,
       isResidingCountryEnabled,
-      residingCountry,
     ],
   )
 

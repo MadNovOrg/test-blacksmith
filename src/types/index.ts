@@ -43,7 +43,7 @@ export type Course = {
   course_code: string
   min_participants: number
   max_participants: number
-  mandatory_course_materials?: number
+  free_course_materials?: number
   status: Course_Status_Enum
   reaccreditation: boolean
   organization?: Organization
@@ -626,7 +626,7 @@ export type CourseInput = {
   maxParticipants: number | null
   minParticipants: number | null
   organization: Organization | null
-  mandatoryCourseMaterials?: number | null
+  freeCourseMaterials?: number | null
 
   organizationKeyContact: {
     email: string

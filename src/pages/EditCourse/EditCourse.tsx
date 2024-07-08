@@ -463,8 +463,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 : {}),
               ...(mandatoryCourseMaterialsCostEnabled && isClosedCourse
                 ? {
-                    mandatory_course_materials:
-                      courseData.mandatoryCourseMaterials ?? 0,
+                    free_course_materials: courseData.freeCourseMaterials ?? 0,
                   }
                 : {}),
               residingCountry: courseData.residingCountry,

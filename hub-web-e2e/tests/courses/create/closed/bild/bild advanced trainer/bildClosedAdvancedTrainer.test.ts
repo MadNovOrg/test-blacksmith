@@ -87,7 +87,7 @@ allowedUsers.forEach(allowedUser => {
           level: Course_Level_Enum.BildAdvancedTrainer,
           accreditedBy: Accreditors_Enum.Bild,
           freeSpaces: 1,
-          mandatoryCourseMaterials: 10,
+          freeCourseMaterials: 10,
           salesRepresentative: users.salesAdmin,
         })
         await API.course.deleteCourse(data.course.id)

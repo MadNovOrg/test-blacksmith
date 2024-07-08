@@ -9,7 +9,6 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
-import { IRELAND_TIMEZONE } from '@qa/constants'
 import { closedCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -124,7 +123,6 @@ allowdUsers.forEach(allowedUser => {
               venue: buildVenue({
                 overrides: { name: 'Ireland Vinayaka Temple' },
               }),
-              timeZone: IRELAND_TIMEZONE,
             },
           ],
           type: Course_Type_Enum.Closed,
@@ -133,7 +131,7 @@ allowdUsers.forEach(allowedUser => {
           bookingContactProfile: users.userOrgAdmin,
           freeSpaces: 1,
           max_participants: 13,
-          mandatoryCourseMaterials: 8,
+          freeCourseMaterials: 8,
           salesRepresentative: users.salesAdmin,
         })
         await API.course.deleteCourse(data.course.id)

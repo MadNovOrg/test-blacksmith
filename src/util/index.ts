@@ -437,7 +437,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     venue: course.schedule[0].venue ?? null,
     minParticipants: course.min_participants,
     maxParticipants: course.max_participants,
-    mandatoryCourseMaterials: course.mandatory_course_materials,
+    freeCourseMaterials: course.free_course_materials,
     startDateTime: timeZoneSchedule.start,
     startDate: timeZoneSchedule.start,
     startTime: extractTime(timeZoneSchedule.start),
@@ -740,6 +740,11 @@ export const getMandatoryCourseMaterialsCost = (
   mandatoryCourseMaterials: number,
   currency: Currency,
 ) => mandatoryCourseMaterials * MCMAmount[currency]
+
+export const getFreeCourseMaterialsCost = (
+  freeCourseMaterials: number,
+  currency: Currency,
+) => freeCourseMaterials * MCMAmount[currency] * -1
 
 export const getTrainerSubsistenceCost = (nights = 0, isUKCountry = true) =>
   isUKCountry ? nights * 30 : 0

@@ -233,7 +233,7 @@ describe('component: CreateCourseForm', () => {
         accreditedBy: Accreditors_Enum.Bild,
         level: Course_Level_Enum.BildRegular,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         max_participants: 10,
         schedule: [
           buildCourseSchedule({
@@ -797,7 +797,7 @@ describe('component: CreateCourseForm', () => {
         level: Course_Level_Enum.BildIntermediateTrainer,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
         organizationKeyContact: undefined,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         max_participants: 10,
         schedule: [
           buildCourseSchedule({
@@ -1033,7 +1033,7 @@ describe('component: CreateCourseForm', () => {
         level: Course_Level_Enum.Level_1,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
         organizationKeyContact: undefined,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         max_participants: 10,
         schedule: [
           buildCourseSchedule({
@@ -1138,7 +1138,7 @@ describe('component: CreateCourseForm', () => {
         accreditedBy: Accreditors_Enum.Icm,
         level: Course_Level_Enum.Level_2,
         go1Integration: true,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         organizationKeyContact: undefined,
         max_participants: 15, // more than 8 participants will take scheduled price
         schedule: [
@@ -1244,7 +1244,7 @@ describe('component: CreateCourseForm', () => {
         accreditedBy: Accreditors_Enum.Icm,
         level: Course_Level_Enum.Level_2,
         go1Integration: true,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         organizationKeyContact: undefined,
         max_participants: 5, // less than 8 participants will have manual price
         schedule: [
@@ -1345,7 +1345,7 @@ describe('component: CreateCourseForm', () => {
         accreditedBy: Accreditors_Enum.Icm,
         level: Course_Level_Enum.Level_2,
         go1Integration: false, // set as NON Blended Learning
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         organizationKeyContact: undefined,
         max_participants: 4, // less than 8 participants will have manual price
         schedule: [
@@ -1535,7 +1535,7 @@ describe('component: CreateCourseForm', () => {
       overrides: {
         type: Course_Type_Enum.Closed,
         accreditedBy: Accreditors_Enum.Icm,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         level: Course_Level_Enum.Level_1,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
         organizationKeyContact: undefined,
@@ -1641,7 +1641,7 @@ describe('component: CreateCourseForm', () => {
         accreditedBy: Accreditors_Enum.Icm,
         level: Course_Level_Enum.Level_2,
         go1Integration: true,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         organizationKeyContact: undefined,
         max_participants: 15, // more than 8 participants will take the scheduled price
         schedule: [

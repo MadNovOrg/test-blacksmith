@@ -36,7 +36,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
       current: { t },
     },
   } = renderHook(() =>
-    useScopedTranslation('components.course-form.mandatory-course-materials'),
+    useScopedTranslation('components.course-form.free-course-materials'),
   )
 
   it('renders mandatory course materials component', async () => {
@@ -92,18 +92,18 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
 
     await userEvent.type(screen.getByTestId('max-attendees'), '5')
     expect(
-      screen.queryByText(t('errors.more-mcm-than-attendees-create')),
+      screen.queryByText(t('errors.more-fcm-than-attendees-create')),
     ).toBeInTheDocument()
   })
 
-  it('free course materials amount is displayed correctly', async () => {
+  it('mandatory course materials amount is displayed correctly', async () => {
     renderForm(
       Course_Type_Enum.Closed,
       Course_Level_Enum.AdvancedTrainer,
       RoleName.TT_ADMIN,
     )
     const maxAttendees = 5
-    const mandatoryCourseMaterials = 2
+    const freeCourseMaterials = 2
 
     await userEvent.type(
       screen.getByLabelText('Number of attendees', { exact: false }),
@@ -111,11 +111,13 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     )
     await userEvent.type(
       screen.getByLabelText('Materials', { exact: false }),
-      mandatoryCourseMaterials.toString(),
+      freeCourseMaterials.toString(),
     )
-    expect(screen.getByTestId('free-course-materials').textContent).toEqual(
-      t('amount-of-free-mcm', {
-        count: maxAttendees - mandatoryCourseMaterials,
+    expect(
+      screen.getByTestId('mandatory-course-materials').textContent,
+    ).toEqual(
+      t('amount-of-mandatory-mcm', {
+        count: maxAttendees - freeCourseMaterials,
       }),
     )
   })
@@ -127,7 +129,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         accreditedBy: Accreditors_Enum.Icm,
         type,
         priceCurrency: Currency.Gbp,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         includeVAT: true,
       },
     })
@@ -177,7 +179,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         accreditedBy: Accreditors_Enum.Icm,
         type,
         priceCurrency: Currency.Eur,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         includeVAT: true,
       },
     })
@@ -227,7 +229,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         accreditedBy: Accreditors_Enum.Icm,
         type,
         priceCurrency: Currency.Usd,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         includeVAT: true,
       },
     })
@@ -277,7 +279,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         accreditedBy: Accreditors_Enum.Icm,
         type,
         priceCurrency: Currency.Nzd,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         includeVAT: true,
       },
     })
@@ -327,7 +329,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         accreditedBy: Accreditors_Enum.Icm,
         type,
         priceCurrency: Currency.Aud,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         includeVAT: true,
       },
     })

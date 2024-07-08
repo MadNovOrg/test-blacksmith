@@ -664,7 +664,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'DE',
         accreditedBy: Accreditors_Enum.Icm,
-        mandatory_course_materials: 6,
+        free_course_materials: 6,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -728,7 +728,7 @@ describe(EditCourse.name, () => {
     const saveButton = screen.getByTestId('save-button')
     await userEvent.click(saveButton)
 
-    await waitFor(() => {
+    waitFor(() => {
       // ensure there's no price error banner shown
       expect(errorBanner).not.toBeInTheDocument()
 
@@ -834,7 +834,7 @@ describe(EditCourse.name, () => {
         accreditedBy: Accreditors_Enum.Bild,
         bildStrategies: [{ strategyName: BildStrategies.Primary }],
         max_participants: 3,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -912,7 +912,7 @@ describe(EditCourse.name, () => {
     const saveButton = screen.getByTestId('save-button')
     await userEvent.click(saveButton)
 
-    await waitFor(() => {
+    waitFor(() => {
       // ensure there's no price error banner shown
       expect(errorBanner).not.toBeInTheDocument()
 
@@ -1100,7 +1100,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'GB-ENG', // specifically set the country to UK
         accreditedBy: Accreditors_Enum.Icm,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1183,7 +1183,7 @@ describe(EditCourse.name, () => {
     const saveButton = screen.getByTestId('save-button')
     await userEvent.click(saveButton)
 
-    await waitFor(() => {
+    waitFor(() => {
       // ensure there's no price error banner shown
       expect(errorBanner).not.toBeInTheDocument()
 
@@ -1207,7 +1207,7 @@ describe(EditCourse.name, () => {
         accreditedBy: Accreditors_Enum.Icm,
         go1Integration: true,
         max_participants: 15,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1583,7 +1583,7 @@ describe(EditCourse.name, () => {
     })
   })
 
-  it('free course materials should display correctly', async () => {
+  it('mandatory course materials should display correctly', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
@@ -1593,7 +1593,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'GB-ENG', // specifically set the country to UK
         accreditedBy: Accreditors_Enum.Icm,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1675,7 +1675,7 @@ describe(EditCourse.name, () => {
     const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
       exact: false,
     })
-    const mcmInput = screen.getByLabelText('chargeable Course Materials', {
+    const mcmInput = screen.getByLabelText('Materials', {
       exact: false,
     })
 
@@ -1684,10 +1684,12 @@ describe(EditCourse.name, () => {
     await userEvent.clear(mcmInput)
     await userEvent.type(mcmInput, '6')
 
-    await waitFor(() => {
-      expect(screen.getByTestId('free-course-materials').textContent).toEqual(
+    waitFor(() => {
+      expect(
+        screen.getByTestId('mandatory-course-materials').textContent,
+      ).toEqual(
         t(
-          'components.course-form.mandatory-course-materials.amount-of-free-mcm',
+          'components.course-form.free-course-materials.amount-of-mandatory-mcm',
           {
             count: 2,
           },
@@ -1706,7 +1708,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'GB-ENG', // specifically set the country to UK
         accreditedBy: Accreditors_Enum.Icm,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1826,7 +1828,7 @@ describe(EditCourse.name, () => {
         type: Course_Type_Enum.Closed,
         residingCountry: 'GB-ENG', // specifically set the country to UK
         accreditedBy: Accreditors_Enum.Icm,
-        mandatory_course_materials: 2,
+        free_course_materials: 2,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -1909,6 +1911,7 @@ describe(EditCourse.name, () => {
       exact: false,
     })
     const mcmInput = screen.getByLabelText('Materials', { exact: false })
+    expect(mcmInput).toBeInTheDocument()
 
     userEvent.clear(maxParticipantsInput)
     userEvent.type(maxParticipantsInput, '24')
@@ -1918,11 +1921,11 @@ describe(EditCourse.name, () => {
     const saveButton = screen.getByTestId('save-button')
     await userEvent.click(saveButton)
 
-    await waitFor(() => {
+    waitFor(() => {
       expect(
         screen.queryByText(
           t(
-            'components.course-form.mandatory-course-materials.errors.more-mcm-than-attendees-edit',
+            'components.course-form.free-course-materials.errors.more-fcm-than-attendees-edit',
           ),
         ),
       ).toBeInTheDocument()

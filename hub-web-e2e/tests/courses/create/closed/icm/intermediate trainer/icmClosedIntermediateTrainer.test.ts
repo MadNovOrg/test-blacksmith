@@ -46,7 +46,7 @@ allowdUsers.forEach(allowedUser => {
           bookingContactProfile: users.userOrgAdmin,
           freeSpaces: 1,
           max_participants: 13,
-          mandatoryCourseMaterials: 8,
+          freeCourseMaterials: 8,
           salesRepresentative: users.salesAdmin,
         })
         await API.course.deleteCourse(data.course.id)

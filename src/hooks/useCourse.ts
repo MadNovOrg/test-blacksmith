@@ -44,7 +44,7 @@ export default function useCourse(courseId: string): {
         acl.isInternalUser() || acl.isOrgAdmin() || acl.isTrainer(),
       withInternationalFinance:
         acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
-      withMandatoryCourseMaterials: mandatoryCourseMaterialsCostEnabled,
+      withFreeCourseCourseMaterials: mandatoryCourseMaterialsCostEnabled,
     },
   })
 

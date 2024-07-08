@@ -47,8 +47,8 @@ export class CreateCoursePage extends BasePage {
   readonly endTimeInput: Locator
   readonly minAttendeesInput: Locator
   readonly maxAttendeesInput: Locator
-  readonly mandatoryCourseMaterialsInput: Locator
-  readonly freeCourseMaterialsLabel: Locator
+  readonly mandatoryCourseMaterialsLabel: Locator
+  readonly freeCourseMaterialsInput: Locator
   readonly acknowledgeCheckboxes: Locator
   readonly nextPageButton: Locator
   readonly exceptionsConfirmButton: Locator
@@ -133,11 +133,11 @@ export class CreateCoursePage extends BasePage {
     this.maxAttendeesInput = this.page.locator(
       '[data-testid="max-attendees"] input',
     )
-    this.mandatoryCourseMaterialsInput = this.page.locator(
-      '[data-testid="mandatory-course-materials"] input',
+    this.mandatoryCourseMaterialsLabel = this.page.locator(
+      '[data-testid="mandatory-course-materials"]',
     )
-    this.freeCourseMaterialsLabel = this.page.locator(
-      '[data-testid-"free-course-materials"',
+    this.freeCourseMaterialsInput = this.page.locator(
+      '[data-testid="free-course-materials"] input',
     )
     this.acknowledgeCheckboxes = this.page.locator(
       '[data-testid="acknowledge-checks"] input',
@@ -299,8 +299,8 @@ export class CreateCoursePage extends BasePage {
     await this.maxAttendeesInput.fill(value.toString())
   }
 
-  async setMandatoryCourseMaterials(value: number) {
-    await this.mandatoryCourseMaterialsInput.fill(value.toString())
+  async setFreeCourseMaterials(value: number) {
+    await this.freeCourseMaterialsInput.fill(value.toString())
   }
   async setPricePerAttendee() {
     await this.priceInput.click()
@@ -439,11 +439,8 @@ export class CreateCoursePage extends BasePage {
     }
 
     await this.setMaxAttendees(course.max_participants)
-    if (
-      course.type === Course_Type_Enum.Closed &&
-      course.mandatoryCourseMaterials
-    ) {
-      await this.setMandatoryCourseMaterials(course.mandatoryCourseMaterials)
+    if (course.type === Course_Type_Enum.Closed && course.freeCourseMaterials) {
+      await this.setFreeCourseMaterials(course.freeCourseMaterials)
     }
     if (course.type === Course_Type_Enum.Indirect) {
       await this.checkAcknowledgeCheckboxes()

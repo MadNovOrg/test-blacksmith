@@ -15553,6 +15553,7 @@ export type Course = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
+  free_course_materials?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   gradingConfirmed: Scalars['Boolean'];
   gradingStarted: Scalars['Boolean'];
@@ -15560,7 +15561,6 @@ export type Course = {
   includeVAT?: Maybe<Scalars['Boolean']>;
   isDraft?: Maybe<Scalars['Boolean']>;
   level: Course_Level_Enum;
-  mandatory_course_materials?: Maybe<Scalars['Int']>;
   max_participants: Scalars['Int'];
   min_participants: Scalars['Int'];
   /** An array relationship */
@@ -16496,8 +16496,8 @@ export type Course_Avg_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -16509,8 +16509,8 @@ export type Course_Avg_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -17191,6 +17191,7 @@ export type Course_Bool_Exp = {
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Bool_Exp>;
   freeSlots?: InputMaybe<Int_Comparison_Exp>;
   freeSpaces?: InputMaybe<Int_Comparison_Exp>;
+  free_course_materials?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
   gradingStarted?: InputMaybe<Boolean_Comparison_Exp>;
@@ -17198,7 +17199,6 @@ export type Course_Bool_Exp = {
   includeVAT?: InputMaybe<Boolean_Comparison_Exp>;
   isDraft?: InputMaybe<Boolean_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
-  mandatory_course_materials?: InputMaybe<Int_Comparison_Exp>;
   max_participants?: InputMaybe<Int_Comparison_Exp>;
   min_participants?: InputMaybe<Int_Comparison_Exp>;
   modules?: InputMaybe<Course_Module_Bool_Exp>;
@@ -21542,8 +21542,8 @@ export type Course_Inc_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   cancellationFee?: InputMaybe<Scalars['Float']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
+  free_course_materials?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
-  mandatory_course_materials?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
@@ -21583,6 +21583,7 @@ export type Course_Insert_Input = {
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   expenses?: InputMaybe<Course_Expenses_Arr_Rel_Insert_Input>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
+  free_course_materials?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   gradingStarted?: InputMaybe<Scalars['Boolean']>;
@@ -21590,7 +21591,6 @@ export type Course_Insert_Input = {
   includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
-  mandatory_course_materials?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
   modules?: InputMaybe<Course_Module_Arr_Rel_Insert_Input>;
@@ -22369,8 +22369,8 @@ export type Course_Max_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
+  free_course_materials?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
-  mandatory_course_materials?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
   modulesDuration?: Maybe<Scalars['Int']>;
@@ -22405,8 +22405,8 @@ export type Course_Max_Order_By = {
   description?: InputMaybe<Order_By>;
   end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -22442,8 +22442,8 @@ export type Course_Min_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
+  free_course_materials?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
-  mandatory_course_materials?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
   modulesDuration?: Maybe<Scalars['Int']>;
@@ -22478,8 +22478,8 @@ export type Course_Min_Order_By = {
   description?: InputMaybe<Order_By>;
   end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -23023,6 +23023,7 @@ export type Course_Order_By = {
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Order_By>;
   freeSlots?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   go1Integration?: InputMaybe<Order_By>;
   gradingConfirmed?: InputMaybe<Order_By>;
   gradingStarted?: InputMaybe<Order_By>;
@@ -23030,7 +23031,6 @@ export type Course_Order_By = {
   includeVAT?: InputMaybe<Order_By>;
   isDraft?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -27487,6 +27487,8 @@ export enum Course_Select_Column {
   /** column name */
   FreeSpaces = 'freeSpaces',
   /** column name */
+  FreeCourseMaterials = 'free_course_materials',
+  /** column name */
   Go1Integration = 'go1Integration',
   /** column name */
   GradingConfirmed = 'gradingConfirmed',
@@ -27500,8 +27502,6 @@ export enum Course_Select_Column {
   IsDraft = 'isDraft',
   /** column name */
   Level = 'level',
-  /** column name */
-  MandatoryCourseMaterials = 'mandatory_course_materials',
   /** column name */
   MaxParticipants = 'max_participants',
   /** column name */
@@ -27609,6 +27609,7 @@ export type Course_Set_Input = {
   end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
+  free_course_materials?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   gradingStarted?: InputMaybe<Scalars['Boolean']>;
@@ -27616,7 +27617,6 @@ export type Course_Set_Input = {
   includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
-  mandatory_course_materials?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
@@ -27947,8 +27947,8 @@ export type Course_Stddev_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -27960,8 +27960,8 @@ export type Course_Stddev_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -27976,8 +27976,8 @@ export type Course_Stddev_Pop_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -27989,8 +27989,8 @@ export type Course_Stddev_Pop_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -28005,8 +28005,8 @@ export type Course_Stddev_Samp_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -28018,8 +28018,8 @@ export type Course_Stddev_Samp_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -28057,6 +28057,7 @@ export type Course_Stream_Cursor_Value_Input = {
   end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
+  free_course_materials?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   gradingStarted?: InputMaybe<Scalars['Boolean']>;
@@ -28064,7 +28065,6 @@ export type Course_Stream_Cursor_Value_Input = {
   includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
-  mandatory_course_materials?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
   modulesDuration?: InputMaybe<Scalars['Int']>;
@@ -28094,8 +28094,8 @@ export type Course_Sum_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
+  free_course_materials?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
-  mandatory_course_materials?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
   modulesDuration?: Maybe<Scalars['Int']>;
@@ -28107,8 +28107,8 @@ export type Course_Sum_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -28914,6 +28914,8 @@ export enum Course_Update_Column {
   /** column name */
   FreeSpaces = 'freeSpaces',
   /** column name */
+  FreeCourseMaterials = 'free_course_materials',
+  /** column name */
   Go1Integration = 'go1Integration',
   /** column name */
   GradingConfirmed = 'gradingConfirmed',
@@ -28927,8 +28929,6 @@ export enum Course_Update_Column {
   IsDraft = 'isDraft',
   /** column name */
   Level = 'level',
-  /** column name */
-  MandatoryCourseMaterials = 'mandatory_course_materials',
   /** column name */
   MaxParticipants = 'max_participants',
   /** column name */
@@ -28996,8 +28996,8 @@ export type Course_Var_Pop_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -29009,8 +29009,8 @@ export type Course_Var_Pop_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -29025,8 +29025,8 @@ export type Course_Var_Samp_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -29038,8 +29038,8 @@ export type Course_Var_Samp_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;
@@ -29054,8 +29054,8 @@ export type Course_Variance_Fields = {
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Float']>;
+  free_course_materials?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
-  mandatory_course_materials?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
   modulesDuration?: Maybe<Scalars['Float']>;
@@ -29067,8 +29067,8 @@ export type Course_Variance_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   cancellationFee?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
+  free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  mandatory_course_materials?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modulesDuration?: InputMaybe<Order_By>;

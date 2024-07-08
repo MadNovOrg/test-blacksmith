@@ -16,7 +16,7 @@ type Props = {
 
 export const CourseMaterialsSection = ({ isCreation }: Props) => {
   const { t } = useScopedTranslation(
-    'components.course-form.mandatory-course-materials',
+    'components.course-form.free-course-materials',
   )
   const {
     register,
@@ -24,35 +24,32 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
     setValue,
     formState: { errors },
   } = useFormContext<CourseInput>()
-  const [maxParticipants, mandatoryCourseMaterials, priceCurrency] = useWatch({
+  const [maxParticipants, freeCourseMaterials, priceCurrency] = useWatch({
     control,
-    name: ['maxParticipants', 'mandatoryCourseMaterials', 'priceCurrency'],
+    name: ['maxParticipants', 'freeCourseMaterials', 'priceCurrency'],
   })
 
   const [enableEditMCM, setEnableEditMCM] = useState(isCreation)
   const initialMaxParticipants = useRef(maxParticipants)
-  const initialMandatoryCourseMaterials = useRef(mandatoryCourseMaterials)
+  const initialFreeCourseMaterials = useRef(freeCourseMaterials)
   const courseCurrency = (priceCurrency as Currency) ?? Currency.Gbp
 
   useEffect(() => {
     if (!isCreation) {
       if (maxParticipants === initialMaxParticipants.current) {
         setEnableEditMCM(false)
-        setValue(
-          'mandatoryCourseMaterials',
-          initialMandatoryCourseMaterials.current,
-        )
+        setValue('freeCourseMaterials', initialFreeCourseMaterials.current)
       } else {
         setEnableEditMCM(true)
       }
     }
   }, [isCreation, maxParticipants, setValue])
 
-  const freeMaterials =
+  const mandatoryCourseMaterials =
     isNotNullish(maxParticipants) &&
-    isNotNullish(mandatoryCourseMaterials) &&
-    mandatoryCourseMaterials >= 0
-      ? maxParticipants - mandatoryCourseMaterials
+    isNotNullish(freeCourseMaterials) &&
+    freeCourseMaterials >= 0
+      ? maxParticipants - freeCourseMaterials
       : 0
 
   return (
@@ -77,16 +74,16 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
           <Grid item md={12} sm={12}>
             <NumericTextField
               required
-              {...register('mandatoryCourseMaterials', {
+              {...register('freeCourseMaterials', {
                 valueAsNumber: true,
               })}
               label={t('placeholder-description')}
               variant="filled"
               fullWidth
-              error={Boolean(errors.mandatoryCourseMaterials)}
-              helperText={errors.mandatoryCourseMaterials?.message}
+              error={Boolean(errors.freeCourseMaterials)}
+              helperText={errors.freeCourseMaterials?.message}
               inputProps={{ min: 1 }}
-              data-testid="mandatory-course-materials"
+              data-testid="free-course-materials"
               disabled={!enableEditMCM}
             />
           </Grid>
@@ -96,10 +93,11 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
           <Typography
             fontWeight={600}
             ml={1}
-            data-testid="free-course-materials"
+            data-testid="mandatory-course-materials"
           >
-            {t('amount-of-free-mcm', {
-              count: freeMaterials > 0 ? freeMaterials : 0,
+            {t('amount-of-mandatory-mcm', {
+              count:
+                mandatoryCourseMaterials > 0 ? mandatoryCourseMaterials : 0,
             })}
           </Typography>
         </Box>

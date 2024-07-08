@@ -238,7 +238,7 @@ describe('component: ReviewAndConfirm', () => {
     const freeSpacesDiscount = PRICING_PER_PARTICIPANT * courseData.freeSpaces
     const coursePricing = courseData.price * courseData.maxParticipants
     const mandatoryCourseCost = getMandatoryCourseMaterialsCost(
-      courseData.mandatoryCourseMaterials ?? 0,
+      courseData.freeCourseMaterials ?? 0,
       Currency.Gbp,
     )
     const subtotal =

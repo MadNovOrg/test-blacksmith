@@ -132,17 +132,17 @@
     "min-attendees-placeholder": "Minimum",
     "max-attendees-placeholder": "Maximum",
     "num-attendees-placeholder": "Number of attendees",
-    "mandatory-course-materials": {
+    "free-course-materials": {
       "section-title": "Course Materials",
-      "panel-title": "Mandatory Course Materials",
-      "panel-description": "All attendees will receive course materials: however, additional {{mcmAmount}} will be charged per person. Please enter the amount of chargeable course materials you wish to charge the organisation.",
-      "placeholder-description": "Number of chargeable Course Materials",
-      "amount-of-free-mcm": "Free Course Materials: {{count}}",
+      "panel-title": "Number of free Mandatory Course Materials",
+      "panel-description": "All attendees will receive course materials: however, additional {{mcmAmount}} will be charged per person. Please enter the amount of free course materials you wish the organisation not to be charged for.",
+      "placeholder-description": "Number of free Mandatory Course Materials",
+      "amount-of-mandatory-mcm": "Chargeable Mandatory Course Materials: {{count}}",
       "errors": {
-        "is-required": "Mandatory Course Materials must have a value that is less than or equal to the number of attendees",
-        "is-negative": "Mandatory Course Materials value cannot be negative",
-        "more-mcm-than-attendees-create": "Mandatory Course Materials value should not be greater than the number of attendees",
-        "more-mcm-than-attendees-edit": "Mandatory Course Materials must have a value that is less than or equal to the number of attendees"
+        "is-required": "Number of free Mandatory Course Materials must have a value that is less than or equal to the number of attendees",
+        "is-negative": "Number of free Course Materials value cannot be negative",
+        "more-fcm-than-attendees-create": "Number of free Mandatory Course Materials value should not be greater than the number of attendees",
+        "more-fcm-than-attendees-edit": "Free Mandatory Course Materials must have a value that is less than or equal to the number of attendees"
       }
     },
     "course-level-required": "Course level is required field",

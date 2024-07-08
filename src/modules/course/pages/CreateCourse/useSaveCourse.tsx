@@ -51,7 +51,8 @@ import { getCourseRenewalCycle } from './utils'
 const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>,
   mandatoryCourseMaterialsCostEnabled: boolean,
-  mandatoryCourseMaterials: number,
+  freeCourseMaterials: number,
+  maxParticipants: number,
   currency: CurrencyEnum,
 ): Array<Course_Expenses_Insert_Input> => {
   const courseExpenses: Array<Course_Expenses_Insert_Input> = []
@@ -61,7 +62,7 @@ const prepareExpensesData = (
       data: {
         type: CourseExpenseType.Materials,
         cost: getMandatoryCourseMaterialsCost(
-          mandatoryCourseMaterials ?? 0,
+          maxParticipants - freeCourseMaterials ?? 0,
           currency,
         ),
       },
@@ -353,7 +354,7 @@ export function useSaveCourse(): {
           max_participants: courseData.maxParticipants,
           ...(isClosedCourse && mandatoryCourseMaterialsCostEnabled
             ? {
-                mandatory_course_materials: courseData.mandatoryCourseMaterials,
+                free_course_materials: courseData.freeCourseMaterials,
               }
             : null),
           type: courseData.type,
@@ -436,7 +437,8 @@ export function useSaveCourse(): {
                   data: prepareExpensesData(
                     expenses,
                     mandatoryCourseMaterialsCostEnabled ?? false,
-                    courseData.mandatoryCourseMaterials ?? 0,
+                    courseData.freeCourseMaterials ?? 0,
+                    courseData.maxParticipants ?? 0,
                     (courseData.priceCurrency as CurrencyEnum) ?? Currency.GBP,
                   ),
                 },

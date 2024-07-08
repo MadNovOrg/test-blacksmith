@@ -90,7 +90,7 @@ describe('component: OrderDetails', () => {
           initialValue={{
             courseData: {
               maxParticipants: 10,
-              mandatoryCourseMaterials: 5,
+              freeCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               courseLevel: Course_Level_Enum.Level_1,
@@ -120,11 +120,11 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 10£100.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5-£50.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
@@ -189,7 +189,7 @@ describe('component: OrderDetails', () => {
                 SECONDARY: true,
               },
               maxParticipants: 10,
-              mandatoryCourseMaterials: 5,
+              freeCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               priceCurrency: Currency.Gbp,
@@ -219,11 +219,11 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 10£100.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5-£50.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
@@ -275,7 +275,7 @@ describe('component: OrderDetails', () => {
           initialValue={{
             courseData: {
               maxParticipants: 10,
-              mandatoryCourseMaterials: 5,
+              freeCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               courseLevel: Course_Level_Enum.Level_1,
@@ -305,11 +305,11 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 10£100.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5-£50.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
@@ -378,7 +378,7 @@ describe('component: OrderDetails', () => {
                 SECONDARY: true,
               },
               maxParticipants: 10,
-              mandatoryCourseMaterials: 5,
+              freeCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               priceCurrency: Currency.Gbp,
@@ -408,11 +408,11 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 10£100.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5-£50.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
@@ -458,7 +458,7 @@ describe('component: OrderDetails', () => {
           initialValue={{
             courseData: {
               maxParticipants: 10,
-              mandatoryCourseMaterials: 5,
+              freeCourseMaterials: 5,
               organization: { id: 'org-id' },
               minParticipants: 10,
               priceCurrency: Currency.Gbp,
@@ -488,11 +488,11 @@ describe('component: OrderDetails', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 5£50.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 10£100.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 5£0.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 5-£50.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,

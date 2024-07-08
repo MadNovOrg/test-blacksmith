@@ -13,6 +13,7 @@ import { Accreditors_Enum, Currency } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { TransportMethod } from '@app/types'
 import {
+  getFreeCourseMaterialsCost,
   getMandatoryCourseMaterialsCost,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
@@ -43,25 +44,39 @@ export const OrderDetailsReview: React.FC = () => {
   const courseMaterialsCost = useMemo(() => {
     if (
       mandatoryCourseMaterialsCostEnabled &&
-      courseData?.mandatoryCourseMaterials
+      courseData?.freeCourseMaterials !== null &&
+      courseData?.freeCourseMaterials !== undefined
     ) {
       return getMandatoryCourseMaterialsCost(
-        courseData?.mandatoryCourseMaterials,
+        courseData?.maxParticipants,
         currency as Currency,
       )
     }
     return 0
   }, [
-    courseData?.mandatoryCourseMaterials,
+    courseData?.freeCourseMaterials,
+    courseData?.maxParticipants,
     currency,
     mandatoryCourseMaterialsCostEnabled,
   ])
 
-  const freeCourseMaterials = useMemo(() => {
-    if (courseData?.maxParticipants && courseData?.mandatoryCourseMaterials)
-      return courseData?.maxParticipants - courseData?.mandatoryCourseMaterials
+  const freeCourseMaterialsCost = useMemo(() => {
+    if (
+      mandatoryCourseMaterialsCostEnabled &&
+      courseData?.freeCourseMaterials !== null &&
+      courseData?.freeCourseMaterials !== undefined
+    ) {
+      return getFreeCourseMaterialsCost(
+        courseData?.freeCourseMaterials,
+        currency as Currency,
+      )
+    }
     return 0
-  }, [courseData?.mandatoryCourseMaterials, courseData?.maxParticipants])
+  }, [
+    courseData?.freeCourseMaterials,
+    currency,
+    mandatoryCourseMaterialsCostEnabled,
+  ])
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -148,10 +163,16 @@ export const OrderDetailsReview: React.FC = () => {
         .add(freeSpacesDiscount)
         .add(trainerExpensesTotal)
         .add(courseMaterialsCost)
+        .add(freeCourseMaterialsCost)
 
       const vat = new Big(
         courseData.includeVAT || isUKCountry(courseData?.residingCountry)
-          ? getVatAmount(subtotal.minus(courseMaterialsCost).toNumber())
+          ? getVatAmount(
+              subtotal
+                .minus(courseMaterialsCost)
+                .minus(freeCourseMaterialsCost)
+                .toNumber(),
+            )
           : 0,
       )
       const amountDue = subtotal.add(vat)
@@ -163,7 +184,13 @@ export const OrderDetailsReview: React.FC = () => {
         vat.round().toNumber(),
         amountDue.round().toNumber(),
       ]
-    }, [courseData, trainerExpensesTotal, courseMaterialsCost, isUKCountry])
+    }, [
+      courseData,
+      trainerExpensesTotal,
+      courseMaterialsCost,
+      freeCourseMaterialsCost,
+      isUKCountry,
+    ])
 
   const courseVenue = courseData?.venue
   const locationNameAddressCity = [
@@ -303,7 +330,7 @@ export const OrderDetailsReview: React.FC = () => {
             label={t(
               'pages.create-course.review-and-confirm.mandatory-course-materials',
               {
-                count: courseData?.mandatoryCourseMaterials,
+                count: courseData?.maxParticipants,
               },
             )}
             value={t('common.currency', {
@@ -316,11 +343,11 @@ export const OrderDetailsReview: React.FC = () => {
             label={t(
               'pages.create-course.review-and-confirm.free-course-materials',
               {
-                count: freeCourseMaterials,
+                count: courseData?.freeCourseMaterials,
               },
             )}
             value={t('common.currency', {
-              amount: 0,
+              amount: freeCourseMaterialsCost,
               currency,
             })}
             testId="free-course-materials-row"
