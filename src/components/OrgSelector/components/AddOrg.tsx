@@ -19,7 +19,10 @@ import { Dialog } from '@app/components/dialogs'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
 import { isDfeSuggestion } from '@app/components/OrgSelector/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
-import { InsertOrgLeadMutation } from '@app/generated/graphql'
+import {
+  InsertOrgLeadMutation,
+  InsertOrgLeadMutationVariables,
+} from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import { Address, Establishment } from '@app/types'
@@ -64,6 +67,11 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
 
   const schema = getSchema({ t: _t, useInternationalCountriesSelector, isInUK })
 
+  const defaultValues = useMemo(
+    () => getDefaultValues({ option, countryCode, getCountryLabel }),
+    [countryCode, getCountryLabel, option],
+  )
+
   const {
     register,
     handleSubmit,
@@ -73,13 +81,13 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     trigger,
   } = useForm<FormInput>({
     resolver: yupResolver(schema),
-    defaultValues: getDefaultValues({ option, countryCode, getCountryLabel }),
+    defaultValues,
   })
 
   const values = watch()
 
   const onSubmit = async (data: FormInput) => {
-    const vars = {
+    const vars: InsertOrgLeadMutationVariables = {
       name: data.organisationName,
       sector: data.sector,
       orgType: !specifyOther
@@ -109,11 +117,14 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             }
           : null),
       },
+      dfeId: isDfeSuggestion(option) ? option.id : undefined,
     }
 
     if (['/registration', '/auto-register'].includes(pathname)) {
       onClose()
-      return saveNewOrganizationDataInLocalState(vars)
+      saveNewOrganizationDataInLocalState(vars)
+
+      return
     }
 
     await insertOrganisation(vars)
@@ -166,6 +177,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                   }
                 }}
                 value={values.countryCode}
+                onlyUKCountries={isDfeSuggestion(option)}
               />
             ) : (
               <CountryDropdown
@@ -184,6 +196,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               label={t('fields.primary-address-line')}
               variant="filled"
               error={!!errors.addressLine1}
+              disabled={Boolean(
+                isDfeSuggestion(option) && defaultValues.addressLine1,
+              )}
               helperText={errors.addressLine1?.message}
               {...register('addressLine1')}
               inputProps={{ 'data-testid': 'addr-line2' }}
@@ -195,6 +210,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             <TextField
               id="secondaryAddressLine"
               label={t('fields.secondary-address-line')}
+              disabled={Boolean(
+                isDfeSuggestion(option) && defaultValues.addressLine2,
+              )}
               variant="filled"
               {...register('addressLine2')}
               inputProps={{ 'data-testid': 'addr-line2' }}
@@ -209,6 +227,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               variant="filled"
               placeholder={t('addr.city')}
               error={!!errors.city}
+              disabled={Boolean(isDfeSuggestion(option) && defaultValues.city)}
               helperText={errors.city?.message}
               {...register('city')}
               inputProps={{ 'data-testid': 'city' }}
@@ -225,6 +244,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               )}
               variant="filled"
               error={!!errors.postCode}
+              disabled={Boolean(
+                isDfeSuggestion(option) && defaultValues.postCode,
+              )}
               helperText={errors.postCode?.message}
               {...register('postCode')}
               inputProps={{ 'data-testid': 'postCode' }}
@@ -262,6 +284,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               variant="filled"
               placeholder={t('org-name-placeholder')}
               error={!!errors.organisationName}
+              disabled={Boolean(isDfeSuggestion(option) && defaultValues.city)}
               helperText={errors.organisationName?.message}
               {...register('organisationName')}
               inputProps={{ 'data-testid': 'org-name' }}

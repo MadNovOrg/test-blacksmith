@@ -41,6 +41,16 @@ configuration:
     trust_name: trustName
     trust_type: trustType
   custom_root_fields: {}
+array_relationships:
+  - name: organizations
+    using:
+      manual_configuration:
+        column_mapping:
+          id: dfe_establishment_id
+        insertion_order: null
+        remote_table:
+          name: organization
+          schema: public
 computed_fields:
   - name: postCodeForSearch
     definition:
@@ -51,24 +61,24 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - id
-        - urn
-        - name
-        - local_authority
-        - trust_type
-        - trust_name
         - address_line_1
         - address_line_2
         - address_line_3
-        - town
         - county
-        - postcode
-        - head_title
         - head_first_name
-        - head_last_name
         - head_job_title
-        - ofsted_rating
+        - head_last_name
+        - head_title
+        - id
+        - local_authority
+        - name
         - ofsted_last_inspection
+        - ofsted_rating
+        - postcode
+        - town
+        - trust_name
+        - trust_type
+        - urn
       computed_fields:
         - postCodeForSearch
       filter: {}
@@ -84,6 +94,7 @@ select_permissions:
         - head_job_title
         - head_last_name
         - head_title
+        - id
         - local_authority
         - name
         - ofsted_last_inspection
@@ -93,7 +104,6 @@ select_permissions:
         - trust_name
         - trust_type
         - urn
-        - id
       computed_fields:
         - postCodeForSearch
       filter: {}
@@ -109,6 +119,7 @@ select_permissions:
         - head_job_title
         - head_last_name
         - head_title
+        - id
         - local_authority
         - name
         - ofsted_last_inspection
@@ -118,7 +129,6 @@ select_permissions:
         - trust_name
         - trust_type
         - urn
-        - id
       computed_fields:
         - postCodeForSearch
       filter: {}
@@ -134,6 +144,7 @@ select_permissions:
         - head_job_title
         - head_last_name
         - head_title
+        - id
         - local_authority
         - name
         - ofsted_last_inspection
@@ -143,7 +154,6 @@ select_permissions:
         - trust_name
         - trust_type
         - urn
-        - id
       computed_fields:
         - postCodeForSearch
       filter: {}

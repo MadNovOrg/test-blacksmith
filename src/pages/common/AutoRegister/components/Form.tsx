@@ -386,6 +386,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                 ? undefined
                 : t('components.org-selector.residing-org')
             }
+            showDfeResults={
+              Boolean(values.countryCode) && isUKCountry(values.countryCode)
+            }
           />
         </Grid>
         <Grid item>

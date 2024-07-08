@@ -48,13 +48,19 @@ import {
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import { Sticky } from '@app/components/Sticky'
-import { Organization } from '@app/generated/graphql'
+import { Dfe_Establishment, Organization } from '@app/generated/graphql'
 import { useOrgType } from '@app/hooks/useOrgType'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { OfstedRating } from '@app/types'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import { getTruthyObjectProps, INPUT_DATE_FORMAT } from '@app/util'
 
-import { FormInputs, defaultValues, getFormSchema } from '../../utils'
+import {
+  FormInputs,
+  MapDfePropsToSchemaKeys,
+  defaultValues,
+  getFormSchema,
+  mapDfePropsToSchema,
+} from '../../utils'
 
 type Props = {
   isEditMode?: boolean
@@ -66,6 +72,7 @@ type Props = {
   editOrgData?: Partial<Organization> & {
     country?: string
     countryCode?: string
+    dfeEstablishment?: Partial<Dfe_Establishment> | null
   }
 }
 
@@ -108,6 +115,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const [sectorState, setSectorState] = useState<string | undefined | null>(
     editOrgData?.sector,
   )
+  const [preFilledDfEProps, setPreFilledDfEProps] = useState<
+    Set<keyof Dfe_Establishment>
+  >(new Set<keyof Dfe_Establishment>())
   const [orgTypeListLoaded, setOrgTypeListLoaded] = useState<boolean>(false)
   defaultValues.country =
     getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
@@ -135,9 +145,33 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
   const onOrgInputChange = useCallback(
     (value: string) => {
+      if (values.dfeId) {
+        ;[...preFilledDfEProps].forEach(key => {
+          if (
+            mapDfePropsToSchema.has(key as MapDfePropsToSchemaKeys) &&
+            mapDfePropsToSchema.get(key as MapDfePropsToSchemaKeys)
+          ) {
+            setValue(
+              mapDfePropsToSchema.get(
+                key as MapDfePropsToSchemaKeys,
+              ) as keyof FormInputs,
+              defaultValues[
+                mapDfePropsToSchema.get(key as MapDfePropsToSchemaKeys)!
+              ],
+              {
+                shouldValidate: true,
+              },
+            )
+          }
+        })
+
+        setPreFilledDfEProps(new Set())
+        setValue('dfeId', null)
+      }
+
       setValue('name', value ?? '', { shouldValidate: true })
     },
-    [setValue],
+    [preFilledDfEProps, setValue, values.dfeId],
   )
 
   const onOrgSelected = useCallback(
@@ -163,16 +197,22 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
             )
           }
           switch (key) {
+            case 'dfeId':
+              return orgDataMap.set(key, org.id ?? null)
             case 'addressLine1':
               return orgDataMap.set(key, org.addressLineOne ?? '')
             case 'addressLine2':
               return orgDataMap.set(key, org.addressLineTwo ?? '')
             case 'settingName':
               return orgDataMap.set(key, org.headJobTitle ?? '')
+            case 'countryCode':
+              return
             case 'country':
-              return orgDataMap.set(key, _t('UK'))
+              return
             case 'city':
               return orgDataMap.set(key, org.town ?? '')
+            case 'headSurname':
+              return orgDataMap.set(key, org.headLastName ?? '')
             case 'ofstedLastInspection':
               return orgDataMap.set(
                 key,
@@ -195,6 +235,10 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
               null
           }
           orgDataMap.set(key, org[key as keyof CallbackOption] ?? '')
+
+          setPreFilledDfEProps(
+            getTruthyObjectProps<keyof Dfe_Establishment>(org),
+          )
         })
         Array.from(orgDataMap).forEach(([key, value]) => {
           setValue(key, value, { shouldValidate: true })
@@ -202,8 +246,14 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
         await trigger()
       }
     },
-    [_t, isEditMode, setValue, setXeroId, trigger, values],
+    [isEditMode, setValue, setXeroId, trigger, values],
   )
+
+  useEffect(() => {
+    if (preFilledDfEProps.size === 0) {
+      setValue('dfeId', null)
+    }
+  }, [preFilledDfEProps.size, setValue])
 
   useEffect(() => {
     if (schema && errors.postcode && !isInUK) {
@@ -233,6 +283,10 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
           setValue('countryCode', UKCountryCode)
         }
         setIsInUK(true)
+      }
+
+      if (editOrgData.dfeEstablishment?.id) {
+        setPreFilledDfEProps(getTruthyObjectProps(editOrgData.dfeEstablishment))
       }
     }
   }, [
@@ -346,6 +400,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     {addOrgCountriesSelectorEnabled ? (
                       <CountriesSelector
+                        onlyUKCountries={
+                          Boolean(values.dfeId) || preFilledDfEProps.size > 0
+                        }
                         onChange={(_, code) => {
                           if (code) {
                             setValue(
@@ -379,6 +436,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="line1"
+                      disabled={preFilledDfEProps.has('addressLineOne')}
                       label={t('fields.addresses.line1')}
                       variant="filled"
                       placeholder={t('fields.addresses.line1-placeholder')}
@@ -396,6 +454,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="line2"
+                      disabled={preFilledDfEProps.has('addressLineTwo')}
                       label={t('fields.addresses.line2')}
                       variant="filled"
                       placeholder={t('fields.addresses.line2-placeholder')}
@@ -412,6 +471,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="city"
+                      disabled={preFilledDfEProps.has('town')}
                       label={t('fields.addresses.town-city')}
                       variant="filled"
                       placeholder={t('fields.addresses.town-city')}
@@ -429,6 +489,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item>
                     <TextField
                       id="postcode"
+                      disabled={preFilledDfEProps.has('postcode')}
                       label={t('fields.addresses.postalAndZipCode')}
                       variant="filled"
                       placeholder={t('fields.addresses.postalAndZipCode')}
@@ -477,6 +538,10 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     {!isEditMode ? (
                       <OrgSelector
                         data-testid="name"
+                        disabled={
+                          Boolean(editOrgData?.dfeEstablishment?.name) &&
+                          preFilledDfEProps.has('name')
+                        }
                         required
                         {...register('name')}
                         error={errors.name?.message}
@@ -487,10 +552,15 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                         textFieldProps={{
                           variant: 'filled',
                         }}
+                        showDfeResults={isInUK}
                       />
                     ) : (
                       <TextField
                         required
+                        disabled={
+                          Boolean(editOrgData?.dfeEstablishment?.name) &&
+                          preFilledDfEProps.has('name')
+                        }
                         label={t('fields.organization-name')}
                         variant="filled"
                         error={!!errors.name}
@@ -611,6 +681,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="headFirstName"
+                      disabled={preFilledDfEProps.has('headFirstName')}
                       label={t('fields.head-first-name')}
                       variant="filled"
                       error={!!errors.headFirstName}
@@ -626,6 +697,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="headSurname"
+                      disabled={preFilledDfEProps.has('headLastName')}
                       label={t('fields.head-surname')}
                       variant="filled"
                       error={!!errors.headSurname}
@@ -670,6 +742,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   >
                     <TextField
                       id="settingName"
+                      disabled={preFilledDfEProps.has('headJobTitle')}
                       label={t('fields.setting-name')}
                       variant="filled"
                       error={!!errors.settingName}
@@ -693,7 +766,10 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                           }
                           value={values.localAuthority ?? null}
                           label={t('fields.local-authority')}
-                          disabled={Boolean(!values.country)}
+                          disabled={
+                            Boolean(!values.country) ||
+                            preFilledDfEProps.has('localAuthority')
+                          }
                         />
                       </Grid>
                       <Grid
@@ -709,6 +785,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                             render={({ field }) => (
                               <TextField
                                 id="ofstedRating"
+                                disabled={preFilledDfEProps.has('ofstedRating')}
                                 select
                                 label={t('fields.ofsted-rating')}
                                 variant="filled"
@@ -718,6 +795,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                                 onChange={field.onChange}
                                 data-testid="ofsted-rating-select"
                                 fullWidth
+                                inputProps={{ 'data-testid': 'ofsted-rating' }}
                               >
                                 {Object.keys(OfstedRating).map((val, i) => {
                                   const option = OfstedRatingOrder[
@@ -752,6 +830,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                                   format={INPUT_DATE_FORMAT}
                                   value={field.value}
                                   onChange={field.onChange}
+                                  disabled={preFilledDfEProps.has(
+                                    'ofstedLastInspection',
+                                  )}
                                   slotProps={{
                                     textField: {
                                       error: !!errors.ofstedLastInspection,

@@ -14,25 +14,27 @@ export type CountriesSelectorProps = {
   onChange: (event: SyntheticEvent, selected: string | null) => void
   value: string | undefined | null
   courseResidingCountry?: string
-  isBILDcourse?: boolean
   courseType?: Course_Type_Enum
-  onBlur?: () => void
   disableClearable?: boolean
+  isBILDcourse?: boolean
+  onBlur?: () => void
+  onlyUKCountries?: boolean
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
-  onChange,
-  value,
-  label,
-  error,
-  required,
-  helperText,
-  disabled,
   courseResidingCountry,
-  isBILDcourse,
   courseType,
-  onBlur,
   disableClearable,
+  disabled,
+  error,
+  helperText,
+  isBILDcourse,
+  label,
+  onBlur,
+  onChange,
+  onlyUKCountries = false,
+  required,
+  value,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -45,8 +47,9 @@ const CountriesSelector = ({
   let countriesList = countries
 
   if (
-    isUKCountry(courseResidingCountry) &&
-    (isBILDcourse || isINDIRECTcourse)
+    (isUKCountry(courseResidingCountry) &&
+      (isBILDcourse || isINDIRECTcourse)) ||
+    onlyUKCountries
   ) {
     countriesList = countries.filter(country => country.includes('GB'))
   }

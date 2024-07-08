@@ -3,9 +3,18 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
-import { GetOrgTypesQuery, Organization } from '@app/generated/graphql'
+import {
+  FindEstablishmentQuery,
+  GetOrgTypesQuery,
+  GetOrganizationsQuery,
+  GetRegionsByCountryQuery,
+  Organization,
+} from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { Query as REGIONS_BY_COUNTRY_QUERY } from '@app/queries/country-region/get-region-by-country'
+import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
 import { GET_ORG_TYPES } from '@app/queries/organization/get-org-types'
+import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
 
 import {
   chance,
@@ -13,6 +22,7 @@ import {
   renderHook,
   screen,
   userEvent,
+  waitFor,
   within,
 } from '@test/index'
 
@@ -33,6 +43,16 @@ describe(OrganizationForm.name, () => {
   useFeatureFlagEnabledMock.mockResolvedValue(true)
 
   const submitMock = vi.fn()
+
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+  })
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers()
+    vi.useRealTimers()
+  })
+
   it('renders the component', () => {
     render(<OrganizationForm onSubmit={submitMock} />)
     expect(screen.getByText(t('fields.organization-name'))).toBeInTheDocument()
@@ -389,5 +409,474 @@ describe(OrganizationForm.name, () => {
     await userEvent.click(submitButton)
 
     expect(submitMock).toHaveBeenCalled()
+  })
+
+  it('disable prefilled dfe organization properties', async () => {
+    const establishmentId = chance.guid()
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === FIND_ESTABLISHMENTS) {
+          return fromValue<{ data: FindEstablishmentQuery }>({
+            data: {
+              establishments: [
+                {
+                  id: establishmentId,
+                  urn: chance.string(),
+                  name: 'The Pointer School',
+                  localAuthority: 'Greenwich',
+                  trustType: null,
+                  trustName: null,
+                  addressLineOne: chance.address(),
+                  addressLineTwo: chance.address(),
+                  addressLineThree: null,
+                  town: 'London',
+                  county: null,
+                  postcode: 'SE3 7TH',
+                  headTitle: chance.name(),
+                  headFirstName: chance.name(),
+                  headLastName: chance.name(),
+                  headJobTitle: chance.name(),
+                  ofstedRating: 'Outstanding',
+                  ofstedLastInspection: '2019-03-05T23:00:00.000Z',
+                },
+              ],
+              total: { aggregate: { count: 1 } },
+            },
+          })
+        }
+
+        if (query === GET_ORGANIZATIONS) {
+          return fromValue<{ data: GetOrganizationsQuery }>({
+            data: {
+              orgs: [],
+            },
+          })
+        }
+
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrganizationForm onSubmit={submitMock} />
+      </Provider>,
+    )
+
+    const orgSelector = screen.getByLabelText(t('fields.organization-name'), {
+      exact: false,
+    })
+    await userEvent.type(orgSelector, 'The Pointer School')
+
+    vi.runAllTimers()
+
+    await waitFor(() =>
+      screen.getByTestId(`org-selector-result-${establishmentId}`),
+    )
+
+    await userEvent.click(
+      screen.getByTestId(`org-selector-result-${establishmentId}`),
+    )
+
+    const line1 = screen.getByLabelText(t('fields.addresses.line1'), {
+      exact: false,
+    })
+    expect(line1).toBeInTheDocument()
+    expect(line1).toBeDisabled()
+
+    const line2 = screen.getByLabelText(t('fields.addresses.line2'))
+    expect(line2).toBeInTheDocument()
+
+    const city = screen.getByLabelText(t('fields.addresses.town-city'), {
+      exact: false,
+    })
+    expect(city).toBeInTheDocument()
+    expect(city).toBeDisabled()
+
+    const zipCode = screen.getByLabelText(
+      t('fields.addresses.postalAndZipCode'),
+      {
+        exact: false,
+      },
+    )
+    expect(zipCode).toBeDisabled()
+
+    const headFirstName = screen.getByLabelText(t('fields.head-first-name'), {
+      exact: false,
+    })
+    expect(headFirstName).toBeDisabled()
+
+    const headSurname = screen.getByLabelText(t('fields.head-surname'), {
+      exact: false,
+    })
+    expect(headSurname).toBeDisabled()
+
+    const settingName = screen.getByLabelText(t('fields.setting-name'), {
+      exact: false,
+    })
+    expect(settingName).toBeDisabled()
+
+    const localAuthority = screen.getByLabelText(t('fields.local-authority'), {
+      exact: false,
+    })
+    expect(localAuthority).toBeDisabled()
+
+    const ofstedRating = screen.getByTestId('ofsted-rating')
+    expect(ofstedRating).toBeDisabled()
+
+    const ofstedLastInspection = screen.getByLabelText(
+      t('fields.ofsted-last-inspection-date'),
+      {
+        exact: false,
+      },
+    )
+    expect(ofstedLastInspection).toBeDisabled()
+  })
+
+  it('enable disabled prefilled dfe organization properties on name change', async () => {
+    const establishmentId = chance.guid()
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === FIND_ESTABLISHMENTS) {
+          return fromValue<{ data: FindEstablishmentQuery }>({
+            data: {
+              establishments: [
+                {
+                  id: establishmentId,
+                  urn: chance.string(),
+                  name: 'The Pointer School',
+                  localAuthority: 'Greenwich',
+                  trustType: null,
+                  trustName: null,
+                  addressLineOne: chance.address(),
+                  addressLineTwo: chance.address(),
+                  addressLineThree: null,
+                  town: 'London',
+                  county: null,
+                  postcode: 'SE3 7TH',
+                  headTitle: chance.name(),
+                  headFirstName: chance.name(),
+                  headLastName: chance.name(),
+                  headJobTitle: chance.name(),
+                  ofstedRating: 'Outstanding',
+                  ofstedLastInspection: '2019-03-05T23:00:00.000Z',
+                },
+              ],
+              total: { aggregate: { count: 1 } },
+            },
+          })
+        }
+
+        if (query === GET_ORGANIZATIONS) {
+          return fromValue<{ data: GetOrganizationsQuery }>({
+            data: {
+              orgs: [],
+            },
+          })
+        }
+
+        if (query === REGIONS_BY_COUNTRY_QUERY) {
+          return fromValue<{ data: GetRegionsByCountryQuery }>({
+            data: {
+              regions: [{ name: 'London' }],
+            },
+          })
+        }
+
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrganizationForm onSubmit={submitMock} />
+      </Provider>,
+    )
+
+    const orgSelector = screen.getByLabelText(t('fields.organization-name'), {
+      exact: false,
+    })
+    await userEvent.type(orgSelector, 'The Pointer School')
+
+    vi.runAllTimers()
+
+    await waitFor(() =>
+      screen.getByTestId(`org-selector-result-${establishmentId}`),
+    )
+
+    await userEvent.click(
+      screen.getByTestId(`org-selector-result-${establishmentId}`),
+    )
+
+    const line1 = screen.getByLabelText(t('fields.addresses.line1'), {
+      exact: false,
+    })
+    expect(line1).toBeInTheDocument()
+    expect(line1).toBeDisabled()
+
+    const line2 = screen.getByLabelText(t('fields.addresses.line2'))
+    expect(line2).toBeDisabled()
+
+    const city = screen.getByLabelText(t('fields.addresses.town-city'), {
+      exact: false,
+    })
+    expect(city).toBeInTheDocument()
+    expect(city).toBeDisabled()
+
+    const zipCode = screen.getByLabelText(
+      t('fields.addresses.postalAndZipCode'),
+      {
+        exact: false,
+      },
+    )
+    expect(zipCode).toBeDisabled()
+
+    const headFirstName = screen.getByLabelText(t('fields.head-first-name'), {
+      exact: false,
+    })
+    expect(headFirstName).toBeDisabled()
+
+    const headSurname = screen.getByLabelText(t('fields.head-surname'), {
+      exact: false,
+    })
+    expect(headSurname).toBeDisabled()
+
+    const settingName = screen.getByLabelText(t('fields.setting-name'), {
+      exact: false,
+    })
+    expect(settingName).toBeDisabled()
+
+    const localAuthority = screen.getByLabelText(t('fields.local-authority'), {
+      exact: false,
+    })
+    expect(localAuthority).toBeDisabled()
+
+    const ofstedRating = screen.getByTestId('ofsted-rating')
+    expect(ofstedRating).toBeDisabled()
+
+    const ofstedLastInspection = screen.getByLabelText(
+      t('fields.ofsted-last-inspection-date'),
+      {
+        exact: false,
+      },
+    )
+    expect(ofstedLastInspection).toBeDisabled()
+
+    await userEvent.type(orgSelector, 'My Org')
+
+    expect(line1).toBeEnabled()
+    expect(line2).toBeEnabled()
+    expect(city).toBeEnabled()
+    expect(zipCode).toBeEnabled()
+    expect(headFirstName).toBeEnabled()
+    expect(headSurname).toBeEnabled()
+    expect(settingName).toBeEnabled()
+    expect(localAuthority).toBeEnabled()
+    expect(ofstedRating).toBeEnabled()
+    expect(ofstedLastInspection).toBeEnabled()
+  })
+
+  it('keep enabled missing dfe org data fields', async () => {
+    const establishmentId = chance.guid()
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === FIND_ESTABLISHMENTS) {
+          return fromValue<{ data: FindEstablishmentQuery }>({
+            data: {
+              establishments: [
+                {
+                  id: establishmentId,
+                  urn: chance.string(),
+                  name: 'The Pointer School',
+                  localAuthority: 'Greenwich',
+                  trustType: null,
+                  trustName: null,
+                  addressLineOne: chance.address(),
+                  addressLineTwo: chance.address(),
+                  addressLineThree: null,
+                  town: 'London',
+                  county: null,
+                  postcode: 'SE3 7TH',
+                  headTitle: chance.name(),
+                  headFirstName: chance.name(),
+                  headLastName: chance.name(),
+                  headJobTitle: chance.name(),
+                  ofstedRating: null,
+                  ofstedLastInspection: null,
+                },
+              ],
+              total: { aggregate: { count: 1 } },
+            },
+          })
+        }
+
+        if (query === GET_ORGANIZATIONS) {
+          return fromValue<{ data: GetOrganizationsQuery }>({
+            data: {
+              orgs: [],
+            },
+          })
+        }
+
+        if (query === REGIONS_BY_COUNTRY_QUERY) {
+          return fromValue<{ data: GetRegionsByCountryQuery }>({
+            data: {
+              regions: [{ name: 'London' }],
+            },
+          })
+        }
+
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrganizationForm onSubmit={submitMock} />
+      </Provider>,
+    )
+
+    const orgSelector = screen.getByLabelText(t('fields.organization-name'), {
+      exact: false,
+    })
+    await userEvent.type(orgSelector, 'The Pointer School')
+
+    vi.runAllTimers()
+
+    await waitFor(() =>
+      screen.getByTestId(`org-selector-result-${establishmentId}`),
+    )
+
+    await userEvent.click(
+      screen.getByTestId(`org-selector-result-${establishmentId}`),
+    )
+
+    const localAuthority = screen.getByLabelText(t('fields.local-authority'), {
+      exact: false,
+    })
+    expect(localAuthority).toBeDisabled()
+
+    const ofstedRating = screen.getByTestId('ofsted-rating')
+    expect(ofstedRating).toBeEnabled()
+
+    const ofstedLastInspection = screen.getByLabelText(
+      t('fields.ofsted-last-inspection-date'),
+      {
+        exact: false,
+      },
+    )
+    expect(ofstedLastInspection).toBeEnabled()
+  })
+
+  it('disable prefilled dfe organization properties on edit org form', async () => {
+    const establishmentId = chance.guid()
+
+    render(
+      <OrganizationForm
+        onSubmit={submitMock}
+        isEditMode
+        editOrgData={{
+          name: 'My Org',
+          dfeEstablishment: {
+            id: establishmentId,
+            urn: chance.string(),
+            name: 'The Pointer School',
+            localAuthority: 'Greenwich',
+            trustType: null,
+            trustName: null,
+            addressLineOne: chance.address(),
+            addressLineTwo: null,
+            addressLineThree: null,
+            town: 'London',
+            county: null,
+            postcode: 'SE3 7TH',
+            headTitle: chance.name(),
+            headFirstName: chance.name(),
+            headLastName: chance.name(),
+            headJobTitle: null,
+            ofstedRating: 'Outstanding',
+            ofstedLastInspection: '2019-03-05T23:00:00.000Z',
+          },
+        }}
+      />,
+    )
+
+    const orgName = screen.getByLabelText(t('fields.organization-name'), {
+      exact: false,
+    })
+    expect(orgName).toBeDisabled()
+
+    const line1 = screen.getByLabelText(t('fields.addresses.line1'), {
+      exact: false,
+    })
+    expect(line1).toBeDisabled()
+
+    const line2 = screen.getByLabelText(t('fields.addresses.line2'))
+    expect(line2).toBeEnabled()
+
+    const city = screen.getByLabelText(t('fields.addresses.town-city'), {
+      exact: false,
+    })
+    expect(city).toBeDisabled()
+
+    const zipCode = screen.getByLabelText(
+      t('fields.addresses.postalAndZipCode'),
+      {
+        exact: false,
+      },
+    )
+    expect(zipCode).toBeDisabled()
+
+    const headFirstName = screen.getByLabelText(t('fields.head-first-name'), {
+      exact: false,
+    })
+    expect(headFirstName).toBeDisabled()
+
+    const headSurname = screen.getByLabelText(t('fields.head-surname'), {
+      exact: false,
+    })
+    expect(headSurname).toBeDisabled()
+
+    const settingName = screen.getByLabelText(t('fields.setting-name'), {
+      exact: false,
+    })
+    expect(settingName).toBeEnabled()
+
+    const localAuthority = screen.getByLabelText(t('fields.local-authority'), {
+      exact: false,
+    })
+    expect(localAuthority).toBeDisabled()
+
+    const ofstedRating = screen.getByTestId('ofsted-rating')
+    expect(ofstedRating).toBeDisabled()
+
+    const ofstedLastInspection = screen.getByLabelText(
+      t('fields.ofsted-last-inspection-date'),
+      {
+        exact: false,
+      },
+    )
+    expect(ofstedLastInspection).toBeDisabled()
+  })
+
+  it('keeps name enabled for non dfe organization on edit org form', async () => {
+    render(
+      <OrganizationForm
+        onSubmit={submitMock}
+        isEditMode
+        editOrgData={{
+          name: 'My Org',
+          dfeEstablishment: undefined,
+        }}
+      />,
+    )
+
+    const orgName = screen.getByLabelText(t('fields.organization-name'), {
+      exact: false,
+    })
+    expect(orgName).toBeEnabled()
   })
 })

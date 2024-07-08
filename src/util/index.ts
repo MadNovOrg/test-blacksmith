@@ -990,3 +990,15 @@ export const saveNewOrganizationDataInLocalState = (
 
 export const ALL_ORGS = 'all'
 export const UKTimezone = 'Europe/London'
+
+export const getTruthyObjectProps = <T>(obj: Record<string, unknown>) => {
+  const props = new Set<T>()
+
+  Object.keys(obj)
+    .filter(key => Boolean(obj[key]))
+    .forEach(key => {
+      props.add(key as T)
+    })
+
+  return props
+}

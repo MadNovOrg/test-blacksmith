@@ -74,6 +74,7 @@ export const CreateOrganization = () => {
               },
             ]
           : [],
+        dfeEstablishmentId: data.dfeId ?? undefined,
       }
       const response = await executeMutation(organisationDataObject)
 

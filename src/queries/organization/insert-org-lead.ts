@@ -16,6 +16,7 @@ export const MUTATION = gql`
     $orgType: String!
     $address: jsonb!
     $attributes: jsonb = {}
+    $dfeId: uuid
   ) {
     org: insert_organization_one(
       object: {
@@ -24,6 +25,7 @@ export const MUTATION = gql`
         attributes: $attributes
         sector: $sector
         organisationType: $orgType
+        dfeEstablishmentId: $dfeId
       }
     ) {
       id

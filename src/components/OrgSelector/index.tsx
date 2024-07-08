@@ -37,6 +37,7 @@ import {
 } from '@app/generated/graphql'
 import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
 import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
+import { organizationData as localStateOrganization } from '@app/util'
 
 import { AddOrg } from './components/AddOrg'
 type OptionToAdd = Dfe_Establishment | { id?: string; name: string }
@@ -98,29 +99,39 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       [profile?.organizations, showTrainerOrgOnly],
     )
 
-    const [{ data: dfeOrgs, fetching: dfeFetching }] = useQuery<
-      FindEstablishmentQuery,
-      FindEstablishmentQueryVariables
-    >({
-      query: FIND_ESTABLISHMENTS,
-      variables: {
-        where: searchOnlyByPostCode
-          ? {
-              postCodeForSearch: {
-                _ilike: `%${debouncedQuery.replace(/\s/g, '')}%`,
-              },
-            }
-          : {
-              _and: debouncedQuery
-                .trim()
-                .split(/\s+/)
-                .map(word => ({
-                  name: { _ilike: `%${word}%` },
-                })),
-            },
-      },
-      pause: !debouncedQuery,
-    })
+    const [{ data: dfeOrgs, fetching: dfeFetching }, refetchDfeEstablishment] =
+      useQuery<FindEstablishmentQuery, FindEstablishmentQueryVariables>({
+        query: FIND_ESTABLISHMENTS,
+        variables: {
+          where: {
+            _and: [
+              ...(localStateOrganization?.dfeId
+                ? [{ id: { _neq: localStateOrganization.dfeId } }]
+                : []),
+              { organizations_aggregate: { count: { predicate: { _eq: 0 } } } },
+              ...(searchOnlyByPostCode
+                ? [
+                    {
+                      postCodeForSearch: {
+                        _ilike: `%${debouncedQuery.replace(/\s/g, '')}%`,
+                      },
+                    },
+                  ]
+                : [
+                    {
+                      _and: debouncedQuery
+                        .trim()
+                        .split(/\s+/)
+                        .map(word => ({
+                          name: { _ilike: `%${word}%` },
+                        })),
+                    },
+                  ]),
+            ],
+          },
+        },
+        pause: !debouncedQuery,
+      })
 
     const where = useMemo<Organization_Bool_Exp>(() => {
       const orConditions = []
@@ -165,13 +176,19 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         pause: !debouncedQuery,
       })
 
+    const refetchAllOrganisations = useCallback(() => {
+      refetchDfeEstablishment({ requestPolicy: 'network-only' })
+      refetchOrganisations({ requestPolicy: 'network-only' })
+    }, [refetchDfeEstablishment, refetchOrganisations])
+
     const handleClose = () => setAdding(null)
     const handleSuccess = async (org: InsertOrgLeadMutation['org']) => {
       if (!org) return
       setAdding(null)
-      // TODO: Not auto selecting the newly added org, needs fixing
+
       onChange(org)
-      refetchOrganisations({ requestPolicy: 'network-only' })
+
+      refetchAllOrganisations()
     }
     const handleChange = (
       event: React.SyntheticEvent,
@@ -393,6 +410,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               isDfeSuggestion(option)
             const address = renderAddress(option)
             const key = !('id' in option) ? 'NEW_ORG' : (option?.id as string)
+
             return (
               <Box
                 display="flex"

@@ -6,11 +6,16 @@ import {
   GetOrganisationDetailsQueryVariables,
 } from '@app/generated/graphql'
 import { Sorting } from '@app/hooks/useTableSort'
-import { SHALLOW_ORGANIZATION, ORGANIZATION } from '@app/queries/fragments'
+import {
+  SHALLOW_ORGANIZATION,
+  ORGANIZATION,
+  ESTABLISHMENT,
+} from '@app/queries/fragments'
 import { ALL_ORGS } from '@app/util'
 export const GET_ORGANISATION_DETAILS_QUERY = gql`
   ${SHALLOW_ORGANIZATION}
   ${ORGANIZATION}
+  ${ESTABLISHMENT}
   query GetOrganisationDetails(
     $where: organization_bool_exp = {}
     $shallow: Boolean! = false
@@ -22,6 +27,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $withSpecificOrganisation: Boolean = false
     $withMembers: Boolean = false
     $withAggregateData: Boolean = false
+    $withDfEEstablishment: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -31,6 +37,11 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     ) {
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
+      dfeEstablishmentId
+      dfeEstablishment: organization_dfe_establishment
+        @include(if: $withDfEEstablishment) {
+        ...Establishment
+      }
       region
       members @include(if: $withMembers) {
         profile {
@@ -78,6 +89,7 @@ type UseOrgV2Input = {
   sorting?: Sorting
   withMembers?: boolean
   withAggregateData?: boolean
+  withDfEEstablishment?: boolean
 }
 
 export default function useOrgV2({
@@ -93,6 +105,7 @@ export default function useOrgV2({
   sorting,
   withMembers = false,
   withAggregateData = false,
+  withDfEEstablishment = false,
 }: UseOrgV2Input) {
   let conditions
   if (orgId !== ALL_ORGS) {
@@ -134,6 +147,7 @@ export default function useOrgV2({
       sort: orderBy,
       withMembers,
       withAggregateData,
+      withDfEEstablishment,
     },
   })
 

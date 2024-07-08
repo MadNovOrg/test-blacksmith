@@ -380,6 +380,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             ? undefined
             : t('components.org-selector.residing-org')
         }
+        showDfeResults={isUKCountry(values.countryCode)}
       />
 
       <Box>

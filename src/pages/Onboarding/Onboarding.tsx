@@ -305,6 +305,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                   ? undefined
                   : _t('components.org-selector.residing-org')
               }
+              showDfeResults={isUKCountry(values.countryCode)}
             />
           </Grid>
           <Grid item>

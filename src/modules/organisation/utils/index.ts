@@ -6,6 +6,7 @@ import {
   CourseLevel,
   OrganizationProfile,
   UpcominEnrollment,
+  Dfe_Establishment,
 } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 import { isValidUKPostalCode } from '@app/util'
@@ -32,6 +33,7 @@ export type FormInputs = {
   countryCode: string
   postcode: string
   workEmail?: string
+  dfeId?: string | null
 }
 export const defaultValues = {
   name: '',
@@ -158,6 +160,7 @@ export const getFormSchema = (
               isValidUKPostalCode,
             ),
         }),
+    dfeId: yup.string().nullable(),
   })
 
 const isEnrollmentEndDateInFuture = (enrollment: Maybe<UpcominEnrollment>) => {
@@ -217,3 +220,51 @@ export const filterOrganisationProfilesById = (
 
   return filteredOrganisations
 }
+
+export type MapDfePropsToSchemaKeys =
+  | keyof Pick<
+      Dfe_Establishment,
+      | 'addressLineOne'
+      | 'addressLineTwo'
+      | 'headFirstName'
+      | 'headJobTitle'
+      | 'headLastName'
+      | 'localAuthority'
+      | 'ofstedLastInspection'
+      | 'ofstedRating'
+      | 'postcode'
+      | 'town'
+    >
+  | 'headLastName'
+  | 'headPreferredJobTitle'
+
+export type MapDfePropsToSchemaValues = keyof Pick<
+  typeof defaultValues,
+  | 'addressLine1'
+  | 'addressLine2'
+  | 'city'
+  | 'headFirstName'
+  | 'headSurname'
+  | 'localAuthority'
+  | 'ofstedLastInspection'
+  | 'ofstedRating'
+  | 'postcode'
+  | 'settingName'
+>
+
+export const mapDfePropsToSchema = new Map<
+  MapDfePropsToSchemaKeys,
+  MapDfePropsToSchemaValues
+>([
+  ['addressLineOne', 'addressLine1'],
+  ['addressLineTwo', 'addressLine2'],
+  ['headFirstName', 'headFirstName'],
+  ['headJobTitle', 'settingName'],
+  ['headLastName', 'headSurname'],
+  ['localAuthority', 'localAuthority'],
+  ['ofstedLastInspection', 'ofstedLastInspection'],
+  ['ofstedRating', 'ofstedRating'],
+  ['postcode', 'postcode'],
+  ['town', 'city'],
+  ['headPreferredJobTitle', 'settingName'],
+])

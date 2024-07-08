@@ -32,10 +32,12 @@ export const EditOrgDetails: React.FC<
     orgId: id ?? '',
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
+    withDfEEstablishment: true,
   })
 
   const org = data?.orgs.length
     ? Object.values(data.orgs).map(orgDetail => ({
+        dfeEstablishment: orgDetail.dfeEstablishment,
         name: orgDetail.name,
         sector: orgDetail.sector,
         orgPhone: orgDetail.attributes.phone,
@@ -49,9 +51,12 @@ export const EditOrgDetails: React.FC<
         country: orgDetail.address.country,
         countryCode: orgDetail.address.countryCode,
         headFirstName: orgDetail.attributes.headFirstName,
-        headSurname: orgDetail.attributes.headSurname,
+        headSurname:
+          orgDetail.attributes.headSurname ?? orgDetail.attributes.headLastName,
         headEmailAddress: orgDetail.attributes.headEmailAddress,
-        settingName: orgDetail.attributes.settingName,
+        settingName:
+          orgDetail.attributes.settingName ??
+          orgDetail.attributes.headPreferredJobTitle,
         localAuthority: orgDetail.attributes.localAuthority,
         ofstedRating: orgDetail.attributes.ofstedRating,
         ofstedLastInspection:

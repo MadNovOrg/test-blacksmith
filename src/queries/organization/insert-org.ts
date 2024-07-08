@@ -12,6 +12,7 @@ export const MUTATION = gql`
     $xeroId: String
     $organisationType: String!
     $invites: [organization_invites_insert_input!] = []
+    $dfeEstablishmentId: uuid
   ) {
     org: insert_organization_one(
       object: {
@@ -21,6 +22,7 @@ export const MUTATION = gql`
         address: $address
         attributes: $attributes
         xeroContactId: $xeroId
+        dfeEstablishmentId: $dfeEstablishmentId
         invites: { data: $invites }
       }
     ) {
