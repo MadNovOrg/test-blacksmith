@@ -13,3 +13,5 @@ module.exports = {
     },
   },
 }
+
+// test comment to check if its catched by sonar
