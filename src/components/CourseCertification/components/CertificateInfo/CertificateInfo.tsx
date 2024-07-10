@@ -1,12 +1,10 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Alert,
   Box,
-  Button,
   Divider,
   Grid,
   Stack,
@@ -17,7 +15,6 @@ import {
 import MUIImage from 'mui-image'
 
 import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
-import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   CertificateStatus,
@@ -32,6 +29,12 @@ import {
   isModule,
 } from '@app/modules/grading/shared/utils'
 import { NonNullish, Strategy } from '@app/types'
+
+import {
+  CertificateRevokedAlert,
+  CertificateRevoked,
+  CertificateValid,
+} from './Components'
 
 type Participant = Pick<
   NonNullish<GetCertificateQuery['certificate']>,
@@ -71,7 +74,6 @@ export const CertificateInfo: React.FC<
 }) => {
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
-  const { acl } = useAuth()
 
   const filterModules = (strategy: Strategy): Strategy => {
     const filteredModules = strategy.modules?.filter(
@@ -98,42 +100,10 @@ export const CertificateInfo: React.FC<
       )}
 
       {isRevoked ? (
-        <Alert
-          severity="warning"
-          sx={{
-            mb: 2,
-            '&& .MuiAlert-message': {
-              width: '100%',
-            },
-          }}
-          variant="outlined"
-          data-testid="revoked-cert-alert"
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            {t('revoked-warning', { date: revokedDate })}
-            {acl.isTTAdmin() ? (
-              <Box>
-                <Button
-                  variant="text"
-                  color="primary"
-                  sx={{ ml: 1, py: 0 }}
-                  size="small"
-                  onClick={onShowChangelogModal}
-                  startIcon={<RemoveRedEyeIcon />}
-                >
-                  {_t('view-details')}
-                </Button>
-              </Box>
-            ) : null}
-          </Box>
-        </Alert>
+        <CertificateRevokedAlert
+          revokedDate={revokedDate}
+          onShowChangelogModal={onShowChangelogModal}
+        />
       ) : null}
 
       <Typography
@@ -179,28 +149,9 @@ export const CertificateInfo: React.FC<
             </Grid>
 
             {isRevoked ? (
-              <Grid item md={3} xs={12}>
-                <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
-                  {t('revoked-on')}
-                </Typography>
-                <Typography variant="body1">
-                  {_t('dates.default', { date: revokedDate })}
-                </Typography>
-              </Grid>
+              <CertificateRevoked revokedDate={revokedDate} />
             ) : (
-              <Grid item md={3} xs={12}>
-                <Typography
-                  data-testid="certificate-valid-until"
-                  variant="body2"
-                  sx={{ mb: 1 }}
-                  color="grey.600"
-                >
-                  {t('valid-until')}
-                </Typography>
-                <Typography variant="body1">
-                  {_t('dates.default', { date: expiryDate })}
-                </Typography>
-              </Grid>
+              <CertificateValid expiryDate={expiryDate} />
             )}
             <Grid item xs={3}>
               <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
@@ -257,7 +208,6 @@ export const CertificateInfo: React.FC<
           </Box>
         </>
       ) : null}
-
       <>
         <Typography variant="h3" gutterBottom>
           {t('modules-list-title')}
@@ -390,7 +340,10 @@ export const CertificateInfo: React.FC<
                           strategyModules[strategyName],
                         ).modules?.map(
                           (bildModule: { name: string }, index: number) => (
-                            <Typography mb={2} key={index}>
+                            <Typography
+                              mb={2}
+                              key={`${bildModule.name}-${index}`}
+                            >
                               {bildModule.name}
                             </Typography>
                           ),

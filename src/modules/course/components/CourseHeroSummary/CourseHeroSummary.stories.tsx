@@ -5,7 +5,7 @@ import { RoleName } from '@app/types'
 
 import { buildCourse } from '@test/mock-data-utils'
 
-import { BackButton } from '../BackButton'
+import { BackButton } from '../../../../components/BackButton'
 
 import { CourseHeroSummary } from './CourseHeroSummary'
 

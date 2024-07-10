@@ -10,6 +10,7 @@ import {
   Course_Type_Enum,
   Course_Trainer_Type_Enum,
   CourseTrainerType,
+  Course as GeneratedCourseType,
 } from '@app/generated/graphql'
 import { getLevels } from '@app/modules/course/components/CourseForm/helpers'
 import {
@@ -138,7 +139,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         () => acl.isOrganizationKeyContactOfCourse(course),
       ])(),
 
-    isCourseLeader: (course: Pick<Course, 'trainers'>) =>
+    isCourseLeader: (
+      course: Pick<Course, 'trainers'> | Pick<GeneratedCourseType, 'trainers'>,
+    ) =>
       getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id &&
       activeRole === RoleName.TRAINER,
 
@@ -403,7 +406,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return allowedBILDLevels || allowedICMLevels
     },
 
-    canEditCourses: (course: Pick<Course, 'type' | 'trainers'>) => {
+    canEditCourses: (
+      course:
+        | Pick<Course, 'type' | 'trainers'>
+        | Pick<GeneratedCourseType, 'type' | 'trainers'>,
+    ) => {
       switch (activeRole) {
         case RoleName.TT_ADMIN:
         case RoleName.TT_OPS:

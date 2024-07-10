@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mui/material'
 import pdf from '@react-pdf/renderer'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useQuery } from 'urql'
 
 import {
@@ -35,6 +35,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { GET_CERTIFICATE_QUERY } from '@app/queries/certificate/get-certificate'
+import { NonNullish } from '@app/types'
 
 import CertificateHoldHistoryModal from './components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'
 import { CertificateInfo } from './components/CertificateInfo/CertificateInfo'
@@ -44,6 +45,7 @@ import ModifyGradeModal from './components/ModifyGradeModal/ModifyGradeModal'
 import PutOnHoldModal from './components/PutOnHoldModal/PutOnHoldModal'
 import RevokeCertModal from './components/RevokeModal/RevokeModal'
 import UndoRevokeModal from './components/UndoRevokeModal/UndoRevokeModal'
+import { CertificateChangelog as CertificateChangelogType } from './types'
 
 // workaround for using recat-pdf with vite
 const { PDFDownloadLink } = pdf
@@ -57,6 +59,13 @@ const gradesToCertificateIconMapping = {
 
 type CourseCertificationProps = {
   certificateId: string
+}
+
+const CertificateChangelog: React.FC<{
+  holdChangelogs: NonNullish<CertificateChangelogType['certificateChanges']>
+}> = ({ holdChangelogs }) => {
+  if (!holdChangelogs) return
+  return <CertificateHoldHistoryModal changelogs={holdChangelogs} />
 }
 
 export const CourseCertification: React.FC<
@@ -87,7 +96,16 @@ export const CourseCertification: React.FC<
   const certificate = data?.certificate
   const holdRequest = data?.certificateHoldRequest[0]
   const courseParticipant = certificate?.participant
-  const isLegacyCertificate = certificate && !certificate.participant
+  const isLegacyCertificate = !certificate?.participant
+
+  const certificateStatus = useCallback(
+    ({ loading, error }: { loading: boolean; error: Error | null }) => {
+      if (loading) return t('cert-loading')
+      if (error) return t('cert-error')
+      return t('download-certificate')
+    },
+    [t],
+  )
 
   const holdChangelogs = useMemo(() => {
     return (
@@ -110,7 +128,7 @@ export const CourseCertification: React.FC<
     )
   }
 
-  if (!certificate || !certificate.profile || error) {
+  if (!certificate?.profile || error) {
     return (
       <Container sx={{ py: 2 }}>
         <Alert severity="error" variant="outlined">
@@ -123,7 +141,7 @@ export const CourseCertification: React.FC<
   const certificationNumber = certificate.number ?? ''
   const grade = courseParticipant?.grade ?? Grade_Enum.Pass
 
-  if (courseParticipant && !courseParticipant?.grade) {
+  if (!courseParticipant?.grade) {
     return (
       <Container sx={{ py: 2 }}>
         <Alert variant="outlined" color="warning">
@@ -152,7 +170,7 @@ export const CourseCertification: React.FC<
           <Grid item md={3} px={4}>
             <Grid container gap={2}>
               <Box sx={{ mb: 2 }} mx="auto">
-                {grade ? gradesToCertificateIconMapping[grade] : null}
+                {gradesToCertificateIconMapping[grade] ?? null}
               </Box>
 
               {acl.canOverrideGrades() ? (
@@ -195,13 +213,7 @@ export const CourseCertification: React.FC<
                     }
                     fileName="certificate.pdf"
                   >
-                    {({ loading, error }) =>
-                      loading
-                        ? t('cert-loading')
-                        : error
-                        ? t('cert-error')
-                        : t('download-certificate')
-                    }
+                    {certificateStatus}
                   </PDFDownloadLink>
                 </Button>
               ) : null}
@@ -214,7 +226,7 @@ export const CourseCertification: React.FC<
                   onShowModifyGrade={() => setShowModifyGradeModal(true)}
                   onShowPutOnHoldModal={() =>
                     setShowPutOnHoldModal({
-                      edit: Boolean(holdRequest) ?? false,
+                      edit: Boolean(holdRequest),
                       open: true,
                     })
                   }
@@ -237,7 +249,7 @@ export const CourseCertification: React.FC<
             ) : null}
             <CertificateInfo
               accreditedBy={certificate.courseAccreditedBy as Accreditors_Enum}
-              grade={grade as Grade_Enum}
+              grade={grade}
               courseParticipant={courseParticipant}
               courseName={certificate.courseName}
               revokedDate={certificate.updatedAt}
@@ -246,7 +258,7 @@ export const CourseCertification: React.FC<
               dateIssued={certificate.certificationDate}
               status={certificate.status as CertificateStatus}
               statusTooltip={statusTooltip}
-              expireHoldDate={holdRequest ? holdRequest.expiry_date : undefined}
+              expireHoldDate={holdRequest?.expiry_date}
               onShowChangelogModal={() => setShowChangelogModal(true)}
             />
           </Grid>
@@ -258,64 +270,74 @@ export const CourseCertification: React.FC<
           <Dialog
             open={showPutOnHoldModal.open}
             onClose={() => setShowPutOnHoldModal({ edit: false, open: false })}
-            title={
-              showPutOnHoldModal.edit
-                ? t('this-certificate-hold')
-                : t('hold-certificate')
-            }
+            slots={{
+              Title: () => (
+                <>
+                  {showPutOnHoldModal.edit
+                    ? t('this-certificate-hold')
+                    : t('hold-certificate')}
+                </>
+              ),
+              Content: () => (
+                <PutOnHoldModal
+                  onClose={() => {
+                    setShowPutOnHoldModal({ edit: false, open: false })
+                    mutate()
+                  }}
+                  participantId={courseParticipant.id}
+                  certificateId={certificateId}
+                  certificateExpiryDate={certificate.expiryDate}
+                  edit={showPutOnHoldModal.edit}
+                  changelogs={holdChangelogs}
+                />
+              ),
+            }}
             maxWidth={800}
-          >
-            <PutOnHoldModal
-              onClose={() => {
-                setShowPutOnHoldModal({ edit: false, open: false })
-                mutate()
-              }}
-              participantId={courseParticipant.id}
-              certificateId={certificateId}
-              certificateExpiryDate={certificate.expiryDate}
-              edit={showPutOnHoldModal.edit}
-              changelogs={holdChangelogs}
-            />
-          </Dialog>
+          />
 
           <Dialog
             open={showModifyGradeModal}
             onClose={() => setShowModifyGradeModal(false)}
             slots={{
               Title: () => <>{t('modify-grade')}</>,
+              Content: () => (
+                <ModifyGradeModal
+                  certificateId={certificateId}
+                  participant={courseParticipant}
+                  onClose={() => setShowModifyGradeModal(false)}
+                />
+              ),
             }}
             maxWidth={800}
-          >
-            <ModifyGradeModal
-              certificateId={certificateId}
-              participant={courseParticipant}
-              onClose={() => setShowModifyGradeModal(false)}
-            />
-          </Dialog>
+          />
 
           <Dialog
             open={showCertificateHoldHistoryModal}
             onClose={() => setShowCertificateHoldHistoryModal(false)}
-            title={t('certificate-hold-history-log')}
+            slots={{
+              Title: () => <>{t('certificate-hold-history-log')}</>,
+              Content: () => (
+                <CertificateChangelog holdChangelogs={holdChangelogs} />
+              ),
+            }}
             minWidth={1000}
-          >
-            {holdChangelogs ? (
-              <CertificateHoldHistoryModal changelogs={holdChangelogs} />
-            ) : null}
-          </Dialog>
+          />
 
           <Dialog
             open={showChangelogModal}
             onClose={() => setShowChangelogModal(false)}
-            title={t('change-log')}
+            slots={{
+              Title: () => <>{t('change-log')}</>,
+              Content: () => (
+                <ChangelogModal
+                  changelogs={
+                    certificate?.participant?.certificateChanges ?? []
+                  }
+                />
+              ),
+            }}
             maxWidth={800}
-          >
-            {certificate.participant?.certificateChanges?.length ? (
-              <ChangelogModal
-                changelogs={certificate?.participant?.certificateChanges}
-              />
-            ) : null}
-          </Dialog>
+          />
         </>
       ) : null}
 
@@ -323,40 +345,48 @@ export const CourseCertification: React.FC<
         <Dialog
           open={showRevokeCertModal}
           onClose={() => setShowRevokeCertModal(false)}
-          title={
-            <Typography variant="h3">{t('revoke-certificate')}</Typography>
-          }
+          slots={{
+            Title: () => (
+              <Typography variant="h3">{t('revoke-certificate')}</Typography>
+            ),
+            Content: () => (
+              <RevokeCertModal
+                certificateId={certificateId}
+                participantId={certificate.participant?.id}
+                onClose={() => setShowRevokeCertModal(false)}
+                onSuccess={() => {
+                  setShowRevokeCertModal(false)
+                  mutate()
+                }}
+              />
+            ),
+          }}
           maxWidth={800}
-        >
-          <RevokeCertModal
-            certificateId={certificateId}
-            participantId={certificate.participant.id}
-            onClose={() => setShowRevokeCertModal(false)}
-            onSuccess={() => {
-              setShowRevokeCertModal(false)
-              mutate()
-            }}
-          />
-        </Dialog>
+        />
       )}
 
       {showUndoRevokeModal && certificate.participant && (
         <Dialog
           open={showUndoRevokeModal}
           onClose={() => setShowUndoRevokeModal(false)}
-          title={<Typography variant="h3">{t('undo-revoke')}</Typography>}
+          slots={{
+            Title: () => (
+              <Typography variant="h3">{t('undo-revoke')}</Typography>
+            ),
+            Content: () => (
+              <UndoRevokeModal
+                certificateId={certificateId}
+                participantId={certificate.participant?.id}
+                onClose={() => setShowUndoRevokeModal(false)}
+                onSuccess={() => {
+                  setShowUndoRevokeModal(false)
+                  mutate()
+                }}
+              />
+            ),
+          }}
           maxWidth={600}
-        >
-          <UndoRevokeModal
-            certificateId={certificateId}
-            participantId={certificate.participant.id}
-            onClose={() => setShowUndoRevokeModal(false)}
-            onSuccess={() => {
-              setShowUndoRevokeModal(false)
-              mutate()
-            }}
-          />
-        </Dialog>
+        />
       )}
     </Box>
   )

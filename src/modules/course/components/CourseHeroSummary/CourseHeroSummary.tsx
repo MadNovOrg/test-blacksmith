@@ -1,5 +1,3 @@
-import { Wrapper } from '@googlemaps/react-wrapper'
-import DeleteIcon from '@mui/icons-material/Delete'
 import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
@@ -10,7 +8,6 @@ import {
   Button,
   Container,
   Grid,
-  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -23,12 +20,10 @@ import {
 import { utcToZonedTime } from 'date-fns-tz'
 import { pick } from 'lodash'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CourseInstructionsDialog } from '@app/components/dialogs'
-import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
@@ -36,22 +31,22 @@ import {
   Venue,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
-import { DeleteCourseModal } from '@app/modules/course/components/DeleteCourseModal'
-import {
-  AttendeeCourse,
-  AttendeeCourseStatus,
-} from '@app/modules/course_attendees/components/AttendeeCourseStatus/AttendeeCourseStatus'
-import { AdminOnlyCourseStatus, Course } from '@app/types'
+import { Course } from '@app/types'
 import {
   getCourseBeginsForMessage,
   formatCourseVenue,
   courseEnded,
-  UKTimezone,
 } from '@app/util'
 
-import { CourseHostInfo } from '../CourseHostInfo'
-import { CourseTrainersInfo } from '../CourseTrainersInfo'
-import { SnackbarMessage } from '../SnackbarMessage'
+import {
+  CourseHeroStatusChip,
+  DeleteCourseButton,
+  MapComponent,
+  ProfileLink,
+  SnackBars,
+  CourseHostInfo,
+  CourseTrainersInfo,
+} from './Components'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
   minWidth: '32px',
@@ -89,18 +84,10 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { acl } = useAuth()
 
-  const [openDeleteCourseDialog, setOpenDeleteCourseDialog] =
-    useState<boolean>(false)
-
-  const onCloseDeleteCourseDialog = useCallback(
-    () => setOpenDeleteCourseDialog(false),
-    [],
-  )
-
-  const courseCancelled =
-    course &&
-    (course.status === Course_Status_Enum.Cancelled ||
-      course.status === Course_Status_Enum.Declined)
+  const courseCancelled = [
+    Course_Status_Enum.Cancelled,
+    Course_Status_Enum.Declined,
+  ].includes(course.status)
 
   const courseContactsData = useMemo(() => {
     const bookingContact = course.bookingContact
@@ -158,51 +145,9 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const courseBeginsForMessage = getCourseBeginsForMessage(course, t)
 
-  const backgroundList = isMobile
-    ? { backgroundColor: 'white', borderRadius: 3, p: 2 }
-    : {}
-
-  const geoCoordinates = useMemo(() => {
-    const coordinates = course.schedule[0].venue?.geoCoordinates
-      ?.replace(/[()]/g, '')
-      .split(',')
-
-    const zeroCoordinate = parseFloat('0')
-
-    if (
-      coordinates !== null &&
-      coordinates !== undefined &&
-      Array.isArray(coordinates) &&
-      coordinates.every(element => typeof element === 'string')
-    ) {
-      const latitude = parseFloat(coordinates[0])
-      const longitude = parseFloat(coordinates[1])
-      return {
-        lat: isNaN(latitude) ? zeroCoordinate : latitude,
-        lng: isNaN(longitude) ? zeroCoordinate : longitude,
-      }
-    } else {
-      return {
-        lat: zeroCoordinate,
-        lng: zeroCoordinate,
-      }
-    }
-  }, [course.schedule])
-
-  const ref = useCallback(
-    (node: HTMLElement | null) => {
-      if (node !== null) {
-        new window.google.maps.Map(node, {
-          center: {
-            lat: geoCoordinates.lat,
-            lng: geoCoordinates.lng,
-          },
-          zoom: 16,
-        })
-      }
-    },
-    [geoCoordinates],
-  )
+  const backgroundList = {
+    ...(isMobile && { backgroundColor: 'white', borderRadius: 3, p: 2 }),
+  }
 
   return (
     <Box
@@ -214,32 +159,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
       }}
     >
       <Container>
-        {isMobile ? (
-          <>
-            <SnackbarMessage
-              messageKey="course-created"
-              sx={{ position: 'absolute' }}
-            />
-            <SnackbarMessage
-              messageKey="course-canceled"
-              severity="info"
-              sx={{ position: 'absolute' }}
-            />
-            <SnackbarMessage
-              messageKey="course-submitted"
-              sx={{ position: 'absolute' }}
-            />
-            <SnackbarMessage
-              messageKey="course-evaluated"
-              sx={{ position: 'absolute' }}
-            />
-            <SnackbarMessage
-              messageKey="participant-transferred"
-              sx={{ position: 'absolute' }}
-            />
-          </>
-        ) : undefined}
-
+        <SnackBars />
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             {slots?.BackButton?.()}
@@ -259,7 +179,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             >
               {course.course_code}
             </Typography>
-            {/* TODO: Delete this after Arlo migration */}
             {acl.isInternalUser() && course.arloReferenceId ? (
               <>
                 <Typography variant="body2" color="secondary">
@@ -274,76 +193,16 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                 </Typography>
               </>
             ) : null}
-            {course.status ? (
-              <Box mt={2}>
-                {acl.isInternalUser() || acl.isTrainer() ? (
-                  <CourseStatusChip
-                    status={
-                      course.cancellationRequest
-                        ? AdminOnlyCourseStatus.CancellationRequested
-                        : course.status
-                    }
-                  />
-                ) : isManaged ? (
-                  <IndividualCourseStatusChip
-                    course={{
-                      ...course,
-                      schedule: [
-                        {
-                          ...course.schedule[0],
-                          timeZone: course.schedule[0].timeZone ?? UKTimezone,
-                        },
-                      ],
-                    }}
-                    participants={course.courseParticipants ?? []}
-                  />
-                ) : (
-                  <AttendeeCourseStatus
-                    course={course as unknown as AttendeeCourse}
-                  />
-                )}
-              </Box>
-            ) : null}
-            {isMobile && course.schedule[0].venue?.geoCoordinates ? (
-              <Grid>
-                <Wrapper
-                  apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}
-                  libraries={['places', 'visualization']}
-                >
-                  <Box
-                    ref={ref}
-                    id="map"
-                    sx={{ height: '20vh', width: '100%', mt: 2 }}
-                  />
-                </Wrapper>
-              </Grid>
-            ) : undefined}
+            <CourseHeroStatusChip isManaged={isManaged} course={course} />
+            <MapComponent
+              geoCoordinates={course.schedule[0].venue?.geoCoordinates}
+              schedule={course.schedule[0]}
+            />
             <Grid container spacing={1} alignItems={'center'} sx={{ mt: 3 }}>
               {slots?.EditButton ? (
                 <Grid item>{slots?.EditButton?.()}</Grid>
               ) : null}
-
-              {acl.canDeleteCourse(course) ? (
-                <Grid item>
-                  <Button
-                    color="error"
-                    data-testid="delete-course-button"
-                    onClick={() => setOpenDeleteCourseDialog(true)}
-                    size="large"
-                    startIcon={<DeleteIcon />}
-                    variant="contained"
-                  >
-                    {t('pages.course-participants.delete-course-button')}
-                  </Button>
-                  {
-                    <DeleteCourseModal
-                      courseId={course.id}
-                      onClose={onCloseDeleteCourseDialog}
-                      open={openDeleteCourseDialog}
-                    />
-                  }
-                </Grid>
-              ) : null}
+              <DeleteCourseButton course={course} />
             </Grid>
           </Grid>
           <Grid item xs={12} md={4}>
@@ -449,16 +308,15 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                       'components.course-form.organization-key-contact-label',
                     )}: `}
                     <ListItemText>
-                      {acl.isInternalUser() &&
-                      courseContactsData.organisationKeyContact.id ? (
-                        <Link
-                          href={`/profile/${courseContactsData.organisationKeyContact.id}`}
-                        >
-                          {`${courseContactsData.organisationKeyContact.fullName} `}
-                        </Link>
-                      ) : (
-                        `${courseContactsData.organisationKeyContact.fullName} `
-                      )}
+                      <ProfileLink
+                        profileId={
+                          courseContactsData.organisationKeyContact.id ?? ''
+                        }
+                        fullName={
+                          courseContactsData.organisationKeyContact.fullName ??
+                          ''
+                        }
+                      />
                     </ListItemText>
                     <ListItemText>
                       {courseContactsData.organisationKeyContact.email}
@@ -475,16 +333,12 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   <ListItemText>
                     {`${t('components.course-form.contact-person-label')}: `}
                     <ListItemText>
-                      {acl.isInternalUser() &&
-                      courseContactsData.bookingContact.id ? (
-                        <Link
-                          href={`/profile/${courseContactsData.bookingContact?.id}`}
-                        >
-                          {`${courseContactsData.bookingContact.fullName} `}
-                        </Link>
-                      ) : (
-                        `${courseContactsData.bookingContact.fullName} `
-                      )}
+                      <ProfileLink
+                        profileId={courseContactsData.bookingContact?.id ?? ''}
+                        fullName={
+                          courseContactsData.bookingContact.fullName ?? ''
+                        }
+                      />
                     </ListItemText>
                     <ListItemText>
                       {courseContactsData.bookingContact.email}

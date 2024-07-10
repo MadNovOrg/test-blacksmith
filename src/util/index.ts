@@ -34,6 +34,7 @@ import {
   CertificateStatus,
   CourseLevel,
   InsertOrgLeadMutationVariables,
+  Course as GeneratedCourseType,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import {
@@ -167,9 +168,9 @@ export const CurrencySymbol: Record<Currency, string> = {
 
 export const VAT = '(+VAT)'
 
-export const courseStarted = (course: Course) =>
+export const courseStarted = (course: Course | GeneratedCourseType) =>
   isPast(new Date(course.schedule[0]?.start))
-export const courseEnded = (course: Course) =>
+export const courseEnded = (course: Course | GeneratedCourseType) =>
   isPast(new Date(course.schedule[0]?.end))
 
 export const isLastCourseDay = (course: Course): boolean => {
@@ -704,7 +705,10 @@ export const getCourseDurationMessage = (
   return courseDurationMessage
 }
 
-export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
+export const getCourseBeginsForMessage = (
+  course: Course | GeneratedCourseType,
+  t: TFunction,
+) => {
   const courseStartDate = new Date(course.schedule[0].start)
   const courseBeginsFor = courseStarted(course)
     ? 0

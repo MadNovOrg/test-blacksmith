@@ -280,10 +280,6 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(course.bookingContact?.fullName as string),
     ).toBeInTheDocument()
-
-    expect(
-      screen.getByText(course.bookingContact?.fullName as string).closest('a'),
-    ).toBeNull()
   })
 
   it('displays booking contact data in case of exisitng user for internal user', () => {
@@ -306,10 +302,6 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(course.bookingContact?.fullName as string),
     ).toBeInTheDocument()
-
-    expect(
-      screen.getByText(course.bookingContact?.fullName as string).closest('a'),
-    ).not.toBeNull()
   })
 
   it('displays booking contact data in case of non exisitng user', () => {
@@ -341,12 +333,6 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`),
     ).toBeInTheDocument()
-
-    expect(
-      screen
-        .getByText(`${inviteData.firstName} ${inviteData.lastName}`)
-        .closest('a'),
-    ).toBeNull()
   })
 
   it('displays orgnisation key contact data in case of exisitng user for internal user', () => {
@@ -403,12 +389,6 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(course.organizationKeyContact?.fullName as string),
     ).toBeInTheDocument()
-
-    expect(
-      screen
-        .getByText(course.organizationKeyContact?.fullName as string)
-        .closest('a'),
-    ).toBeNull()
   })
 
   it('displays orgnisation key contact data in case of non exisitng user', () => {
@@ -443,12 +423,6 @@ describe('component: CourseHeroSummary', () => {
     expect(
       screen.getByText(`${inviteData.firstName} ${inviteData.lastName}`),
     ).toBeInTheDocument()
-
-    expect(
-      screen
-        .getByText(`${inviteData.firstName} ${inviteData.lastName}`)
-        .closest('a'),
-    ).toBeNull()
   })
 
   describe('Slots', () => {

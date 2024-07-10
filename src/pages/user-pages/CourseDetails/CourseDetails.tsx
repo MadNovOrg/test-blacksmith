@@ -24,7 +24,6 @@ import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification/CourseCertification'
-import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { CourseOverview } from '@app/components/CourseOverview'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { LinkBehavior } from '@app/components/LinkBehavior'
@@ -40,6 +39,7 @@ import {
   Organization,
 } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { CourseHeroSummary } from '@app/modules/course/components/CourseHeroSummary'
 import { CourseAttendeesTab } from '@app/modules/course_attendees/components/CourseAttendeesTab'
 import { EvaluationSummaryTab } from '@app/modules/course_evaluation/components/EvaluationSummaryTab'
 import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_evaluation/queries/get-feedback-users'

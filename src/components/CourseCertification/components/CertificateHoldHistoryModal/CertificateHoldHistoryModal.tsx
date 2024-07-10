@@ -9,19 +9,10 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { GetCertificateQuery } from '@app/generated/graphql'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { NonNullish } from '@app/types'
 
-type Participant = Pick<
-  NonNullish<GetCertificateQuery['certificate']>,
-  'participant'
->
-
-type CertificateChangelog = Pick<
-  NonNullish<Participant['participant']>,
-  'certificateChanges'
->
+import { CertificateChangelog } from '../../types'
 
 export type ChangelogModalProps = {
   changelogs: NonNullish<CertificateChangelog['certificateChanges']>
