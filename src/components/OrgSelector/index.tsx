@@ -219,7 +219,9 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       }
       return uniqBy(
         [
-          ...(localSavedOrgToBeCreated?.name.includes(debouncedQuery)
+          ...(localSavedOrgToBeCreated?.name
+            .toLowerCase()
+            .includes(debouncedQuery.toLowerCase())
             ? [{ ...localSavedOrgToBeCreated, id: uniqueId() }]
             : []),
           ...(showHubResults ? hubOrgs?.orgs ?? [] : []),
