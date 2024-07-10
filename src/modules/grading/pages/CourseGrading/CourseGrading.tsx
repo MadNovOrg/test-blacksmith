@@ -1,6 +1,5 @@
 import { Alert, CircularProgress, Container, Stack } from '@mui/material'
 import { t } from 'i18next'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useParams } from 'react-router-dom'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
@@ -9,7 +8,6 @@ import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
 import { BILDGrading } from './components/BILDGrading'
-import { ICMGrading } from './components/ICMGrading/ICMGrading'
 import { ICMGradingV2 } from './components/ICMGradingV2/ICMGradingV2'
 import useCourseGradingData from './hooks/useCourseGradingData'
 
@@ -17,10 +15,6 @@ export const CourseGrading = () => {
   const { id: courseId } = useParams()
 
   const { data: course, status } = useCourseGradingData(Number(courseId) ?? '')
-
-  const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model',
-  )
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
@@ -42,11 +36,7 @@ export const CourseGrading = () => {
         ) : null}
 
         {course?.accreditedBy === Accreditors_Enum.Icm ? (
-          !newModulesDataModelEnabled ? (
-            <ICMGrading course={course} />
-          ) : (
-            <ICMGradingV2 course={course} />
-          )
+          <ICMGradingV2 course={course} />
         ) : null}
 
         {course?.accreditedBy === Accreditors_Enum.Bild ? (

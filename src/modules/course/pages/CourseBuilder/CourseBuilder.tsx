@@ -1,5 +1,4 @@
 import { Alert, Box, CircularProgress } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +10,6 @@ import {
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
 } from '@app/generated/graphql'
-import { ICMCourseBuilder } from '@app/modules/course/pages/CourseBuilder/components/ICMCourseBuilder/ICMCourseBuilder'
 import { NotFound } from '@app/pages/common/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 
@@ -19,9 +17,6 @@ import { BILDCourseBuilder } from './components/BILDCourseBuilder/BILDCourseBuil
 import { ICMCourseBuilderV2 } from './components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 
 export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
-  const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model',
-  )
   const { t } = useTranslation()
   const { id: courseId } = useParams()
 
@@ -70,11 +65,7 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
       </Helmet>
 
       {courseData?.course?.accreditedBy === Accreditors_Enum.Icm ? (
-        newModulesDataModelEnabled ? (
-          <ICMCourseBuilderV2 editMode={editMode ?? false} />
-        ) : (
-          <ICMCourseBuilder editMode={editMode ?? false} />
-        )
+        <ICMCourseBuilderV2 editMode={editMode ?? false} />
       ) : null}
 
       {courseData?.course?.accreditedBy === Accreditors_Enum.Bild ? (

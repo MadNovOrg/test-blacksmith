@@ -12,15 +12,12 @@ import {
   Typography,
 } from '@mui/material'
 import { t } from 'i18next'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { Grade } from '@app/components/Grade'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { ICMGradedOnAccordion } from '@app/modules/grading/pages/ParticipantGrade/components/ICMGradedOnAccordion/ICMGradedOnAccordion'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
 
@@ -29,9 +26,6 @@ import { ICMGradedOnAccordionV2 } from './components/ICMGradedOnAccordionV2/ICMG
 import { useGradedParticipant } from './hooks/useGradedParticipant'
 
 export const ParticipantGrade = () => {
-  const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model',
-  )
   const { participantId, id: courseId } = useParams()
 
   const [{ data, fetching, error }] = useGradedParticipant(participantId ?? '')
@@ -112,11 +106,7 @@ export const ParticipantGrade = () => {
                 </Typography>
 
                 {participant.course.accreditedBy === Accreditors_Enum.Icm ? (
-                  newModulesDataModelEnabled ? (
-                    <ICMGradedOnAccordionV2 gradedOn={participant.gradedOn} />
-                  ) : (
-                    <ICMGradedOnAccordion participant={participant} />
-                  )
+                  <ICMGradedOnAccordionV2 gradedOn={participant.gradedOn} />
                 ) : null}
 
                 {participant.course.accreditedBy === Accreditors_Enum.Bild ? (

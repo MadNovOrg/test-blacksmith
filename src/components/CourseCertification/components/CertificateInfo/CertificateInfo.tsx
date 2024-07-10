@@ -15,14 +15,12 @@ import {
   useTheme,
 } from '@mui/material'
 import MUIImage from 'mui-image'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   CertificateStatus,
-  Course_Participant_Module,
   GetCertificateQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
@@ -34,9 +32,6 @@ import {
   isModule,
 } from '@app/modules/grading/shared/utils'
 import { NonNullish, Strategy } from '@app/types'
-import { transformModulesToGroups } from '@app/util'
-
-import { ModuleGroupAccordion } from '../ModuleGroupAccordion/ModuleGroupAccordion'
 
 type Participant = Pick<
   NonNullish<GetCertificateQuery['certificate']>,
@@ -78,22 +73,12 @@ export const CertificateInfo: React.FC<
   const { t, _t } = useScopedTranslation('common.course-certificate')
   const { acl } = useAuth()
 
-  const newModulesDataModelEnabled = useFeatureFlagEnabled(
-    'new-modules-data-model',
-  )
-
   const filterModules = (strategy: Strategy): Strategy => {
     const filteredModules = strategy.modules?.filter(
       obj1 => !strategy.groups?.some(obj2 => obj2.name === obj1.name),
     )
     return { modules: filteredModules, groups: strategy.groups }
   }
-
-  const moduleGroupsWithModules = courseParticipant
-    ? transformModulesToGroups(
-        courseParticipant.gradingModules as Course_Participant_Module[],
-      )
-    : null
 
   const isRevoked = status === CertificateStatus.Revoked
   const isOnHold = status === CertificateStatus.OnHold
@@ -273,135 +258,108 @@ export const CertificateInfo: React.FC<
         </>
       ) : null}
 
-      {newModulesDataModelEnabled ? (
-        <>
-          <Typography variant="h3" gutterBottom>
-            {t('modules-list-title')}
-          </Typography>
+      <>
+        <Typography variant="h3" gutterBottom>
+          {t('modules-list-title')}
+        </Typography>
 
-          {Array.isArray(courseParticipant?.gradedOn)
-            ? courseParticipant?.gradedOn.map(module => {
-                if (!isModule(module)) {
-                  return null
-                }
+        {Array.isArray(courseParticipant?.gradedOn)
+          ? courseParticipant?.gradedOn.map(module => {
+              if (!isModule(module)) {
+                return null
+              }
 
-                const lessons = module.lessons?.items
+              const lessons = module.lessons?.items
 
-                const { numberOfLessons, coveredLessons } =
-                  countLessons(lessons)
+              const { numberOfLessons, coveredLessons } = countLessons(lessons)
 
-                return (
-                  <>
-                    <Accordion key={module.id}>
-                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography
-                          variant="subtitle2"
-                          sx={{
-                            width: { sm: '60%', md: '70%' },
-                            flexShrink: 0,
-                            mt: -0.5,
-                          }}
-                        >
-                          {module.displayName ?? module.name}
-                        </Typography>
+              return (
+                <>
+                  <Accordion key={module.id}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          width: { sm: '60%', md: '70%' },
+                          flexShrink: 0,
+                          mt: -0.5,
+                        }}
+                      >
+                        {module.displayName ?? module.name}
+                      </Typography>
 
-                        <Typography sx={{ color: 'text.secondary' }}>
-                          {`${coveredLessons} of ${numberOfLessons} completed`}
-                        </Typography>
-                      </AccordionSummary>
+                      <Typography sx={{ color: 'text.secondary' }}>
+                        {`${coveredLessons} of ${numberOfLessons} completed`}
+                      </Typography>
+                    </AccordionSummary>
 
-                      {Array.isArray(lessons) && lessons.length ? (
-                        <AccordionDetails>
-                          {lessons.map((lesson: object) => {
-                            if (!isLesson(lesson)) {
-                              return null
-                            }
+                    {Array.isArray(lessons) && lessons.length ? (
+                      <AccordionDetails>
+                        {lessons.map((lesson: object) => {
+                          if (!isLesson(lesson)) {
+                            return null
+                          }
 
-                            const hasSubModules = Boolean(lesson.items)
-                            const subModules = lesson.items ?? []
+                          const hasSubModules = Boolean(lesson.items)
+                          const subModules = lesson.items ?? []
 
-                            const { numberOfLessons, coveredLessons } =
-                              countLessons(subModules)
+                          const { numberOfLessons, coveredLessons } =
+                            countLessons(subModules)
 
-                            return hasSubModules ? (
-                              <>
-                                <Accordion key={module.id}>
-                                  <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
+                          return hasSubModules ? (
+                            <>
+                              <Accordion key={module.id}>
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                >
+                                  <Typography
+                                    sx={{
+                                      width: { sm: '60%', md: '70%' },
+                                      flexShrink: 0,
+                                      mt: -0.5,
+                                    }}
                                   >
-                                    <Typography
-                                      sx={{
-                                        width: { sm: '60%', md: '70%' },
-                                        flexShrink: 0,
-                                        mt: -0.5,
-                                      }}
-                                    >
-                                      {lesson.name}
-                                    </Typography>
+                                    {lesson.name}
+                                  </Typography>
 
-                                    <Typography
-                                      sx={{ color: 'text.secondary' }}
-                                    >
-                                      {`${coveredLessons} of ${numberOfLessons} completed`}
-                                    </Typography>
-                                  </AccordionSummary>
+                                  <Typography sx={{ color: 'text.secondary' }}>
+                                    {`${coveredLessons} of ${numberOfLessons} completed`}
+                                  </Typography>
+                                </AccordionSummary>
 
-                                  {subModules.length ? (
-                                    <AccordionDetails>
-                                      {subModules.map((lesson: object) => {
-                                        if (!isLesson(lesson)) {
-                                          return null
-                                        }
+                                {subModules.length ? (
+                                  <AccordionDetails>
+                                    {subModules.map((lesson: object) => {
+                                      if (!isLesson(lesson)) {
+                                        return null
+                                      }
 
-                                        return (
-                                          <Typography key={lesson.name}>
-                                            {lesson.name}
-                                          </Typography>
-                                        )
-                                      })}
-                                    </AccordionDetails>
-                                  ) : null}
-                                </Accordion>
-                                <Divider />
-                              </>
-                            ) : (
-                              <Typography key={lesson.name}>
-                                {lesson.name}
-                              </Typography>
-                            )
-                          })}
-                        </AccordionDetails>
-                      ) : null}
-                    </Accordion>
-                    <Divider />
-                  </>
-                )
-              })
-            : null}
-        </>
-      ) : null}
-
-      {!newModulesDataModelEnabled && moduleGroupsWithModules?.length ? (
-        <>
-          <Typography variant="h3" gutterBottom>
-            {t('modules-list-title')}
-          </Typography>
-          {moduleGroupsWithModules.map(moduleGroupWithModules => {
-            return (
-              <ModuleGroupAccordion
-                key={moduleGroupWithModules.id}
-                moduleGroupName={moduleGroupWithModules.name}
-                completedModules={moduleGroupWithModules.modules.filter(
-                  module => module.completed,
-                )}
-                uncompletedModules={moduleGroupWithModules.modules.filter(
-                  module => !module.completed,
-                )}
-              />
-            )
-          })}
-        </>
-      ) : null}
+                                      return (
+                                        <Typography key={lesson.name}>
+                                          {lesson.name}
+                                        </Typography>
+                                      )
+                                    })}
+                                  </AccordionDetails>
+                                ) : null}
+                              </Accordion>
+                              <Divider />
+                            </>
+                          ) : (
+                            <Typography key={lesson.name}>
+                              {lesson.name}
+                            </Typography>
+                          )
+                        })}
+                      </AccordionDetails>
+                    ) : null}
+                  </Accordion>
+                  <Divider />
+                </>
+              )
+            })
+          : null}
+      </>
 
       {courseParticipant?.bildGradingModules?.modules ? (
         <>
