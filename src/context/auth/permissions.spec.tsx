@@ -1800,9 +1800,21 @@ describe(getACL.name, () => {
                 {
                   grade: Grade_Enum.Pass,
                   course: {
-                    start: pastDate.toISOString(),
+                    start: {
+                      aggregate: {
+                        date: {
+                          start: pastDate.toISOString(),
+                        },
+                      },
+                    },
                     level: Course_Level_Enum.AdvancedTrainer,
-                    end: futureDate.toISOString(),
+                    end: {
+                      aggregate: {
+                        date: {
+                          end: futureDate.toISOString(),
+                        },
+                      },
+                    },
                   },
                 },
               ],
@@ -1848,9 +1860,21 @@ describe(getACL.name, () => {
                 {
                   grade: null,
                   course: {
-                    start: pastDate.toISOString(),
+                    start: {
+                      aggregate: {
+                        date: {
+                          start: pastDate.toISOString(),
+                        },
+                      },
+                    },
                     level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
-                    end: futureDate.toISOString(),
+                    end: {
+                      aggregate: {
+                        date: {
+                          end: futureDate.toISOString(),
+                        },
+                      },
+                    },
                   },
                 },
               ],
@@ -1881,9 +1905,21 @@ describe(getACL.name, () => {
                 {
                   grade: Grade_Enum.Pass,
                   course: {
-                    start: pastDate.toISOString(),
+                    start: {
+                      aggregate: {
+                        date: {
+                          start: pastDate.toISOString(),
+                        },
+                      },
+                    },
                     level: Course_Level_Enum.BildAdvancedTrainer,
-                    end: pastDate.toISOString(),
+                    end: {
+                      aggregate: {
+                        date: {
+                          end: pastDate.toISOString(),
+                        },
+                      },
+                    },
                   },
                 },
               ],
@@ -1913,9 +1949,21 @@ describe(getACL.name, () => {
                 {
                   grade: null,
                   course: {
-                    start: pastDate.toISOString(),
+                    start: {
+                      aggregate: {
+                        date: {
+                          start: pastDate.toISOString(),
+                        },
+                      },
+                    },
                     level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
-                    end: pastDate.toISOString(),
+                    end: {
+                      aggregate: {
+                        date: {
+                          end: pastDate.toISOString(),
+                        },
+                      },
+                    },
                   },
                 },
               ],
@@ -1945,9 +1993,21 @@ describe(getACL.name, () => {
                 {
                   grade: 'FAIL' as Grade_Enum,
                   course: {
-                    start: pastDate.toISOString(),
+                    start: {
+                      aggregate: {
+                        date: {
+                          start: pastDate.toISOString(),
+                        },
+                      },
+                    },
                     level: 'BILD_ADVANCED_TRAINER' as Course_Level_Enum,
-                    end: pastDate.toISOString(),
+                    end: {
+                      aggregate: {
+                        date: {
+                          end: pastDate.toISOString(),
+                        },
+                      },
+                    },
                   },
                 },
               ],

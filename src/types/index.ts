@@ -22,6 +22,7 @@ import {
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
+import { AttendedCourseData } from '@app/pages/Resources/utils'
 
 export type Base = {
   id: string
@@ -234,11 +235,13 @@ export type Profile = {
   certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
   courses?: {
     grade?: Grade_Enum | null | undefined
-    course: {
-      start?: string
-      end?: string
-      level?: Course_Level_Enum
-    }
+    course:
+      | {
+          start?: string
+          end?: string
+          level?: Course_Level_Enum
+        }
+      | AttendedCourseData
   }[]
   archived?: boolean
   country?: string

@@ -1,6 +1,6 @@
 import { isPast, isFuture, parseISO } from 'date-fns'
 
-import { Grade_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
 
 export enum TrainerCoursesEnum {
   Level1BS = 'LEVEL_1_BS',
@@ -18,10 +18,26 @@ enum NonTrainerCoursesEnum {
   Advanced = 'ADVANCED',
 }
 
-type AttendedCourseData = {
-  start?: string | undefined
-  end?: string | undefined
-  level?: TrainerCoursesEnum | NonTrainerCoursesEnum
+export type AttendedCourseData = {
+  start?:
+    | {
+        aggregate: {
+          date: {
+            start: string | undefined
+          }
+        }
+      }
+    | undefined
+  end?:
+    | {
+        aggregate: {
+          date: {
+            end: string | undefined
+          }
+        }
+      }
+    | undefined
+  level?: TrainerCoursesEnum | NonTrainerCoursesEnum | Course_Level_Enum
 }
 
 export interface ICourseCategoryUserAttends {
@@ -73,8 +89,8 @@ const onGoingTrainerCourseLevelsUserAttends = (
 ): (TrainerCoursesEnum | never[])[] | undefined => {
   const onGoingCourses = userCourses?.map(({ course }) => {
     const courseIsOngoing =
-      isPast(parseISO(course.start ?? '')) &&
-      isFuture(parseISO(course.end ?? ''))
+      isPast(parseISO(course.start?.aggregate?.date?.start ?? '')) &&
+      isFuture(parseISO(course.end?.aggregate?.date?.end ?? ''))
 
     if (courseIsOngoing) {
       return course.level as TrainerCoursesEnum
@@ -93,10 +109,14 @@ const getCourseProgress = (
   participantCourses?: ICourseCategoryUserAttends[],
 ): ITrainerCourseProgress | null => {
   const started = participantCourses?.some(participantCourse =>
-    isPast(parseISO(participantCourse.course.start ?? '')),
+    isPast(
+      parseISO(participantCourse?.course?.start?.aggregate?.date?.start ?? ''),
+    ),
   )
   const ended = participantCourses?.some(participantCourse =>
-    isPast(parseISO(participantCourse.course.end ?? '')),
+    isPast(
+      parseISO(participantCourse?.course?.end?.aggregate?.date?.end ?? ''),
+    ),
   )
 
   return {
