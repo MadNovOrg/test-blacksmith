@@ -12,6 +12,7 @@ export const RESOURCE_CATEGORY_SUMMARY = gql`
     resourcePermissions {
       certificateLevels
       principalTrainer
+      courseInProgress
     }
     resources(
       first: 100

@@ -17,6 +17,7 @@ export const ALL_RESOURCE_CATEGORIES_QUERY = gql`
           resourcePermissions {
             certificateLevels
             principalTrainer
+            courseInProgress
           }
         }
       }

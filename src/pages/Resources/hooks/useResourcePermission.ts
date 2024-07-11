@@ -10,7 +10,7 @@ import {
 import {
   courseCategoryUserAttends,
   onGoingTrainerCourseLevelsUserAttends,
-  trainerCourseProgress,
+  getCourseProgress,
   hasGotPassForTrainerCourse,
   ICourseCategoryUserAttends,
   TrainerCoursesEnum,
@@ -39,7 +39,7 @@ export function useResourcePermission() {
   const onGoingCoursesUserAttends = onGoingTrainerCourseLevelsUserAttends(
     profile?.courses as ICourseCategoryUserAttends[],
   )
-  const courseProgress = trainerCourseProgress(
+  const courseProgress = getCourseProgress(
     profile?.courses as ICourseCategoryUserAttends[],
   )
   const hasPassed = hasGotPassForTrainerCourse(
@@ -50,7 +50,7 @@ export function useResourcePermission() {
     (
       resourcePermissions: Pick<
         Resource_Resourcepermissions,
-        'certificateLevels' | 'principalTrainer'
+        'certificateLevels' | 'principalTrainer' | 'courseInProgress'
       >,
     ) => {
       if (!resourcePermissions) {
@@ -81,6 +81,18 @@ export function useResourcePermission() {
       if (
         hasPermissionByCourseCertificateLevel ||
         hasPermissionByPrincipalTrainer
+      ) {
+        return true
+      }
+
+      /**
+       * @summary we set the Workbook and Manuals resource permission to allow access
+       * to the Workbooks and Manuals resource category, and make it easier to control access to it
+       */
+      if (
+        resourcePermissions.courseInProgress &&
+        courseProgress?.started &&
+        !courseProgress.ended
       ) {
         return true
       }
@@ -127,12 +139,13 @@ export function useResourcePermission() {
     },
     [
       acl,
-      attendedCourse,
-      onGoingCoursesUserAttends,
-      courseProgress?.ended,
-      currentUserCertificates,
-      hasPassed,
       trainerRoles,
+      courseProgress?.started,
+      courseProgress?.ended,
+      attendedCourse?.attendsTrainer,
+      hasPassed,
+      currentUserCertificates,
+      onGoingCoursesUserAttends,
     ],
   )
 

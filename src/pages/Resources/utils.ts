@@ -89,25 +89,19 @@ const onGoingTrainerCourseLevelsUserAttends = (
   )
 }
 
-const trainerCourseProgress = (
+const getCourseProgress = (
   participantCourses?: ICourseCategoryUserAttends[],
 ): ITrainerCourseProgress | null => {
-  const attendedTrainerCourses = participantCourses?.filter(attendedCourse =>
-    trainerCoursesList.includes(
-      attendedCourse.course.level as TrainerCoursesEnum,
-    ),
-  )
-
-  const started = attendedTrainerCourses?.some(participantCourse =>
+  const started = participantCourses?.some(participantCourse =>
     isPast(parseISO(participantCourse.course.start ?? '')),
   )
-  const ended = attendedTrainerCourses?.some(participantCourse =>
+  const ended = participantCourses?.some(participantCourse =>
     isPast(parseISO(participantCourse.course.end ?? '')),
   )
 
   return {
-    started: started ? started : null,
-    ended: ended ? ended : null,
+    started: started ?? null,
+    ended: ended ?? null,
   }
 }
 
@@ -131,5 +125,5 @@ export {
   courseCategoryUserAttends,
   onGoingTrainerCourseLevelsUserAttends,
   hasGotPassForTrainerCourse,
-  trainerCourseProgress,
+  getCourseProgress,
 }

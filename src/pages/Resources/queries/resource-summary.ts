@@ -17,6 +17,7 @@ export const RESOURCE_SUMMARY = gql`
     resourcePermissions {
       certificateLevels
       principalTrainer
+      courseInProgress
     }
   }
 `

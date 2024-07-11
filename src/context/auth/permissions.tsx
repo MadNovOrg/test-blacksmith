@@ -17,7 +17,7 @@ import {
   courseCategoryUserAttends,
   hasGotPassForTrainerCourse,
   ICourseCategoryUserAttends,
-  trainerCourseProgress,
+  getCourseProgress,
 } from '@app/pages/Resources/utils'
 import { Course, CourseInput, RoleName } from '@app/types'
 import {
@@ -508,7 +508,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const attendedCourse = courseCategoryUserAttends(
         auth.profile?.courses as ICourseCategoryUserAttends[],
       )
-      const courseProgress = trainerCourseProgress(
+      const courseProgress = getCourseProgress(
         auth.profile?.courses as ICourseCategoryUserAttends[],
       )
       const hasPassed = hasGotPassForTrainerCourse(
@@ -516,8 +516,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       )
 
       const attendedTrainerCourse = attendedCourse?.attendsTrainer
-      const trainerCourseIsOngoing =
-        courseProgress?.started && !courseProgress.ended
+      const courseIsOngoing = courseProgress?.started && !courseProgress.ended
       const hasPassedTrainerCourse = hasPassed
 
       const currentUserCertificates = auth.certificates
@@ -544,7 +543,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ) {
         return Boolean(
           currentUserCertificates?.length ||
-            trainerCourseIsOngoing ||
+            courseIsOngoing ||
             hasPassedTrainerCourse,
         )
       }
