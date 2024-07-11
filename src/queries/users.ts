@@ -25,6 +25,20 @@ export const getUserProfile = gql`
         grade
         course {
           level
+          start: schedule_aggregate {
+            aggregate {
+              date: max {
+                start
+              }
+            }
+          }
+          end: schedule_aggregate {
+            aggregate {
+              date: max {
+                end
+              }
+            }
+          }
         }
       }
     }
