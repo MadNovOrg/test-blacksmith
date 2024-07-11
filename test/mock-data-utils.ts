@@ -797,7 +797,11 @@ export const buildLogs = build<GetCourseAuditLogsQuery['logs'][0]>({
     course: {
       id: perBuild(() => chance.integer()),
       course_code: 'OP-L1-10000',
-      start: sub(new Date(), { days: 2 }).toISOString(),
+      start: {
+        aggregate: {
+          date: { start: sub(new Date(), { days: 2 }).toISOString() },
+        },
+      },
       type: Course_Type_Enum.Closed,
       orders: [
         {

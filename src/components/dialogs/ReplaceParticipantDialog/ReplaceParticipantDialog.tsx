@@ -234,7 +234,7 @@ export const ReplaceParticipantDialog: React.FC<
           {course && (
             <CourseTitleAndDuration
               mb={2}
-              showCourseDuration={false}
+              showCourseDuration={true}
               course={{
                 id: course.id,
                 course_code: course.course_code,

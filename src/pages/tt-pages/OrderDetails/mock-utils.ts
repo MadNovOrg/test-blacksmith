@@ -59,8 +59,12 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
         level: Course_Level_Enum.Level_1,
         name: chance.name(),
         type: Course_Type_Enum.Open,
-        start: new Date().toISOString(),
-        end: new Date().toISOString(),
+        start: {
+          aggregate: { date: { start: new Date().toISOString() } },
+        },
+        end: {
+          aggregate: { date: { end: new Date().toISOString() } },
+        },
         residingCountry: 'GB-ENG',
         deliveryType: Course_Delivery_Type_Enum.F2F,
       },

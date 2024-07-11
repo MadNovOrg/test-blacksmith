@@ -93,10 +93,10 @@ export const AvailableCourses: React.FC<
       },
     ]
     if (dateFrom) {
-      conditions.push({ start: { _gte: dateFrom } })
+      conditions.push({ schedule: { start: { _gte: dateFrom } } })
     }
     if (dateTo) {
-      conditions.push({ start: { _lte: dateTo } })
+      conditions.push({ schedule: { start: { _lte: dateTo } } })
     }
     if (filterByCertificateLevel.length) {
       conditions.push({ level: { _in: filterByCertificateLevel } })

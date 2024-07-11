@@ -30,10 +30,10 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
     const timeZone = data.schedule[0].timeZone ?? 'Europe/London'
 
     return {
-      start: utcToZonedTime(data.start, timeZone),
-      end: utcToZonedTime(data.end, timeZone),
+      start: utcToZonedTime(data.schedule[0].start, timeZone),
+      end: utcToZonedTime(data.schedule[0].end, timeZone),
     }
-  }, [data.end, data.schedule, data.start])
+  }, [data.schedule])
 
   let location = ''
   if (data.schedule && data.schedule.length > 0) {
@@ -86,7 +86,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
           {`${t('dates.withTime', {
             date: isResidingCountryEnabled
               ? timeZoneScheduleDateTime.start
-              : data.start,
+              : data.schedule[0].start,
           })}${
             isResidingCountryEnabled
               ? ` ${formatGMTDateTimeByTimeZone(
@@ -105,7 +105,7 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
           {`${t('dates.withTime', {
             date: isResidingCountryEnabled
               ? timeZoneScheduleDateTime.end
-              : data.end,
+              : data.schedule[0].end,
           })}${
             isResidingCountryEnabled
               ? ` ${formatGMTDateTimeByTimeZone(

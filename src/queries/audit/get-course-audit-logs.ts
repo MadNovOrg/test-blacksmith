@@ -27,7 +27,13 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
         id
         course_code
         type
-        start @include(if: $fromExceptionsLog)
+        start: schedule_aggregate @include(if: $fromExceptionsLog) {
+          aggregate {
+            date: max {
+              start
+            }
+          }
+        }
         organization @include(if: $fromExceptionsLog) {
           name
           id

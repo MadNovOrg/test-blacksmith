@@ -1,5 +1,5 @@
 import { Link, Typography, TypographyProps } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course, Course_Level_Enum, CourseLevel } from '@app/generated/graphql'
@@ -7,10 +7,12 @@ import { getTimeDifferenceAndContext } from '@app/util'
 
 export type CourseSubset = Pick<
   Course,
-  'id' | 'course_code' | 'start' | 'end' | 'reaccreditation'
+  'id' | 'course_code' | 'reaccreditation'
 > & {
+  end?: Date | string
   level?: Course_Level_Enum | CourseLevel | null
   residingCountry?: string | null
+  start?: Date | string
   timeZone?: string | null
 }
 
@@ -30,10 +32,37 @@ export const CourseTitle: React.FC<
 }) => {
   const { t } = useTranslation()
 
-  const difference = getTimeDifferenceAndContext(
-    new Date(course.end),
-    new Date(course.start),
-  )
+  const difference =
+    course.start && course.end
+      ? getTimeDifferenceAndContext(
+          new Date(course.end),
+          new Date(course.start),
+        )
+      : undefined
+
+  const courseDuration = useMemo(() => {
+    if (showCourseDuration && difference) {
+      return difference.context === 'hours'
+        ? ` - ${difference.count} ${t('hours')} `
+        : ''
+    }
+
+    return null
+  }, [difference, showCourseDuration, t])
+
+  const courseLink = useMemo(() => {
+    if (course?.course_code) {
+      return showCourseLink ? (
+        <Link href={`/courses/${course.id}/details`} color="primary">
+          ({course.course_code})
+        </Link>
+      ) : (
+        <>({course.course_code})</>
+      )
+    }
+
+    return null
+  }, [course.course_code, course.id, showCourseLink])
 
   return (
     <Typography
@@ -44,20 +73,8 @@ export const CourseTitle: React.FC<
     >
       {t(`course-levels.${course?.level}`)}{' '}
       {course.reaccreditation ? t('reaccreditation') + ' ' : ''}
-      {showCourseDuration
-        ? difference.context === 'hours'
-          ? ` - ${difference.count} ${t('hours')} `
-          : ''
-        : null}
-      {course?.course_code ? (
-        showCourseLink ? (
-          <Link href={`/courses/${course.id}/details`} color="primary">
-            ({course.course_code})
-          </Link>
-        ) : (
-          <>({course.course_code})</>
-        )
-      ) : null}
+      {courseDuration}
+      {courseLink}
     </Typography>
   )
 }

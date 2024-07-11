@@ -24,9 +24,7 @@ export const getUserProfile = gql`
       courses {
         grade
         course {
-          end
           level
-          start
         }
       }
     }

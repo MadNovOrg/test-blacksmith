@@ -72,8 +72,20 @@ export const QUERY = gql`
           id
           name
           status
-          start
-          end
+          start: schedule_aggregate {
+            aggregate {
+              date: max {
+                start
+              }
+            }
+          }
+          end: schedule_aggregate {
+            aggregate {
+              date: max {
+                end
+              }
+            }
+          }
         }
       }
 

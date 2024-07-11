@@ -108,7 +108,9 @@ export default function useActionableCourses({
             _and: [
               { status: { _eq: Course_Status_Enum.TrainerMissing } },
               {
-                start: { _lte: addDays(new Date(), 30).toISOString() },
+                schedule: {
+                  start: { _lte: addDays(new Date(), 30).toISOString() },
+                },
               },
             ],
           },

@@ -70,8 +70,6 @@ export const GET_COURSE_ORDERS = gql`
         source
         go1Integration
         max_participants
-        start
-        end
         freeSpaces
         deliveryType
         bookingContact {

@@ -85,11 +85,13 @@ export default function useCourseAuditLogs({
     }
     if (filter.eventDates?.from) {
       conditions.push({
-        course: { start: { _gte: filter.eventDates.from } },
+        course: { schedule: { start: { _gte: filter.eventDates.from } } },
       })
     }
     if (filter.eventDates?.to) {
-      conditions.push({ course: { end: { _lte: filter.eventDates.to } } })
+      conditions.push({
+        course: { schedule: { end: { _lte: filter.eventDates.to } } },
+      })
     }
     return { _and: conditions }
   }, [
@@ -99,7 +101,8 @@ export default function useCourseAuditLogs({
     filter.query,
     filter.filterByCertificateLevel,
     filter.filterByCourseType,
-    filter.eventDates,
+    filter.eventDates?.from,
+    filter.eventDates?.to,
   ])
 
   const client = useClient()

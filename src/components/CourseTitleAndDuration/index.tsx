@@ -1,5 +1,4 @@
-import { Box } from '@mui/material'
-import { TypographyProps } from '@mui/material'
+import { Box, TypographyProps } from '@mui/material'
 import React from 'react'
 
 import { CourseDuration } from './components/CourseDuration'

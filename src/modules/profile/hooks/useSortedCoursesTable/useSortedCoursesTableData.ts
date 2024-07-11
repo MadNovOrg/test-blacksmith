@@ -23,7 +23,7 @@ export const useSortedCoursesTableData = ({ profile }: Props) => {
     let targetB: string | undefined
 
     if (a.__typename === 'course_participant') {
-      targetA = a.course.start ?? ''
+      targetA = a.course.start?.aggregate?.date?.start ?? ''
     } else if (a.__typename === 'course_participant_audit') {
       targetA = a.course.dates?.aggregate?.start?.date ?? ''
     } else {
@@ -31,7 +31,7 @@ export const useSortedCoursesTableData = ({ profile }: Props) => {
     }
 
     if (b.__typename === 'course_participant') {
-      targetB = b.course.start ?? ''
+      targetB = b.course.start?.aggregate?.date?.start ?? ''
     } else if (b.__typename === 'course_participant_audit') {
       targetB = b.course.dates?.aggregate?.start?.date ?? ''
     } else {

@@ -47,7 +47,7 @@ export const SEARCH_COURSES = gql`
     courses: course(
       where: { _and: [$where, { id: { _nin: $selectedIds } }] }
       limit: 200
-      order_by: { start: asc }
+      order_by: { schedule_aggregate: { max: { start: asc } } }
     ) {
       ...SearchCourse
     }

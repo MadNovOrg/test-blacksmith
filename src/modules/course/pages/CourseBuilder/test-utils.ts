@@ -64,8 +64,6 @@ export function buildCourse(
     level: Course_Level_Enum.Advanced,
     go1Integration: false,
     deliveryType: Course_Delivery_Type_Enum.F2F,
-    start: new Date().toISOString(),
-    end: new Date().toISOString(),
     organization: {
       name: chance.name({ full: true }),
     },
@@ -76,6 +74,8 @@ export function buildCourse(
           name: chance.name(),
           city: chance.name(),
         },
+        start: new Date().toISOString(),
+        end: new Date().toISOString(),
       },
     ],
     moduleGroupIds: [],

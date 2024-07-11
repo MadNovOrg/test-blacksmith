@@ -61,7 +61,8 @@ export const CoursesTable: FC<PropsWithChildren<CoursesTableProps>> = ({
                   courseId: row.course.id,
                   courseName: row.course.name,
                   attended: row?.attended ?? undefined,
-                  courseStartDate: row?.course?.start,
+                  courseStartDate:
+                    row?.course?.start.aggregate?.date?.start ?? '',
                   courseStatus: row?.course?.status ?? undefined,
                 }}
               />

@@ -7223,9 +7223,11 @@ export type ResourceCategory_Resourcearea = AcfFieldGroup & {
 export type ResourceCategory_Resourcepermissions = AcfFieldGroup & {
   __typename?: 'ResourceCategory_Resourcepermissions';
   certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
+  courseInProgress?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
   principalTrainer?: Maybe<Scalars['Boolean']>;
+  seniorEngagedTrainerCopy?: Maybe<Scalars['Boolean']>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -7416,9 +7418,11 @@ export type Resource_Resourceattachment = AcfFieldGroup & {
 export type Resource_Resourcepermissions = AcfFieldGroup & {
   __typename?: 'Resource_Resourcepermissions';
   certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
+  courseInProgress?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
   principalTrainer?: Maybe<Scalars['Boolean']>;
+  seniorEngagedTrainerCopy?: Maybe<Scalars['Boolean']>;
 };
 
 /** Input for the restoreComment mutation */
@@ -9038,6 +9042,8 @@ export type SearchTrainer = {
   id: Scalars['uuid'];
   levels: Array<CourseCertificateLevel>;
   trainer_role_types: Array<TrainerRoleType>;
+  translatedFamilyName?: Maybe<Scalars['String']>;
+  translatedGivenName?: Maybe<Scalars['String']>;
 };
 
 export enum SearchTrainerAvailability {
@@ -15540,7 +15546,6 @@ export type Course = {
   deliveryType: Course_Delivery_Type_Enum;
   description?: Maybe<Scalars['String']>;
   displayOnWebsite?: Maybe<Scalars['Boolean']>;
-  end?: Maybe<Scalars['timestamptz']>;
   /** An array relationship */
   evaluation_answers: Array<Course_Evaluation_Answers>;
   /** An aggregate relationship */
@@ -15602,7 +15607,6 @@ export type Course = {
   searchFields?: Maybe<Scalars['String']>;
   source?: Maybe<Course_Source_Enum>;
   special_instructions?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_state" */
   state?: Maybe<Scalars['String']>;
   status?: Maybe<Course_Status_Enum>;
@@ -17183,7 +17187,6 @@ export type Course_Bool_Exp = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   displayOnWebsite?: InputMaybe<Boolean_Comparison_Exp>;
-  end?: InputMaybe<Timestamptz_Comparison_Exp>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Bool_Exp>;
   exceptionsPending?: InputMaybe<Boolean_Comparison_Exp>;
@@ -17227,7 +17230,6 @@ export type Course_Bool_Exp = {
   searchFields?: InputMaybe<String_Comparison_Exp>;
   source?: InputMaybe<Course_Source_Enum_Comparison_Exp>;
   special_instructions?: InputMaybe<String_Comparison_Exp>;
-  start?: InputMaybe<Timestamptz_Comparison_Exp>;
   state?: InputMaybe<String_Comparison_Exp>;
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
   tempOrders?: InputMaybe<Order_Temp_Bool_Exp>;
@@ -21578,7 +21580,6 @@ export type Course_Insert_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   displayOnWebsite?: InputMaybe<Scalars['Boolean']>;
-  end?: InputMaybe<Scalars['timestamptz']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   expenses?: InputMaybe<Course_Expenses_Arr_Rel_Insert_Input>;
@@ -21613,7 +21614,6 @@ export type Course_Insert_Input = {
   schedule?: InputMaybe<Course_Schedule_Arr_Rel_Insert_Input>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
-  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   tempOrders?: InputMaybe<Order_Temp_Arr_Rel_Insert_Input>;
   trainers?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
@@ -22365,7 +22365,6 @@ export type Course_Max_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
@@ -22384,7 +22383,6 @@ export type Course_Max_Fields = {
   /** A computed field, executes function "merge_course_rows" */
   searchFields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_state" */
   state?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -22403,7 +22401,6 @@ export type Course_Max_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
-  end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -22418,7 +22415,6 @@ export type Course_Max_Order_By = {
   priceCurrency?: InputMaybe<Order_By>;
   residingCountry?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
-  start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -22438,7 +22434,6 @@ export type Course_Min_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
@@ -22457,7 +22452,6 @@ export type Course_Min_Fields = {
   /** A computed field, executes function "merge_course_rows" */
   searchFields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['timestamptz']>;
   /** A computed field, executes function "course_state" */
   state?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -22476,7 +22470,6 @@ export type Course_Min_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
-  end?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -22491,7 +22484,6 @@ export type Course_Min_Order_By = {
   priceCurrency?: InputMaybe<Order_By>;
   residingCountry?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
-  start?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -23017,7 +23009,6 @@ export type Course_Order_By = {
   deliveryType?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   displayOnWebsite?: InputMaybe<Order_By>;
-  end?: InputMaybe<Order_By>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Order_By>;
   exceptionsPending?: InputMaybe<Order_By>;
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Order_By>;
@@ -23054,7 +23045,6 @@ export type Course_Order_By = {
   searchFields?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
-  start?: InputMaybe<Order_By>;
   state?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
   tempOrders_aggregate?: InputMaybe<Order_Temp_Aggregate_Order_By>;
@@ -27481,8 +27471,6 @@ export enum Course_Select_Column {
   /** column name */
   DisplayOnWebsite = 'displayOnWebsite',
   /** column name */
-  End = 'end',
-  /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
@@ -27532,8 +27520,6 @@ export enum Course_Select_Column {
   Source = 'source',
   /** column name */
   SpecialInstructions = 'special_instructions',
-  /** column name */
-  Start = 'start',
   /** column name */
   Status = 'status',
   /** column name */
@@ -27606,7 +27592,6 @@ export type Course_Set_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   displayOnWebsite?: InputMaybe<Scalars['Boolean']>;
-  end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   free_course_materials?: InputMaybe<Scalars['Int']>;
@@ -27632,7 +27617,6 @@ export type Course_Set_Input = {
   residingCountry?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
-  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -28054,7 +28038,6 @@ export type Course_Stream_Cursor_Value_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   displayOnWebsite?: InputMaybe<Scalars['Boolean']>;
-  end?: InputMaybe<Scalars['timestamptz']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   free_course_materials?: InputMaybe<Scalars['Int']>;
@@ -28080,7 +28063,6 @@ export type Course_Stream_Cursor_Value_Input = {
   residingCountry?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
-  start?: InputMaybe<Scalars['timestamptz']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -28908,8 +28890,6 @@ export enum Course_Update_Column {
   /** column name */
   DisplayOnWebsite = 'displayOnWebsite',
   /** column name */
-  End = 'end',
-  /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
@@ -28959,8 +28939,6 @@ export enum Course_Update_Column {
   Source = 'source',
   /** column name */
   SpecialInstructions = 'special_instructions',
-  /** column name */
-  Start = 'start',
   /** column name */
   Status = 'status',
   /** column name */
@@ -29530,14 +29508,37 @@ export type Dfe_Establishment = {
   name: Scalars['String'];
   ofstedLastInspection?: Maybe<Scalars['String']>;
   ofstedRating?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  organizations: Array<Organization>;
+  /** An aggregate relationship */
+  organizations_aggregate: Organization_Aggregate;
   /** A computed field, executes function "dfe_org_post_code" */
   postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
-  registered: Scalars['Boolean'];
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
   trustType?: Maybe<Scalars['String']>;
   urn: Scalars['String'];
+};
+
+
+/** columns and relationships of "dfe_establishment" */
+export type Dfe_EstablishmentOrganizationsArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Order_By>>;
+  where?: InputMaybe<Organization_Bool_Exp>;
+};
+
+
+/** columns and relationships of "dfe_establishment" */
+export type Dfe_EstablishmentOrganizations_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Order_By>>;
+  where?: InputMaybe<Organization_Bool_Exp>;
 };
 
 /** aggregated selection of "dfe_establishment" */
@@ -29580,9 +29581,10 @@ export type Dfe_Establishment_Bool_Exp = {
   name?: InputMaybe<String_Comparison_Exp>;
   ofstedLastInspection?: InputMaybe<String_Comparison_Exp>;
   ofstedRating?: InputMaybe<String_Comparison_Exp>;
+  organizations?: InputMaybe<Organization_Bool_Exp>;
+  organizations_aggregate?: InputMaybe<Organization_Aggregate_Bool_Exp>;
   postCodeForSearch?: InputMaybe<String_Comparison_Exp>;
   postcode?: InputMaybe<String_Comparison_Exp>;
-  registered?: InputMaybe<Boolean_Comparison_Exp>;
   town?: InputMaybe<String_Comparison_Exp>;
   trustName?: InputMaybe<String_Comparison_Exp>;
   trustType?: InputMaybe<String_Comparison_Exp>;
@@ -29610,8 +29612,8 @@ export type Dfe_Establishment_Insert_Input = {
   name?: InputMaybe<Scalars['String']>;
   ofstedLastInspection?: InputMaybe<Scalars['String']>;
   ofstedRating?: InputMaybe<Scalars['String']>;
+  organizations?: InputMaybe<Organization_Arr_Rel_Insert_Input>;
   postcode?: InputMaybe<Scalars['String']>;
-  registered?: InputMaybe<Scalars['Boolean']>;
   town?: InputMaybe<Scalars['String']>;
   trustName?: InputMaybe<Scalars['String']>;
   trustType?: InputMaybe<Scalars['String']>;
@@ -29706,9 +29708,9 @@ export type Dfe_Establishment_Order_By = {
   name?: InputMaybe<Order_By>;
   ofstedLastInspection?: InputMaybe<Order_By>;
   ofstedRating?: InputMaybe<Order_By>;
+  organizations_aggregate?: InputMaybe<Organization_Aggregate_Order_By>;
   postCodeForSearch?: InputMaybe<Order_By>;
   postcode?: InputMaybe<Order_By>;
-  registered?: InputMaybe<Order_By>;
   town?: InputMaybe<Order_By>;
   trustName?: InputMaybe<Order_By>;
   trustType?: InputMaybe<Order_By>;
@@ -29751,8 +29753,6 @@ export enum Dfe_Establishment_Select_Column {
   /** column name */
   Postcode = 'postcode',
   /** column name */
-  Registered = 'registered',
-  /** column name */
   Town = 'town',
   /** column name */
   TrustName = 'trustName',
@@ -29778,7 +29778,6 @@ export type Dfe_Establishment_Set_Input = {
   ofstedLastInspection?: InputMaybe<Scalars['String']>;
   ofstedRating?: InputMaybe<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
-  registered?: InputMaybe<Scalars['Boolean']>;
   town?: InputMaybe<Scalars['String']>;
   trustName?: InputMaybe<Scalars['String']>;
   trustType?: InputMaybe<Scalars['String']>;
@@ -29809,7 +29808,6 @@ export type Dfe_Establishment_Stream_Cursor_Value_Input = {
   ofstedLastInspection?: InputMaybe<Scalars['String']>;
   ofstedRating?: InputMaybe<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
-  registered?: InputMaybe<Scalars['Boolean']>;
   town?: InputMaybe<Scalars['String']>;
   trustName?: InputMaybe<Scalars['String']>;
   trustType?: InputMaybe<Scalars['String']>;
@@ -29846,8 +29844,6 @@ export enum Dfe_Establishment_Update_Column {
   OfstedRating = 'ofstedRating',
   /** column name */
   Postcode = 'postcode',
-  /** column name */
-  Registered = 'registered',
   /** column name */
   Town = 'town',
   /** column name */
@@ -44419,6 +44415,17 @@ export type Organization_Aggregate = {
   nodes: Array<Organization>;
 };
 
+export type Organization_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Organization_Aggregate_Bool_Exp_Count>;
+};
+
+export type Organization_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Organization_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "organization" */
 export type Organization_Aggregate_Fields = {
   __typename?: 'organization_aggregate_fields';
@@ -44442,6 +44449,21 @@ export type Organization_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "organization" */
+export type Organization_Aggregate_Order_By = {
+  avg?: InputMaybe<Organization_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Organization_Max_Order_By>;
+  min?: InputMaybe<Organization_Min_Order_By>;
+  stddev?: InputMaybe<Organization_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Organization_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Organization_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Organization_Sum_Order_By>;
+  var_pop?: InputMaybe<Organization_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Organization_Var_Samp_Order_By>;
+  variance?: InputMaybe<Organization_Variance_Order_By>;
+};
+
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Organization_Append_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
@@ -44452,11 +44474,24 @@ export type Organization_Append_Input = {
   tags?: InputMaybe<Scalars['jsonb']>;
 };
 
+/** input type for inserting array relation for remote table "organization" */
+export type Organization_Arr_Rel_Insert_Input = {
+  data: Array<Organization_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Organization_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Organization_Avg_Fields = {
   __typename?: 'organization_avg_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "organization" */
+export type Organization_Avg_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "organization". All fields are combined with a logical 'AND'. */
@@ -44501,8 +44536,6 @@ export type Organization_Bool_Exp = {
 
 /** unique or primary key constraints on table "organization" */
 export enum Organization_Constraint {
-  /** unique or primary key constraint on columns "dfe_establishment_id" */
-  OrganizationDfeEstablishmentIdKey = 'organization_dfe_establishment_id_key',
   /** unique or primary key constraint on columns "id" */
   OrganizationPkey = 'organization_pkey'
 }
@@ -44883,6 +44916,21 @@ export type Organization_Max_Fields = {
   xeroContactId?: Maybe<Scalars['String']>;
 };
 
+/** order by max() on columns of table "organization" */
+export type Organization_Max_Order_By = {
+  createdAt?: InputMaybe<Order_By>;
+  dfeEstablishmentId?: InputMaybe<Order_By>;
+  go1Licenses?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  organisationType?: InputMaybe<Order_By>;
+  region?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+  xeroContactId?: InputMaybe<Order_By>;
+};
+
 /** columns and relationships of "organization_member" */
 export type Organization_Member = {
   __typename?: 'organization_member';
@@ -45208,6 +45256,21 @@ export type Organization_Min_Fields = {
   xeroContactId?: Maybe<Scalars['String']>;
 };
 
+/** order by min() on columns of table "organization" */
+export type Organization_Min_Order_By = {
+  createdAt?: InputMaybe<Order_By>;
+  dfeEstablishmentId?: InputMaybe<Order_By>;
+  go1Licenses?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  organisationType?: InputMaybe<Order_By>;
+  region?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+  xeroContactId?: InputMaybe<Order_By>;
+};
+
 /** response of any mutation on the table "organization" */
 export type Organization_Mutation_Response = {
   __typename?: 'organization_mutation_response';
@@ -45346,6 +45409,12 @@ export type Organization_Stddev_Fields = {
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "organization" */
+export type Organization_Stddev_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Organization_Stddev_Pop_Fields = {
   __typename?: 'organization_stddev_pop_fields';
@@ -45353,11 +45422,23 @@ export type Organization_Stddev_Pop_Fields = {
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_pop() on columns of table "organization" */
+export type Organization_Stddev_Pop_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_samp on columns */
 export type Organization_Stddev_Samp_Fields = {
   __typename?: 'organization_stddev_samp_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "organization" */
+export type Organization_Stddev_Samp_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "organization" */
@@ -45395,6 +45476,12 @@ export type Organization_Sum_Fields = {
   __typename?: 'organization_sum_fields';
   go1Licenses?: Maybe<Scalars['Int']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "organization" */
+export type Organization_Sum_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "organization_type" */
@@ -45617,6 +45704,12 @@ export type Organization_Var_Pop_Fields = {
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "organization" */
+export type Organization_Var_Pop_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Organization_Var_Samp_Fields = {
   __typename?: 'organization_var_samp_fields';
@@ -45624,11 +45717,23 @@ export type Organization_Var_Samp_Fields = {
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "organization" */
+export type Organization_Var_Samp_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Organization_Variance_Fields = {
   __typename?: 'organization_variance_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
   reservedGo1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "organization" */
+export type Organization_Variance_Order_By = {
+  go1Licenses?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "payment_methods" */
@@ -59560,18 +59665,18 @@ export type AdminCourseQueryVariables = Exact<{
 }>;
 
 
-export type AdminCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationFee?: number | null, cancellationReason?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
+export type AdminCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationFee?: number | null, cancellationReason?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any, end: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', max?: { __typename?: 'course_schedule_max_fields', end?: any | null } | null } | null } } | null };
 
 export type TrainerCourseQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type TrainerCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, end?: any | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any } | null };
+export type TrainerCourseQuery = { __typename?: 'query_root', course_by_pk?: { __typename?: 'course', id: number, accountCode?: string | null, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, bookingContactProfileId?: any | null, course_code?: string | null, createdAt: any, createdById?: any | null, deliveryType: Course_Delivery_Type_Enum, description?: string | null, freeSlots?: number | null, freeSpaces?: number | null, go1Integration: boolean, gradingConfirmed: boolean, gradingStarted: boolean, level: Course_Level_Enum, max_participants: number, min_participants: number, modulesDuration: number, name: string, organization_id?: any | null, parking_instructions?: string | null, reaccreditation?: boolean | null, source?: Course_Source_Enum | null, special_instructions?: string | null, status?: Course_Status_Enum | null, type: Course_Type_Enum, updatedAt: any, end: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', max?: { __typename?: 'course_schedule_max_fields', end?: any | null } | null } | null } } | null };
 
 export type UnverifiedUserCoursesQueryVariables = Exact<{
   ids: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
-export type UnverifiedUserCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', reaccreditation?: boolean | null, id: number, max_participants: number, min_participants: number, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, type: Course_Type_Enum, description?: string | null, name: string, createdAt: any, updatedAt: any, course_code?: string | null, end?: any | null, start?: any | null }> };
+export type UnverifiedUserCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', reaccreditation?: boolean | null, id: number, max_participants: number, min_participants: number, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, type: Course_Type_Enum, description?: string | null, name: string, createdAt: any, updatedAt: any, course_code?: string | null }> };

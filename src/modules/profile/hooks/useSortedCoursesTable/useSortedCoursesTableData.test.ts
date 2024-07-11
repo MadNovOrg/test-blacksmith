@@ -6,8 +6,14 @@ import { useSortedCoursesTableData } from './useSortedCoursesTableData'
 describe('useSortedCoursesTableData', () => {
   const mockProfile = {
     courses: [
-      { __typename: 'course_participant', course: { start: '2024-05-15' } },
-      { __typename: 'course_participant', course: { start: '2024-05-10' } },
+      {
+        __typename: 'course_participant',
+        course: { start: { aggregate: { date: { start: '2024-05-15' } } } },
+      },
+      {
+        __typename: 'course_participant',
+        course: { start: { aggregate: { date: { start: '2024-05-10' } } } },
+      },
     ],
     participantAudits: [
       {

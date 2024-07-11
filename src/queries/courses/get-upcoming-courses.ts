@@ -14,7 +14,7 @@ export const QUERY = gql`
       where: {
         _and: [$courseFilter, { schedule: { start: { _gt: "now()" } } }]
       }
-      order_by: { start: asc }
+      order_by: { schedule_aggregate: { max: { start: asc } } }
       limit: $limit
     ) {
       ...Course

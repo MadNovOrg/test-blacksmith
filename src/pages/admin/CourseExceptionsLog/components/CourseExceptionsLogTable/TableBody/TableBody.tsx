@@ -47,7 +47,7 @@ export const TableBody: FC<PropsWithChildren<Props>> = ({
         <TableRow key={log.id}>
           <TableCell>
             {t('dates.withTime', {
-              date: log.course.start,
+              date: log.course.start.aggregate?.date?.start,
             })}
           </TableCell>
           <TableCell sx={{ maxWidth: 150 }}>

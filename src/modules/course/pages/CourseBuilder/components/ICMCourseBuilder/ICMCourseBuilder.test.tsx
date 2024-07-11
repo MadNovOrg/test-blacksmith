@@ -200,10 +200,13 @@ describe('component: CourseBuilder', () => {
     const course = buildCourse({
       isDraft: true,
       organization: { name: 'Organization' },
-      start: '2023-07-28T09:00Z',
-      end: '2023-07-28T17:00Z',
       schedule: [
-        { timeZone: 'GMT+00:00', venue: { name: 'Venue', city: 'City' } },
+        {
+          end: '2023-07-28T17:00Z',
+          start: '2023-07-28T09:00Z',
+          timeZone: 'GMT+00:00',
+          venue: { name: 'Venue', city: 'City' },
+        },
       ],
     })
 

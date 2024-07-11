@@ -16,7 +16,13 @@ export const ADMIN_COURSE_QUERY = gql`
       createdById
       deliveryType
       description
-      end
+      end: schedule_aggregate {
+        aggregate {
+          max {
+            end
+          }
+        }
+      }
       freeSlots
       freeSpaces
       go1Integration
@@ -53,7 +59,13 @@ export const TRAINER_COURSE_QUERY = gql`
       createdById
       deliveryType
       description
-      end
+      end: schedule_aggregate {
+        aggregate {
+          max {
+            end
+          }
+        }
+      }
       freeSlots
       freeSpaces
       go1Integration
@@ -92,8 +104,6 @@ export const UNVERIFIED_USER_COURSES_QUERY = gql`
       createdAt
       updatedAt
       course_code
-      end
-      start
     }
   }
 `

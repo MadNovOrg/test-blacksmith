@@ -68,10 +68,22 @@ export const GET_ORDER_QUERY = gql`
         name
         type
         source
+        start: schedule_aggregate {
+          aggregate {
+            date: max {
+              start
+            }
+          }
+        }
+        end: schedule_aggregate {
+          aggregate {
+            date: max {
+              end
+            }
+          }
+        }
         go1Integration
         max_participants
-        start
-        end
         freeSpaces
         deliveryType
         bookingContact {
