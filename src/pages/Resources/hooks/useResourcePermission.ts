@@ -10,8 +10,7 @@ import {
 import {
   courseCategoryUserAttends,
   onGoingTrainerCourseLevelsUserAttends,
-  getCourseProgress,
-  hasGotPassForTrainerCourse,
+  hasCourseInProgress,
   ICourseCategoryUserAttends,
   TrainerCoursesEnum,
 } from '@app/pages/Resources/utils'
@@ -39,10 +38,7 @@ export function useResourcePermission() {
   const onGoingCoursesUserAttends = onGoingTrainerCourseLevelsUserAttends(
     profile?.courses as ICourseCategoryUserAttends[],
   )
-  const courseProgress = getCourseProgress(
-    profile?.courses as ICourseCategoryUserAttends[],
-  )
-  const hasPassed = hasGotPassForTrainerCourse(
+  const courseInProgress = hasCourseInProgress(
     profile?.courses as ICourseCategoryUserAttends[],
   )
 
@@ -89,11 +85,7 @@ export function useResourcePermission() {
        * @summary we set the Workbook and Manuals resource permission to allow access
        * to the Workbooks and Manuals resource category, and make it easier to control access to it
        */
-      if (
-        resourcePermissions.courseInProgress &&
-        courseProgress?.started &&
-        !courseProgress.ended
-      ) {
+      if (resourcePermissions.courseInProgress && courseInProgress) {
         return true
       }
 
@@ -109,8 +101,6 @@ export function useResourcePermission() {
        *          again if user gets a PASS or ASSIST PASS certificate for that course
        */
       const attendedTrainerCourse = attendedCourse?.attendsTrainer
-      const trainerCourseEnded = courseProgress?.ended
-      const hasPassedTrainerCourse = hasPassed
 
       if (attendedTrainerCourse) {
         const hasAccessBasedOnCertificates = onGoingCoursesUserAttends?.some(
@@ -123,16 +113,6 @@ export function useResourcePermission() {
         if (hasAccessBasedOnCertificates) {
           return true
         }
-
-        if (trainerCourseEnded) {
-          // check if user got a PASS or ASSIST PASS for the recently attended Trainer Course
-          // but at the same time, he needs to have at least one valid certificate
-          if (hasPassedTrainerCourse && hasPermissionByCourseCertificateLevel) {
-            return true
-          }
-
-          return false
-        }
       }
 
       return false
@@ -140,10 +120,8 @@ export function useResourcePermission() {
     [
       acl,
       trainerRoles,
-      courseProgress?.started,
-      courseProgress?.ended,
+      courseInProgress,
       attendedCourse?.attendsTrainer,
-      hasPassed,
       currentUserCertificates,
       onGoingCoursesUserAttends,
     ],

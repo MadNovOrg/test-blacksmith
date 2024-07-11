@@ -19,7 +19,7 @@ enum NonTrainerCoursesEnum {
 }
 
 export type AttendedCourseData = {
-  start?:
+  start:
     | {
         aggregate: {
           date: {
@@ -28,7 +28,7 @@ export type AttendedCourseData = {
         }
       }
     | undefined
-  end?:
+  end:
     | {
         aggregate: {
           date: {
@@ -41,18 +41,13 @@ export type AttendedCourseData = {
 }
 
 export interface ICourseCategoryUserAttends {
-  grade?: Grade_Enum | null | undefined
+  grade: Grade_Enum | null | undefined
   course: AttendedCourseData
 }
 
 interface ICourseCategoryUserAttendsReturnType {
   attendsNonTrainer: boolean | undefined
   attendsTrainer: boolean | undefined
-}
-
-interface ITrainerCourseProgress {
-  started: boolean | null
-  ended: boolean | null
 }
 
 const trainerCoursesList = Object.values(TrainerCoursesEnum)
@@ -105,24 +100,21 @@ const onGoingTrainerCourseLevelsUserAttends = (
   )
 }
 
-const getCourseProgress = (
+const hasCourseInProgress = (
   participantCourses?: ICourseCategoryUserAttends[],
-): ITrainerCourseProgress | null => {
-  const started = participantCourses?.some(participantCourse =>
-    isPast(
-      parseISO(participantCourse?.course?.start?.aggregate?.date?.start ?? ''),
-    ),
-  )
-  const ended = participantCourses?.some(participantCourse =>
-    isPast(
-      parseISO(participantCourse?.course?.end?.aggregate?.date?.end ?? ''),
-    ),
-  )
+): boolean => {
+  return (
+    participantCourses?.some(participantCourse => {
+      const courseStart = parseISO(
+        participantCourse?.course?.start?.aggregate?.date?.start ?? '',
+      )
+      const courseEnd = parseISO(
+        participantCourse?.course?.end?.aggregate?.date?.end ?? '',
+      )
 
-  return {
-    started: started ?? null,
-    ended: ended ?? null,
-  }
+      return isPast(courseStart) && isFuture(courseEnd)
+    }) ?? false
+  )
 }
 
 const hasGotPassForTrainerCourse = (
@@ -145,5 +137,5 @@ export {
   courseCategoryUserAttends,
   onGoingTrainerCourseLevelsUserAttends,
   hasGotPassForTrainerCourse,
-  getCourseProgress,
+  hasCourseInProgress,
 }
