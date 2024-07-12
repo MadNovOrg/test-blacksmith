@@ -17,11 +17,11 @@ import {
   SaveModuleSelectionMutationVariables,
 } from '@app/generated/graphql'
 import useCourseModules from '@app/hooks/useCourseModules'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import {
   HoldsRecord,
   ModulesSelectionList,
 } from '@app/modules/grading/components/ModulesSelectionList'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import { MUTATION as SAVE_COURSE_MODULES_SELECTION } from '@app/queries/courses/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 

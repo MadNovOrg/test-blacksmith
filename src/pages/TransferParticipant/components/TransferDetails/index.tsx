@@ -12,9 +12,9 @@ import { Navigate } from 'react-router-dom'
 import { MarkOptional } from 'ts-essentials'
 
 import { FormValues as FeesFormValues } from '@app/components/FeesForm'
-import { FormValues as ParticipantFormValues } from '@app/components/ParticipantPostalAddressForm'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { FormValues as ParticipantFormValues } from '@app/modules/course_details/course_attendees_tab/components/ParticipantPostalAddressForm'
 import {
   TransferFormInput,
   TransferStepsEnum,

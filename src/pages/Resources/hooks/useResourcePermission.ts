@@ -1,12 +1,12 @@
 import { isFuture, parseISO } from 'date-fns'
 import { useCallback } from 'react'
 
-import { isCertificateOutsideGracePeriod } from '@app/components/CourseCertification/utils'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
   Resource_Resourcepermissions,
 } from '@app/generated/graphql'
+import { isCertificateOutsideGracePeriod } from '@app/modules/course_details/course_certification_tab/pages/CourseCertification/utils'
 import {
   courseCategoryUserAttends,
   onGoingTrainerCourseLevelsUserAttends,

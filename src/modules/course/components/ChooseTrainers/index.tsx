@@ -18,7 +18,6 @@ import {
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
-import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
 import {
   BildStrategy,
@@ -30,6 +29,7 @@ import {
   Course_Level_Enum,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
+import { SearchTrainers } from '@app/modules/course/components/SearchTrainers'
 import { isModeratorMandatory, isModeratorNeeded } from '@app/rules/trainers'
 import { yup } from '@app/schemas'
 import { CourseTrainer } from '@app/types'

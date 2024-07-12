@@ -21,7 +21,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -34,6 +33,7 @@ import {
   SearchTrainer,
 } from '@app/generated/graphql'
 import { CourseForm } from '@app/modules/course/components/CourseForm'
+import { SearchTrainers } from '@app/modules/course/components/SearchTrainers'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,

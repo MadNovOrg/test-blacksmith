@@ -15,7 +15,7 @@ import {
 } from '@app/generated/graphql'
 import { getIndividualsCourseStatusesConditions } from '@app/hooks/useCourses'
 import { Sorting } from '@app/hooks/useTableSort'
-import { useUnevaluatedUserCourses } from '@app/modules/course_evaluation/hooks/useUnevaluatedUserCourses'
+import { useUnevaluatedUserCourses } from '@app/modules/course_details/course_evaluation_tab/hooks/useUnevaluatedUserCourses'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
 import {
   AdminOnlyCourseStatus,

@@ -9,7 +9,7 @@ import React, {
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { Accreditors_Enum } from '@app/generated/graphql'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 
 type Step = 'grading-clearance' | 'modules'
 

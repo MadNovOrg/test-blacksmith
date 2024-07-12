@@ -15,10 +15,10 @@ import { t } from 'i18next'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { Grade } from '@app/components/Grade'
 import { Accreditors_Enum } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
+import { Grade } from '@app/modules/grading/components/Grade'
 import theme from '@app/theme'
 
 import { BILDGradedOnAccordion } from './components/BILDGradedOnAccordion/BILDGradedOnAccordion'

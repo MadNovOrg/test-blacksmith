@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
@@ -22,9 +21,10 @@ import {
   Course_Trainer_Type_Enum,
   Grade_Enum,
 } from '@app/generated/graphql'
+import { CourseGradingMenu } from '@app/modules/course_details/course_grading_tab/components/CourseGradingMenu/CourseGradingMenu'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { ModulesSelectionListV2 } from '@app/modules/grading/components/ModulesSelectionListV2/ModulesSelectionListV2'
 import { isLesson, isModule } from '@app/modules/grading/shared/utils'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 
 import useCourseGradingData from '../../hooks/useCourseGradingData'
 import { useGradingParticipants } from '../../hooks/useGradingParticipants'

@@ -7,23 +7,23 @@ import { FormProvider, useForm } from 'react-hook-form'
 import useWorldCountries, {
   UKsCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { FeesForm } from '@app/components/FeesForm'
 import {
+  FeesForm,
   schema as feesSchema,
   FormValues as FeesFormValues,
 } from '@app/components/FeesForm'
 import { InfoPanel } from '@app/components/InfoPanel'
-import {
-  schema as participantPostalAddressSchema,
-  FormValues as ParticipantFormValues,
-} from '@app/components/ParticipantPostalAddressForm'
-import { ParticipantPostalAddressForm } from '@app/components/ParticipantPostalAddressForm'
 import {
   Course_Level_Enum,
   TransferCourse,
   TransferFeeType,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import {
+  ParticipantPostalAddressForm,
+  schema as participantPostalAddressSchema,
+  FormValues as ParticipantFormValues,
+} from '@app/modules/course_details/course_attendees_tab/components/ParticipantPostalAddressForm'
 import { isAddressInfoRequired } from '@app/pages/TransferParticipant/utils'
 
 import {

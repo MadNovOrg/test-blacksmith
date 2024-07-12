@@ -11,7 +11,7 @@ import {
   GetCourseParticipantByInviteQuery,
   GetCourseParticipantByInviteQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY as GET_COURSE_PARTICIPANT } from '@app/queries/course-participant/get-course-participant-by-invitation'
+import { QUERY as GET_COURSE_PARTICIPANT } from '@app/modules/course_details/hooks/course-participant/get-course-participant-by-invitation'
 import { MUTATION as ACCEPT_INVITE_MUTATION } from '@app/queries/invites/accept-invite'
 import { RoleName } from '@app/types'
 
@@ -22,7 +22,7 @@ export const AcceptInvite = () => {
   const params = useParams()
   const [searchParams] = useSearchParams()
 
-  const courseId = searchParams.get('courseId') || ''
+  const courseId = searchParams.get('courseId') ?? ''
   const inviteId = params.id as string
 
   useEffect(() => {

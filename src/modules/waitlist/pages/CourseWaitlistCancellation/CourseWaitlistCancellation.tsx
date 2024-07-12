@@ -2,15 +2,11 @@ import { Box, Typography, Link, Alert, CircularProgress } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import { useMutation } from 'urql'
 
-import {
-  CancelMyselfFromCourseWaitlistMutation,
-  CancelMyselfFromCourseWaitlistMutationVariables,
-  CancelMyselfFromCourseWaitlistError,
-} from '@app/generated/graphql'
+import { CancelMyselfFromCourseWaitlistError } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
-import { CANCEL_MYSELF_FROM_COURSE_WAITLIST_MUTATION } from '@app/queries/waitlist/cancel-myself-from-course-waitlist'
+
+import { useCancelMyselfFromCourseWaitlist } from '../../hooks/useCancelMyselfFromCourseWaitlist/useCancelMyselfFromCourseWaitlist'
 
 const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation()
@@ -61,7 +57,7 @@ const Message: React.FC<
       sx={{ mt: 2, minWidth: '100%' }}
     >
       <Typography variant="body1" textAlign="left" color="grey.700">
-        {t(errorMessage || 'waitlist-cancellation-success')}
+        {t(errorMessage ?? 'waitlist-cancellation-success')}
       </Typography>
     </Alert>
   )
@@ -74,10 +70,8 @@ export const CourseWaitlistCancellation: React.FC<
   const courseId = searchParams.get('course_id')
   const cancellationSecret = searchParams.get('s')
 
-  const [{ data, error }, cancelMyselfFromCourseWaitlist] = useMutation<
-    CancelMyselfFromCourseWaitlistMutation,
-    CancelMyselfFromCourseWaitlistMutationVariables
-  >(CANCEL_MYSELF_FROM_COURSE_WAITLIST_MUTATION)
+  const [{ data, error }, cancelMyselfFromCourseWaitlist] =
+    useCancelMyselfFromCourseWaitlist()
 
   const apiError = data?.cancelMyselfFromCourseWaitlist?.error
 

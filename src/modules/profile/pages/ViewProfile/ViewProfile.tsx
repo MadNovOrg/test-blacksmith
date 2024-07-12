@@ -29,11 +29,11 @@ import {
 } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery, Grade_Enum } from '@app/generated/graphql'
+import { CoursePrerequisitesAlert } from '@app/modules/course_details/components/CoursePrerequisitesAlert'
 import { Avatar } from '@app/modules/profile/components/Avatar'
 import { ProfileArchiveDialog } from '@app/modules/profile/components/ProfileArchiveDialog'
 import useProfile from '@app/modules/profile/hooks/useProfile'

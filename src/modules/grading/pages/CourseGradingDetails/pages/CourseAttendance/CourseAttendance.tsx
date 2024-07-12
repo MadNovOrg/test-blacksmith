@@ -21,8 +21,8 @@ import {
   SaveCourseAttendanceMutation,
   SaveCourseAttendanceMutationVariables,
 } from '@app/generated/graphql'
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { MUTATION as SAVE_COURSE_ATTENDANCE } from '@app/modules/course_attendees/queries/save-course-attendance'
+import { MUTATION as SAVE_COURSE_ATTENDANCE } from '@app/modules/course_details/course_attendees_tab/queries/save-course-attendance'
+import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
 import { CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -52,7 +52,7 @@ export const CourseAttendance = () => {
   const { completeStep, steps } = useGradingDetails()
 
   const { data: participantsData, status } = useCourseParticipants(
-    Number(courseId) ?? '',
+    Number(courseId),
   )
 
   const saveGradingDetails = useSaveGradingDetails()

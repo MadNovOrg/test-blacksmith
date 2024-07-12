@@ -10,11 +10,11 @@ import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { submodulesCount } from '@app/components/CourseOverview/utils'
 import {
   GradedParticipantQuery,
   Course_Participant_Module,
 } from '@app/generated/graphql'
+import { submodulesCount } from '@app/modules/course/components/CourseOverview/utils'
 import { ModuleGroupNote } from '@app/modules/grading/components/ModuleGroupNote/ModuleGroupNote'
 import theme from '@app/theme'
 import { transformModulesToGroups } from '@app/util'

@@ -7,7 +7,7 @@ import {
   SaveCourseInvitesMutation,
   SaveCourseInvitesMutationVariables,
 } from '@app/generated/graphql'
-import { SAVE_INVITE } from '@app/hooks/useCourseInvites'
+import { SAVE_INVITE } from '@app/modules/course_details/course_attendees_tab/hooks/useCourseInvites/useCourseInvites'
 import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'

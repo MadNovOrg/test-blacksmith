@@ -16,7 +16,7 @@ import { BackButton } from '@app/components/BackButton'
 import { Sticky } from '@app/components/Sticky'
 import useCourse from '@app/hooks/useCourse'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { LoadingStatus } from '@app/util'
 
 import { CourseGradingSteps } from './components/CourseGradingSteps'

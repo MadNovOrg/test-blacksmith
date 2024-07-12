@@ -1,9 +1,9 @@
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
 import {
-  AttendeeCourseStatus,
   AttendeeCourse,
-} from '@app/modules/course_attendees/components/AttendeeCourseStatus/AttendeeCourseStatus'
+  AttendeeCourseStatus,
+} from '@app/modules/course_details/course_attendees_tab/components/AttendeeCourseStatus/AttendeeCourseStatus'
 import { AdminOnlyCourseStatus, Course } from '@app/types'
 import { UKTimezone } from '@app/util'
 

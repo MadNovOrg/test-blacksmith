@@ -2,7 +2,6 @@ import { isFuture, parseISO } from 'date-fns'
 import { anyPass } from 'lodash/fp'
 import { MarkOptional } from 'ts-essentials'
 
-import { isCertificateOutsideGracePeriod } from '@app/components/CourseCertification/utils'
 import {
   Accreditors_Enum,
   Course_Level_Enum,
@@ -13,6 +12,7 @@ import {
   Course as GeneratedCourseType,
 } from '@app/generated/graphql'
 import { getLevels } from '@app/modules/course/components/CourseForm/helpers'
+import { isCertificateOutsideGracePeriod } from '@app/modules/course_details/course_certification_tab/pages/CourseCertification/utils'
 import {
   courseCategoryUserAttends,
   hasGotPassForTrainerCourse,

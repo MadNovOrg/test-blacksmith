@@ -22,7 +22,7 @@ import {
   UserCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { AttendeeCourseStatus } from '@app/modules/course_attendees/components/AttendeeCourseStatus/AttendeeCourseStatus'
+import { AttendeeCourseStatus } from '@app/modules/course_details/course_attendees_tab/components/AttendeeCourseStatus/AttendeeCourseStatus'
 
 export type CoursesTableProps = {
   courses: UserCoursesQuery['courses']

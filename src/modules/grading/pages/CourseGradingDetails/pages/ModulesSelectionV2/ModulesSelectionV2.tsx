@@ -10,9 +10,9 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { ModulesSelectionListV2 } from '@app/modules/grading/components/ModulesSelectionListV2/ModulesSelectionListV2'
 import { isLesson, isModule } from '@app/modules/grading/shared/utils'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
 
 import { useGradingDetails } from '../../components/GradingDetailsProvider'

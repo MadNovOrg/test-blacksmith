@@ -23,7 +23,6 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseInstructionsDialog } from '@app/components/dialogs'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
@@ -31,6 +30,7 @@ import {
   Venue,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
+import { CourseInstructionsDialog } from '@app/modules/course_details/components/CourseInstructionsDialog'
 import { Course } from '@app/types'
 import {
   getCourseBeginsForMessage,

@@ -1,7 +1,4 @@
 export * from './ConfirmDialog'
-export * from './CourseInstructionsDialog'
 export * from './Dialog'
 export * from './ExportBlendedDialog'
 export * from './IconDialog'
-export * from '@app/modules/course_attendees/components/CancelAttendeeDialog'
-export * from './ReplaceParticipantDialog'

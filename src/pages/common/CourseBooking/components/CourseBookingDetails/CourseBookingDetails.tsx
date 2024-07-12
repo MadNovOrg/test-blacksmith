@@ -30,7 +30,6 @@ import useWorldCountries, {
   UKsCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
-import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
 import {
   formSchema as invoiceDetailsFormSchema,
   InvoiceForm,
@@ -53,6 +52,7 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
+import { CourseDuration } from '@app/modules/course_details/components/CourseDuration'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'

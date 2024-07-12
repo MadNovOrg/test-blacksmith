@@ -7,23 +7,23 @@ import {
   GetUserCanAccessResourcesQuery,
   GetUserCanAccessResourcesQueryVariables,
 } from '@app/generated/graphql'
-import { EvaluationSummary } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary'
-import { CourseEvaluation } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary/components/CourseEvaluation'
-import { CourseHealthAndSafetyForm } from '@app/modules/course_evaluation/pages/ExternalEvaluationSummary/components/CourseHealthAndSafetyForm'
+import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/modules/certifications/hooks/get-user-can-access-resources'
+import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
+import { CourseHealthAndSafetyForm } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseHealthAndSafetyForm'
+import { EvaluationSummary } from '@app/modules/course_details/course_evaluation_tab/pages/InternalEvaluationSummary'
+import { CourseCertificationDetails } from '@app/modules/course_details/pages/CourseCertificationDetails/CourseCertificationDetails'
+import { CourseDetails as TrainerCourseDetails } from '@app/modules/course_details/pages/CourseDetails'
+import { CourseDetails } from '@app/modules/course_details/pages/UserPagesCourseDetails/CourseDetails'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import { NotFound } from '@app/pages/common/NotFound'
-import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails/CourseCertificationDetails'
-import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
 import { UserTransferParticipant } from '@app/pages/TransferParticipant/UserTransferParticipant'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
-import { CourseDetails } from '@app/pages/user-pages/CourseDetails/CourseDetails'
 import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
-import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/queries/certificate/get-user-can-access-resources'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 
@@ -39,8 +39,8 @@ const UserRoutes = () => {
   })
 
   const showResources =
-    (data?.certificates.aggregate?.count ||
-      0 + (data?.participant.aggregate?.count || 0)) > 0 || acl.isOrgAdmin()
+    (data?.certificates.aggregate?.count ??
+      0 + (data?.participant.aggregate?.count ?? 0)) > 0 || acl.isOrgAdmin()
 
   return (
     <Routes>

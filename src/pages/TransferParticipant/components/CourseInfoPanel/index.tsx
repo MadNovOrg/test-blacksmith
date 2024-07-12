@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material'
 import React from 'react'
 
-import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { InfoPanel } from '@app/components/InfoPanel'
 import {
   Course_Schedule,
   Course_Level_Enum,
   CourseLevel,
 } from '@app/generated/graphql'
+import { CourseTitleAndDuration } from '@app/modules/course_details/components/CourseTitleAndDuration'
 import theme from '@app/theme'
 
 export type CourseInfoPanelProps = {

@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
-import { CourseGradingMenu } from '@app/components/CourseGradingMenu/CourseGradingMenu'
 import { Dialog } from '@app/components/dialogs'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
@@ -24,7 +23,8 @@ import {
   SaveBildGradeMutation,
   SaveBildGradeMutationVariables,
 } from '@app/generated/graphql'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import { CourseGradingMenu } from '@app/modules/course_details/course_grading_tab/components/CourseGradingMenu/CourseGradingMenu'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { Strategy } from '@app/types'
 
 import useCourseGradingData from '../../hooks/useCourseGradingData'

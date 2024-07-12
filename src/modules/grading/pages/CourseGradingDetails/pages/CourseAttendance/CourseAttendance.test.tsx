@@ -10,8 +10,8 @@ import {
   SaveGradingDetailsMutation,
   SaveGradingDetailsMutationVariables,
 } from '@app/generated/graphql'
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
+import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { LoadingStatus } from '@app/util'
 
 import { render, renderHook, screen, waitForText, within } from '@test/index'
@@ -21,7 +21,9 @@ import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
 
 import { CourseAttendance } from './CourseAttendance'
 
-vi.mock('@app/hooks/useCourseParticipants')
+vi.mock(
+  '@app/modules/course_details/hooks/course-participant/useCourseParticipants',
+)
 
 const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
 
