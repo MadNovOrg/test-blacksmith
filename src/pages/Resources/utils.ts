@@ -82,7 +82,13 @@ const courseCategoryUserAttends = (
 const onGoingTrainerCourseLevelsUserAttends = (
   userCourses?: ICourseCategoryUserAttends[],
 ): (TrainerCoursesEnum | never[])[] | undefined => {
-  const onGoingCourses = userCourses?.map(({ course }) => {
+  const ongoingTrainerCourses = userCourses?.filter(({ course }) =>
+    Object.values(TrainerCoursesEnum).includes(
+      course.level as TrainerCoursesEnum,
+    ),
+  )
+
+  const onGoingCourses = ongoingTrainerCourses?.map(({ course }) => {
     const courseIsOngoing =
       isPast(parseISO(course.start?.aggregate?.date?.start ?? '')) &&
       isFuture(parseISO(course.end?.aggregate?.date?.end ?? ''))
