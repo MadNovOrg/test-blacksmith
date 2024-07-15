@@ -90,11 +90,16 @@ export const getFormSchema = (
         ),
     }),
 
-    orgPhone: yup.string().required(
-      _t('validation-errors.required-field', {
-        name: t('fields.organization-phone'),
-      }),
-    ),
+    orgPhone: yup
+
+      .string()
+      .required(
+        _t('validation-errors.required-field', {
+          name: t('fields.organization-phone'),
+        }),
+      )
+      .phoneNumber(_t)
+      .isPossiblePhoneNumber(_t),
     orgEmail: yup
       .string()
       .required(

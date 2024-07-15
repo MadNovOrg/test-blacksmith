@@ -61,7 +61,7 @@ describe(OrganizationForm.name, () => {
     render(<OrganizationForm onSubmit={submitMock} />)
     expect(screen.getByText(t('add-new-organization'))).toBeInTheDocument()
     await userEvent.click(screen.getByTestId('create-org-form-submit-btn'))
-    expect(submitMock).not.toBeCalled()
+    expect(submitMock).not.toHaveBeenCalled()
   })
   it('prefills if edit mode', async () => {
     const editOrgData = {
@@ -207,10 +207,14 @@ describe(OrganizationForm.name, () => {
     const typeOption = screen.getByTestId('type-UTC')
     await userEvent.click(typeOption)
 
-    const orgNumber = screen.getByLabelText(t('fields.organization-phone'), {
-      exact: false,
-    })
-    await userEvent.type(orgNumber, chance.phone())
+    const orgPhoneNumber = screen.getByLabelText(
+      t('fields.organization-phone'),
+      {
+        exact: false,
+      },
+    )
+    await userEvent.clear(orgPhoneNumber)
+    await userEvent.type(orgPhoneNumber, '445555555555')
 
     const orgEmail = screen.getByLabelText(t('fields.organization-email'), {
       exact: false,
@@ -350,10 +354,14 @@ describe(OrganizationForm.name, () => {
     const typeOption = screen.getByTestId('type-UTC')
     await userEvent.click(typeOption)
 
-    const orgNumber = screen.getByLabelText(t('fields.organization-phone'), {
-      exact: false,
-    })
-    await userEvent.type(orgNumber, chance.phone())
+    const orgPhoneNumber = screen.getByLabelText(
+      t('fields.organization-phone'),
+      {
+        exact: false,
+      },
+    )
+    await userEvent.clear(orgPhoneNumber)
+    await userEvent.type(orgPhoneNumber, '445555555555')
 
     const orgEmail = screen.getByLabelText(t('fields.organization-email'), {
       exact: false,

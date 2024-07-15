@@ -1,9 +1,10 @@
+import styled from '@emotion/styled'
 import { BaseTextFieldProps } from '@mui/material/TextField/TextField'
 import parsePhoneNumberFromString, {
   CountryCode,
   PhoneNumber,
 } from 'libphonenumber-js'
-import { MuiTelInput, MuiTelInputInfo } from 'mui-tel-input'
+import { classes, MuiTelInput, MuiTelInputInfo } from 'mui-tel-input'
 import { FC, PropsWithChildren, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,6 +25,12 @@ export type PhoneNumberInputProps = {
   handleManualError?: (isError: boolean) => void
   defaultCountry?: string
 } & BaseTextFieldProps
+
+const MuiTelInputWithCustomFlag = styled(MuiTelInput)`
+.${classes.flagButton} {
+  padding: 0px;
+  height: 45px;
+}}`
 
 const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   value,
@@ -64,7 +71,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   }
 
   return (
-    <MuiTelInput
+    <MuiTelInputWithCustomFlag
       onlyCountries={onlyCountries}
       defaultCountry={defaultCountry ?? DEFAULT_PHONE_COUNTRY}
       value={value.phoneNumber}
@@ -94,6 +101,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
           <FlagComponent
             countryName={countryName}
             isoCode={showDefaultFlag ? isoCode : value.countryCode ?? ''}
+            isSelected={isSelected}
           />
         )
       }}

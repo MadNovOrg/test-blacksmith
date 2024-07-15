@@ -51,6 +51,7 @@ import { Sticky } from '@app/components/Sticky'
 import { Dfe_Establishment, Organization } from '@app/generated/graphql'
 import { useOrgType } from '@app/hooks/useOrgType'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
 import { OfstedRating } from '@app/types'
 import { getTruthyObjectProps, INPUT_DATE_FORMAT } from '@app/util'
 
@@ -627,14 +628,22 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     </Grid>
                   ) : null}
                   <Grid item>
-                    <TextField
-                      id="orgPhone"
+                    <PhoneNumberInput
                       label={t('fields.organization-phone')}
                       variant="filled"
+                      sx={{ bgcolor: 'grey.100' }}
+                      inputProps={{
+                        sx: { height: 40 },
+                        'data-testid': 'org-phone',
+                      }}
                       error={!!errors.orgPhone}
                       helperText={errors.orgPhone?.message}
-                      {...register('orgPhone')}
-                      inputProps={{ 'data-testid': 'org-phone' }}
+                      value={{ phoneNumber: values.orgPhone, countryCode: '' }}
+                      onChange={({ phoneNumber }) =>
+                        setValue('orgPhone', phoneNumber, {
+                          shouldValidate: true,
+                        })
+                      }
                       fullWidth
                       required
                     />
