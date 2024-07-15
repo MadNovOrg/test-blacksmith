@@ -1,11 +1,29 @@
-import React from 'react'
 import {} from 'react-router-dom'
 
-import { Grade_Enum } from '@app/generated/graphql'
-import { SortOrder } from '@app/types'
+import { useTranslation } from 'react-i18next'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { render, screen, within, userEvent } from '@test/index'
-import { buildCertificate, buildParticipant } from '@test/mock-data-utils'
+import {
+  GetCourseParticipantsOrganizationsQuery,
+  Grade_Enum,
+} from '@app/generated/graphql'
+import { RoleName, SortOrder } from '@app/types'
+
+import {
+  render,
+  screen,
+  within,
+  userEvent,
+  waitFor,
+  renderHook,
+} from '@test/index'
+import {
+  buildCertificate,
+  buildOrganization,
+  buildParticipant,
+  buildProfile,
+} from '@test/mock-data-utils'
 
 import {
   CertificationList,
@@ -13,6 +31,28 @@ import {
 } from './CertificationList'
 
 describe('component: CertificationList', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
+  const sorting = {
+    by: 'name',
+    dir: 'asc' as SortOrder,
+    onSort: vi.fn(),
+  }
+  const columns = [
+    'name',
+    'certificate',
+    'course-code',
+    'status',
+    'date-obtained',
+    'date-expired',
+    'organisation',
+    'contact',
+  ] as CertificationListColumns
+
   it('renders default columns', async () => {
     const participants = [buildParticipant()]
     const sorting = {
@@ -43,21 +83,6 @@ describe('component: CertificationList', () => {
     participant.certificate = buildCertificate()
     participant.grade = Grade_Enum.Pass
     const participants = [participant]
-    const sorting = {
-      by: 'name',
-      dir: 'asc' as SortOrder,
-      onSort: vi.fn(),
-    }
-    const columns = [
-      'name',
-      'certificate',
-      'course-code',
-      'status',
-      'date-obtained',
-      'date-expired',
-      'organisation',
-      'contact',
-    ] as CertificationListColumns
 
     render(
       <CertificationList
@@ -121,5 +146,170 @@ describe('component: CertificationList', () => {
     ).toBeDisabled()
     await userEvent.click(screen.getByTestId('TableChecks-Head'))
     expect(screen.getByTestId('download-selected-certifications')).toBeEnabled()
+  })
+
+  it('displays search filter', () => {
+    const participant = buildParticipant()
+    participant.certificate = buildCertificate()
+    participant.grade = Grade_Enum.Pass
+    const participants = [participant]
+
+    render(
+      <CertificationList
+        participants={participants}
+        sorting={sorting}
+        columns={columns}
+      />,
+    )
+    const searchFilter = screen.getByTestId('FilterSearch-Input')
+
+    expect(searchFilter).toBeInTheDocument()
+  })
+
+  it('displays organization dropdown', () => {
+    const participant = buildParticipant()
+    participant.certificate = buildCertificate()
+    participant.grade = Grade_Enum.Pass
+    const participants = [participant]
+
+    render(
+      <CertificationList
+        participants={participants}
+        sorting={sorting}
+        columns={columns}
+      />,
+    )
+    const searchFilter = screen.getByTestId('attendee-organization-dropdown')
+
+    expect(searchFilter).toBeInTheDocument()
+  })
+
+  it('displays all participants organizations in Organization Dropdown', async () => {
+    const participants = [
+      buildParticipant({
+        overrides: {
+          grade: Grade_Enum.Pass,
+          profile: buildProfile({
+            overrides: {
+              organizations: [
+                {
+                  organization: buildOrganization({
+                    overrides: {
+                      name: 'NearForm',
+                    },
+                  }),
+                  isAdmin: false,
+                },
+              ],
+            },
+          }),
+        },
+      }),
+      buildParticipant({
+        overrides: {
+          profile: buildProfile({
+            overrides: {
+              organizations: [
+                {
+                  organization: buildOrganization({
+                    overrides: {
+                      name: 'Amdaris',
+                    },
+                  }),
+                  isAdmin: false,
+                },
+              ],
+            },
+          }),
+          grade: Grade_Enum.Pass,
+          healthSafetyConsent: true,
+        },
+      }),
+      buildParticipant({
+        overrides: {
+          profile: buildProfile({
+            overrides: {
+              organizations: [
+                {
+                  organization: buildOrganization({
+                    overrides: {
+                      name: 'Team Teach',
+                    },
+                  }),
+                  isAdmin: false,
+                },
+              ],
+            },
+          }),
+          grade: Grade_Enum.Pass,
+          healthSafetyConsent: false,
+          completed_evaluation: true,
+        },
+      }),
+    ]
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+          data: {
+            course_participant: [
+              {
+                profile: {
+                  organizations: [
+                    {
+                      organization: {
+                        name: 'Amdaris',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'Team Teach',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'NearForm',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CertificationList
+          participants={participants}
+          sorting={sorting}
+          columns={columns}
+        />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+    )
+    const orgNames = participants
+      ?.flatMap(cp =>
+        cp.profile.organizations.map(org => org.organization.name),
+      )
+      .filter(Boolean)
+
+    const organizationDropdown = screen.getByLabelText(
+      t('components.organization-dropdown.title'),
+    )
+
+    userEvent.click(organizationDropdown)
+    await waitFor(() => {
+      orgNames.forEach(name => {
+        expect(
+          screen.queryByTestId(`organization-option-${name}`),
+        ).toBeInTheDocument()
+      })
+    })
   })
 })

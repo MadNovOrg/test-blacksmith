@@ -32,6 +32,8 @@ import {
   GetEvaluationsQueryVariables,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
+import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/CourseDetailsFilters'
+import { OrgAndName } from '@app/modules/course/components/CourseForm/CourseDetailsFilters/utils'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-evaluations'
 import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { Course, SortOrder } from '@app/types'
@@ -58,6 +60,9 @@ export const EvaluationSummaryTab: React.FC<
   const courseId = Number.parseInt(params.id as string, 10)
   const profileId = profile?.id as string
 
+  const [keywordArray, setKeywordArray] = useState<string[]>([])
+  const [selectedOrganization, setSelectedOrganization] = useState<string>()
+
   const [{ data, error }] = useQuery<
     GetEvaluationsQuery,
     GetEvaluationsQueryVariables
@@ -70,9 +75,40 @@ export const EvaluationSummaryTab: React.FC<
         : { profileCondition: { archived: { _eq: false } } }),
     },
   })
+  const loading = !data?.evaluations && !error
+
+  const handleWhereConditionChange = (
+    whereCondition: Record<string, object>,
+  ) => {
+    const condition = whereCondition.condition as OrgAndName
+    setSelectedOrganization(condition?.selectedOrganization)
+    setKeywordArray(condition?.keywordArray)
+  }
+
+  const filteredEvaluations = useMemo(() => {
+    let evaluations = data?.evaluations
+
+    if (selectedOrganization && selectedOrganization !== '') {
+      evaluations = evaluations?.filter(ce =>
+        ce.profile.organizations.some(
+          org => org.organization.name === selectedOrganization,
+        ),
+      )
+    }
+
+    if (keywordArray?.length && keywordArray[0] !== '') {
+      evaluations = evaluations?.filter(ce => {
+        const userInfo = [ce.profile.fullName, ce.profile.email]
+          .join(' ')
+          .toLocaleLowerCase()
+        return keywordArray.every(keyword => userInfo.includes(keyword))
+      })
+    }
+    return evaluations
+  }, [data?.evaluations, keywordArray, selectedOrganization])
 
   const isCourseTrainer = useMemo(
-    () => !!data?.trainers.find(t => t.profile.id === profileId),
+    () => !!data?.trainers?.find(t => t.profile.id === profileId),
     [data, profileId],
   )
 
@@ -84,7 +120,7 @@ export const EvaluationSummaryTab: React.FC<
 
   const displayEvaluationColumn =
     acl.isInternalUser() ||
-    (isCourseTrainer && !(course.type === Course_Type_Enum.Open))
+    (isCourseTrainer && course.type !== Course_Type_Enum.Open)
 
   const cols = useMemo(
     () =>
@@ -116,11 +152,9 @@ export const EvaluationSummaryTab: React.FC<
   const [order] = useState<SortOrder>('asc')
   const [orderBy] = useState(cols[0].id)
 
-  const loading = !data && !error
-
   const findEvaluationForProfileId = useCallback(
     (id: string) =>
-      data?.evaluations.find((e: Evaluation) => e.profile.id === id),
+      data?.evaluations?.find((e: Evaluation) => e.profile.id === id),
     [data],
   )
 
@@ -130,19 +164,21 @@ export const EvaluationSummaryTab: React.FC<
   )
 
   const leadTrainer = useMemo(
-    () => data?.trainers.find(t => t.type === Course_Trainer_Type_Enum.Leader),
+    () => data?.trainers?.find(t => t.type === Course_Trainer_Type_Enum.Leader),
     [data],
   )
 
   const assistTrainers = useMemo(
     () =>
-      data?.trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant),
+      data?.trainers?.filter(
+        t => t.type === Course_Trainer_Type_Enum.Assistant,
+      ),
     [data],
   )
 
   const moderatorTrainer = useMemo(
     () =>
-      data?.trainers.find(t => t.type === Course_Trainer_Type_Enum.Moderator),
+      data?.trainers?.find(t => t.type === Course_Trainer_Type_Enum.Moderator),
     [data],
   )
 
@@ -156,28 +192,25 @@ export const EvaluationSummaryTab: React.FC<
       Course_Status_Enum.TrainerMissing,
       Course_Status_Enum.TrainerPending,
     ].includes(course?.status) &&
-      course.schedule?.length &&
-      isPast(new Date(course.schedule[0].end)))
+      isPast(new Date(course?.schedule[0]?.end)))
 
   const canTrainerSubmitEvaluation =
-    isCourseCanBeEvaluated &&
-    !didTrainerSubmitEvaluation &&
-    (isCourseTrainer || leadTrainer?.profile.id === profileId)
+    isCourseCanBeEvaluated && !didTrainerSubmitEvaluation && isCourseTrainer
 
-  const leadTrainerEvaluation = data?.evaluations.filter(
+  const leadTrainerEvaluation = filteredEvaluations?.filter(
     e => e.profile.id === leadTrainer?.profile.id,
   )
 
-  const assistTrainersEvaluations = data?.evaluations.filter(e =>
+  const assistTrainersEvaluations = filteredEvaluations?.filter(e =>
     assistTrainers?.map(t => t.profile).some(p => p.id === e.profile.id),
   )
 
-  const moderatorTrainerEvaluations = data?.evaluations.filter(
+  const moderatorTrainerEvaluations = filteredEvaluations?.filter(
     e => e.profile.id === moderatorTrainer?.profile.id,
   )
 
-  const attendeeEvaluations = data?.evaluations
-    .filter(
+  const attendeeEvaluations = filteredEvaluations
+    ?.filter(
       e =>
         !leadTrainerEvaluation
           ?.concat(moderatorTrainerEvaluations ?? [])
@@ -245,7 +278,7 @@ export const EvaluationSummaryTab: React.FC<
       )}
 
       <Box>
-        <Grid container alignItems="center" spacing={2}>
+        <Grid container alignItems="center" spacing={2} md={12}>
           <Grid item md={6} sm={12}>
             <Typography
               variant="subtitle1"
@@ -257,44 +290,52 @@ export const EvaluationSummaryTab: React.FC<
               {t('pages.course-details.tabs.evaluation.desc')}
             </Typography>
           </Grid>
-          {!isOpenCourseTrainer ? (
-            <Grid
-              item
-              container
-              md={6}
-              sm={12}
-              display="flex"
-              justifyContent="flex-end"
-              flexDirection={isMobile ? 'column' : 'row'}
-              spacing={2}
-            >
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-                  data-testid="export-summary"
-                  fullWidth={isMobile}
-                  onClick={() => setIsPDFExporting(true)}
-                >
-                  {PDFExportButtonContent}
-                </Button>
+          <Grid item md={12}>
+            <CourseDetailsFilters
+              courseId={course.id}
+              handleWhereConditionChange={handleWhereConditionChange}
+            />
+          </Grid>
+          <Grid item md={12}>
+            {!isOpenCourseTrainer ? (
+              <Grid
+                item
+                container
+                md={12}
+                sm={12}
+                display="flex"
+                justifyContent="flex-end"
+                flexDirection={isMobile ? 'column' : 'row'}
+                spacing={2}
+              >
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                    data-testid="export-summary"
+                    fullWidth={isMobile}
+                    onClick={() => setIsPDFExporting(true)}
+                  >
+                    {PDFExportButtonContent}
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    component={LinkBehavior}
+                    variant="contained"
+                    color="primary"
+                    href="../evaluation/summary"
+                    disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                    data-testid="view-summary-evaluation"
+                    fullWidth={isMobile}
+                  >
+                    {t('pages.course-details.tabs.evaluation.button')}
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Button
-                  component={LinkBehavior}
-                  variant="contained"
-                  color="primary"
-                  href="../evaluation/summary"
-                  disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-                  data-testid="view-summary-evaluation"
-                  fullWidth={isMobile}
-                >
-                  {t('pages.course-details.tabs.evaluation.button')}
-                </Button>
-              </Grid>
-            </Grid>
-          ) : null}
+            ) : null}
+          </Grid>
         </Grid>
 
         <TableContainer component={Paper} elevation={0} sx={{ mt: 2 }}>
@@ -355,13 +396,13 @@ export const EvaluationSummaryTab: React.FC<
                   </TableRow>
                 ),
               ) ??
-                (loading && (
+                (loading ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center">
                       <CircularProgress data-testid="evaluations-fetching" />
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : null)}
             </TableBody>
           </Table>
         </TableContainer>

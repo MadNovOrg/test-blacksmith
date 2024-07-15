@@ -67,6 +67,9 @@
     "no-results": "No results found.",
     "add-new-venue": "Add new venue?"
   },
+  "organization-dropdown": {
+    "title": "Select organization"
+  },
   "suspense-loading": {
     "text": "Loading..."
   },

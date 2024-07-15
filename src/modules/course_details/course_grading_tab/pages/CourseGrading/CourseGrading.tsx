@@ -15,7 +15,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useEffectOnce } from 'react-use'
@@ -24,6 +24,7 @@ import { noop } from 'ts-essentials'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
+import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/CourseDetailsFilters'
 import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
 import { Grade } from '@app/modules/grading/components/Grade'
 import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
@@ -50,29 +51,42 @@ export const CourseGrading: React.FC<
   const [order, setOrder] = useState<SortOrder>('asc')
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([])
+  const [where, setWhere] = useState<Record<string, object>>({})
+
+  const handleWhereConditionChange = (
+    whereCondition: Record<string, object>,
+  ) => {
+    setWhere(whereCondition)
+  }
 
   const {
-    data: participants,
+    data: courseParticipants,
+    total: courseParticipantsTotal,
     status,
-    total,
+    mutate: refreshParticipants,
   } = useCourseParticipants(course?.id ?? '', {
     sortBy: 'name',
     order,
     where: {
-      attended: { _eq: true },
+      _and: [where],
     },
   })
 
-  const participantsWithoutGrades = (participants ?? []).filter(
+  useEffect(() => {
+    refreshParticipants({ requestPolicy: 'network-only' })
+  }, [refreshParticipants, where])
+
+  const participantsWithoutGrades = (courseParticipants ?? []).filter(
     participant => !participant.grade,
   )
 
   const canEditGradingDetails = !course.gradingStarted
   const disableGradeAll = useMemo(() => {
     const participantFiltered =
-      participants?.filter(participant => participant.grade !== null) || []
-    return participantFiltered.length === participants?.length
-  }, [participants])
+      courseParticipants?.filter(participant => participant.grade !== null) ??
+      []
+    return participantFiltered.length === courseParticipants?.length
+  }, [courseParticipants])
 
   const canGradeParticipants = acl.canGradeParticipants(course.trainers ?? [])
 
@@ -217,64 +231,77 @@ export const CourseGrading: React.FC<
                 justifyContent="space-between"
                 alignItems="center"
                 sx={{ mb: 2, p: 0 }}
+                spacing={3}
               >
-                <Grid item>
-                  <Typography variant="body1" color="grey.600">
-                    {t('pages.course-details.tabs.grading.attendees', {
-                      number: total,
-                    })}
-                  </Typography>
+                <Grid item md={12} sx={{ marginTop: '15px' }}>
+                  <CourseDetailsFilters
+                    canViewEvaluationSubmittedColumn={false}
+                    courseId={course.id}
+                    handleWhereConditionChange={handleWhereConditionChange}
+                  />
                 </Grid>
-                {canGradeParticipants ? (
-                  <Grid
-                    item
-                    container
-                    md={6}
-                    sm={12}
-                    display="flex"
-                    justifyContent="flex-end"
-                    flexDirection={isMobile ? 'column' : 'row'}
-                    spacing={2}
-                  >
-                    <Grid item>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        disabled={selectedParticipants.length === 0}
-                        fullWidth={isMobile}
-                        onClick={() =>
-                          navigate(
-                            `/courses/${
-                              course.id
-                            }/grading?participants=${selectedParticipants.join(
-                              ',',
-                            )}`,
-                          )
-                        }
-                      >
-                        {t('pages.course-details.tabs.grading.grade-selected', {
-                          number: selectedParticipants.length,
-                        })}
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={disableGradeAll}
-                        fullWidth={isMobile}
-                        onClick={() =>
-                          navigate(`/courses/${course.id}/grading`)
-                        }
-                        data-testid="grade-all-attendees"
-                      >
-                        {t(
-                          'pages.course-details.tabs.grading.grade-all-attendees',
-                        )}
-                      </Button>
-                    </Grid>
+                <Grid item container md={12} alignItems={'flex-end'}>
+                  <Grid item md={6}>
+                    <Typography variant="body1" color="grey.600">
+                      {t('pages.course-details.tabs.grading.attendees', {
+                        number: courseParticipantsTotal,
+                      })}
+                    </Typography>
                   </Grid>
-                ) : null}
+                  {canGradeParticipants ? (
+                    <Grid
+                      item
+                      container
+                      md={6}
+                      sm={12}
+                      display="flex"
+                      justifyContent="flex-end"
+                      flexDirection={isMobile ? 'column' : 'row'}
+                      spacing={2}
+                    >
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          disabled={selectedParticipants.length === 0}
+                          fullWidth={isMobile}
+                          onClick={() =>
+                            navigate(
+                              `/courses/${
+                                course.id
+                              }/grading?participants=${selectedParticipants.join(
+                                ',',
+                              )}`,
+                            )
+                          }
+                        >
+                          {t(
+                            'pages.course-details.tabs.grading.grade-selected',
+                            {
+                              number: selectedParticipants.length,
+                            },
+                          )}
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          disabled={disableGradeAll}
+                          fullWidth={isMobile}
+                          onClick={() =>
+                            navigate(`/courses/${course.id}/grading`)
+                          }
+                          data-testid="grade-all-attendees"
+                        >
+                          {t(
+                            'pages.course-details.tabs.grading.grade-all-attendees',
+                          )}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  ) : null}
+                </Grid>
               </Grid>
               <Grid sx={{ overflowX: 'auto' }}>
                 <Table>
@@ -285,7 +312,7 @@ export const CourseGrading: React.FC<
                     onRequestSort={handleSortChange}
                   />
                   <TableBody>
-                    {participants?.map(courseParticipant => (
+                    {courseParticipants?.map(courseParticipant => (
                       <TableRow
                         key={courseParticipant.id}
                         data-testid={`attending-participant-row-${courseParticipant.id}`}

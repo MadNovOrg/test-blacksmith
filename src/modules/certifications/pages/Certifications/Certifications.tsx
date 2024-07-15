@@ -32,10 +32,8 @@ import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificationsTable } from '@app/modules/certifications/components/CertificationsTable'
 import useCertifications from '@app/modules/certifications/hooks/useCertifications'
 
-type CertificationsProps = unknown
-
 export const Certifications: React.FC<
-  React.PropsWithChildren<CertificationsProps>
+  React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
 
@@ -77,8 +75,6 @@ export const Certifications: React.FC<
         .split(' ')
         .filter(w => Boolean(w))
         .map(w => w.trim())
-
-      console.log('words', words)
 
       const ilike = { _ilike: `%${query}%` }
 

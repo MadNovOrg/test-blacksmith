@@ -14,7 +14,7 @@ import {
 import { pdf } from '@react-pdf/renderer'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -30,6 +30,8 @@ import {
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
+import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/CourseDetailsFilters'
+import { OrgAndName } from '@app/modules/course/components/CourseForm/CourseDetailsFilters/utils'
 import { Grade } from '@app/modules/grading/components/Grade'
 import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
@@ -50,6 +52,7 @@ export type CertificationListColumns = (
 )[]
 
 type CertificationListProps = {
+  courseId?: number
   participants: CourseParticipant[]
   filtered?: boolean
   sorting: Sorting
@@ -73,9 +76,42 @@ export const CertificationList: React.FC<
   const { acl } = useAuth()
   const { checkbox, selected, isSelected } = useTableChecks()
 
+  const [keywordArray, setKeywordArray] = useState<string[]>([])
+  const [selectedOrganization, setSelectedOrganization] = useState<string>()
+
+  const handleWhereConditionChange = (
+    whereCondition: Record<string, object>,
+  ) => {
+    const condition = whereCondition.condition as OrgAndName
+    setSelectedOrganization(condition?.selectedOrganization)
+    setKeywordArray(condition?.keywordArray)
+  }
+
+  const filteredPatricipants = useMemo(() => {
+    let courseParticipants = participants
+
+    if (selectedOrganization && selectedOrganization !== '') {
+      courseParticipants = participants?.filter(cp =>
+        cp.profile.organizations.some(
+          org => org.organization.name === selectedOrganization,
+        ),
+      )
+    }
+
+    if (keywordArray?.length && keywordArray[0] !== '') {
+      courseParticipants = courseParticipants?.filter(cp => {
+        const userInfo = [cp.profile.fullName, cp.profile.email]
+          .join(' ')
+          .toLocaleLowerCase()
+        return keywordArray.every(keyword => userInfo.includes(keyword))
+      })
+    }
+    return courseParticipants
+  }, [keywordArray, participants, selectedOrganization])
+
   const selectedParticipants = useMemo(
-    () => participants.filter(p => isSelected(p.id)),
-    [participants, isSelected],
+    () => filteredPatricipants.filter(p => isSelected(p.id)),
+    [filteredPatricipants, isSelected],
   )
 
   const colsToShow: Set<string> = useMemo(() => new Set(columns), [columns])
@@ -89,7 +125,7 @@ export const CertificationList: React.FC<
 
     return [
       checkbox.headCol(
-        participants.flatMap(p =>
+        filteredPatricipants.flatMap(p =>
           p.certificate?.status === CertificateStatus.Revoked ? [] : [p.id],
         ),
       ),
@@ -104,11 +140,11 @@ export const CertificationList: React.FC<
       ...col('date-expired'),
       ...col('actions', {}, false),
     ] as Col[]
-  }, [participants, t, checkbox, showCol])
+  }, [filteredPatricipants, t, checkbox, showCol])
 
   const downloadCertificates = useCallback(
-    async (participants: CourseParticipant[]) => {
-      const tuples: [string, JSX.Element][] = participants.map(p => [
+    async (filteredPatricipants: CourseParticipant[]) => {
+      const tuples: [string, JSX.Element][] = filteredPatricipants.map(p => [
         `${p.profile?.fullName} - ${
           p.certificate?.courseName.replace(':', '') ?? ''
         }.pdf`,
@@ -159,13 +195,19 @@ export const CertificationList: React.FC<
         <Grid
           item
           container
-          md={6}
+          md={12}
           sm={12}
           display="flex"
           justifyContent="flex-end"
           flexDirection={isMobile ? 'column' : 'row'}
           spacing={2}
         >
+          <Grid item md={12} sx={{ marginTop: '15px' }}>
+            <CourseDetailsFilters
+              courseId={participants[0]?.course?.id}
+              handleWhereConditionChange={handleWhereConditionChange}
+            />
+          </Grid>
           <Grid item>
             <Button
               variant="outlined"
@@ -188,7 +230,7 @@ export const CertificationList: React.FC<
               fullWidth={isMobile}
               onClick={() => {
                 downloadCertificates(
-                  participants.filter(
+                  filteredPatricipants.filter(
                     p => p.certificate?.status !== CertificateStatus.Revoked,
                   ) ?? [],
                 )
@@ -210,13 +252,13 @@ export const CertificationList: React.FC<
           ></TableHead>
           <TableBody data-testid={'table-body'}>
             <TableNoRows
-              noRecords={!participants.length}
+              noRecords={!filteredPatricipants.length}
               filtered={filtered}
               colSpan={cols.length}
               itemsName={t('certifications').toLowerCase()}
             />
 
-            {participants?.map(p => {
+            {filteredPatricipants?.map(p => {
               if (!p.certificate) return null
 
               const status = p.certificate?.status
@@ -259,11 +301,18 @@ export const CertificationList: React.FC<
 
                   {showCol('organisation') ? (
                     <TableCell data-testid="organisation">
-                      <Link
-                        href={`/organisations/${p.course?.organization?.id}`}
-                      >
-                        {p.course?.organization?.name}
-                      </Link>
+                      <Box display={'flex'} flexDirection={'column'}>
+                        {p.profile.organizations.map(o => {
+                          return (
+                            <Link
+                              key={o.organization.id}
+                              href={`/organisations/${o.organization.id}`}
+                            >
+                              {o.organization.name}
+                            </Link>
+                          )
+                        })}
+                      </Box>
                     </TableCell>
                   ) : null}
 

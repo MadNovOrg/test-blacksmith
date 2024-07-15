@@ -1,13 +1,30 @@
-import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { Grade_Enum } from '@app/generated/graphql'
+import {
+  GetCourseParticipantsOrganizationsQuery,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
 import { RoleName } from '@app/types'
 import { LoadingStatus, noop } from '@app/util'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
-import { buildCourse, buildParticipant } from '@test/mock-data-utils'
+import {
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
+import {
+  buildCourse,
+  buildOrganization,
+  buildParticipant,
+  buildProfile,
+} from '@test/mock-data-utils'
 
 import { CourseGrading } from './CourseGrading'
 
@@ -17,6 +34,12 @@ vi.mock(
 const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
 
 describe('component: CourseGrading', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   it('displays spinner while loading for participants', () => {
     const course = buildCourse()
     course.gradingConfirmed = true
@@ -73,6 +96,262 @@ describe('component: CourseGrading', () => {
       screen.getByText(participants[2].profile.fullName),
     ).toBeInTheDocument()
     expect(gradeCells[2]).toHaveTextContent('Grade')
+  })
+
+  it('displays search filter', () => {
+    const course = buildCourse()
+    course.gradingConfirmed = true
+    const participants = [
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      mutate: vi.fn(),
+    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+          data: {
+            course_participant: [
+              {
+                profile: {
+                  organizations: [
+                    {
+                      organization: {
+                        name: 'Amdaris',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'Team Teach',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'NearForm',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+    render(
+      <Routes>
+        <Route
+          path="/courses/:id/details"
+          element={
+            <Provider value={client}>
+              <CourseGrading course={course} />
+            </Provider>
+          }
+        />
+      </Routes>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/${course.id}/details`] },
+    )
+    const searchFilter = screen.getByTestId('FilterSearch-Input')
+
+    expect(searchFilter).toBeInTheDocument()
+  })
+
+  it('displays organization dropdown', () => {
+    const course = buildCourse()
+    course.gradingConfirmed = true
+    const participants = [
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      mutate: vi.fn(),
+    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+          data: {
+            course_participant: [
+              {
+                profile: {
+                  organizations: [
+                    {
+                      organization: {
+                        name: 'Amdaris',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'Team Teach',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'NearForm',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+    render(
+      <Routes>
+        <Route
+          path="/courses/:id/details"
+          element={
+            <Provider value={client}>
+              <CourseGrading course={course} />
+            </Provider>
+          }
+        />
+      </Routes>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/${course.id}/details`] },
+    )
+    const searchFilter = screen.getByTestId('attendee-organization-dropdown')
+
+    expect(searchFilter).toBeInTheDocument()
+  })
+
+  it('displays all participants organizations in Organization Dropdown', async () => {
+    const course = buildCourse()
+    course.gradingConfirmed = true
+    const participants = [
+      buildParticipant({
+        overrides: {
+          profile: buildProfile({
+            overrides: {
+              organizations: [
+                {
+                  organization: buildOrganization({
+                    overrides: {
+                      name: 'NearForm',
+                    },
+                  }),
+                  isAdmin: false,
+                },
+              ],
+            },
+          }),
+        },
+      }),
+      buildParticipant({
+        overrides: {
+          profile: buildProfile({
+            overrides: {
+              organizations: [
+                {
+                  organization: buildOrganization({
+                    overrides: {
+                      name: 'Amdaris',
+                    },
+                  }),
+                  isAdmin: false,
+                },
+              ],
+            },
+          }),
+          healthSafetyConsent: true,
+        },
+      }),
+      buildParticipant({
+        overrides: {
+          profile: buildProfile({
+            overrides: {
+              organizations: [
+                {
+                  organization: buildOrganization({
+                    overrides: {
+                      name: 'Team Teach',
+                    },
+                  }),
+                  isAdmin: false,
+                },
+              ],
+            },
+          }),
+          healthSafetyConsent: false,
+          completed_evaluation: true,
+        },
+      }),
+    ]
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      mutate: vi.fn(),
+    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+          data: {
+            course_participant: [
+              {
+                profile: {
+                  organizations: [
+                    {
+                      organization: {
+                        name: 'Amdaris',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'Team Teach',
+                      },
+                    },
+                    {
+                      organization: {
+                        name: 'NearForm',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+    render(
+      <Routes>
+        <Route
+          path="/courses/:id/details"
+          element={
+            <Provider value={client}>
+              <CourseGrading course={course} />
+            </Provider>
+          }
+        />
+      </Routes>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/${course.id}/details`] },
+    )
+    const orgNames = participants
+      ?.flatMap(cp =>
+        cp.profile.organizations.map(org => org.organization.name),
+      )
+      .filter(Boolean)
+
+    const organizationDropdown = screen.getByLabelText(
+      t('components.organization-dropdown.title'),
+    )
+
+    userEvent.click(organizationDropdown)
+    await waitFor(() => {
+      orgNames.forEach(name => {
+        expect(
+          screen.queryByTestId(`organization-option-${name}`),
+        ).toBeInTheDocument()
+      })
+    })
   })
 
   it('shows button to modify grading details', async () => {

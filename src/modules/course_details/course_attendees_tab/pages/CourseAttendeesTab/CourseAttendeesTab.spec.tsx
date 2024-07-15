@@ -1,11 +1,13 @@
-import { getByTestId } from '@testing-library/dom'
+import { getByTestId, waitFor } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
+import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
-import { never } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import {
   Course_Type_Enum,
   GetCourseInvitesQuery,
+  GetCourseParticipantsOrganizationsQuery,
   GetWaitlistQuery,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
@@ -16,11 +18,13 @@ import { buildOrder } from '@app/pages/tt-pages/OrderDetails/mock-utils'
 import { Course, CourseParticipant, RoleName } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT, LoadingStatus } from '@app/util'
 
-import { render, screen, within } from '@test/index'
+import { render, renderHook, screen, within } from '@test/index'
 import {
   buildCourse,
   buildInvite,
+  buildOrganization,
   buildParticipant,
+  buildProfile,
   buildWaitlistEntry,
 } from '@test/mock-data-utils'
 
@@ -65,6 +69,11 @@ const emptyPendingInvitesResponse = {
 
 describe(CourseAttendeesTab.name, () => {
   let course: Course
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -110,10 +119,61 @@ describe(CourseAttendeesTab.name, () => {
                 },
               ],
             })[0].order,
+            profile: buildProfile({
+              overrides: {
+                organizations: [
+                  {
+                    organization: buildOrganization({
+                      overrides: {
+                        name: 'NearForm',
+                      },
+                    }),
+                    isAdmin: false,
+                  },
+                ],
+              },
+            }),
           },
         }),
-        buildParticipant(),
-        buildParticipant(),
+        buildParticipant({
+          overrides: {
+            profile: buildProfile({
+              overrides: {
+                organizations: [
+                  {
+                    organization: buildOrganization({
+                      overrides: {
+                        name: 'Amdaris',
+                      },
+                    }),
+                    isAdmin: false,
+                  },
+                ],
+              },
+            }),
+            healthSafetyConsent: true,
+          },
+        }),
+        buildParticipant({
+          overrides: {
+            profile: buildProfile({
+              overrides: {
+                organizations: [
+                  {
+                    organization: buildOrganization({
+                      overrides: {
+                        name: 'Team Teach',
+                      },
+                    }),
+                    isAdmin: false,
+                  },
+                ],
+              },
+            }),
+            healthSafetyConsent: false,
+            completed_evaluation: true,
+          },
+        }),
       ],
     }
 
@@ -143,6 +203,34 @@ describe(CourseAttendeesTab.name, () => {
         },
       })
       const urqlMockClient = {
+        executeQuery: () =>
+          fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+            data: {
+              course_participant: [
+                {
+                  profile: {
+                    organizations: [
+                      {
+                        organization: {
+                          name: 'Amdaris',
+                        },
+                      },
+                      {
+                        organization: {
+                          name: 'Team Teach',
+                        },
+                      },
+                      {
+                        organization: {
+                          name: 'NearForm',
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          }),
         executeMutation: vi.fn(() => never),
       } as unknown as Client
       // Act
@@ -183,6 +271,60 @@ describe(CourseAttendeesTab.name, () => {
           screen.getByTestId(`course-participant-row-${participant.id}`),
         ).toBeInTheDocument()
       })
+    })
+
+    it('displays search filter', () => {
+      setup()
+      const searchFilter = screen.getByTestId('FilterSearch-Input')
+
+      expect(searchFilter).toBeInTheDocument()
+    })
+
+    it('displays organization dropdown', () => {
+      setup()
+      const searchFilter = screen.getByTestId('attendee-organization-dropdown')
+
+      expect(searchFilter).toBeInTheDocument()
+    })
+
+    it('displays all participants organizations in Organization Dropdown', async () => {
+      setup()
+      const { participants } = testData
+
+      const orgNames = participants
+        ?.flatMap(cp =>
+          cp.profile.organizations.map(org => org.organization.name),
+        )
+        .filter(Boolean)
+
+      const organizationDropdown = screen.getByLabelText(
+        t('components.organization-dropdown.title'),
+      )
+
+      userEvent.click(organizationDropdown)
+      await waitFor(() => {
+        orgNames.forEach(name => {
+          expect(
+            screen.queryByTestId(`organization-option-${name}`),
+          ).toBeInTheDocument()
+        })
+      })
+    })
+
+    it('should display H&S checbox', () => {
+      setup()
+      const handsChecbox = screen.getByTestId('h-and-s-checkbox')
+
+      expect(handsChecbox).toBeInTheDocument()
+    })
+
+    it('should display Course Evaluation checbox', () => {
+      setup(RoleName.TT_ADMIN)
+      const handsChecbox = screen.getByLabelText(
+        t('common.filters.course-evaluation'),
+      )
+
+      expect(handsChecbox).toBeInTheDocument()
     })
 
     it('should display "Full Name" column in a row', () => {
@@ -235,7 +377,6 @@ describe(CourseAttendeesTab.name, () => {
       )
 
       // Assert
-      console.log(participants[0].order)
       expect(
         within(participantRow).getByText(
           // @ts-expect-error types difference between the generator method and the actual query result
@@ -275,11 +416,11 @@ describe(CourseAttendeesTab.name, () => {
     })
   })
 
-  it('displays a message if no one has registered yet', () => {
+  it('displays a message if there was an error loading participants', () => {
     const participants: CourseParticipant[] = []
 
     useCourseParticipantsMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
+      status: LoadingStatus.ERROR,
       data: participants,
       total: participants.length,
       mutate: vi.fn(),
@@ -332,7 +473,7 @@ describe(CourseAttendeesTab.name, () => {
 
     await userEvent.click(screen.getByTitle('Go to next page'))
 
-    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
+    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(2)
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
       course.id,
       {
@@ -343,6 +484,7 @@ describe(CourseAttendeesTab.name, () => {
           offset: DEFAULT_PAGINATION_LIMIT,
         },
         sortBy: 'name',
+        where: {},
       },
     ])
   })
@@ -374,7 +516,7 @@ describe(CourseAttendeesTab.name, () => {
 
     await userEvent.click(screen.getByText('Name'))
 
-    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
+    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(2)
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
       course.id,
       {
@@ -385,6 +527,7 @@ describe(CourseAttendeesTab.name, () => {
           offset: 0,
         },
         sortBy: 'name',
+        where: {},
       },
     ])
   })
@@ -416,9 +559,7 @@ describe(CourseAttendeesTab.name, () => {
       isLoading: false,
       total: waitlist.length,
       error: undefined,
-      mutate: function (): void {
-        throw new Error('Function not implemented.')
-      },
+      mutate: vi.fn(),
     })
 
     const openCourse = buildCourse()
@@ -493,9 +634,7 @@ describe(CourseAttendeesTab.name, () => {
       isLoading: false,
       total: 0,
       error: undefined,
-      mutate: function (): void {
-        throw new Error('Function not implemented.')
-      },
+      mutate: vi.fn(),
     })
 
     const openCourse = buildCourse()

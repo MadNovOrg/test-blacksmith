@@ -552,7 +552,9 @@
     "GBP": "£",
     "NZD": "NZD $",
     "USD": "$",
-    "archived": "Archived"
+    "archived": "Archived",
+    "h-and-s": "H&S",
+    "course-evaluation": "Course Evaluation"
   },
   "pagination": {
     "rows-per-page": "Rows per page"

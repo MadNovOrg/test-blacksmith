@@ -52,7 +52,6 @@ describe('component: EvaluationSummaryTab', () => {
       {},
       { initialEntries: ['/courses/1/details'] },
     )
-
     expect(screen.queryByTestId('evaluations-fetching')).toBeInTheDocument()
   })
 
@@ -101,6 +100,74 @@ describe('component: EvaluationSummaryTab', () => {
         { initialEntries: ['/courses/1/details'] },
       )
       expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
+    })
+
+    it('displays search filter', () => {
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: GetEvaluationsQuery }>({
+            data: {
+              evaluations,
+              attendees,
+              trainers,
+            },
+          }),
+      } as unknown as Client
+      render(
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={
+              <Provider value={client}>
+                <EvaluationSummaryTab
+                  course={buildCourse({
+                    overrides: { status: Course_Status_Enum.EvaluationMissing },
+                  })}
+                />
+              </Provider>
+            }
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] },
+      )
+      const searchFilter = screen.getByTestId('FilterSearch-Input')
+
+      expect(searchFilter).toBeInTheDocument()
+    })
+
+    it('displays organization dropdown', () => {
+      const client = {
+        executeQuery: () =>
+          fromValue<{ data: GetEvaluationsQuery }>({
+            data: {
+              evaluations,
+              attendees,
+              trainers,
+            },
+          }),
+      } as unknown as Client
+      render(
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={
+              <Provider value={client}>
+                <EvaluationSummaryTab
+                  course={buildCourse({
+                    overrides: { status: Course_Status_Enum.EvaluationMissing },
+                  })}
+                />
+              </Provider>
+            }
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] },
+      )
+      const searchFilter = screen.getByTestId('attendee-organization-dropdown')
+
+      expect(searchFilter).toBeInTheDocument()
     })
 
     it(`leader trainer and course status is ${Course_Status_Enum.EvaluationMissing}`, () => {

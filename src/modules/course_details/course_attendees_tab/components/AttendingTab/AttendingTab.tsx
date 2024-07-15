@@ -9,7 +9,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -26,6 +26,7 @@ import {
   SendCourseInformationMutationVariables,
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
+import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/CourseDetailsFilters'
 import { CancelAttendeeDialog } from '@app/modules/course_details/course_attendees_tab/components/CancelAttendeeDialog'
 import { ManageAttendanceMenu } from '@app/modules/course_details/course_attendees_tab/components/ManageAttendanceMenu'
 import {
@@ -80,6 +81,12 @@ export const AttendingTab = ({
     useState<CourseParticipant>()
   const [attendeeToResendInfo, setAttendeeToResendInfo] =
     useState<CourseParticipant>()
+  const [where, setWhere] = useState<Record<string, object>>({})
+  const handleWhereConditionChange = (
+    whereCondition: Record<string, object>,
+  ) => {
+    setWhere(whereCondition)
+  }
 
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === Course_Type_Enum.Open
@@ -101,8 +108,9 @@ export const AttendingTab = ({
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     mutate: refreshParticipants,
-  } = useCourseParticipants(course?.id ?? '', {
+  } = useCourseParticipants(course?.id, {
     sortBy: sortColumn,
+    where,
     order,
     pagination: {
       limit: perPage,
@@ -110,6 +118,9 @@ export const AttendingTab = ({
     },
     alwaysShowArchived: true,
   })
+  useEffect(() => {
+    refreshParticipants({ requestPolicy: 'network-only' })
+  }, [refreshParticipants, where])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -292,8 +303,7 @@ export const AttendingTab = ({
   const isOpenTypeCourse = course.type === Course_Type_Enum.Open
   return (
     <>
-      {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
-      courseParticipants?.length ? (
+      {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS ? (
         <>
           <Box sx={{ overflowX: 'auto' }}>
             <SnackbarMessage
@@ -308,7 +318,13 @@ export const AttendingTab = ({
               severity="error"
               autoHideDuration={5000}
             />
-
+            <CourseDetailsFilters
+              canViewEvaluationSubmittedColumn={
+                canViewEvaluationSubmittedColumn
+              }
+              courseId={course.id}
+              handleWhereConditionChange={handleWhereConditionChange}
+            />
             {canToggleAttendance ? (
               <Box display="flex" justifyContent="flex-end" mb={2}>
                 <BulkAttendanceButton
@@ -319,165 +335,171 @@ export const AttendingTab = ({
                 />
               </Box>
             ) : null}
-            <Table data-testid="attending-table">
-              <TableHead
-                cols={cols}
-                order={order}
-                orderBy={sortColumn}
-                onRequestSort={handleSortChange}
-              />
-              <TableBody>
-                {courseParticipants?.map(courseParticipant => {
-                  return (
-                    <TableRow
-                      key={courseParticipant.id}
-                      data-testid={`course-participant-row-${courseParticipant.id}`}
-                      sx={{
-                        backgroundColor: isSelected(courseParticipant.id)
-                          ? 'grey.50'
-                          : '',
-                      }}
-                    >
-                      {checkbox.rowCell(
-                        courseParticipant.id,
-                        !canToggleParticipantAttendance(courseParticipant),
-                      )}
-                      <TableCell>
-                        <LinkToProfile
-                          profileId={courseParticipant.profile.id}
-                          isProfileArchived={courseParticipant.profile.archived}
-                          courseId={course.id}
-                        >
-                          {courseParticipant.profile.archived
-                            ? t('common.archived-profile')
-                            : courseParticipant.profile.fullName}
-                        </LinkToProfile>
-                      </TableCell>
-                      <TableCell>
-                        <LinkToProfile
-                          profileId={courseParticipant.profile.id}
-                          isProfileArchived={courseParticipant.profile.archived}
-                          courseId={course.id}
-                        >
-                          {courseParticipant.profile.email}
-                          {courseParticipant.profile.contactDetails.map(
-                            (contact: Scalars['jsonb']) => contact.value,
-                          )}
-                        </LinkToProfile>
-                      </TableCell>
-                      <TableCell>
-                        {courseParticipant.profile.organizations.map(org =>
-                          acl.canViewOrganizations() ? (
-                            <Link
-                              href={`/organisations/${org.organization.id}`}
-                              key={org.organization.id}
-                            >
-                              <Typography>{org.organization.name}</Typography>
-                            </Link>
-                          ) : (
-                            <Typography key={org.organization.id}>
-                              {org.organization.name}
-                            </Typography>
-                          ),
+            <Box sx={{ overflowX: 'auto' }}>
+              <Table data-testid="attending-table">
+                <TableHead
+                  cols={cols}
+                  order={order}
+                  orderBy={sortColumn}
+                  onRequestSort={handleSortChange}
+                />
+                <TableBody>
+                  {courseParticipants?.map(courseParticipant => {
+                    return (
+                      <TableRow
+                        key={courseParticipant.id}
+                        data-testid={`course-participant-row-${courseParticipant.id}`}
+                        sx={{
+                          backgroundColor: isSelected(courseParticipant.id)
+                            ? 'grey.50'
+                            : '',
+                        }}
+                      >
+                        {checkbox.rowCell(
+                          courseParticipant.id,
+                          !canToggleParticipantAttendance(courseParticipant),
                         )}
-                      </TableCell>
-                      {isBlendedCourse && (
                         <TableCell>
-                          {courseParticipant.go1EnrolmentStatus && (
-                            <Chip
-                              label={t(
-                                `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`,
-                              )}
-                              color={
-                                courseParticipant.go1EnrolmentStatus ===
-                                BlendedLearningStatus.COMPLETED
-                                  ? 'success'
-                                  : 'warning'
-                              }
-                            />
+                          <LinkToProfile
+                            profileId={courseParticipant.profile.id}
+                            isProfileArchived={
+                              courseParticipant.profile.archived
+                            }
+                            courseId={course.id}
+                          >
+                            {courseParticipant.profile.archived
+                              ? t('common.archived-profile')
+                              : courseParticipant.profile.fullName}
+                          </LinkToProfile>
+                        </TableCell>
+                        <TableCell>
+                          <LinkToProfile
+                            profileId={courseParticipant.profile.id}
+                            isProfileArchived={
+                              courseParticipant.profile.archived
+                            }
+                            courseId={course.id}
+                          >
+                            {courseParticipant.profile.email}
+                            {courseParticipant.profile.contactDetails.map(
+                              (contact: Scalars['jsonb']) => contact.value,
+                            )}
+                          </LinkToProfile>
+                        </TableCell>
+                        <TableCell>
+                          {courseParticipant.profile.organizations.map(org =>
+                            acl.canViewOrganizations() ? (
+                              <Link
+                                href={`/organisations/${org.organization.id}`}
+                                key={org.organization.id}
+                              >
+                                <Typography>{org.organization.name}</Typography>
+                              </Link>
+                            ) : (
+                              <Typography key={org.organization.id}>
+                                {org.organization.name}
+                              </Typography>
+                            ),
                           )}
                         </TableCell>
-                      )}
-                      <TableCell style={{ textAlign: 'center' }}>
-                        {courseParticipant.healthSafetyConsent
-                          ? t('common.yes')
-                          : t('common.no')}
-                      </TableCell>
-                      {canViewEvaluationSubmittedColumn ? (
+                        {isBlendedCourse && (
+                          <TableCell>
+                            {courseParticipant.go1EnrolmentStatus && (
+                              <Chip
+                                label={t(
+                                  `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`,
+                                )}
+                                color={
+                                  courseParticipant.go1EnrolmentStatus ===
+                                  BlendedLearningStatus.COMPLETED
+                                    ? 'success'
+                                    : 'warning'
+                                }
+                              />
+                            )}
+                          </TableCell>
+                        )}
                         <TableCell style={{ textAlign: 'center' }}>
-                          {courseParticipant.completed_evaluation
+                          {courseParticipant.healthSafetyConsent
                             ? t('common.yes')
                             : t('common.no')}
                         </TableCell>
-                      ) : null}
-                      {canToggleAttendance ||
-                      (canViewRowActions(courseParticipant) &&
-                        acl.isOrgAdmin()) ? (
-                        <TableCell width={180}>
-                          <AttendingToggle
-                            participant={courseParticipant}
-                            disabled={
-                              !canToggleParticipantAttendance(courseParticipant)
-                            }
-                          />
-                        </TableCell>
-                      ) : null}
-                      {isOpenCourse && acl.canViewOrders() ? (
-                        <TableCell>
-                          {courseParticipant.order ? (
-                            <Link
-                              href={`/orders/${courseParticipant.order.id}`}
-                              data-testid="order-item-link"
-                              key="order-item-link"
-                            >
-                              {courseParticipant.order.xeroInvoiceNumber}
-                            </Link>
-                          ) : (
-                            <Typography
-                              color="InactiveCaption"
-                              style={{ userSelect: 'none' }}
-                            >
-                              -
-                            </Typography>
-                          )}
-                        </TableCell>
-                      ) : null}
-                      {canViewRowActions(courseParticipant) ? (
-                        <TableCell>
-                          <ManageAttendanceMenu
-                            course={course}
-                            courseParticipant={courseParticipant}
-                            data-testid="manage-attendance"
-                            {...rowActions}
-                          />
-                        </TableCell>
-                      ) : null}
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
+                        {canViewEvaluationSubmittedColumn ? (
+                          <TableCell style={{ textAlign: 'center' }}>
+                            {courseParticipant.completed_evaluation
+                              ? t('common.yes')
+                              : t('common.no')}
+                          </TableCell>
+                        ) : null}
+                        {canToggleAttendance ||
+                        (canViewRowActions(courseParticipant) &&
+                          acl.isOrgAdmin()) ? (
+                          <TableCell width={180}>
+                            <AttendingToggle
+                              participant={courseParticipant}
+                              disabled={
+                                !canToggleParticipantAttendance(
+                                  courseParticipant,
+                                )
+                              }
+                            />
+                          </TableCell>
+                        ) : null}
+                        {isOpenCourse && acl.canViewOrders() ? (
+                          <TableCell>
+                            {courseParticipant.order ? (
+                              <Link
+                                href={`/orders/${courseParticipant.order.id}`}
+                                data-testid="order-item-link"
+                                key="order-item-link"
+                              >
+                                {courseParticipant.order.xeroInvoiceNumber}
+                              </Link>
+                            ) : (
+                              <Typography
+                                color="InactiveCaption"
+                                style={{ userSelect: 'none' }}
+                              >
+                                -
+                              </Typography>
+                            )}
+                          </TableCell>
+                        ) : null}
+                        {canViewRowActions(courseParticipant) ? (
+                          <TableCell>
+                            <ManageAttendanceMenu
+                              course={course}
+                              courseParticipant={courseParticipant}
+                              data-testid="manage-attendance"
+                              {...rowActions}
+                            />
+                          </TableCell>
+                        ) : null}
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
           </Box>
-          {courseParticipantsTotal ? (
-            <TablePagination
-              component="div"
-              count={courseParticipantsTotal}
-              page={currentPage}
-              onPageChange={(_, page) => setCurrentPage(page)}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={perPage}
-              rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
-              data-testid="course-participants-pagination"
-              sx={{
-                '.MuiTablePagination-toolbar': { pl: 0 },
-                '.MuiTablePagination-spacer': { flex: 0 },
-                '.MuiTablePagination-displayedRows': {
-                  flex: 1,
-                  textAlign: 'center',
-                },
-              }}
-            />
-          ) : null}
+          <TablePagination
+            component="div"
+            count={courseParticipantsTotal ?? 0}
+            page={currentPage}
+            onPageChange={(_, page) => setCurrentPage(page)}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            rowsPerPage={perPage}
+            rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
+            data-testid="course-participants-pagination"
+            sx={{
+              '.MuiTablePagination-toolbar': { pl: 0 },
+              '.MuiTablePagination-spacer': { flex: 0 },
+              '.MuiTablePagination-displayedRows': {
+                flex: 1,
+                textAlign: 'center',
+              },
+            }}
+          />
 
           {attendeeToCancel ? (
             <CancelAttendeeDialog
@@ -533,9 +555,13 @@ export const AttendingTab = ({
           data-testid="course-participants-zero-message"
         >
           <Typography variant="body1" color="grey.600">
-            {course?.type === Course_Type_Enum.Open
-              ? t('pages.course-participants.no-attendees')
-              : t('pages.course-participants.none-registered-message')}
+            {t(
+              `pages.course-participants.${
+                course.type === Course_Type_Enum.Open
+                  ? 'no-attendees'
+                  : 'none-registered-message'
+              }`,
+            )}
           </Typography>
         </Box>
       )}

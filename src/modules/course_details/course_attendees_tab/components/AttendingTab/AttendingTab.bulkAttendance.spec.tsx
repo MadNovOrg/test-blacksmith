@@ -1,10 +1,11 @@
 import { subDays } from 'date-fns'
 import { Client, Provider } from 'urql'
-import { never } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import {
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
+  GetCourseParticipantsOrganizationsQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
 import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
@@ -239,6 +240,34 @@ it('displays the mark attendance button if course has ended', () => {
 it('marks the mark attendance button disabled if course ended and course status is not grade missing', () => {
   const client = {
     executeMutation: () => never,
+    executeQuery: () =>
+      fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+        data: {
+          course_participant: [
+            {
+              profile: {
+                organizations: [
+                  {
+                    organization: {
+                      name: 'Amdaris',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'Team Teach',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'NearForm',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      }),
   } as unknown as Client
 
   const course = buildCourse({
@@ -286,6 +315,34 @@ it('marks the mark attendance button disabled if course ended and course status 
 it('toggles selected participant when main checkbox is clicked', async () => {
   const client = {
     executeMutation: () => never,
+    executeQuery: () =>
+      fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+        data: {
+          course_participant: [
+            {
+              profile: {
+                organizations: [
+                  {
+                    organization: {
+                      name: 'Amdaris',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'Team Teach',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'NearForm',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      }),
   } as unknown as Client
 
   const course = buildCourse({
@@ -346,6 +403,34 @@ it('toggles selected participant when main checkbox is clicked', async () => {
 it('toggles the main checkbox as indeterminate when some participants are toggled', async () => {
   const client = {
     executeMutation: () => never,
+    executeQuery: () =>
+      fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+        data: {
+          course_participant: [
+            {
+              profile: {
+                organizations: [
+                  {
+                    organization: {
+                      name: 'Amdaris',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'Team Teach',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'NearForm',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      }),
   } as unknown as Client
 
   const course = buildCourse({
@@ -392,6 +477,34 @@ it('toggles the main checkbox as indeterminate when some participants are toggle
 it("disables participant's checkbox when participant has been graded", () => {
   const client = {
     executeMutation: () => never,
+    executeQuery: () =>
+      fromValue<{ data: GetCourseParticipantsOrganizationsQuery }>({
+        data: {
+          course_participant: [
+            {
+              profile: {
+                organizations: [
+                  {
+                    organization: {
+                      name: 'Amdaris',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'Team Teach',
+                    },
+                  },
+                  {
+                    organization: {
+                      name: 'NearForm',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      }),
   } as unknown as Client
 
   const course = buildCourse({
