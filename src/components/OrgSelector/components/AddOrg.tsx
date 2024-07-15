@@ -7,6 +7,7 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid'
 
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
@@ -124,6 +125,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       onClose()
       saveNewOrganizationDataInLocalState(vars)
 
+      onSuccess({ id: uuidv4(), ...vars })
       return
     }
 
