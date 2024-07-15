@@ -52,7 +52,6 @@
     "graphql-codegen": "graphql-codegen --config codegen.yml",
     "graphql-codegen:watch": "graphql-codegen --config codegen.yml --watch",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky install",
     "release:add": "changeset",
     "release:version": "changeset version",
     "release:tag": "changeset tag"
@@ -215,7 +214,7 @@
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-playwright": "^0.16.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react": "^7.34.4",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.15",
     "eslint-plugin-vitest": "^0.5.1",
