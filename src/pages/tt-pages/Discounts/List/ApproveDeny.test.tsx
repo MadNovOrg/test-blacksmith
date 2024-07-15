@@ -1,10 +1,9 @@
 import React from 'react'
 
+import { buildPromo } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
 import { asyncNoop } from '@app/util'
 
 import { render, screen } from '@test/index'
-
-import { buildPromo } from '../../OrderDetails/mock-utils'
 
 import { ApproveDeny } from './ApproveDeny'
 

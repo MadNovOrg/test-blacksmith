@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
-import { InvoiceDetails } from '@app/components/InvoiceDetails'
 import { Accreditors_Enum, Currency } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
+import { InvoiceDetails } from '@app/modules/course/components/CourseForm/InvoiceDetails'
 import { TransportMethod } from '@app/types'
 import {
   getFreeCourseMaterialsCost,

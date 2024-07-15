@@ -3,8 +3,8 @@ import {
   OrdersQuery,
   OrdersQueryVariables,
 } from '@app/generated/graphql'
-import { GET_ORDERS } from '@app/pages/tt-pages/Orders/query'
-import { MUTATION as CREATE_ORDER } from '@app/queries/order/create-order'
+import { MUTATION as CREATE_ORDER } from '@app/modules/orders/queries/create-order'
+import { GET_ORDERS } from '@app/modules/orders/queries/query'
 
 import { OrderCreation } from '@qa/data/types'
 

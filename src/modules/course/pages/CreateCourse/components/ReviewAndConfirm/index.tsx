@@ -26,7 +26,7 @@ import {
 import usePollQuery from '@app/hooks/usePollQuery'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
 import { useSaveCourse } from '@app/modules/course/pages/CreateCourse/useSaveCourse'
-import { GET_ORDER_REDUCED } from '@app/queries/order/get-order-reduced'
+import { GET_ORDER_REDUCED } from '@app/modules/orders/queries/get-order-reduced'
 import { LoadingStatus } from '@app/util'
 
 import { useCreateCourse } from '../CreateCourseProvider'

@@ -8,6 +8,7 @@ import {
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
+import { buildInvoice } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
 
 import {
   formatCurrency,
@@ -17,8 +18,6 @@ import {
   within,
   render,
 } from '@test/index'
-
-import { buildInvoice } from '../OrderDetails/mock-utils'
 
 import { buildOrder, renderWithOrders } from './test-utils'
 

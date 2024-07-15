@@ -8,12 +8,11 @@ import {
   Promo_Code_Type_Enum,
   UpsertPromoCodeMutation,
 } from '@app/generated/graphql'
+import { buildPromo } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { profile } from '@test/providers'
-
-import { buildPromo } from '../../OrderDetails/mock-utils'
 
 import { DiscountForm } from './DiscountForm'
 import { APPLIES_TO } from './helpers'

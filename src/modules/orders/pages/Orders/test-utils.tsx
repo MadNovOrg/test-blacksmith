@@ -8,10 +8,9 @@ import {
   Currency,
   OrdersQuery,
 } from '@app/generated/graphql'
+import { buildInvoice } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
 
 import { chance, render } from '@test/index'
-
-import { buildInvoice } from '../OrderDetails/mock-utils'
 
 export function buildOrder(
   overrides?: Partial<OrderInfoFragment>,

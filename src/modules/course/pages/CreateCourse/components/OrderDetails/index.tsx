@@ -14,8 +14,11 @@ import { useEffect, useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-import { InvoiceForm, formSchema } from '@app/components/InvoiceForm'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import {
+  InvoiceForm,
+  formSchema,
+} from '@app/modules/course/components/CourseForm/InvoiceForm'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'
 

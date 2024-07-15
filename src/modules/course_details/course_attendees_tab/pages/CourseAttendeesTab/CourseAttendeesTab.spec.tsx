@@ -14,7 +14,7 @@ import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/modules/course_details/course_attendees_tab/hooks/useCourseInvites/useCourseInvites'
 import { useWaitlist } from '@app/modules/course_details/course_attendees_tab/hooks/useWaitlistTab/useWaitlist'
 import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
-import { buildOrder } from '@app/pages/tt-pages/OrderDetails/mock-utils'
+import { buildOrder } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
 import { Course, CourseParticipant, RoleName } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT, LoadingStatus } from '@app/util'
 

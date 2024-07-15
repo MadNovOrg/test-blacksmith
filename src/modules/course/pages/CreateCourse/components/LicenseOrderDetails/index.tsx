@@ -14,12 +14,15 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'urql'
 
-import { formSchema, InvoiceForm } from '@app/components/InvoiceForm'
 import {
   OrgLicensesWithHistoryQuery,
   OrgLicensesWithHistoryQueryVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import {
+  formSchema,
+  InvoiceForm,
+} from '@app/modules/course/components/CourseForm/InvoiceForm'
 import orgLicensesWithHistory from '@app/queries/go1-licensing/org-licenses-with-history'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'

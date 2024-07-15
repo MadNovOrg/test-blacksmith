@@ -16,7 +16,6 @@ import {
   XeroLineItemSummaryFragment,
   XeroPhoneType,
 } from '@app/generated/graphql'
-import { GET_COURSE_ORDERS } from '@app/hooks/useCourseOrders'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import useTimeZones from '@app/hooks/useTimeZones'
 
@@ -29,13 +28,15 @@ import {
   within,
 } from '@test/index'
 
+import { GET_COURSE_ORDERS } from '../../hooks/useCourseOrders'
+import { CourseWorkbooks } from '../../utils/utils'
+
 import {
   buildInvoice,
   buildLineItem,
   buildOrder,
   buildPromo,
 } from './mock-utils'
-import { CourseWorkbooks } from './utils'
 
 import { OrderDetails } from '.'
 

@@ -30,7 +30,7 @@ import type { Sorting } from '@app/hooks/useTableSort'
 import { INVOICE_STATUS_COLOR } from '@app/util'
 
 const formatBillToForExcel = (organization?: OrderOrganizationInfoFragment) => {
-  if (organization && organization.name) {
+  if (organization?.name) {
     let address
     if (organization.address) {
       const { line1, line2, city, country, postCode } = organization.address

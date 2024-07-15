@@ -14,8 +14,8 @@ import {
   GetOrderForBookingDoneQueryVariables,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
+import { ORDER_FOR_BOOKING_DONE } from '@app/modules/orders/queries/get-order-for-booking-done'
 import { MUTATION as DELETE_TEMP_PROFILE } from '@app/modules/profile/queries/delete-temp-profile'
-import { ORDER_FOR_BOOKING_DONE } from '@app/queries/order/get-order-for-booking-done'
 
 const completedSteps = ['details', 'review', 'payment']
 

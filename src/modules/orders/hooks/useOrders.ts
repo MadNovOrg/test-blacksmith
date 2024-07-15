@@ -11,8 +11,9 @@ import {
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
-import { GET_ORDERS } from '@app/pages/tt-pages/Orders/query'
 import { SortOrder } from '@app/types'
+
+import { GET_ORDERS } from '../queries/query'
 
 export type FiltersType = {
   currencies?: Currency[]
@@ -29,7 +30,7 @@ export type UseOrdersProps = {
 }
 
 const isFilterValid = (filter?: FiltersType[keyof FiltersType] | string) =>
-  filter && filter.length && filter.length > 0
+  Number(filter?.length) > 0
 
 export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
   const where = useMemo(() => {
@@ -67,7 +68,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
         },
       })
 
-      const onlyDigits = /^\d+$/.test(filters.searchParam || '')
+      const onlyDigits = /^\d+$/.test(filters.searchParam ?? '')
 
       if (onlyDigits) {
         where._or.push({ orderDue: { _eq: filters.searchParam } })

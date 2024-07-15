@@ -6,11 +6,11 @@ import { FilterByCurrencies } from '@app/components/filters/FilterByCurrencies'
 import { FilterByOrderStatuses } from '@app/components/filters/FilterByOrderStatuses'
 import { FilterByPaymentMethods } from '@app/components/filters/FilterByPaymentMethods'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { useOrders, FiltersType } from '@app/hooks/useOrders'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { useOrders, FiltersType } from '@app/modules/orders/hooks/useOrders'
 
-import { List } from './List'
+import { List } from '../../components/List'
 
 export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()

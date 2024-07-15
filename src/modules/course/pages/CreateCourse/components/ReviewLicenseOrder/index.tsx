@@ -8,12 +8,12 @@ import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
-import { InvoiceDetails } from '@app/components/InvoiceDetails'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
+import { InvoiceDetails } from '@app/modules/course/components/CourseForm/InvoiceDetails'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'

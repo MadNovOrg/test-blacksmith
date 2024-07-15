@@ -33,7 +33,6 @@ import {
   XeroPhoneType,
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
-import useCourseOrders from '@app/hooks/useCourseOrders'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
@@ -43,6 +42,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 
+import useCourseOrders from '../../hooks/useCourseOrders'
 import {
   getTrainerExpensesLineItems,
   isDiscountLineItem,
@@ -51,7 +51,7 @@ import {
   isMandatoryCourseMaterials,
   isProcessingFeeLineItem,
   isRegistrantLineItem,
-} from './utils'
+} from '../../utils/utils'
 
 type OrderRegistrant = {
   firstName: string

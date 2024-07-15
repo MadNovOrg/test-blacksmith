@@ -4,12 +4,11 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
+import { OrgSelector } from '@app/components/OrgSelector'
 import { isHubOrg } from '@app/components/OrgSelector/utils'
 import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
 import { schemas, yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
-
-import { OrgSelector } from '../OrgSelector'
 
 export function formSchema(t: TFunction) {
   return yup.object({
