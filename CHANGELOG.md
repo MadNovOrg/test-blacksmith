@@ -1,5 +1,24 @@
 # @teamteach/hub
 
+## 4.6.0
+
+### Minor Changes
+
+- 38ad7fc: Set discount amount to free course materials and subtract it from total cost.
+- 76fa5eb: Update and refactor the structure of the waitlist functionality
+- 55801b8: Display Resources when a user has a course in progress
+
+### Patch Changes
+
+- 9af3ab3: Improve search by user's name on certifications page and trainer search
+- afc85f2: Fix organizations toolbar on manage courses page for booking and org key contact
+- 75aae01: Redirect trainer to My Courses page from snackbar link.
+- 82ea051: Case insensitive search by local org on org selector
+- c8d068d: Capitalise Knowledge Hub
+- b4ee3b3: Do not allow Dfe orgs duplicates
+- c1480cb: Get rid off new-modules-data-model feature flag
+- 1344571: Validate user's email and countries for hubspot sync
+
 ## 4.5.0
 
 ### Minor Changes
