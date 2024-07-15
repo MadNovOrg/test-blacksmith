@@ -298,6 +298,7 @@ export function useSaveCourse(): {
         billingAddress: invoiceData?.billingAddress,
         clientPurchaseOrder: invoiceData?.purchaseOrder,
         paymentMethod: Payment_Methods_Enum.Invoice,
+
         attendeesQuantity:
           courseData.type === Course_Type_Enum.Closed
             ? courseData.maxParticipants
@@ -459,7 +460,10 @@ export function useSaveCourse(): {
                             order: {
                               data: { ...orderToBeCreated },
                             },
-                            quantity: orderToBeCreated.attendeesQuantity,
+                            quantity:
+                              courseData.type === Course_Type_Enum.Indirect
+                                ? courseData.maxParticipants
+                                : orderToBeCreated.attendeesQuantity,
                           }),
                     },
                   ],
