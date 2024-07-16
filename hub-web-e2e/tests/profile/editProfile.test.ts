@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
 import { getProfileId } from '@qa/api/hasura/profile'
 import { users } from '@qa/data/users'
@@ -17,7 +17,10 @@ allowedRoles.forEach(role => {
     await profilePage.goto(profileId)
     await profilePage.clickEditButton()
     await profilePage.selectJobTitle(job)
-    await profilePage.clickSaveChanges()
-    await profilePage.checkJobTitle(job)
+    await profilePage.selectCountry('England')
+    const payloadData = await profilePage.clickSaveChanges()
+
+    expect(payloadData).toContain(job)
+    expect(payloadData).toContain('England')
   })
 })

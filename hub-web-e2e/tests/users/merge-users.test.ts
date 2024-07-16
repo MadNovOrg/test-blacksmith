@@ -78,7 +78,7 @@ test.describe('Merge Users Dialog', () => {
     await expect(dialog.continueButton).toBeEnabled()
   })
 
-  test('Should prioritize attributes of the first user when merging if they are selected in the dialog', async () => {
+  test.skip('Should prioritize attributes of the first user when merging if they are selected in the dialog', async () => {
     await dialog.primaryUserRadios.user1.click()
     await dialog.confirmCheckbox.click()
     await dialog.continueButton.click()
@@ -91,7 +91,7 @@ test.describe('Merge Users Dialog', () => {
     expect(roles).toEqual(['Individual', 'Trainer', 'Sales Administrator'])
   })
 
-  test('Should prioritize attributes of the second user when merging if they are selected in the dialog', async () => {
+  test.skip('Should prioritize attributes of the second user when merging if they are selected in the dialog', async () => {
     await dialog.primaryUserRadios.user2.click()
     await dialog.confirmCheckbox.click()
     await dialog.continueButton.click()

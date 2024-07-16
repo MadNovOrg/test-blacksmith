@@ -1,7 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLResponse } from '@qa/commands'
-
 import { BasePage } from '../BasePage.fixture'
 import { CertificationPage } from '../certificate/CertificationPage.fixture'
 
@@ -10,13 +8,18 @@ export class ProfilePage extends BasePage {
   readonly saveChanges: Locator
   readonly certificateButton: Locator
   readonly phoneNumberField: Locator
+  readonly autocompleteOption: Locator
 
   readonly jobTitleSelector: Locator
   readonly viewPhoneNumber: Locator
   readonly deleteProfile: Locator
+  readonly countrySelector: Locator
 
   constructor(page: Page) {
     super(page)
+    this.autocompleteOption = this.page.locator(
+      '.MuiAutocomplete-popper .MuiAutocomplete-option',
+    )
     this.editProfile = this.page.locator('data-testid=edit-profile')
     this.saveChanges = this.page.locator('data-testid=profile-save-changes')
     this.certificateButton = this.page.locator(
@@ -26,6 +29,9 @@ export class ProfilePage extends BasePage {
     this.jobTitleSelector = this.page.locator('data-testid=job-title-selector')
     this.viewPhoneNumber = this.page.locator('[data-testid="profile-phone"]')
     this.deleteProfile = this.page.locator('data-testid=delete-profile-button')
+    this.countrySelector = this.page.locator(
+      '[data-testid="countries-selector-autocomplete"] input',
+    )
   }
 
   async goto(profileId?: string, orgId?: string) {
@@ -41,6 +47,27 @@ export class ProfilePage extends BasePage {
   }
 
   async clickDeleteProfileButton() {
+    await this.page.route(/.*\/v1\/graphql/, async route => {
+      const request = route.request()
+
+      if (JSON.stringify(request.postDataJSON()).includes('DeleteProfile')) {
+        await route.fulfill({
+          json: {
+            data: {
+              deleteUser: {
+                success: true,
+                error: null,
+                courseIds: null,
+                __typename: 'DeleteUserOutput',
+              },
+            },
+          },
+        })
+      } else {
+        await route.continue()
+      }
+    })
+
     await this.page.waitForSelector('data-testid=delete-profile-button', {
       state: 'visible',
     })
@@ -61,6 +88,12 @@ export class ProfilePage extends BasePage {
     await this.page.locator(`data-testid=job-position-${jobTitle}`).click()
   }
 
+  async selectCountry(name: string) {
+    await this.countrySelector.clear()
+    await this.countrySelector.fill(name)
+    await this.autocompleteOption.locator(`text=${name}`).first().click()
+  }
+
   async enterPhoneNumber(phoneNumber: string) {
     const currentPhoneNumberValue = await this.phoneNumberField.inputValue()
 
@@ -76,12 +109,28 @@ export class ProfilePage extends BasePage {
   }
 
   async clickSaveChanges() {
-    await Promise.all([
-      waitForGraphQLResponse(this.page, 'updateUserProfile', 'true'),
-      this.saveChanges.click(),
-    ])
+    let stringifyData: string | null = null
+    const regex = new RegExp('\\b' + 'UpdateProfile' + '\\b')
+
+    await this.page.route(/.*\/v1\/graphql/, async route => {
+      const request = route.request()
+
+      if (JSON.stringify(request.postDataJSON()).match(regex)) {
+        await route.fulfill({
+          json: { data: { updateUserProfile: true } },
+        })
+        stringifyData = JSON.stringify(request.postDataJSON())
+      } else {
+        await route.continue()
+      }
+    })
+
+    await this.saveChanges.click()
+
     await expect(this.editProfile).toBeVisible()
     await this.page.reload()
+
+    return stringifyData
   }
 
   async checkJobTitle(jobTitle: string) {

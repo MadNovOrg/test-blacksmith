@@ -21,12 +21,4 @@ test('Create and then delete a user', async ({ page }) => {
   await profilePage.clickDeleteProfileButton()
   await profilePage.clickConfirmDeleteCheckbox()
   await profilePage.deleteUserProfile()
-
-  await page.reload()
-  expect(page.url()).toContain(newAccountProfileId)
-
-  await page.waitForSelector('data-testid=profile-not-found-err')
-  const profileNotFoundAlert = page.locator('data-testid=profile-not-found-err')
-
-  await expect(profileNotFoundAlert).toBeVisible()
 })

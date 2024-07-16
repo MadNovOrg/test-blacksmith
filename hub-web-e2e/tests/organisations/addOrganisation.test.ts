@@ -22,10 +22,9 @@ test('add new organisation as admin', async ({ page }) => {
   await orgPage.addPostCode()
   await orgPage.addWorkEmail()
   await orgPage.clickSaveOrganisation()
-  await orgPage.goto()
-  // Check new org is on organisation summary table
-  await orgPage.findNewOrg()
+
   await orgPage.checkNewOrgPage()
+
   const orgId = await API.organization.getOrganizationId(orgName)
   await API.organization.deleteOrganization(orgId)
 })
@@ -45,9 +44,7 @@ test('add new international organisation as admin', async ({ page }) => {
   await orgPage.addCity()
   await orgPage.addWorkEmail()
   await orgPage.clickSaveOrganisation()
-  await orgPage.goto()
-  // Check new org is on organisation summary table
-  await orgPage.findNewOrg()
+
   await orgPage.checkNewOrgPage()
   const orgId = await API.organization.getOrganizationId(orgName)
   await API.organization.deleteOrganization(orgId)

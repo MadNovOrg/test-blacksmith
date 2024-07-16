@@ -1,9 +1,12 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
+import { subDays } from 'date-fns'
 
-import { Course_Type_Enum } from '@app/generated/graphql'
+import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'
-import { FINISHED_COURSE } from '@qa/data/courses'
+import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { CourseEvaluationPage } from '@qa/fixtures/pages/courses/evaluation-page/CourseEvaluationPage.fixture'
@@ -11,9 +14,16 @@ import { stateFilePath } from '@qa/util'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
-    const course = FINISHED_COURSE()
+    const course = UNIQUE_COURSE()
+
+    course.schedule = [
+      { start: subDays(new Date(), 2), end: subDays(new Date(), 1) },
+    ]
+    course.status = Course_Status_Enum.EvaluationMissing
     course.type = Course_Type_Enum.Closed
+
     course.id = (await API.course.insertCourse(course, users.trainer.email)).id
+
     await API.course.insertCourseParticipants(course.id, [users.user1])
     await use(course)
     await API.course.deleteCourse(course.id)
@@ -21,7 +31,6 @@ const test = base.extend<{ course: Course }>({
 })
 
 test('course evaluation as user', async ({ browser, course }) => {
-  test.fail(true, 'See https://behaviourhub.atlassian.net/browse/TTHP-1748')
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),
   })
@@ -54,6 +63,7 @@ test('course evaluation as user', async ({ browser, course }) => {
   await trainerEvaluationPage.checkPDFExportIsNotAvailable()
   await trainerEvaluationPage.randomlyEvaluate(
     `${users.trainer.givenName} ${users.trainer.familyName}`,
+    RoleName.TRAINER,
   )
   await trainerEvaluationPage.submitEvaluation()
   await trainerEvaluationPage.checkSubmission()

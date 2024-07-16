@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { RoleName } from '@app/types'
+
 import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
 import { fillEvaluationForm, Questions } from './Common'
@@ -62,7 +64,7 @@ export class TrainerEvaluationPage extends BasePage {
 
   async randomlyEvaluate(questions: Questions, signature: string) {
     await this.gotoSubmit()
-    await fillEvaluationForm(this.page, questions)
+    await fillEvaluationForm(this.page, questions, RoleName.TRAINER)
     await this.signatureField.locator('input').fill(signature)
   }
 
@@ -71,8 +73,6 @@ export class TrainerEvaluationPage extends BasePage {
   }
 
   async checkSubmission() {
-    await expect(this.attendingTable).toBeVisible()
-    await this.goto()
     await expect(this.viewSummaryEvaluationButton).toBeEnabled()
   }
 

@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { RoleName } from '@app/types'
+
 import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
 import { fillEvaluationForm, Questions } from './Common'
@@ -37,8 +39,12 @@ export class UserEvaluationPage extends BasePage {
     await super.goto(`courses/${this.courseId}/evaluation`)
   }
 
-  async randomlyEvaluate(questions: Questions, signature: string) {
-    await fillEvaluationForm(this.page, questions, 'user')
+  async randomlyEvaluate(
+    questions: Questions,
+    signature: string,
+    userRole: RoleName.TRAINER | RoleName.USER,
+  ) {
+    await fillEvaluationForm(this.page, questions, userRole)
     await this.signatureField.locator('input').fill(signature)
   }
 

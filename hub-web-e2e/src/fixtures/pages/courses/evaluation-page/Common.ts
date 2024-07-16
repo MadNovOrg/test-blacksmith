@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { RoleName } from '@app/types'
+
 export type Questions = {
   rating: Locator
   boolean: Locator
@@ -9,12 +11,16 @@ export type Questions = {
 export const fillEvaluationForm = async (
   page: Page,
   questions: Questions,
-  userType?: string,
+  userType: RoleName.USER | RoleName.TRAINER,
 ) => {
-  if (userType === 'user') {
+  if (userType === RoleName.USER) {
     await expect(questions.rating.first()).toBeVisible()
   }
-  await expect(questions.boolean.first()).toBeVisible()
+
+  if (userType === RoleName.TRAINER) {
+    await expect(questions.boolean.first()).toBeVisible()
+  }
+
   await expect(questions.text.first()).toBeVisible()
   const [ratingQuestionsCount, booleanQuestionsCount, textQuestionsCount] =
     await Promise.all([
@@ -32,20 +38,22 @@ export const fillEvaluationForm = async (
       .click({ force: true })
   }
 
-  for (let i = 0; i < booleanQuestionsCount; ++i) {
-    const question = questions.boolean.nth(i)
-    const response = Math.round(Math.random()) ? 'yes' : 'no'
-    await question.locator(`data-testid=rating-${response}`).click()
-    if (response === 'yes') {
-      await page
-        .locator(`data-testid=rating-boolean-reason-${response}`)
-        .locator('input')
-        .fill('Reason')
+  if (userType === RoleName.TRAINER) {
+    for (let i = 0; i < booleanQuestionsCount; ++i) {
+      const question = questions.boolean.nth(i)
+      const response = Math.round(Math.random()) ? 'yes' : 'no'
+      await question.locator(`data-testid=rating-${response}`).click()
+      if (response === 'yes') {
+        await page
+          .locator(`data-testid=rating-boolean-reason-${response}`)
+          .locator('input')
+          .fill('Reason')
+      }
     }
-  }
 
-  for (let i = 0; i < textQuestionsCount; ++i) {
-    const question = questions.text.nth(i)
-    await question.locator('input').fill('Response')
+    for (let i = 0; i < textQuestionsCount; ++i) {
+      const question = questions.text.nth(i)
+      await question.locator('input').fill('Response')
+    }
   }
 }

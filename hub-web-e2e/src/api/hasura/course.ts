@@ -125,6 +125,7 @@ export const insertCourse = async (
     curriculum: course.curriculum,
     deliveryType: course.deliveryType,
     description: course.description,
+    free_course_materials: 0,
     go1Integration: course.go1Integration,
     gradingConfirmed: course.gradingConfirmed,
     level: course.level,

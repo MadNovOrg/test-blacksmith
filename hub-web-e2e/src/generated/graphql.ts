@@ -59520,6 +59520,34 @@ export enum __TypeKind {
   NonNull = 'NON_NULL'
 }
 
+export type InsertCoursePricingScheduleMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  coursePricingId: Scalars['uuid'];
+  priceAmount: Scalars['numeric'];
+  effectiveFrom: Scalars['date'];
+  effectiveTo: Scalars['date'];
+}>;
+
+
+export type InsertCoursePricingScheduleMutation = { __typename?: 'mutation_root', course_pricing_schedule?: { __typename?: 'course_pricing_schedule', id: any } | null };
+
+export type GetCoursePricingQueryVariables = Exact<{
+  type: Course_Type_Enum;
+  level: Course_Level_Enum;
+  blended?: InputMaybe<Scalars['Boolean']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type GetCoursePricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any }> };
+
+export type DeleteCoursePricingScheduleMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteCoursePricingScheduleMutation = { __typename?: 'mutation_root', delete_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null };
+
 export type InsertLicenseHistoryEventMutationVariables = Exact<{
   input: Go1_Licenses_History_Insert_Input;
 }>;

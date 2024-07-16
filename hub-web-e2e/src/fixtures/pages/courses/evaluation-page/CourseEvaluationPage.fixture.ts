@@ -1,5 +1,7 @@
 import { Page } from '@playwright/test'
 
+import { RoleName } from '@app/types'
+
 import { Questions } from './Common'
 import { TrainerEvaluationPage } from './TrainerEvaluationPage.fixture'
 import { UserEvaluationPage } from './UserEvaluationPage.fixture'
@@ -43,8 +45,11 @@ export class CourseEvaluationPage {
     await this.page.waitForPageLoad()
   }
 
-  async randomlyEvaluate(signature: string) {
-    await this.page.randomlyEvaluate(this.questions, signature)
+  async randomlyEvaluate(
+    signature: string,
+    userRole: RoleName.TRAINER | RoleName.USER = RoleName.USER,
+  ) {
+    await this.page.randomlyEvaluate(this.questions, signature, userRole)
   }
 
   async submitEvaluation() {

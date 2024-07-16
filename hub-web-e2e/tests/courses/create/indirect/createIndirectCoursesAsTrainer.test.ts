@@ -20,12 +20,16 @@ import { stateFilePath } from '@qa/util'
 let courseIDToDelete: number
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
+    const orgName = 'London First School'
+
     const course = UNIQUE_COURSE()
-    course.type = Course_Type_Enum.Indirect
-    course.organization = { name: 'London First School' }
-    course.organizationKeyContactProfile = users.userOrgAdmin
+
     course.freeSpaces = 1
+    course.organization = { name: orgName }
+    course.organizationKeyContactProfile = users.userOrgAdmin
     course.salesRepresentative = users.salesAdmin
+    course.type = Course_Type_Enum.Indirect
+
     await use({ ...course, go1Integration: false })
   },
 })
@@ -58,9 +62,9 @@ indirectLevels.forEach(level => {
     const orderDetailsPage = new CourseOrderDetailsPage(page)
     await orderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
     await orderDetailsPage.clickReviewAndConfirmButton()
-    const reviewAndCofirmPage = new ReviewAndConfirmPage(page)
+    const reviewAndConfirmPage = new ReviewAndConfirmPage(page)
     const courseBuilder =
-      await reviewAndCofirmPage.getCourseIdAfterProceedingToCourseBuilder()
+      await reviewAndConfirmPage.getCourseIdAfterProceedingToCourseBuilder()
     const courseBuilderPage = courseBuilder.courseBuilderPage
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(

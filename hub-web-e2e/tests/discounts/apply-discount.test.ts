@@ -13,14 +13,23 @@ const test = base.extend<{ courseId: number }>({
     const openCourse = UNIQUE_COURSE()
     openCourse.type = Course_Type_Enum.Open
 
-    const id = await API.course.insertCourse(
-      openCourse,
-      'trainer@teamteach.testinator.com',
-    )
+    const id = (
+      await API.course.insertCourse(
+        openCourse,
+        'trainer@teamteach.testinator.com',
+      )
+    ).id
+
+    const PROMO_CODE = '5_PERCENT_OFF'
+    const promoCodeResponse = await API.promoCode.createSample(PROMO_CODE)
 
     await use(id)
 
     await API.course.deleteCourse(id)
+
+    if (promoCodeResponse?.id) {
+      await API.promoCode.remove(promoCodeResponse.id)
+    }
   },
 })
 test.use({ storageState: stateFilePath('admin') })
@@ -32,9 +41,6 @@ test('should apply a discount when booking an OPEN course', async ({
   page,
   courseId,
 }) => {
-  const PROMO_CODE = '5_PERCENT_OFF'
-  await API.promoCode.createSample(PROMO_CODE)
-
   const bookingDetailsPage = new BookingDetailsPage(page)
   await bookingDetailsPage.goto(String(courseId))
 
@@ -42,7 +48,8 @@ test('should apply a discount when booking an OPEN course', async ({
     (await bookingDetailsPage.amountDue.textContent())!,
   )
   await bookingDetailsPage.openPromoCodeFormButton.click()
-  await bookingDetailsPage.promoCodeInput.fill(PROMO_CODE)
+  await bookingDetailsPage.promoCodeInput.fill('5_PERCENT_OFF')
+
   await bookingDetailsPage.applyPromoCodeButton.click()
 
   const discount = parsePrice(

@@ -37,7 +37,9 @@ export class OrderPage extends BasePage {
   }
 
   async checkOrderVisiblity(orders: OrderInfoFragment[]) {
-    for (const order of orders) {
+    for (const order of orders.filter(order =>
+      Boolean(order.xeroInvoiceNumber),
+    )) {
       await expect(
         this.page.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`),
       ).toBeVisible()

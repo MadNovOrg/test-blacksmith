@@ -39,13 +39,13 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   const [adding, setAdding] = useState(false)
   const [value, setValue] = useState('')
   const [applyError, setApplyError] = useState('')
-  const [{ data: response, error }, checkCanApply] = useQuery<
+
+  const [{ data: response, error }] = useQuery<
     CanApplyPromoCodeQuery,
     CanApplyPromoCodeQueryVariables
   >({
     query: CAN_APPLY_PROMO_CODE,
     variables: { input: { code: value.trim(), courseId } },
-    pause: !true,
   })
 
   const onChange = useCallback(
@@ -64,8 +64,6 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const handleApply = useCallback(async () => {
-    checkCanApply()
-
     if (error) {
       return setApplyError(t('invalid-promo-code'))
     }
@@ -77,14 +75,7 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
     }
     setValue('')
     setAdding(false)
-  }, [
-    checkCanApply,
-    codes,
-    error,
-    onAdd,
-    response?.canApplyPromoCode.result,
-    t,
-  ])
+  }, [codes, error, onAdd, response?.canApplyPromoCode.result, t])
 
   return (
     <Stack>

@@ -17,7 +17,7 @@ import { ConfirmRescheduleModal } from '@qa/fixtures/pages/courses/ConfirmResche
 import { CourseDetailsPage } from '@qa/fixtures/pages/courses/course-details/CourseDetailsPage.fixture'
 import { CreateCoursePage } from '@qa/fixtures/pages/courses/CreateCoursePage.fixture'
 import { Course_Renewal_Cycle_Enum } from '@qa/generated/graphql'
-import { stateFilePath } from '@qa/util'
+import { stateFilePath, StoredCredentialKey } from '@qa/util'
 
 const testDataMovingEarlier = [
   {
@@ -32,11 +32,13 @@ const testDataMovingEarlier = [
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 2)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 2)
       course.renewalCycle = Course_Renewal_Cycle_Enum.One
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
       return course
     },
   },
@@ -93,12 +95,14 @@ const testDataMovingEarlier = [
       course.status = Course_Status_Enum.Scheduled
       course.type = Course_Type_Enum.Closed
 
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-        true,
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+          true,
+        )
+      ).id
       return course
     },
   },
@@ -143,11 +147,13 @@ const testDataMovingEarlier = [
           displayName: null,
         },
       ]
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
       return course
     },
   },
@@ -157,7 +163,29 @@ for (const data of testDataMovingEarlier) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
       const course = await data.course()
+
+      const coursePricing = await API.coursePricing.getCoursePricing({
+        type: course.type,
+        level: course.level,
+      })
+
+      let pricingSchedule: { id: string } | null | undefined
+
+      if (coursePricing.course_pricing[0]?.id) {
+        pricingSchedule = await API.coursePricing.insertPricingSchedule({
+          effectiveFrom: data.newStartDate,
+          effectiveTo: data.newEndDate,
+          coursePricingId: coursePricing.course_pricing[0].id,
+        })
+      }
+
       await use(course)
+
+      if (pricingSchedule?.id) {
+        await API.coursePricing.deleteCoursePricingSchedule({
+          id: pricingSchedule.id,
+        })
+      }
     },
   })
 
@@ -166,7 +194,7 @@ for (const data of testDataMovingEarlier) {
     course,
   }) => {
     const userContext = await browser.newContext({
-      storageState: stateFilePath(data.user),
+      storageState: stateFilePath(data.user as StoredCredentialKey),
     })
 
     const page = await userContext.newPage()
@@ -235,11 +263,13 @@ const testDataMovingLater = [
       course.schedule[0].start = addMonths(new Date().setHours(9, 0), 2)
       course.schedule[0].end = addMonths(new Date().setHours(17, 0), 2)
       course.renewalCycle = Course_Renewal_Cycle_Enum.One
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
       return course
     },
   },
@@ -296,12 +326,15 @@ const testDataMovingLater = [
       course.status = Course_Status_Enum.Scheduled
       course.type = Course_Type_Enum.Closed
 
-      course.id = await API.course.insertCourse(
+      const newCourse = await API.course.insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
         true,
       )
+
+      course.id = newCourse.id
+
       return course
     },
   },
@@ -320,11 +353,13 @@ const testDataMovingLater = [
       course.organization = { name: 'London First School' }
       course.organizationKeyContactProfile = users.user1WithOrg
       course.assistTrainer = users.assistant
-      course.id = await API.course.insertCourse(
-        course,
-        users.trainer.email,
-        InviteStatus.ACCEPTED,
-      )
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
       return course
     },
   },
@@ -334,7 +369,29 @@ for (const data of testDataMovingLater) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
       const course = await data.course()
+
+      const coursePricing = await API.coursePricing.getCoursePricing({
+        type: course.type,
+        level: course.level,
+      })
+
+      let pricingSchedule: { id: string } | null | undefined
+
+      if (coursePricing.course_pricing[0]?.id) {
+        pricingSchedule = await API.coursePricing.insertPricingSchedule({
+          effectiveFrom: data.newStartDate,
+          effectiveTo: data.newEndDate,
+          coursePricingId: coursePricing.course_pricing[0].id,
+        })
+      }
+
       await use(course)
+
+      if (pricingSchedule?.id) {
+        await API.coursePricing.deleteCoursePricingSchedule({
+          id: pricingSchedule.id,
+        })
+      }
     },
   })
 
@@ -343,11 +400,12 @@ for (const data of testDataMovingLater) {
     course,
   }) => {
     const userContext = await browser.newContext({
-      storageState: stateFilePath(data.user),
+      storageState: stateFilePath(data.user as StoredCredentialKey),
     })
     const page = await userContext.newPage()
     const createCoursePage = new CreateCoursePage(page)
     const courseDetailsPage = new CourseDetailsPage(page)
+    const confirmRescheduleModal = new ConfirmRescheduleModal(page)
     await courseDetailsPage.goto(`${course.id}`)
 
     const formattedStartDate = format(
@@ -366,9 +424,19 @@ for (const data of testDataMovingLater) {
       formattedEndDate,
     )
     await courseDetailsPage.clickEditCourseButton()
+
     await createCoursePage.setStartDateTime(data.newStartDate)
     await createCoursePage.setEndDateTime(data.newEndDate)
     await createCoursePage.clickSaveChangesButton()
+
+    await createCoursePage.setStartDateTime(data.newStartDate)
+    await createCoursePage.setEndDateTime(data.newEndDate)
+
+    await confirmRescheduleModal.confirmChange(
+      'trainer availability',
+      course.type,
+    )
+
     const formattedNewStartDate = format(
       data.newStartDate,
       courseDetailsPage.dateFormat,
