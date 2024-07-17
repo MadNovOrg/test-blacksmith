@@ -124,9 +124,8 @@ export const getGradingTabWhereCondition = (
 export const getWhereCondition = (currentTab: CourseDetailsTabs): object => {
   switch (currentTab) {
     case CourseDetailsTabs.ATTENDEES:
-      return {}
     case CourseDetailsTabs.GRADING:
-      return { attended: { _eq: true } }
+      return {}
     case CourseDetailsTabs.EVALUATION:
       return {
         _and: [
@@ -140,7 +139,7 @@ export const getWhereCondition = (currentTab: CourseDetailsTabs): object => {
         _and: [
           { attended: { _eq: true } },
           { healthSafetyConsent: { _eq: true } },
-          { grade: { _eq: 'PASS' } },
+          { grade: { _in: ['PASS', 'ASSIST_ONLY', 'OBSERVE_ONLY'] } },
           { completed_evaluation: { _eq: true } },
         ],
       }

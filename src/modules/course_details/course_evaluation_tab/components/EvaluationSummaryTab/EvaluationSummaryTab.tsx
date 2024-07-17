@@ -252,7 +252,10 @@ export const EvaluationSummaryTab: React.FC<
   const trainersWithEvaluations: string[] = []
 
   data?.trainers.forEach(t => {
-    if (data.evaluations.some(e => e.profile.id === t.profile.id))
+    if (
+      t.profile.id !== profileId &&
+      data.evaluations.some(e => e.profile.id === t.profile.id)
+    )
       trainersWithEvaluations.push(t.profile.id)
   })
   return (
