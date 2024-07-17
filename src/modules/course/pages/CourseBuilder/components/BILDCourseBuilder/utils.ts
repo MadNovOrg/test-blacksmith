@@ -1,5 +1,5 @@
 import { Course_Level_Enum } from '@app/generated/graphql'
-import { Strategies } from '@app/hooks/useBildStrategies'
+import { Strategies } from '@app/modules/course/hooks/useBildStrategies'
 import { BildStrategies } from '@app/types'
 
 export function getPreselectedModules({

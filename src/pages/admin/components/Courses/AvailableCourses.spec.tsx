@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next'
 
-import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
+import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { RoleName } from '@app/types'
 
-import { act, renderHook, userEvent } from '@test/index'
-import { render, screen } from '@test/index'
+import { render, screen, act, renderHook, userEvent } from '@test/index'
+
+import { AvailableCourses } from './AvailableCourses'
 
 vi.mock('@app/modules/organisation/hooks/useOrgV2')
-vi.mock('@app/hooks/useUpcomingCourses')
+vi.mock('@app/modules/admin/hooks/useUpcomingCourses')
 
 describe('AvailableCourse', () => {
   describe('while loading', () => {

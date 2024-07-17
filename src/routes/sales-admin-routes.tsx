@@ -1,7 +1,14 @@
+import { Contacts } from '@mui/icons-material'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { AuditsPage } from '@app/modules/admin/Audits/pages/AuditsPage'
+import {
+  DiscountsList,
+  DiscountForm,
+} from '@app/modules/admin/Discounts/components'
+import { AdminPage } from '@app/modules/admin/pages/AdminPage'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import {
   OrderDetails as CourseOrderDetails,
@@ -14,17 +21,13 @@ import { CourseDetails as TrainerCourseDetails } from '@app/modules/course_detai
 import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
 import { Orders } from '@app/modules/orders/pages/Orders'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
+import { ChooseTransferCourse } from '@app/modules/transfer_participant/components/ChooseTransferCourse'
+import { TransferDetails } from '@app/modules/transfer_participant/components/TransferDetails'
+import { TransferReview } from '@app/modules/transfer_participant/components/TransferReview'
+import { AdminTransferParticipantPage } from '@app/modules/transfer_participant/pages/AdminTransferParticipant/AdminTransferParticipant'
 import { UserRoutes } from '@app/modules/user/routes'
-import { AdminPage } from '@app/pages/admin'
-import { AuditsPage } from '@app/pages/admin/Audits'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import { Contacts } from '@app/pages/admin/Contacts'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
-import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/AdminTransferParticipant'
-import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
-import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
-import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
-import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 
@@ -85,7 +88,9 @@ const MyCourses = React.lazy(() =>
 )
 
 const CourseExceptionsLog = React.lazy(() =>
-  import('@app/pages/admin/CourseExceptionsLog').then(module => ({
+  import(
+    '@app/modules/admin/CourseExceptionsLog/pages/CourseExceptionsLog'
+  ).then(module => ({
     default: module.CourseExceptionsLog,
   })),
 )

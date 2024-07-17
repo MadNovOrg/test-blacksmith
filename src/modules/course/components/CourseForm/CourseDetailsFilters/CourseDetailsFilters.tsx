@@ -11,7 +11,7 @@ import { useDebounce } from 'use-debounce'
 import { useQueryParam } from 'use-query-params'
 
 import { FilterSearch } from '@app/components/FilterSearch'
-import useCourseParticipantsOrganizations from '@app/modules/course_attendees/hooks/useCourseParticipantsOrganizations'
+import useCourseParticipantsOrganizations from '@app/modules/course_details/hooks/course-participant/useCourseParticipantsOrganizations'
 import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import theme from '@app/theme'
 

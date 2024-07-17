@@ -5,7 +5,10 @@ import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import { CourseToBuildQuery, Course_Level_Enum } from '@app/generated/graphql'
-import { Strategies, useBildStrategies } from '@app/hooks/useBildStrategies'
+import {
+  Strategies,
+  useBildStrategies,
+} from '@app/modules/course/hooks/useBildStrategies'
 import { BILDModule, BILDModuleGroup, BildStrategies } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -16,7 +19,7 @@ import { useModuleSettings } from '../ICMCourseBuilderV2/hooks/useModuleSettings
 
 import { BILDCourseBuilder } from './BILDCourseBuilder'
 
-vi.mock('@app/hooks/useBildStrategies')
+vi.mock('@app/modules/course/hooks/useBildStrategies')
 vi.mock('../ICMCourseBuilderV2/hooks/useModuleSettings')
 
 const useBildStrategiesMocked = vi.mocked(useBildStrategies)

@@ -17,7 +17,7 @@ import {
   SetCourseDraftMutation,
   SetCourseDraftMutationVariables,
 } from '@app/generated/graphql'
-import { useBildStrategies } from '@app/hooks/useBildStrategies'
+import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
 import { QUERY as SET_COURSE_DRAFT } from '@app/queries/courses/set-course-draft'
 import {
   Draft,

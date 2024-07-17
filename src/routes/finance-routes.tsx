@@ -1,7 +1,15 @@
+import { Contacts } from '@mui/icons-material'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { AuditsPage } from '@app/modules/admin/Audits/pages/AuditsPage'
+import {
+  DiscountsList,
+  DiscountForm,
+} from '@app/modules/admin/Discounts/components'
+import { AdminPage } from '@app/modules/admin/pages/AdminPage'
+import { PricingList } from '@app/modules/admin/Pricing/components'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { OrderDetails as CourseOrderDetails } from '@app/modules/course/pages/CreateCourse/components/OrderDetails'
 import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
@@ -13,13 +21,8 @@ import { OrderDetails } from '@app/modules/order_details/pages/OrderDetails'
 import { Orders } from '@app/modules/orders/pages/Orders'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { UserRoutes } from '@app/modules/user/routes'
-import { AdminPage } from '@app/pages/admin'
-import { AuditsPage } from '@app/pages/admin/Audits'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import { Contacts } from '@app/pages/admin/Contacts'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
-import { DiscountForm, DiscountsList } from '@app/pages/tt-pages/Discounts'
-import { PricingList } from '@app/pages/tt-pages/Pricing'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 
@@ -81,7 +84,9 @@ const MyCourses = React.lazy(() =>
 )
 
 const CourseExceptionsLog = React.lazy(() =>
-  import('@app/pages/admin/CourseExceptionsLog').then(module => ({
+  import(
+    '@app/modules/admin/CourseExceptionsLog/pages/CourseExceptionsLog'
+  ).then(module => ({
     default: module.CourseExceptionsLog,
   })),
 )

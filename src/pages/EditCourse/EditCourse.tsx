@@ -49,7 +49,6 @@ import {
   UpdateCourseMutation,
   UpdateCourseMutationVariables,
 } from '@app/generated/graphql'
-import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useCourse from '@app/hooks/useCourse'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
@@ -64,6 +63,7 @@ import {
   hasRenewalCycle,
   isRenewalCycleHiddenFromUI,
 } from '@app/modules/course/components/CourseForm/helpers'
+import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,

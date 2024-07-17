@@ -7,7 +7,7 @@ import {
   Course_Level_Enum,
 } from '@app/generated/graphql'
 import { SAVE_COURSE_GRADING_MUTATION } from '@app/modules/grading/pages/CourseGrading/queries/save-course-grading'
-import { TRANSFER_PARTICIPANT } from '@app/pages/TransferParticipant/queries'
+import { TRANSFER_PARTICIPANT } from '@app/modules/transfer_participant/queries/queries'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
 import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'

@@ -36,7 +36,7 @@ import {
   InsertOrgLeadMutationVariables,
   Course as GeneratedCourseType,
 } from '@app/generated/graphql'
-import { useBildStrategies } from '@app/hooks/useBildStrategies'
+import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
 import {
   Address,
   AdminOnlyCourseStatus,

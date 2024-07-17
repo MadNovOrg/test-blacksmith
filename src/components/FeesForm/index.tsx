@@ -17,7 +17,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
   ContextValue,
   TransferModeEnum,
-} from '@app/pages/TransferParticipant/components/TransferParticipantProvider'
+} from '@app/modules/transfer_participant/components/TransferParticipantProvider'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { customFeeFormat } from '@app/util'

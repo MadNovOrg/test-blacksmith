@@ -8,7 +8,7 @@ import { Trans } from 'react-i18next'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { TransferTermsTable } from '@app/pages/TransferParticipant/components/TransferTermsTable'
+import { TransferTermsTable } from '@app/modules/transfer_participant/components/TransferTermsTable'
 
 import { ACTION_TYPE } from './ModifyAttendanceModal'
 

@@ -14,7 +14,7 @@ import {
   Currency,
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { QUERY as BILD_STRATEGIES_QUERY } from '@app/queries/bild/get-bild-strategies'
+import { QUERY as BILD_STRATEGIES_QUERY } from '@app/modules/course/queries/get-bild-strategies'
 import { BildStrategies, ValidCourseInput } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'

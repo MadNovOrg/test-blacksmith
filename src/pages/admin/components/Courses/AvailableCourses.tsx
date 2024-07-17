@@ -32,8 +32,8 @@ import {
   GetUpcomingCoursesQuery,
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
-import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'

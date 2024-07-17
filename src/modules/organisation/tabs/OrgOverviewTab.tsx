@@ -28,7 +28,7 @@ import {
   CourseLevel,
   OrganizationProfile,
 } from '@app/generated/graphql'
-import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
+import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/modules/organisation/tabs/components/IndividualsByLevelList'
