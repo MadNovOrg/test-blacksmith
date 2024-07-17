@@ -1,3 +1,5 @@
+import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
+
 export type OrgAndName = {
   selectedOrganization: string
   keywordArray: string[]
@@ -117,4 +119,32 @@ export const getGradingTabWhereCondition = (
   )
 
   return filterConditions
+}
+
+export const getWhereCondition = (currentTab: CourseDetailsTabs): object => {
+  switch (currentTab) {
+    case CourseDetailsTabs.ATTENDEES:
+      return {}
+    case CourseDetailsTabs.GRADING:
+      return { attended: { _eq: true } }
+    case CourseDetailsTabs.EVALUATION:
+      return {
+        _and: [
+          { attended: { _eq: true } },
+          { healthSafetyConsent: { _eq: true } },
+          { completed_evaluation: { _eq: true } },
+        ],
+      }
+    case CourseDetailsTabs.CERTIFICATIONS:
+      return {
+        _and: [
+          { attended: { _eq: true } },
+          { healthSafetyConsent: { _eq: true } },
+          { grade: { _eq: 'PASS' } },
+          { completed_evaluation: { _eq: true } },
+        ],
+      }
+    default:
+      return {}
+  }
 }

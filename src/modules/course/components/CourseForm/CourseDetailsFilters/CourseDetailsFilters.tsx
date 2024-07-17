@@ -20,17 +20,20 @@ import { AttendeeOrganizationDropdown } from '../AttendeeOrganizationSelector'
 import {
   getAttendeeTabWhereCondition,
   getGradingTabWhereCondition,
+  getWhereCondition,
 } from './utils'
 
 type Props = {
   canViewEvaluationSubmittedColumn?: boolean
   courseId: number
+  trainersWithEvaluations?: string[]
   handleWhereConditionChange: (where: Record<string, object>) => void
 }
 export const CourseDetailsFilters: React.FC<Props> = (props: Props) => {
   const {
     canViewEvaluationSubmittedColumn,
     courseId,
+    trainersWithEvaluations,
     handleWhereConditionChange,
   } = props
 
@@ -44,19 +47,31 @@ export const CourseDetailsFilters: React.FC<Props> = (props: Props) => {
   const [filterByCourseEvaluation, setFilterByCourseEvaluation] =
     useState(false)
 
-  const { data: orgNames } = useCourseParticipantsOrganizations(courseId)
-  const attendeeOrganizations = Array.from(
-    new Set(
-      orgNames?.course_participant?.flatMap(cp =>
-        cp?.profile?.organizations?.map(org => org?.organization?.name),
-      ),
-    ),
-  )
   const selectedTab = useQueryParam('tab')
   const isAttendeesTab =
     selectedTab.includes(CourseDetailsTabs.ATTENDEES) ||
     selectedTab[0] === undefined
   const isGradingTab = selectedTab.includes(CourseDetailsTabs.GRADING)
+
+  const includeTrainerOrganizations =
+    selectedTab.includes(CourseDetailsTabs.EVALUATION) &&
+    Number(trainersWithEvaluations?.length) > 0
+
+  const { data: orgNames } = useCourseParticipantsOrganizations(
+    courseId,
+    getWhereCondition(selectedTab[0] as CourseDetailsTabs),
+    includeTrainerOrganizations,
+    trainersWithEvaluations,
+  )
+  const attendeeOrganizations =
+    orgNames?.course_participant?.flatMap(cp =>
+      cp?.profile?.organizations?.map(org => org?.organization?.name),
+    ) ?? []
+  const trainerOrganizations =
+    orgNames?.course_trainer?.flatMap(ct =>
+      ct?.profile?.organizations?.map(org => org?.organization?.name),
+    ) ?? []
+
   const keywordArray = useMemo(() => {
     return keywordDebounced.toLocaleLowerCase().trim().split(' ')
   }, [keywordDebounced])
@@ -129,7 +144,9 @@ export const CourseDetailsFilters: React.FC<Props> = (props: Props) => {
       </Grid>
       <Grid item xs={12} sm={12} md={4}>
         <AttendeeOrganizationDropdown
-          options={attendeeOrganizations}
+          options={Array.from(
+            new Set([...attendeeOrganizations, ...trainerOrganizations]),
+          )}
           selectedOrganization={selectedOrganization ?? ''}
           onChange={handleOrganizationChange}
         />

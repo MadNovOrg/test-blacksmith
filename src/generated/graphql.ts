@@ -59351,13 +59351,6 @@ export type GetDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string
 
 export type GetDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
 
-export type GetCourseOrdersQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, schedule: Array<{ __typename?: 'course_schedule', timeZone: string }> } | null }> };
-
 export type GetPricingQueryVariables = Exact<{
   where?: InputMaybe<Course_Pricing_Bool_Exp>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -59613,10 +59606,13 @@ export type GetCourseParticipantOrderQuery = { __typename?: 'query_root', partic
 
 export type GetCourseParticipantsOrganizationsQueryVariables = Exact<{
   courseId: Scalars['Int'];
+  where?: InputMaybe<Course_Participant_Bool_Exp>;
+  withTrainerOrganization?: InputMaybe<Scalars['Boolean']>;
+  trainersWithEvaluations?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
 }>;
 
 
-export type GetCourseParticipantsOrganizationsQuery = { __typename?: 'query_root', course_participant: Array<{ __typename?: 'course_participant', profile: { __typename?: 'profile', organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }> };
+export type GetCourseParticipantsOrganizationsQuery = { __typename?: 'query_root', course_participant: Array<{ __typename?: 'course_participant', profile: { __typename?: 'profile', organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }>, course_trainer?: Array<{ __typename?: 'course_trainer', profile: { __typename?: 'profile', organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }> };
 
 export type ReplaceParticipantMutationVariables = Exact<{
   input: ReplaceParticipantInput;
@@ -59892,6 +59888,52 @@ export type UpdateGradeMutationVariables = Exact<{
 
 
 export type UpdateGradeMutation = { __typename?: 'mutation_root', updateCourseParticipant?: { __typename?: 'course_participant', id: any } | null, insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
+
+export type GetCourseOrdersQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, schedule: Array<{ __typename?: 'course_schedule', timeZone: string }> } | null }> };
+
+export type CreateOrderMutationVariables = Exact<{
+  input: CreateOrderInput;
+}>;
+
+
+export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id?: any | null, success: boolean, error?: CreateOrderError | null } | null };
+
+export type GetOrderForBookingDoneQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderForBookingDoneQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum } | null };
+
+export type GetOrderReducedQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderReducedQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null };
+
+export type ContactInfoFragment = { __typename?: 'xero_contact', firstName: string };
+
+export type InvoiceInfoFragment = { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } };
+
+export type OrderOrganizationInfoFragment = { __typename?: 'organization', id: any, name: string, address: any };
+
+export type OrderInfoFragment = { __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null, courses: Array<{ __typename?: 'course_order', course?: { __typename?: 'course', course_code?: string | null } | null }> };
+
+export type OrdersQueryVariables = Exact<{
+  where?: InputMaybe<Order_Bool_Exp>;
+  orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type OrdersQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null, courses: Array<{ __typename?: 'course_order', course?: { __typename?: 'course', course_code?: string | null } | null }> }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type GetOrganisationDetailsForDeleteQueryVariables = Exact<{
   orgId: Scalars['uuid'];
@@ -60172,24 +60214,6 @@ export type ArloCallbackMutationVariables = Exact<{
 
 
 export type ArloCallbackMutation = { __typename?: 'mutation_root', arloCallback?: { __typename?: 'ArloCallbackOutput', status: boolean } | null };
-
-export type ContactInfoFragment = { __typename?: 'xero_contact', firstName: string };
-
-export type InvoiceInfoFragment = { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } };
-
-export type OrderOrganizationInfoFragment = { __typename?: 'organization', id: any, name: string, address: any };
-
-export type OrderInfoFragment = { __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null, courses: Array<{ __typename?: 'course_order', course?: { __typename?: 'course', course_code?: string | null } | null }> };
-
-export type OrdersQueryVariables = Exact<{
-  where?: InputMaybe<Order_Bool_Exp>;
-  orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
-  offset?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type OrdersQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null, courses: Array<{ __typename?: 'course_order', course?: { __typename?: 'course', course_code?: string | null } | null }> }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -60822,27 +60846,6 @@ export type ModuleGroupsQueryVariables = Exact<{
 
 
 export type ModuleGroupsQuery = { __typename?: 'query_root', groups: Array<{ __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, requires?: any | null, createdAt: any, updatedAt: any, modules: Array<{ __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any, submodules: Array<{ __typename?: 'submodule', id: any, name: string }>, submodules_aggregate: { __typename?: 'submodule_aggregate', aggregate?: { __typename?: 'submodule_aggregate_fields', count: number } | null } }>, duration: { __typename?: 'module_group_duration_aggregate', aggregate?: { __typename?: 'module_group_duration_aggregate_fields', sum?: { __typename?: 'module_group_duration_sum_fields', duration?: number | null } | null } | null } }> };
-
-export type CreateOrderMutationVariables = Exact<{
-  input: CreateOrderInput;
-}>;
-
-
-export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id?: any | null, success: boolean, error?: CreateOrderError | null } | null };
-
-export type GetOrderForBookingDoneQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetOrderForBookingDoneQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum } | null };
-
-export type GetOrderReducedQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetOrderReducedQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

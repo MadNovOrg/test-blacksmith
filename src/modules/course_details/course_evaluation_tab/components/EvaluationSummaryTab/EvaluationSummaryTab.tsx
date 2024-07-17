@@ -249,6 +249,12 @@ export const EvaluationSummaryTab: React.FC<
       })) ?? [],
     )
 
+  const trainersWithEvaluations: string[] = []
+
+  data?.trainers.forEach(t => {
+    if (data.evaluations.some(e => e.profile.id === t.profile.id))
+      trainersWithEvaluations.push(t.profile.id)
+  })
   return (
     <Container disableGutters>
       {!loading && canTrainerSubmitEvaluation && (
@@ -293,6 +299,7 @@ export const EvaluationSummaryTab: React.FC<
           <Grid item md={12}>
             <CourseDetailsFilters
               courseId={course.id}
+              trainersWithEvaluations={trainersWithEvaluations}
               handleWhereConditionChange={handleWhereConditionChange}
             />
           </Grid>
@@ -369,9 +376,11 @@ export const EvaluationSummaryTab: React.FC<
                       </LinkToProfile>
                     </TableCell>
                     <TableCell>
-                      {e.profile.organizations
-                        ?.map(o => o.organization.name)
-                        .join(', ')}
+                      {e.profile.organizations?.map(o => (
+                        <Typography key={o.organization.name}>
+                          {o.organization.name}
+                        </Typography>
+                      ))}
                     </TableCell>
                     {displayEvaluationColumn ? (
                       <TableCell>

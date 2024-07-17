@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Grid,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -304,12 +303,9 @@ export const CertificationList: React.FC<
                       <Box display={'flex'} flexDirection={'column'}>
                         {p.profile.organizations.map(o => {
                           return (
-                            <Link
-                              key={o.organization.id}
-                              href={`/organisations/${o.organization.id}`}
-                            >
+                            <Typography key={o.organization.id}>
                               {o.organization.name}
-                            </Link>
+                            </Typography>
                           )
                         })}
                       </Box>
