@@ -216,38 +216,13 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   describe('Level 1 Behaviour Support', () => {
-    it("doesn't show Level 1 Behaviour Support with the feature flag disabled", async () => {
-      useFeatureFlagEnabledMock.mockReturnValue(false)
-
-      renderForm(type)
-
-      const select = screen.getByTestId('course-level-select')
-      await userEvent.click(within(select).getByRole('button'))
-      const levels = screen.getAllByRole('option')
-      const text = 'Level One Behaviour Support'
-      expect(levels.some(level => level.textContent === text)).toBe(false)
-    })
-
-    it('shows Level 1 Behaviour Support with the feature flag enabled', async () => {
-      useFeatureFlagEnabledMock.mockReturnValue(true)
-
-      renderForm(type)
-
-      const select = screen.getByTestId('course-level-select')
-      await userEvent.click(within(select).getByRole('button'))
-      const levels = screen.getAllByRole('option')
-      const text = 'Level One Behaviour Support'
-      expect(levels.some(level => level.textContent === text)).toBe(true)
-    })
-
     it.each([
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.BildIntermediateTrainer,
       Course_Level_Enum.AdvancedTrainer,
       Course_Level_Enum.BildAdvancedTrainer,
-      Course_Level_Enum.FoundationTrainerPlus,
     ])(
-      'shows Level 1 Behaviour Support for trainers with %s certificate',
+      'do not show Level 1 Behaviour Support for trainers with %s certificate',
       async level => {
         useFeatureFlagEnabledMock.mockReturnValue(true)
 
@@ -257,14 +232,26 @@ describe('component: CourseForm - INDIRECT', () => {
         await userEvent.click(within(select).getByRole('button'))
         const levels = screen.getAllByRole('option')
         const text = 'Level One Behaviour Support'
-        expect(levels.some(level => level.textContent === text)).toBe(true)
+        expect(levels.some(level => level.textContent === text)).toBe(false)
       },
     )
+
+    it('show Level 1 Behaviour Support for trainers with Foundation Trainer Plus certificate', async () => {
+      useFeatureFlagEnabledMock.mockReturnValue(true)
+
+      renderForm(type, Course_Level_Enum.FoundationTrainerPlus)
+
+      const select = screen.getByTestId('course-level-select')
+      await userEvent.click(within(select).getByRole('button'))
+      const levels = screen.getAllByRole('option')
+      const text = 'Level One Behaviour Support'
+      expect(levels.some(level => level.textContent === text)).toBe(true)
+    })
 
     it('allows re-accreditation to be selected', async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(type)
+      renderForm(type, Course_Level_Enum.FoundationTrainerPlus)
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
 
@@ -277,7 +264,7 @@ describe('component: CourseForm - INDIRECT', () => {
     it('allows Face to face and Mixed delivery type, but not Virtual', async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(type)
+      renderForm(type, Course_Level_Enum.FoundationTrainerPlus)
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
 
@@ -302,7 +289,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
       renderForm(
         type,
-        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
         RoleName.TRAINER,
         {
           countryCode: 'MD',

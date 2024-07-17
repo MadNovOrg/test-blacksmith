@@ -72,13 +72,7 @@ export const GeneralDetailsSection = ({
   } = useFormContext<CourseInput>()
   const { changeCountryOnCourseLevelChange } = useCourseFormEffects()
   const { t, _t } = useScopedTranslation('components.course-form')
-  const foundationTrainerPlusLevelEnabled = useFeatureFlagEnabled(
-    'foundation-trainer-plus-course',
-  )
-  const levelOneBSEnabled = useFeatureFlagEnabled('level-one-bs')
 
-  const BSor3DaySRTEnabled =
-    foundationTrainerPlusLevelEnabled || levelOneBSEnabled
   const isResidingCountryEnabled = !!useFeatureFlagEnabled(
     'course-residing-country',
   )
@@ -471,8 +465,8 @@ export const GeneralDetailsSection = ({
                     residingCountry,
                   )
                   field.onChange(event)
-                  BSor3DaySRTEnabled &&
-                    setValue('residingCountry', countryToChangeTo)
+
+                  setValue('residingCountry', countryToChangeTo)
                   setValue(
                     'aolCountry',
                     countryToChangeTo ??
