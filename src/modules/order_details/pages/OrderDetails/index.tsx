@@ -386,7 +386,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                 {t('quantity')}
                               </Typography>
                               <Typography>
-                                {quantities.get(Number(course?.id)) ?? 0}
+                                {course?.type === Course_Type_Enum.Indirect
+                                  ? course.max_participants
+                                  : quantities.get(Number(course?.id)) ?? 0}
                               </Typography>
                             </Box>
                           </Box>

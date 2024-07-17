@@ -460,10 +460,7 @@ export function useSaveCourse(): {
                             order: {
                               data: { ...orderToBeCreated },
                             },
-                            quantity:
-                              courseData.type === Course_Type_Enum.Indirect
-                                ? courseData.maxParticipants
-                                : orderToBeCreated.attendeesQuantity,
+                            quantity: orderToBeCreated.attendeesQuantity,
                           }),
                     },
                   ],
