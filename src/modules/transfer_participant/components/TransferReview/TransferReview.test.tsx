@@ -17,12 +17,12 @@ import {
   TransferParticipantMutation,
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
+import { getTransferTermsFee } from '@app/modules/transfer_participant/utils'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { TRANSFER_PARTICIPANT } from '../../queries/queries'
 import { EligibleCourse } from '../../utils/types'
-import { getTransferTermsFee } from '../../utils/utils'
 import {
   ChosenParticipant,
   ContextValue,

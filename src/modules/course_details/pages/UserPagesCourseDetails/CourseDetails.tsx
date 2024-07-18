@@ -51,7 +51,7 @@ import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/modules/course_details/
 import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { CourseCancellationRequestFeature } from '@app/modules/course_details/pages/CourseDetails/CourseCancellationRequestFeature'
 import { ModifyAttendanceModal } from '@app/modules/course_details/pages/UserPagesCourseDetails/ModifyAttendanceModal'
-import { ResidingCountryDialog } from '@app/pages/Welcome/components/ResidingCountryDialog/ResidingCountryDialog'
+import { ResidingCountryDialog } from '@app/modules/welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   ParamsType,

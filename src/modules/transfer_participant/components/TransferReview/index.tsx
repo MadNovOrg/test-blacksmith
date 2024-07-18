@@ -21,14 +21,14 @@ import {
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-
-import { TRANSFER_PARTICIPANT } from '../../queries/queries'
-import { TransferStepsEnum } from '../../utils/types'
 import {
   getTransferTermsFee,
   isAddressInfoRequired,
   isTrainTheTrainerCourse,
-} from '../../utils/utils'
+} from '@app/modules/transfer_participant/utils'
+
+import { TRANSFER_PARTICIPANT } from '../../queries/queries'
+import { TransferStepsEnum } from '../../utils/types'
 import { CourseInfoPanel } from '../CourseInfoPanel'
 import {
   TransferModeEnum,

@@ -15,10 +15,10 @@ import { getLevels } from '@app/modules/course/components/CourseForm/helpers'
 import { isCertificateOutsideGracePeriod } from '@app/modules/course_details/course_certification_tab/pages/CourseCertification/utils'
 import {
   courseCategoryUserAttends,
+  hasCourseInProgress,
   hasGotPassForTrainerCourse,
   ICourseCategoryUserAttends,
-  hasCourseInProgress,
-} from '@app/pages/Resources/utils'
+} from '@app/modules/resources/utils'
 import { Course, CourseInput, RoleName } from '@app/types'
 import {
   getCourseAssistants,

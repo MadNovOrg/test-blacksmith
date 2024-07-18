@@ -38,11 +38,6 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseTitleAndDuration } from '@app/modules/course_details/components/CourseTitleAndDuration'
-import { NotFound } from '@app/pages/common/NotFound'
-import theme from '@app/theme'
-import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
-
-import useCourseOrders from '../../hooks/useCourseOrders'
 import {
   getTrainerExpensesLineItems,
   isDiscountLineItem,
@@ -51,7 +46,12 @@ import {
   isMandatoryCourseMaterials,
   isProcessingFeeLineItem,
   isRegistrantLineItem,
-} from '../../utils/utils'
+} from '@app/modules/order_details/utils'
+import { NotFound } from '@app/pages/common/NotFound'
+import theme from '@app/theme'
+import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
+
+import useCourseOrders from '../../hooks/useCourseOrders'
 
 type OrderRegistrant = {
   firstName: string

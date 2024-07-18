@@ -7,8 +7,10 @@ import React from 'react'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-
-import { getTransferTermsFee, isTrainTheTrainerCourse } from '../../utils/utils'
+import {
+  getTransferTermsFee,
+  isTrainTheTrainerCourse,
+} from '@app/modules/transfer_participant/utils'
 
 type Props = {
   startDate: Date

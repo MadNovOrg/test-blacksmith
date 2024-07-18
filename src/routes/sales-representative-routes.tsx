@@ -15,9 +15,9 @@ import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/Pa
 import { OrderDetails } from '@app/modules/order_details/pages/OrderDetails'
 import { Orders } from '@app/modules/orders/pages/Orders'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
+import { TrainerFeedback } from '@app/modules/trainer_feedback/pages/TrainerFeedback'
 import { UserRoutes } from '@app/modules/user/routes'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 

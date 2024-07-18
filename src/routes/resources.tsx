@@ -5,7 +5,7 @@ import {
   ResourcesList,
   ResourceDetails,
   ResourceVideoItem,
-} from '@app/pages/Resources'
+} from '@app/modules/resources/pages'
 
 function ResourcesRoutes() {
   return (

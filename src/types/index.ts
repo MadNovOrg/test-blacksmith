@@ -22,7 +22,7 @@ import {
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
-import { AttendedCourseData } from '@app/pages/Resources/utils'
+import { AttendedCourseData } from '@app/modules/resources/utils'
 
 export type Base = {
   id: string

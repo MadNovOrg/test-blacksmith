@@ -1,37 +1,37 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import { MembershipAreaPage } from '@app/pages/MembershipArea'
+import { MembershipAreaPage } from '@app/modules/membership_area/pages/MembershipArea'
 
-const Blog = React.lazy(() => import('@app/pages/MembershipArea/pages/Blog'))
-const Post = React.lazy(() => import('@app/pages/MembershipArea/pages/Post'))
+const Blog = React.lazy(() => import('@app/modules/membership_area/pages/Blog'))
+const Post = React.lazy(() => import('@app/modules/membership_area/pages/Post'))
 
 const Ebooks = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Ebooks'),
+  () => import('@app/modules/membership_area/pages/Ebooks'),
 )
-const Home = React.lazy(() => import('@app/pages/MembershipArea/pages/Home'))
+const Home = React.lazy(() => import('@app/modules/membership_area/pages/Home'))
 const Podcast = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Podcast'),
+  () => import('@app/modules/membership_area/pages/Podcast'),
 )
 const Podcasts = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Podcasts'),
+  () => import('@app/modules/membership_area/pages/Podcasts'),
 )
 const ResearchSummaries = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/ResearchSummaries'),
+  () => import('@app/modules/membership_area/pages/ResearchSummaries'),
 )
 const VideoItem = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/VideoItem'),
+  () => import('@app/modules/membership_area/pages/VideoItem'),
 )
 const VideoSeries = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/VideoSeries'),
+  () => import('@app/modules/membership_area/pages/VideoSeries'),
 )
 const Webinar = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Webinar'),
+  () => import('@app/modules/membership_area/pages/Webinar'),
 )
 const Webinars = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Webinars'),
+  () => import('@app/modules/membership_area/pages/Webinars'),
 )
-const Term = React.lazy(() => import('@app/pages/MembershipArea/pages/Term'))
+const Term = React.lazy(() => import('@app/modules/membership_area/pages/Term'))
 
 const MembershipRoutes: React.FC<React.PropsWithChildren<unknown>> = () => (
   <Routes>

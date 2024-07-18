@@ -15,13 +15,13 @@ import { FormValues as FeesFormValues } from '@app/components/FeesForm'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { FormValues as ParticipantFormValues } from '@app/modules/course_details/course_attendees_tab/components/ParticipantPostalAddressForm'
+import { isAddressInfoRequired } from '@app/modules/transfer_participant/utils'
 import {
   TransferFormInput,
   TransferStepsEnum,
 } from '@app/modules/transfer_participant/utils/types'
 import { yup } from '@app/schemas'
 
-import { isAddressInfoRequired } from '../../utils/utils'
 import { CourseInfoPanel } from '../CourseInfoPanel'
 import FeesPanel from '../FeesPanel'
 import { useTransferParticipantContext } from '../TransferParticipantProvider'

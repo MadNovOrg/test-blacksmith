@@ -5,8 +5,8 @@ import {
   GetResourcesQuery,
   GetResourcesQueryVariables,
 } from '@app/generated/graphql'
-import { ResourceItemsSkeleton } from '@app/pages/Resources/ResourceCategoryDetails/components/ResourceItemSkeleton'
-import ResourcesList from '@app/pages/Resources/ResourceCategoryDetails/components/ResourcesList'
+import { ResourceItemsSkeleton } from '@app/modules/resources/components/ResourceItemSkeleton'
+import ResourcesList from '@app/modules/resources/components/ResourcesList'
 
 import { GET_RESOURCES_BY_IDS } from '../../queries/queries'
 

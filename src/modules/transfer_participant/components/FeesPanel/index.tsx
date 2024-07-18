@@ -24,7 +24,7 @@ import {
   schema as participantPostalAddressSchema,
   FormValues as ParticipantFormValues,
 } from '@app/modules/course_details/course_attendees_tab/components/ParticipantPostalAddressForm'
-import { isAddressInfoRequired } from '@app/modules/transfer_participant/utils/utils'
+import { isAddressInfoRequired } from '@app/modules/transfer_participant/utils'
 
 import {
   ContextValue,

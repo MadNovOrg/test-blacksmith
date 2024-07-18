@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { RESOURCE_SUMMARY } from '@app/pages/Resources/queries/resource-summary'
+import { RESOURCE_SUMMARY } from '@app/modules/resources/queries/resource-summary'
 
 export const GET_RESOURCES_BY_IDS = gql`
   ${RESOURCE_SUMMARY}

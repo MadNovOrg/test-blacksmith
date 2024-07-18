@@ -29,7 +29,7 @@ import {
 } from '@test/index'
 
 import { GET_COURSE_ORDERS } from '../../hooks/useCourseOrders'
-import { CourseWorkbooks } from '../../utils/utils'
+import { CourseWorkbooks } from '../../utils'
 
 import {
   buildInvoice,

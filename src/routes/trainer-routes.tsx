@@ -14,12 +14,12 @@ import { CourseCertificationDetails } from '@app/modules/course_details/pages/Co
 import { CourseDetails as TrainerCourseDetails } from '@app/modules/course_details/pages/CourseDetails'
 import { GradingRoutes } from '@app/modules/grading/routes'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
+import { TrainerFeedback } from '@app/modules/trainer_feedback/pages/TrainerFeedback'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import { NotFound } from '@app/pages/common/NotFound'
 import { EditCourse } from '@app/pages/EditCourse'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { DraftCourses } from '@app/pages/trainer-pages/MyCourses/DraftCourses'
-import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 
