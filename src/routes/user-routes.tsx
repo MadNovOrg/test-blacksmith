@@ -7,23 +7,23 @@ import {
   GetUserCanAccessResourcesQuery,
   GetUserCanAccessResourcesQueryVariables,
 } from '@app/generated/graphql'
+import { AcceptInvite } from '@app/modules/accept_invite/pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/modules/accept_org_invite/pages/AcceptOrgInvite'
 import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/modules/certifications/hooks/get-user-can-access-resources'
+import { ManageCourses } from '@app/modules/course/pages/ManageCourses/ManageCourses'
 import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseHealthAndSafetyForm'
 import { EvaluationSummary } from '@app/modules/course_details/course_evaluation_tab/pages/InternalEvaluationSummary'
 import { CourseCertificationDetails } from '@app/modules/course_details/pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/modules/course_details/pages/CourseDetails'
 import { CourseDetails } from '@app/modules/course_details/pages/UserPagesCourseDetails/CourseDetails'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { ChooseTransferCourse } from '@app/modules/transfer_participant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/modules/transfer_participant/components/TransferDetails'
 import { TransferReview } from '@app/modules/transfer_participant/components/TransferReview'
 import { UserTransferParticipant } from '@app/modules/transfer_participant/pages/UserTransferParticipant/UserTransferParticipant'
-import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import { NotFound } from '@app/pages/common/NotFound'
-import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
-import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
-import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
+import { AttendeeCourses } from '@app/modules/user_courses/pages/AttendeeCourses'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 

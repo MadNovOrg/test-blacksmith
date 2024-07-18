@@ -7,7 +7,7 @@ import {
   GetCourseParticipantIdQuery,
   GetCourseParticipantIdQueryVariables,
 } from '@app/generated/graphql'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 
 import {

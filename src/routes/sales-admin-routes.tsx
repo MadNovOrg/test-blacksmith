@@ -3,6 +3,8 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { AcceptInvite } from '@app/modules/accept_invite/pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/modules/accept_org_invite/pages/AcceptOrgInvite'
 import { AuditsPage } from '@app/modules/admin/Audits/pages/AuditsPage'
 import {
   DiscountsList,
@@ -14,6 +16,7 @@ import {
   OrderDetails as CourseOrderDetails,
   OrderDetails,
 } from '@app/modules/course/pages/CreateCourse/components/OrderDetails'
+import { ManageCourses } from '@app/modules/course/pages/ManageCourses/ManageCourses'
 import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
 import { EvaluationSummary } from '@app/modules/course_details/course_evaluation_tab/pages/InternalEvaluationSummary'
 import { CourseCertificationDetails } from '@app/modules/course_details/pages/CourseCertificationDetails/CourseCertificationDetails'
@@ -27,12 +30,9 @@ import { TransferDetails } from '@app/modules/transfer_participant/components/Tr
 import { TransferReview } from '@app/modules/transfer_participant/components/TransferReview'
 import { AdminTransferParticipantPage } from '@app/modules/transfer_participant/pages/AdminTransferParticipant/AdminTransferParticipant'
 import { UserRoutes } from '@app/modules/user/routes'
-import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
-import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
-import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 
 const NotFound = React.lazy(() =>
-  import('@app/pages/common/NotFound').then(module => ({
+  import('@app/modules/not_found/pages/NotFound').then(module => ({
     default: module.NotFound,
   })),
 )
@@ -76,13 +76,13 @@ const CreateCourseForm = React.lazy(() =>
 )
 
 const EditCourse = React.lazy(() =>
-  import('@app/pages/EditCourse').then(module => ({
+  import('@app/modules/edit_course/pages/EditCourse').then(module => ({
     default: module.EditCourse,
   })),
 )
 
 const MyCourses = React.lazy(() =>
-  import('@app/pages/trainer-pages/MyCourses').then(module => ({
+  import('@app/modules/trainer_courses/pages/MyCourses').then(module => ({
     default: module.TrainerCourses,
   })),
 )

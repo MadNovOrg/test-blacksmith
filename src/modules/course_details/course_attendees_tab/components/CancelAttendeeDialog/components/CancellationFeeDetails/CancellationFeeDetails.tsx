@@ -24,7 +24,7 @@ import {
 } from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CancellationFeeType } from '@app/generated/graphql'
-import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
+import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
 
 import { FormInput } from '../../types'
 

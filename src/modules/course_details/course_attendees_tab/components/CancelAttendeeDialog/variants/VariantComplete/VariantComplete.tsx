@@ -24,7 +24,7 @@ import {
 } from '@app/generated/graphql'
 import { CourseTitleAndDuration } from '@app/modules/course_details/components/CourseTitleAndDuration'
 import { CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION } from '@app/modules/course_details/course_attendees_tab/queries/cancel-individual-from-course'
-import { getCancellationTermsFee } from '@app/pages/EditCourse/shared'
+import { getCancellationTermsFee } from '@app/modules/edit_course/utils/shared'
 import { yup } from '@app/schemas'
 import { Course, CourseParticipant } from '@app/types'
 import { capitalize, customFeeFormat } from '@app/util'

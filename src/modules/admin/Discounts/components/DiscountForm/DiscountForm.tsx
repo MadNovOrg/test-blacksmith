@@ -44,8 +44,8 @@ import {
   UpsertPromoCodeMutation,
   UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
-import { NotFound } from '@app/pages/common/NotFound'
 import { DISABLE_PROMO_CODE } from '@app/queries/promo-codes/disable-promo-code'
 import { GET_PROMO_CODES } from '@app/queries/promo-codes/get-promo-codes'
 import { UPSERT_PROMO_CODE } from '@app/queries/promo-codes/upsert-promo-code'

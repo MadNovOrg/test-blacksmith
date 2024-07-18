@@ -1,8 +1,7 @@
 import { Locator } from '@playwright/test'
 
 import { UiTable } from '@qa/fixtures/components/UiTable.fixture'
-
-import { BasePage } from '../../../BasePage.fixture'
+import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
 import { MergeUserRow } from './MergeUserRow.fixture'
 

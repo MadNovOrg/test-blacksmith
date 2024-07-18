@@ -3,9 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { UnverifiedLayout } from '@app/layouts/UnverifiedLayout'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { AutoVerify } from '@app/modules/profile/pages/AutoVerify'
-import { NotFound } from '@app/pages/common/NotFound'
-import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
+import { VerifyEmailPage } from '@app/modules/verify_email/pages/VerifyEmail'
 
 // Routes that are specific to unverified users are rendered here.
 // Booking and Profile pages are applicable to any logged in user

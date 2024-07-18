@@ -23,7 +23,7 @@ import {
   SetCourseAsDraftMutation,
   SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'

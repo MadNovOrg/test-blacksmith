@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 
 import {
   ResourceItemsSkeleton,

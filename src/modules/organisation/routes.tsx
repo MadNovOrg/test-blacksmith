@@ -1,7 +1,7 @@
 import { Route, Navigate, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
+import { AvailableCourses } from '@app/modules/course/pages/AvailableCourses/AvailableCourses'
 
 import { InviteUserToOrganization } from './components/InviteUserToOrganization/InviteUserToOrganization'
 import { CreateOrganization } from './pages/CreateOrganization/CreateOrganization'

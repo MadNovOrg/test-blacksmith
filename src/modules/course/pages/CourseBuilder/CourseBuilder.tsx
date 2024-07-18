@@ -10,7 +10,7 @@ import {
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
 } from '@app/generated/graphql'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 
 import { BILDCourseBuilder } from './components/BILDCourseBuilder/BILDCourseBuilder'

@@ -38,6 +38,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { CourseTitleAndDuration } from '@app/modules/course_details/components/CourseTitleAndDuration'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import {
   getTrainerExpensesLineItems,
   isDiscountLineItem,
@@ -47,7 +48,6 @@ import {
   isProcessingFeeLineItem,
   isRegistrantLineItem,
 } from '@app/modules/order_details/utils'
-import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 

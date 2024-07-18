@@ -22,7 +22,7 @@ import {
 } from '@app/generated/graphql'
 import { DELETE_COURSE_CANCELLATION_REQUEST_MUTATION } from '@app/modules/course_details/hooks/courses/delete-course-cancellation-request'
 import { CourseCancellationRequestModal } from '@app/modules/course_details/pages/CourseDetails/CourseCancellationRequestModal'
-import { CourseCancellationModal } from '@app/pages/EditCourse/components/CourseCancellationModal'
+import { CourseCancellationModal } from '@app/modules/edit_course/components/CourseCancellationModal'
 import { Course } from '@app/types'
 
 export type CourseCancellationRequestFeatureProps = {

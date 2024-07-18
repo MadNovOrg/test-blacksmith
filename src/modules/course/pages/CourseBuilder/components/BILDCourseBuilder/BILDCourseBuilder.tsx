@@ -27,7 +27,7 @@ import {
   SaveCourseModulesBildMutationVariables,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { MUTATION as SAVE_COURSE_MODULES_BILD_MUTATION } from '@app/queries/courses/save-course-modules-bild'
 import { Strategy } from '@app/types'
 import {

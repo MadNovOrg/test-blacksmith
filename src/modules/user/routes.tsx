@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 
 import { Import } from './pages/Import/Import'
 import { ChooseFile } from './pages/Import/steps/ChooseFile/ChooseFile'

@@ -42,7 +42,7 @@ import {
   InviteStatus,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { MUTATION as DECLINE_INVITE_MUTATION } from '@app/queries/invites/decline-invite'
 import { QUERY as GET_INVITE_QUERY } from '@app/queries/invites/get-invite'
 import { CHECK_USER_EXISTS_BY_EMAIL } from '@app/queries/user-queries/get-user-by-email'

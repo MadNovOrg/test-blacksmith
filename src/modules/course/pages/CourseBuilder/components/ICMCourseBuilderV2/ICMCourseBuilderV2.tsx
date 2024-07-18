@@ -14,7 +14,7 @@ import {
   Course_Type_Enum,
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
 import { Hero } from '../Hero/Hero'

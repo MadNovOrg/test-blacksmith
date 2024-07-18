@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import { NotFound } from '@app/pages/common/NotFound'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
 
 import { EditProfilePage } from '../pages/EditProfile'
 import { ViewProfilePage } from '../pages/ViewProfile'

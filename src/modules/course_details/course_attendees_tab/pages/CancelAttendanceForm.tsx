@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { ACTION_TYPE } from '@app/modules/course_details/pages/UserPagesCourseDetails/ModifyAttendanceModal'
-import { CancellationTermsTable } from '@app/pages/EditCourse/components/CancellationTermsTable'
+import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
 import { Course } from '@app/types'
 
 type CancelAttendanceFormProps = {
