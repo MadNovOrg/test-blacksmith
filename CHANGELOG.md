@@ -1,5 +1,12 @@
 # @teamteach/hub
 
+## 4.6.1
+
+### Patch Changes
+
+- 2450a14: Fix legacy certificates view not being available
+  Fix Organization heavy query
+
 ## 4.6.0
 
 ### Minor Changes

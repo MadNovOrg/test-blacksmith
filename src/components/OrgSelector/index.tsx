@@ -108,7 +108,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
               ...(localStateOrganization?.dfeId
                 ? [{ id: { _neq: localStateOrganization.dfeId } }]
                 : []),
-              { organizations_aggregate: { count: { predicate: { _eq: 0 } } } },
+              // { organizations_aggregate: { count: { predicate: { _eq: 0 } } } },
               ...(searchOnlyByPostCode
                 ? [
                     {

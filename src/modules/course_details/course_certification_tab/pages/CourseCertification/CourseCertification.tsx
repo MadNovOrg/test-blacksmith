@@ -141,7 +141,7 @@ export const CourseCertification: React.FC<
   const certificationNumber = certificate.number ?? ''
   const grade = courseParticipant?.grade ?? Grade_Enum.Pass
 
-  if (!courseParticipant?.grade) {
+  if (courseParticipant && !courseParticipant?.grade) {
     return (
       <Container sx={{ py: 2 }}>
         <Alert variant="outlined" color="warning">
