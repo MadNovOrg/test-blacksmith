@@ -5,6 +5,9 @@ import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlended
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByReaccreditation } from '@app/components/filters/FilterByReaccreditation'
+import { Course_Type_Enum } from '@app/generated/graphql'
+
+import { BILD_COURSE_LEVELS } from '../../utils'
 
 type Props = { onChange: (next: Record<string, unknown>) => void }
 
@@ -47,8 +50,14 @@ export const Filters: React.FC<Props> = ({ onChange }) => {
 
   return (
     <>
-      <FilterByCourseLevel onChange={onLevelsChange} />
-      <FilterByCourseType onChange={onTypeChange} />
+      <FilterByCourseLevel
+        onChange={onLevelsChange}
+        excludedStatuses={new Set(BILD_COURSE_LEVELS)}
+      />
+      <FilterByCourseType
+        onChange={onTypeChange}
+        courseTypeBlacklist={Course_Type_Enum.Indirect}
+      />
       <FilterByBlendedLearning
         selected={filterBlendedLearning}
         onChange={onBlendedChange}
