@@ -46,7 +46,11 @@ export function useResourcePermission() {
     (
       resourcePermissions: Pick<
         Resource_Resourcepermissions,
-        'certificateLevels' | 'principalTrainer' | 'courseInProgress'
+        | 'certificateLevels'
+        | 'courseInProgress'
+        | 'etaTrainer'
+        | 'principalTrainer'
+        | 'seniorTrainer'
       >,
     ) => {
       if (!resourcePermissions) {
@@ -70,13 +74,24 @@ export function useResourcePermission() {
         listOfCertificatesNeededForAccess?.some(certificate =>
           currentUserCertificates?.includes(certificate as Course_Level_Enum),
         )
+
       const hasPermissionByPrincipalTrainer =
         resourcePermissions.principalTrainer &&
         trainerRoles?.includes(TrainerRoleTypeName.PRINCIPAL)
 
+      const hasPermissionBySeniorTrainer =
+        resourcePermissions.seniorTrainer &&
+        trainerRoles?.includes(TrainerRoleTypeName.SENIOR)
+
+      const hasPermissionByETATrainer =
+        resourcePermissions.etaTrainer &&
+        trainerRoles?.includes(TrainerRoleTypeName.TRAINER_ETA)
+
       if (
         hasPermissionByCourseCertificateLevel ||
-        hasPermissionByPrincipalTrainer
+        hasPermissionByETATrainer ||
+        hasPermissionByPrincipalTrainer ||
+        hasPermissionBySeniorTrainer
       ) {
         return true
       }

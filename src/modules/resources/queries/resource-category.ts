@@ -13,6 +13,8 @@ export const RESOURCE_CATEGORY_SUMMARY = gql`
       certificateLevels
       principalTrainer
       courseInProgress
+      seniorTrainer
+      etaTrainer
     }
     resources(
       first: 100

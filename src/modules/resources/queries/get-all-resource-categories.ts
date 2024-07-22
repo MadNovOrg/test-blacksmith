@@ -18,6 +18,8 @@ export const ALL_RESOURCE_CATEGORIES_QUERY = gql`
             certificateLevels
             principalTrainer
             courseInProgress
+            seniorTrainer
+            etaTrainer
           }
         }
       }

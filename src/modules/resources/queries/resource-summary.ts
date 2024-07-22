@@ -18,6 +18,8 @@ export const RESOURCE_SUMMARY = gql`
       certificateLevels
       principalTrainer
       courseInProgress
+      seniorTrainer
+      etaTrainer
     }
   }
 `
