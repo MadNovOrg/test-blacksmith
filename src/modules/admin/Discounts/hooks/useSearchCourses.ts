@@ -1,8 +1,12 @@
 import { gql } from 'graphql-request'
+import { useQuery } from 'urql'
 
 import {
+  Course_Bool_Exp,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  SearchCoursesQuery,
+  SearchCoursesQueryVariables,
 } from '@app/generated/graphql'
 
 export type QueryResult = {
@@ -53,3 +57,26 @@ export const SEARCH_COURSES = gql`
     }
   }
 `
+
+export default function useSearchCourses(
+  where: Course_Bool_Exp,
+  selectedIds: number[],
+) {
+  const [{ data, error, fetching }, mutate] = useQuery<
+    SearchCoursesQuery,
+    SearchCoursesQueryVariables
+  >({
+    query: SEARCH_COURSES,
+    variables: {
+      where: where,
+      selectedIds: selectedIds,
+    },
+  })
+
+  return {
+    data,
+    error,
+    fetching,
+    mutate,
+  }
+}

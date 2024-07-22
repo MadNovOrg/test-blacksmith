@@ -10,14 +10,13 @@ import {
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import { Course_Level_Enum } from '@app/generated/graphql'
 
+import useSearchCourses from '../../hooks/useSearchCourses'
+import { CLOSED_COURSE_LEVELS } from '../../utils'
 import { SelectLevels } from '../SelectLevels'
-
-import { QueryResult, SEARCH_COURSES, SearchCourse } from './queries'
 
 type Props = {
   value: number[]
@@ -39,27 +38,29 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const [levels, setLevels] = useState<Course_Level_Enum[]>([])
 
   const levelFilter = useMemo(() => {
-    if (levels.length === 0) return {}
+    if (levels.length === 0) return { _nin: CLOSED_COURSE_LEVELS }
     return { _in: levels }
   }, [levels])
 
-  const [searchResult] = useQuery<QueryResult>({
-    query: SEARCH_COURSES,
-    variables: { where: { ...where, level: levelFilter }, selectedIds: value },
-  })
+  const { data: searchResult } = useSearchCourses(
+    { ...where, level: levelFilter },
+    value,
+  )
 
   const selectedIds = useMemo(() => new Set(value), [value])
 
   const searched = useMemo(
     () => [
-      ...(searchResult.data?.courses ?? []),
-      ...(searchResult.data?.selectedCourses ?? []),
+      ...(searchResult?.courses ?? []),
+      ...(searchResult?.selectedCourses ?? []),
     ],
-    [searchResult.data],
+    [searchResult],
   )
+  console.log('courses', searchResult?.courses)
+  console.log('selectedCourses', searchResult?.selectedCourses)
 
   const selected = useMemo(
-    () => searchResult.data?.selectedCourses ?? [],
+    () => searchResult?.selectedCourses ?? [],
     [searchResult],
   )
 
@@ -163,7 +164,7 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
               {t('components.selectCourses.no-results')}
             </Typography>
           ) : null}
-          {courses.map((c: SearchCourse) => {
+          {courses.map(c => {
             const label = (
               <Box
                 sx={{

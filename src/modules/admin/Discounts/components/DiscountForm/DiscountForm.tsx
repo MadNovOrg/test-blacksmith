@@ -29,8 +29,6 @@ import { useMutation, useQuery } from 'urql'
 import { useDebounce, useDebouncedCallback } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
-import { SelectCourses } from '@app/components/SelectCourses'
-import { SelectLevels } from '@app/components/SelectLevels'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
@@ -44,6 +42,8 @@ import {
   UpsertPromoCodeMutation,
   UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
+import { SelectCourses } from '@app/modules/admin/Discounts/components/SelectCourses'
+import { SelectLevels } from '@app/modules/admin/Discounts/components/SelectLevels'
 import { DISABLE_PROMO_CODE } from '@app/modules/admin/Discounts/queries/disable-promo-code'
 import { UPSERT_PROMO_CODE } from '@app/modules/admin/Discounts/queries/upsert-promo-code'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
@@ -110,7 +110,6 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   })
   const values = watch()
   const [debouncedCode] = useDebounce(values.code, 300)
-
   const [{ data, error, fetching: promoCodesFetching }] = useQuery<
     GetPromoCodesQuery,
     GetPromoCodesQueryVariables

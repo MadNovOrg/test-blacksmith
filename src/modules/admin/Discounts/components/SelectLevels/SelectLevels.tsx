@@ -5,11 +5,12 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
+
+import { CLOSED_COURSE_LEVELS } from '../../utils'
 
 type Props = {
   value: Course_Level_Enum[]
@@ -25,13 +26,10 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     ? ''
     : t('components.selectLevels.placeholder')
 
-  const isBSEnabled = !!useFeatureFlagEnabled('level-one-bs')
-
-  const levels = isBSEnabled
-    ? Object.values(Course_Level_Enum)
-    : Object.values(Course_Level_Enum).filter(
-        level => level !== Course_Level_Enum.Level_1Bs,
-      )
+  const levels = Object.values(Course_Level_Enum).filter(
+    level => !CLOSED_COURSE_LEVELS.includes(level),
+  )
+  const sortedLevels = [...levels].sort((a, b) => a.localeCompare(b))
 
   const onSelected = (
     ev: React.SyntheticEvent,
@@ -66,7 +64,7 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     <Autocomplete
       multiple={true}
       value={value}
-      options={levels.sort((a, b) => a.localeCompare(b))}
+      options={sortedLevels}
       onChange={onSelected}
       disableClearable={true}
       renderInput={renderInput}

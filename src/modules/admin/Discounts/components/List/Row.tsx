@@ -19,7 +19,7 @@ import {
 } from '@app/generated/graphql'
 import { Avatar } from '@app/modules/profile/components/Avatar'
 
-import { DISCOUNT_STATUS_COLOR, getPromoCodeStatus } from '../../utils/helpers'
+import { DISCOUNT_STATUS_COLOR, getPromoCodeStatus } from '../../utils'
 
 import { ApproveDeny } from './ApproveDeny'
 

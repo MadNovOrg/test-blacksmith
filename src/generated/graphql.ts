@@ -59386,16 +59386,6 @@ export type GetRegionsByCountryQueryVariables = Exact<{
 
 export type GetRegionsByCountryQuery = { __typename?: 'query_root', regions: Array<{ __typename?: 'country_region', name: string }> };
 
-export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
-
-export type SearchCoursesQueryVariables = Exact<{
-  where: Course_Bool_Exp;
-  selectedIds: Array<Scalars['Int']> | Scalars['Int'];
-}>;
-
-
-export type SearchCoursesQuery = { __typename?: 'query_root', selectedCourses: Array<{ __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }>, courses: Array<{ __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }> };
-
 export type GetOrgMembersQueryVariables = Exact<{
   id?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
   email: Scalars['String'];
@@ -59530,6 +59520,16 @@ export type GetContactsQueryVariables = Exact<{
 
 
 export type GetContactsQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string, id: any } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+
+export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
+
+export type SearchCoursesQueryVariables = Exact<{
+  where: Course_Bool_Exp;
+  selectedIds: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type SearchCoursesQuery = { __typename?: 'query_root', selectedCourses: Array<{ __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }>, courses: Array<{ __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }> };
 
 export type ApproveCodeMutationVariables = Exact<{
   id: Scalars['uuid'];

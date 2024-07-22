@@ -1,6 +1,10 @@
 import { differenceInDays } from 'date-fns'
 
-import { Promo_Code, Promo_Code_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Level_Enum,
+  Promo_Code,
+  Promo_Code_Type_Enum,
+} from '@app/generated/graphql'
 import { PromoCodeStatus } from '@app/types'
 
 export const promoCodeNeedsApproval = (
@@ -59,3 +63,9 @@ export const DISCOUNT_STATUS_COLOR: Record<
   [PromoCodeStatus.DENIED]: 'error',
   [PromoCodeStatus.DISABLED]: 'gray',
 }
+
+export const CLOSED_COURSE_LEVELS = [
+  Course_Level_Enum.Level_1Bs,
+  Course_Level_Enum.Advanced,
+  Course_Level_Enum.BildRegular,
+]
