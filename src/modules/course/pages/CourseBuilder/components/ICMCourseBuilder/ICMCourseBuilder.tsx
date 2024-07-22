@@ -23,10 +23,10 @@ import {
   SetCourseAsDraftMutation,
   SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
+import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/modules/course/queries/finalize-course-builder'
+import { GET_MODULE_GROUPS } from '@app/modules/course/queries/get-module-groups'
+import { SAVE_COURSE_MODULES } from '@app/modules/course/queries/save-course-modules'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
-import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
-import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
-import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
 import { isNotNullish } from '@app/util'
 
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
@@ -97,7 +97,7 @@ export const ICMCourseBuilder: React.FC<
       fetching: fetchingModuleGroups,
     },
   ] = useQuery<ModuleGroupsQuery, ModuleGroupsQueryVariables>({
-    query: GetModuleGroups,
+    query: GET_MODULE_GROUPS,
     variables: courseData?.course
       ? {
           level: courseData?.course.level ?? Course_Level_Enum.Level_1,
@@ -313,7 +313,7 @@ export const ICMCourseBuilder: React.FC<
   const [{ error: saveModulesError }, saveModules] = useMutation<
     SaveCourseModulesMutation,
     SaveCourseModulesMutationVariables
-  >(SaveCourseModules)
+  >(SAVE_COURSE_MODULES)
 
   const [
     { data: finalizeCourseData, error: finalizeCourseError },

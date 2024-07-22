@@ -12,8 +12,8 @@ import {
   TermQuery,
   TermQueryVariables,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import term from '@app/queries/membership/term'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import term from '@app/modules/membership_area/queries/term'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

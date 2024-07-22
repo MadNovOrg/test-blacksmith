@@ -24,7 +24,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CancelAttendanceForm } from '@app/modules/course_details/course_attendees_tab/pages/CancelAttendanceForm'
-import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/queries/courses/cancel-myself-from-course'
+import { CANCEL_MYSELF_FROM_COURSE_MUTATION } from '@app/modules/course_details/queries/cancel-myself-from-course'
 import { Course } from '@app/types'
 
 import { ParticipantTransferInfo } from './ParticipantTransferInfo'

@@ -11,7 +11,7 @@ import {
   InsertOrgMutationVariables,
 } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { MUTATION } from '@app/queries/organization/insert-org'
+import { INSERT_ORGANISATION_MUTATION } from '@app/modules/organisation/queries/insert-org'
 import { Address } from '@app/types'
 
 import { OrganizationForm } from '../../components/OrganizationForm'
@@ -27,7 +27,7 @@ export const CreateOrganization = () => {
   const [{ fetching: loading, error }, executeMutation] = useMutation<
     InsertOrgMutation,
     InsertOrgMutationVariables
-  >(MUTATION)
+  >(INSERT_ORGANISATION_MUTATION)
   const [xeroId, setXeroId] = useState<string>()
   const [otherOrgType, setOtherOrgType] = useState<boolean>(false)
 

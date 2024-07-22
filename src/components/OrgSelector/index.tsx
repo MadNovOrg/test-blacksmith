@@ -17,6 +17,8 @@ import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 import { useDebounce } from 'use-debounce'
 
+import { FIND_ESTABLISHMENTS } from '@app/components/OrgSelector/queries/find-establishment'
+import { GET_ORGANIZATIONS } from '@app/components/OrgSelector/queries/get-organizations'
 import {
   isDfeSuggestion,
   isHubOrg,
@@ -35,8 +37,6 @@ import {
   Dfe_Establishment,
   Organization_Bool_Exp,
 } from '@app/generated/graphql'
-import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
-import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
 import { organizationData as localStateOrganization } from '@app/util'
 
 import { AddOrg } from './components/AddOrg'

@@ -23,9 +23,9 @@ import {
   Course_Pricing,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { useCoursePricing } from '@app/hooks/useCoursePricing'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { useCoursePricing } from '@app/modules/admin/Pricing/hooks/useCoursePricing'
 import theme from '@app/theme'
 
 import { getCourseAttributes } from '../utils'

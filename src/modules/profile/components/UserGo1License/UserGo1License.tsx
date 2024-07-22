@@ -10,7 +10,7 @@ import {
   Go1_Licenses,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import DELETE_GO1_LICENSE from '@app/queries/go1-licensing/delete-go1-license'
+import DELETE_GO1_LICENSE from '@app/modules/profile/queries/delete-go1-license'
 
 export type Go1LicenseInfo = Pick<
   Go1_Licenses,

@@ -7,7 +7,7 @@ import {
   SetCourseTrainerStatusMutation,
   SetCourseTrainerStatusMutationVariables,
 } from '@app/generated/graphql'
-import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
+import { SET_COURSE_TRAINER_STATUS } from '@app/modules/trainer_courses/queries/set-course-trainer-status'
 
 import { chance, render, screen, userEvent, within } from '@test/index'
 
@@ -120,7 +120,7 @@ describe('AcceptDeclineCourse', () => {
         variables: SetCourseTrainerStatusMutationVariables
       }) => {
         const mutationMatches =
-          query === SetCourseTrainerStatus &&
+          query === SET_COURSE_TRAINER_STATUS &&
           variables.status === Course_Invite_Status_Enum.Accepted
 
         if (mutationMatches) {
@@ -180,7 +180,7 @@ describe('AcceptDeclineCourse', () => {
         variables: SetCourseTrainerStatusMutationVariables
       }) => {
         const mutationMatches =
-          query === SetCourseTrainerStatus &&
+          query === SET_COURSE_TRAINER_STATUS &&
           variables.status === Course_Invite_Status_Enum.Declined
 
         if (mutationMatches) {

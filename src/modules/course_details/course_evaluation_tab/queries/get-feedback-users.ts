@@ -13,7 +13,7 @@ export type ResponseType = {
 
 export type ParamsType = { courseId: string }
 
-export const QUERY = gql`
+export const GET_FEEDBACK_USERS_QUERY = gql`
   query GetFeedbackUsers($courseId: Int!) {
     users: course_evaluation_answers(
       where: { _and: { courseId: { _eq: $courseId } } }

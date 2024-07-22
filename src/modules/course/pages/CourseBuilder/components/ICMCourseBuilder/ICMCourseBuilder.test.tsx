@@ -9,15 +9,15 @@ import {
   CourseToBuildQueryVariables,
   Course_Level_Enum,
   Course_Type_Enum,
+  FinalizeCourseBuilderMutation,
   FinalizeCourseBuilderMutationVariables,
   ModuleGroupsQuery,
   SaveCourseModulesMutation,
   SaveCourseModulesMutationVariables,
   SetCourseAsDraftMutationVariables,
 } from '@app/generated/graphql'
-import { FinalizeCourseBuilderMutation } from '@app/generated/graphql'
-import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
-import { MUTATION as SAVE_COURSE_MODULES } from '@app/queries/courses/save-course-modules'
+import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/modules/course/queries/finalize-course-builder'
+import { SAVE_COURSE_MODULES } from '@app/modules/course/queries/save-course-modules'
 
 import {
   fireEvent,

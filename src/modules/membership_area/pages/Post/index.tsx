@@ -14,7 +14,7 @@ import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
 
 import { PostQuery, PostQueryVariables } from '@app/generated/graphql'
-import POST_QUERY from '@app/queries/membership/post'
+import POST_QUERY from '@app/modules/membership_area/queries/post'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'

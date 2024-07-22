@@ -9,8 +9,8 @@ import {
   StripeCreatePaymentMutation,
   StripeCreatePaymentMutationVariables,
 } from '@app/generated/graphql'
-import { useOrder } from '@app/hooks/useOrder'
 import { stripe, Elements, STRIPE_CREATE_PAYMENT } from '@app/lib/stripe'
+import { useOrder } from '@app/modules/course_booking/hooks/useOrder'
 
 import { PaymentForm } from './Form'
 

@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const MUTATION = gql`
+export const UPDATE_PROFILE_ROLES_MUTATION = gql`
   mutation UpdateProfileRoles(
     $id: uuid!
     $roles: [profile_role_insert_input!]!

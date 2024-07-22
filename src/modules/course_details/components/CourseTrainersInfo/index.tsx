@@ -21,7 +21,7 @@ import {
   ReInviteTrainerMutation,
   ReInviteTrainerMutationVariables,
 } from '@app/generated/graphql'
-import { RE_INVITE_COURSE_TRAINER_MUTATION } from '@app/queries/courses/re-invite-course-trainer'
+import { RE_INVITE_COURSE_TRAINER_MUTATION } from '@app/modules/course_details/queries/re-invite-course-trainer'
 import { CourseTrainer } from '@app/types'
 import {
   getCourseAssistants,

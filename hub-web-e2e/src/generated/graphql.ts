@@ -7224,10 +7224,11 @@ export type ResourceCategory_Resourcepermissions = AcfFieldGroup & {
   __typename?: 'ResourceCategory_Resourcepermissions';
   certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
   courseInProgress?: Maybe<Scalars['Boolean']>;
+  etaTrainer?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
   principalTrainer?: Maybe<Scalars['Boolean']>;
-  seniorEngagedTrainerCopy?: Maybe<Scalars['Boolean']>;
+  seniorTrainer?: Maybe<Scalars['Boolean']>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -7419,10 +7420,11 @@ export type Resource_Resourcepermissions = AcfFieldGroup & {
   __typename?: 'Resource_Resourcepermissions';
   certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
   courseInProgress?: Maybe<Scalars['Boolean']>;
+  etaTrainer?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
   principalTrainer?: Maybe<Scalars['Boolean']>;
-  seniorEngagedTrainerCopy?: Maybe<Scalars['Boolean']>;
+  seniorTrainer?: Maybe<Scalars['Boolean']>;
 };
 
 /** Input for the restoreComment mutation */

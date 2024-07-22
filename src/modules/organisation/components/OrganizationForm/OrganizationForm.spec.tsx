@@ -3,6 +3,8 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
+import { FIND_ESTABLISHMENTS } from '@app/components/OrgSelector/queries/find-establishment'
+import { GET_ORGANIZATIONS } from '@app/components/OrgSelector/queries/get-organizations'
 import {
   FindEstablishmentQuery,
   GetOrgTypesQuery,
@@ -11,10 +13,8 @@ import {
   Organization,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { Query as REGIONS_BY_COUNTRY_QUERY } from '@app/queries/country-region/get-region-by-country'
-import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
-import { GET_ORG_TYPES } from '@app/queries/organization/get-org-types'
-import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
+import { GET_ORG_TYPES } from '@app/modules/organisation/queries/get-org-types'
+import { REGIONS_BY_COUNTRY_QUERY } from '@app/modules/organisation/queries/get-region-by-country'
 
 import {
   chance,

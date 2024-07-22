@@ -1,6 +1,6 @@
 import { render, screen, userEvent, within } from '@test/index'
 
-import { buildModule, buildLesson } from '../../test-utils'
+import { buildModule, buildLesson } from '../../utils'
 
 import { ModulesSelectionListV2 } from './ModulesSelectionListV2'
 

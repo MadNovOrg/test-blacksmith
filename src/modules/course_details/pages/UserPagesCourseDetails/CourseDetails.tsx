@@ -44,20 +44,20 @@ import {
 import { CourseAttendeesTab } from '@app/modules/course_details/course_attendees_tab/pages/CourseAttendeesTab'
 import { CourseCertifications } from '@app/modules/course_details/course_certification_tab/components/CourseCertifications'
 import { EvaluationSummaryTab } from '@app/modules/course_details/course_evaluation_tab/components/EvaluationSummaryTab'
-import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
+import { GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
 import { DietaryRequirementsTab } from '@app/modules/course_details/dietary_requirements_tab/DietaryRequirementsTab'
 import { DisabilitiesTab } from '@app/modules/course_details/disabilities_tab/components/DisabilitiesTab'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/modules/course_details/hooks/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { CourseCancellationRequestFeature } from '@app/modules/course_details/pages/CourseDetails/CourseCancellationRequestFeature'
 import { ModifyAttendanceModal } from '@app/modules/course_details/pages/UserPagesCourseDetails/ModifyAttendanceModal'
-import { ResidingCountryDialog } from '@app/modules/welcome/components/ResidingCountryDialog/ResidingCountryDialog'
-import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   ParamsType,
-  QUERY as GET_COURSE_QUERY,
+  GET_COURSE_QUERY,
   ResponseType as GetCourseResponseType,
-} from '@app/queries/user-queries/get-course-by-id'
+} from '@app/modules/course_details/queries/get-course-by-id'
+import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
+import { ResidingCountryDialog } from '@app/modules/welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { CourseParticipant } from '@app/types'
 import { courseEnded, courseStarted, isLastCourseDay } from '@app/util'

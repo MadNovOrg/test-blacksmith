@@ -11,7 +11,7 @@ import {
   GetCoursesSourcesQuery,
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
+import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
 import { CourseInput, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'

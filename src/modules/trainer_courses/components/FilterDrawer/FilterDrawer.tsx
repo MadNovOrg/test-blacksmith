@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { useToggle } from 'react-use'
 
-import { CoursesFilters } from '@app/hooks/useCourses'
+import { CoursesFilters } from '@app/modules/trainer_courses/hooks/useCourses'
 
 import { Filters } from '../Filters'
 

@@ -34,9 +34,9 @@ import {
   CreateOrderMutationVariables,
 } from '@app/generated/graphql'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
-import { MUTATION as CREATE_ORDER } from '@app/modules/orders/queries/create-order'
-import { QUERY as GET_TEMP_PROFILE } from '@app/modules/profile/queries/get-temp-profile'
-import { GET_COURSE_PRICING_QUERY } from '@app/queries/courses/get-course-pricing'
+import { CREATE_ORDER } from '@app/modules/course_booking/queries/create-order'
+import { GET_COURSE_PRICING_QUERY } from '@app/modules/course_booking/queries/get-course-pricing'
+import { GET_TEMP_PROFILE } from '@app/modules/course_booking/queries/get-temp-profile'
 import {
   CourseExpenseType,
   InvoiceDetails,

@@ -5,7 +5,7 @@ import {
   UserCoursesQuery,
   UserCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY } from '@app/queries/user-queries/get-user-courses'
+import { GET_UNEVALUATED_USER_COURSES } from '@app/modules/course_details/course_evaluation_tab/queries/get-unevaluated-user-courses'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export function useUnevaluatedUserCourses(): {
@@ -19,7 +19,7 @@ export function useUnevaluatedUserCourses(): {
     UserCoursesQuery,
     UserCoursesQueryVariables
   >({
-    query: QUERY,
+    query: GET_UNEVALUATED_USER_COURSES,
     variables: {
       where: { participants: { attended: { _eq: true } } },
       profileId: profile?.id,

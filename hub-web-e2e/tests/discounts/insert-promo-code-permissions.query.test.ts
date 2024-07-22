@@ -6,7 +6,7 @@ import {
   UpsertPromoCodeMutation,
   UpsertPromoCodeMutationVariables,
 } from '@app/generated/graphql'
-import { UPSERT_PROMO_CODE } from '@app/queries/promo-codes/upsert-promo-code'
+import { UPSERT_PROMO_CODE } from '@app/modules/admin/Discounts/queries/upsert-promo-code'
 import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'

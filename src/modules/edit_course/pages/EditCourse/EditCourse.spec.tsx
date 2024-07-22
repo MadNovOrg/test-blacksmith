@@ -18,7 +18,7 @@ import {
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
+import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
 import { BildStrategies, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

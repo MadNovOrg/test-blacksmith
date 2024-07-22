@@ -20,8 +20,8 @@ import {
   UpdateOrgMemberMutation,
   UpdateOrgMemberMutationVariables,
 } from '@app/generated/graphql'
-import { MUTATION as REMOVE_ORG_MEMBER } from '@app/queries/organization/remove-org-member'
-import { MUTATION as UPDATE_ORG_MEMBER } from '@app/queries/organization/update-org-member'
+import { REMOVE_ORG_MEMBER_MUTATION } from '@app/modules/profile/queries/remove-org-member'
+import { UPDATE_ORG_MEMBER_MUTATION } from '@app/modules/profile/queries/update-org-member'
 import theme from '@app/theme'
 
 export type EditOrgUserModalProps = {
@@ -41,12 +41,12 @@ export const EditOrgUserModal: React.FC<
   const [{ error: removeOrgMemberError }, removeOrgMember] = useMutation<
     RemoveOrgMemberMutation,
     RemoveOrgMemberMutationVariables
-  >(REMOVE_ORG_MEMBER)
+  >(REMOVE_ORG_MEMBER_MUTATION)
 
   const [{ error: updateOrgMemberError }, updateOrgMember] = useMutation<
     UpdateOrgMemberMutation,
     UpdateOrgMemberMutationVariables
-  >(UPDATE_ORG_MEMBER)
+  >(UPDATE_ORG_MEMBER_MUTATION)
 
   const onRemove = useCallback(async () => {
     await removeOrgMember({

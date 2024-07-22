@@ -11,7 +11,7 @@ import {
   UpdateOrgMutationVariables,
 } from '@app/generated/graphql'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
+import { UPDATE_ORG_MUTATION } from '@app/modules/organisation/queries/update-org'
 
 import { OrganizationForm } from '../../components/OrganizationForm'
 import { FormInputs } from '../../utils'

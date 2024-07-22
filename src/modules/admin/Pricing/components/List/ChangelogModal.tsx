@@ -24,8 +24,8 @@ import {
   PricingChangelogQuery,
   PricingChangelogQueryVariables,
 } from '@app/generated/graphql'
+import { GET_PRICING_CHANGELOG } from '@app/modules/admin/Pricing/queries/get-pricing-changelog'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
-import { GET_PRICING_CHANGELOG } from '@app/queries/pricing/get-pricing-changelog'
 
 import { getCourseAttributes } from '../utils'
 

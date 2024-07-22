@@ -415,16 +415,6 @@ export type Venue = {
   countryCode?: string
 }
 
-export type TrainerSchedule = {
-  id: string
-  name: string
-  start: string
-  end: string
-  type: string
-  course: Course
-  venue: Venue
-} & Base
-
 export type CourseSchedule = {
   start: string
   end: string

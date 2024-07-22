@@ -132,9 +132,7 @@ test.describe(
       await user1AcceptCoursePage.gotoAccept(course.id, user1InviteId)
       await user1AcceptCoursePage.waitForAcceptConfirmation()
 
-      await page.reload({
-        waitUntil: 'networkidle',
-      })
+      await page.reload()
       await courseDetailsPage.waitForPageLoad()
       await courseDetailsPage.checkAttendingTabText('Attending (1)')
       await expect(courseDetailsPage.attendeesTable.rows).toHaveCount(1)

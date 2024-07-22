@@ -33,7 +33,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
-import { CoursesFilters } from '@app/hooks/useCourses'
+import { CoursesFilters } from '@app/modules/trainer_courses/hooks/useCourses'
 import { CourseStatusFilters } from '@app/modules/user_courses/components/Filters/Filters'
 import { UserCourseStatus } from '@app/modules/user_courses/hooks/useUserCourses'
 import {

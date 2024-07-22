@@ -13,11 +13,11 @@ import { useMount } from 'react-use'
 import { useQuery } from 'urql'
 import { useDebounce } from 'use-debounce'
 
+import { GET_ORG_MEMBERS } from '@app/components/UserSelector/queries/get-members'
 import {
   GetOrgMembersQuery,
   GetOrgMembersQueryVariables,
 } from '@app/generated/graphql'
-import { GET_ORG_MEMBERS } from '@app/queries/organization/get-members'
 import { NonNullish } from '@app/types'
 
 export type Member = Pick<

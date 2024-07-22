@@ -22,7 +22,7 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { GET_ORGANISATION_DETAILS_FOR_DELETE } from '@app/modules/organisation/components/DeleteOrgModal/queries'
-import { DELETE_ORG } from '@app/queries/organization/delete-org'
+import { DELETE_ORG } from '@app/modules/organisation/queries/delete-org'
 
 type OrgAggregateData = {
   count: { members: number; courses: number; orders: number }

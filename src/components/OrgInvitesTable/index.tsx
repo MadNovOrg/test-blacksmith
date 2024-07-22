@@ -17,9 +17,9 @@ import { groupBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useOrgInvites } from '@app/components/OrgInvitesTable/hooks/useOrgInvites'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { Course_Invite_Status_Enum } from '@app/generated/graphql'
-import { useOrgInvites } from '@app/hooks/useOrgInvites'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,

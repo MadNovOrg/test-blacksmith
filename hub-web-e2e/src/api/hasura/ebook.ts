@@ -1,5 +1,5 @@
 import { EbooksQuery, EbooksQueryVariables } from '@app/generated/graphql'
-import EBOOKS_QUERY from '@app/queries/membership/ebooks'
+import EBOOKS_QUERY from '@app/modules/membership_area/queries/ebooks'
 
 import { getClient } from './client'
 

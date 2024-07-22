@@ -7,7 +7,7 @@ import { fromValue, never } from 'wonka'
 import { useAuth } from '@app/context/auth'
 import { AuthContextType } from '@app/context/auth/types'
 import { GetOrgByIdQuery } from '@app/generated/graphql'
-import { GET_ORG_BY_ID } from '@app/queries/organization/get-org-by-id'
+import { GET_ORG_BY_ID } from '@app/modules/autoregister/queries/get-org-by-id'
 
 import { render, screen, chance } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'

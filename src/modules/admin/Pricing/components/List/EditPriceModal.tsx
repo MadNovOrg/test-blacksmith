@@ -47,9 +47,9 @@ import {
   DeleteCoursePricingScheduleMutation,
   DeleteCoursePricingScheduleMutationVariables,
 } from '@app/generated/graphql'
-import { MUTATION as DELETE_MUTATION } from '@app/queries/pricing/delete-course-pricing-schedule'
-import { MUTATION as INSERT_MUTATION } from '@app/queries/pricing/insert-course-pricing-schedule'
-import { MUTATION as UPDATE_MUTATION } from '@app/queries/pricing/set-course-pricing-schedule'
+import { DELETE_MUTATION } from '@app/modules/admin/Pricing/queries/delete-course-pricing-schedule'
+import { INSERT_MUTATION } from '@app/modules/admin/Pricing/queries/insert-course-pricing-schedule'
+import { UPDATE_MUTATION } from '@app/modules/admin/Pricing/queries/set-course-pricing-schedule'
 import theme from '@app/theme'
 
 import { getCourseAttributes } from '../utils'

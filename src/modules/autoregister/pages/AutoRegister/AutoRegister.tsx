@@ -11,7 +11,7 @@ import {
   GetOrgByIdQueryVariables,
 } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
-import { GET_ORG_BY_ID } from '@app/queries/organization/get-org-by-id'
+import { GET_ORG_BY_ID } from '@app/modules/autoregister/queries/get-org-by-id'
 
 import { Form } from '../../components/Form'
 

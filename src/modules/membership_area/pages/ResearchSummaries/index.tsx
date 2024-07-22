@@ -12,8 +12,8 @@ import {
   ResearchSummariesQueryVariables,
   ResearchSummaryDetailsFragment,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import RESEARCH_SUMMARIES_QUERY from '@app/queries/membership/research-summaries'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import RESEARCH_SUMMARIES_QUERY from '@app/modules/membership_area/queries/research-summaries'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

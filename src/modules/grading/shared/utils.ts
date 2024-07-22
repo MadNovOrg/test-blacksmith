@@ -1,4 +1,4 @@
-import { Lesson, ModuleForGrading } from '../types'
+import { Lesson, ModuleForGrading } from '../utils/types'
 
 export function isModule(module: object): module is ModuleForGrading {
   return 'id' in module && 'name' in module && 'lessons' in module

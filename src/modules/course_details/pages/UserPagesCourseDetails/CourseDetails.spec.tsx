@@ -4,9 +4,9 @@ import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
-import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
-import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
-import { QUERY as GET_COURSE_QUERY } from '@app/queries/user-queries/get-course-by-id'
+import { GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
+import { GET_COURSE_QUERY } from '@app/modules/course_details/queries/get-course-by-id'
+import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
 import { Course, CourseParticipant, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'

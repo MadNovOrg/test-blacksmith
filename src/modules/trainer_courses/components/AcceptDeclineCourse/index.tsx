@@ -11,7 +11,7 @@ import {
   SetCourseTrainerStatusMutation,
   SetCourseTrainerStatusMutationVariables,
 } from '@app/generated/graphql'
-import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
+import { SET_COURSE_TRAINER_STATUS } from '@app/modules/trainer_courses/queries/set-course-trainer-status'
 
 enum Action {
   ACCEPT = 'ACCEPT',
@@ -47,7 +47,7 @@ export const AcceptDeclineCourse: React.FC<
   const [{ fetching: saving }, saveTrainerStatus] = useMutation<
     SetCourseTrainerStatusMutation,
     SetCourseTrainerStatusMutationVariables
-  >(SetCourseTrainerStatus)
+  >(SET_COURSE_TRAINER_STATUS)
 
   const closeModal = useCallback(
     () => !saving && setAction(undefined),

@@ -37,7 +37,7 @@ import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelect
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY,
 } from '@app/modules/profile/components/PhoneNumberInput'
-import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
+import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
 import { schemas, yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 

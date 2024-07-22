@@ -10,7 +10,7 @@ import { createSearchParams, useNavigate } from 'react-router-dom'
 import { ResendPasswordMutation } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { gqlRequest } from '@app/lib/gql-request'
-import { RESEND_PASSWORD_MUTATION } from '@app/queries/user-queries/resend-password'
+import { RESEND_PASSWORD_MUTATION } from '@app/modules/forgot_password/queries/resend-password'
 import { schemas, yup } from '@app/schemas'
 
 export const ForgotPasswordPage = () => {

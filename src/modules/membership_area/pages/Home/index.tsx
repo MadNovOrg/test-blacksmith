@@ -13,7 +13,7 @@ import {
   WebinarIcon,
 } from '@app/assets'
 import { MembershipHomeQuery } from '@app/generated/graphql'
-import HOME_QUERY from '@app/queries/membership/home'
+import HOME_QUERY from '@app/modules/membership_area/queries/home'
 
 import { AppBanner } from '../../components/AppBanner'
 import { BlogPostItem } from '../../components/BlogPostItem'

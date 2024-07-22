@@ -27,8 +27,8 @@ import {
   FilterChangeEvent,
 } from '@app/modules/admin/Audits/components/AuditFilteringSidebar'
 import { ExportAuditsButton } from '@app/modules/admin/Audits/components/ExportAuditsButton'
+import { GET_USER_BY_EMAIL } from '@app/modules/admin/Audits/queries/get-user-by-email'
 import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAvatar'
-import { GET_USER_BY_EMAIL } from '@app/queries/user-queries/get-user-by-email'
 
 import useAttendeeAuditLogs from '../hooks/useAttendeeAuditLogs'
 import {

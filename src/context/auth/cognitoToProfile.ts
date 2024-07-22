@@ -1,9 +1,9 @@
+import { GET_USER_PROFILE } from '@app/context/auth/queries/users'
 import {
   GetProfileByIdQuery,
   GetProfileByIdQueryVariables,
 } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
-import { getUserProfile } from '@app/queries/users'
 
 import type { Claims, CognitoUser, Profile } from './types'
 
@@ -40,7 +40,7 @@ export default async function (
   const { profile } = await gqlRequest<
     GetProfileByIdQuery,
     GetProfileByIdQueryVariables
-  >(getUserProfile, { id: claims['x-hasura-user-id'] }, { token })
+  >(GET_USER_PROFILE, { id: claims['x-hasura-user-id'] }, { token })
 
   return {
     profile: profile as ProfileType,

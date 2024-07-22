@@ -33,8 +33,8 @@ import {
   courseWithManualPrice,
   isCourseWithNoPrice,
 } from '@app/modules/course/pages/CreateCourse/utils'
-import { MUTATION as INSERT_COURSE_MUTATION } from '@app/queries/courses/insert-course'
-import { QUERY as REMOVE_COURSE_DRAFT } from '@app/queries/courses/remove-course-draft'
+import { INSERT_COURSE_MUTATION } from '@app/modules/course/queries/insert-course'
+import { REMOVE_COURSE_DRAFT } from '@app/modules/course/queries/remove-course-draft'
 import { isModeratorNeeded } from '@app/rules/trainers'
 import {
   BildStrategies,

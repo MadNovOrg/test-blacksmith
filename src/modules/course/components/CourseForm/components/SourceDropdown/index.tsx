@@ -15,7 +15,7 @@ import {
   GetCoursesSourcesQueryVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
+import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
 
 export const SourceDropdown = React.forwardRef(function SourceDropdown(
   props: SelectProps<Course_Source_Enum | ''>,

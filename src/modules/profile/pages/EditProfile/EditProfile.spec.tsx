@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
-import useRoles from '@app/hooks/useRoles'
 import useProfile from '@app/modules/profile/hooks/useProfile'
+import useRoles from '@app/modules/profile/hooks/useRoles'
 import { RoleName } from '@app/types'
 
 import { render, renderHook, screen } from '@test/index'
@@ -15,7 +15,7 @@ const useProfileMock = vi.mocked(useProfile)
 vi.mock('@app/modules/profile/hooks/useProfile')
 
 const useRolesMock = vi.mocked(useRoles)
-vi.mock('@app/hooks/useRoles')
+vi.mock('@app/modules/profile/hooks/useRoles')
 
 describe(EditProfilePage.name, () => {
   const {

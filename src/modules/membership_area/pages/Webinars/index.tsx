@@ -12,8 +12,8 @@ import {
   WebinarsQueryVariables,
   WebinarSummaryFragment,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import WEBINARS_QUERY from '@app/queries/membership/webinars'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import WEBINARS_QUERY from '@app/modules/membership_area/queries/webinars'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

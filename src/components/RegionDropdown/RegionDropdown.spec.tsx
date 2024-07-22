@@ -2,7 +2,7 @@ import { noop } from 'ts-essentials'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { getAOLCountries, getAOLRegions } from './helpers'
+import { getAOLCountries, getAOLRegions } from './utils'
 
 import { RegionDropdown } from './index'
 

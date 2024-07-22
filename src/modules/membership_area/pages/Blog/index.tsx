@@ -12,8 +12,8 @@ import {
   OrderEnum,
   PostSummaryFragment,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import BLOG_QUERY from '@app/queries/membership/blog'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import BLOG_QUERY from '@app/modules/membership_area/queries/blog'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

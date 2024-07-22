@@ -16,7 +16,7 @@ import {
   CanApplyPromoCodeQueryVariables,
   PromoCodeOutput,
 } from '@app/generated/graphql'
-import { QUERY as CAN_APPLY_PROMO_CODE } from '@app/queries/promo-codes/can-apply-promo-code'
+import { CAN_APPLY_PROMO_CODE } from '@app/modules/course_booking/queries/can-apply-promo-code'
 
 import type { Discounts } from '../BookingContext'
 

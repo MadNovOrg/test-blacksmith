@@ -35,8 +35,8 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
+import { CANCEL_COURSE_MUTATION } from '@app/modules/edit_course/queries/cancel-course'
 import { getCancellationTermsFee } from '@app/modules/edit_course/utils/shared'
-import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { yup } from '@app/schemas'
 import { Course } from '@app/types'
 import { customFeeFormat } from '@app/util' // 🙃 TODO: replace with generated type

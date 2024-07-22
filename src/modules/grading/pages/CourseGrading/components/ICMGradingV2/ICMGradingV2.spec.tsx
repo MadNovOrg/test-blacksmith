@@ -10,7 +10,7 @@ import {
   SaveCourseGradingV2Mutation,
   SaveCourseGradingV2MutationVariables,
 } from '@app/generated/graphql'
-import { buildLesson, buildModule } from '@app/modules/grading/test-utils'
+import { buildLesson, buildModule } from '@app/modules/grading/utils'
 import { Grade, RoleName } from '@app/types'
 
 import { render, screen, within, userEvent, chance } from '@test/index'

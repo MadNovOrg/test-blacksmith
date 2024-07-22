@@ -12,8 +12,8 @@ import {
   EbookSummaryFragment,
   OrderEnum,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import EBOOKS_QUERY from '@app/queries/membership/ebooks'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import EBOOKS_QUERY from '@app/modules/membership_area/queries/ebooks'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

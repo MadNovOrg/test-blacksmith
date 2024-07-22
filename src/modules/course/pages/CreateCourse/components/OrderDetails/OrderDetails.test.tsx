@@ -43,7 +43,7 @@ vi.mock('@app/components/OrgSelector', () => ({
   }),
 }))
 
-vi.mock('@app/hooks/useCourseDraft', () => ({
+vi.mock('@app/modules/course/hooks/useCourseDraft', () => ({
   useCourseDraft: vi
     .fn()
     .mockReturnValue({ removeDraft: vi.fn(), setDraft: vi.fn() }),

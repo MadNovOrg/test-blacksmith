@@ -37,12 +37,12 @@ import {
 } from '@app/components/OrgSelector/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
+import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { gqlRequest } from '@app/lib/gql-request'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY,
 } from '@app/modules/profile/components/PhoneNumberInput'
-import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 

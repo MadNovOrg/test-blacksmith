@@ -1,6 +1,6 @@
 import { gql } from 'urql'
 
-export const QUERY = gql`
+export const GET_ANSWERS_QUERY = gql`
   query GetEvaluation($courseId: Int!, $profileId: uuid!) {
     answers: course_evaluation_answers(
       where: {

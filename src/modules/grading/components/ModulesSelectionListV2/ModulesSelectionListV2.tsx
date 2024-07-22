@@ -19,7 +19,7 @@ import {
   isLesson,
   isModule,
 } from '@app/modules/grading/shared/utils'
-import { Lesson } from '@app/modules/grading/types'
+import { Lesson } from '@app/modules/grading/utils/types'
 import theme from '@app/theme'
 
 type Props = {

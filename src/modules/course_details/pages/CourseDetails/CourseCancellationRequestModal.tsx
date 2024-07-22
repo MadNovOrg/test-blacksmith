@@ -21,8 +21,8 @@ import {
   RequestCourseCancellationMutation,
   RequestCourseCancellationMutationVariables,
 } from '@app/generated/graphql'
+import { REQUEST_COURSE_CANCELLATION_MUTATION } from '@app/modules/course_details/queries/request-course-cancellation'
 import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
-import { REQUEST_COURSE_CANCELLATION_MUTATION } from '@app/queries/courses/request-course-cancellation'
 import { yup } from '@app/schemas'
 import { Course } from '@app/types'
 

@@ -5,8 +5,8 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
 import { CourseForm } from '@app/modules/course/components/CourseForm'
+import useZoomMeetingUrl from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
 import { Profile, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -21,7 +21,7 @@ vi.mock('@app/components/VenueSelector', () => ({
 }))
 
 export const ZOOM_MOCKED_URL = 'https://us99web.zoom.us/j/99999?pwd=mockP4ss'
-vi.mock('@app/hooks/useZoomMeetingLink')
+vi.mock('@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink')
 const useZoomMeetingUrlMocked = vi.mocked(useZoomMeetingUrl)
 const zoomGenerateLink = vi.mocked(() => {
   useZoomMeetingUrlMocked.mockReturnValue({

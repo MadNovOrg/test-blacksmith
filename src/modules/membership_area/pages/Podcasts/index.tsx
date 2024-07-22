@@ -10,8 +10,8 @@ import {
   PodcastsQuery,
   PodcastsQueryVariables,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import PODCASTS_QUERY from '@app/queries/membership/podcasts'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import PODCASTS_QUERY from '@app/modules/membership_area/queries/podcasts'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { ArrowPagination } from '../../components/ArrowPagination'

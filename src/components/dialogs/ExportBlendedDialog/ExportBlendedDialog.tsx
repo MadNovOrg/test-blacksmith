@@ -8,12 +8,12 @@ import { useQuery } from 'urql'
 import { utils as xlsxUtils, write } from 'xlsx'
 
 import { Dialog } from '@app/components/dialogs'
+import { GET_LICENSES_HISTORY } from '@app/components/dialogs/ExportBlendedDialog/queries/all-org-licenses-with-history'
 import { FilterByDates } from '@app/components/filters/FilterByDates'
 import {
   LicensesHistoryBetweenDatesQuery,
   LicensesHistoryBetweenDatesQueryVariables,
 } from '@app/generated/graphql'
-import { GET_LICENSES_HISTORY } from '@app/queries/go1-licensing/all-org-licenses-with-history'
 
 type Props = {
   isOpen: boolean

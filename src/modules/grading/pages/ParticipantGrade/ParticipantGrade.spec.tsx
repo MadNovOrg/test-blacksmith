@@ -9,7 +9,7 @@ import { GradedParticipantQuery, Grade_Enum } from '@app/generated/graphql'
 import { render, screen, within, userEvent, waitFor } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
-import { buildLesson, buildModule as buildModuleV2 } from '../../test-utils'
+import { buildLesson, buildModule as buildModuleV2 } from '../../utils'
 
 import { ParticipantGrade } from './ParticipantGrade'
 import { buildGradedParticipant } from './test-utils'

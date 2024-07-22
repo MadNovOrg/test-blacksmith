@@ -6,11 +6,11 @@ import {
   TransferFeeType,
   Course_Level_Enum,
 } from '@app/generated/graphql'
+import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
+import { CANCEL_COURSE_MUTATION } from '@app/modules/edit_course/queries/cancel-course'
 import { SAVE_COURSE_GRADING_MUTATION } from '@app/modules/grading/pages/CourseGrading/queries/save-course-grading'
+import { GET_TRAINER_COURSES } from '@app/modules/trainer_courses/queries/get-trainer-courses'
 import { TRANSFER_PARTICIPANT } from '@app/modules/transfer_participant/queries/queries'
-import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
-import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
-import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   CourseParticipant,
   CourseTrainerType,
@@ -29,7 +29,7 @@ import { getVenueId } from './venue'
 
 export const getTrainerCourses = async (email: string): Promise<Course[]> => {
   const { courses } = await getClient().request<{ courses: Course[] }>(
-    TRAINER_COURSES,
+    GET_TRAINER_COURSES,
     {
       where: {
         trainers: {

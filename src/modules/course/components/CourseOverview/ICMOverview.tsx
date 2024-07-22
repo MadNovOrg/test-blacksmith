@@ -19,7 +19,7 @@ import {
   ModuleGroupsQuery,
   ModuleGroupsQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
+import { GET_MODULE_GROUPS } from '@app/modules/course/queries/get-module-groups'
 import { Course } from '@app/types'
 import { LoadingStatus, getSWRLoadingStatus } from '@app/util'
 
@@ -37,7 +37,7 @@ export const ICMOverview: React.FC<React.PropsWithChildren<Props>> = ({
     ModuleGroupsQuery,
     ModuleGroupsQueryVariables
   >({
-    query: GetModuleGroups,
+    query: GET_MODULE_GROUPS,
     variables: {
       level: course.level as unknown as Course_Level_Enum,
       courseDeliveryType:

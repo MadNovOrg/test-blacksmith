@@ -4,11 +4,11 @@ import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
-  GetCourseParticipantIdQuery,
-  GetCourseParticipantIdQueryVariables,
+  GetCourseParticipantForTransferQuery,
+  GetCourseParticipantForTransferQueryVariables,
 } from '@app/generated/graphql'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
-import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_PARTICIPANT_FOR_TRANSFER } from '@app/modules/transfer_participant/queries/get-course-participant-for-transfer-by-profile-id'
 
 import {
   TransferModeEnum,
@@ -32,10 +32,10 @@ export const UserTransferParticipant: React.FC<
   }>()
 
   const [{ data: participantData, fetching: participantFetching }] = useQuery<
-    GetCourseParticipantIdQuery,
-    GetCourseParticipantIdQueryVariables
+    GetCourseParticipantForTransferQuery,
+    GetCourseParticipantForTransferQueryVariables
   >({
-    query: GET_PARTICIPANT,
+    query: GET_PARTICIPANT_FOR_TRANSFER,
     variables: { profileId: profile?.id, courseId: Number(id) },
     pause: Boolean(participantId) || participantFetched.current,
   })

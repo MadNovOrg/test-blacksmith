@@ -3,7 +3,7 @@ import {
   OrdersQuery,
   OrdersQueryVariables,
 } from '@app/generated/graphql'
-import { MUTATION as CREATE_ORDER } from '@app/modules/orders/queries/create-order'
+import { CREATE_ORDER } from '@app/modules/course_booking/queries/create-order'
 import { GET_ORDERS } from '@app/modules/orders/queries/query'
 
 import { OrderCreation } from '@qa/data/types'

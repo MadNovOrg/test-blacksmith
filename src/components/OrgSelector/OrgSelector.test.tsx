@@ -3,12 +3,12 @@ import { noop } from 'ts-essentials'
 import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
+import { FIND_ESTABLISHMENTS } from '@app/components/OrgSelector/queries/find-establishment'
+import { GET_ORGANIZATIONS } from '@app/components/OrgSelector/queries/get-organizations'
 import {
   FindEstablishmentQuery,
   GetOrganizationsQuery,
 } from '@app/generated/graphql'
-import { QUERY as FIND_ESTABLISHMENTS } from '@app/queries/dfe/find-establishment'
-import { QUERY as GET_ORGANIZATIONS } from '@app/queries/organization/get-organizations'
 
 import {
   render,

@@ -12,7 +12,7 @@ import {
   Go1LicensesChangeMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import GO1_LICENSES_CHANGE_HISTORY from '@app/queries/go1-licensing/go1-licenses-history-change'
+import GO1_LICENSES_CHANGE_HISTORY from '@app/modules/organisation/queries/go1-licenses-history-change'
 
 import { FormData, Type, ManageLicensesForm } from '../ManageLicensesForm'
 

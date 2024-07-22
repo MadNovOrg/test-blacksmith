@@ -15,7 +15,7 @@ import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
 
 import { WebinarQuery, WebinarQueryVariables } from '@app/generated/graphql'
-import WEBINAR_QUERY from '@app/queries/membership/webinar'
+import WEBINAR_QUERY from '@app/modules/membership_area/queries/webinar'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

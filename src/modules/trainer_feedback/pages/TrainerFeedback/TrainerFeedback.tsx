@@ -31,8 +31,8 @@ import {
 import useCourse from '@app/hooks/useCourse'
 import { BooleanQuestion } from '@app/modules/course_details/course_evaluation_tab/components/BooleanQuestion'
 import { QuestionGroup } from '@app/modules/course_details/course_evaluation_tab/components/QuestionGroup'
-import { QUERY as GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
-import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
+import { GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
+import { GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
 import { MUTATION as SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/modules/course_details/course_evaluation_tab/queries/save-trainer-evaluation'
 import { validUserSignature } from '@app/util'
 

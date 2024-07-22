@@ -10,7 +10,7 @@ import {
   SaveCurriculumSelectionMutation,
   SaveCurriculumSelectionMutationVariables,
 } from '@app/generated/graphql'
-import { buildLesson, buildModule } from '@app/modules/grading/test-utils'
+import { buildLesson, buildModule } from '@app/modules/grading/utils'
 
 import { render, screen, userEvent } from '@test/index'
 

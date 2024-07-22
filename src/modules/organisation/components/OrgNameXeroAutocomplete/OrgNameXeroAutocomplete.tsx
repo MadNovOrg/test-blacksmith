@@ -9,7 +9,7 @@ import {
   SearchXeroContactsQuery,
   SearchXeroContactsQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY as SearchXeroContacts } from '@app/queries/xero/search-xero-contacts'
+import { SEARCH_XERO_CONTACTS } from '@app/modules/organisation/queries/search-xero-contacts'
 
 type OrgNameXeroAutocompleteProps = {
   value: string
@@ -32,7 +32,7 @@ export const OrgNameXeroAutocomplete: React.FC<
     SearchXeroContactsQuery,
     SearchXeroContactsQueryVariables
   >({
-    query: SearchXeroContacts,
+    query: SEARCH_XERO_CONTACTS,
     variables: { input: { searchTerm: query } },
   })
 

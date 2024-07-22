@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next'
 
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
-import { useCourseDrafts } from '@app/hooks/useCourseDrafts'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { useCourseDrafts } from '@app/modules/trainer_courses/hooks/useCourseDrafts'
 import { RoleName } from '@app/types'
 
 import { DraftsTable } from '../../components/DraftsTable'

@@ -11,8 +11,8 @@ import {
   GetCourseParticipantByInviteQuery,
   GetCourseParticipantByInviteQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY as GET_COURSE_PARTICIPANT } from '@app/modules/course_details/hooks/course-participant/get-course-participant-by-invitation'
-import { MUTATION as ACCEPT_INVITE_MUTATION } from '@app/queries/invites/accept-invite'
+import { ACCEPT_INVITE_MUTATION } from '@app/modules/accept_invite/queries/accept-invite'
+import { GET_COURSE_PARTICIPANT } from '@app/modules/accept_invite/queries/get-course-participant-by-invitation'
 import { RoleName } from '@app/types'
 
 export const AcceptInvite = () => {

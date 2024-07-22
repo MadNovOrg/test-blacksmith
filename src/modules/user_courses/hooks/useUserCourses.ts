@@ -13,10 +13,10 @@ import {
   UserCoursesQuery,
   UserCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { getIndividualsCourseStatusesConditions } from '@app/hooks/useCourses'
 import { Sorting } from '@app/hooks/useTableSort'
 import { useUnevaluatedUserCourses } from '@app/modules/course_details/course_evaluation_tab/hooks/useUnevaluatedUserCourses'
-import { QUERY } from '@app/queries/user-queries/get-user-courses'
+import { getIndividualsCourseStatusesConditions } from '@app/modules/trainer_courses/hooks/useCourses'
+import { GET_USER_COURSES } from '@app/modules/user_courses/queries/get-user-courses'
 import {
   AdminOnlyCourseStatus,
   AttendeeOnlyCourseStatus,
@@ -392,7 +392,7 @@ export function useUserCourses(
     UserCoursesQuery,
     UserCoursesQueryVariables
   >({
-    query: QUERY,
+    query: GET_USER_COURSES,
     requestPolicy: 'cache-and-network',
     variables: {
       where,

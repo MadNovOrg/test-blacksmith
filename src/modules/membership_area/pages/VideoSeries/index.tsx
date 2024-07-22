@@ -12,8 +12,8 @@ import {
   VideoSeriesQueryVariables,
   VideoItemSummaryFragment,
 } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import VIDEO_SERIES_QUERY from '@app/modules/membership_area/queries/video-series'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

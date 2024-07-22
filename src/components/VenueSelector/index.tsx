@@ -23,6 +23,7 @@ import { useQuery } from 'urql'
 import { useDebounce } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
+import { FIND_VENUES } from '@app/components/VenueSelector/queries/find-venues'
 import VenueForm, {
   VenueFormProps,
 } from '@app/components/VenueSelector/VenueForm'
@@ -31,7 +32,6 @@ import {
   FindVenuesQuery,
   FindVenuesQueryVariables,
 } from '@app/generated/graphql'
-import { FIND_VENUES } from '@app/queries/venue/find-venues'
 import { Venue } from '@app/types'
 
 import {

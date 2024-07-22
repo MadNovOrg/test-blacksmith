@@ -3,12 +3,12 @@ import React, { useMemo } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { useQuery } from 'urql'
 
+import { Query as QUERY_COUNTRIES } from '@app/components/CountryDropdown/queries/get-countries'
 import {
   GetCountriesQuery,
   GetCountriesQueryVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { Query as QUERY_COUNTRIES } from '@app/queries/country/get-countries'
 
 interface ICountryDropdownProps {
   required: boolean

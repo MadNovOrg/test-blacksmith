@@ -33,7 +33,7 @@ import {
 } from '@app/generated/graphql'
 import useOrganisationByName from '@app/modules/organisation/hooks/useOrganisationByName'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/profile/queries/save-org-invites'
 
 export type InviteUserToOrganisationProps = {
   userProfile: {

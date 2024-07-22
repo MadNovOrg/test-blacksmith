@@ -8,7 +8,7 @@ import {
   AcceptOrgInviteMutation,
   AcceptOrgInviteMutationVariables,
 } from '@app/generated/graphql'
-import { MUTATION as ACCEPT_ORG_INVITE_MUTATION } from '@app/queries/invites/accept-org-invite'
+import { ACCEPT_ORG_INVITE_MUTATION } from '@app/modules/accept_org_invite/queries/accept-org-invite'
 
 export const AcceptOrgInvite = () => {
   const [searchParams] = useSearchParams()

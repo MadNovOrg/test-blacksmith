@@ -1,11 +1,11 @@
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { useCoursePricing } from '@app/hooks/useCoursePricing'
+import { useCoursePricing } from '@app/modules/admin/Pricing/hooks/useCoursePricing'
 
 import { chance, render, screen } from '@test/index'
 
 import { PricingList } from './PricingList'
 
-vi.mock('@app/hooks/useCoursePricing')
+vi.mock('@app/modules/admin/Pricing/hooks/useCoursePricing')
 
 const useCoursePricingMock = vi.mocked(useCoursePricing)
 

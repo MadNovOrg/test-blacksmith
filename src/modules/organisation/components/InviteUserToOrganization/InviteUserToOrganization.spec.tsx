@@ -10,7 +10,7 @@ import {
   SaveOrgInviteError,
 } from '@app/generated/graphql'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/queries/invites/save-org-invites'
+import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/organisation/queries/save-org-invites'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent } from '@test/index'

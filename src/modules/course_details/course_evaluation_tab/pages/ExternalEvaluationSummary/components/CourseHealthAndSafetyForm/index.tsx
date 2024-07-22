@@ -28,7 +28,7 @@ import {
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { MUTATION } from '@app/queries/user-queries/save-health-safety-consent'
+import { MUTATION } from '@app/modules/course_details/queries/save-health-safety-consent'
 import { validUserSignature } from '@app/util'
 
 export const CourseHealthAndSafetyForm = () => {

@@ -13,8 +13,9 @@ import {
   GetPromoCodesPendingApprovalQuery,
   GetPromoCodesQuery,
 } from '@app/generated/graphql'
-import { APPROVE_CODE, DENY_CODE } from '@app/queries/promo-codes/approve-deny'
-import { GET_PROMOCODES_PENDING_APPROVAL } from '@app/queries/promo-codes/get-pending-approval'
+import { APPROVE_CODE } from '@app/modules/admin/Discounts/queries/approve'
+import { DENY_CODE } from '@app/modules/admin/Discounts/queries/deny'
+import { GET_PROMOCODES_PENDING_APPROVAL } from '@app/modules/admin/Discounts/queries/get-pending-approval'
 
 type Props = {
   promoCode: GetPromoCodesQuery['promoCodes'][number]

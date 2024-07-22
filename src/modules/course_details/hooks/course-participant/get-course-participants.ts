@@ -27,7 +27,7 @@ export type ParamsType = {
   withOrder?: boolean
 }
 
-export const QUERY = gql`
+export const GET_COURSE_PARTICIPANTS = gql`
   ${COURSE}
   ${ORDER}
   ${CERTIFICATE}

@@ -35,12 +35,12 @@ import {
   CreateUserMutationVariables,
   Organization,
 } from '@app/generated/graphql'
+import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
+import { CREATE_USER_MUTATION } from '@app/modules/autoregister/queries/create-user'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY,
 } from '@app/modules/profile/components/PhoneNumberInput'
-import { MUTATION as CREATE_USER_MUTATION } from '@app/queries/invites/create-user'
-import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import {
   INPUT_DATE_FORMAT,
   organizationData as localStateOrganizationToBeCreated,

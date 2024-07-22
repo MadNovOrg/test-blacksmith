@@ -2,7 +2,7 @@ import { Autocomplete, Box, TextField } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import useCountryRegions from '@app/hooks/useCountryRegions'
+import useCountryRegions from '@app/components/RegionDropdown/hooks/useCountryRegions'
 
 interface Props {
   value: string | null

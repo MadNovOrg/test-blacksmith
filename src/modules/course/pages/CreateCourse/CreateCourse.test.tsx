@@ -4,7 +4,7 @@ import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
-import { useCourseDraft } from '@app/hooks/useCourseDraft'
+import { useCourseDraft } from '@app/modules/course/hooks/useCourseDraft'
 import { RoleName } from '@app/types'
 
 import { render, within, screen } from '@test/index'
@@ -13,7 +13,7 @@ import { StepsEnum } from './types'
 
 import { CreateCourse } from '.'
 
-vi.mock('@app/hooks/useCourseDraft')
+vi.mock('@app/modules/course/hooks/useCourseDraft')
 const useCourseDraftMocked = vi.mocked(useCourseDraft)
 
 function createFetchingClient() {

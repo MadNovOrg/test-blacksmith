@@ -27,8 +27,8 @@ import {
   SaveCourseModulesBildMutationVariables,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
+import { SAVE_COURSE_MODULES_BILD } from '@app/modules/course/queries/save-course-modules-bild'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
-import { MUTATION as SAVE_COURSE_MODULES_BILD_MUTATION } from '@app/queries/courses/save-course-modules-bild'
 import { Strategy } from '@app/types'
 import {
   LoadingStatus,
@@ -251,7 +251,7 @@ export const BILDCourseBuilder: React.FC<
   const [saveStrategiesResult, saveStrategies] = useMutation<
     SaveCourseModulesBildMutation,
     SaveCourseModulesBildMutationVariables
-  >(SAVE_COURSE_MODULES_BILD_MUTATION)
+  >(SAVE_COURSE_MODULES_BILD)
 
   const estimatedDuration = useMemo(() => {
     let total = 0

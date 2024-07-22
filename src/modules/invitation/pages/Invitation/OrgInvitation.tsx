@@ -25,11 +25,11 @@ import {
   GetOrgInviteQuery,
   GetOrgInviteQueryVariables,
 } from '@app/generated/graphql'
-import { MUTATION as DECLINE_ORG_INVITE_MUTATION } from '@app/queries/invites/decline-org-invite'
+import { DECLINE_ORG_INVITE_MUTATION } from '@app/modules/invitation/queries/decline-org-invite'
 import {
-  QUERY as GET_ORG_INVITE_QUERY,
+  GET_ORG_INVITE_QUERY,
   ResponseType as GetOrgInviteResponseType,
-} from '@app/queries/invites/get-org-invite'
+} from '@app/modules/invitation/queries/get-org-invite'
 import { userExistsInCognito } from '@app/util'
 
 export const OrgInvitationPage = () => {

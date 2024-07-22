@@ -23,10 +23,13 @@ import {
   Course_Invite_Status_Enum,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
-import { useCourseDrafts } from '@app/hooks/useCourseDrafts'
-import { CoursesFilters, useCourses } from '@app/hooks/useCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { useCourseDrafts } from '@app/modules/trainer_courses/hooks/useCourseDrafts'
+import {
+  CoursesFilters,
+  useCourses,
+} from '@app/modules/trainer_courses/hooks/useCourses'
 import { RoleName } from '@app/types'
 
 import { ActionableCoursesTable } from '../../components/ActionableCoursesTable'

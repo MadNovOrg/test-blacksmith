@@ -8,7 +8,7 @@ import {
 import useCourse from '@app/hooks/useCourse'
 import {
   ParamsType,
-  QUERY,
+  GET_COURSE_PARTICIPANTS,
   ResponseType,
 } from '@app/modules/course_details/hooks/course-participant/get-course-participants'
 import { SortOrder } from '@app/types'
@@ -58,7 +58,7 @@ export default function useCourseParticipants(
   }
 
   const [{ data, error }, mutate] = useQuery<ResponseType, ParamsType>({
-    query: QUERY,
+    query: GET_COURSE_PARTICIPANTS,
     variables: {
       limit: options?.pagination?.limit,
       offset: options?.pagination?.offset,

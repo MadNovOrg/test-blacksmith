@@ -24,8 +24,8 @@ import {
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
 } from '@app/generated/graphql'
+import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { useInsertNewOrganization } from '@app/queries/organization/insert-org-lead'
 import { Address, Establishment } from '@app/types'
 import { saveNewOrganizationDataInLocalState } from '@app/util'
 

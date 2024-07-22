@@ -41,15 +41,15 @@ import { AttendeeMenu } from '@app/modules/course_details/course_attendees_tab/c
 import { BooleanQuestion } from '@app/modules/course_details/course_evaluation_tab/components/BooleanQuestion'
 import { QuestionGroup } from '@app/modules/course_details/course_evaluation_tab/components/QuestionGroup'
 import { RatingQuestion } from '@app/modules/course_details/course_evaluation_tab/components/RatingQuestion'
-import { QUERY as GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
+import { GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
 import {
   ParamsType as GetFeedbackUsersParamsType,
-  QUERY as GET_FEEDBACK_USERS_QUERY,
+  GET_FEEDBACK_USERS_QUERY,
   ResponseType as GetFeedbackUsersResponseType,
 } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
-import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
+import { GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
 import { MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/modules/course_details/course_evaluation_tab/queries/save-evaluation'
-import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
 import { courseStarted, LoadingStatus, validUserSignature } from '@app/util'
 
 const groups = [

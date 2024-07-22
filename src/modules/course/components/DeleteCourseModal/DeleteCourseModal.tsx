@@ -11,7 +11,7 @@ import {
   DeleteCourseMutation,
   DeleteCourseMutationVariables,
 } from '@app/generated/graphql'
-import { DELETE_COURSE } from '@app/queries/courses/delete-course'
+import { DELETE_COURSE } from '@app/modules/course/queries/delete-course'
 
 export type DeleteCourseModalProps = {
   courseId: number

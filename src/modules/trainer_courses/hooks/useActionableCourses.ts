@@ -11,13 +11,13 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { Sorting } from '@app/hooks/useTableSort'
 import {
   CoursesFilters,
   filtersToWhereClause,
   getOrderBy,
-} from '@app/hooks/useCourses'
-import { Sorting } from '@app/hooks/useTableSort'
-import { QUERY } from '@app/queries/courses/get-trainer-courses'
+} from '@app/modules/trainer_courses/hooks/useCourses'
+import { GET_TRAINER_COURSES } from '@app/modules/trainer_courses/queries/get-trainer-courses'
 import { RoleName } from '@app/types'
 import { ALL_ORGS } from '@app/util'
 
@@ -175,7 +175,7 @@ export default function useActionableCourses({
   ])
 
   return useQuery<TrainerCoursesQuery, TrainerCoursesQueryVariables>({
-    query: QUERY,
+    query: GET_TRAINER_COURSES,
     requestPolicy: 'cache-and-network',
     variables: {
       where,

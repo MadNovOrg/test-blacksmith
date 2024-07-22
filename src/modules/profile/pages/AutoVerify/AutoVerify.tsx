@@ -11,7 +11,7 @@ import {
   VerifyUserMutation,
   VerifyUserMutationVariables,
 } from '@app/generated/graphql'
-import { MUTATION as VERIFY_USER_MUTATION } from '@app/queries/invites/verify-user'
+import { VERIFY_USER_MUTATION } from '@app/modules/profile/queries/verify-user'
 
 export const AutoVerify = () => {
   const params = useParams()

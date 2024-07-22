@@ -8,9 +8,9 @@ import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   ParamsType as InitAuthParamsType,
-  QUERY as INIT_AUTH_QUERY,
+  INIT_AUTH_QUERY,
   ResponseType as InitAuthResponseType,
-} from '@app/queries/invites/init-auth'
+} from '@app/modules/autologin/queries/init-auth'
 
 export const AutoLogin = () => {
   const [calledLogout, setCalledLogout] = useState<boolean>(false)

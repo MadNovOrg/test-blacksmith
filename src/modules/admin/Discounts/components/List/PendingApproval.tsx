@@ -5,7 +5,7 @@ import { useQuery } from 'urql'
 
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { GetPromoCodesPendingApprovalQuery } from '@app/generated/graphql'
-import { GET_PROMOCODES_PENDING_APPROVAL } from '@app/queries/promo-codes/get-pending-approval'
+import { GET_PROMOCODES_PENDING_APPROVAL } from '@app/modules/admin/Discounts/queries/get-pending-approval'
 
 import { Row } from './Row'
 

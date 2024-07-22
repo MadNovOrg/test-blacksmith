@@ -15,8 +15,8 @@ import { useQuery } from 'urql'
 
 import { FilterSearch } from '@app/components/FilterSearch'
 import { OrderEnum, TagQuery, TagQueryVariables } from '@app/generated/graphql'
-import { useScrollToElement } from '@app/hooks/useScrollToElement'
-import TAG_QUERY from '@app/queries/membership/tag'
+import { useScrollToElement } from '@app/modules/membership_area/hooks/useScrollToElement'
+import TAG_QUERY from '@app/modules/membership_area/queries/tag'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

@@ -22,7 +22,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { Avatar } from '@app/modules/profile/components/Avatar'
 import useProfile from '@app/modules/profile/hooks/useProfile'
-import { MUTATION as MERGE_USERS_MUTATION } from '@app/queries/user/merge-users'
+import { MERGE_USERS_MUTATION } from '@app/modules/user/queries/merge-users'
 import { LoadingStatus } from '@app/util'
 
 type Props = {

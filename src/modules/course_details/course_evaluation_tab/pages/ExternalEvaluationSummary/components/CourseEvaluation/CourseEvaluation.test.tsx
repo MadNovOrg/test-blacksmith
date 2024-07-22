@@ -9,10 +9,10 @@ import {
   GetFeedbackUsersQuery,
 } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
-import { QUERY as GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
-import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
-import { QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
-import { GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
+import { GET_FEEDBACK_USERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-feedback-users'
+import { GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
+import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

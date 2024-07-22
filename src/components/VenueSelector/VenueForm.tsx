@@ -14,13 +14,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
-import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum } from '@app/generated/graphql'
 import {
   ADD_VENUE_MUTATION,
   ParamsType,
   ResponseType,
-} from '@app/queries/venue/insert-venue'
+} from '@app/components/VenueSelector/queries/insert-venue'
+import { useAuth } from '@app/context/auth'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 import { Venue } from '@app/types'
 import { requiredMsg, isValidUKPostalCode } from '@app/util'

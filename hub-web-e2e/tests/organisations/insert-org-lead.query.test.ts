@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import { v4 as uuidv4 } from 'uuid'
 
 import { InsertOrgLeadMutationVariables } from '@app/generated/graphql'
-import { MUTATION as InsertOrgLeadMutation } from '@app/queries/organization/insert-org-lead'
+import { MUTATION as InsertOrgLeadMutation } from '@app/hooks/useInsertNewOrganisationLead'
 import { RoleName } from '@app/types'
 
 import { buildOrganization } from '@test/mock-data-utils'

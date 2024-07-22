@@ -20,7 +20,7 @@ import {
 } from '@app/generated/graphql'
 import { SummaryDocument } from '@app/modules/course_details/components/SummaryDocument/SummaryDocument'
 import { GET_EVALUATIONS_SUMMARY_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-evaluations-summary'
-import { QUERY as GET_COURSE_PARTICIPANTS } from '@app/modules/course_details/hooks/course-participant/get-course-participants'
+import { GET_COURSE_PARTICIPANTS } from '@app/modules/course_details/hooks/course-participant/get-course-participants'
 import { QUERY as GET_COURSE_BY_ID_QUERY } from '@app/queries/courses/get-course-by-id'
 import { CourseEvaluationGroupedQuestion } from '@app/types'
 

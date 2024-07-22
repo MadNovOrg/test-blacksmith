@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { PodcastQuery, PodcastQueryVariables } from '@app/generated/graphql'
-import QUERY from '@app/queries/membership/podcast'
+import QUERY from '@app/modules/membership_area/queries/podcast'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

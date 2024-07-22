@@ -6,7 +6,7 @@ import {
   Accreditors_Enum,
   SaveModuleSelectionMutation,
 } from '@app/generated/graphql'
-import useCourseModules from '@app/hooks/useCourseModules'
+import useCourseModules from '@app/modules/grading/hooks/useCourseModules'
 
 import {
   render,
@@ -22,7 +22,7 @@ import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
 
 import { ModulesSelection } from './ModulesSelection'
 
-vi.mock('@app/hooks/useCourseModules')
+vi.mock('@app/modules/grading/hooks/useCourseModules')
 
 const useCourseModulesMock = vi.mocked(useCourseModules)
 

@@ -15,12 +15,12 @@ import {
   GetCoursesSourcesQuery,
 } from '@app/generated/graphql'
 import { Course_Level_Enum, Currency } from '@app/generated/graphql'
-import { useCourseDraft } from '@app/hooks/useCourseDraft'
-import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
+import useZoomMeetingLink from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
+import { useCourseDraft } from '@app/modules/course/hooks/useCourseDraft'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
+import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
 import useProfile from '@app/modules/profile/hooks/useProfile'
-import { GET_COURSE_SOURCES_QUERY } from '@app/queries/courses/get-course-sources'
 import { BildStrategies, ValidCourseInput, RoleName } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
@@ -44,9 +44,9 @@ vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(),
 }))
 
-vi.mock('@app/hooks/useZoomMeetingLink')
+vi.mock('@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink')
 
-vi.mock('@app/hooks/useCourseDraft')
+vi.mock('@app/modules/course/hooks/useCourseDraft')
 
 vi.mock('@app/modules/profile/hooks/useProfile')
 

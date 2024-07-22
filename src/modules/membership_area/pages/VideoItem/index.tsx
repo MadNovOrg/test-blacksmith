@@ -16,7 +16,7 @@ import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
 
 import { VideoItemQuery, VideoItemQueryVariables } from '@app/generated/graphql'
-import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
+import VIDEO_ITEM_QUERY from '@app/modules/membership_area/queries/video-item'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'

@@ -4,7 +4,7 @@ import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Organization_Type } from '@app/generated/graphql'
-import { useOrgType } from '@app/hooks/useOrgType'
+import { useOrgType } from '@app/modules/organisation/hooks/useOrgType'
 
 type Props = {
   sector: string

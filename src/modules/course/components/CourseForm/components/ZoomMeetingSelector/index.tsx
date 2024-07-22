@@ -10,9 +10,9 @@ import { useTranslation } from 'react-i18next'
 import { usePrevious } from 'react-use'
 
 import { ZoomUser } from '@app/generated/graphql'
-import useDeleteZoomMeeting from '@app/hooks/useDeleteZoomMeeting'
-import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import useZoomUsers from '@app/hooks/useZoomUsers'
+import useDeleteZoomMeeting from '@app/modules/course/components/CourseForm/hooks/useDeleteZoomMeeting'
+import useZoomMeetingLink from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
+import useZoomUsers from '@app/modules/course/components/CourseForm/hooks/useZoomUsers'
 import { LoadingStatus } from '@app/util'
 
 export type Props = {

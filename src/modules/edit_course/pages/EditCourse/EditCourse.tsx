@@ -73,10 +73,10 @@ import {
 import { getCourseRenewalCycle } from '@app/modules/course/pages/CreateCourse/utils'
 import { CourseCancellationModal } from '@app/modules/edit_course/components/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/modules/edit_course/components/RegistrantsCancellationModal'
+import { INSERT_COURSE_AUDIT } from '@app/modules/edit_course/queries/insert-course-audit'
+import { NOTIFY_COURSE_EDIT } from '@app/modules/edit_course/queries/notify-course-edit'
+import { UPDATE_COURSE_MUTATION } from '@app/modules/edit_course/queries/update-course'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
-import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
-import { MUTATION as NOTIFY_COURSE_INPUT } from '@app/queries/courses/notify-course-edit'
-import { UPDATE_COURSE_MUTATION } from '@app/queries/courses/update-course'
 import {
   BildStrategies,
   CourseInput,
@@ -209,7 +209,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [{ fetching: notifyCourseEditLoading }, notifyCourseEdit] = useMutation<
     NotifyCourseEditMutation,
     NotifyCourseEditMutationVariables
-  >(NOTIFY_COURSE_INPUT)
+  >(NOTIFY_COURSE_EDIT)
 
   const [courseDiffs, autoapproved]: [CourseDiff[], boolean] = useMemo(() => {
     const diffs: CourseDiff[] = []

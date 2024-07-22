@@ -16,13 +16,13 @@ import {
   SaveModuleSelectionMutation,
   SaveModuleSelectionMutationVariables,
 } from '@app/generated/graphql'
-import useCourseModules from '@app/hooks/useCourseModules'
 import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import {
   HoldsRecord,
   ModulesSelectionList,
 } from '@app/modules/grading/components/ModulesSelectionList'
-import { MUTATION as SAVE_COURSE_MODULES_SELECTION } from '@app/queries/courses/save-course-modules-selection'
+import useCourseModules from '@app/modules/grading/hooks/useCourseModules'
+import { SAVE_COURSE_MODULES_SELECTION } from '@app/modules/grading/queries/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 
 import { useGradingDetails } from '../../components/GradingDetailsProvider'

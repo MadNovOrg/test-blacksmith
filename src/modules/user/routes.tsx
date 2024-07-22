@@ -8,7 +8,7 @@ import { ChooseFile } from './pages/Import/steps/ChooseFile/ChooseFile'
 import { Configure } from './pages/Import/steps/Configure/Configure'
 import { Importing } from './pages/Import/steps/Importing/Importing'
 import { Preview } from './pages/Import/steps/Preview/Preview'
-import { Users } from './pages/Users/Users'
+import { Users } from './pages/Users/User/Users'
 
 export const UserRoutes: React.FC = () => {
   const { acl } = useAuth()
