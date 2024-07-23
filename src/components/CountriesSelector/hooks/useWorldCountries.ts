@@ -254,6 +254,7 @@ export default function useWorldCountries() {
       'GW',
       'GY',
       'GG',
+      'HK',
       'HN',
       'HR',
       'HT',
