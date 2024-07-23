@@ -13,7 +13,7 @@ import {
   DiscountForm,
 } from '@app/modules/admin/Discounts/components'
 import { AdminPage } from '@app/modules/admin/pages/AdminPage'
-import { PricingList } from '@app/modules/admin/Pricing/components'
+import { PricingRoutes } from '@app/modules/admin/Pricing'
 import { XeroConnect } from '@app/modules/admin/Xero/pages'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
@@ -143,11 +143,7 @@ const TTAdminRoutes = () => {
           <Route path="contacts" element={<Contacts />} />
           <Route path="users/*" element={<UserRoutes />} />
 
-          {acl.canViewAdminPricing() ? (
-            <Route path="pricing">
-              <Route index element={<PricingList />} />
-            </Route>
-          ) : null}
+          <Route path="pricing" element={<PricingRoutes />} />
 
           {acl.canViewAdminDiscount() ? (
             <Route path="discounts">

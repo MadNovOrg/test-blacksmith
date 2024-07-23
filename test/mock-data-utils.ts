@@ -13,6 +13,8 @@ import {
   Course_Invite_Status_Enum,
   CourseLevel as Course_Level,
   Course_Level_Enum,
+  Course_Pricing,
+  Course_Pricing_Schedule,
   Course_Renewal_Cycle_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
@@ -31,6 +33,7 @@ import {
   Grade_Enum,
   Podcast,
   PostSummaryFragment,
+  PricingChangelogQuery,
   ResearchSummaryDetailsFragment,
   ResourceCategory,
   TagSummaryFragment,
@@ -1280,5 +1283,46 @@ export const buildAttendeeCourseEvaluationAnswers = build<GetEvaluationQuery>({
         __typename: 'course_evaluation_answers',
       },
     ],
+  },
+})
+export const buildPricing = build<
+  PricingChangelogQuery['course_pricing_changelog'][0]
+>({
+  fields: {
+    createdAt: chance.date(),
+    id: chance.guid(),
+    newPrice: chance.integer(),
+    oldPrice: chance.integer(),
+    author: {
+      archived: false,
+      fullName: chance.name(),
+      id: chance.guid(),
+    },
+  },
+})
+
+export const buildPricingSchedule = build<Course_Pricing_Schedule>({
+  fields: {
+    coursePricingId: chance.guid(),
+    effectiveFrom: new Date(2024, 0, 1),
+    priceAmount: 130,
+    priceCurrency: Currency.Gbp,
+    effectiveTo: new Date(2024, 11, 31),
+    id: chance.guid(),
+  },
+})
+
+export const buildCoursePricing = build<Course_Pricing>({
+  fields: {
+    blended: false,
+    id: chance.guid(),
+    level: Course_Level_Enum.Level_1,
+    priceAmount: 130,
+    priceCurrency: Currency.Gbp,
+    pricingSchedules: [buildPricingSchedule()],
+    pricingSchedules_aggregate: { aggregate: { count: 1 }, nodes: [] },
+    reaccreditation: false,
+    type: Course_Type_Enum.Open,
+    xeroCode: '',
   },
 })

@@ -1526,16 +1526,23 @@
       "effective-from-valid": "Effective from should be a valid date.",
       "effective-to-required": "Effective to is required.",
       "effective-to-valid": "Effective to should be a valid date.",
-      "effective-date-valid-interval": "Effective from should be before Effective to.",
+      "EFFECTIVE_DATE_VALID_INTERVAL": "Effective from should be before Effective to.",
       "price-amount-required": "Price is required.",
-      "price-amount-positive": "Price should be a positive value."
+      "price-amount-positive": "Price should be a positive value.",
+      "EFFECTIVE_TO_RESIDES_IN_OTHER_INTERVAL": "Existing price for the same period of time",
+      "EFFECTIVE_FROM_RESIDES_IN_OTHER_INTERVAL": "Existing price for the same period of time",
+      "INCLUDES_DATES_FROM_OTHER_INTERVAL": "Existing price for the same period of time.",
+      "SET_EFFECTIVE_TO_FOR_EXISTING_SCHEDULE": "Existing price requires an end duration.",
+      "EFFECTIVE_FROM_EARLIER_THAN_TODAY": "Effective from date can not be earlier than today",
+      "INTERVALS_OVERLAP": "Existing price for the same period of time."
     },
     "modal-individual-edit-description": "Please review the course details before proceeding. Price changes are effective immediately after saving.",
     "modal-cols-effective-from": "Effective from",
     "modal-cols-effective-to": "Effective to",
     "modal-cols-actions": "Actions",
     "modal-changelog-title": "Pricing history",
-    "modal-changelog-event": "Changed price from {{ oldPrice }} to {{ newPrice }}"
+    "modal-changelog-event": "Changed price from {{ oldPrice }} to {{ newPrice }}",
+    "modal-impacted-courses-title": "The following course(s) have no price set for the specified duration. Please review and amend the dates."
   },
   "promoCodes": {
     "title": "Discounts",

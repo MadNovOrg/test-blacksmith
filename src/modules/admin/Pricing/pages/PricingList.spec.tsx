@@ -1,5 +1,9 @@
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { useCoursePricing } from '@app/modules/admin/Pricing/hooks/useCoursePricing'
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Currency,
+} from '@app/generated/graphql'
+import { useCoursePricing } from '@app/modules/admin/Pricing/hooks'
 
 import { chance, render, screen } from '@test/index'
 
@@ -9,14 +13,14 @@ vi.mock('@app/modules/admin/Pricing/hooks/useCoursePricing')
 
 const useCoursePricingMock = vi.mocked(useCoursePricing)
 
-describe('component: PricingList', () => {
+describe(PricingList.name, () => {
   const setup = () => {
     useCoursePricingMock.mockReturnValue({
       coursePricing: [
         {
           id: chance.guid(),
           priceAmount: 100,
-          priceCurrency: 'GBP',
+          priceCurrency: Currency.Gbp,
           level: Course_Level_Enum.Level_1,
           type: Course_Type_Enum.Open,
           blended: true,

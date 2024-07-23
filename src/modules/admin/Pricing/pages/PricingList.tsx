@@ -25,14 +25,15 @@ import {
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
-import { useCoursePricing } from '@app/modules/admin/Pricing/hooks/useCoursePricing'
+import {
+  ChangelogModal,
+  PriceActionsModal,
+  PricingFilters,
+} from '@app/modules/admin/Pricing/components'
+import { useCoursePricing } from '@app/modules/admin/Pricing/hooks'
 import theme from '@app/theme'
 
 import { getCourseAttributes } from '../utils'
-
-import { ChangelogModal } from './ChangelogModal'
-import { EditPriceModal } from './EditPriceModal'
-import { Filters } from './Filters'
 
 type Filters = {
   type?: Course_Type_Enum[]
@@ -116,7 +117,7 @@ export const PricingList: React.FC = () => {
             </Typography>
 
             <Stack gap={4} mt={4}>
-              <Filters onChange={onFilterChange} />
+              <PricingFilters onChange={onFilterChange} />
             </Stack>
           </Box>
           <Box flex={1}>
@@ -187,14 +188,12 @@ export const PricingList: React.FC = () => {
             {total ? <Pagination total={total} /> : null}
 
             {showEditPriceModal ? (
-              <EditPriceModal
+              <PriceActionsModal
                 pricing={selectedEditPrice}
                 onClose={() => setSelectedEditPrice(null)}
                 onSave={() => {
                   setSelectedEditPrice(null)
-                  mutate({
-                    requestPolicy: 'network-only',
-                  })
+                  mutate()
                 }}
               />
             ) : null}

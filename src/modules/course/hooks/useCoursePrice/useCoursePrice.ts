@@ -24,7 +24,12 @@ export const COURSE_PRICE_QUERY = gql`
         where: {
           _and: [
             { effectiveFrom: { _lte: $startDate } }
-            { effectiveTo: { _gte: $startDate } }
+            {
+              _or: [
+                { effectiveTo: { _gte: $startDate } }
+                { effectiveTo: { _is_null: true } }
+              ]
+            }
           ]
         }
       ) {

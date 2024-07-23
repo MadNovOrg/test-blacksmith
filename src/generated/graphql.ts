@@ -26058,7 +26058,7 @@ export type Course_Pricing_Schedule = {
   coursePricingId: Scalars['uuid'];
   created_at?: Maybe<Scalars['timestamptz']>;
   effectiveFrom: Scalars['date'];
-  effectiveTo: Scalars['date'];
+  effectiveTo?: Maybe<Scalars['date']>;
   id: Scalars['uuid'];
   /** Price per participant without any discounts */
   priceAmount: Scalars['numeric'];
@@ -59574,7 +59574,7 @@ export type GetPricingQueryVariables = Exact<{
 }>;
 
 
-export type GetPricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo: any, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo: any, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
+export type GetPricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
 
 export type DeleteCoursePricingScheduleMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -59582,15 +59582,6 @@ export type DeleteCoursePricingScheduleMutationVariables = Exact<{
 
 
 export type DeleteCoursePricingScheduleMutation = { __typename?: 'mutation_root', delete_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null };
-
-export type PricingChangelogQueryVariables = Exact<{
-  where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type PricingChangelogQuery = { __typename?: 'query_root', course_pricing_changelog: Array<{ __typename?: 'course_pricing_changelog', id: any, newPrice: any, oldPrice: any, createdAt: any, author?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, course_pricing_changelog_aggregate: { __typename?: 'course_pricing_changelog_aggregate', aggregate?: { __typename?: 'course_pricing_changelog_aggregate_fields', count: number } | null } };
 
 export type InsertCoursePricingScheduleMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -59616,6 +59607,45 @@ export type SetCoursePricingScheduleMutationVariables = Exact<{
 
 
 export type SetCoursePricingScheduleMutation = { __typename?: 'mutation_root', update_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
+
+export type SetCoursePricingMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  oldPrice: Scalars['numeric'];
+  priceAmount: Scalars['numeric'];
+  authorId: Scalars['uuid'];
+}>;
+
+
+export type SetCoursePricingMutation = { __typename?: 'mutation_root', update_course_pricing_by_pk?: { __typename?: 'course_pricing', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
+
+export type SetCoursePricingBulkMutationVariables = Exact<{
+  newPrice: Scalars['numeric'];
+  coursePricingIds: Array<Scalars['uuid']> | Scalars['uuid'];
+  coursePricingChangelogs: Array<Course_Pricing_Changelog_Insert_Input> | Course_Pricing_Changelog_Insert_Input;
+}>;
+
+
+export type SetCoursePricingBulkMutation = { __typename?: 'mutation_root', update_course_pricing?: { __typename?: 'course_pricing_mutation_response', affected_rows: number } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog_mutation_response', affected_rows: number } | null };
+
+export type PricingChangelogQueryVariables = Exact<{
+  where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type PricingChangelogQuery = { __typename?: 'query_root', course_pricing_changelog: Array<{ __typename?: 'course_pricing_changelog', id: any, newPrice: any, oldPrice: any, createdAt: any, author?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, course_pricing_changelog_aggregate: { __typename?: 'course_pricing_changelog_aggregate', aggregate?: { __typename?: 'course_pricing_changelog_aggregate_fields', count: number } | null } };
+
+export type GetCoursesWithPricingQueryVariables = Exact<{
+  pricingStartBeforeChange: Scalars['timestamptz'];
+  pricingEndBeforeChange: Scalars['timestamptz'];
+  pricingStartAfterChange: Scalars['timestamptz'];
+  pricingEndAfterChange: Scalars['timestamptz'];
+  where?: Course_Bool_Exp;
+}>;
+
+
+export type GetCoursesWithPricingQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, course_code?: string | null }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 

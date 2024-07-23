@@ -15,19 +15,14 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'urql'
 
 import { Dialog } from '@app/components/dialogs'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import {
-  Course_Pricing,
-  PricingChangelogQuery,
-  PricingChangelogQueryVariables,
-} from '@app/generated/graphql'
-import { GET_PRICING_CHANGELOG } from '@app/modules/admin/Pricing/queries/get-pricing-changelog'
+import { Course_Pricing } from '@app/generated/graphql'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 
-import { getCourseAttributes } from '../utils'
+import { usePricingChangelog } from '../../hooks'
+import { getCourseAttributes } from '../../utils'
 
 export type ChangelogModalProps = {
   coursePricing?: Course_Pricing | null
@@ -46,23 +41,12 @@ export const ChangelogModal = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
 
-  const [{ data, error }] = useQuery<
-    PricingChangelogQuery,
-    PricingChangelogQueryVariables
-  >({
-    query: GET_PRICING_CHANGELOG,
-    variables: {
-      ...(coursePricing
-        ? {
-            where: { coursePricingId: { _eq: coursePricing.id } },
-          }
-        : {}),
-      limit: perPage,
-      offset: currentPage * perPage,
-    },
+  const [{ data, fetching: loading }] = usePricingChangelog({
+    coursePricing,
+    perPage,
+    currentPage,
   })
 
-  const loading = !data && !error
   const changelogTotalCount =
     data?.course_pricing_changelog_aggregate?.aggregate?.count
 

@@ -11,7 +11,7 @@ import {
   DiscountForm,
 } from '@app/modules/admin/Discounts/components'
 import { AdminPage } from '@app/modules/admin/pages/AdminPage'
-import { PricingList } from '@app/modules/admin/Pricing/components'
+import { PricingRoutes } from '@app/modules/admin/Pricing'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { OrderDetails as CourseOrderDetails } from '@app/modules/course/pages/CreateCourse/components/OrderDetails'
 import { ManageCourses } from '@app/modules/course/pages/ManageCourses/ManageCourses'
@@ -166,11 +166,9 @@ const FinanceRoute = () => {
             element={<CourseExceptionsLog />}
           />
           <Route path="users/*" element={<UserRoutes />} />
-          {acl.canViewAdminPricing() ? (
-            <Route path="pricing">
-              <Route index element={<PricingList />} />
-            </Route>
-          ) : null}
+
+          <Route path="pricing" element={<PricingRoutes />} />
+
           <Route path="discounts">
             <Route index element={<DiscountsList />} />
             <Route path="new" element={<DiscountForm />} />

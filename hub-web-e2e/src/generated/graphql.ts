@@ -26058,7 +26058,7 @@ export type Course_Pricing_Schedule = {
   coursePricingId: Scalars['uuid'];
   created_at?: Maybe<Scalars['timestamptz']>;
   effectiveFrom: Scalars['date'];
-  effectiveTo: Scalars['date'];
+  effectiveTo?: Maybe<Scalars['date']>;
   id: Scalars['uuid'];
   /** Price per participant without any discounts */
   priceAmount: Scalars['numeric'];
@@ -59618,6 +59618,13 @@ export type DeleteOrganizationMemberMutationVariables = Exact<{
 
 
 export type DeleteOrganizationMemberMutation = { __typename?: 'mutation_root', delete_organization_member_by_pk?: { __typename?: 'organization_member', id: any } | null };
+
+export type DeletePrigingScheduleMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type DeletePrigingScheduleMutation = { __typename?: 'mutation_root', delete_course_pricing_schedule?: { __typename?: 'course_pricing_schedule_mutation_response', affected_rows: number } | null };
 
 export type ProfileByEmailQueryVariables = Exact<{
   email: Scalars['String'];
