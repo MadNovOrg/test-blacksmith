@@ -14,6 +14,10 @@ on:
       checkout_ref:
         required: false
         type: string
+      aws_region:
+        required: true
+        type: string
+        default: 'eu-west-2'
     secrets:
       cognito_user_pool_id:
         required: true

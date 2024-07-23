@@ -2,6 +2,16 @@ name: CD-STG
 
 on:
   workflow_dispatch:
+    inputs:
+      region:
+        type: choice
+        description: 'Select the region to deploy to'
+        required: true
+        default: 'Both'
+        options:
+          - 'UK'
+          - 'Australia'
+          - 'Both'
 
 permissions:
   id-token: write
@@ -9,10 +19,12 @@ permissions:
 
 jobs:
   stg-cd:
+    if: ${{ github.event.inputs.region == 'UK' || github.event.inputs.region == 'Both' }}
     name: Deploy
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'staging'
+      aws_region: 'eu-west-2'
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
@@ -25,5 +37,27 @@ jobs:
       gmaps_key: ${{ secrets.GMAPS_KEY }}
       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
       stripe_key: ${{ secrets.STRIPE_KEY_STG }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  stg-cd-aus:
+    if: ${{ github.event.inputs.region == 'Australia' || github.event.inputs.region == 'Both' }}
+    name: Deploy
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      mode: 'staging'
+      aws_region: 'ap-southeast-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG_AUS }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG_AUS }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG_AUS }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG_AUS }}
+      wp_host: ${{ secrets.WP_HOST_STG_AUS }}
+      s3_bucket: ${{ secrets.S3_BUCKET_STG_AUS }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_STG_AUS }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG_AUS }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY_STG_AUS }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}

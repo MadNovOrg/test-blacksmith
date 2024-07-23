@@ -123,6 +123,9 @@ jobs:
   dev-cd:
     name: DEV
     needs: [lint-and-typecheck, test, sonar-analysis]
+    strategy:
+      matrix:
+        aws_region: [eu-west-2, ap-southeast-2]
     if: |
       github.ref == 'refs/heads/main' &&
       github.event_name == 'push' &&
@@ -130,17 +133,18 @@ jobs:
     uses: ./.github/workflows/pipeline.yml
     with:
       mode: 'development'
+      aws_region: ${{ matrix.aws_region }}
     secrets:
-      service_role_arn: ${{ secrets.IAM_SERVICE_DEV }}
-      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_DEV }}
-      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_DEV }}
-      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_DEV }}
-      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_DEV }}
-      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_DEV }}
-      wp_host: ${{ secrets.WP_HOST_DEV }}
-      s3_bucket: ${{ secrets.S3_BUCKET_DEV }}
+      service_role_arn: ${{ matrix.aws_region == 'eu-west-2' && secrets.IAM_SERVICE_DEV || secrets.IAM_SERVICE_DEV_AUS }}
+      hasura_admin_pass: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ADMIN_PASS_DEV || secrets.HASURA_ADMIN_PASS_DEV_AUS }}
+      cognito_user_pool_id: ${{  matrix.aws_region == 'eu-west-2' && secrets.COGNITO_POOL_ID_DEV || secrets.COGNITO_POOL_ID_DEV_AUS }}
+      cognito_user_pool_client_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_CLIENT_ID_DEV || secrets.COGNITO_CLIENT_ID_DEV_AUS }}
+      hasura_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ENDPOINT_DEV || secrets.HASURA_ENDPOINT_DEV_AUS }}
+      hasura_ws_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_WS_ENDPOINT_DEV || secrets.HASURA_WS_ENDPOINT_DEV_AUS }}
+      wp_host: ${{ matrix.aws_region && secrets.WP_HOST_DEV || secrets.WP_HOST_DEV_AUS }}
+      s3_bucket: ${{ matrix.aws_region == 'eu-west-2' && secrets.S3_BUCKET_DEV || secrets.S3_BUCKET_DEV_AUS }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}
       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
-      stripe_key: ${{ secrets.STRIPE_KEY_DEV }}
+      stripe_key: ${{ matrix.aws_region == 'eu-west-2' && secrets.STRIPE_KEY_DEV || secrets.STRIPE_KEY_DEV_AUS }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
