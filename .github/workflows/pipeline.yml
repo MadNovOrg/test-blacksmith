@@ -111,6 +111,8 @@ jobs:
     name: Hasura migrations
     needs: build-deploy
     runs-on: ubuntu-latest
+    ## temporarily disabled for AUS untill hasura intance is available
+    if: ${{inputs.aws_region != 'ap-southeast-2'}}
 
     env:
       SECRET: ${{ secrets.hasura_admin_pass }}
