@@ -65,7 +65,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-region: eu-west-2
+          aws-region: ${{ inputs.aws_region }}
           role-to-assume: ${{ secrets.service_role_arn }}
           role-duration-seconds: 1200
 
