@@ -24,6 +24,7 @@ describe(CoursesWithAvailablePricing.name, () => {
   } as GetCoursesWithPricingQuery
   const showCTAMock = false
   const setCTAOptionMock = vi.fn()
+  const handleCloseMock = vi.fn()
   const setup = ({
     courses = coursesMock,
     showCTA = showCTAMock,
@@ -34,6 +35,7 @@ describe(CoursesWithAvailablePricing.name, () => {
         courses={courses}
         showCTA={showCTA}
         setCTAOption={setCTAOption}
+        onClose={handleCloseMock}
       />,
     )
   }
@@ -105,5 +107,26 @@ describe(CoursesWithAvailablePricing.name, () => {
     expect(
       screen.queryByText('courses-with-price-dialog'),
     ).not.toBeInTheDocument()
+  })
+
+  it('displays title related to deleting the price when showCTA is false', () => {
+    setup({ showCTA: false })
+    expect(
+      screen.getByText(
+        t('pages.course-pricing.modal-impacted-courses-by-delete-title'),
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('doesn`t display CTA buttons when showCTA is false', () => {
+    setup({ showCTA: false })
+    expect(screen.queryByText(t('cancel'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('approve'))).not.toBeInTheDocument()
+  })
+
+  it('calls onClose when clicking on the close button', () => {
+    setup({})
+    fireEvent.click(screen.getByRole('button', { name: /close/i }))
+    expect(handleCloseMock).toHaveBeenCalled()
   })
 })

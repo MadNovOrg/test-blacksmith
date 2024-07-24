@@ -1548,7 +1548,9 @@
     "modal-cols-actions": "Actions",
     "modal-changelog-title": "Pricing history",
     "modal-changelog-event": "Changed price from {{ oldPrice }} to {{ newPrice }}",
-    "modal-impacted-courses-title": "The following course(s) have no price set for the specified duration. Please review and amend the dates."
+    "modal-impacted-courses-title": "The following course(s) have no price set for the specified duration. Please review and amend the dates.",
+    "modal-impacted-courses-by-delete-title": "This price cannot be deleted as a new price has not been determined for this course level and attributes. Please amend before proceeding",
+    "modal-impact-on-proceeding-with-delete": "By proceeding, no price will be determined for this course level and attribute."
   },
   "promoCodes": {
     "title": "Discounts",

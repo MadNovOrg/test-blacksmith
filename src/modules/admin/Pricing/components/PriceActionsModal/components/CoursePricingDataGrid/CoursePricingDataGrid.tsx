@@ -43,6 +43,7 @@ import {
 } from '@app/modules/admin/Pricing/utils'
 
 import { EditPriceToolbar } from '..'
+import { DeletePricingNoCourseModal } from '../DeletePricingNoCourseModal'
 
 export const CoursePricingDataGrid = ({
   onSave,
@@ -67,6 +68,9 @@ export const CoursePricingDataGrid = ({
   const [ctaOption, setCTAOption] = useState<'approve' | 'cancel' | undefined>(
     undefined,
   )
+  const [showCTA, setShowCTA] = useState(false)
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false)
+  const [pricingToDeleteId, setPricingToDeleteId] = useState<GridRowId>()
 
   const [pricingDetails, setPricingDetails] = useState<PricingDetails>()
 
@@ -97,6 +101,7 @@ export const CoursePricingDataGrid = ({
     }
   }
   const handleEditClick = (id: GridRowId) => () => {
+    setShowCTA(true)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
 
@@ -105,13 +110,32 @@ export const CoursePricingDataGrid = ({
   }
 
   const handleDeleteClick = (id: GridRowId) => async () => {
-    const { data } = await deleteCoursePricingSchedule({
-      id: id,
-    })
-    if (data) {
-      setRows(rows.filter(row => row.id !== id))
-      onSave()
-    }
+    setShowCTA(false)
+    setPricingToDeleteId(id)
+    const pricingToDelete = rows.find(row => row.id === id)
+    client
+      .query<GetCoursesWithPricingQuery, GetCoursesWithPricingQueryVariables>(
+        GET_COURSES_WITH_AVAILABLE_PRICING_QUERY,
+        {
+          pricingStartBeforeChange: pricingToDelete?.effectiveFrom,
+          pricingStartAfterChange: pricingToDelete?.effectiveTo,
+          pricingEndBeforeChange: pricingToDelete?.effectiveFrom,
+          pricingEndAfterChange: pricingToDelete?.effectiveTo,
+          where: {
+            type: { _eq: pricing?.type },
+            level: { _eq: pricing?.level },
+            go1Integration: { _eq: pricing?.blended },
+            reaccreditation: { _eq: pricing?.reaccreditation },
+          },
+        },
+      )
+      .toPromise()
+      .then(async ({ data }) => {
+        setCourses(data)
+        if (!data?.course_aggregate.aggregate?.count) {
+          setOpenDeleteConfirmation(true)
+        }
+      })
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -121,7 +145,7 @@ export const CoursePricingDataGrid = ({
     })
 
     const editedRow = rows.find(row => row.id === id)
-    if (editedRow && editedRow.isNew) {
+    if (editedRow?.isNew) {
       setRows(rows.filter(row => row.id !== id))
     }
   }
@@ -242,6 +266,21 @@ export const CoursePricingDataGrid = ({
         return updatedRow
       }
     }
+  }
+
+  const handleCloseCoursesModal = () => {
+    setCourses(undefined)
+  }
+  const handleCloseDeleteConfirmation = async () => {
+    if (!pricingToDeleteId) return
+    const { data: deleteData } = await deleteCoursePricingSchedule({
+      id: pricingToDeleteId,
+    })
+    if (deleteData) {
+      setRows(rows.filter(row => row.id !== pricingToDeleteId))
+      onSave()
+    }
+    setOpenDeleteConfirmation(false)
   }
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -396,8 +435,16 @@ export const CoursePricingDataGrid = ({
       {courses?.course_aggregate.aggregate?.count ? (
         <CoursesWithAvailablePricing
           courses={courses}
-          showCTA={true}
+          showCTA={showCTA}
           setCTAOption={setCTAOption}
+          onClose={handleCloseCoursesModal}
+        />
+      ) : null}
+
+      {openDeleteConfirmation ? (
+        <DeletePricingNoCourseModal
+          isOpen={openDeleteConfirmation}
+          handleClose={handleCloseDeleteConfirmation}
         />
       ) : null}
     </>

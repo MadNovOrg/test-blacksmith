@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Link,
@@ -30,12 +31,14 @@ export type CouresWithAvailablePricingProps = {
   courses: GetCoursesWithPricingQuery
   showCTA?: boolean
   setCTAOption?: Dispatch<SetStateAction<'approve' | 'cancel' | undefined>>
+  onClose: () => void
 }
 
 export const CoursesWithAvailablePricing = ({
   courses,
   showCTA,
   setCTAOption,
+  onClose,
 }: CouresWithAvailablePricingProps) => {
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(0)
@@ -53,16 +56,25 @@ export const CoursesWithAvailablePricing = ({
     },
     [],
   )
+  const handleClose = () => {
+    setOpen(false)
+    onClose()
+  }
   return (
     <Dialog
-      onClose={() => setOpen(false)}
+      onClose={() => handleClose()}
       open={open}
       slots={{
-        Title: () => (
-          <Typography variant="h6" px={2} fontWeight={600} color="secondary">
-            {t('pages.course-pricing.modal-impacted-courses-title')}
-          </Typography>
-        ),
+        Title: () =>
+          showCTA ? (
+            <Typography variant="h6" px={2} fontWeight={600} color="secondary">
+              {t(`pages.course-pricing.modal-impacted-courses-title`)}
+            </Typography>
+          ) : (
+            <Alert severity="warning">
+              {t('pages.course-pricing.modal-impacted-courses-by-delete-title')}
+            </Alert>
+          ),
       }}
       maxWidth={600}
       data-testid="courses-with-price-dialog"
