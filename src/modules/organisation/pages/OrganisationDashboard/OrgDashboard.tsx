@@ -25,12 +25,14 @@ import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
 import { LicensesTab } from '../../tabs/Licenses/LicensesTab'
+import { OrgPermissionsTab } from '../../tabs/OrgPermissionsTab/OrgPermissionsTab'
 
 export enum OrgDashboardTabs {
   OVERVIEW = 'OVERVIEW',
   DETAILS = 'DETAILS',
   INDIVIDUALS = 'INDIVIDUALS',
   LICENSES = 'LICENSES',
+  PERMISSIONS = 'PERMISSIONS',
 }
 
 export enum CertificationStatus {
@@ -153,6 +155,13 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                         value={OrgDashboardTabs.LICENSES}
                         data-testid="org-blended-licences"
                       />
+                      {acl.canManageKnowledgeHubAccess() ? (
+                        <Tab
+                          label={t('pages.org-details.tabs.permissions.title')}
+                          value={OrgDashboardTabs.PERMISSIONS}
+                          data-testid="org-permissions"
+                        />
+                      ) : null}
                     </TabList>
 
                     <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.OVERVIEW}>
@@ -172,6 +181,14 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.LICENSES}>
                       <LicensesTab orgId={id} />
                     </TabPanel>
+                    {acl.canManageKnowledgeHubAccess() ? (
+                      <TabPanel
+                        sx={{ p: 0 }}
+                        value={OrgDashboardTabs.PERMISSIONS}
+                      >
+                        <OrgPermissionsTab orgId={id} />
+                      </TabPanel>
+                    ) : null}
                   </TabContext>
                 ) : (
                   <OrgOverviewTab orgId={ALL_ORGS} />

@@ -16,9 +16,12 @@ export const QUERY = gql`
     $orgId: uuid
     $withCourseHistory: Boolean = false
     $withCourseTrainerHistory: Boolean = false
+    $withKnowledgeHubAccess: Boolean = false
   ) {
     profile: profile_by_pk(id: $profileId) {
       ...Profile
+
+      canAccessKnowledgeHub @include(if: $withKnowledgeHubAccess)
 
       participantAudits: participant_audits(
         where: { type: { _nin: [ATTENDED, NOT_ATTENDED] } }

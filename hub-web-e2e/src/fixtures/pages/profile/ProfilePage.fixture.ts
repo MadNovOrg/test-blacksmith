@@ -14,6 +14,7 @@ export class ProfilePage extends BasePage {
   readonly viewPhoneNumber: Locator
   readonly deleteProfile: Locator
   readonly countrySelector: Locator
+  readonly knowledgeHubSwitch: Locator
 
   constructor(page: Page) {
     super(page)
@@ -31,6 +32,9 @@ export class ProfilePage extends BasePage {
     this.deleteProfile = this.page.locator('data-testid=delete-profile-button')
     this.countrySelector = this.page.locator(
       '[data-testid="countries-selector-autocomplete"] input',
+    )
+    this.knowledgeHubSwitch = this.page.locator(
+      '[data-testid="knowledge-hub-access-switch"]',
     )
   }
 

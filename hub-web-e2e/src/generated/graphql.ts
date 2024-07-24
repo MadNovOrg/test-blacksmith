@@ -44208,6 +44208,7 @@ export type Organization = {
   /** A computed field, executes function "org_address_each_text" */
   addressEachText?: Maybe<Scalars['String']>;
   attributes: Scalars['jsonb'];
+  canAccessKnowledgeHub?: Maybe<Scalars['Boolean']>;
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
@@ -44418,7 +44419,23 @@ export type Organization_Aggregate = {
 };
 
 export type Organization_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Organization_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Organization_Aggregate_Bool_Exp_Bool_Or>;
   count?: InputMaybe<Organization_Aggregate_Bool_Exp_Count>;
+};
+
+export type Organization_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Organization_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
 };
 
 export type Organization_Aggregate_Bool_Exp_Count = {
@@ -44504,6 +44521,7 @@ export type Organization_Bool_Exp = {
   address?: InputMaybe<Jsonb_Comparison_Exp>;
   addressEachText?: InputMaybe<String_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
+  canAccessKnowledgeHub?: InputMaybe<Boolean_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dfeEstablishmentId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -44582,6 +44600,7 @@ export type Organization_Inc_Input = {
 export type Organization_Insert_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -45301,6 +45320,7 @@ export type Organization_Order_By = {
   address?: InputMaybe<Order_By>;
   addressEachText?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
+  canAccessKnowledgeHub?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
@@ -45349,6 +45369,8 @@ export enum Organization_Select_Column {
   /** column name */
   Attributes = 'attributes',
   /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
+  /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
   CreatedAt = 'createdAt',
@@ -45382,10 +45404,23 @@ export enum Organization_Select_Column {
   XeroContactId = 'xeroContactId'
 }
 
+/** select "organization_aggregate_bool_exp_bool_and_arguments_columns" columns of table "organization" */
+export enum Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub'
+}
+
+/** select "organization_aggregate_bool_exp_bool_or_arguments_columns" columns of table "organization" */
+export enum Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub'
+}
+
 /** input type for updating data in table "organization" */
 export type Organization_Set_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -45455,6 +45490,7 @@ export type Organization_Stream_Cursor_Input = {
 export type Organization_Stream_Cursor_Value_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -45646,6 +45682,8 @@ export enum Organization_Update_Column {
   Address = 'address',
   /** column name */
   Attributes = 'attributes',
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -46391,6 +46429,7 @@ export type Profile = {
   archived?: Maybe<Scalars['Boolean']>;
   attributes: Scalars['jsonb'];
   avatar?: Maybe<Scalars['String']>;
+  canAccessKnowledgeHub?: Maybe<Scalars['Boolean']>;
   /** An array relationship */
   certificates: Array<Course_Certificate>;
   /** An aggregate relationship */
@@ -46771,6 +46810,7 @@ export type Profile_Bool_Exp = {
   archived?: InputMaybe<Boolean_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   avatar?: InputMaybe<String_Comparison_Exp>;
+  canAccessKnowledgeHub?: InputMaybe<Boolean_Comparison_Exp>;
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -46879,6 +46919,7 @@ export type Profile_Insert_Input = {
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   country?: InputMaybe<Scalars['String']>;
@@ -47025,6 +47066,7 @@ export type Profile_Order_By = {
   archived?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
   avatar?: InputMaybe<Order_By>;
+  canAccessKnowledgeHub?: InputMaybe<Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   country?: InputMaybe<Order_By>;
@@ -47342,6 +47384,8 @@ export enum Profile_Select_Column {
   /** column name */
   Avatar = 'avatar',
   /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
+  /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
   Country = 'country',
@@ -47398,6 +47442,7 @@ export type Profile_Set_Input = {
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   country?: InputMaybe<Scalars['String']>;
   countryCode?: InputMaybe<Scalars['String']>;
@@ -47459,6 +47504,7 @@ export type Profile_Stream_Cursor_Value_Input = {
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   country?: InputMaybe<Scalars['String']>;
   countryCode?: InputMaybe<Scalars['String']>;
@@ -48113,6 +48159,8 @@ export enum Profile_Update_Column {
   Attributes = 'attributes',
   /** column name */
   Avatar = 'avatar',
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -59632,6 +59680,20 @@ export type ProfileByEmailQueryVariables = Exact<{
 
 
 export type ProfileByEmailQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any }> };
+
+export type ProfileAccessToKnowledgeHubQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type ProfileAccessToKnowledgeHubQuery = { __typename?: 'query_root', profile_by_pk?: { __typename?: 'profile', id: any, canAccessKnowledgeHub?: boolean | null } | null };
+
+export type DeleteProfileMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteProfileMutation = { __typename?: 'mutation_root', delete_profile_by_pk?: { __typename?: 'profile', id: any } | null };
 
 export type InsertProfileMutationVariables = Exact<{
   email: Scalars['String'];

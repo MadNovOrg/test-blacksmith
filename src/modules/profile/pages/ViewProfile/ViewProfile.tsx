@@ -45,6 +45,7 @@ import { CourseAsTrainer } from '../../components/CourseAsTrainer'
 import { CoursesTable } from '../../components/CoursesTable'
 import { InviteUserToOrganisation } from '../../components/InviteUserToOrganisation'
 import { OrganisationsTable } from '../../components/OrganisationsTable'
+import { ProfilePermissions } from '../../components/Permissions/Permissions'
 import { ProfileDeleteDialog } from '../../components/ProfileDeleteDialog'
 import { TableMenu, TableMenuSelections } from '../../components/TableMenu'
 import { UserGo1License } from '../../components/UserGo1License'
@@ -82,6 +83,8 @@ export const ViewProfilePage: React.FC<
     acl.canViewCourseHistory() ||
       acl.canViewCourseAsAttendeeHistory() ||
       callCourseHistory,
+    false,
+    acl.canManageKnowledgeHubAccess(),
   )
 
   const allTrainerRoles = Object.values(TrainerRoleTypeName)
@@ -510,6 +513,13 @@ export const ViewProfilePage: React.FC<
               <Box mt={3}>
                 <UserGo1License license={go1Licenses[0]} editable={false} />
               </Box>
+            ) : null}
+
+            {acl.canManageKnowledgeHubAccess() ? (
+              <ProfilePermissions
+                canAccessKnowledgeHub={Boolean(profile.canAccessKnowledgeHub)}
+                profileId={profile.id}
+              />
             ) : null}
 
             <Box mt={5}>

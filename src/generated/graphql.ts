@@ -44208,6 +44208,7 @@ export type Organization = {
   /** A computed field, executes function "org_address_each_text" */
   addressEachText?: Maybe<Scalars['String']>;
   attributes: Scalars['jsonb'];
+  canAccessKnowledgeHub?: Maybe<Scalars['Boolean']>;
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
@@ -44418,7 +44419,23 @@ export type Organization_Aggregate = {
 };
 
 export type Organization_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Organization_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Organization_Aggregate_Bool_Exp_Bool_Or>;
   count?: InputMaybe<Organization_Aggregate_Bool_Exp_Count>;
+};
+
+export type Organization_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Organization_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Organization_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
 };
 
 export type Organization_Aggregate_Bool_Exp_Count = {
@@ -44504,6 +44521,7 @@ export type Organization_Bool_Exp = {
   address?: InputMaybe<Jsonb_Comparison_Exp>;
   addressEachText?: InputMaybe<String_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
+  canAccessKnowledgeHub?: InputMaybe<Boolean_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dfeEstablishmentId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -44582,6 +44600,7 @@ export type Organization_Inc_Input = {
 export type Organization_Insert_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -45301,6 +45320,7 @@ export type Organization_Order_By = {
   address?: InputMaybe<Order_By>;
   addressEachText?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
+  canAccessKnowledgeHub?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
@@ -45349,6 +45369,8 @@ export enum Organization_Select_Column {
   /** column name */
   Attributes = 'attributes',
   /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
+  /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
   CreatedAt = 'createdAt',
@@ -45382,10 +45404,23 @@ export enum Organization_Select_Column {
   XeroContactId = 'xeroContactId'
 }
 
+/** select "organization_aggregate_bool_exp_bool_and_arguments_columns" columns of table "organization" */
+export enum Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub'
+}
+
+/** select "organization_aggregate_bool_exp_bool_or_arguments_columns" columns of table "organization" */
+export enum Organization_Select_Column_Organization_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub'
+}
+
 /** input type for updating data in table "organization" */
 export type Organization_Set_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -45455,6 +45490,7 @@ export type Organization_Stream_Cursor_Input = {
 export type Organization_Stream_Cursor_Value_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -45646,6 +45682,8 @@ export enum Organization_Update_Column {
   Address = 'address',
   /** column name */
   Attributes = 'attributes',
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -46391,6 +46429,7 @@ export type Profile = {
   archived?: Maybe<Scalars['Boolean']>;
   attributes: Scalars['jsonb'];
   avatar?: Maybe<Scalars['String']>;
+  canAccessKnowledgeHub?: Maybe<Scalars['Boolean']>;
   /** An array relationship */
   certificates: Array<Course_Certificate>;
   /** An aggregate relationship */
@@ -46771,6 +46810,7 @@ export type Profile_Bool_Exp = {
   archived?: InputMaybe<Boolean_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   avatar?: InputMaybe<String_Comparison_Exp>;
+  canAccessKnowledgeHub?: InputMaybe<Boolean_Comparison_Exp>;
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -46879,6 +46919,7 @@ export type Profile_Insert_Input = {
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   country?: InputMaybe<Scalars['String']>;
@@ -47025,6 +47066,7 @@ export type Profile_Order_By = {
   archived?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
   avatar?: InputMaybe<Order_By>;
+  canAccessKnowledgeHub?: InputMaybe<Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   country?: InputMaybe<Order_By>;
@@ -47342,6 +47384,8 @@ export enum Profile_Select_Column {
   /** column name */
   Avatar = 'avatar',
   /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
+  /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
   Country = 'country',
@@ -47398,6 +47442,7 @@ export type Profile_Set_Input = {
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   country?: InputMaybe<Scalars['String']>;
   countryCode?: InputMaybe<Scalars['String']>;
@@ -47459,6 +47504,7 @@ export type Profile_Stream_Cursor_Value_Input = {
   archived?: InputMaybe<Scalars['Boolean']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   country?: InputMaybe<Scalars['String']>;
   countryCode?: InputMaybe<Scalars['String']>;
@@ -48113,6 +48159,8 @@ export enum Profile_Update_Column {
   Attributes = 'attributes',
   /** column name */
   Avatar = 'avatar',
+  /** column name */
+  CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -60704,6 +60752,21 @@ export type GetOrganisationPendingInvitesQueryVariables = Exact<{
 
 export type GetOrganisationPendingInvitesQuery = { __typename?: 'query_root', organization_invites_aggregate: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
+export type GetOrganisationPermissionsQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type GetOrganisationPermissionsQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', canAccessKnowledgeHub?: boolean | null } | null };
+
+export type UpdateOrganisationPermissionsMutationVariables = Exact<{
+  orgId: Scalars['uuid'];
+  canAccessKnowledgeHub: Scalars['Boolean'];
+}>;
+
+
+export type UpdateOrganisationPermissionsMutation = { __typename?: 'mutation_root', update_organization_by_pk?: { __typename?: 'organization', canAccessKnowledgeHub?: boolean | null } | null };
+
 export type GetOrganizationProfilesQueryVariables = Exact<{
   input: OrganizationProfilesInput;
 }>;
@@ -60800,6 +60863,14 @@ export type GetTrainerRoleTypesQueryVariables = Exact<{ [key: string]: never; }>
 
 export type GetTrainerRoleTypesQuery = { __typename?: 'query_root', trainer_role_type: Array<{ __typename?: 'trainer_role_type', id: any, name: string }> };
 
+export type UpdateProfileAccessMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+  canAccessKnowledgeHub: Scalars['Boolean'];
+}>;
+
+
+export type UpdateProfileAccessMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', canAccessKnowledgeHub?: boolean | null } | null };
+
 export type ArchiveProfileMutationVariables = Exact<{
   profileId: Scalars['uuid'];
 }>;
@@ -60849,10 +60920,18 @@ export type GetProfileDetailsQueryVariables = Exact<{
   orgId?: InputMaybe<Scalars['uuid']>;
   withCourseHistory?: InputMaybe<Scalars['Boolean']>;
   withCourseTrainerHistory?: InputMaybe<Scalars['Boolean']>;
+  withKnowledgeHubAccess?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courseAsTrainer: Array<{ __typename?: 'course_trainer', id: any, course_id: number, type: Course_Trainer_Type_Enum, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, start: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', start?: any | null } | null } | null }, end: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', end?: any | null } | null } | null } } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum, course_code?: string | null, name: string, status?: Course_Status_Enum | null, reaccreditation?: boolean | null }> };
+export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', canAccessKnowledgeHub?: boolean | null, id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courseAsTrainer: Array<{ __typename?: 'course_trainer', id: any, course_id: number, type: Course_Trainer_Type_Enum, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null, start: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', start?: any | null } | null } | null }, end: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', end?: any | null } | null } | null } } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum, course_code?: string | null, name: string, status?: Course_Status_Enum | null, reaccreditation?: boolean | null }> };
+
+export type GetUserKnowledgeHubAccessQueryVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type GetUserKnowledgeHubAccessQuery = { __typename?: 'query_root', organization_member_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;

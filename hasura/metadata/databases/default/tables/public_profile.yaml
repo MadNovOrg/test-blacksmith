@@ -3,6 +3,8 @@ table:
   schema: public
 configuration:
   column_config:
+    can_access_knowledge_hub:
+      custom_name: canAccessKnowledgeHub
     contact_details:
       custom_name: contactDetails
     created_at:
@@ -118,7 +120,7 @@ computed_fields:
       function:
         name: profile_full_name
         schema: public
-    comment: ""
+    comment: ''
   - name: givenName
     definition:
       function:
@@ -155,6 +157,7 @@ select_permissions:
         - archived
         - attributes
         - avatar
+        - can_access_knowledge_hub
         - contact_details
         - country
         - countryCode
@@ -289,6 +292,7 @@ select_permissions:
         - archived
         - attributes
         - avatar
+        - can_access_knowledge_hub
         - contact_details
         - country
         - countryCode
@@ -325,6 +329,7 @@ select_permissions:
         - archived
         - attributes
         - avatar
+        - can_access_knowledge_hub
         - contact_details
         - country
         - countryCode
@@ -425,6 +430,12 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - can_access_knowledge_hub
+      filter: {}
+      check: null
   - role: sales-admin
     permission:
       columns:
@@ -437,11 +448,12 @@ update_permissions:
   - role: tt-admin
     permission:
       columns:
-        - archived
         - _family_name
         - _given_name
-        - last_activity
+        - archived
+        - can_access_knowledge_hub
         - dob
+        - last_activity
       filter: {}
       check: null
   - role: tt-ops
@@ -450,6 +462,7 @@ update_permissions:
         - _family_name
         - _given_name
         - archived
+        - can_access_knowledge_hub
         - dob
         - last_activity
       filter: {}

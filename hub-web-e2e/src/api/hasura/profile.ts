@@ -2,6 +2,8 @@ import { Chance } from 'chance'
 import { gql } from 'graphql-request'
 
 import {
+  ProfileAccessToKnowledgeHubQuery,
+  ProfileAccessToKnowledgeHubQueryVariables,
   ProfileByEmailQuery,
   ProfileByEmailQueryVariables,
 } from '@qa/generated/graphql'
@@ -25,6 +27,43 @@ export const getProfileId = async (email: string): Promise<string> => {
   >(query, { email })
   console.log(`Email: ${email}, Profile ID: ${response.profile[0].id}`)
   return response.profile[0].id
+}
+
+export const getProfileAccessToKnowledgeHub = async (id: string) => {
+  const query = gql`
+    query ProfileAccessToKnowledgeHub($id: uuid!) {
+      profile_by_pk(id: $id) {
+        id
+        canAccessKnowledgeHub
+      }
+    }
+  `
+  const response = await client.request<
+    ProfileAccessToKnowledgeHubQuery,
+    ProfileAccessToKnowledgeHubQueryVariables
+  >(query, { id })
+
+  return response.profile_by_pk
+}
+
+type DeleteProfileMutationResponse = {
+  delete_profile_by_pk: { id: string }
+}
+
+export const deleteProfile = async (id: string) => {
+  const mutation = gql`
+    mutation DeleteProfile($id: uuid!) {
+      delete_profile_by_pk(id: $id) {
+        id
+      }
+    }
+  `
+  const response = await client.request<DeleteProfileMutationResponse>(
+    mutation,
+    { id },
+  )
+
+  return response.delete_profile_by_pk.id
 }
 
 type InsertProfileResponse = {

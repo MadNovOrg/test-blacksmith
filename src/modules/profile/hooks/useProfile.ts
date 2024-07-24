@@ -111,6 +111,7 @@ export default function useProfile(
   orgId?: string,
   withCourseHistory = false,
   refreshProfileData = false,
+  withKnowledgeHubAccess = false,
 ) {
   const [{ data: getProfileResponse, error: getProfileError }, reexecuteQuery] =
     useQuery<GetProfileDetailsQuery, GetProfileDetailsQueryVariables>({
@@ -121,6 +122,7 @@ export default function useProfile(
         orgId,
         withCourseHistory,
         withCourseTrainerHistory: withCourseHistory,
+        withKnowledgeHubAccess: withKnowledgeHubAccess,
       },
     })
   const [{ data: avatarData }, updateAvatarMutation] = useMutation<

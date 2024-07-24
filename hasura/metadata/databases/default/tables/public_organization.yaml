@@ -3,6 +3,8 @@ table:
   schema: public
 configuration:
   column_config:
+    can_access_knowledge_hub:
+      custom_name: canAccessKnowledgeHub
     contact_details:
       custom_name: contactDetails
     created_at:
@@ -22,6 +24,7 @@ configuration:
     xero_contact_id:
       custom_name: xeroContactId
   custom_column_names:
+    can_access_knowledge_hub: canAccessKnowledgeHub
     contact_details: contactDetails
     created_at: createdAt
     dfe_establishment_id: dfeEstablishmentId
@@ -275,24 +278,25 @@ select_permissions:
   - role: finance
     permission:
       columns:
-        - name
-        - go1_licenses
-        - reserved_go1_licenses
         - address
         - attributes
+        - can_access_knowledge_hub
         - contact_details
+        - created_at
         - dfe_establishment_id
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - name
+        - organisation_type
         - original_record
         - preferences
-        - tags
-        - geo_coordinates
         - region
-        - organisation_type
+        - reserved_go1_licenses
         - sector
-        - xero_contact_id
-        - created_at
+        - tags
         - updated_at
-        - id
+        - xero_contact_id
       computed_fields:
         - addressEachText
         - postCode
@@ -407,6 +411,7 @@ select_permissions:
       columns:
         - address
         - attributes
+        - can_access_knowledge_hub
         - contact_details
         - created_at
         - dfe_establishment_id
@@ -414,11 +419,11 @@ select_permissions:
         - go1_licenses
         - id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
-        - organisation_type
         - sector
         - tags
         - updated_at
@@ -431,24 +436,25 @@ select_permissions:
   - role: tt-ops
     permission:
       columns:
-        - name
-        - go1_licenses
-        - reserved_go1_licenses
         - address
         - attributes
+        - can_access_knowledge_hub
         - contact_details
+        - created_at
         - dfe_establishment_id
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - name
+        - organisation_type
         - original_record
         - preferences
-        - tags
-        - geo_coordinates
         - region
-        - organisation_type
+        - reserved_go1_licenses
         - sector
-        - xero_contact_id
-        - created_at
+        - tags
         - updated_at
-        - id
+        - xero_contact_id
       computed_fields:
         - addressEachText
         - postCode
@@ -504,6 +510,12 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - can_access_knowledge_hub
+      filter: {}
+      check: {}
   - role: sales-admin
     permission:
       columns:
@@ -544,13 +556,14 @@ update_permissions:
       columns:
         - address
         - attributes
+        - can_access_knowledge_hub
         - contact_details
         - geo_coordinates
         - name
+        - organisation_type
         - preferences
         - region
         - sector
-        - organisation_type
         - tags
         - xero_contact_id
       filter: {}
@@ -560,17 +573,18 @@ update_permissions:
       columns:
         - address
         - attributes
+        - can_access_knowledge_hub
         - contact_details
         - geo_coordinates
         - go1_licenses
         - id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
         - sector
-        - organisation_type
         - tags
         - xero_contact_id
       filter: {}

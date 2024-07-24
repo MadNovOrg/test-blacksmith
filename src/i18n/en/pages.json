@@ -1175,7 +1175,10 @@
     "bl-license-deleting-error": "There was an error deleting the licence. Please try again later",
     "this-is-an-archived-user": "This is an archived user.",
     "manage-data": "Manage my data",
-    "unsubscribe": "Unsubscribe"
+    "unsubscribe": "Unsubscribe",
+    "knowledge-hub-access-placeholder": "By switching this toggle off, Individuals access to the Knowledge Hub will be revoked, while access to Connect will still remain.",
+    "knowledge-hub-access-warning": "It is not possible to allow access to Knowledge Hub for this user, because all organisations he relates to are cut off this access",
+    "permissions": "Permissions"
   },
   "orders": {
     "cols-invoiceNumber": "Invoice no.",
@@ -1458,6 +1461,9 @@
           "col-note": "Note",
           "col-invoked-by": "Invoked by"
         }
+      },
+      "permissions": {
+        "title": "Permissions"
       }
     },
     "edit-organization": "Edit organisation",

@@ -51,6 +51,8 @@ export class AllOrganisations extends BasePage {
   readonly organisationTitle: Locator
   readonly phone: Locator
   readonly type: Locator
+  readonly permissionsTab: Locator
+  readonly knowledgeHubAccessSwitch: Locator
 
   constructor(page: Page) {
     super(page)
@@ -116,6 +118,10 @@ export class AllOrganisations extends BasePage {
     )
     this.organisationTitle = this.page.locator('[data-testid=org-title]')
     this.type = this.page.locator('data-testid=org-type-selector')
+    this.permissionsTab = this.page.locator('[data-testid="org-permissions"]')
+    this.knowledgeHubAccessSwitch = this.page.locator(
+      '[data-testid="org-knowledge-hub-access-switch"]',
+    )
   }
 
   async goto(orgId?: string) {
