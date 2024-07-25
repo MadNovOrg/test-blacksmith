@@ -65,11 +65,11 @@ export const ProfilePermissions = ({
           <Alert sx={{ my: 1 }} severity="warning" variant="outlined">
             {t('pages.my-profile.knowledge-hub-access-warning')}
           </Alert>
-        ) : null}
-
-        <Typography variant="body1" color="grey.700">
-          {t('pages.my-profile.knowledge-hub-access-placeholder')}
-        </Typography>
+        ) : (
+          <Typography variant="body1" color="grey.700">
+            {t('pages.my-profile.knowledge-hub-access')}
+          </Typography>
+        )}
       </Box>
     </>
   )

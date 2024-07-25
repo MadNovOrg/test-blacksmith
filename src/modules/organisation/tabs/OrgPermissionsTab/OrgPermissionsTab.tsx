@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography'
 import { useCallback, useEffect, useState } from 'react'
 import { useWindowSize } from 'react-use'
 
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+
 import {
   useOrganisationPermissions,
   useUpdateOrganisationPermissions,
@@ -17,6 +19,7 @@ type OrgPermissionsTabProps = {
 }
 
 export const OrgPermissionsTab = ({ orgId }: OrgPermissionsTabProps) => {
+  const { t } = useScopedTranslation('pages.org-details.tabs.permissions')
   const { width } = useWindowSize()
 
   const isMobile = width <= 425
@@ -75,8 +78,7 @@ export const OrgPermissionsTab = ({ orgId }: OrgPermissionsTabProps) => {
           onChange={accessHandleChange}
         />
         <Typography variant="body1" color="grey.700">
-          By switching this toggle off, Individuals access to the Knowledge Hub
-          will be revoked, while access to Connect will still remain.
+          {t('knowledge-hub-access')}
         </Typography>
       </Box>
     </Box>

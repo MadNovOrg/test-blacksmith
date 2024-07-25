@@ -1176,7 +1176,7 @@
     "this-is-an-archived-user": "This is an archived user.",
     "manage-data": "Manage my data",
     "unsubscribe": "Unsubscribe",
-    "knowledge-hub-access-placeholder": "By switching this toggle off, Individuals access to the Knowledge Hub will be revoked, while access to Connect will still remain.",
+    "knowledge-hub-access": "By switching this toggle off, Individuals access to the Knowledge Hub will be revoked, while access to Connect will still remain.",
     "knowledge-hub-access-warning": "It is not possible to allow access to Knowledge Hub for this user, because all organisations he relates to are cut off this access",
     "permissions": "Permissions"
   },
@@ -1463,7 +1463,8 @@
         }
       },
       "permissions": {
-        "title": "Permissions"
+        "title": "Permissions",
+        "knowledge-hub-access": "By switching this toggle off, all members within this organization will cut off access to the Knowledge Hub, while access to Connect will still remain."
       }
     },
     "edit-organization": "Edit organisation",
