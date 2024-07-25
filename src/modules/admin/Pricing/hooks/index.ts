@@ -3,7 +3,6 @@ import { zonedTimeToUtc } from 'date-fns-tz'
 import { useMutation } from 'urql'
 
 import {
-  Course_Pricing,
   DeleteCoursePricingScheduleMutation,
   DeleteCoursePricingScheduleMutationVariables,
   InsertCoursePricingScheduleMutation,
@@ -20,9 +19,6 @@ import {
 
 export type PricingDetails = {
   rowAfterChange: GridValidRowModel
-  rowBeforeChange: GridValidRowModel
-  pricing: Course_Pricing | null
-  authorId: string
 }
 
 export const useUpdatePricingEntry = () => {
@@ -31,18 +27,10 @@ export const useUpdatePricingEntry = () => {
     SetCoursePricingScheduleMutationVariables
   >(UPDATE_COURSE_PRICING)
 
-  const updatePricingSchedule = async ({
-    rowAfterChange,
-    rowBeforeChange,
-    pricing,
-    authorId,
-  }: PricingDetails) => {
+  const updatePricingSchedule = async ({ rowAfterChange }: PricingDetails) => {
     const { data } = await updateCoursePricingSchedule({
       id: rowAfterChange.id,
-      coursePricingId: pricing?.id,
-      oldPrice: rowBeforeChange.priceAmount,
       priceAmount: rowAfterChange.priceAmount,
-      authorId,
       effectiveFrom: zonedTimeToUtc(
         new Date(rowAfterChange.effectiveFrom),
         'GMT',

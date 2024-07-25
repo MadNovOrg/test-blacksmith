@@ -18,6 +18,7 @@ import {
   Course_Pricing_Schedule,
   Course_Pricing,
   Course_Level_Enum,
+  PricingChangelogQuery,
 } from '@app/generated/graphql'
 import { isNotNullish } from '@app/util'
 
@@ -494,3 +495,173 @@ export const BILD_COURSE_LEVELS = [
   Course_Level_Enum.BildAdvancedTrainer,
   Course_Level_Enum.BildIntermediateTrainer,
 ]
+
+export const formatChangelogDate = (
+  date: PricingChangelogQuery['course_pricing_changelog'][number]['newEffectiveFrom'],
+  separator: '-' | '/' = '-',
+) => {
+  return format(new Date(date), `yyyy${separator}MM${separator}dd`)
+}
+
+export const formatSchedulePriceDuration = (
+  changelog: Pick<
+    PricingChangelogQuery['course_pricing_changelog'][number],
+    | 'courseSchedulePrice'
+    | 'newEffectiveFrom'
+    | 'newEffectiveTo'
+    | 'oldEffectiveFrom'
+    | 'oldEffectiveTo'
+  >,
+) => {
+  const {
+    courseSchedulePrice,
+    newEffectiveFrom,
+    newEffectiveTo,
+    oldEffectiveFrom,
+    oldEffectiveTo,
+  } = changelog
+
+  let from = ''
+  let to = ''
+
+  if (
+    !newEffectiveFrom &&
+    !newEffectiveTo &&
+    !oldEffectiveFrom &&
+    !oldEffectiveTo
+  ) {
+    from = format(new Date(courseSchedulePrice?.effectiveFrom), 'yyyy/MM/dd')
+    to = format(new Date(courseSchedulePrice?.effectiveTo), 'yyyy/MM/dd')
+  } else {
+    const isInsertChangelog =
+      newEffectiveFrom && newEffectiveTo && !oldEffectiveFrom && !oldEffectiveTo
+
+    from = format(
+      new Date(isInsertChangelog ? newEffectiveFrom : oldEffectiveFrom),
+      'yyyy/MM/dd',
+    )
+
+    to = format(
+      new Date(isInsertChangelog ? newEffectiveTo : oldEffectiveTo),
+      'yyyy/MM/dd',
+    )
+  }
+
+  return `${from ?? ''}${to ? ` - ${to}` : ''}`
+}
+
+export const getChangelogEvents = (
+  changelog: Pick<
+    PricingChangelogQuery['course_pricing_changelog'][number],
+    | 'coursePricing'
+    | 'newEffectiveFrom'
+    | 'newEffectiveTo'
+    | 'newPrice'
+    | 'oldEffectiveFrom'
+    | 'oldEffectiveTo'
+    | 'oldPrice'
+  >,
+  t: TFunction,
+) => {
+  const events: string[] = []
+  const {
+    newEffectiveFrom,
+    newEffectiveTo,
+    newPrice,
+    oldEffectiveFrom,
+    oldEffectiveTo,
+    oldPrice,
+  } = changelog
+
+  const isChangelogPriceCreation =
+    !oldPrice && !oldEffectiveFrom && !oldEffectiveTo
+
+  const isChangelogPriceDelete =
+    !newPrice && !newEffectiveFrom && !newEffectiveTo
+
+  if (isChangelogPriceCreation) {
+    events.push(
+      t('pages.course-pricing.modal-changelog-insert-event', {
+        newPrice: t('currency', {
+          amount: changelog.newPrice,
+          currency: changelog.coursePricing.priceCurrency,
+        }),
+      }),
+    )
+  } else if (isChangelogPriceDelete) {
+    events.push(
+      t('pages.course-pricing.modal-changelog-delete-event', {
+        oldPrice: t('currency', {
+          amount: changelog.oldPrice,
+          currency: changelog.coursePricing.priceCurrency,
+        }),
+      }),
+    )
+  } else {
+    const changedPrice = oldPrice && newPrice
+    const effectiveFromChanged = oldEffectiveFrom && newEffectiveFrom
+    const effectiveToChanged = oldEffectiveTo && newEffectiveTo
+
+    if (changedPrice) {
+      events.push(
+        t('pages.course-pricing.modal-changelog-update-price-event', {
+          oldPrice: t('currency', {
+            amount: changelog.oldPrice,
+            currency: changelog.coursePricing.priceCurrency,
+          }),
+          newPrice: t('currency', {
+            amount: changelog.newPrice,
+            currency: changelog.coursePricing.priceCurrency,
+          }),
+        }),
+      )
+    }
+
+    if (effectiveFromChanged) {
+      events.push(
+        t('pages.course-pricing.modal-changelog-update-effective-from-event', {
+          newDate: formatChangelogDate(newEffectiveFrom),
+          oldDate: formatChangelogDate(oldEffectiveFrom),
+        }),
+      )
+    }
+
+    if (effectiveToChanged) {
+      events.push(
+        t('pages.course-pricing.modal-changelog-update-effective-to-event', {
+          newDate: formatChangelogDate(newEffectiveTo),
+          oldDate: formatChangelogDate(oldEffectiveTo),
+        }),
+      )
+    }
+  }
+
+  return events
+}
+
+export const getChangelogDuration = (
+  changelogs: PricingChangelogQuery['course_pricing_changelog'],
+) => {
+  if (changelogs[0].courseSchedulePrice) {
+    return {
+      from: changelogs[0].courseSchedulePrice.effectiveFrom,
+      to: changelogs[0].courseSchedulePrice.effectiveTo,
+    }
+  }
+
+  const deleteChangelog = changelogs.find(
+    changelog =>
+      !(
+        changelog.newPrice &&
+        changelog.newEffectiveFrom &&
+        changelog.newEffectiveTo
+      ),
+  )
+
+  if (deleteChangelog) {
+    return {
+      from: deleteChangelog.oldEffectiveFrom,
+      to: deleteChangelog.oldEffectiveTo,
+    }
+  }
+}

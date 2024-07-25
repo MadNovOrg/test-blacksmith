@@ -12,7 +12,6 @@ export const INSERT_COURSE_PRICING = gql`
     $id: uuid!
     $coursePricingId: uuid!
     $priceAmount: numeric!
-    $authorId: uuid!
     $effectiveFrom: date!
     $effectiveTo: date!
   ) {
@@ -28,27 +27,13 @@ export const INSERT_COURSE_PRICING = gql`
     ) {
       id
     }
-    course_pricing_changelog: insert_course_pricing_changelog_one(
-      object: {
-        coursePricingScheduleId: $id
-        coursePricingId: $coursePricingId
-        authorId: $authorId
-        oldPrice: $priceAmount
-        newPrice: $priceAmount
-      }
-    ) {
-      id
-    }
   }
 `
 
 export const UPDATE_COURSE_PRICING = gql`
   mutation setCoursePricingSchedule(
     $id: uuid!
-    $coursePricingId: uuid!
-    $oldPrice: numeric!
     $priceAmount: numeric!
-    $authorId: uuid!
     $effectiveFrom: date!
     $effectiveTo: date!
   ) {
@@ -62,40 +47,14 @@ export const UPDATE_COURSE_PRICING = gql`
     ) {
       id
     }
-    course_pricing_changelog: insert_course_pricing_changelog_one(
-      object: {
-        coursePricingScheduleId: $id
-        coursePricingId: $coursePricingId
-        authorId: $authorId
-        oldPrice: $oldPrice
-        newPrice: $priceAmount
-      }
-    ) {
-      id
-    }
   }
 `
 
 export const SET_SINGLE_COURSE_PRICING = gql`
-  mutation setCoursePricing(
-    $id: uuid!
-    $oldPrice: numeric!
-    $priceAmount: numeric!
-    $authorId: uuid!
-  ) {
+  mutation setCoursePricing($id: uuid!, $priceAmount: numeric!) {
     update_course_pricing_by_pk(
       pk_columns: { id: $id }
       _set: { priceAmount: $priceAmount }
-    ) {
-      id
-    }
-    course_pricing_changelog: insert_course_pricing_changelog_one(
-      object: {
-        coursePricingId: $id
-        authorId: $authorId
-        oldPrice: $oldPrice
-        newPrice: $priceAmount
-      }
     ) {
       id
     }
@@ -106,16 +65,10 @@ export const SET_BULK_COURSE_PRICING = gql`
   mutation setCoursePricingBulk(
     $newPrice: numeric!
     $coursePricingIds: [uuid!]!
-    $coursePricingChangelogs: [course_pricing_changelog_insert_input!]!
   ) {
     update_course_pricing(
       where: { id: { _in: $coursePricingIds } }
       _set: { priceAmount: $newPrice }
-    ) {
-      affected_rows
-    }
-    course_pricing_changelog: insert_course_pricing_changelog(
-      objects: $coursePricingChangelogs
     ) {
       affected_rows
     }
@@ -135,15 +88,27 @@ export const GET_PRICING_CHANGELOG = gql`
       offset: $offset
     ) {
       id
-      newPrice
-      oldPrice
-      createdAt
       author {
         id
-        fullName
-        avatar
         archived
+        avatar
+        fullName
       }
+      createdAt
+      coursePricing {
+        priceCurrency
+      }
+      courseSchedulePrice {
+        effectiveFrom
+        effectiveTo
+      }
+      createdAt
+      newEffectiveFrom
+      newEffectiveTo
+      newPrice
+      oldEffectiveFrom
+      oldEffectiveTo
+      oldPrice
     }
     course_pricing_changelog_aggregate(where: $where) {
       aggregate {

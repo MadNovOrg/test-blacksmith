@@ -29,5 +29,6 @@ export const usePricingChangelog = ({
       offset: currentPage * perPage,
     },
     pause: !coursePricing?.id,
+    requestPolicy: 'cache-and-network',
   })
 }

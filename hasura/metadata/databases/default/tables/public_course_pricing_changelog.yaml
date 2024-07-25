@@ -11,8 +11,16 @@ configuration:
       custom_name: coursePricingScheduleId
     created_at:
       custom_name: createdAt
+    new_effective_from:
+      custom_name: newEffectiveFrom
+    new_effective_to:
+      custom_name: newEffectiveTo
     new_price:
       custom_name: newPrice
+    old_effective_from:
+      custom_name: oldEffectiveFrom
+    old_effective_to:
+      custom_name: oldEffectiveTo
     old_price:
       custom_name: oldPrice
     updated_at:
@@ -22,7 +30,11 @@ configuration:
     course_pricing_id: coursePricingId
     course_pricing_schedule_id: coursePricingScheduleId
     created_at: createdAt
+    new_effective_from: newEffectiveFrom
+    new_effective_to: newEffectiveTo
     new_price: newPrice
+    old_effective_from: oldEffectiveFrom
+    old_effective_to: oldEffectiveTo
     old_price: oldPrice
     updated_at: updatedAt
   custom_root_fields: {}
@@ -33,6 +45,9 @@ object_relationships:
   - name: coursePricing
     using:
       foreign_key_constraint_on: course_pricing_id
+  - name: courseSchedulePrice
+    using:
+      foreign_key_constraint_on: course_pricing_schedule_id
 insert_permissions:
   - role: finance
     permission:
@@ -43,7 +58,11 @@ insert_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - new_effective_from
+        - new_effective_to
         - new_price
+        - old_effective_from
+        - old_effective_to
         - old_price
         - updated_at
   - role: tt-admin
@@ -55,7 +74,11 @@ insert_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - new_effective_from
+        - new_effective_to
         - new_price
+        - old_effective_from
+        - old_effective_to
         - old_price
         - updated_at
 select_permissions:
@@ -67,7 +90,11 @@ select_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - new_effective_from
+        - new_effective_to
         - new_price
+        - old_effective_from
+        - old_effective_to
         - old_price
         - updated_at
       filter: {}
@@ -80,7 +107,11 @@ select_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - new_effective_from
+        - new_effective_to
         - new_price
+        - old_effective_from
+        - old_effective_to
         - old_price
         - updated_at
       filter: {}

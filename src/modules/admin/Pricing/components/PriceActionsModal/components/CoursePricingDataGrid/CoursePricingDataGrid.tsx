@@ -165,7 +165,6 @@ export const CoursePricingDataGrid = ({
         id: rowAfterChange.id,
         coursePricingId: pricing?.id,
         priceAmount: rowAfterChange.priceAmount,
-        authorId: profile?.id,
         effectiveFrom: zonedTimeToUtc(
           new Date(rowAfterChange.effectiveFrom),
           'GMT',
@@ -208,9 +207,6 @@ export const CoursePricingDataGrid = ({
       ) {
         const data = await updatePricingSchedule({
           rowAfterChange,
-          rowBeforeChange,
-          pricing,
-          authorId: profile?.id ?? '',
         })
         if (data) onSave()
         const updatedRow = { ...rowAfterChange, isNew: false }
@@ -245,17 +241,11 @@ export const CoursePricingDataGrid = ({
             if (!data?.course_aggregate.aggregate?.count) {
               const data = await updatePricingSchedule({
                 rowAfterChange,
-                rowBeforeChange,
-                pricing,
-                authorId: profile?.id ?? '',
               })
               if (data) onSave()
             } else {
               setPricingDetails({
                 rowAfterChange,
-                rowBeforeChange,
-                pricing,
-                authorId: profile?.id ?? '',
               })
             }
           })
@@ -383,9 +373,6 @@ export const CoursePricingDataGrid = ({
       if (ctaOption === 'approve' && pricingDetails) {
         const pricingData = await updatePricingSchedule({
           rowAfterChange: pricingDetails?.rowAfterChange,
-          rowBeforeChange: pricingDetails?.rowAfterChange,
-          pricing: pricingDetails?.pricing,
-          authorId: profile?.id ?? '',
         })
         if (pricingData) onSave()
       }

@@ -141,3 +141,18 @@ delete_permissions:
   - role: tt-admin
     permission:
       filter: {}
+event_triggers:
+  - name: schedule_course_price
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/price/handle-schedule'

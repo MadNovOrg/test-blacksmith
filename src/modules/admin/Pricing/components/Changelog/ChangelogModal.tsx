@@ -22,7 +22,11 @@ import { Course_Pricing } from '@app/generated/graphql'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 
 import { usePricingChangelog } from '../../hooks'
-import { getCourseAttributes } from '../../utils'
+import {
+  formatSchedulePriceDuration,
+  getChangelogEvents,
+  getCourseAttributes,
+} from '../../utils'
 
 export type ChangelogModalProps = {
   coursePricing?: Course_Pricing | null
@@ -136,16 +140,21 @@ export const ChangelogModal = ({
           <Divider sx={{ my: 2 }} />
 
           <Table>
-            <TableHead>
+            <TableHead data-testid="table-head">
               <TableRow>
+                <TableCell>
+                  {t('pages.course-pricing.cols-price-duration')}
+                </TableCell>
                 <TableCell>
                   {t('pages.course-pricing.cols-administrator')}
                 </TableCell>
-                <TableCell>{t('pages.course-pricing.cols-date')}</TableCell>
+                <TableCell>
+                  {t('pages.course-pricing.cols-event-date')}
+                </TableCell>
                 <TableCell>{t('pages.course-pricing.cols-event')}</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody data-testid="table-body">
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={3}>
@@ -169,6 +178,9 @@ export const ChangelogModal = ({
               {data?.course_pricing_changelog.map(changelog => (
                 <TableRow key={changelog.id}>
                   <TableCell>
+                    {formatSchedulePriceDuration(changelog)}
+                  </TableCell>
+                  <TableCell>
                     <Box display="flex" alignItems="center" gap={1}>
                       {changelog.author ? (
                         <ProfileAvatar profile={changelog.author} />
@@ -179,16 +191,12 @@ export const ChangelogModal = ({
                     {t('dates.withTime', { date: changelog.createdAt })}
                   </TableCell>
                   <TableCell>
-                    {t('pages.course-pricing.modal-changelog-event', {
-                      oldPrice: t('currency', {
-                        amount: changelog.oldPrice,
-                        currency: coursePricing?.priceCurrency,
-                      }),
-                      newPrice: t('currency', {
-                        amount: changelog.newPrice,
-                        currency: coursePricing?.priceCurrency,
-                      }),
-                    })}
+                    {getChangelogEvents(changelog, t).map(ev => (
+                      <>
+                        {ev}
+                        <br />
+                      </>
+                    ))}
                   </TableCell>
                 </TableRow>
               ))}

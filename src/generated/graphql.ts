@@ -25677,10 +25677,16 @@ export type Course_Pricing_Changelog = {
   coursePricing: Course_Pricing;
   coursePricingId: Scalars['uuid'];
   coursePricingScheduleId?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  courseSchedulePrice?: Maybe<Course_Pricing_Schedule>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  newPrice: Scalars['numeric'];
-  oldPrice: Scalars['numeric'];
+  newEffectiveFrom?: Maybe<Scalars['timestamptz']>;
+  newEffectiveTo?: Maybe<Scalars['timestamptz']>;
+  newPrice?: Maybe<Scalars['numeric']>;
+  oldEffectiveFrom?: Maybe<Scalars['timestamptz']>;
+  oldEffectiveTo?: Maybe<Scalars['timestamptz']>;
+  oldPrice?: Maybe<Scalars['numeric']>;
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -25731,9 +25737,14 @@ export type Course_Pricing_Changelog_Bool_Exp = {
   coursePricing?: InputMaybe<Course_Pricing_Bool_Exp>;
   coursePricingId?: InputMaybe<Uuid_Comparison_Exp>;
   coursePricingScheduleId?: InputMaybe<Uuid_Comparison_Exp>;
+  courseSchedulePrice?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  newEffectiveFrom?: InputMaybe<Timestamptz_Comparison_Exp>;
+  newEffectiveTo?: InputMaybe<Timestamptz_Comparison_Exp>;
   newPrice?: InputMaybe<Numeric_Comparison_Exp>;
+  oldEffectiveFrom?: InputMaybe<Timestamptz_Comparison_Exp>;
+  oldEffectiveTo?: InputMaybe<Timestamptz_Comparison_Exp>;
   oldPrice?: InputMaybe<Numeric_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -25757,9 +25768,14 @@ export type Course_Pricing_Changelog_Insert_Input = {
   coursePricing?: InputMaybe<Course_Pricing_Obj_Rel_Insert_Input>;
   coursePricingId?: InputMaybe<Scalars['uuid']>;
   coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
+  courseSchedulePrice?: InputMaybe<Course_Pricing_Schedule_Obj_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  newEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
+  newEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
+  oldEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
+  oldEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   oldPrice?: InputMaybe<Scalars['numeric']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -25772,7 +25788,11 @@ export type Course_Pricing_Changelog_Max_Fields = {
   coursePricingScheduleId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  newEffectiveFrom?: Maybe<Scalars['timestamptz']>;
+  newEffectiveTo?: Maybe<Scalars['timestamptz']>;
   newPrice?: Maybe<Scalars['numeric']>;
+  oldEffectiveFrom?: Maybe<Scalars['timestamptz']>;
+  oldEffectiveTo?: Maybe<Scalars['timestamptz']>;
   oldPrice?: Maybe<Scalars['numeric']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -25785,7 +25805,11 @@ export type Course_Pricing_Changelog_Min_Fields = {
   coursePricingScheduleId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  newEffectiveFrom?: Maybe<Scalars['timestamptz']>;
+  newEffectiveTo?: Maybe<Scalars['timestamptz']>;
   newPrice?: Maybe<Scalars['numeric']>;
+  oldEffectiveFrom?: Maybe<Scalars['timestamptz']>;
+  oldEffectiveTo?: Maybe<Scalars['timestamptz']>;
   oldPrice?: Maybe<Scalars['numeric']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -25813,9 +25837,14 @@ export type Course_Pricing_Changelog_Order_By = {
   coursePricing?: InputMaybe<Course_Pricing_Order_By>;
   coursePricingId?: InputMaybe<Order_By>;
   coursePricingScheduleId?: InputMaybe<Order_By>;
+  courseSchedulePrice?: InputMaybe<Course_Pricing_Schedule_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  newEffectiveFrom?: InputMaybe<Order_By>;
+  newEffectiveTo?: InputMaybe<Order_By>;
   newPrice?: InputMaybe<Order_By>;
+  oldEffectiveFrom?: InputMaybe<Order_By>;
+  oldEffectiveTo?: InputMaybe<Order_By>;
   oldPrice?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -25838,7 +25867,15 @@ export enum Course_Pricing_Changelog_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  NewEffectiveFrom = 'newEffectiveFrom',
+  /** column name */
+  NewEffectiveTo = 'newEffectiveTo',
+  /** column name */
   NewPrice = 'newPrice',
+  /** column name */
+  OldEffectiveFrom = 'oldEffectiveFrom',
+  /** column name */
+  OldEffectiveTo = 'oldEffectiveTo',
   /** column name */
   OldPrice = 'oldPrice',
   /** column name */
@@ -25852,7 +25889,11 @@ export type Course_Pricing_Changelog_Set_Input = {
   coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  newEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
+  newEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
+  oldEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
+  oldEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   oldPrice?: InputMaybe<Scalars['numeric']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -25893,7 +25934,11 @@ export type Course_Pricing_Changelog_Stream_Cursor_Value_Input = {
   coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  newEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
+  newEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
+  oldEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
+  oldEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   oldPrice?: InputMaybe<Scalars['numeric']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -25918,7 +25963,15 @@ export enum Course_Pricing_Changelog_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  NewEffectiveFrom = 'newEffectiveFrom',
+  /** column name */
+  NewEffectiveTo = 'newEffectiveTo',
+  /** column name */
   NewPrice = 'newPrice',
+  /** column name */
+  OldEffectiveFrom = 'oldEffectiveFrom',
+  /** column name */
+  OldEffectiveTo = 'oldEffectiveTo',
   /** column name */
   OldPrice = 'oldPrice',
   /** column name */
@@ -26055,7 +26108,7 @@ export type Course_Pricing_Pk_Columns_Input = {
 /** Schedules for course pricing per participant */
 export type Course_Pricing_Schedule = {
   __typename?: 'course_pricing_schedule';
-  coursePricingId: Scalars['uuid'];
+  coursePricingId?: Maybe<Scalars['uuid']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   effectiveFrom: Scalars['date'];
   effectiveTo?: Maybe<Scalars['date']>;
@@ -26243,6 +26296,13 @@ export type Course_Pricing_Schedule_Mutation_Response = {
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
   returning: Array<Course_Pricing_Schedule>;
+};
+
+/** input type for inserting object relation for remote table "course_pricing_schedule" */
+export type Course_Pricing_Schedule_Obj_Rel_Insert_Input = {
+  data: Course_Pricing_Schedule_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Pricing_Schedule_On_Conflict>;
 };
 
 /** on_conflict condition type for table "course_pricing_schedule" */
@@ -59622,7 +59682,7 @@ export type GetPricingQueryVariables = Exact<{
 }>;
 
 
-export type GetPricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId: any, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
+export type GetPricingQuery = { __typename?: 'query_root', course_pricing: Array<{ __typename?: 'course_pricing', id: any, level: Course_Level_Enum, priceAmount: any, priceCurrency: string, reaccreditation: boolean, type: Course_Type_Enum, xeroCode: string, blended: boolean, updatedAt?: any | null, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId?: any | null, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }>, pricingSchedules_aggregate: { __typename?: 'course_pricing_schedule_aggregate', aggregate?: { __typename?: 'course_pricing_schedule_aggregate_fields', count: number } | null, nodes: Array<{ __typename?: 'course_pricing_schedule', id: any, coursePricingId?: any | null, effectiveFrom: any, effectiveTo?: any | null, priceAmount: any, priceCurrency: string }> } }>, course_pricing_aggregate: { __typename?: 'course_pricing_aggregate', aggregate?: { __typename?: 'course_pricing_aggregate_fields', count: number } | null } };
 
 export type DeleteCoursePricingScheduleMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -59635,45 +59695,38 @@ export type InsertCoursePricingScheduleMutationVariables = Exact<{
   id: Scalars['uuid'];
   coursePricingId: Scalars['uuid'];
   priceAmount: Scalars['numeric'];
-  authorId: Scalars['uuid'];
   effectiveFrom: Scalars['date'];
   effectiveTo: Scalars['date'];
 }>;
 
 
-export type InsertCoursePricingScheduleMutation = { __typename?: 'mutation_root', course_pricing_schedule?: { __typename?: 'course_pricing_schedule', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
+export type InsertCoursePricingScheduleMutation = { __typename?: 'mutation_root', course_pricing_schedule?: { __typename?: 'course_pricing_schedule', id: any } | null };
 
 export type SetCoursePricingScheduleMutationVariables = Exact<{
   id: Scalars['uuid'];
-  coursePricingId: Scalars['uuid'];
-  oldPrice: Scalars['numeric'];
   priceAmount: Scalars['numeric'];
-  authorId: Scalars['uuid'];
   effectiveFrom: Scalars['date'];
   effectiveTo: Scalars['date'];
 }>;
 
 
-export type SetCoursePricingScheduleMutation = { __typename?: 'mutation_root', update_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
+export type SetCoursePricingScheduleMutation = { __typename?: 'mutation_root', update_course_pricing_schedule_by_pk?: { __typename?: 'course_pricing_schedule', id: any } | null };
 
 export type SetCoursePricingMutationVariables = Exact<{
   id: Scalars['uuid'];
-  oldPrice: Scalars['numeric'];
   priceAmount: Scalars['numeric'];
-  authorId: Scalars['uuid'];
 }>;
 
 
-export type SetCoursePricingMutation = { __typename?: 'mutation_root', update_course_pricing_by_pk?: { __typename?: 'course_pricing', id: any } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog', id: any } | null };
+export type SetCoursePricingMutation = { __typename?: 'mutation_root', update_course_pricing_by_pk?: { __typename?: 'course_pricing', id: any } | null };
 
 export type SetCoursePricingBulkMutationVariables = Exact<{
   newPrice: Scalars['numeric'];
   coursePricingIds: Array<Scalars['uuid']> | Scalars['uuid'];
-  coursePricingChangelogs: Array<Course_Pricing_Changelog_Insert_Input> | Course_Pricing_Changelog_Insert_Input;
 }>;
 
 
-export type SetCoursePricingBulkMutation = { __typename?: 'mutation_root', update_course_pricing?: { __typename?: 'course_pricing_mutation_response', affected_rows: number } | null, course_pricing_changelog?: { __typename?: 'course_pricing_changelog_mutation_response', affected_rows: number } | null };
+export type SetCoursePricingBulkMutation = { __typename?: 'mutation_root', update_course_pricing?: { __typename?: 'course_pricing_mutation_response', affected_rows: number } | null };
 
 export type PricingChangelogQueryVariables = Exact<{
   where?: InputMaybe<Course_Pricing_Changelog_Bool_Exp>;
@@ -59682,7 +59735,7 @@ export type PricingChangelogQueryVariables = Exact<{
 }>;
 
 
-export type PricingChangelogQuery = { __typename?: 'query_root', course_pricing_changelog: Array<{ __typename?: 'course_pricing_changelog', id: any, newPrice: any, oldPrice: any, createdAt: any, author?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }>, course_pricing_changelog_aggregate: { __typename?: 'course_pricing_changelog_aggregate', aggregate?: { __typename?: 'course_pricing_changelog_aggregate_fields', count: number } | null } };
+export type PricingChangelogQuery = { __typename?: 'query_root', course_pricing_changelog: Array<{ __typename?: 'course_pricing_changelog', id: any, createdAt: any, newEffectiveFrom?: any | null, newEffectiveTo?: any | null, newPrice?: any | null, oldEffectiveFrom?: any | null, oldEffectiveTo?: any | null, oldPrice?: any | null, author?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, fullName?: string | null } | null, coursePricing: { __typename?: 'course_pricing', priceCurrency: string }, courseSchedulePrice?: { __typename?: 'course_pricing_schedule', effectiveFrom: any, effectiveTo?: any | null } | null }>, course_pricing_changelog_aggregate: { __typename?: 'course_pricing_changelog_aggregate', aggregate?: { __typename?: 'course_pricing_changelog_aggregate_fields', count: number } | null } };
 
 export type GetCoursesWithPricingQueryVariables = Exact<{
   pricingStartBeforeChange: Scalars['timestamptz'];

@@ -70,6 +70,38 @@ import { UKTimezone } from '@app/util'
 
 const chance = new Chance()
 
+export const buildSchedulePriceChangelog = (
+  overrides?: Partial<
+    PricingChangelogQuery['course_pricing_changelog'][number]
+  >,
+) => {
+  const buildChangelog = build<
+    PricingChangelogQuery['course_pricing_changelog'][number]
+  >({
+    fields: {
+      id: chance.guid(),
+      author: {
+        id: chance.guid(),
+        archived: false,
+        fullName: chance.name(),
+      },
+      courseSchedulePrice: null,
+      coursePricing: {
+        priceCurrency: 'GBP',
+      },
+      createdAt: Date.now(),
+      newEffectiveFrom: null,
+      newEffectiveTo: null,
+      newPrice: null,
+      oldEffectiveFrom: null,
+      oldEffectiveTo: null,
+      oldPrice: null,
+    },
+  })
+
+  return buildChangelog({ overrides })
+}
+
 export const buildAddress = build<Address>({
   fields: {
     id: perBuild(() => chance.guid()),
@@ -1285,21 +1317,6 @@ export const buildAttendeeCourseEvaluationAnswers = build<GetEvaluationQuery>({
     ],
   },
 })
-export const buildPricing = build<
-  PricingChangelogQuery['course_pricing_changelog'][0]
->({
-  fields: {
-    createdAt: chance.date(),
-    id: chance.guid(),
-    newPrice: chance.integer(),
-    oldPrice: chance.integer(),
-    author: {
-      archived: false,
-      fullName: chance.name(),
-      id: chance.guid(),
-    },
-  },
-})
 
 export const buildPricingSchedule = build<Course_Pricing_Schedule>({
   fields: {
@@ -1324,5 +1341,22 @@ export const buildCoursePricing = build<Course_Pricing>({
     reaccreditation: false,
     type: Course_Type_Enum.Open,
     xeroCode: '',
+  },
+})
+
+export const buildPricing = build<
+  PricingChangelogQuery['course_pricing_changelog'][0]
+>({
+  fields: {
+    createdAt: chance.date(),
+    id: chance.guid(),
+    newPrice: chance.integer(),
+    oldPrice: chance.integer(),
+    author: {
+      archived: false,
+      fullName: chance.name(),
+      id: chance.guid(),
+    },
+    coursePricing: buildCoursePricing(),
   },
 })
