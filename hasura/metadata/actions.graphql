@@ -771,6 +771,7 @@ input UpdateUserProfileInput {
   disabilities: String
   orgId: String
   phoneCountryCode: String
+  canAccessKnowledgeHub: Boolean
 }
 
 input NotifyCourseInput {

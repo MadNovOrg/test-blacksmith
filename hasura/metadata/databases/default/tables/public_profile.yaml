@@ -20,6 +20,7 @@ configuration:
     updated_at:
       custom_name: updatedAt
   custom_column_names:
+    can_access_knowledge_hub: canAccessKnowledgeHub
     contact_details: contactDetails
     created_at: createdAt
     dietary_restrictions: dietaryRestrictions
@@ -157,7 +158,6 @@ select_permissions:
         - archived
         - attributes
         - avatar
-        - can_access_knowledge_hub
         - contact_details
         - country
         - countryCode
@@ -430,12 +430,6 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
-  - role: finance
-    permission:
-      columns:
-        - can_access_knowledge_hub
-      filter: {}
-      check: null
   - role: sales-admin
     permission:
       columns:

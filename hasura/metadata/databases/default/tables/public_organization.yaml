@@ -280,7 +280,6 @@ select_permissions:
       columns:
         - address
         - attributes
-        - can_access_knowledge_hub
         - contact_details
         - created_at
         - dfe_establishment_id
@@ -510,12 +509,6 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
-  - role: finance
-    permission:
-      columns:
-        - can_access_knowledge_hub
-      filter: {}
-      check: {}
   - role: sales-admin
     permission:
       columns:

@@ -45,7 +45,6 @@ import { CourseAsTrainer } from '../../components/CourseAsTrainer'
 import { CoursesTable } from '../../components/CoursesTable'
 import { InviteUserToOrganisation } from '../../components/InviteUserToOrganisation'
 import { OrganisationsTable } from '../../components/OrganisationsTable'
-import { ProfilePermissions } from '../../components/Permissions/Permissions'
 import { ProfileDeleteDialog } from '../../components/ProfileDeleteDialog'
 import { TableMenu, TableMenuSelections } from '../../components/TableMenu'
 import { UserGo1License } from '../../components/UserGo1License'
@@ -464,6 +463,36 @@ export const ViewProfilePage: React.FC<
               </Box>
             ) : null}
 
+            {acl.canManageKnowledgeHubAccess() ? (
+              <>
+                <Typography variant="subtitle2" mt={3}>
+                  {t('pages.my-profile.permissions')}
+                </Typography>
+                <Box
+                  bgcolor="common.white"
+                  borderRadius={1}
+                  my={1}
+                  p={3}
+                  sx={{ overflowX: 'auto' }}
+                >
+                  <DetailsRow label={'Access to Knowledge Hub'}>
+                    <Chip
+                      label={t(
+                        `pages.my-profile.${
+                          profile.canAccessKnowledgeHub
+                            ? 'hasAccessToKnowledgeHub'
+                            : 'doesNotHaveAccessToKnowledgeHub'
+                        }`,
+                      )}
+                      color={
+                        profile.canAccessKnowledgeHub ? 'success' : 'error'
+                      }
+                    />
+                  </DetailsRow>
+                </Box>
+              </>
+            ) : null}
+
             {!isMobile || selectedTab === TableMenuSelections.ORG_DETAILS ? (
               <>
                 <Typography variant="subtitle2" mb={1} mt={3}>
@@ -513,13 +542,6 @@ export const ViewProfilePage: React.FC<
               <Box mt={3}>
                 <UserGo1License license={go1Licenses[0]} editable={false} />
               </Box>
-            ) : null}
-
-            {acl.canManageKnowledgeHubAccess() ? (
-              <ProfilePermissions
-                canAccessKnowledgeHub={Boolean(profile.canAccessKnowledgeHub)}
-                profileId={profile.id}
-              />
             ) : null}
 
             <Box mt={5}>

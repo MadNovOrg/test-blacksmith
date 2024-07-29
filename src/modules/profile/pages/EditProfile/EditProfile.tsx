@@ -25,6 +25,7 @@ import { subYears } from 'date-fns'
 import { uniq } from 'lodash-es'
 import React, {
   ChangeEvent,
+  SyntheticEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -114,6 +115,7 @@ import {
   rolesFormSchema,
 } from '../../components/EditRoles'
 import { InviteUserToOrganisation } from '../../components/InviteUserToOrganisation'
+import { ProfilePermissions } from '../../components/Permissions/Permissions'
 import { UserGo1License } from '../../components/UserGo1License'
 
 export const EditProfilePage: React.FC<
@@ -174,6 +176,7 @@ export const EditProfilePage: React.FC<
     callProfileParams.orgId,
     callProfileParams.userCourses,
     callProfileParams.refreshProfileData,
+    acl.canManageKnowledgeHubAccess(),
   )
 
   /**
@@ -268,6 +271,7 @@ export const EditProfilePage: React.FC<
             name: t('country'),
           }),
         ),
+        canAccessKnowledgeHub: yup.boolean().optional(),
         phone: schemas.phone(t),
         phoneCountryCode: yup.string().optional(),
         dob: yup
@@ -312,6 +316,7 @@ export const EditProfilePage: React.FC<
       firstName: '',
       surname: '',
       countryCode: '',
+      canAccessKnowledgeHub: false,
       phone: '',
       phoneCountryCode: DEFAULT_PHONE_COUNTRY,
       dob: null,
@@ -372,6 +377,10 @@ export const EditProfilePage: React.FC<
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
       setValue('org', [])
+      setValue(
+        'canAccessKnowledgeHub',
+        profile.canAccessKnowledgeHub ?? undefined,
+      )
       setValue('country', profile.country ?? '')
       setValue('countryCode', profile.countryCode ?? '')
       setValue('phoneCountryCode', profile.phoneCountryCode ?? '')
@@ -572,6 +581,9 @@ export const EditProfilePage: React.FC<
           country: data.country,
           countryCode: data.countryCode,
           phoneCountryCode: data.phoneCountryCode ?? '',
+          canAccessKnowledgeHub: acl.canManageKnowledgeHubAccess()
+            ? data.canAccessKnowledgeHub
+            : undefined,
         },
       })
 
@@ -757,6 +769,13 @@ export const EditProfilePage: React.FC<
       updateOrgMemberFetching,
       removeOrgMemberFetching,
     ],
+  )
+
+  const onAccessToKnowledgeHubChange = useCallback(
+    (e: SyntheticEvent, checked: boolean) => {
+      setValue('canAccessKnowledgeHub', checked)
+    },
+    [setValue],
   )
 
   if (!profile || !systemRoles) return null
@@ -1130,6 +1149,14 @@ export const EditProfilePage: React.FC<
                   </Typography>
                   <EditRoles />
                 </>
+              ) : null}
+
+              {acl.canManageKnowledgeHubAccess() ? (
+                <ProfilePermissions
+                  checked={Boolean(values.canAccessKnowledgeHub)}
+                  onChange={onAccessToKnowledgeHubChange}
+                  profileId={profile.id}
+                />
               ) : null}
 
               <Grid item my={3}>

@@ -10365,6 +10365,7 @@ export type UpdateUserPayload = {
 
 export type UpdateUserProfileInput = {
   avatar?: InputMaybe<Scalars['String']>;
+  canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
   country?: InputMaybe<Scalars['String']>;
   countryCode?: InputMaybe<Scalars['String']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;

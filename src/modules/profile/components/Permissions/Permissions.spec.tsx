@@ -6,7 +6,7 @@ import { fromValue } from 'wonka'
 import { GetUserKnowledgeHubAccessQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, render, screen } from '@test/index'
 
 import { useUpdateProfileAccess } from '../../hooks/useUpdateProfileAccess'
 import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '../../queries/get-user-knowledge-hub-access'
@@ -49,7 +49,8 @@ describe(ProfilePermissions.name, () => {
     render(
       <Provider value={client}>
         <ProfilePermissions
-          canAccessKnowledgeHub={false}
+          checked={false}
+          onChange={vi.fn()}
           profileId={chance.guid()}
         />
       </Provider>,
@@ -90,7 +91,8 @@ describe(ProfilePermissions.name, () => {
     render(
       <Provider value={client}>
         <ProfilePermissions
-          canAccessKnowledgeHub={false}
+          checked={false}
+          onChange={vi.fn()}
           profileId={chance.guid()}
         />
       </Provider>,
@@ -109,91 +111,5 @@ describe(ProfilePermissions.name, () => {
     expect(
       screen.queryByText(t('pages.my-profile.knowledge-hub-access-warning')),
     ).not.toBeInTheDocument()
-  })
-
-  it("update user's access to true for Knowledge Hub when user has no access", async () => {
-    const profileId = chance.guid()
-
-    const client = {
-      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === GET_USER_KNOWLEDGE_HUB_ACCESS) {
-          return fromValue<{ data: GetUserKnowledgeHubAccessQuery }>({
-            data: {
-              organization_member_aggregate: {
-                aggregate: {
-                  count: 1,
-                },
-              },
-            },
-          })
-        }
-      },
-    } as unknown as Client
-
-    render(
-      <Provider value={client}>
-        <ProfilePermissions
-          canAccessKnowledgeHub={false}
-          profileId={profileId}
-        />
-      </Provider>,
-      {
-        auth: {
-          activeRole: RoleName.TT_ADMIN,
-        },
-      },
-    )
-
-    const accessSwitch = screen.getByTestId('knowledge-hub-access-switch')
-    await userEvent.click(accessSwitch)
-
-    expect(updateProfileAccessMock).toHaveBeenCalledTimes(1)
-    expect(updateProfileAccessMock).toHaveBeenCalledWith({
-      canAccessKnowledgeHub: true,
-      profileId,
-    })
-  })
-
-  it("update user's access to false for Knowledge Hub when user has access", async () => {
-    const profileId = chance.guid()
-
-    const client = {
-      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
-        if (query === GET_USER_KNOWLEDGE_HUB_ACCESS) {
-          return fromValue<{ data: GetUserKnowledgeHubAccessQuery }>({
-            data: {
-              organization_member_aggregate: {
-                aggregate: {
-                  count: 1,
-                },
-              },
-            },
-          })
-        }
-      },
-    } as unknown as Client
-
-    render(
-      <Provider value={client}>
-        <ProfilePermissions
-          canAccessKnowledgeHub={true}
-          profileId={profileId}
-        />
-      </Provider>,
-      {
-        auth: {
-          activeRole: RoleName.TT_ADMIN,
-        },
-      },
-    )
-
-    const accessSwitch = screen.getByTestId('knowledge-hub-access-switch')
-    await userEvent.click(accessSwitch)
-
-    expect(updateProfileAccessMock).toHaveBeenCalledTimes(1)
-    expect(updateProfileAccessMock).toHaveBeenCalledWith({
-      canAccessKnowledgeHub: false,
-      profileId,
-    })
   })
 })

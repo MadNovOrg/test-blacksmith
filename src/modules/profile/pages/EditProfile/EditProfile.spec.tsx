@@ -1,13 +1,16 @@
 import { useTranslation } from 'react-i18next'
-import { Client, Provider } from 'urql'
-import { never } from 'wonka'
+import { Client, Provider, TypedDocumentNode } from 'urql'
+import { fromValue, never } from 'wonka'
 
+import { GetUserKnowledgeHubAccessQuery } from '@app/generated/graphql'
 import useProfile from '@app/modules/profile/hooks/useProfile'
 import useRoles from '@app/modules/profile/hooks/useRoles'
 import { RoleName } from '@app/types'
 
 import { render, renderHook, screen } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
+
+import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '../../queries/get-user-knowledge-hub-access'
 
 import { EditProfilePage } from './EditProfile'
 
@@ -23,6 +26,115 @@ describe(EditProfilePage.name, () => {
       current: { t },
     },
   } = renderHook(() => useTranslation())
+
+  it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
+    'should display switch for access to Knowledge Hub for %s role',
+    async role => {
+      useProfileMock.mockReturnValue({
+        profile: {
+          ...buildProfile(),
+          courses: [],
+          archived: false,
+        },
+        certifications: [],
+      } as unknown as ReturnType<typeof useProfile>)
+
+      useRolesMock.mockReturnValue({
+        roles: [],
+        fetching: false,
+        error: undefined,
+      })
+
+      const client = {
+        executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+          if (query === GET_USER_KNOWLEDGE_HUB_ACCESS) {
+            return fromValue<{ data: GetUserKnowledgeHubAccessQuery }>({
+              data: {
+                organization_member_aggregate: {
+                  aggregate: {
+                    count: 1,
+                  },
+                },
+              },
+            })
+          }
+        },
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <EditProfilePage />
+        </Provider>,
+        {
+          auth: {
+            activeRole: role,
+          },
+        },
+      )
+
+      expect(
+        screen.queryByTestId('knowledge-hub-access-switch'),
+      ).toBeInTheDocument()
+    },
+  )
+
+  it.each([
+    RoleName.BOOKING_CONTACT,
+    RoleName.ORGANIZATION_KEY_CONTACT,
+    RoleName.SALES_ADMIN,
+    RoleName.SALES_REPRESENTATIVE,
+    RoleName.TRAINER,
+    RoleName.USER,
+  ])(
+    'should not display switch for access to Knowledge Hub for %s role',
+    async role => {
+      useProfileMock.mockReturnValue({
+        profile: {
+          ...buildProfile(),
+          courses: [],
+          archived: false,
+        },
+        certifications: [],
+      } as unknown as ReturnType<typeof useProfile>)
+
+      useRolesMock.mockReturnValue({
+        roles: [],
+        fetching: false,
+        error: undefined,
+      })
+
+      const client = {
+        executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+          if (query === GET_USER_KNOWLEDGE_HUB_ACCESS) {
+            return fromValue<{ data: GetUserKnowledgeHubAccessQuery }>({
+              data: {
+                organization_member_aggregate: {
+                  aggregate: {
+                    count: 1,
+                  },
+                },
+              },
+            })
+          }
+        },
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <EditProfilePage />
+        </Provider>,
+        {
+          auth: {
+            activeRole: role,
+          },
+        },
+      )
+
+      expect(
+        screen.queryByTestId('knowledge-hub-access-switch'),
+      ).not.toBeInTheDocument()
+    },
+  )
   it('should show profile roles with admins', async () => {
     useProfileMock.mockReturnValue({
       profile: {

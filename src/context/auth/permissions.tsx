@@ -915,8 +915,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         () => acl.isCourseAnyTrainer(course),
       ])(),
 
-    canManageKnowledgeHubAccess: () =>
-      anyPass([acl.isFinance, acl.isTTAdmin, acl.isTTOps])(),
+    canManageKnowledgeHubAccess: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
   })
   return acl
 }

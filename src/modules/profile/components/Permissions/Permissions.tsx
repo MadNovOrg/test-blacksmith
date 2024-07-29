@@ -3,43 +3,33 @@ import Box from '@mui/material/Box'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
-import { useCallback, useState } from 'react'
+import { SyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useUpdateProfileAccess } from '../../hooks/useUpdateProfileAccess'
 import { useUserAccessToKnowledgeHub } from '../../hooks/useUserAccessToKnowledgeHub'
 
 type ProfilePermissionsProps = {
-  canAccessKnowledgeHub: boolean
+  onChange: (e: SyntheticEvent, checked: boolean) => void
   profileId: string
+  checked: boolean
 }
 
 export const ProfilePermissions = ({
-  canAccessKnowledgeHub,
   profileId,
+  checked,
+  onChange,
 }: ProfilePermissionsProps) => {
   const { t } = useTranslation()
 
-  const [checked, setChecked] = useState(canAccessKnowledgeHub)
-  const [{ fetching }, updateProfileAccess] = useUpdateProfileAccess()
-
   const [{ data, fetching: loadingOrgsAccess }] =
     useUserAccessToKnowledgeHub(profileId)
-
-  const accessHandleChange = useCallback(async () => {
-    setChecked(prev => !prev)
-    await updateProfileAccess({
-      profileId,
-      canAccessKnowledgeHub: !checked,
-    })
-  }, [checked, profileId, updateProfileAccess])
 
   if (!data || loadingOrgsAccess) return null
 
   return (
     <>
       <Typography variant="subtitle2" mt={3}>
-        {t('pages.my-profile.permission')}
+        {t('pages.my-profile.permissions')}
       </Typography>
       <Box
         bgcolor="common.white"
@@ -53,13 +43,11 @@ export const ProfilePermissions = ({
             <Switch
               data-testid={'knowledge-hub-access-switch'}
               checked={checked}
-              disabled={
-                fetching || !data.organization_member_aggregate.aggregate?.count
-              }
+              disabled={!data.organization_member_aggregate.aggregate?.count}
             />
           }
           label="Access to Knowledge Hub"
-          onChange={accessHandleChange}
+          onChange={onChange}
         />
         {!data.organization_member_aggregate.aggregate?.count ? (
           <Alert sx={{ my: 1 }} severity="warning" variant="outlined">

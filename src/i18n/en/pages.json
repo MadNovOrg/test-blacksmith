@@ -1176,8 +1176,10 @@
     "this-is-an-archived-user": "This is an archived user.",
     "manage-data": "Manage my data",
     "unsubscribe": "Unsubscribe",
-    "knowledge-hub-access": "By switching this toggle off, Individuals access to the Knowledge Hub will be revoked, while access to Connect will still remain.",
+    "doesNotHaveAccessToKnowledgeHub": "Restricted Access",
+    "hasAccessToKnowledgeHub": "Full Access",
     "knowledge-hub-access-warning": "It is not possible to allow access to Knowledge Hub for this user, because all organisations he relates to are cut off this access",
+    "knowledge-hub-access": "By switching this toggle off, Individuals access to the Knowledge Hub will be revoked, while access to Connect will still remain.",
     "permissions": "Permissions"
   },
   "orders": {
