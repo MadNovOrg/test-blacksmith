@@ -5,6 +5,7 @@ import {
   isAfter,
   isBefore,
   isToday,
+  isValid,
   isWithinInterval,
   startOfDay,
   startOfToday,
@@ -498,9 +499,8 @@ export const BILD_COURSE_LEVELS = [
 
 export const formatChangelogDate = (
   date: PricingChangelogQuery['course_pricing_changelog'][number]['newEffectiveFrom'],
-  separator: '-' | '/' = '-',
 ) => {
-  return format(new Date(date), `yyyy${separator}MM${separator}dd`)
+  return format(new Date(date), `dd MMMM yyyy`)
 }
 
 export const formatSchedulePriceDuration = (
@@ -530,20 +530,27 @@ export const formatSchedulePriceDuration = (
     !oldEffectiveFrom &&
     !oldEffectiveTo
   ) {
-    from = format(new Date(courseSchedulePrice?.effectiveFrom), 'yyyy/MM/dd')
-    to = format(new Date(courseSchedulePrice?.effectiveTo), 'yyyy/MM/dd')
+    if (
+      isValid(new Date(courseSchedulePrice?.effectiveFrom)) ||
+      isValid(new Date(courseSchedulePrice?.effectiveTo))
+    ) {
+      return '-'
+    }
+
+    from = format(new Date(courseSchedulePrice?.effectiveFrom), 'dd MMMM yyyy')
+    to = format(new Date(courseSchedulePrice?.effectiveTo), 'dd MMMM yyyy')
   } else {
     const isInsertChangelog =
       newEffectiveFrom && newEffectiveTo && !oldEffectiveFrom && !oldEffectiveTo
 
     from = format(
       new Date(isInsertChangelog ? newEffectiveFrom : oldEffectiveFrom),
-      'yyyy/MM/dd',
+      'dd MMMM yyyy',
     )
 
     to = format(
       new Date(isInsertChangelog ? newEffectiveTo : oldEffectiveTo),
-      'yyyy/MM/dd',
+      'dd MMMM yyyy',
     )
   }
 
