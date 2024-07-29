@@ -1,26 +1,32 @@
-import { Alert } from '@mui/material'
+import { Alert, Box, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
 
 export type DeletePricingNoCourseModalProps = {
   isOpen: boolean
-  handleClose: () => void
+  handleApprove: () => void
+  handleCancel: () => void
 }
 
 export const DeletePricingNoCourseModal = ({
   isOpen,
-  handleClose,
+  handleApprove,
+  handleCancel,
 }: DeletePricingNoCourseModalProps) => {
   const { t } = useTranslation()
-  const handleCloseModal = () => {
-    handleClose()
+  const approveDeleteModal = () => {
+    handleApprove()
+  }
+
+  const cancelDeleteModal = () => {
+    handleCancel()
   }
 
   return (
     <Dialog
       open={isOpen}
-      onClose={() => handleCloseModal()}
+      onClose={() => cancelDeleteModal()}
       slots={{
         Title: () => (
           <Alert severity="warning">
@@ -29,6 +35,21 @@ export const DeletePricingNoCourseModal = ({
         ),
       }}
       data-testid="delete-pricing-no-course-modal"
-    />
+    >
+      <Box display="flex" justifyContent="center">
+        <Button
+          onClick={() => approveDeleteModal()}
+          data-testid="approve-delete-course-pricing"
+        >
+          {t('approve')}
+        </Button>
+        <Button
+          onClick={() => cancelDeleteModal()}
+          data-testid="cancel-delete-course-pricing"
+        >
+          {t('cancel')}
+        </Button>
+      </Box>
+    </Dialog>
   )
 }

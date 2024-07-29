@@ -7,7 +7,7 @@ import { DeletePricingNoCourseModal } from './DeletePricingNoCourseModal'
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
-  ...((await vi.importActual('react-router-dom')) as object),
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }))
 
@@ -19,11 +19,20 @@ describe(DeletePricingNoCourseModal.name, () => {
   } = renderHook(() => useTranslation())
 
   const isOpenMock = true
-  const handleCloseMock = vi.fn()
+  const handleCancelMock = vi.fn()
+  const handleApproveMock = vi.fn()
 
-  const setup = ({ isOpen = isOpenMock, handleClose = handleCloseMock }) => {
+  const setup = ({
+    isOpen = isOpenMock,
+    handleApprove = handleApproveMock,
+    handleCancel = handleCancelMock,
+  }) => {
     return render(
-      <DeletePricingNoCourseModal isOpen={isOpen} handleClose={handleClose} />,
+      <DeletePricingNoCourseModal
+        isOpen={isOpen}
+        handleApprove={handleApprove}
+        handleCancel={handleCancel}
+      />,
     )
   }
 
@@ -43,9 +52,31 @@ describe(DeletePricingNoCourseModal.name, () => {
     ).toBeInTheDocument()
   })
 
-  it('calls handleClose when the close button is clicked', () => {
+  it('calls handleCancel when the close button is clicked', () => {
     setup({})
     fireEvent.click(screen.getByRole('button', { name: /close/i }))
-    expect(handleCloseMock).toHaveBeenCalled()
+    expect(handleCancelMock).toHaveBeenCalled()
+  })
+
+  it('displays approve and cancel buttons', () => {
+    setup({})
+    expect(
+      screen.getByTestId('approve-delete-course-pricing'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('cancel-delete-course-pricing'),
+    ).toBeInTheDocument()
+  })
+
+  it('calls handleApprove when the approve button is clicked', () => {
+    setup({})
+    fireEvent.click(screen.getByTestId('approve-delete-course-pricing'))
+    expect(handleApproveMock).toHaveBeenCalled()
+  })
+
+  it('calls handleCancel when the cancel button is clicked', () => {
+    setup({})
+    fireEvent.click(screen.getByTestId('cancel-delete-course-pricing'))
+    expect(handleCancelMock).toHaveBeenCalled()
   })
 })

@@ -262,7 +262,8 @@ export const CoursePricingDataGrid = ({
     setCourses(undefined)
     setRows(getInitialRows(pricing?.pricingSchedules))
   }
-  const handleCloseDeleteConfirmation = async () => {
+
+  const handleApproveDeleteConfirmation = async () => {
     if (!pricingToDeleteId) return
     const { data: deleteData } = await deleteCoursePricingSchedule({
       id: pricingToDeleteId,
@@ -271,6 +272,11 @@ export const CoursePricingDataGrid = ({
       setRows(rows.filter(row => row.id !== pricingToDeleteId))
       onSave()
     }
+    setOpenDeleteConfirmation(false)
+  }
+
+  const handleCancelDeleteConfirmation = () => {
+    setCourses(undefined)
     setOpenDeleteConfirmation(false)
   }
 
@@ -423,7 +429,7 @@ export const CoursePricingDataGrid = ({
             {[...new Set([...errors, ...validationAsMessages.values()])]
               .filter(Boolean)
               .map((e, index) => (
-                <Typography key={index}>{e}</Typography>
+                <Typography key={`${e}-${index}`}>{e}</Typography>
               ))}
           </Alert>
         </Snackbar>
@@ -443,7 +449,8 @@ export const CoursePricingDataGrid = ({
       {openDeleteConfirmation ? (
         <DeletePricingNoCourseModal
           isOpen={openDeleteConfirmation}
-          handleClose={handleCloseDeleteConfirmation}
+          handleApprove={handleApproveDeleteConfirmation}
+          handleCancel={handleCancelDeleteConfirmation}
         />
       ) : null}
     </>
