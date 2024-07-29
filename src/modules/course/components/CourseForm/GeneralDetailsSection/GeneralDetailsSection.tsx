@@ -472,6 +472,12 @@ export const GeneralDetailsSection = ({
                     countryToChangeTo ??
                       Countries_Code.DEFAULT_RESIDING_COUNTRY,
                   )
+                  if (
+                    newCourseLevel !== Course_Level_Enum.Level_1 &&
+                    deliveryType === Course_Delivery_Type_Enum.Virtual
+                  ) {
+                    setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
+                  }
                   resetSpecialInstructionsToDefault({
                     newCourseLevel,
                   })
