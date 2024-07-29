@@ -30,7 +30,7 @@ import {
 export type CouresWithAvailablePricingProps = {
   courses: GetCoursesWithPricingQuery
   showCTA?: boolean
-  setCTAOption?: Dispatch<SetStateAction<'approve' | 'cancel' | undefined>>
+  setCTAOption: Dispatch<SetStateAction<'approve' | 'cancel' | undefined>>
   onClose: () => void
 }
 
@@ -99,7 +99,7 @@ export const CoursesWithAvailablePricing = ({
           <Box display="flex" justifyContent="center">
             <Button
               onClick={() => {
-                setCTAOption ? setCTAOption('approve') : null
+                setCTAOption('approve')
                 setOpen(false)
               }}
             >
@@ -107,7 +107,7 @@ export const CoursesWithAvailablePricing = ({
             </Button>
             <Button
               onClick={() => {
-                setCTAOption ? setCTAOption('cancel') : null
+                setCTAOption('cancel')
                 setOpen(false)
               }}
             >

@@ -260,6 +260,7 @@ export const CoursePricingDataGrid = ({
 
   const handleCloseCoursesModal = () => {
     setCourses(undefined)
+    setRows(getInitialRows(pricing?.pricingSchedules))
   }
   const handleCloseDeleteConfirmation = async () => {
     if (!pricingToDeleteId) return
@@ -376,8 +377,19 @@ export const CoursePricingDataGrid = ({
         })
         if (pricingData) onSave()
       }
+      if (ctaOption === 'cancel') {
+        setRows(getInitialRows(pricing?.pricingSchedules))
+      }
     })()
-  }, [ctaOption, onSave, pricingDetails, profile, updatePricingSchedule])
+    setCTAOption(undefined)
+  }, [
+    ctaOption,
+    onSave,
+    pricingDetails,
+    profile,
+    updatePricingSchedule,
+    pricing?.pricingSchedules,
+  ])
 
   return (
     <>
