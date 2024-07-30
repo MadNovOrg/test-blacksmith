@@ -47,7 +47,7 @@ describe(validatePricingDates.name, () => {
         pricingScheduleEffectiveTo: existingIntervalMock.end,
       })
       expect(Object.fromEntries(datesValidationMap)).toEqual({
-        [DatesValidation.EFFECTIVE_FROM_RESIDES_IN_OTHER_INTERVAL]: true,
+        [DatesValidation.INTERVALS_OVERLAP]: true,
       })
     })
     it('creates if effectiveFrom date is not within another interval', () => {
@@ -160,7 +160,7 @@ describe(validatePricingDates.name, () => {
         pricingScheduleEffectiveTo: intervalMock.end,
       })
       expect(Object.fromEntries(datesValidationMap)).toEqual({
-        [DatesValidation.EFFECTIVE_FROM_RESIDES_IN_OTHER_INTERVAL]: true,
+        [DatesValidation.INTERVALS_OVERLAP]: true,
       })
     })
   })
