@@ -531,8 +531,8 @@ export const formatSchedulePriceDuration = (
     !oldEffectiveTo
   ) {
     if (
-      isValid(new Date(courseSchedulePrice?.effectiveFrom)) ||
-      isValid(new Date(courseSchedulePrice?.effectiveTo))
+      !isValid(new Date(courseSchedulePrice?.effectiveFrom)) ||
+      !isValid(new Date(courseSchedulePrice?.effectiveTo))
     ) {
       return '-'
     }
@@ -543,15 +543,19 @@ export const formatSchedulePriceDuration = (
     const isInsertChangelog =
       newEffectiveFrom && newEffectiveTo && !oldEffectiveFrom && !oldEffectiveTo
 
+    const isOldEffectiveToInfinite = !oldEffectiveTo && !isInsertChangelog
+
     from = format(
       new Date(isInsertChangelog ? newEffectiveFrom : oldEffectiveFrom),
       'dd MMMM yyyy',
     )
 
-    to = format(
-      new Date(isInsertChangelog ? newEffectiveTo : oldEffectiveTo),
-      'dd MMMM yyyy',
-    )
+    to = isOldEffectiveToInfinite
+      ? t('pages.course-pricing.indefinite')
+      : format(
+          new Date(isInsertChangelog ? newEffectiveTo : oldEffectiveTo),
+          'dd MMMM yyyy',
+        )
   }
 
   return `${from ?? ''}${to ? ` - ${to}` : ''}`
@@ -561,6 +565,7 @@ export const getChangelogEvents = (
   changelog: Pick<
     PricingChangelogQuery['course_pricing_changelog'][number],
     | 'coursePricing'
+    | 'indefiniteEffectiveTo'
     | 'newEffectiveFrom'
     | 'newEffectiveTo'
     | 'newPrice'
@@ -572,6 +577,7 @@ export const getChangelogEvents = (
 ) => {
   const events: string[] = []
   const {
+    indefiniteEffectiveTo,
     newEffectiveFrom,
     newEffectiveTo,
     newPrice,
@@ -584,7 +590,7 @@ export const getChangelogEvents = (
     !oldPrice && !oldEffectiveFrom && !oldEffectiveTo
 
   const isChangelogPriceDelete =
-    !newPrice && !newEffectiveFrom && !newEffectiveTo
+    !newPrice && !newEffectiveFrom && !newEffectiveTo && !indefiniteEffectiveTo
 
   if (isChangelogPriceCreation) {
     events.push(
@@ -607,7 +613,7 @@ export const getChangelogEvents = (
   } else {
     const changedPrice = oldPrice && newPrice
     const effectiveFromChanged = oldEffectiveFrom && newEffectiveFrom
-    const effectiveToChanged = oldEffectiveTo && newEffectiveTo
+    const effectiveToChanged = newEffectiveTo
 
     if (changedPrice) {
       events.push(
@@ -633,11 +639,15 @@ export const getChangelogEvents = (
       )
     }
 
-    if (effectiveToChanged) {
+    if (effectiveToChanged || indefiniteEffectiveTo) {
       events.push(
         t('pages.course-pricing.modal-changelog-update-effective-to-event', {
-          newDate: formatChangelogDate(newEffectiveTo),
-          oldDate: formatChangelogDate(oldEffectiveTo),
+          newDate: newEffectiveTo
+            ? formatChangelogDate(newEffectiveTo)
+            : t('pages.course-pricing.indefinite'),
+          oldDate: oldEffectiveTo
+            ? formatChangelogDate(oldEffectiveTo)
+            : t('pages.course-pricing.indefinite'),
         }),
       )
     }

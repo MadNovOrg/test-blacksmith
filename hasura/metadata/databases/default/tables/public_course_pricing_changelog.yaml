@@ -11,6 +11,8 @@ configuration:
       custom_name: coursePricingScheduleId
     created_at:
       custom_name: createdAt
+    indefinite_effective_to:
+      custom_name: indefiniteEffectiveTo
     new_effective_from:
       custom_name: newEffectiveFrom
     new_effective_to:
@@ -30,6 +32,7 @@ configuration:
     course_pricing_id: coursePricingId
     course_pricing_schedule_id: coursePricingScheduleId
     created_at: createdAt
+    indefinite_effective_to: indefiniteEffectiveTo
     new_effective_from: newEffectiveFrom
     new_effective_to: newEffectiveTo
     new_price: newPrice
@@ -58,6 +61,7 @@ insert_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - indefinite_effective_to
         - new_effective_from
         - new_effective_to
         - new_price
@@ -74,6 +78,7 @@ insert_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - indefinite_effective_to
         - new_effective_from
         - new_effective_to
         - new_price
@@ -90,6 +95,7 @@ select_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - indefinite_effective_to
         - new_effective_from
         - new_effective_to
         - new_price
@@ -107,6 +113,7 @@ select_permissions:
         - course_pricing_schedule_id
         - created_at
         - id
+        - indefinite_effective_to
         - new_effective_from
         - new_effective_to
         - new_price

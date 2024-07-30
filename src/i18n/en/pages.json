@@ -1523,6 +1523,7 @@
     "cols-event-date": "Event Date",
     "cols-price-duration": "Price duration",
     "edit-pricing": "Edit",
+    "indefinite": "indefinite",
     "view-history": "View history",
     "modal-add-new": "Add new price",
     "modal-price-label": "Price per participant by course date",

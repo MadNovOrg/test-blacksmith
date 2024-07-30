@@ -25682,6 +25682,7 @@ export type Course_Pricing_Changelog = {
   courseSchedulePrice?: Maybe<Course_Pricing_Schedule>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
+  indefiniteEffectiveTo: Scalars['Boolean'];
   newEffectiveFrom?: Maybe<Scalars['timestamptz']>;
   newEffectiveTo?: Maybe<Scalars['timestamptz']>;
   newPrice?: Maybe<Scalars['numeric']>;
@@ -25741,6 +25742,7 @@ export type Course_Pricing_Changelog_Bool_Exp = {
   courseSchedulePrice?: InputMaybe<Course_Pricing_Schedule_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  indefiniteEffectiveTo?: InputMaybe<Boolean_Comparison_Exp>;
   newEffectiveFrom?: InputMaybe<Timestamptz_Comparison_Exp>;
   newEffectiveTo?: InputMaybe<Timestamptz_Comparison_Exp>;
   newPrice?: InputMaybe<Numeric_Comparison_Exp>;
@@ -25772,6 +25774,7 @@ export type Course_Pricing_Changelog_Insert_Input = {
   courseSchedulePrice?: InputMaybe<Course_Pricing_Schedule_Obj_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  indefiniteEffectiveTo?: InputMaybe<Scalars['Boolean']>;
   newEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
   newEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
@@ -25841,6 +25844,7 @@ export type Course_Pricing_Changelog_Order_By = {
   courseSchedulePrice?: InputMaybe<Course_Pricing_Schedule_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  indefiniteEffectiveTo?: InputMaybe<Order_By>;
   newEffectiveFrom?: InputMaybe<Order_By>;
   newEffectiveTo?: InputMaybe<Order_By>;
   newPrice?: InputMaybe<Order_By>;
@@ -25868,6 +25872,8 @@ export enum Course_Pricing_Changelog_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  IndefiniteEffectiveTo = 'indefiniteEffectiveTo',
+  /** column name */
   NewEffectiveFrom = 'newEffectiveFrom',
   /** column name */
   NewEffectiveTo = 'newEffectiveTo',
@@ -25890,6 +25896,7 @@ export type Course_Pricing_Changelog_Set_Input = {
   coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  indefiniteEffectiveTo?: InputMaybe<Scalars['Boolean']>;
   newEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
   newEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
@@ -25935,6 +25942,7 @@ export type Course_Pricing_Changelog_Stream_Cursor_Value_Input = {
   coursePricingScheduleId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  indefiniteEffectiveTo?: InputMaybe<Scalars['Boolean']>;
   newEffectiveFrom?: InputMaybe<Scalars['timestamptz']>;
   newEffectiveTo?: InputMaybe<Scalars['timestamptz']>;
   newPrice?: InputMaybe<Scalars['numeric']>;
@@ -25963,6 +25971,8 @@ export enum Course_Pricing_Changelog_Update_Column {
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
+  /** column name */
+  IndefiniteEffectiveTo = 'indefiniteEffectiveTo',
   /** column name */
   NewEffectiveFrom = 'newEffectiveFrom',
   /** column name */
@@ -59736,7 +59746,7 @@ export type PricingChangelogQueryVariables = Exact<{
 }>;
 
 
-export type PricingChangelogQuery = { __typename?: 'query_root', course_pricing_changelog: Array<{ __typename?: 'course_pricing_changelog', id: any, createdAt: any, newEffectiveFrom?: any | null, newEffectiveTo?: any | null, newPrice?: any | null, oldEffectiveFrom?: any | null, oldEffectiveTo?: any | null, oldPrice?: any | null, author?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, fullName?: string | null } | null, coursePricing: { __typename?: 'course_pricing', priceCurrency: string }, courseSchedulePrice?: { __typename?: 'course_pricing_schedule', effectiveFrom: any, effectiveTo?: any | null } | null }>, course_pricing_changelog_aggregate: { __typename?: 'course_pricing_changelog_aggregate', aggregate?: { __typename?: 'course_pricing_changelog_aggregate_fields', count: number } | null } };
+export type PricingChangelogQuery = { __typename?: 'query_root', course_pricing_changelog: Array<{ __typename?: 'course_pricing_changelog', id: any, createdAt: any, newEffectiveFrom?: any | null, newEffectiveTo?: any | null, newPrice?: any | null, oldEffectiveFrom?: any | null, oldEffectiveTo?: any | null, oldPrice?: any | null, indefiniteEffectiveTo: boolean, author?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, fullName?: string | null } | null, coursePricing: { __typename?: 'course_pricing', priceCurrency: string }, courseSchedulePrice?: { __typename?: 'course_pricing_schedule', effectiveFrom: any, effectiveTo?: any | null } | null }>, course_pricing_changelog_aggregate: { __typename?: 'course_pricing_changelog_aggregate', aggregate?: { __typename?: 'course_pricing_changelog_aggregate_fields', count: number } | null } };
 
 export type GetCoursesWithPricingQueryVariables = Exact<{
   pricingStartBeforeChange: Scalars['timestamptz'];

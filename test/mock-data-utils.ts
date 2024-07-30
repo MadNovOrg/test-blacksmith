@@ -96,6 +96,7 @@ export const buildSchedulePriceChangelog = (
       oldEffectiveFrom: null,
       oldEffectiveTo: null,
       oldPrice: null,
+      indefiniteEffectiveTo: false,
     },
   })
 
@@ -1358,5 +1359,6 @@ export const buildPricing = build<
       id: chance.guid(),
     },
     coursePricing: buildCoursePricing(),
+    indefiniteEffectiveTo: false,
   },
 })

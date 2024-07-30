@@ -109,6 +109,7 @@ export const GET_PRICING_CHANGELOG = gql`
       oldEffectiveFrom
       oldEffectiveTo
       oldPrice
+      indefiniteEffectiveTo
     }
     course_pricing_changelog_aggregate(where: $where) {
       aggregate {
