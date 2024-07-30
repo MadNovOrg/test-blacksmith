@@ -177,7 +177,7 @@ export const ChangelogModal = ({
               />
               {data?.course_pricing_changelog.map(changelog => (
                 <TableRow key={changelog.id}>
-                  <TableCell>
+                  <TableCell sx={{ textTransform: 'capitalize' }}>
                     {formatSchedulePriceDuration(changelog)}
                   </TableCell>
                   <TableCell>
