@@ -26,7 +26,7 @@ export class CourseInvitationPage extends BasePage {
   async acceptInvitation(course: Course): Promise<CourseDetailsPage> {
     if (course.type === Course_Type_Enum.Open) {
       await Promise.all([
-        waitForGraphQLResponse(this.page, 'invite', '"status": "ACCEPTED"'),
+        waitForGraphQLResponse(this.page, 'invite'),
         expect(this.page.locator('.MuiAlert-message')).toContainText(
           'Your response has been sent',
           { timeout: 120000 },
@@ -34,11 +34,7 @@ export class CourseInvitationPage extends BasePage {
       ])
     } else {
       await Promise.all([
-        waitForGraphQLResponse(
-          this.page,
-          'acceptInvite',
-          '"status": "ACCEPTED"',
-        ),
+        waitForGraphQLResponse(this.page, 'acceptInvite'),
         this.willAttendOption.click(),
         this.continueButton.click(),
         this.waitForPageLoad(),

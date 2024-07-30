@@ -21,6 +21,9 @@ export type User = {
   healthSafetyConsent?: boolean
   organization?: Organization
   password: string
+  country: string
+  countryCode: string
+  job_title: string
 }
 
 export type Email = {

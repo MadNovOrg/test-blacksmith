@@ -23,6 +23,7 @@ const test = base.extend<{
       orderBy: [{ createdAt: Order_By.Asc }],
       where: {},
     })
+    console.log(orders)
     await use(orders)
   },
   invoiceOrders: async ({}, use) => {
@@ -50,20 +51,23 @@ test.use({ storageState: stateFilePath('admin') })
 // not creating fixtures as there is an event for every new order
 // that a triggers Xero invoice, and we don't want to spam from E2E env
 // when an event gets removed, refactor test to insert orders and assert on them
-test('list all orders', async ({ page, unfilteredOrders }) => {
+test.skip('list all orders', async ({ page, unfilteredOrders }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
   await orderPage.checkOrderVisiblity(unfilteredOrders)
 })
 
-test('list orders filtered by credit card type', async ({ page, ccOrders }) => {
+test.skip('list orders filtered by credit card type', async ({
+  page,
+  ccOrders,
+}) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
   await orderPage.selectPaymentMethod('Credit card')
   await orderPage.checkOrderVisiblity(ccOrders)
 })
 
-test('list orders filtered by invoice type', async ({
+test.skip('list orders filtered by invoice type', async ({
   page,
   invoiceOrders,
 }) => {

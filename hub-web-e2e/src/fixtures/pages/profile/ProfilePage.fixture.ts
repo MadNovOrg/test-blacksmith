@@ -21,7 +21,7 @@ export class ProfilePage extends BasePage {
     this.autocompleteOption = this.page.locator(
       '.MuiAutocomplete-popper .MuiAutocomplete-option',
     )
-    this.editProfile = this.page.locator('data-testid=edit-profile')
+    this.editProfile = this.page.locator('[data-testid="edit-profile"]')
     this.saveChanges = this.page.locator('data-testid=profile-save-changes')
     this.certificateButton = this.page.locator(
       `[data-testid*=certificate] button`,

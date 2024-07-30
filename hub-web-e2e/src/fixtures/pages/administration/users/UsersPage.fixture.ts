@@ -7,8 +7,7 @@ import { MergeUsersPage } from './merge/MergeUsersPage.fixture'
 export class UsersPage extends BasePage {
   readonly searchInput = this.page.getByPlaceholder('Search')
   readonly mergeUsersButton = this.page.getByRole('button', {
-    name: 'Merge Users',
-    exact: true,
+    name: /merge user/i,
   })
   readonly table = new UiTable(this.page.getByRole('table'))
 

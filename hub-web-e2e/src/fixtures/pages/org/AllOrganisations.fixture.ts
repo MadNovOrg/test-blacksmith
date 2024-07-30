@@ -116,7 +116,7 @@ export class AllOrganisations extends BasePage {
     this.organisationMembersTable = this.page.locator(
       '[data-testid=organisation-members]',
     )
-    this.organisationTitle = this.page.locator('[data-testid=org-title]')
+    this.organisationTitle = this.page.locator('[data-testid="org-title"]')
     this.type = this.page.locator('data-testid=org-type-selector')
     this.permissionsTab = this.page.locator('[data-testid="org-permissions"]')
     this.knowledgeHubAccessSwitch = this.page.locator(
@@ -125,7 +125,7 @@ export class AllOrganisations extends BasePage {
   }
 
   async goto(orgId?: string) {
-    await super.goto(`organisations/${orgId ? orgId : 'all'}`)
+    await super.goto(`organisations/${orgId ?? 'all'}`)
   }
 
   async gotoOrganisation(id: string) {
@@ -178,7 +178,8 @@ export class AllOrganisations extends BasePage {
   }
 
   async addPhoneNumber() {
-    await this.phone.type('5555555555')
+    await this.phone.clear()
+    await this.phone.fill('+445555555555')
   }
 
   chance = new Chance()

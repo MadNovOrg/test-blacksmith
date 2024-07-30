@@ -63,7 +63,7 @@ export class CourseDetailsPage extends BasePage {
     this.pendingTab = this.page.locator('data-testid=tabPending')
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
     this.attendeesTable = new UiTable(
-      this.page.locator('data-testid=attending-table'),
+      this.page.locator('table[data-testid="attending-table"]'),
     )
     this.editCourseButton = this.page.getByText('Edit course details')
     this.saveButton = this.page.locator('[data-testid="save-button"]')

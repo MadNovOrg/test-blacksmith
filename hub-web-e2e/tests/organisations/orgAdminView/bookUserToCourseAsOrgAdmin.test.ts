@@ -39,7 +39,7 @@ let test = base.extend<{ courseId: number }>({
   },
 })
 
-test.use({ storageState: stateFilePath('userOrgAdmin') })
+test.use({ storageState: stateFilePath('ttOrgAdmin') })
 
 const teamTeachOrgId = 'a24397aa-b059-46b9-a728-955580823ce4'
 
@@ -47,18 +47,18 @@ test('max 5 courses on org page', async ({ page }) => {
   const orgPage = new AllOrganisations(page)
   await orgPage.gotoOrganisation(teamTeachOrgId)
   const courseLocators = await orgPage.maxCourses()
-  await test.expect(courseLocators).toBeLessThanOrEqual(5)
+  test.expect(courseLocators).toBeLessThanOrEqual(5)
 })
 
-test('book attendee from organisation page', async ({ page }) => {
+test('book attendee from organisation page @smoke', async ({ page }) => {
   const orgPage = new AllOrganisations(page)
   await orgPage.gotoOrganisation(teamTeachOrgId)
   await orgPage.clickBookNow()
 
-  await page.waitForURL(bookWordpressFormURL)
+  await page.waitForURL(/.*\/(booking\/details|1k2Yr8kkgRJuXF8s6II6npQfdx9c)/i)
 })
 
-test('book attendee from organisation, all courses page', async ({
+test('book attendee from organisation, all courses page @smoke', async ({
   page,
   courseId,
 }) => {
@@ -69,7 +69,7 @@ test('book attendee from organisation, all courses page', async ({
   await orgPage.insertCourseId(courseId.toString())
   await orgPage.clickBookNow()
 
-  await page.waitForURL(bookWordpressFormURL)
+  await page.waitForURL(/.*\/(booking\/details|1k2Yr8kkgRJuXF8s6II6npQfdx9c)/i)
 })
 
 test = base.extend<{ courseId: number }>({
@@ -101,6 +101,7 @@ test = base.extend<{ courseId: number }>({
   },
 })
 
+test.use({ storageState: stateFilePath('ttOrgAdmin') })
 test('join waiting list from organisation, all courses page', async ({
   page,
   courseId,

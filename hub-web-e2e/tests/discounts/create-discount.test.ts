@@ -74,5 +74,5 @@ test('Should redirect to the discounts page after creating a discount successful
   await newDiscountPage.discountCodeInput.fill('NEW_CODE')
   await newDiscountPage.createDiscountButton.click()
   // wait for request to complete
-  await page.waitForURL('admin/discounts')
+  await page.waitForURL(/.*\/admin\/discounts/)
 })

@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 import { addYears } from 'date-fns'
 

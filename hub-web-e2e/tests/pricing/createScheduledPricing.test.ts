@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { test, expect } from '@playwright/test'
 
 import * as API from '@qa/api'
 import { PricingPage } from '@qa/fixtures/pages/pricing/PricingPage.fixture'
 import { stateFilePath, StoredCredentialKey } from '@qa/util'
 
-let pricingIdToDelete: null | string = null
+let pricingIdToDelete: any
 
 test.afterEach(async () => {
-  await API.pricing.deletePricingSchedule(String(pricingIdToDelete))
+  console.log(pricingIdToDelete)
+  await API.coursePricing.deleteCoursePricingSchedule({ id: pricingIdToDelete })
 })
 
 const allowedRoles = ['admin'] as StoredCredentialKey[]
@@ -18,8 +20,8 @@ allowedRoles.forEach(role => {
     })
     const page = await context.newPage()
     const pricingToBeCreated = {
-      effectiveFrom: '30-12-2100',
-      effectiveTo: '31-12-2100',
+      effectiveFrom: '30-12-2101',
+      effectiveTo: '31-12-2101',
       price: 130,
     }
     const pricingPage = new PricingPage(page)

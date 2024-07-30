@@ -38,7 +38,7 @@ test('remove user from organisation as admin', async ({
   organisation,
 }) => {
   const orgPage = new AllOrganisations(page)
-  await orgPage.goto(organisation.id)
+  await orgPage.gotoOrganisation(organisation.id)
   await orgPage.clickIndividualsTab()
   await orgPage.checkOrganisationUserExists(organisation.user, true)
   const editUserModal = await orgPage.clickEditUserButton()

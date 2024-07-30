@@ -6,10 +6,9 @@ import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 import { MergeUserRow } from './MergeUserRow.fixture'
 
 export class MergeUsersPage extends BasePage {
-  readonly searchInput = this.page.getByPlaceholder('Search')
+  readonly searchInput = this.page.locator('[data-testid="FilterSearch-Input"]')
   readonly mergeSelectedButton = this.page.getByRole('button', {
-    name: 'Merge Selected',
-    exact: true,
+    name: /merge selected/i,
   })
   readonly table = new UiTable(this.page.getByRole('table'))
 

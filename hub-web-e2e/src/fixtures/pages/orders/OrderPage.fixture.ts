@@ -41,7 +41,7 @@ export class OrderPage extends BasePage {
       Boolean(order.xeroInvoiceNumber),
     )) {
       await expect(
-        this.page.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`),
+        this.page.locator(`${order.xeroInvoiceNumber}`),
       ).toBeVisible()
     }
   }

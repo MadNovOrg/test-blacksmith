@@ -1,30 +1,30 @@
-INSERT INTO profile (id, dob, _given_name, _family_name, _email, _phone) VALUES
-('13a223a8-2184-42f1-ba37-b49e115e59a2', '1981-08-01', 'John', 'Trainer', 'trainer@teamteach.testinator.com', '+44 55 5555 5555'),
-('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', '1981-08-01', 'Mark', 'Trainer', 'trainer.with.org@teamteach.testinator.com', '+44 55 5555 5555'),
-('bb5526c7-198c-4be5-a53a-1177f55c1c5b', '1981-08-01', 'Steven', 'Trainer', 'trainer.and.user@teamteach.testinator.com', '+44 55 5555 5555'),
-('4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', '1981-08-01', 'Liam', 'Assistant', 'assistant@teamteach.testinator.com', '+44 55 5555 5555'),
-('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', '1981-08-01', 'Noah', 'Assistant', 'assistant.with.org@teamteach.testinator.com', '+44 55 5555 5555'),
-('6b72504a-6447-4b30-9909-e8e6fc1d300f', '1981-08-01', 'Oliver', 'Participant', 'user1@teamteach.testinator.com', '+44 55 5555 5555'),
-('d394a9ff-7517-4e35-91aa-466f9d4c1b77', '1981-08-01', 'Elijah', 'Participant', 'user2@teamteach.testinator.com', '+44 55 5555 5555'),
-('fb523ef0-7fd1-42b2-b078-dce29a1713fe', '1981-08-01', 'William', 'Participant', 'user1.with.org@teamteach.testinator.com', '+44 55 5555 5555'),
-('a39bb4b3-a07a-4610-8da1-b0ce885cc263', '1981-08-01', 'James', 'Participant', 'user2.with.org@teamteach.testinator.com', '+44 55 5555 5555'),
-('22015a3e-8907-4333-8811-85f782265a63', '1981-08-01', 'Benjamin', 'Admin', 'adm@teamteach.testinator.com', '+44 55 5555 5555'),
-('48c9c19b-e7bf-4309-9679-52d5619d27dd', '1981-08-01', 'Lucas', 'Ops', 'ops@teamteach.testinator.com', '+44 55 5555 5555'),
-('48812860-89a5-41be-95c9-b8889e88bffd', '1981-08-01', 'Henry', 'Moderator', 'moderator@teamteach.testinator.com', '+44 55 5555 5555'),
-('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', '1981-08-01', 'Alex', 'Admin', 'org.adm@teamteach.testinator.com', '+44 55 5555 5555'),
-('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', '1981-08-01', 'Logan', 'Password', 'password@teamteach.testinator.com', '+44 55 5555 5555'),
-('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', '1981-08-01', 'One', 'Trainer', 'trainer01@teamteach.testinator.com', '+44 55 5555 5555'),
-('30ebb1e1-0491-44f8-b0a2-3087bd454b19', '1981-08-01', 'Two', 'Trainer', 'trainer02@teamteach.testinator.com', '+44 55 5555 5555'),
-('e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', '1981-08-01', 'Three', 'Trainer', 'trainer03@teamteach.testinator.com', '+44 55 5555 5555'),
-('d54f86ca-0181-4264-8c73-7b73ff395405', '1981-08-01', 'Four', 'Trainer', 'trainer04@teamteach.testinator.com', '+44 55 5555 5555'),
-('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', '1981-08-01', 'Five', 'Trainer', 'trainer05@teamteach.testinator.com', '+44 55 5555 5555'),
-('8ba2c43e-a7e5-47c5-8d03-0383719d77df', '1981-08-01', 'Six', 'Trainer', 'trainer06@teamteach.testinator.com', '+44 55 5555 5555'),
-('2a451ef2-99fe-4350-9f0e-2081b6f3f87f', '1981-08-01', 'Seven', 'Trainer', 'trainer07@teamteach.testinator.com', '+44 55 5555 5555'),
-('14184530-d2a8-4cc2-ad42-2b7312aa5b3d', '1981-08-01', 'Eight', 'Trainer', 'trainer08@teamteach.testinator.com', '+44 55 5555 5555'),
-('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', '1981-08-01', 'Nine', 'Trainer', 'trainer09@teamteach.testinator.com', '+44 55 5555 5555'),
-('b414536d-29dd-4902-81f9-e808503428ee', '1981-08-01', 'Ten', 'Trainer', 'trainer10@teamteach.testinator.com', '+44 55 5555 5555'),
-('7a35d3ce-cc02-4a66-9446-16b6740bfb23', '1981-08-01', 'Sales', 'Admin', 'sales.adm@teamteach.testinator.com', '+44 55 5555 5555'),
-('6987feba-0877-4a2a-b7da-982de1977eb3', '1981-08-01', 'Learning', 'Development', 'ld@teamteach.testinator.com', '+44 55 5555 5555');
+INSERT INTO profile (id, dob, _given_name, _family_name, _email, _phone, country, "countryCode", job_title) VALUES
+('13a223a8-2184-42f1-ba37-b49e115e59a2', '1981-08-01', 'John', 'Trainer', 'trainer@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', '1981-08-01', 'Mark', 'Trainer', 'trainer.with.org@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('bb5526c7-198c-4be5-a53a-1177f55c1c5b', '1981-08-01', 'Steven', 'Trainer', 'trainer.and.user@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', '1981-08-01', 'Liam', 'Assistant', 'assistant@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', '1981-08-01', 'Noah', 'Assistant', 'assistant.with.org@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('6b72504a-6447-4b30-9909-e8e6fc1d300f', '1981-08-01', 'Oliver', 'Participant', 'user1@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('d394a9ff-7517-4e35-91aa-466f9d4c1b77', '1981-08-01', 'Elijah', 'Participant', 'user2@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('fb523ef0-7fd1-42b2-b078-dce29a1713fe', '1981-08-01', 'William', 'Participant', 'user1.with.org@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('a39bb4b3-a07a-4610-8da1-b0ce885cc263', '1981-08-01', 'James', 'Participant', 'user2.with.org@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('22015a3e-8907-4333-8811-85f782265a63', '1981-08-01', 'Benjamin', 'Admin', 'adm@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('48c9c19b-e7bf-4309-9679-52d5619d27dd', '1981-08-01', 'Lucas', 'Ops', 'ops@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('48812860-89a5-41be-95c9-b8889e88bffd', '1981-08-01', 'Henry', 'Moderator', 'moderator@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', '1981-08-01', 'Alex', 'Admin', 'org.adm@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', '1981-08-01', 'Logan', 'Password', 'password@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', '1981-08-01', 'One', 'Trainer', 'trainer01@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('30ebb1e1-0491-44f8-b0a2-3087bd454b19', '1981-08-01', 'Two', 'Trainer', 'trainer02@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', '1981-08-01', 'Three', 'Trainer', 'trainer03@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('d54f86ca-0181-4264-8c73-7b73ff395405', '1981-08-01', 'Four', 'Trainer', 'trainer04@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', '1981-08-01', 'Five', 'Trainer', 'trainer05@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('8ba2c43e-a7e5-47c5-8d03-0383719d77df', '1981-08-01', 'Six', 'Trainer', 'trainer06@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('2a451ef2-99fe-4350-9f0e-2081b6f3f87f', '1981-08-01', 'Seven', 'Trainer', 'trainer07@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('14184530-d2a8-4cc2-ad42-2b7312aa5b3d', '1981-08-01', 'Eight', 'Trainer', 'trainer08@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', '1981-08-01', 'Nine', 'Trainer', 'trainer09@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('b414536d-29dd-4902-81f9-e808503428ee', '1981-08-01', 'Ten', 'Trainer', 'trainer10@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('7a35d3ce-cc02-4a66-9446-16b6740bfb23', '1981-08-01', 'Sales', 'Admin', 'sales.adm@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),
+('6987feba-0877-4a2a-b7da-982de1977eb3', '1981-08-01', 'Learning', 'Development', 'ld@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO');
 
 INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('b7cc8b4e-b567-42d2-8edf-0b359fb68171', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com
@@ -63,7 +63,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('443abe40-c9f8-4fb1-af33-3f1c602ca754', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com
 ('281fbeeb-99a3-46d0-81b6-c3dca984d1af', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com staging
 
-('c6bfe325-a350-43fb-b149-7e6a1e457176', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com
+('0a662dc5-156b-4dd3-96c6-fb9d49586b1e', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com
 ('8080870a-9be0-4a16-97f5-3cb2b29a8c65', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com staging
 
 ('c353ca53-bc7f-46e0-8736-920acb4ccce8', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com

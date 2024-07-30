@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
@@ -8,7 +9,7 @@ import { Course } from '@qa/data/types'
 import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
 import { EmailPage } from '@qa/fixtures/pages/EmailPage.fixture'
-import { stateFilePath } from '@qa/util'
+import { stateFilePath, StoredCredentialKey } from '@qa/util'
 
 const testData = [
   {
@@ -79,7 +80,7 @@ for (const data of testData) {
     course,
   }) => {
     const trainerContext = await browser.newContext({
-      storageState: stateFilePath(data.user),
+      storageState: stateFilePath(data.user as StoredCredentialKey),
     })
     const trainerPage = await trainerContext.newPage()
     const myCoursesPage = new MyCoursesPage(trainerPage)

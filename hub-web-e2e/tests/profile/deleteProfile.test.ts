@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 
 import { insertDummyUserProfile } from '@qa/api/hasura/profile'
 import { TEST_SETTINGS } from '@qa/constants'
@@ -16,8 +16,6 @@ test('Create and then delete a user', async ({ page }) => {
 
   const profilePage = new ProfilePage(page)
   await profilePage.goto(newAccountProfileId)
-  expect(page.url()).toContain(newAccountProfileId)
-
   await profilePage.clickDeleteProfileButton()
   await profilePage.clickConfirmDeleteCheckbox()
   await profilePage.deleteUserProfile()

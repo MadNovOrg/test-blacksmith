@@ -7,6 +7,7 @@ import { LoginPage } from '@qa/fixtures/pages/auth/LoginPage.fixture'
 test('login successfully @smoke', async ({ page }) => {
   const loginPage = new LoginPage(page)
   await loginPage.goto()
+  await loginPage.cookieConsentDeclinedButton.click()
   const myCoursesPage = await loginPage.logIn(
     users.trainer.email,
     users.trainer.password,
