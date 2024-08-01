@@ -281,6 +281,7 @@ export default function useWorldCountries() {
       'KP',
       'KR',
       'KW',
+      'KY',
       'KZ',
       'LA',
       'LB',
