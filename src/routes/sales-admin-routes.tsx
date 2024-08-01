@@ -12,16 +12,14 @@ import {
 } from '@app/modules/admin/Discounts/components'
 import { AdminPage } from '@app/modules/admin/pages/AdminPage'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
-import {
-  OrderDetails as CourseOrderDetails,
-  OrderDetails,
-} from '@app/modules/course/pages/CreateCourse/components/OrderDetails'
+import { OrderDetails as CourseOrderDetails } from '@app/modules/course/pages/CreateCourse/components/OrderDetails'
 import { ManageCourses } from '@app/modules/course/pages/ManageCourses/ManageCourses'
 import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
 import { EvaluationSummary } from '@app/modules/course_details/course_evaluation_tab/pages/InternalEvaluationSummary'
 import { CourseCertificationDetails } from '@app/modules/course_details/pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/modules/course_details/pages/CourseDetails'
 import { ParticipantGrade } from '@app/modules/grading/pages/ParticipantGrade/ParticipantGrade'
+import { OrderDetails } from '@app/modules/order_details/pages/OrderDetails'
 import { Orders } from '@app/modules/orders/pages/Orders'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { TrainerFeedback } from '@app/modules/trainer_feedback/pages/TrainerFeedback'
