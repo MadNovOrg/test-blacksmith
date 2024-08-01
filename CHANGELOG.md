@@ -1,5 +1,33 @@
 # @teamteach/hub
 
+## 4.7.0
+
+### Minor Changes
+
+- cfc71f5: Schedule price changelogs
+- 61bf294: Add view for international hubspot reporting
+- 412f5d4: Add Senior trainer and ETA trainer WordPress reources permissions
+- 0420a39: Allow only trainers with Foundation Trainer Plus certificates to create a L1 BS course
+- 31d60c1: Add search and filters on course details tabs.
+- 45d3f2f: Manage user's access to Knowledge Hub from update profile
+- ade0a69: Add Hong Kong to the countries list across the app
+- d7b70ad: Add Cayman Islands to the countries list across the app
+- 53cb016: Course pricing updates, pricing removal changes
+- eea21d2: Add arrow dropdown icon next to phone number input country selector
+- d9b7e70: Restrict access to Knowledge Hub
+- aa62e06: Scheduled pricing section updates
+
+### Patch Changes
+
+- d3d8e61: Display quantity on Indirect BL course order
+- b8a7d76: Remove BILD levels and Indirect course type from course pricings filters
+- 713129e: Map Connect country names to HubSpot valid ones
+- 7a63b5d: Remove L1BS, Advanced Modules and BILD Certified from discounts list.
+- 45ffa1e: Fix error on order details page for Sales Admin role
+- cfe4d03: Move related functionality into modules
+- 775a81b: Redirect internal user to course wailist page when there are no spaces left.
+- e553f4a: Set Delivery type to F2F when changing the level from L1 Virtual.
+
 ## 4.6.1
 
 ### Patch Changes
