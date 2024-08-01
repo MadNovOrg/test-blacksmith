@@ -408,7 +408,10 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       ) : null}
       {moduleSettingsData?.moduleSettings && courseData?.course && (
         <Box pb={6}>
-          <BackButton label={t('pages.course-participants.back-button')} />
+          <BackButton
+            label={t('pages.course-participants.back-button')}
+            to={acl.isInternalUser() ? '/manage-courses/all' : '/courses'}
+          />
           {courseData.course ? (
             <Hero
               course={courseData.course}

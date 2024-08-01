@@ -19,6 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
+import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Level_Enum,
@@ -146,6 +147,7 @@ export const BILDCourseBuilder: React.FC<
   const { id: courseId } = useParams()
 
   const navigate = useNavigate()
+  const { acl } = useAuth()
   const [expanded, setExpanded] = useState<string | false>(false)
   const [submitError, setSubmitError] = useState<string>()
   const [disabledStrategies, setDisabledStrategies] = useState<
@@ -438,7 +440,10 @@ export const BILDCourseBuilder: React.FC<
 
       {bildStrategies.length && courseData?.course && !modulesLoading && (
         <Box pb={6}>
-          <BackButton label={t('pages.course-participants.back-button')} />
+          <BackButton
+            label={t('pages.course-participants.back-button')}
+            to={acl.isInternalUser() ? '/manage-courses/all' : '/courses'}
+          />
 
           {submitError || saveStrategiesResult.error ? (
             <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
