@@ -5521,6 +5521,8 @@ export enum PostStatusEnum {
   RequestFailed = 'REQUEST_FAILED',
   /** Objects with the request-pending status */
   RequestPending = 'REQUEST_PENDING',
+  /** Objects with the spam status */
+  Spam = 'SPAM',
   /** Objects with the trash status */
   Trash = 'TRASH'
 }
@@ -60731,6 +60733,13 @@ export type GetCourseOrdersQueryVariables = Exact<{
 
 
 export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, schedule: Array<{ __typename?: 'course_schedule', timeZone: string }> } | null }> };
+
+export type GetShallowAttendeeAuditLogsQueryVariables = Exact<{
+  where: Course_Participant_Audit_Bool_Exp;
+}>;
+
+
+export type GetShallowAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }> };
 
 export type GetOrderForBookingDoneQueryVariables = Exact<{
   orderId: Scalars['uuid'];

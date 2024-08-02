@@ -10,6 +10,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   GetCourseOrdersQuery,
+  GetShallowAttendeeAuditLogsQuery,
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
   XeroAddressType,
@@ -29,6 +30,7 @@ import {
 } from '@test/index'
 
 import { GET_COURSE_ORDERS } from '../../hooks/useCourseOrders'
+import { GET_SHALLOW_ATTENDEE_AUDIT_LOGS_QUERY } from '../../hooks/useShallowAttendeeAudits'
 import { CourseWorkbooks } from '../../utils'
 
 import {
@@ -292,6 +294,119 @@ describe('page: OrderDetails', () => {
         }),
       ),
     )
+  })
+
+  it('disaply cancelled on line items where attendee was cancelled', () => {
+    const user1Email = chance.email()
+    const user2Email = chance.email()
+    const unitPrice = 130
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: unitPrice,
+              description: `Level One, ${user1Email}`,
+              lineItemID: chance.guid(),
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: unitPrice,
+              description: `Level One, ${user2Email}`,
+              lineItemID: chance.guid(),
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 10,
+              itemCode: CourseWorkbooks.Mandatory,
+              description: `Mandatory Course Materials x ${12}`,
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 0,
+              itemCode: CourseWorkbooks.Free,
+              description: `Free Course Materials x ${12}`,
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    registrants: [
+                      {
+                        email: user1Email,
+                        xeroLineItemID: invoice.lineItems[0].lineItemID,
+                      },
+                      { email: user2Email },
+                    ],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    bookingContact: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  quantity: 1,
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+
+        if (query === GET_SHALLOW_ATTENDEE_AUDIT_LOGS_QUERY) {
+          return fromValue<{ data: GetShallowAttendeeAuditLogsQuery }>({
+            data: {
+              logs: [
+                {
+                  id: chance.guid(),
+                  profile: {
+                    id: chance.guid(),
+                    fullName: chance.name(),
+                    email: user1Email,
+                  },
+                  xero_invoice_number: invoice.invoiceNumber,
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>,
+    )
+
+    const user1Row = screen.getByTestId(`order-registrant-0`)
+    const user2Row = screen.getByTestId(`order-registrant-1`)
+
+    expect(within(user1Row).getByText('Cancelled')).toBeInTheDocument()
+    expect(within(user2Row).queryByText('Cancelled')).not.toBeInTheDocument()
   })
 
   it('renders blended learning licenses information if purchased', () => {

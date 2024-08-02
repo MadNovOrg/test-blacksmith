@@ -113,7 +113,9 @@ export const buildInvoice = build<Xero_Invoice>({
   },
 })
 
-export const buildLineItem = build<XeroLineItemSummaryFragment>({
+export const buildLineItem = build<
+  XeroLineItemSummaryFragment & { lineItemID: string }
+>({
   fields: {
     description: chance.sentence(),
     quantity: 1,
@@ -125,6 +127,7 @@ export const buildLineItem = build<XeroLineItemSummaryFragment>({
       itemID: chance.word(),
       code: chance.word(),
     },
+    lineItemID: chance.guid(),
     taxType: 'None',
     taxAmount: 0,
     tracking: [],

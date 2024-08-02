@@ -32,6 +32,7 @@ import {
   XeroPhone,
   XeroPhoneType,
   Course_Delivery_Type_Enum,
+  Course_Participant_Audit_Type_Enum,
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -52,16 +53,18 @@ import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 
 import useCourseOrders from '../../hooks/useCourseOrders'
+import { useShallowAttendeeAudits } from '../../hooks/useShallowAttendeeAudits'
 
 type OrderRegistrant = {
-  firstName: string
-  email: string
-  lastName: string
   addressLine1: string
   addressLine2: string
   city: string
   country: string
+  email: string
+  firstName: string
+  lastName: string
   postCode: string
+  xeroLineItemID?: string
 }
 
 export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
@@ -95,17 +98,49 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const invoice = order?.invoice
 
-  const registrants = (
-    Array.isArray(order?.registrants) ? order?.registrants : []
-  ) as OrderRegistrant[]
+  const registrants = useMemo(
+    () =>
+      (Array.isArray(order?.registrants)
+        ? order?.registrants
+        : []) as OrderRegistrant[],
+    [order?.registrants],
+  )
 
-  const registrantsLineItems = useMemo(() => {
-    return mainCourse?.name
-      ? invoice?.lineItems?.filter((li: XeroLineItem) =>
-          isRegistrantLineItem(li, mainCourse.level),
-        )
-      : []
-  }, [invoice, mainCourse])
+  const getAuditsArgs = useMemo(() => {
+    return {
+      where: {
+        profile: {
+          email: { _in: registrants.map(registrant => registrant.email) },
+        },
+        type: { _eq: Course_Participant_Audit_Type_Enum.Cancellation },
+        xero_invoice_number: { _eq: order?.xeroInvoiceNumber },
+      },
+      pause: !registrants.length,
+    }
+  }, [order?.xeroInvoiceNumber, registrants])
+
+  const [{ data: participantAudits }] = useShallowAttendeeAudits(getAuditsArgs)
+
+  const registrantsLineItems: (XeroLineItem & { lineItemID: string })[] =
+    useMemo(() => {
+      return mainCourse?.name
+        ? invoice?.lineItems?.filter((li: XeroLineItem) =>
+            isRegistrantLineItem(li, mainCourse.level),
+          )
+        : []
+    }, [invoice, mainCourse])
+
+  const cancelledRegistrantsLineItemIds = useMemo(() => {
+    const matchRegistrant = registrants.filter(registrant =>
+      participantAudits?.logs.some(
+        audit => audit.profile.email === registrant.email,
+      ),
+    )
+
+    return matchRegistrant
+      .map(registrant => registrant.xeroLineItemID)
+      .filter(id => Boolean(id))
+  }, [participantAudits?.logs, registrants])
 
   const go1LicensesLineItem = useMemo(() => {
     return invoice?.lineItems.find((li: XeroLineItem) => isGo1LicensesItem(li))
@@ -410,14 +445,24 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         {registrantsLineItems?.map(
-                          (lineItem: XeroLineItem, index: number) => (
+                          (lineItem, index: number) => (
                             <ItemRow
                               key={index}
                               data-testid={`order-registrant-${index}`}
+                              sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                gap: theme.spacing(2),
+                              }}
                             >
                               <Typography color="grey.700">
                                 {lineItem.description}
                               </Typography>
+                              {cancelledRegistrantsLineItemIds.includes(
+                                lineItem.lineItemID,
+                              ) ? (
+                                <Typography color="error">Cancelled</Typography>
+                              ) : null}
                               <Typography color="grey.700">
                                 {_t('common.currency', {
                                   amount: lineItem?.unitAmount,
