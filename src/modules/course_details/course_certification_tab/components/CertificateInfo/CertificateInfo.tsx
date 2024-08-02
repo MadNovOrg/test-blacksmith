@@ -18,6 +18,7 @@ import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
 import {
   Accreditors_Enum,
   CertificateStatus,
+  Course_Participant_Module,
   GetCertificateQuery,
   Grade_Enum,
 } from '@app/generated/graphql'
@@ -29,6 +30,9 @@ import {
   isModule,
 } from '@app/modules/grading/shared/utils'
 import { NonNullish, Strategy } from '@app/types'
+import { transformModulesToGroups } from '@app/util'
+
+import { ModuleGroupAccordion } from '../ModuleGroupAccordion/ModuleGroupAccordion'
 
 import {
   CertificateRevoked,
@@ -74,6 +78,12 @@ export const CertificateInfo: React.FC<
 }) => {
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
+
+  const oldModuleGroupsWithModules = courseParticipant
+    ? transformModulesToGroups(
+        courseParticipant.gradingModules as unknown as Course_Participant_Module[],
+      )
+    : null
 
   const filterModules = (strategy: Strategy): Strategy => {
     const filteredModules = strategy.modules?.filter(
@@ -310,6 +320,24 @@ export const CertificateInfo: React.FC<
             })
           : null}
       </>
+
+      {/* Handle historical course participants with old mode stored modules */}
+      {oldModuleGroupsWithModules?.length
+        ? oldModuleGroupsWithModules.map(moduleGroupWithModules => {
+            return (
+              <ModuleGroupAccordion
+                key={moduleGroupWithModules.id}
+                moduleGroupName={moduleGroupWithModules.name}
+                completedModules={moduleGroupWithModules.modules.filter(
+                  module => module.completed,
+                )}
+                uncompletedModules={moduleGroupWithModules.modules.filter(
+                  module => !module.completed,
+                )}
+              />
+            )
+          })
+        : null}
 
       {courseParticipant?.bildGradingModules?.modules ? (
         <>

@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { t } from 'i18next'
+import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -22,6 +23,7 @@ import { Grade } from '@app/modules/grading/components/Grade'
 import theme from '@app/theme'
 
 import { BILDGradedOnAccordion } from './components/BILDGradedOnAccordion/BILDGradedOnAccordion'
+import { ICMGradedOnAccordion } from './components/ICMGradedOnAccordion/ICMGradedOnAccordion'
 import { ICMGradedOnAccordionV2 } from './components/ICMGradedOnAccordionV2/ICMGradedOnAccordionV2'
 import { useGradedParticipant } from './hooks/useGradedParticipant'
 
@@ -31,6 +33,23 @@ export const ParticipantGrade = () => {
   const [{ data, fetching, error }] = useGradedParticipant(participantId ?? '')
 
   const participant = data?.participant
+
+  const GradedOnAccordion = useMemo(() => {
+    if (participant?.course.accreditedBy === Accreditors_Enum.Icm) {
+      return participant.gradedOn ? (
+        <ICMGradedOnAccordionV2 gradedOn={participant.gradedOn} />
+      ) : (
+        // Handle historical course participants with old mode stored modules
+        <ICMGradedOnAccordion participant={participant} />
+      )
+    }
+
+    if (participant?.course.accreditedBy === Accreditors_Enum.Bild) {
+      return <BILDGradedOnAccordion participant={participant} />
+    }
+
+    return null
+  }, [participant])
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
@@ -105,13 +124,7 @@ export const ParticipantGrade = () => {
                   {t('pages.participant-grading.modules-title˜')}
                 </Typography>
 
-                {participant.course.accreditedBy === Accreditors_Enum.Icm ? (
-                  <ICMGradedOnAccordionV2 gradedOn={participant.gradedOn} />
-                ) : null}
-
-                {participant.course.accreditedBy === Accreditors_Enum.Bild ? (
-                  <BILDGradedOnAccordion participant={participant} />
-                ) : null}
+                {GradedOnAccordion}
               </Box>
             </Box>
           </>
