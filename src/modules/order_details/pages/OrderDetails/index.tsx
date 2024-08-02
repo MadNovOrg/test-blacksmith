@@ -32,7 +32,6 @@ import {
   XeroPhone,
   XeroPhoneType,
   Course_Delivery_Type_Enum,
-  Course_Participant_Audit_Type_Enum,
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -106,20 +105,29 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     [order?.registrants],
   )
 
-  const getAuditsArgs = useMemo(() => {
+  const getCancellationAuditsArgs = useMemo(() => {
     return {
       where: {
         profile: {
           email: { _in: registrants.map(registrant => registrant.email) },
         },
-        type: { _eq: Course_Participant_Audit_Type_Enum.Cancellation },
-        xero_invoice_number: { _eq: order?.xeroInvoiceNumber },
       },
+      xeroInvoiceNumber: order?.xeroInvoiceNumber as string,
       pause: !registrants.length,
     }
   }, [order?.xeroInvoiceNumber, registrants])
 
-  const [{ data: participantAudits }] = useShallowAttendeeAudits(getAuditsArgs)
+  const [{ data: participantAudits }] = useShallowAttendeeAudits(
+    getCancellationAuditsArgs,
+  )
+
+  const cancellationAudits = useMemo(() => {
+    return participantAudits?.cancellation
+  }, [participantAudits?.cancellation])
+
+  const replacementAudits = useMemo(() => {
+    return participantAudits?.replacement
+  }, [participantAudits?.replacement])
 
   const registrantsLineItems: (XeroLineItem & { lineItemID: string })[] =
     useMemo(() => {
@@ -132,7 +140,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const cancelledRegistrantsLineItemIds = useMemo(() => {
     const matchRegistrant = registrants.filter(registrant =>
-      participantAudits?.logs.some(
+      cancellationAudits?.some(
         audit => audit.profile.email === registrant.email,
       ),
     )
@@ -140,7 +148,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     return matchRegistrant
       .map(registrant => registrant.xeroLineItemID)
       .filter(id => Boolean(id))
-  }, [participantAudits?.logs, registrants])
+  }, [cancellationAudits, registrants])
 
   const go1LicensesLineItem = useMemo(() => {
     return invoice?.lineItems.find((li: XeroLineItem) => isGo1LicensesItem(li))
@@ -279,6 +287,30 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   data?.orders.forEach(order => {
     quantities.set(Number(order.course?.id), Number(order.quantity))
   })
+
+  const getOldUserNameAndEmail = (lineItem: XeroLineItem) => {
+    const oldUser = replacementAudits?.find(
+      log =>
+        lineItem?.description
+          ?.trim()
+          .toLocaleLowerCase()
+          .includes(
+            log?.payload?.inviteeFirstName
+              ?.trim()
+              .toLocaleLowerCase() as string,
+          ) &&
+        lineItem?.description
+          ?.trim()
+          .toLocaleLowerCase()
+          .includes(
+            log?.payload?.inviteeLastName?.trim().toLocaleLowerCase() as string,
+          ),
+    )
+    return {
+      oldUserFullName: oldUser?.profile.fullName,
+      oldUserEmail: oldUser?.profile.email,
+    }
+  }
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
@@ -455,9 +487,24 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                 gap: theme.spacing(2),
                               }}
                             >
-                              <Typography color="grey.700">
-                                {lineItem.description}
-                              </Typography>
+                              <Box>
+                                <Typography color="grey.700">
+                                  {lineItem.description}
+                                </Typography>
+                                {getOldUserNameAndEmail(lineItem)
+                                  .oldUserEmail ? (
+                                  <Typography color="error">
+                                    {t('replaced-user', {
+                                      oldUserFullName:
+                                        getOldUserNameAndEmail(lineItem)
+                                          .oldUserFullName,
+                                      oldUserEmail:
+                                        getOldUserNameAndEmail(lineItem)
+                                          .oldUserEmail,
+                                    })}
+                                  </Typography>
+                                ) : null}
+                              </Box>
                               {cancelledRegistrantsLineItemIds.includes(
                                 lineItem.lineItemID,
                               ) ? (

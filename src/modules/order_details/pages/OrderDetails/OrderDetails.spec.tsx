@@ -379,7 +379,7 @@ describe('page: OrderDetails', () => {
         if (query === GET_SHALLOW_ATTENDEE_AUDIT_LOGS_QUERY) {
           return fromValue<{ data: GetShallowAttendeeAuditLogsQuery }>({
             data: {
-              logs: [
+              cancellation: [
                 {
                   id: chance.guid(),
                   profile: {
@@ -390,6 +390,7 @@ describe('page: OrderDetails', () => {
                   xero_invoice_number: invoice.invoiceNumber,
                 },
               ],
+              replacement: [],
             },
           })
         }
@@ -407,6 +408,137 @@ describe('page: OrderDetails', () => {
 
     expect(within(user1Row).getByText('Cancelled')).toBeInTheDocument()
     expect(within(user2Row).queryByText('Cancelled')).not.toBeInTheDocument()
+  })
+
+  it('renders replaced participant full name and email', () => {
+    const user1Email = chance.email()
+    const user1FirstName = 'John'
+    const user1LastName = 'Trainer'
+    const user2Email = chance.email()
+    const replacedUserEmail = chance.email()
+    const replacedUserFullName = chance.name()
+    const unitPrice = 130
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: unitPrice,
+              description: `Level One, ${user1FirstName} ${user1LastName}`,
+              lineItemID: chance.guid(),
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: unitPrice,
+              description: `Level One, ${user2Email}`,
+              lineItemID: chance.guid(),
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 10,
+              itemCode: CourseWorkbooks.Mandatory,
+              description: `Mandatory Course Materials x ${12}`,
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 0,
+              itemCode: CourseWorkbooks.Free,
+              description: `Free Course Materials x ${12}`,
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    registrants: [
+                      {
+                        email: user1Email,
+                        xeroLineItemID: invoice.lineItems[0].lineItemID,
+                      },
+                      { email: user2Email },
+                    ],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: `${user1FirstName} ${user1LastName}`,
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    bookingContact: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  quantity: 1,
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+
+        if (query === GET_SHALLOW_ATTENDEE_AUDIT_LOGS_QUERY) {
+          return fromValue<{ data: GetShallowAttendeeAuditLogsQuery }>({
+            data: {
+              cancellation: [],
+              replacement: [
+                {
+                  id: chance.guid(),
+                  profile: {
+                    id: chance.guid(),
+                    fullName: chance.name(),
+                    email: user1Email,
+                  },
+                  payload: {
+                    inviteeEmail: user1Email,
+                    inviteeFirstName: user1FirstName,
+                    inviteeLastName: user1LastName,
+                    invoiceNumber: invoice.invoiceNumber,
+                    profile: {
+                      id: chance.guid(),
+                      fullName: replacedUserFullName,
+                      email: replacedUserEmail,
+                    },
+                  },
+                  xero_invoice_number: invoice.invoiceNumber,
+                },
+              ],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>,
+    )
+
+    const user1Row = screen.getByTestId(`order-registrant-0`)
+    expect(user1Row.textContent).toContain(
+      t('replaced-user', {
+        oldUserFullName: replacedUserFullName,
+        oldUserEmail: replacedUserEmail,
+      }),
+    )
   })
 
   it('renders blended learning licenses information if purchased', () => {

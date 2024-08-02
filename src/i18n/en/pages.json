@@ -992,6 +992,7 @@
     "payment-method-INVOICE": "Pay by invoice",
     "payment-method-CC": "Pay by credit card",
     "per-attendee": "per attendee",
+    "replaced-user": "Replaced {{oldUserFullName}}, {{oldUserEmail}}",
     "ordered-by": "Ordered by",
     "invoiced-to": "Invoiced to",
     "registration": "Registration",

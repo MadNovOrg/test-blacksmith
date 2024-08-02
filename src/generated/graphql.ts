@@ -5521,8 +5521,6 @@ export enum PostStatusEnum {
   RequestFailed = 'REQUEST_FAILED',
   /** Objects with the request-pending status */
   RequestPending = 'REQUEST_PENDING',
-  /** Objects with the spam status */
-  Spam = 'SPAM',
   /** Objects with the trash status */
   Trash = 'TRASH'
 }
@@ -60736,10 +60734,11 @@ export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ 
 
 export type GetShallowAttendeeAuditLogsQueryVariables = Exact<{
   where: Course_Participant_Audit_Bool_Exp;
+  xeroInvoiceNumber: Scalars['String'];
 }>;
 
 
-export type GetShallowAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }> };
+export type GetShallowAttendeeAuditLogsQuery = { __typename?: 'query_root', cancellation: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }>, replacement: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, payload: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }> };
 
 export type GetOrderForBookingDoneQueryVariables = Exact<{
   orderId: Scalars['uuid'];
