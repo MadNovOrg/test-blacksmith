@@ -14,7 +14,9 @@ INSERT INTO public.course (id, booking_contact_profile_id, source, description, 
 (10081, '6987feba-0877-4a2a-b7da-982de1977eb3', 'EXISTING_CLIENT', 'Closed course level one virtual', 'Positive Behaviour Training: Level One', 'CLOSED', 'VIRTUAL', 'LEVEL_1', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'TRAINER_PENDING', true, 'ICM', 0),
 (10082, null, null, 'Indirect course level two', 'Positive Behaviour Training: Level Two', 'INDIRECT', 'F2F', 'LEVEL_2', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', true, 'ICM', null),
 (10083, null, null, 'Trainer missing course.', 'Positive Behaviour Training: Intermediate Trainer', 'OPEN', 'F2F', 'INTERMEDIATE_TRAINER', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false, false, 'TRAINER_MISSING', false, 'ICM', null),
-(10084, null, null, 'cancelled course.', 'Positive Behaviour Training: Level One', 'OPEN', 'VIRTUAL', 'LEVEL_1', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false, false, 'CANCELLED', false, 'ICM', null);
+(10084, null, null, 'cancelled course.', 'Positive Behaviour Training: Level One', 'OPEN', 'VIRTUAL', 'LEVEL_1', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false, false, 'CANCELLED', false, 'ICM', null),
+(10150, '6987feba-0877-4a2a-b7da-982de1977eb3', 'EXISTING_CLIENT', 'Closed course level one virtual', 'Positive Behaviour Training: Level One', 'CLOSED', 'VIRTUAL', 'LEVEL_1', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', true, 'ICM', 0),
+(10151, '6987feba-0877-4a2a-b7da-982de1977eb3', 'EXISTING_CLIENT', 'Closed course level one virtual', 'Positive Behaviour Training: Level Two', 'CLOSED', 'F2F', 'LEVEL_2', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', true, 'ICM', 0);
 SELECT setval('course_id_seq', 10012);
 
 INSERT INTO public.course_trainer (profile_id, course_id, type, status) VALUES
@@ -26,6 +28,8 @@ INSERT INTO public.course_trainer (profile_id, course_id, type, status) VALUES
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10008, 'LEADER', 'ACCEPTED'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10010, 'LEADER', 'ACCEPTED'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10011, 'LEADER', 'ACCEPTED'),
+('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 10150, 'LEADER', 'ACCEPTED'),
+('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 10151, 'LEADER', 'ACCEPTED'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10081, 'LEADER', 'PENDING'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10082, 'LEADER', 'ACCEPTED');
 

@@ -29,7 +29,6 @@ import {
   OrganizationProfile,
 } from '@app/generated/graphql'
 import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/modules/organisation/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
@@ -37,7 +36,6 @@ import { OrgSummaryList } from '@app/modules/organisation/tabs/components/OrgSum
 import { ALL_ORGS } from '@app/util'
 
 import { useOrganisationProfiles } from '../hooks/useOrganisationProfiles'
-import useOrganisationStats from '../hooks/useOrganisationStats'
 
 type OrgOverviewTabParams = {
   orgId: string
@@ -88,18 +86,6 @@ export const OrgOverviewTab: React.FC<
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
     withUpcomingEnrollmentsOnly: true,
-  })
-
-  const { data } = useOrgV2({
-    orgId,
-    profileId: profile?.id,
-    shallow: true,
-    showAll: acl.canViewAllOrganizations(),
-  })
-
-  const { stats } = useOrganisationStats({
-    profilesByOrg: profilesByOrganisation as Map<string, OrganizationProfile[]>,
-    organisations: data?.orgs,
   })
 
   const { courses: coursesForBooking, fetching: coursesLoading } =
@@ -193,7 +179,7 @@ export const OrgOverviewTab: React.FC<
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
 
-        {!stats[orgId]?.profiles.count ? (
+        {orgId !== 'all' && !profilesByOrganisation.get(orgId) ? (
           <>
             {certificateStatus.length ? (
               <>

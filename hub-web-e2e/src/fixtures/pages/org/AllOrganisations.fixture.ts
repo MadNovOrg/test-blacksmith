@@ -139,7 +139,7 @@ export class AllOrganisations extends BasePage {
   }
 
   async insertCourseId(courseId: string) {
-    await this.searchAvailableCourses.fill(courseId)
+    await this.searchAvailableCourses.type(courseId)
   }
 
   async clickBookNow() {

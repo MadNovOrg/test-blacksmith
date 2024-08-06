@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
@@ -31,15 +32,13 @@ const test = base.extend<{
 
 test.use({ storageState: stateFilePath('trainerWithOrg') })
 
-// eslint-disable-next-line playwright/no-skipped-test
 test.skip('my courses view @smoke', async ({ page, courses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.checkRows(courses)
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-test('my courses filter', async ({ page, courses }) => {
+test('my courses filter', async ({ page }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.filterCourses('FilterByCourseLevel', [
