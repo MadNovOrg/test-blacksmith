@@ -44149,6 +44149,78 @@ export type Order_Variance_Order_By = {
   vat?: InputMaybe<Order_By>;
 };
 
+/** columns and relationships of "org_distinct_country_codes" */
+export type Org_Distinct_Country_Codes = {
+  __typename?: 'org_distinct_country_codes';
+  countrycode?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "org_distinct_country_codes" */
+export type Org_Distinct_Country_Codes_Aggregate = {
+  __typename?: 'org_distinct_country_codes_aggregate';
+  aggregate?: Maybe<Org_Distinct_Country_Codes_Aggregate_Fields>;
+  nodes: Array<Org_Distinct_Country_Codes>;
+};
+
+/** aggregate fields of "org_distinct_country_codes" */
+export type Org_Distinct_Country_Codes_Aggregate_Fields = {
+  __typename?: 'org_distinct_country_codes_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Org_Distinct_Country_Codes_Max_Fields>;
+  min?: Maybe<Org_Distinct_Country_Codes_Min_Fields>;
+};
+
+
+/** aggregate fields of "org_distinct_country_codes" */
+export type Org_Distinct_Country_Codes_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Org_Distinct_Country_Codes_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "org_distinct_country_codes". All fields are combined with a logical 'AND'. */
+export type Org_Distinct_Country_Codes_Bool_Exp = {
+  _and?: InputMaybe<Array<Org_Distinct_Country_Codes_Bool_Exp>>;
+  _not?: InputMaybe<Org_Distinct_Country_Codes_Bool_Exp>;
+  _or?: InputMaybe<Array<Org_Distinct_Country_Codes_Bool_Exp>>;
+  countrycode?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** aggregate max on columns */
+export type Org_Distinct_Country_Codes_Max_Fields = {
+  __typename?: 'org_distinct_country_codes_max_fields';
+  countrycode?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Org_Distinct_Country_Codes_Min_Fields = {
+  __typename?: 'org_distinct_country_codes_min_fields';
+  countrycode?: Maybe<Scalars['String']>;
+};
+
+/** Ordering options when selecting data from "org_distinct_country_codes". */
+export type Org_Distinct_Country_Codes_Order_By = {
+  countrycode?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "org_distinct_country_codes" */
+export enum Org_Distinct_Country_Codes_Select_Column {
+  /** column name */
+  Countrycode = 'countrycode'
+}
+
+/** Streaming cursor of the table "org_distinct_country_codes" */
+export type Org_Distinct_Country_Codes_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Org_Distinct_Country_Codes_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Org_Distinct_Country_Codes_Stream_Cursor_Value_Input = {
+  countrycode?: InputMaybe<Scalars['String']>;
+};
+
 /** columns and relationships of "organisation_sector" */
 export type Organisation_Sector = {
   __typename?: 'organisation_sector';
@@ -44334,6 +44406,8 @@ export type Organization = {
   preferences: Scalars['jsonb'];
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  residing_country?: Maybe<Scalars['String']>;
+  residing_country_code?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
   updatedAt: Scalars['timestamptz'];
@@ -44633,6 +44707,8 @@ export type Organization_Bool_Exp = {
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
   region?: InputMaybe<String_Comparison_Exp>;
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
+  residing_country?: InputMaybe<String_Comparison_Exp>;
+  residing_country_code?: InputMaybe<String_Comparison_Exp>;
   sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -44705,6 +44781,8 @@ export type Organization_Insert_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
+  residing_country?: InputMaybe<Scalars['String']>;
+  residing_country_code?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -45017,6 +45095,8 @@ export type Organization_Max_Fields = {
   postCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  residing_country?: Maybe<Scalars['String']>;
+  residing_country_code?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -45032,6 +45112,8 @@ export type Organization_Max_Order_By = {
   organisationType?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
+  residing_country?: InputMaybe<Order_By>;
+  residing_country_code?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45357,6 +45439,8 @@ export type Organization_Min_Fields = {
   postCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  residing_country?: Maybe<Scalars['String']>;
+  residing_country_code?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -45372,6 +45456,8 @@ export type Organization_Min_Order_By = {
   organisationType?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
+  residing_country?: InputMaybe<Order_By>;
+  residing_country_code?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45426,6 +45512,8 @@ export type Organization_Order_By = {
   preferences?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
+  residing_country?: InputMaybe<Order_By>;
+  residing_country_code?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
@@ -45480,6 +45568,10 @@ export enum Organization_Select_Column {
   /** column name */
   ReservedGo1Licenses = 'reservedGo1Licenses',
   /** column name */
+  ResidingCountry = 'residing_country',
+  /** column name */
+  ResidingCountryCode = 'residing_country_code',
+  /** column name */
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
@@ -45518,6 +45610,8 @@ export type Organization_Set_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
+  residing_country?: InputMaybe<Scalars['String']>;
+  residing_country_code?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -45588,6 +45682,8 @@ export type Organization_Stream_Cursor_Value_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
+  residing_country?: InputMaybe<Scalars['String']>;
+  residing_country_code?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -45793,6 +45889,10 @@ export enum Organization_Update_Column {
   Region = 'region',
   /** column name */
   ReservedGo1Licenses = 'reservedGo1Licenses',
+  /** column name */
+  ResidingCountry = 'residing_country',
+  /** column name */
+  ResidingCountryCode = 'residing_country_code',
   /** column name */
   Sector = 'sector',
   /** column name */
@@ -49451,6 +49551,10 @@ export type Query_Root = {
   order_temp_aggregate: Order_Temp_Aggregate;
   /** fetch data from the table: "order_temp" using primary key columns */
   order_temp_by_pk?: Maybe<Order_Temp>;
+  /** fetch data from the table: "org_distinct_country_codes" */
+  org_distinct_country_codes: Array<Org_Distinct_Country_Codes>;
+  /** fetch aggregated fields from the table: "org_distinct_country_codes" */
+  org_distinct_country_codes_aggregate: Org_Distinct_Country_Codes_Aggregate;
   /** fetch data from the table: "organisation_sector" */
   organisation_sector: Array<Organisation_Sector>;
   /** fetch aggregated fields from the table: "organisation_sector" */
@@ -51584,6 +51688,24 @@ export type Query_RootOrder_Temp_By_PkArgs = {
 };
 
 
+export type Query_RootOrg_Distinct_Country_CodesArgs = {
+  distinct_on?: InputMaybe<Array<Org_Distinct_Country_Codes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Org_Distinct_Country_Codes_Order_By>>;
+  where?: InputMaybe<Org_Distinct_Country_Codes_Bool_Exp>;
+};
+
+
+export type Query_RootOrg_Distinct_Country_Codes_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Org_Distinct_Country_Codes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Org_Distinct_Country_Codes_Order_By>>;
+  where?: InputMaybe<Org_Distinct_Country_Codes_Bool_Exp>;
+};
+
+
 export type Query_RootOrganisation_SectorArgs = {
   distinct_on?: InputMaybe<Array<Organisation_Sector_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -53426,6 +53548,12 @@ export type Subscription_Root = {
   order_temp_by_pk?: Maybe<Order_Temp>;
   /** fetch data from the table in a streaming manner: "order_temp" */
   order_temp_stream: Array<Order_Temp>;
+  /** fetch data from the table: "org_distinct_country_codes" */
+  org_distinct_country_codes: Array<Org_Distinct_Country_Codes>;
+  /** fetch aggregated fields from the table: "org_distinct_country_codes" */
+  org_distinct_country_codes_aggregate: Org_Distinct_Country_Codes_Aggregate;
+  /** fetch data from the table in a streaming manner: "org_distinct_country_codes" */
+  org_distinct_country_codes_stream: Array<Org_Distinct_Country_Codes>;
   /** fetch data from the table: "organisation_sector" */
   organisation_sector: Array<Organisation_Sector>;
   /** fetch aggregated fields from the table: "organisation_sector" */
@@ -56148,6 +56276,31 @@ export type Subscription_RootOrder_Temp_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Order_Temp_Stream_Cursor_Input>>;
   where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrg_Distinct_Country_CodesArgs = {
+  distinct_on?: InputMaybe<Array<Org_Distinct_Country_Codes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Org_Distinct_Country_Codes_Order_By>>;
+  where?: InputMaybe<Org_Distinct_Country_Codes_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrg_Distinct_Country_Codes_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Org_Distinct_Country_Codes_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Org_Distinct_Country_Codes_Order_By>>;
+  where?: InputMaybe<Org_Distinct_Country_Codes_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrg_Distinct_Country_Codes_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Org_Distinct_Country_Codes_Stream_Cursor_Input>>;
+  where?: InputMaybe<Org_Distinct_Country_Codes_Bool_Exp>;
 };
 
 
@@ -59559,6 +59712,11 @@ export type GetDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string
 
 
 export type GetDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
+
+export type GetDistinctOrgResidingCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDistinctOrgResidingCountriesQuery = { __typename?: 'query_root', org_distinct_country_codes: Array<{ __typename?: 'org_distinct_country_codes', countrycode?: string | null }> };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];

@@ -27,6 +27,7 @@ import {
 
 import { BackButton } from '@app/components/BackButton'
 import { ExportBlendedDialog } from '@app/components/dialogs'
+import { FilterByOrgResidingCountry } from '@app/components/filters/FilterByOrgResidingCountry'
 import { FilterByOrgSector } from '@app/components/filters/FilterByOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -42,17 +43,13 @@ import {
 
 import useOrgV2 from '../../hooks/useOrgV2'
 
-type OrganizationsProps = unknown
-
-export const Organizations: React.FC<
-  React.PropsWithChildren<OrganizationsProps>
-> = () => {
+export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
-  const [showExportModal, setExportShowModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
     () => [
@@ -94,6 +91,7 @@ export const Organizations: React.FC<
     'sectors',
     withDefault(ArrayParam, []),
   )
+  const [filterOrgCountries, setFilterOrgCountries] = useState<string[]>([])
 
   const [where, filtered] = useMemo(() => {
     let isFiltered = false
@@ -123,8 +121,14 @@ export const Organizations: React.FC<
       }
     }
 
+    if (filterOrgCountries?.length) {
+      obj._or = filterOrgCountries.map(countryCode => ({
+        address: { _contains: { countryCode: countryCode } },
+      }))
+    }
+
     return [obj, isFiltered]
-  }, [acl, debouncedQuery, filterSector, profile?.id])
+  }, [acl, debouncedQuery, filterOrgCountries, filterSector, profile?.id])
 
   const { data, fetching } = useOrgV2({
     sorting,
@@ -136,7 +140,7 @@ export const Organizations: React.FC<
 
   const count = data?.orgsCount.aggregate?.count
   const closeExportModal = useCallback(() => {
-    setExportShowModal(false)
+    setShowExportModal(false)
   }, [])
 
   const lastActivityData = useMemo(() => {
@@ -216,6 +220,9 @@ export const Organizations: React.FC<
 
                 <Stack gap={1}>
                   <FilterByOrgSector onChange={setFilterSector} />
+                  <FilterByOrgResidingCountry
+                    onChange={setFilterOrgCountries}
+                  />
                 </Stack>
               </Box>
             </Stack>
@@ -232,7 +239,7 @@ export const Organizations: React.FC<
                 <Button
                   variant="contained"
                   data-testid="export-blended-learning-licence-summary"
-                  onClick={() => setExportShowModal(true)}
+                  onClick={() => setShowExportModal(true)}
                   sx={{ marginRight: '1em' }}
                 >
                   {t('pages.admin.organizations.export.blended-learning')}
