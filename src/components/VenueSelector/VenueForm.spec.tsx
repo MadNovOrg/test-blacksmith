@@ -169,4 +169,20 @@ describe('component: VenueForm', () => {
 
     expect(getByLabelTextRo(/zip code/i)).toBeInTheDocument()
   })
+
+  it('should make postcode required for UK countries', () => {
+    const { getByLabelText } = setup({
+      courseResidingCountry: 'GB-ENG',
+    })
+
+    expect(getByLabelText(/postcode/i)).toBeRequired()
+  })
+
+  it('should make ZIP Code not required for non UK countries', () => {
+    const { getByLabelText } = setup({
+      courseResidingCountry: 'FR',
+    })
+
+    expect(getByLabelText(/zip code/i)).not.toBeRequired()
+  })
 })

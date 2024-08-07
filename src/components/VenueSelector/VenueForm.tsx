@@ -99,8 +99,6 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   t('common.validation-errors.invalid-postcode'),
                   isValidUKPostalCode,
                 ),
-            otherwise: schema =>
-              schema.required(requiredMsg(t, 'addr.zipCode')),
           }),
       country: yup
         .string()
@@ -133,11 +131,12 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
           addressLineTwo: '',
           city: '',
           postCode: '',
-          country: courseResidingCountry || 'GB-ENG',
+          country: courseResidingCountry ?? 'GB-ENG',
         },
   })
   const values = watch()
 
+  const UKCountry = isUKCountry(values.country ?? courseResidingCountry)
   const submitHandler = useCallback(
     async (formData: VenueFormProps['data']) => {
       const validationResult = await trigger()
@@ -289,17 +288,17 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
                   disabled={preFilledFields.has('postCode')}
                   fullWidth
                   variant="filled"
-                  required={!acl.isTTAdmin()}
+                  required={UKCountry}
                   error={fieldState.invalid}
                   label={
-                    isUKCountry(values.country ?? courseResidingCountry)
+                    UKCountry
                       ? t('components.venue-selector.modal.fields.postCode')
                       : t('components.venue-selector.modal.fields.zipCode')
                   }
                   helperText={errors.postCode?.message}
                   {...field}
                   InputProps={
-                    isUKCountry(values.country ?? courseResidingCountry)
+                    UKCountry
                       ? {
                           endAdornment: (
                             <Tooltip title={t('common.post-code-tooltip')}>
