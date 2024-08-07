@@ -23,6 +23,8 @@ configuration:
       custom_name: ofstedLastInspection
     ofsted_rating:
       custom_name: ofstedRating
+    search_post_code:
+      custom_name: searchPostCode
     trust_name:
       custom_name: trustName
     trust_type:
@@ -38,6 +40,7 @@ configuration:
     local_authority: localAuthority
     ofsted_last_inspection: ofstedLastInspection
     ofsted_rating: ofstedRating
+    search_post_code: searchPostCode
     trust_name: trustName
     trust_type: trustType
   custom_root_fields: {}
@@ -51,12 +54,6 @@ array_relationships:
         remote_table:
           name: organization
           schema: public
-computed_fields:
-  - name: postCodeForSearch
-    definition:
-      function:
-        name: dfe_org_post_code
-        schema: public
 select_permissions:
   - role: anonymous
     permission:
@@ -75,12 +72,12 @@ select_permissions:
         - ofsted_last_inspection
         - ofsted_rating
         - postcode
+        - registered
+        - search_post_code
         - town
         - trust_name
         - trust_type
         - urn
-      computed_fields:
-        - postCodeForSearch
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -100,12 +97,12 @@ select_permissions:
         - ofsted_last_inspection
         - ofsted_rating
         - postcode
+        - registered
+        - search_post_code
         - town
         - trust_name
         - trust_type
         - urn
-      computed_fields:
-        - postCodeForSearch
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -125,12 +122,12 @@ select_permissions:
         - ofsted_last_inspection
         - ofsted_rating
         - postcode
+        - registered
+        - search_post_code
         - town
         - trust_name
         - trust_type
         - urn
-      computed_fields:
-        - postCodeForSearch
       filter: {}
       allow_aggregations: true
   - role: user
@@ -150,11 +147,11 @@ select_permissions:
         - ofsted_last_inspection
         - ofsted_rating
         - postcode
+        - registered
+        - search_post_code
         - town
         - trust_name
         - trust_type
         - urn
-      computed_fields:
-        - postCodeForSearch
       filter: {}
       allow_aggregations: true

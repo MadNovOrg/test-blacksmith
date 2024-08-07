@@ -105,14 +105,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         variables: {
           where: {
             _and: [
-              ...(localStateOrganization?.dfeId
-                ? [{ id: { _neq: localStateOrganization.dfeId } }]
-                : []),
-              // { organizations_aggregate: { count: { predicate: { _eq: 0 } } } },
               ...(searchOnlyByPostCode
                 ? [
                     {
-                      postCodeForSearch: {
+                      searchPostCode: {
                         _ilike: `%${debouncedQuery.replace(/\s/g, '')}%`,
                       },
                     },
@@ -127,6 +123,12 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                         })),
                     },
                   ]),
+
+              { registered: { _eq: false } },
+
+              ...(localStateOrganization?.dfeId
+                ? [{ id: { _neq: localStateOrganization.dfeId } }]
+                : []),
             ],
           },
         },

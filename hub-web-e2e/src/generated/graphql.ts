@@ -29575,9 +29575,8 @@ export type Dfe_Establishment = {
   organizations: Array<Organization>;
   /** An aggregate relationship */
   organizations_aggregate: Organization_Aggregate;
-  /** A computed field, executes function "dfe_org_post_code" */
-  postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
+  searchPostCode?: Maybe<Scalars['String']>;
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
   trustType?: Maybe<Scalars['String']>;
@@ -29646,8 +29645,8 @@ export type Dfe_Establishment_Bool_Exp = {
   ofstedRating?: InputMaybe<String_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Bool_Exp>;
   organizations_aggregate?: InputMaybe<Organization_Aggregate_Bool_Exp>;
-  postCodeForSearch?: InputMaybe<String_Comparison_Exp>;
   postcode?: InputMaybe<String_Comparison_Exp>;
+  searchPostCode?: InputMaybe<String_Comparison_Exp>;
   town?: InputMaybe<String_Comparison_Exp>;
   trustName?: InputMaybe<String_Comparison_Exp>;
   trustType?: InputMaybe<String_Comparison_Exp>;
@@ -29677,6 +29676,7 @@ export type Dfe_Establishment_Insert_Input = {
   ofstedRating?: InputMaybe<Scalars['String']>;
   organizations?: InputMaybe<Organization_Arr_Rel_Insert_Input>;
   postcode?: InputMaybe<Scalars['String']>;
+  searchPostCode?: InputMaybe<Scalars['String']>;
   town?: InputMaybe<Scalars['String']>;
   trustName?: InputMaybe<Scalars['String']>;
   trustType?: InputMaybe<Scalars['String']>;
@@ -29699,9 +29699,8 @@ export type Dfe_Establishment_Max_Fields = {
   name?: Maybe<Scalars['String']>;
   ofstedLastInspection?: Maybe<Scalars['String']>;
   ofstedRating?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "dfe_org_post_code" */
-  postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
+  searchPostCode?: Maybe<Scalars['String']>;
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
   trustType?: Maybe<Scalars['String']>;
@@ -29724,9 +29723,8 @@ export type Dfe_Establishment_Min_Fields = {
   name?: Maybe<Scalars['String']>;
   ofstedLastInspection?: Maybe<Scalars['String']>;
   ofstedRating?: Maybe<Scalars['String']>;
-  /** A computed field, executes function "dfe_org_post_code" */
-  postCodeForSearch?: Maybe<Scalars['String']>;
   postcode?: Maybe<Scalars['String']>;
+  searchPostCode?: Maybe<Scalars['String']>;
   town?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
   trustType?: Maybe<Scalars['String']>;
@@ -29772,8 +29770,8 @@ export type Dfe_Establishment_Order_By = {
   ofstedLastInspection?: InputMaybe<Order_By>;
   ofstedRating?: InputMaybe<Order_By>;
   organizations_aggregate?: InputMaybe<Organization_Aggregate_Order_By>;
-  postCodeForSearch?: InputMaybe<Order_By>;
   postcode?: InputMaybe<Order_By>;
+  searchPostCode?: InputMaybe<Order_By>;
   town?: InputMaybe<Order_By>;
   trustName?: InputMaybe<Order_By>;
   trustType?: InputMaybe<Order_By>;
@@ -29816,6 +29814,8 @@ export enum Dfe_Establishment_Select_Column {
   /** column name */
   Postcode = 'postcode',
   /** column name */
+  SearchPostCode = 'searchPostCode',
+  /** column name */
   Town = 'town',
   /** column name */
   TrustName = 'trustName',
@@ -29841,6 +29841,7 @@ export type Dfe_Establishment_Set_Input = {
   ofstedLastInspection?: InputMaybe<Scalars['String']>;
   ofstedRating?: InputMaybe<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
+  searchPostCode?: InputMaybe<Scalars['String']>;
   town?: InputMaybe<Scalars['String']>;
   trustName?: InputMaybe<Scalars['String']>;
   trustType?: InputMaybe<Scalars['String']>;
@@ -29871,6 +29872,7 @@ export type Dfe_Establishment_Stream_Cursor_Value_Input = {
   ofstedLastInspection?: InputMaybe<Scalars['String']>;
   ofstedRating?: InputMaybe<Scalars['String']>;
   postcode?: InputMaybe<Scalars['String']>;
+  searchPostCode?: InputMaybe<Scalars['String']>;
   town?: InputMaybe<Scalars['String']>;
   trustName?: InputMaybe<Scalars['String']>;
   trustType?: InputMaybe<Scalars['String']>;
@@ -29907,6 +29909,8 @@ export enum Dfe_Establishment_Update_Column {
   OfstedRating = 'ofstedRating',
   /** column name */
   Postcode = 'postcode',
+  /** column name */
+  SearchPostCode = 'searchPostCode',
   /** column name */
   Town = 'town',
   /** column name */
