@@ -455,7 +455,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               <Typography>
                                 {course?.type === Course_Type_Enum.Indirect
                                   ? course.max_participants
-                                  : quantities.get(Number(course?.id)) ?? 0}
+                                  : (quantities.get(Number(course?.id)) ?? 0) +
+                                    (cancellationAudits ?? []).filter(audit => {
+                                      return audit.course_id === course?.id
+                                    }).length}
                               </Typography>
                             </Box>
                           </Box>
@@ -478,45 +481,50 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       <Stack spacing={2}>
                         {registrantsLineItems?.map(
                           (lineItem, index: number) => (
-                            <ItemRow
+                            <div
                               key={index}
-                              data-testid={`order-registrant-${index}`}
-                              sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                gap: theme.spacing(2),
-                              }}
+                              data-testid={`order-registrant-box-${index}`}
                             >
-                              <Box>
-                                <Typography color="grey.700">
-                                  {lineItem.description}
-                                </Typography>
-                                {getOldUserNameAndEmail(lineItem)
-                                  .oldUserEmail ? (
-                                  <Typography color="error">
-                                    {t('replaced-user', {
-                                      oldUserFullName:
-                                        getOldUserNameAndEmail(lineItem)
-                                          .oldUserFullName,
-                                      oldUserEmail:
-                                        getOldUserNameAndEmail(lineItem)
-                                          .oldUserEmail,
-                                    })}
+                              <ItemRow
+                                data-testid={`order-registrant-${index}`}
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  gap: theme.spacing(2),
+                                }}
+                              >
+                                <Box>
+                                  <Typography color="grey.700">
+                                    {lineItem.description}
                                   </Typography>
-                                ) : null}
-                              </Box>
+                                  {getOldUserNameAndEmail(lineItem)
+                                    .oldUserEmail ? (
+                                    <Typography color="error">
+                                      {t('replaced-user', {
+                                        oldUserFullName:
+                                          getOldUserNameAndEmail(lineItem)
+                                            .oldUserFullName,
+                                        oldUserEmail:
+                                          getOldUserNameAndEmail(lineItem)
+                                            .oldUserEmail,
+                                      })}
+                                    </Typography>
+                                  ) : null}
+                                </Box>
+
+                                <Typography color="grey.700">
+                                  {_t('common.currency', {
+                                    amount: lineItem?.unitAmount,
+                                    currency: invoice?.currencyCode,
+                                  })}
+                                </Typography>
+                              </ItemRow>
                               {cancelledRegistrantsLineItemIds.includes(
                                 lineItem.lineItemID,
                               ) ? (
                                 <Typography color="error">Cancelled</Typography>
                               ) : null}
-                              <Typography color="grey.700">
-                                {_t('common.currency', {
-                                  amount: lineItem?.unitAmount,
-                                  currency: invoice?.currencyCode,
-                                })}
-                              </Typography>
-                            </ItemRow>
+                            </div>
                           ),
                         )}
                       </Stack>

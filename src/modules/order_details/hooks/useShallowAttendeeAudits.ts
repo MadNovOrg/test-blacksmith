@@ -22,6 +22,7 @@ export const GET_SHALLOW_ATTENDEE_AUDIT_LOGS_QUERY = gql`
     ) {
       id
       xero_invoice_number
+      course_id
       profile {
         id
         fullName

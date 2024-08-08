@@ -388,6 +388,7 @@ describe('page: OrderDetails', () => {
                     email: user1Email,
                   },
                   xero_invoice_number: invoice.invoiceNumber,
+                  course_id: 1,
                 },
               ],
               replacement: [],
@@ -403,8 +404,8 @@ describe('page: OrderDetails', () => {
       </Provider>,
     )
 
-    const user1Row = screen.getByTestId(`order-registrant-0`)
-    const user2Row = screen.getByTestId(`order-registrant-1`)
+    const user1Row = screen.getByTestId(`order-registrant-box-0`)
+    const user2Row = screen.getByTestId(`order-registrant-box-1`)
 
     expect(within(user1Row).getByText('Cancelled')).toBeInTheDocument()
     expect(within(user2Row).queryByText('Cancelled')).not.toBeInTheDocument()

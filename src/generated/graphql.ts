@@ -44406,8 +44406,6 @@ export type Organization = {
   preferences: Scalars['jsonb'];
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
-  residing_country?: Maybe<Scalars['String']>;
-  residing_country_code?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
   updatedAt: Scalars['timestamptz'];
@@ -44707,8 +44705,6 @@ export type Organization_Bool_Exp = {
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
   region?: InputMaybe<String_Comparison_Exp>;
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
-  residing_country?: InputMaybe<String_Comparison_Exp>;
-  residing_country_code?: InputMaybe<String_Comparison_Exp>;
   sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -44781,8 +44777,6 @@ export type Organization_Insert_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
-  residing_country?: InputMaybe<Scalars['String']>;
-  residing_country_code?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -45095,8 +45089,6 @@ export type Organization_Max_Fields = {
   postCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
-  residing_country?: Maybe<Scalars['String']>;
-  residing_country_code?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -45112,8 +45104,6 @@ export type Organization_Max_Order_By = {
   organisationType?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
-  residing_country?: InputMaybe<Order_By>;
-  residing_country_code?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45439,8 +45429,6 @@ export type Organization_Min_Fields = {
   postCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
-  residing_country?: Maybe<Scalars['String']>;
-  residing_country_code?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -45456,8 +45444,6 @@ export type Organization_Min_Order_By = {
   organisationType?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
-  residing_country?: InputMaybe<Order_By>;
-  residing_country_code?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45512,8 +45498,6 @@ export type Organization_Order_By = {
   preferences?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
-  residing_country?: InputMaybe<Order_By>;
-  residing_country_code?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
@@ -45568,10 +45552,6 @@ export enum Organization_Select_Column {
   /** column name */
   ReservedGo1Licenses = 'reservedGo1Licenses',
   /** column name */
-  ResidingCountry = 'residing_country',
-  /** column name */
-  ResidingCountryCode = 'residing_country_code',
-  /** column name */
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
@@ -45610,8 +45590,6 @@ export type Organization_Set_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
-  residing_country?: InputMaybe<Scalars['String']>;
-  residing_country_code?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -45682,8 +45660,6 @@ export type Organization_Stream_Cursor_Value_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
-  residing_country?: InputMaybe<Scalars['String']>;
-  residing_country_code?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -45889,10 +45865,6 @@ export enum Organization_Update_Column {
   Region = 'region',
   /** column name */
   ReservedGo1Licenses = 'reservedGo1Licenses',
-  /** column name */
-  ResidingCountry = 'residing_country',
-  /** column name */
-  ResidingCountryCode = 'residing_country_code',
   /** column name */
   Sector = 'sector',
   /** column name */
@@ -60910,7 +60882,7 @@ export type GetShallowAttendeeAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetShallowAttendeeAuditLogsQuery = { __typename?: 'query_root', cancellation: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }>, replacement: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, payload: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }> };
+export type GetShallowAttendeeAuditLogsQuery = { __typename?: 'query_root', cancellation: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, course_id: number, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }>, replacement: Array<{ __typename?: 'course_participant_audit', id: any, xero_invoice_number?: string | null, payload: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null } }> };
 
 export type GetOrderForBookingDoneQueryVariables = Exact<{
   orderId: Scalars['uuid'];
