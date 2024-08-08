@@ -150,6 +150,20 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       .filter(id => Boolean(id))
   }, [cancellationAudits, registrants])
 
+  const replacedRegistrants = useMemo(() => {
+    const matchRegistrant = registrants.filter(registrant =>
+      replacementAudits?.some(
+        audit => audit.payload?.inviteeEmail === registrant.email,
+      ),
+    )
+    return matchRegistrant
+      .map(({ email, xeroLineItemID }) => ({
+        xeroLineItemID,
+        email,
+      }))
+      .filter(id => Boolean(id))
+  }, [registrants, replacementAudits])
+
   const go1LicensesLineItem = useMemo(() => {
     return invoice?.lineItems.find((li: XeroLineItem) => isGo1LicensesItem(li))
   }, [invoice])
@@ -288,7 +302,27 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     quantities.set(Number(order.course?.id), Number(order.quantity))
   })
 
-  const getOldUserNameAndEmail = (lineItem: XeroLineItem) => {
+  const getOldUserNameAndEmail = (
+    lineItem: XeroLineItem & { lineItemID: string },
+  ) => {
+    //Search the registrant by xero line item id (will work for new orders)
+    const registrantEmail = replacedRegistrants?.find(
+      ({ xeroLineItemID }) => xeroLineItemID === lineItem.lineItemID,
+    )?.email
+
+    if (registrantEmail) {
+      const oldUserByEmail = replacementAudits?.find(
+        audit => audit?.payload?.inviteeEmail === registrantEmail,
+      )
+      if (oldUserByEmail) {
+        return {
+          oldUserFullName: oldUserByEmail?.profile.fullName,
+          oldUserEmail: oldUserByEmail?.profile.email,
+        }
+      }
+    }
+
+    // For historic cases, search the registrant by name
     const oldUser = replacementAudits?.find(
       log =>
         lineItem?.description
