@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   FormGroup,
 } from '@mui/material'
+import * as Sentry from '@sentry/react'
 import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -350,12 +351,16 @@ export const BILDCourseBuilder: React.FC<
       }
     })
 
-    saveStrategies({
-      courseId: course.id,
-      modules: { ...transformedSelection, ...modulesSelection },
-      duration: estimatedDuration,
-      status: null,
-    })
+    try {
+      await saveStrategies({
+        courseId: course.id,
+        modules: { ...transformedSelection, ...modulesSelection },
+        duration: estimatedDuration,
+        status: null,
+      })
+    } catch (e) {
+      Sentry.captureException(e)
+    }
 
     if (!courseCreated) {
       addSnackbarMessage('course-submitted', {

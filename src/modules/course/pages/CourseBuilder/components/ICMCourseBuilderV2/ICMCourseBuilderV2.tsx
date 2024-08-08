@@ -1,8 +1,10 @@
 import { Alert, Box, CircularProgress, Container, Link } from '@mui/material'
+import * as Sentry from '@sentry/react'
 import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+import { CombinedError } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/dialogs'
@@ -290,11 +292,19 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
 
   const confirmModules = () => {
     setIsTimeCommitmentModalOpen(false)
-    submitModules({
-      id: Number(courseId),
-      curriculum: modulesSelectionRef.current,
-      duration: estimatedDurationRef.current ?? 0,
-    })
+    try {
+      submitModules({
+        id: Number(courseId),
+        curriculum: modulesSelectionRef.current,
+        duration: estimatedDurationRef.current ?? 0,
+      })
+    } catch (e) {
+      Sentry.captureException(e)
+    }
+
+    if (submitModulesError) {
+      throw new CombinedError(submitModulesError)
+    }
   }
 
   const handleModulesSubmit: CallbackFn = ({
