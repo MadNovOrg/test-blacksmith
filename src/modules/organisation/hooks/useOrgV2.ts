@@ -73,7 +73,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
     }
-    orgsCount: organization_aggregate {
+    orgsCount: organization_aggregate(where: $where) {
       aggregate {
         count
       }
