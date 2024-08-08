@@ -618,6 +618,17 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-completed-evaluation'
+  - name: course_participant_completed_evaluation
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - completed_evaluation
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/evaluation'
   - name: course_participant_graded
     definition:
       enable_manual: true
