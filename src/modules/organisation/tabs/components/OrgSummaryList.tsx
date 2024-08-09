@@ -43,6 +43,8 @@ export const OrgSummaryList: React.FC<
     orgId,
     profileId: profile?.id,
     showAll: showAllOrgs,
+    limit: perPage,
+    offset: perPage * currentPage,
   })
 
   const { data, reexecute } = useOrgV2({

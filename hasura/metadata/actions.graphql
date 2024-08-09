@@ -882,6 +882,8 @@ input OrganizationProfilesInput {
   profileId: uuid
   showAll: Boolean
   certificateFilter: [CertificateStatus]
+  limit: Int
+  offset: Int
 }
 
 type LinkProfileResult {

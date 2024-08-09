@@ -4476,6 +4476,8 @@ export type OrganizationProfile = {
 
 export type OrganizationProfilesInput = {
   certificateFilter?: InputMaybe<Array<InputMaybe<CertificateStatus>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   orgId?: InputMaybe<Scalars['uuid']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   showAll?: InputMaybe<Scalars['Boolean']>;
@@ -46028,6 +46030,8 @@ export type Organizations_Statistics = {
   id: Scalars['uuid'];
   individuals: Scalars['Int'];
   on_hold_certifications: Scalars['Int'];
+  /** An object relationship */
+  organization: Organization;
   organization_id: Scalars['uuid'];
 };
 
@@ -46082,6 +46086,7 @@ export type Organizations_Statistics_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   individuals?: InputMaybe<Int_Comparison_Exp>;
   on_hold_certifications?: InputMaybe<Int_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
@@ -46108,6 +46113,7 @@ export type Organizations_Statistics_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   individuals?: InputMaybe<Scalars['Int']>;
   on_hold_certifications?: InputMaybe<Scalars['Int']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   organization_id?: InputMaybe<Scalars['uuid']>;
 };
 
@@ -46159,6 +46165,7 @@ export type Organizations_Statistics_Order_By = {
   id?: InputMaybe<Order_By>;
   individuals?: InputMaybe<Order_By>;
   on_hold_certifications?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   organization_id?: InputMaybe<Order_By>;
 };
 
