@@ -473,10 +473,10 @@ describe('trainers-pages/MyCourses', () => {
         }) => {
           const conditions: Course_Bool_Exp['_or'] = variables.where?._or ?? []
           const courseCodeCondition = conditions.find(cond =>
-            Object.keys(cond).includes('searchFields'),
+            Object.keys(cond).includes('search_fields'),
           )
           const courses =
-            courseCodeCondition?.searchFields?._ilike === `%${keyword}%`
+            courseCodeCondition?.search_fields?._ilike === `%${keyword}%`
               ? [filteredCourse]
               : [filteredCourse, course]
 

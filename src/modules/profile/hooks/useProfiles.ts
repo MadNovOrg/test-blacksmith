@@ -3,25 +3,12 @@ import { useQuery, gql } from 'urql'
 import {
   GetProfilesQuery,
   GetProfilesQueryVariables,
-  Order_By,
   Profile_Bool_Exp,
-  Profile_Order_By,
 } from '@app/generated/graphql'
-import { Sorting } from '@app/hooks/useTableSort'
 
 export const GET_PROFILES = gql`
-  query GetProfiles(
-    $limit: Int
-    $offset: Int
-    $orderBy: [profile_order_by!]
-    $where: profile_bool_exp
-  ) {
-    profiles: profile(
-      limit: $limit
-      offset: $offset
-      where: $where
-      order_by: $orderBy
-    ) {
+  query GetProfiles($limit: Int, $offset: Int, $where: profile_bool_exp) {
+    profiles: profile(limit: $limit, offset: $offset, where: $where) {
       id
       fullName
       avatar
@@ -57,24 +44,16 @@ export const GET_PROFILES = gql`
 `
 
 export type UseProfileProps = {
-  sorting: Sorting
   limit: number
   offset: number
   where: Profile_Bool_Exp
 }
 
-export default function useProfiles({
-  sorting,
-  where,
-  limit,
-  offset,
-}: UseProfileProps) {
-  const orderBy = getOrderBy(sorting)
-
+export default function useProfiles({ where, limit, offset }: UseProfileProps) {
   const [{ data, error, fetching }, mutate] = useQuery<
     GetProfilesQuery,
     GetProfilesQueryVariables
-  >({ query: GET_PROFILES, variables: { where, orderBy, limit, offset } })
+  >({ query: GET_PROFILES, variables: { where, limit, offset } })
 
   return {
     mutate,
@@ -82,20 +61,5 @@ export default function useProfiles({
     count: data?.profile_aggregate.aggregate?.count,
     error,
     isLoading: fetching,
-  }
-}
-
-export function getOrderBy({
-  by,
-  dir,
-}: Pick<Sorting, 'by' | 'dir'>): Profile_Order_By {
-  switch (by) {
-    case 'fullName':
-    case 'email':
-      return { [by]: dir }
-
-    default: {
-      return { fullName: Order_By.Asc }
-    }
   }
 }
