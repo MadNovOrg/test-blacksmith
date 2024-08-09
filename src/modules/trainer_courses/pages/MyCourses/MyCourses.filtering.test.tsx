@@ -58,7 +58,7 @@ describe('trainers-pages/MyCourses', () => {
       }) => {
         const conditions = variables.where?._or ?? []
         const courses =
-          conditions[0]?.searchFields?._ilike === `%${keyword}%`
+          conditions[0]?.search_fields?._ilike === `%${keyword}%`
             ? [filteredCourse]
             : [course]
 

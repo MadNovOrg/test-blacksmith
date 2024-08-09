@@ -58,10 +58,12 @@ select_permissions:
         - org_name
         - course_id
         - course_level
+        - certification_status
         - schedule_start
         - org_id
         - profile_id
       filter: {}
+      allow_aggregations: true
   - role: ld
     permission:
       columns:
@@ -71,7 +73,9 @@ select_permissions:
         - schedule_start
         - org_id
         - profile_id
+        - certification_status
       filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -80,8 +84,10 @@ select_permissions:
         - course_level
         - schedule_start
         - org_id
+        - certification_status
         - profile_id
       filter: {}
+      allow_aggregations: true
   - role: sales-representative
     permission:
       columns:
@@ -91,7 +97,9 @@ select_permissions:
         - schedule_start
         - org_id
         - profile_id
+        - certification_status
       filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:
@@ -100,21 +108,26 @@ select_permissions:
         - course_level
         - schedule_start
         - org_id
+        - certification_status
         - profile_id
       filter: {}
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
         - org_name
+        - certification_status
         - course_id
         - course_level
         - schedule_start
         - org_id
         - profile_id
       filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
+        - certification_status
         - course_id
         - course_level
         - org_id
