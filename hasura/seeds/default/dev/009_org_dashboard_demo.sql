@@ -104,17 +104,17 @@ select module.id as module_id, 10103 as course_id
 from public.module
 where module.course_level = 'INTERMEDIATE_TRAINER';
 
-insert into public.course_participant (booking_date, profile_id, attended, grading_feedback, grade, date_graded, course_id, certificate_id, hs_consent, completed_evaluation)
-values ('2022-12-06 12:42:07.622554 +00:00', '117c12fc-d7c6-4987-9841-a499765ade4b', true, '', 'PASS', NOW() - interval '12 months', 10101, '1e345ec4-f99f-4ce7-b765-ee2d36d7f400', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', true, '', 'PASS', NOW() - interval '12 months', 10101, '1e345ec4-f99f-4ce7-b765-ee2d36d7f401', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '38290d3f-7614-44be-ac70-cd0db7b71b1e', true, '', 'PASS', NOW() - interval '17 months', 10101, '1e345ec4-f99f-4ce7-b765-ee2d36d7f402', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '117c12fc-d7c6-4987-9841-a499765ade4b', true, '', 'PASS', NOW() - interval '24 months', 10102, '1e345ec4-f99f-4ce7-b765-ee2d36d7f403', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', true, '', 'PASS', NOW() - interval '24 months', 10102, '1e345ec4-f99f-4ce7-b765-ee2d36d7f404', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '38290d3f-7614-44be-ac70-cd0db7b71b1e', true, '', 'PASS', NOW() - interval '24 months', 10102, '1e345ec4-f99f-4ce7-b765-ee2d36d7f405', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', 'b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', true, '', 'ASSIST_ONLY', NOW() - interval '12 months', 10103, '1e345ec4-f99f-4ce7-b765-ee2d36d7f406', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '38290d3f-7614-44be-ac70-cd0db7b71b1e', true, '', 'PASS', NOW() - interval '24 months', 10103, '1e345ec4-f99f-4ce7-b765-ee2d36d7f407', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '85687c6e-d8a4-4e98-a47e-a66c8059919b', true, '', 'PASS', NOW() - interval '18 months', 10104, '1e345ec4-f99f-4ce7-b765-ee2d36d7f408', true, true),
-       ('2022-12-06 12:42:07.622554 +00:00', '49f34a78-a73d-46c3-a17f-5cee00feb1ca', true, '', 'PASS', NOW() - interval '12 months', 10104, '1e345ec4-f99f-4ce7-b765-ee2d36d7f409', true, true);
+insert into public.course_participant (booking_date, profile_id, attended, grading_feedback, grade, date_graded, course_id, certificate_id, hs_consent)
+values ('2022-12-06 12:42:07.622554 +00:00', '117c12fc-d7c6-4987-9841-a499765ade4b', true, '', 'PASS', NOW() - interval '12 months', 10101, '1e345ec4-f99f-4ce7-b765-ee2d36d7f400', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', true, '', 'PASS', NOW() - interval '12 months', 10101, '1e345ec4-f99f-4ce7-b765-ee2d36d7f401', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '38290d3f-7614-44be-ac70-cd0db7b71b1e', true, '', 'PASS', NOW() - interval '17 months', 10101, '1e345ec4-f99f-4ce7-b765-ee2d36d7f402', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '117c12fc-d7c6-4987-9841-a499765ade4b', true, '', 'PASS', NOW() - interval '24 months', 10102, '1e345ec4-f99f-4ce7-b765-ee2d36d7f403', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', true, '', 'PASS', NOW() - interval '24 months', 10102, '1e345ec4-f99f-4ce7-b765-ee2d36d7f404', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '38290d3f-7614-44be-ac70-cd0db7b71b1e', true, '', 'PASS', NOW() - interval '24 months', 10102, '1e345ec4-f99f-4ce7-b765-ee2d36d7f405', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', true, '', 'ASSIST_ONLY', NOW() - interval '12 months', 10103, '1e345ec4-f99f-4ce7-b765-ee2d36d7f406', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '38290d3f-7614-44be-ac70-cd0db7b71b1e', true, '', 'PASS', NOW() - interval '24 months', 10103, '1e345ec4-f99f-4ce7-b765-ee2d36d7f407', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '85687c6e-d8a4-4e98-a47e-a66c8059919b', true, '', 'PASS', NOW() - interval '18 months', 10104, '1e345ec4-f99f-4ce7-b765-ee2d36d7f408', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '49f34a78-a73d-46c3-a17f-5cee00feb1ca', true, '', 'PASS', NOW() - interval '12 months', 10104, '1e345ec4-f99f-4ce7-b765-ee2d36d7f409', false);
 
 INSERT INTO public.course_participant_module (course_participant_id, module_id, completed)
 SELECT participant.id as course_participant_id, module.id as module_id, TRUE as completed

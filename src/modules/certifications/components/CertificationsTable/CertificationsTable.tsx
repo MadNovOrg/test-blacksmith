@@ -28,6 +28,7 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
+import type { Sorting } from '@app/hooks/useTableSort'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
 import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
 import { Grade } from '@app/modules/grading/components/Grade'
@@ -37,11 +38,12 @@ import { Profile } from '@app/types'
 type CertificationsTableProps = {
   certificates: GetCertificationsQuery['certifications']
   filtered?: boolean
+  sorting: Sorting
 }
 
 export const CertificationsTable: React.FC<
   React.PropsWithChildren<CertificationsTableProps>
-> = ({ certificates, filtered = false }) => {
+> = ({ certificates, filtered = false, sorting }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const navigate = useNavigate()
@@ -65,7 +67,7 @@ export const CertificationsTable: React.FC<
             : [c.id],
         ),
       ),
-      { id: 'name', label: _t('name'), sorting: false },
+      { id: 'name', label: _t('name'), sorting: true },
       { id: 'certificate', label: _t('certificate') },
       { id: 'course-code', label: _t('course-code') },
       { id: 'status', label: _t('status') },
@@ -156,7 +158,12 @@ export const CertificationsTable: React.FC<
 
       <Grid sx={{ overflowX: 'auto' }}>
         <Table data-testid="certification-table">
-          <TableHead cols={cols}></TableHead>
+          <TableHead
+            cols={cols}
+            orderBy={sorting.by}
+            order={sorting.dir}
+            onRequestSort={sorting.onSort}
+          ></TableHead>
           <TableBody data-testid={'table-body'}>
             <TableNoRows
               noRecords={!certificates.length}

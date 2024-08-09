@@ -104,19 +104,19 @@ INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profi
 ('4fff750b-ef54-461c-806e-0f087a7efae0', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', 'c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD'),
 ('b76ec0ea-7f48-4a91-9806-e517d97df17d', 10033, 'B.INT.F.CL.PSTI.10033', '2025-05-05', '729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', 'BILD Certified Course: PSTI', 'BILD_INTERMEDIATE_TRAINER', '2022-03-03', false, false, false, 'BILD');
 
-INSERT INTO public.course_participant (id, course_id, profile_id, invite_id, certificate_id, grade, hs_consent, completed_evaluation) VALUES
-('0af7536e-b396-490a-b7e8-eb4c5152c84e', 10033, '5bc30260-04fb-41a4-bd29-07c5f433d904', '2b70862b-9ef7-412f-b742-d9a159c46151', '0413cb5f-c04d-403c-b76f-23025c91de25', 'PASS', true, true),
-('adbde73d-d666-45c4-9e0c-afab87641e8e', 10033, '9b236919-918d-45ad-84e4-fb063c1938f0', 'cd154b82-8cbb-49d4-9806-a8115678c42e', 'cdce5101-331a-449b-95f2-73f5863caf34', 'PASS', true, true),
-('a06f96d1-2bc0-44d1-8895-4a106b44da60', 10033, '082d778c-7b78-4cd8-ac24-ec78c0e8b4ed', '5bbdb9d1-7777-478c-8405-d517331100bc', 'fa53e9c5-63c2-41fd-85fa-8529a7794fb2', 'PASS', true, true),
-('0ec89029-dadd-420e-8f9d-956f005fa549', 10034, '1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'bc01e1c9-c4e5-4d87-8364-86d8d5e48461', '1a98205a-e742-49d5-a852-0a148d74bb16', 'PASS', true, true),
-('2dcd0b8c-b194-4df3-9021-07d64543ea81', 10034, '00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', '05097f9a-1540-458c-ba35-738f90a78136', 'da8ef2ec-a7b4-41ad-8008-b74448cc7bac', 'PASS', true, true),
-('aadb93fa-c88c-422f-9cf4-b37c772a084d', 10034, '98920ae3-ab16-424f-a0cd-302136c7b413', 'ab232b6b-3ef0-4f87-b1e5-b2f1217f2abd', 'a5adb1b9-3bc8-45e3-ae29-7372b47310f1', 'PASS', true, true),
-('d53455ed-1dbd-466f-8d41-37ce4a23124d', 10034, '2be41d95-40ee-49d5-810c-fae16135cccc', '21da4813-83e8-4be6-bd54-fa2a956239ef', '039cb50a-6fc9-4ba1-9373-a6a2e1317cd9', 'PASS', true, true),
-('8562902e-f35d-4e6c-ac54-6fd5c17efdbd', 10034, 'd1c5fa19-30da-4512-88f6-dc9ef6a26958', '20d0d6dc-6eea-4c98-a086-5bf078a96c69', '9bd03085-6448-4870-8da3-7ec1eea5fe9f', 'PASS', true, true),
-('a8458a98-f100-41cc-9959-6446e2729f57', 10034, '4c6194ad-6dd3-461e-b4da-d3562b1007d1', '6377aae9-b835-47be-bacb-9b770a371237', '970ff9d0-5a99-4eb1-b021-d815ab8a938a', 'PASS', true, true),
-('d389dd72-72bc-46e4-b47a-aa7d4725e4de', 10034, '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'e5e72cab-5c8f-474a-a867-3fffd210582e', '5beb390c-450b-40b2-905e-d79d54b9daca', 'PASS', true, true),
-('f75fcb66-5f3e-442b-93cd-a08aeb801f26', 10034, 'c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'a8c4542a-2d7c-4e26-ba66-cd372f462248', '4fff750b-ef54-461c-806e-0f087a7efae0', 'PASS', true, true),
-('5c7942e4-b333-4913-ac7f-7571fde2c9c2', 10034, '729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', '95b96976-c985-40d9-91fc-bdf10a7e3089', 'b76ec0ea-7f48-4a91-9806-e517d97df17d', 'PASS', true, true);
+INSERT INTO public.course_participant (id, course_id, profile_id, invite_id, certificate_id, grade) VALUES
+('0af7536e-b396-490a-b7e8-eb4c5152c84e', 10033, '5bc30260-04fb-41a4-bd29-07c5f433d904', '2b70862b-9ef7-412f-b742-d9a159c46151', '0413cb5f-c04d-403c-b76f-23025c91de25', 'PASS'),
+('adbde73d-d666-45c4-9e0c-afab87641e8e', 10033, '9b236919-918d-45ad-84e4-fb063c1938f0', 'cd154b82-8cbb-49d4-9806-a8115678c42e', 'cdce5101-331a-449b-95f2-73f5863caf34', 'PASS'),
+('a06f96d1-2bc0-44d1-8895-4a106b44da60', 10033, '082d778c-7b78-4cd8-ac24-ec78c0e8b4ed', '5bbdb9d1-7777-478c-8405-d517331100bc', 'fa53e9c5-63c2-41fd-85fa-8529a7794fb2', 'PASS'),
+('0ec89029-dadd-420e-8f9d-956f005fa549', 10034, '1b37b4d3-0dcc-4f17-96d5-bc27c029010f', 'bc01e1c9-c4e5-4d87-8364-86d8d5e48461', '1a98205a-e742-49d5-a852-0a148d74bb16', 'PASS'),
+('2dcd0b8c-b194-4df3-9021-07d64543ea81', 10034, '00d14fc3-7fa6-4d52-9ae4-f3bcb26baade', '05097f9a-1540-458c-ba35-738f90a78136', 'da8ef2ec-a7b4-41ad-8008-b74448cc7bac', 'PASS'),
+('aadb93fa-c88c-422f-9cf4-b37c772a084d', 10034, '98920ae3-ab16-424f-a0cd-302136c7b413', 'ab232b6b-3ef0-4f87-b1e5-b2f1217f2abd', 'a5adb1b9-3bc8-45e3-ae29-7372b47310f1', 'PASS'),
+('d53455ed-1dbd-466f-8d41-37ce4a23124d', 10034, '2be41d95-40ee-49d5-810c-fae16135cccc', '21da4813-83e8-4be6-bd54-fa2a956239ef', '039cb50a-6fc9-4ba1-9373-a6a2e1317cd9', 'PASS'),
+('8562902e-f35d-4e6c-ac54-6fd5c17efdbd', 10034, 'd1c5fa19-30da-4512-88f6-dc9ef6a26958', '20d0d6dc-6eea-4c98-a086-5bf078a96c69', '9bd03085-6448-4870-8da3-7ec1eea5fe9f', 'PASS'),
+('a8458a98-f100-41cc-9959-6446e2729f57', 10034, '4c6194ad-6dd3-461e-b4da-d3562b1007d1', '6377aae9-b835-47be-bacb-9b770a371237', '970ff9d0-5a99-4eb1-b021-d815ab8a938a', 'PASS'),
+('d389dd72-72bc-46e4-b47a-aa7d4725e4de', 10034, '2c4b16db-bfba-4a21-a092-55ef9010ca2f', 'e5e72cab-5c8f-474a-a867-3fffd210582e', '5beb390c-450b-40b2-905e-d79d54b9daca', 'PASS'),
+('f75fcb66-5f3e-442b-93cd-a08aeb801f26', 10034, 'c15a4b34-bb98-4096-ae2e-ea280fb14e05', 'a8c4542a-2d7c-4e26-ba66-cd372f462248', '4fff750b-ef54-461c-806e-0f087a7efae0', 'PASS'),
+('5c7942e4-b333-4913-ac7f-7571fde2c9c2', 10034, '729e3ed4-f86e-41a7-9e29-c6387b9fbaa6', '95b96976-c985-40d9-91fc-bdf10a7e3089', 'b76ec0ea-7f48-4a91-9806-e517d97df17d', 'PASS');
 
 INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('9b236919-918d-45ad-84e4-fb063c1938f0', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- bild.intermediate@teamteach2.testinator.com

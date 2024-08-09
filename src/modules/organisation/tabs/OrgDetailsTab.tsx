@@ -76,7 +76,7 @@ export const OrgDetailsTab: React.FC<
                 />
                 <DetailsRow
                   label={t('organization-details-section.organization-sector')}
-                  value={sector ?? ''}
+                  value={sector || ''}
                 />
                 <DetailsRow
                   label={t('organization-details-section.organization-type')}

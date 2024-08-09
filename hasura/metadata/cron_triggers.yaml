@@ -9,17 +9,6 @@
     timeout_seconds: 60
     tolerance_seconds: 21600
   comment: clear email notifications
-- name: UpdateCourseCertificationsStatus
-  webhook: '{{EVENTS_HOST}}/update-course-certification-status'
-  schedule: 10 0 * * *
-  include_in_metadata: true
-  payload: {}
-  retry_conf:
-    num_retries: 3
-    retry_interval_seconds: 10
-    timeout_seconds: 60
-    tolerance_seconds: 21600
-  comment: Update the status of each course certification
 - name: XeroCredentialStatusCheck
   webhook: '{{EVENTS_HOST}}/xero/status'
   schedule: 0 0 * * *
