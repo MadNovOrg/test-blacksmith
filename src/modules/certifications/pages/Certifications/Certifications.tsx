@@ -28,6 +28,7 @@ import {
   CertificateStatus,
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificationsTable } from '@app/modules/certifications/components/CertificationsTable'
 import useCertifications from '@app/modules/certifications/hooks/useCertifications'
 
@@ -35,6 +36,8 @@ export const Certifications: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { t } = useTranslation()
+
+  const sorting = useTableSort('name', 'asc')
 
   const [keyword, setKeyword] = useState('')
 
@@ -230,6 +233,7 @@ export const Certifications: React.FC<
             <>
               <CertificationsTable
                 certificates={certificates ?? []}
+                sorting={sorting}
                 filtered={filtered}
               />
 

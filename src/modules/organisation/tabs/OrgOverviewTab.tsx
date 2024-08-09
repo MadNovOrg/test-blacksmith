@@ -152,7 +152,6 @@ export const OrgOverviewTab: React.FC<
 
   const shouldShowLoader = coursesLoading || profilesFetching
 
-  console.log(profilesByOrganisation)
   if (shouldShowLoader) {
     return (
       <Stack

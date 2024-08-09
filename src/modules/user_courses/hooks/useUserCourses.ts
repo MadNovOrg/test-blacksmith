@@ -22,7 +22,8 @@ import {
   AttendeeOnlyCourseStatus,
   CourseState,
 } from '@app/types'
-import { ALL_ORGS, getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import { ALL_ORGS } from '@app/util'
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type UserCourseStatus =
   | AdminOnlyCourseStatus.CancellationRequested
@@ -345,11 +346,9 @@ export function useUserCourses(
       const orClauses = [
         keywords && keywords?.length > 1
           ? {
-              _and: keywords.map(w => ({
-                search_fields: { _ilike: `%${w}%` },
-              })),
+              _and: keywords.map(w => ({ searchFields: { _ilike: `%${w}%` } })),
             }
-          : { search_fields: { _ilike: `%${query}%` } },
+          : { searchFields: { _ilike: `%${query}%` } },
       ]
 
       filterConditions._or = [

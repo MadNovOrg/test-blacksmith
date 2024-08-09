@@ -295,9 +295,9 @@ export const filtersToWhereClause = (
     const orClauses = [
       keywords && keywords?.length > 1
         ? {
-            _and: keywords.map(w => ({ search_fields: { _ilike: `%${w}%` } })),
+            _and: keywords.map(w => ({ searchFields: { _ilike: `%${w}%` } })),
           }
-        : { search_fields: { _ilike: `%${query}%` } },
+        : { searchFields: { _ilike: `%${query}%` } },
     ]
 
     if (where._or) {

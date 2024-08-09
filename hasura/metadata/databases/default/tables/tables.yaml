@@ -88,7 +88,6 @@
 - "!include public_organization_invites.yaml"
 - "!include public_organization_member.yaml"
 - "!include public_organization_type.yaml"
-- "!include public_organizations_statistics.yaml"
 - "!include public_payment_methods.yaml"
 - "!include public_post_training_email_scheduled_events.yaml"
 - "!include public_private_course_booking.yaml"

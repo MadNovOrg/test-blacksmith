@@ -232,6 +232,11 @@ computed_fields:
       function:
         name: course_free_slots
         schema: public
+  - name: searchFields
+    definition:
+      function:
+        name: merge_course_rows
+        schema: public
   - name: state
     definition:
       function:
@@ -450,11 +455,11 @@ select_permissions:
         - renewal_cycle
         - residingCountry
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter:
         _and:
           - course_type:
@@ -513,11 +518,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter:
         _or:
           - participants:
@@ -621,11 +626,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -686,10 +691,10 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - state
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: organization-key-contact
@@ -737,11 +742,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter:
         _or:
           - participants:
@@ -831,11 +836,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -896,11 +901,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -949,11 +954,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter:
         _or:
           - trainers:
@@ -1044,11 +1049,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -1099,10 +1104,10 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - state
+        - searchFields
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -1141,10 +1146,10 @@ select_permissions:
         - renewal_cycle
         - residingCountry
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - state
+        - searchFields
       filter:
         _and:
           - course_type:
@@ -1201,11 +1206,11 @@ select_permissions:
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
         - state
+        - searchFields
       filter:
         _or:
           - participants:

@@ -35,6 +35,7 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { CertificateStatus, Course_Level_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import useProfiles from '@app/modules/profile/hooks/useProfiles'
@@ -51,6 +52,7 @@ export const Users = () => {
   const [showMergeDialog, setShowMergeDialog] = useState(false)
   const { acl } = useAuth()
   const { getLabel } = useWorldCountries()
+  const sorting = useTableSort('fullName', 'asc')
 
   const roleOptions = useMemo<FilterOption[]>(() => {
     const rolesToFilterBy = [
@@ -351,6 +353,7 @@ export const Users = () => {
     mutate: refreshUsers,
   } = useProfiles({
     where,
+    sorting,
     limit: perPage,
     offset: perPage * (currentPage - 1),
   })
@@ -365,12 +368,12 @@ export const Users = () => {
       {
         id: 'fullName',
         label: _t('name'),
-        sorting: false,
+        sorting: true,
       },
       {
         id: 'email',
         label: _t('email'),
-        sorting: false,
+        sorting: true,
       },
       {
         id: 'residingCountry',
@@ -527,7 +530,12 @@ export const Users = () => {
             ) : (
               <TableContainer component={Paper} elevation={0}>
                 <Table>
-                  <TableHead cols={cols}></TableHead>
+                  <TableHead
+                    cols={cols}
+                    order={sorting.dir}
+                    orderBy={sorting.by}
+                    onRequestSort={sorting.onSort}
+                  ></TableHead>
                   <TableBody data-testid={'table-body'}>
                     <TableNoRows
                       noRecords={!users.length}
