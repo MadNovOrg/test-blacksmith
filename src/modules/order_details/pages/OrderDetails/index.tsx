@@ -146,7 +146,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
 
     return matchRegistrant
-      .map(registrant => registrant.xeroLineItemID)
+      .map(registrant => ({
+        email: registrant.email,
+        xeroLineItemID: registrant.xeroLineItemID,
+      }))
       .filter(id => Boolean(id))
   }, [cancellationAudits, registrants])
 
@@ -553,8 +556,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                   })}
                                 </Typography>
                               </ItemRow>
-                              {cancelledRegistrantsLineItemIds.includes(
-                                lineItem.lineItemID,
+                              {cancelledRegistrantsLineItemIds.some(
+                                item =>
+                                  item.xeroLineItemID === lineItem.lineItemID,
                               ) ? (
                                 <Typography color="error">Cancelled</Typography>
                               ) : null}
@@ -571,10 +575,25 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     <DetailsItemBox data-testid="registrants-details">
                       <Stack spacing={2}>
                         {registrants.map((registrant, index: number) => {
+                          const cancelled =
+                            cancelledRegistrantsLineItemIds.some(
+                              item => item.email === registrant.email,
+                            )
+
+                          const cancelledTypographyProps = cancelled
+                            ? {
+                                color: 'error',
+                                sx: { textDecoration: 'line-through' },
+                              }
+                            : {}
+
                           if (getRegistrantPostalAddress(registrant)) {
                             return (
                               <ItemRow key={index}>
-                                <Typography color="grey.700">
+                                <Typography
+                                  color="grey.700"
+                                  {...cancelledTypographyProps}
+                                >
                                   {` Address: ${getRegistrantPostalAddress(
                                     registrant,
                                   )}`}
@@ -897,22 +916,36 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         <Typography fontWeight={600}>
                           {t('registration')}
                         </Typography>
-                        {registrants.map((registrant, index) => {
+                        {registrants.map(registrant => {
                           if (getRegistrantPostalAddress(registrant)) {
+                            const cancelled =
+                              cancelledRegistrantsLineItemIds.some(
+                                item => item.email === registrant.email,
+                              )
+
+                            const cancelledTypographyProps = cancelled
+                              ? {
+                                  color: 'error',
+                                  sx: { textDecoration: 'line-through' },
+                                }
+                              : {}
+
                             return (
-                              <Grid key={index}>
+                              <Grid key={registrant.email}>
                                 <Grid item>
-                                  <Typography>
+                                  <Typography {...cancelledTypographyProps}>
                                     {getRegistrantPostalAddress(registrant)}
                                   </Typography>
                                 </Grid>
                                 <Grid item>
-                                  <Typography>
+                                  <Typography {...cancelledTypographyProps}>
                                     {registrant.firstName} {registrant.lastName}
                                   </Typography>
                                 </Grid>
                                 <Grid item>
-                                  <Typography>{registrant.email}</Typography>
+                                  <Typography {...cancelledTypographyProps}>
+                                    {registrant.email}
+                                  </Typography>
                                 </Grid>
                               </Grid>
                             )
