@@ -15,13 +15,12 @@ import React, { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { OrganizationProfile } from '@app/generated/graphql'
 import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { Avatar } from '@app/modules/profile/components/Avatar'
 import theme from '@app/theme'
 
-import useOrganisationStats from '../../hooks/useOrganisationStats'
+import { useIndividualOrganizationStatistics } from '../../hooks/useIndividualOrganizationStatistics'
 
 type OrgSummaryListParams = {
   orgId: string
@@ -55,11 +54,6 @@ export const OrgSummaryList: React.FC<
     offset: perPage * currentPage,
   })
 
-  const { stats } = useOrganisationStats({
-    profilesByOrg: profilesByOrganisation as Map<string, OrganizationProfile[]>,
-    organisations: data?.orgs,
-  })
-
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setPerPage(parseInt(event.target.value, 10))
@@ -67,6 +61,10 @@ export const OrgSummaryList: React.FC<
       reexecute()
     },
     [reexecute],
+  )
+
+  const { data: orgStats } = useIndividualOrganizationStatistics(
+    data?.orgs.map(org => org.id) ?? [],
   )
 
   return (
@@ -104,87 +102,92 @@ export const OrgSummaryList: React.FC<
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.orgs?.map(org => (
-            <TableRow key={org.id} sx={{ backgroundColor: 'white' }}>
-              <TableCell>
-                {org?.id === orgId ? (
-                  org?.name
-                ) : (
-                  <Link href={`/organisations/${org?.id}`} variant="body2">
-                    {org?.name}
-                  </Link>
-                )}
-              </TableCell>
-              <TableCell>{org.address?.city}</TableCell>
-              <TableCell>
-                <Link
-                  href={`/organisations/${org?.id}`}
-                  underline="none"
-                  ml={-1}
-                >
-                  <AvatarGroup
-                    max={4}
-                    sx={{
-                      justifyContent: 'center',
-                      '& .MuiAvatar-root': {
-                        width: 32,
-                        height: 32,
-                        fontSize: 15,
-                      },
-                    }}
+          {data?.orgs?.map(org => {
+            const orgStat = orgStats?.organizations_statistics.find(
+              orgStat => orgStat.organization_id === org.id,
+            )
+            return (
+              <TableRow key={org.id} sx={{ backgroundColor: 'white' }}>
+                <TableCell>
+                  {org?.id === orgId ? (
+                    org?.name
+                  ) : (
+                    <Link href={`/organisations/${org?.id}`} variant="body2">
+                      {org?.name}
+                    </Link>
+                  )}
+                </TableCell>
+                <TableCell>{org.address?.city}</TableCell>
+                <TableCell>
+                  <Link
+                    href={`/organisations/${org?.id}`}
+                    underline="none"
+                    ml={-1}
                   >
-                    {profilesByOrganisation.get(org.id)?.map(profile => (
-                      <Link
-                        href={`/profile/${profile?.id}`}
-                        key={profile?.id}
-                        underline="none"
-                        ml={-1}
-                      >
-                        <Avatar
-                          src={profile?.avatar ?? ''}
-                          name={
-                            profile?.archived
-                              ? undefined
-                              : profile?.fullName ?? ''
-                          }
+                    <AvatarGroup
+                      max={4}
+                      sx={{
+                        justifyContent: 'center',
+                        '& .MuiAvatar-root': {
+                          width: 32,
+                          height: 32,
+                          fontSize: 15,
+                        },
+                      }}
+                    >
+                      {profilesByOrganisation.get(org.id)?.map(profile => (
+                        <Link
+                          href={`/profile/${profile?.id}`}
+                          key={profile?.id}
+                          underline="none"
+                          ml={-1}
                         >
-                          {profile?.archived ? <CloseIcon /> : null}
-                        </Avatar>
-                      </Link>
-                    ))}
-                  </AvatarGroup>
-                </Link>
-              </TableCell>
-              <TableCell align="center">
-                <Chip
-                  label={stats[org.id].certificates.active.count}
-                  size="small"
-                  color="success"
-                />
-              </TableCell>
-              <TableCell align="center">
-                <Chip
-                  label={stats[org.id].certificates.expiringSoon.count}
-                  size="small"
-                  color="warning"
-                />
-              </TableCell>
-              <TableCell align="center">
-                <Chip
-                  label={stats[org.id].certificates.hold.count}
-                  size="small"
-                  color="warning"
-                />
-              </TableCell>
-              <TableCell align="center">
-                <Chip
-                  label={stats[org.id].certificates.expired.count}
-                  size="small"
-                  color="error"
-                />
-              </TableCell>
-            </TableRow>
-          ))}
+                          <Avatar
+                            src={profile?.avatar ?? ''}
+                            name={
+                              profile?.archived
+                                ? undefined
+                                : profile?.fullName ?? ''
+                            }
+                          >
+                            {profile?.archived ? <CloseIcon /> : null}
+                          </Avatar>
+                        </Link>
+                      ))}
+                    </AvatarGroup>
+                  </Link>
+                </TableCell>
+                <TableCell align="center">
+                  <Chip
+                    label={orgStat?.active_certifications ?? 0}
+                    size="small"
+                    color="success"
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  <Chip
+                    label={orgStat?.expiring_soon_certifications ?? 0}
+                    size="small"
+                    color="warning"
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  <Chip
+                    label={orgStat?.on_hold_certifications ?? 0}
+                    size="small"
+                    color="warning"
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  <Chip
+                    label={orgStat?.expired_recently_certifications ?? 0}
+                    size="small"
+                    color="error"
+                  />
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
       <TablePagination
