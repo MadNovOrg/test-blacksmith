@@ -46,9 +46,10 @@ export const FilterByOrgResidingCountry = ({
   })
 
   const residingCountryOptions = useMemo(() => {
-    const countryCodes = countries?.length
-      ? countries
-      : data?.org_distinct_country_codes.map(c => c.countrycode) ?? []
+    const countryCodes =
+      countries ??
+      data?.org_distinct_country_codes.map(c => c.countrycode) ??
+      []
 
     return (
       countryCodes

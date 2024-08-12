@@ -203,6 +203,8 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
         countries.push(org.address.countryCode)
       }
     })
+
+    return countries
   }, [acl, allOrganisationsData])
 
   return (
@@ -238,7 +240,9 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <Stack gap={1}>
                   <FilterByOrgSector onChange={setFilterSector} />
                   <FilterByOrgResidingCountry
-                    countries={countryFilterCodes}
+                    countries={
+                      acl.isOrgAdmin() ? countryFilterCodes : undefined
+                    }
                     onChange={setFilterOrgCountries}
                   />
                 </Stack>
