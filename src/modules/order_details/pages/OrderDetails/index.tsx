@@ -574,34 +574,88 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   ) ? (
                     <DetailsItemBox data-testid="registrants-details">
                       <Stack spacing={2}>
-                        {registrants.map((registrant, index: number) => {
-                          const cancelled =
-                            cancelledRegistrantsLineItemIds.some(
-                              item => item.email === registrant.email,
-                            )
+                        {registrants.some(
+                          r =>
+                            r.xeroLineItemID === undefined ||
+                            r.xeroLineItemID === null,
+                        ) ? (
+                          <Stack>
+                            {' '}
+                            spacing={2}{' '}
+                            {registrants.map((registrant, index: number) => {
+                              const cancelled =
+                                cancelledRegistrantsLineItemIds.some(
+                                  item => item.email === registrant?.email,
+                                )
 
-                          const cancelledTypographyProps = cancelled
-                            ? {
-                                color: 'error',
-                                sx: { textDecoration: 'line-through' },
-                              }
-                            : {}
+                              const cancelledTypographyProps = cancelled
+                                ? {
+                                    color: 'error',
+                                    sx: { textDecoration: 'line-through' },
+                                  }
+                                : {}
 
-                          if (getRegistrantPostalAddress(registrant)) {
-                            return (
-                              <ItemRow key={index}>
-                                <Typography
-                                  color="grey.700"
-                                  {...cancelledTypographyProps}
-                                >
-                                  {` Address: ${getRegistrantPostalAddress(
-                                    registrant,
-                                  )}`}
-                                </Typography>
-                              </ItemRow>
-                            )
-                          } else return null
-                        })}
+                              if (
+                                registrant &&
+                                getRegistrantPostalAddress(registrant)
+                              ) {
+                                return (
+                                  <ItemRow key={index}>
+                                    <Typography
+                                      color="grey.700"
+                                      {...cancelledTypographyProps}
+                                    >
+                                      {` Address: ${getRegistrantPostalAddress(
+                                        registrant,
+                                      )}`}
+                                    </Typography>
+                                  </ItemRow>
+                                )
+                              } else return null
+                            })}{' '}
+                          </Stack>
+                        ) : (
+                          <Stack>
+                            {' '}
+                            spacing={2}
+                            {registrantsLineItems.map(
+                              (lineItem, index: number) => {
+                                const registrant = registrants.find(
+                                  r => r.xeroLineItemID === lineItem.lineItemID,
+                                )
+                                const cancelled =
+                                  cancelledRegistrantsLineItemIds.some(
+                                    item => item.email === registrant?.email,
+                                  )
+
+                                const cancelledTypographyProps = cancelled
+                                  ? {
+                                      color: 'error',
+                                      sx: { textDecoration: 'line-through' },
+                                    }
+                                  : {}
+
+                                if (
+                                  registrant &&
+                                  getRegistrantPostalAddress(registrant)
+                                ) {
+                                  return (
+                                    <ItemRow key={index}>
+                                      <Typography
+                                        color="grey.700"
+                                        {...cancelledTypographyProps}
+                                      >
+                                        {` Address: ${getRegistrantPostalAddress(
+                                          registrant,
+                                        )}`}
+                                      </Typography>
+                                    </ItemRow>
+                                  )
+                                } else return null
+                              },
+                            )}{' '}
+                          </Stack>
+                        )}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
