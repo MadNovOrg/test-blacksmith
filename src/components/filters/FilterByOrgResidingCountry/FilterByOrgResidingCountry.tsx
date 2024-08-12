@@ -2,7 +2,11 @@ import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEffectOnce } from 'react-use'
 import { useQuery } from 'urql'
-import { useQueryParam } from 'use-query-params'
+import {
+  createEnumArrayParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
@@ -25,6 +29,12 @@ export const FilterByOrgResidingCountry = ({
 }: Props) => {
   const { getLabel } = useWorldCountries()
   const { t } = useTranslation()
+
+  const { countriesCodesWithUKs } = useWorldCountries()
+  const orgResidingCountryParam = withDefault(
+    createEnumArrayParam<string>(countriesCodesWithUKs),
+    [] as string[],
+  )
 
   const [{ data }] = useQuery<
     GetDistinctOrgResidingCountriesQuery,
@@ -54,7 +64,10 @@ export const FilterByOrgResidingCountry = ({
     )
   }, [countries, data?.org_distinct_country_codes, getLabel])
 
-  const [selected, setSelected] = useQueryParam<string[]>('country')
+  const [selected, setSelected] = useQueryParam<string[]>(
+    'country',
+    orgResidingCountryParam,
+  )
 
   const options = useMemo(() => {
     return residingCountryOptions?.map(o => ({
