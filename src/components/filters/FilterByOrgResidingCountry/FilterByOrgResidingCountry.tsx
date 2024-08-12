@@ -16,11 +16,15 @@ import { GET_DISTINCT_ORG_RESIDING_COUNTRIES_QUERY } from './queries/get-distinc
 
 type Props = {
   onChange: (selected: string[]) => void
+  countries?: string[]
 }
 
-export const FilterByOrgResidingCountry = ({ onChange = noop }: Props) => {
-  const { t } = useTranslation()
+export const FilterByOrgResidingCountry = ({
+  countries,
+  onChange = noop,
+}: Props) => {
   const { getLabel } = useWorldCountries()
+  const { t } = useTranslation()
 
   const [{ data }] = useQuery<
     GetDistinctOrgResidingCountriesQuery,
@@ -28,22 +32,27 @@ export const FilterByOrgResidingCountry = ({ onChange = noop }: Props) => {
   >({
     query: GET_DISTINCT_ORG_RESIDING_COUNTRIES_QUERY,
     requestPolicy: 'cache-and-network',
+    pause: Boolean(countries?.length),
   })
 
   const residingCountryOptions = useMemo(() => {
+    const countryCodes = countries?.length
+      ? countries
+      : data?.org_distinct_country_codes.map(c => c.countrycode) ?? []
+
     return (
-      data?.org_distinct_country_codes
-        .map(c =>
-          c.countrycode
+      countryCodes
+        .map(code =>
+          code
             ? {
-                id: c.countrycode,
-                title: getLabel(c.countrycode) ?? '',
+                id: code,
+                title: getLabel(code) ?? '',
               }
             : { id: '', title: '' },
         )
         .filter(c => c.title) ?? []
     )
-  }, [data?.org_distinct_country_codes, getLabel])
+  }, [countries, data?.org_distinct_country_codes, getLabel])
 
   const [selected, setSelected] = useQueryParam<string[]>('country')
 

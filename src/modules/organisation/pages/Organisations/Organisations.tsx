@@ -186,7 +186,24 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     [],
   )
 
-  const allOrganisationsData = [...(data?.orgs ?? [])]
+  const allOrganisationsData = useMemo(
+    () => [...(data?.orgs ?? [])],
+    [data?.orgs],
+  )
+
+  const countryFilterCodes = useMemo(() => {
+    const countries: string[] = []
+    if (!acl.isOrgAdmin()) return countries
+
+    allOrganisationsData.forEach(org => {
+      if (
+        org.address?.countryCode &&
+        !countries.includes(org.address.countryCode)
+      ) {
+        countries.push(org.address.countryCode)
+      }
+    })
+  }, [acl, allOrganisationsData])
 
   return (
     <FullHeightPageLayout>
@@ -221,6 +238,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <Stack gap={1}>
                   <FilterByOrgSector onChange={setFilterSector} />
                   <FilterByOrgResidingCountry
+                    countries={countryFilterCodes}
                     onChange={setFilterOrgCountries}
                   />
                 </Stack>
