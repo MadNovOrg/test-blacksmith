@@ -151,7 +151,7 @@ export const OrgOverviewTab: React.FC<
     [setCertificateStatus],
   )
 
-  const shouldShowLoader = coursesLoading || profilesFetching
+  const shouldShowLoader = coursesLoading
 
   if (shouldShowLoader) {
     return (
@@ -225,13 +225,7 @@ export const OrgOverviewTab: React.FC<
               ))}
             </TabList>
             {profilesFetching ? (
-              <Stack
-                alignItems="center"
-                justifyContent="center"
-                data-testid="individuals-fetching"
-              >
-                <CircularProgress />
-              </Stack>
+              <CircularProgress />
             ) : (
               levelsToShow.map(courseLevel => (
                 <TabPanel

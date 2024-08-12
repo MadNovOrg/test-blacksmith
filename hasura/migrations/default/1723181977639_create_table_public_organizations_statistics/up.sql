@@ -20,7 +20,7 @@ DROP FUNCTION IF EXISTS update_certification_statuses();
 DROP INDEX IF EXISTS idx_course_certificate_status;
 
 DROP TABLE IF EXISTS "public"."organizations_statistics";
-ALTER TABLE "public"."course_certificate" DROP COLUMN IF EXISTS "status";
+ALTER TABLE "public"."course_certificate" DROP COLUMN IF EXISTS "status" CASCADE;
 
 ALTER TABLE "public"."course_certificate" ADD COLUMN "status" text NULL;
 
