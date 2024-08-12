@@ -86,6 +86,7 @@ export const OrgOverviewTab: React.FC<
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
     withUpcomingEnrollmentsOnly: true,
+    pause: orgId === 'all',
   })
 
   const { courses: coursesForBooking, fetching: coursesLoading } =

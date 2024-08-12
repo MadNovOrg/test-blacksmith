@@ -76,6 +76,7 @@ type UserOrgProfiles = {
   withUpcomingEnrollmentsOnly?: boolean
   limit?: number
   offset?: number
+  pause?: boolean
 }
 
 export const useOrganisationProfiles = ({
@@ -85,6 +86,7 @@ export const useOrganisationProfiles = ({
   withUpcomingEnrollmentsOnly,
   limit,
   offset,
+  pause,
 }: UserOrgProfiles) => {
   const [params] = useSearchParams()
   const certificateFilter = params.getAll('status') as CertificateStatus[]
@@ -104,6 +106,7 @@ export const useOrganisationProfiles = ({
         offset,
       },
     },
+    pause: pause ?? false,
   })
 
   useEffect(() => {
