@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
@@ -14,6 +15,8 @@ import {
   ManageContactRoleCoursesProps,
 } from '@app/modules/user_courses/pages/ManageContactRoleCourses/ManageContactRoleCourses'
 import { RoleName } from '@app/types'
+
+import { useBookingContactCountOpenCourses } from '../../hooks/useBookingContactCountOpenCourses'
 
 export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { orgId: id } = useParams()
@@ -42,13 +45,44 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
     shallow: true,
     showAll: acl.canViewAllOrganizations(),
   })
-  const navigateToOrgCourses = allOrgs && allOrgs.orgs.length === 1
+
+  const countBookingContactOpenCourses = useBookingContactCountOpenCourses({
+    bookingContactEmail: profile?.email as string,
+    pause: !acl.isBookingContact(),
+  })
+
+  const navigateToOrgCourses = useMemo(() => {
+    if (
+      acl.isBookingContact() &&
+      (countBookingContactOpenCourses.fetching ||
+        countBookingContactOpenCourses.count > 0)
+    ) {
+      return false
+    }
+
+    return allOrgs && allOrgs.orgs.length === 1
+  }, [
+    acl,
+    allOrgs,
+    countBookingContactOpenCourses.count,
+    countBookingContactOpenCourses.fetching,
+  ])
 
   useEffect(() => {
     if (navigateToOrgCourses) {
-      navigate('/manage-courses/' + allOrgs.orgs[0].id)
+      navigate(
+        '/manage-courses/' +
+          (allOrgs as GetOrganisationDetailsQuery).orgs[0].id,
+      )
     }
-  }, [allOrgs, navigate, navigateToOrgCourses])
+  }, [
+    acl,
+    allOrgs,
+    countBookingContactOpenCourses.count,
+    countBookingContactOpenCourses.fetching,
+    navigate,
+    navigateToOrgCourses,
+  ])
 
   const manageCoursesComponent = useMemo(() => {
     if (!contact)
@@ -76,7 +110,11 @@ export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
         <title>{t('pages.browser-tab-titles.manage-courses.title')}</title>
       </Helmet>
       <>
-        {allOrgs && allOrgs.orgs.length > 1 ? (
+        {allOrgs &&
+        (allOrgs.orgs.length > 1 ||
+          (acl.isBookingContact() &&
+            countBookingContactOpenCourses.count > 0 &&
+            allOrgs.orgs.length === 1)) ? (
           <OrgSelectionToolbar prefix="/manage-courses" />
         ) : null}
         {fetching ? (

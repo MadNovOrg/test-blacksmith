@@ -60550,6 +60550,13 @@ export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetBildStrategiesQuery = { __typename?: 'query_root', strategies: Array<{ __typename?: 'bild_strategy', id: any, name: string, shortName: string, modules: any, duration?: number | null, sort?: number | null }> };
 
+export type GetCountBookingContactOpenCoursesQueryVariables = Exact<{
+  bookingContactEmail: Scalars['String'];
+}>;
+
+
+export type GetCountBookingContactOpenCoursesQuery = { __typename?: 'query_root', course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
+
 export type GetCourseDraftQueryVariables = Exact<{
   draftId: Scalars['uuid'];
 }>;
