@@ -579,9 +579,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             r.xeroLineItemID === undefined ||
                             r.xeroLineItemID === null,
                         ) ? (
-                          <Stack>
-                            {' '}
-                            spacing={2}{' '}
+                          <Stack spacing={2}>
                             {registrants.map((registrant, index: number) => {
                               const cancelled =
                                 cancelledRegistrantsLineItemIds.some(
@@ -615,9 +613,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             })}{' '}
                           </Stack>
                         ) : (
-                          <Stack>
-                            {' '}
-                            spacing={2}
+                          <Stack spacing={2}>
                             {registrantsLineItems.map(
                               (lineItem, index: number) => {
                                 const registrant = registrants.find(
@@ -653,7 +649,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                   )
                                 } else return null
                               },
-                            )}{' '}
+                            )}
                           </Stack>
                         )}
                       </Stack>

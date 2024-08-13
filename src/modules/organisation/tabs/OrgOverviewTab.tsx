@@ -1,13 +1,8 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
-  Box,
-  Alert,
   Button,
   CircularProgress,
   Grid,
-  Link,
   Stack,
-  Tab,
   Typography,
 } from '@mui/material'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -30,12 +25,11 @@ import {
 } from '@app/generated/graphql'
 import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
-import { IndividualsByLevelList } from '@app/modules/organisation/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
-import { OrgSummaryList } from '@app/modules/organisation/tabs/components/OrgSummaryList'
-import { ALL_ORGS } from '@app/util'
 
 import { useOrganisationProfiles } from '../hooks/useOrganisationProfiles'
+
+import { OrgIndividuals } from './components/OrgIndividuals'
 
 type OrgOverviewTabParams = {
   orgId: string
@@ -180,90 +174,18 @@ export const OrgOverviewTab: React.FC<
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
 
-        {orgId !== 'all' && !profilesByOrganisation.get(orgId) ? (
-          <>
-            {certificateStatus.length ? (
-              <>
-                <Typography variant="body1" sx={{ margin: '1em 1em' }}>
-                  {t('components.org-selector.no-individuals')}
-                </Typography>
-                <Typography variant="body2" sx={{ margin: '0em 1em' }}>
-                  {t('components.table-no-rows.noMatches-second')}
-                </Typography>
-              </>
-            ) : (
-              <Alert sx={{ mt: 2 }} severity="info">
-                {t('pages.org-details.tabs.overview.no-org-users') + ' '}
-                <Link href={'./invite'}>
-                  {t('pages.org-details.tabs.overview.click-here-to-invite')}
-                </Link>
-              </Alert>
-            )}
-          </>
-        ) : (
-          <TabContext value={selectedTab}>
-            <TabList
-              onChange={(_, value) => setUserByLevelSelectedTab(value)}
-              sx={{ mt: 2 }}
-              variant="scrollable"
-            >
-              {levelsToShow.map(courseLevel => (
-                <Tab
-                  key={courseLevel}
-                  label={t(
-                    `pages.org-details.tabs.overview.certificates.${
-                      courseLevel
-                        ? courseLevel.toLowerCase()
-                        : 'no-certification'
-                    }`,
-                    {
-                      count: profilesByLevel.get(courseLevel)?.length ?? 0,
-                    },
-                  )}
-                  value={courseLevel ?? 'none'}
-                />
-              ))}
-            </TabList>
-            {profilesFetching ? (
-              <CircularProgress />
-            ) : (
-              levelsToShow.map(courseLevel => (
-                <TabPanel
-                  value={courseLevel ?? 'none'}
-                  key={courseLevel}
-                  sx={{ p: 0, overflowX: 'auto' }}
-                >
-                  <IndividualsByLevelList
-                    profilesByLevel={
-                      profilesByLevel as Map<CourseLevel, OrganizationProfile[]>
-                    }
-                    orgId={orgId}
-                    courseLevel={courseLevel}
-                  />
-                </TabPanel>
-              ))
-            )}
-          </TabContext>
-        )}
-
-        {orgId === ALL_ORGS && !profilesFetching && (
-          <>
-            <Box display="flex" justifyContent="space-between" my={2}>
-              <Typography variant="h4">
-                {t('pages.org-details.tabs.overview.organization-summary')}
-              </Typography>
-              <Button
-                variant="outlined"
-                onClick={() => navigate('/organisations/list')}
-                data-testid="see-all-organisations"
-              >
-                {t('pages.org-details.tabs.overview.see-all-organizations')}
-              </Button>
-            </Box>
-
-            <OrgSummaryList orgId={orgId} />
-          </>
-        )}
+        <OrgIndividuals
+          orgId={orgId}
+          profilesFetching={profilesFetching}
+          certificateStatus={certificateStatus}
+          profilesByLevel={
+            profilesByLevel as Map<CourseLevel, OrganizationProfile[]>
+          }
+          setUserByLevelSelectedTab={setUserByLevelSelectedTab}
+          levelsToShow={levelsToShow}
+          selectedTab={selectedTab}
+          orgIdNotInProfiles={!profilesByOrganisation.get(orgId)?.length}
+        />
       </Grid>
 
       <Grid item xs={12} md={3} p={1} mt={2}>
