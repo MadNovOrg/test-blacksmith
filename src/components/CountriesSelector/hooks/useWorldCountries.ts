@@ -18,6 +18,7 @@ export const UKsCountriesCodes = {
 } as const
 
 export const ExceptionsCountriesCodes = {
+  VN: 'Vietnam',
   XK: 'Kosovo',
 } as const
 
