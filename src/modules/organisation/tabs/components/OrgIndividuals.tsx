@@ -3,24 +3,19 @@ import {
   Stack,
   CircularProgress,
   Alert,
-  Box,
-  Button,
   Link,
   Tab,
   Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import {
   CertificateStatus,
   CourseLevel,
   OrganizationProfile,
 } from '@app/generated/graphql'
-import { ALL_ORGS } from '@app/util'
 
 import { IndividualsByLevelList } from './IndividualsByLevelList'
-import { OrgSummaryList } from './OrgSummaryList'
 
 type OrgIndividualsProps = {
   orgId: string
@@ -44,7 +39,6 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
   orgIdNotInProfiles,
 }) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   if (profilesFetching) {
     return (
       <Stack sx={{ alignItems: 'center' }}>
@@ -113,25 +107,6 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
           ))}
         </TabContext>
       )}
-
-      {orgId === ALL_ORGS ? (
-        <>
-          <Box display="flex" justifyContent="space-between" my={2}>
-            <Typography variant="h4">
-              {t('pages.org-details.tabs.overview.organization-summary')}
-            </Typography>
-            <Button
-              variant="outlined"
-              onClick={() => navigate('/organisations/list')}
-              data-testid="see-all-organisations"
-            >
-              {t('pages.org-details.tabs.overview.see-all-organizations')}
-            </Button>
-          </Box>
-
-          <OrgSummaryList orgId={orgId} />
-        </>
-      ) : null}
     </>
   )
 }

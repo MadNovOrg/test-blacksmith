@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   CircularProgress,
   Grid,
@@ -26,10 +27,12 @@ import {
 import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
+import { ALL_ORGS } from '@app/util'
 
 import { useOrganisationProfiles } from '../hooks/useOrganisationProfiles'
 
 import { OrgIndividuals } from './components/OrgIndividuals'
+import { OrgSummaryList } from './components/OrgSummaryList'
 
 type OrgOverviewTabParams = {
   orgId: string
@@ -186,6 +189,25 @@ export const OrgOverviewTab: React.FC<
           selectedTab={selectedTab}
           orgIdNotInProfiles={!profilesByOrganisation.get(orgId)?.length}
         />
+
+        {orgId === ALL_ORGS ? (
+          <>
+            <Box display="flex" justifyContent="space-between" my={2}>
+              <Typography variant="h4">
+                {t('pages.org-details.tabs.overview.organization-summary')}
+              </Typography>
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/organisations/list')}
+                data-testid="see-all-organisations"
+              >
+                {t('pages.org-details.tabs.overview.see-all-organizations')}
+              </Button>
+            </Box>
+
+            <OrgSummaryList orgId={orgId} />
+          </>
+        ) : null}
       </Grid>
 
       <Grid item xs={12} md={3} p={1} mt={2}>
