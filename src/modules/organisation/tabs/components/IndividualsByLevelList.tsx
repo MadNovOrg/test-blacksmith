@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material'
 import Link from '@mui/material/Link'
+import { uniqBy } from 'lodash'
 import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -176,7 +177,12 @@ export const IndividualsByLevelList: React.FC<
                 ) : null}
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {profile.upcomingEnrollments?.map(enrollment => (
+                    {[
+                      ...uniqBy(
+                        profile.upcomingEnrollments,
+                        'enrollment.course.id',
+                      ),
+                    ]?.map(enrollment => (
                       <Link
                         key={enrollment?.course?.id}
                         variant="body2"
