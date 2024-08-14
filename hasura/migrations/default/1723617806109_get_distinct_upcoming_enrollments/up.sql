@@ -13,7 +13,9 @@ CREATE OR REPLACE VIEW "public"."upcoming_enrollments" AS
      JOIN organization org ON ((course.organization_id = org.id)))
      JOIN course_schedule schedule ON ((schedule.course_id = course.id)))
      JOIN course_certificate cc ON ((cc.profile_id = profile.id))
-  WHERE (schedule."end" > now()) AND cc.status IN ('ACTIVE','ON_HOLD','EXPIRED_RECENTLY','EXPIRING_SOON');
+  WHERE (schedule."end" > now()) AND cc.status IN ('ACTIVE','ON_HOLD','EXPIRED_RECENTLY','EXPIRING_SOON')
+   AND (cp.completed_evaluation IS TRUE OR cc.legacy_course_code IS NOT NULL)
+   AND profile.archived IS FALSE;
   
 CREATE OR REPLACE FUNCTION update_organizations_statistics(org_id uuid)
     RETURNS VOID

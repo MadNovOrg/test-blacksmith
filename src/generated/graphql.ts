@@ -9817,10 +9817,13 @@ export type UniformResourceIdentifiable = {
 
 export type UpcominEnrollment = {
   __typename?: 'UpcominEnrollment';
+  certification_status?: Maybe<Scalars['String']>;
   course?: Maybe<UpcomingEnrollmentCourse>;
   courseLevel?: Maybe<CourseLevel>;
   orgId: Scalars['uuid'];
   orgName?: Maybe<Scalars['String']>;
+  profileId?: Maybe<Scalars['uuid']>;
+  scheduleStart?: Maybe<Scalars['date']>;
 };
 
 export type UpcomingEnrollmentCourse = {
@@ -61393,6 +61396,13 @@ export type GetOrganisationDetailsForDeleteQueryVariables = Exact<{
 
 
 export type GetOrganisationDetailsForDeleteQuery = { __typename?: 'query_root', orgs?: { __typename?: 'organization', members: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, courses: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, orders: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } } | null };
+
+export type AllOrganizationProfilesQueryVariables = Exact<{
+  org_id: Scalars['uuid'];
+}>;
+
+
+export type AllOrganizationProfilesQuery = { __typename?: 'query_root', organization_member: Array<{ __typename?: 'organization_member', profile_id: any }> };
 
 export type GetOrganizationStatisticsQueryVariables = Exact<{
   orgIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;

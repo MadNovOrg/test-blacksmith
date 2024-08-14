@@ -7,6 +7,7 @@ import { CountPanel } from '@app/modules/organisation/components/CountPanel'
 import { SelectableCountPanel } from '@app/modules/organisation/components/SelectableCountPanel/SelectableCountPanel'
 import { ALL_ORGS, noop } from '@app/util'
 
+import { useAllOrganizationProfiles } from '../../hooks/useAllOrgMembersProfiles'
 import { useIndividualOrganizationStatistics } from '../../hooks/useIndividualOrganizationStatistics'
 import { useAllOrganisationStatistics } from '../../hooks/useOrganizationStatistics'
 import { useUpcomingEnrollmentsStats } from '../../hooks/useUpcomingEnrollmentsStats'
@@ -22,17 +23,21 @@ export const OrgStatsTiles: React.FC<
 > = ({ orgId, selected = [], onTileSelect = noop }) => {
   const { t } = useTranslation()
   const isAllOrgs = orgId === ALL_ORGS
+
+  const { data: orgMemberIds } = useAllOrganizationProfiles(orgId, isAllOrgs)
+
+  const profileIds = useMemo(() => {
+    return orgMemberIds?.organization_member.map(m => m?.profile_id)
+  }, [orgMemberIds])
+
   const where = useMemo(() => {
     const whereCondition: Record<string, object> = {
-      _and: [
-        { orgId: { _is_null: false } },
-        { orgId: isAllOrgs ? {} : { _eq: orgId } },
-      ],
+      profileId: isAllOrgs ? {} : { _in: profileIds },
     }
     return whereCondition
-  }, [isAllOrgs, orgId])
+  }, [isAllOrgs, profileIds])
 
-  const { data: enollmentStats } = useUpcomingEnrollmentsStats({
+  const { data: enrollmentStats } = useUpcomingEnrollmentsStats({
     where,
   })
 
@@ -126,7 +131,7 @@ export const OrgStatsTiles: React.FC<
             color: 'success',
           }}
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
-            count: enollmentStats?.active_enrollments.aggregate?.count,
+            count: enrollmentStats?.active_enrollments.aggregate?.count,
           })}
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-active-certificates',
@@ -144,7 +149,7 @@ export const OrgStatsTiles: React.FC<
             color: 'warning',
           }}
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
-            count: enollmentStats?.on_hold_enrollments.aggregate?.count,
+            count: enrollmentStats?.on_hold_enrollments.aggregate?.count,
           })}
           onClick={() => onTileSelect(CertificateStatus.OnHold)}
           selected={selected.includes(CertificateStatus.OnHold)}
@@ -158,7 +163,7 @@ export const OrgStatsTiles: React.FC<
             color: 'warning',
           }}
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
-            count: enollmentStats?.expiring_soon_enrollments.aggregate?.count,
+            count: enrollmentStats?.expiring_soon_enrollments.aggregate?.count,
           })}
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-certificates-to-expire',
@@ -176,7 +181,7 @@ export const OrgStatsTiles: React.FC<
           }}
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count:
-              enollmentStats?.expired_recently_enrollments.aggregate?.count,
+              enrollmentStats?.expired_recently_enrollments.aggregate?.count,
           })}
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-expired-certificates',
