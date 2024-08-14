@@ -68,7 +68,7 @@ export const CourseGrading: React.FC<
     sortBy: 'name',
     order,
     where: {
-      _and: [where],
+      _and: [{ attended: { _eq: true } }, where],
     },
   })
 

@@ -151,12 +151,8 @@ describe('component: CourseAttendance', () => {
     )
 
     expect(
-      within(
-        screen.getByTestId(`participant-attendance-${participants[0].id}`),
-      ).getByText(
-        t('pages.course-attendance.participant-not-attended-chip-label'),
-      ),
-    ).toBeInTheDocument()
+      screen.queryByTestId(`participant-attendance-${participants[0].id}`),
+    ).not.toBeInTheDocument()
 
     expect(
       within(
@@ -267,8 +263,9 @@ describe('component: CourseAttendance', () => {
     )
 
     expect(
-      screen.getByTestId(`${participants[0].id}-attendance-checkbox`),
-    ).not.toBeChecked()
+      screen.queryByTestId(`${participants[0].id}-attendance-checkbox`),
+    ).not.toBeInTheDocument()
+
     expect(screen.getByText('2 selected')).toBeInTheDocument()
   })
 

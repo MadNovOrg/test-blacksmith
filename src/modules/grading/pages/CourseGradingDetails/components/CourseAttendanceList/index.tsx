@@ -35,7 +35,9 @@ export const CourseAttendanceList: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     const attending: Record<string, boolean> = {}
     participants.forEach(participant => {
-      attending[participant.id] = participant.attending
+      if (participant.attending) {
+        attending[participant.id] = participant.attending
+      }
     })
 
     setAttendance(attending)
@@ -109,54 +111,56 @@ export const CourseAttendanceList: React.FC<React.PropsWithChildren<Props>> = ({
         </Typography>
       </Box>
 
-      {participants.map(participant => (
-        <ListItemButton
-          disableGutters
-          disableRipple
-          key={participant.id}
-          sx={{
-            backgroundColor: theme.palette.common.white,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            display: 'flex',
-            borderRadius: '4px',
-            marginBottom: '5px',
-            padding: '10px 15px 10px 5px',
-          }}
-          onClick={() => toggleParticipantAttendance(participant.id)}
-          data-testid={`participant-attendance-${participant.id}`}
-        >
-          <Box display="flex" alignItems="center">
-            <Checkbox
-              checked={attendance[participant.id] || false}
-              data-testid={`${participant.id}-attendance-checkbox`}
-            />
-            <Avatar
-              sx={{ marginRight: 2, width: 32, height: 32 }}
-              src={participant.avatar ?? ''}
-            />
-            <Typography>{participant.name}</Typography>
-          </Box>
-          {attendance[participant.id] ? (
-            <Chip
-              label={t(
-                'pages.course-attendance.participant-attended-chip-label',
-              )}
-              color="success"
-              sx={{
-                backgroundColor: 'success.light',
-              }}
-            />
-          ) : (
-            <Chip
-              label={t(
-                'pages.course-attendance.participant-not-attended-chip-label',
-              )}
-              color="error"
-            />
-          )}
-        </ListItemButton>
-      ))}
+      {participants
+        .filter(participant => participant.attending)
+        .map(participant => (
+          <ListItemButton
+            disableGutters
+            disableRipple
+            key={participant.id}
+            sx={{
+              backgroundColor: theme.palette.common.white,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              display: 'flex',
+              borderRadius: '4px',
+              marginBottom: '5px',
+              padding: '10px 15px 10px 5px',
+            }}
+            onClick={() => toggleParticipantAttendance(participant.id)}
+            data-testid={`participant-attendance-${participant.id}`}
+          >
+            <Box display="flex" alignItems="center">
+              <Checkbox
+                checked={attendance[participant.id] || false}
+                data-testid={`${participant.id}-attendance-checkbox`}
+              />
+              <Avatar
+                sx={{ marginRight: 2, width: 32, height: 32 }}
+                src={participant.avatar ?? ''}
+              />
+              <Typography>{participant.name}</Typography>
+            </Box>
+            {attendance[participant.id] ? (
+              <Chip
+                label={t(
+                  'pages.course-attendance.participant-attended-chip-label',
+                )}
+                color="success"
+                sx={{
+                  backgroundColor: 'success.light',
+                }}
+              />
+            ) : (
+              <Chip
+                label={t(
+                  'pages.course-attendance.participant-not-attended-chip-label',
+                )}
+                color="error"
+              />
+            )}
+          </ListItemButton>
+        ))}
     </Box>
   )
 }
