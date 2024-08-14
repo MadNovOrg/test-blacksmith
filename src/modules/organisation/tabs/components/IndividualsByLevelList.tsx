@@ -177,22 +177,19 @@ export const IndividualsByLevelList: React.FC<
                 ) : null}
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {[
-                      ...uniqBy(
-                        profile.upcomingEnrollments,
-                        'enrollment.course.id',
+                    {[...uniqBy(profile.upcomingEnrollments, 'course.id')]?.map(
+                      enrollment => (
+                        <Link
+                          key={enrollment?.course?.id}
+                          variant="body2"
+                          href={`/manage-courses/${profile.id}/${enrollment?.course?.id}/details`}
+                        >
+                          {`${t(
+                            `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`,
+                          )} ${enrollment?.course?.course_code}`}
+                        </Link>
                       ),
-                    ]?.map(enrollment => (
-                      <Link
-                        key={enrollment?.course?.id}
-                        variant="body2"
-                        href={`/manage-courses/${profile.id}/${enrollment?.course?.id}/details`}
-                      >
-                        {`${t(
-                          `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`,
-                        )} ${enrollment?.course?.course_code}`}
-                      </Link>
-                    ))}
+                    )}
                   </Box>
                 </TableCell>
               </TableRow>
