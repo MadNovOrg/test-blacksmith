@@ -1,1 +1,2 @@
 - "!include public_update_certification_statuses.yaml"
+- "!include public_update_all_organizations_statistics.yaml"

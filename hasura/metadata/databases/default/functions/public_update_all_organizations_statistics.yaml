@@ -1,0 +1,6 @@
+function:
+  name: update_all_organizations_statistics
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: mutation
