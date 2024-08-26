@@ -15,6 +15,7 @@ import { FlagComponent } from './FlagComponent'
 export interface PhoneNumberSelection {
   phoneNumber: string
   countryCode: string
+  countryCallingCode?: string | null
 }
 
 export const DEFAULT_PHONE_COUNTRY = 'GB'
@@ -60,6 +61,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
   ) => {
     if (
       changeInfo.countryCode &&
+      parsedPhone?.country &&
       changeInfo.countryCode !== parsedPhone?.country
     ) {
       setTextError(t('validation-errors.invalid-phone'))
@@ -86,6 +88,7 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
         const newPhoneInfo: PhoneNumberSelection = {
           phoneNumber: phoneNumber,
           countryCode: changeInfo?.countryCode ?? '',
+          countryCallingCode: changeInfo?.countryCallingCode,
         }
 
         onChange(newPhoneInfo)

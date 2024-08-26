@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { isPossibleNumber } from 'libphonenumber-js'
 import isEmail from 'validator/lib/isEmail'
 import * as yup from 'yup'
 
@@ -11,10 +12,12 @@ export const getSchema = ({
   t,
   useInternationalCountriesSelector,
   isInUK,
+  isDfeSuggestion,
 }: {
   t: TFunction
   useInternationalCountriesSelector: boolean
   isInUK: boolean
+  isDfeSuggestion: boolean
 }) => {
   return yup.object({
     organisationName: yup.string().required(
@@ -106,6 +109,22 @@ export const getSchema = ({
         name: t('components.add-organisation.fields.country'),
       }),
     ),
+    ...(isDfeSuggestion
+      ? {
+          organisationPhoneNumber: yup
+            .string()
+            .test(
+              'organisationPhoneNumber',
+              t('validation-errors.invalid-phone'),
+              (value: string | undefined, context) => {
+                if (value === context.parent.countryCallingCode) return true
+
+                return isPossibleNumber(value ?? '')
+              },
+            ),
+          countryCallingCode: yup.string(),
+        }
+      : {}),
   })
 }
 
@@ -129,6 +148,7 @@ export const getDefaultValues = ({
         postCode: option.postcode ?? '',
         sector: '',
         organisationType: '',
+        organisationPhoneNumber: '',
       }
     : {
         organisationName: option.name,
@@ -156,4 +176,6 @@ export type AddNewOrganizationFormInputs = {
   postCode: string
   country: string
   countryCode: string
+  organisationPhoneNumber?: string
+  countryCallingCode?: string
 }

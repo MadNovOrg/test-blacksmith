@@ -26,6 +26,9 @@ import {
 } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import PhoneNumberInput, {
+  PhoneNumberSelection,
+} from '@app/modules/profile/components/PhoneNumberInput'
 import { Address, Establishment } from '@app/types'
 import { saveNewOrganizationDataInLocalState } from '@app/util'
 
@@ -65,8 +68,14 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
 
   const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
   const [specifyOther, setSpecifyOther] = useState(false)
+  const isDFESuggestion = isDfeSuggestion(option)
 
-  const schema = getSchema({ t: _t, useInternationalCountriesSelector, isInUK })
+  const schema = getSchema({
+    t: _t,
+    useInternationalCountriesSelector,
+    isInUK,
+    isDfeSuggestion: isDFESuggestion,
+  })
 
   const defaultValues = useMemo(
     () => getDefaultValues({ option, countryCode, getCountryLabel }),
@@ -104,8 +113,9 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       } as Address,
       attributes: {
         email: data.organisationEmail,
-        ...(isDfeSuggestion(option)
+        ...(isDFESuggestion
           ? {
+              phone: data.organisationPhoneNumber,
               localAuthority: option.localAuthority,
               headFirstName: option.headFirstName,
               headLastName: option.headLastName,
@@ -118,7 +128,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             }
           : null),
       },
-      dfeId: isDfeSuggestion(option) ? option.id : undefined,
+      dfeId: isDFESuggestion ? option.id : undefined,
     }
 
     if (['/registration', '/auto-register'].includes(pathname)) {
@@ -179,7 +189,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                   }
                 }}
                 value={values.countryCode}
-                onlyUKCountries={isDfeSuggestion(option)}
+                onlyUKCountries={isDFESuggestion}
               />
             ) : (
               <CountryDropdown
@@ -198,9 +208,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               label={t('fields.primary-address-line')}
               variant="filled"
               error={!!errors.addressLine1}
-              disabled={Boolean(
-                isDfeSuggestion(option) && defaultValues.addressLine1,
-              )}
+              disabled={Boolean(isDFESuggestion && defaultValues.addressLine1)}
               helperText={errors.addressLine1?.message}
               {...register('addressLine1')}
               inputProps={{ 'data-testid': 'addr-line2' }}
@@ -212,9 +220,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             <TextField
               id="secondaryAddressLine"
               label={t('fields.secondary-address-line')}
-              disabled={Boolean(
-                isDfeSuggestion(option) && defaultValues.addressLine2,
-              )}
+              disabled={Boolean(isDFESuggestion && defaultValues.addressLine2)}
               variant="filled"
               {...register('addressLine2')}
               inputProps={{ 'data-testid': 'addr-line2' }}
@@ -229,7 +235,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               variant="filled"
               placeholder={t('addr.city')}
               error={!!errors.city}
-              disabled={Boolean(isDfeSuggestion(option) && defaultValues.city)}
+              disabled={Boolean(isDFESuggestion && defaultValues.city)}
               helperText={errors.city?.message}
               {...register('city')}
               inputProps={{ 'data-testid': 'city' }}
@@ -246,9 +252,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               )}
               variant="filled"
               error={!!errors.postCode}
-              disabled={Boolean(
-                isDfeSuggestion(option) && defaultValues.postCode,
-              )}
+              disabled={Boolean(isDFESuggestion && defaultValues.postCode)}
               helperText={errors.postCode?.message}
               {...register('postCode')}
               inputProps={{ 'data-testid': 'postCode' }}
@@ -286,7 +290,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               variant="filled"
               placeholder={t('org-name-placeholder')}
               error={!!errors.organisationName}
-              disabled={Boolean(isDfeSuggestion(option) && defaultValues.city)}
+              disabled={Boolean(isDFESuggestion && defaultValues.city)}
               helperText={errors.organisationName?.message}
               {...register('organisationName')}
               inputProps={{ 'data-testid': 'org-name' }}
@@ -357,6 +361,35 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               required
             />
           </Grid>
+          {isDFESuggestion ? (
+            <Grid item>
+              <PhoneNumberInput
+                label={t('fields.organisation-phone')}
+                variant="filled"
+                sx={{ bgcolor: 'grey.100' }}
+                inputProps={{
+                  sx: { height: 40 },
+                  'data-testid': 'org-phone',
+                }}
+                error={!!errors.organisationPhoneNumber}
+                helperText={errors.organisationPhoneNumber?.message}
+                value={{
+                  phoneNumber: values.organisationPhoneNumber ?? '',
+                  countryCode: '',
+                }}
+                onChange={({
+                  phoneNumber,
+                  countryCallingCode,
+                }: PhoneNumberSelection) => {
+                  setValue('countryCallingCode', `+${countryCallingCode}`)
+                  setValue('organisationPhoneNumber', phoneNumber, {
+                    shouldValidate: true,
+                  })
+                }}
+                fullWidth
+              />
+            </Grid>
+          ) : null}
         </Grid>
 
         <Grid mt={3} display="flex" justifyContent="flex-end" item>
