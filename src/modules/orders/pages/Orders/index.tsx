@@ -2,6 +2,7 @@ import { Container, Typography, Box, Stack, Skeleton } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { FilterByCourseResidingCountry } from '@app/components/filters/FilterByCourseResidingCountry'
 import { FilterByCurrencies } from '@app/components/filters/FilterByCurrencies'
 import { FilterByOrderStatuses } from '@app/components/filters/FilterByOrderStatuses'
 import { FilterByPaymentMethods } from '@app/components/filters/FilterByPaymentMethods'
@@ -36,6 +37,10 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
     setFilters(prev => ({ ...prev, searchParam: newSearchParam }))
   }, [])
 
+  const onCountryFilterChange = useCallback((codes: string[]) => {
+    setFilters(prev => ({ ...prev, countries: codes }))
+  }, [])
+
   const filtered = Object.values(filters).reduce(
     (acc, filter) => acc || filter.length > 0,
     false,
@@ -67,6 +72,9 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <FilterByPaymentMethods onChange={onFilterChange} />
                 <FilterByCurrencies onChange={onFilterChange} />
                 <FilterByOrderStatuses onChange={onFilterChange} />
+                <FilterByCourseResidingCountry
+                  onChange={onCountryFilterChange}
+                />
               </Stack>
             </Box>
           </Stack>

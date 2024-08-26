@@ -1,10 +1,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Client, Provider } from 'urql'
-import { never } from 'wonka'
+import { Client, Provider, TypedDocumentNode } from 'urql'
+import { fromValue, never } from 'wonka'
 
+import { GET_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY } from '@app/components/filters/FilterByCourseResidingCountry/queries/get-distinct-course-countries'
 import {
   Currency,
+  GetDistinctCourseResidingCountriesQuery,
   OrdersQueryVariables,
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
@@ -182,6 +184,62 @@ describe('page: Orders filtering', () => {
                     Xero_Invoice_Status_Enum.Submitted,
                     Xero_Invoice_Status_Enum.Draft,
                   ],
+                },
+              },
+            },
+          ],
+        }),
+      )
+    })
+  })
+
+  it('filters by course residing country', async () => {
+    let queryVariables: OrdersQueryVariables
+
+    const client = {
+      executeQuery: ({
+        query,
+        variables,
+      }: {
+        query: TypedDocumentNode
+        variables: OrdersQueryVariables
+      }) => {
+        queryVariables = variables
+
+        if (query === GET_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY) {
+          return fromValue<{ data: GetDistinctCourseResidingCountriesQuery }>({
+            data: {
+              course: [
+                { residingCountry: 'GB-ENG' },
+                { residingCountry: 'RO' },
+                { residingCountry: 'MD' },
+              ],
+            },
+          })
+        }
+
+        return never
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Orders />
+      </Provider>,
+    )
+
+    const statusFilter = screen.getByTestId('course-residing-country-filter')
+
+    await user.click(within(statusFilter).getByText('England'))
+
+    await waitFor(() => {
+      expect(queryVariables.where).toEqual(
+        expect.objectContaining({
+          _or: [
+            {
+              courses: {
+                course: {
+                  residingCountry: { _in: ['GB-ENG'] },
                 },
               },
             },

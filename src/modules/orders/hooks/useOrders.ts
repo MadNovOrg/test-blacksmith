@@ -16,6 +16,7 @@ import { SortOrder } from '@app/types'
 import { GET_ORDERS } from '../queries/query'
 
 export type FiltersType = {
+  countries?: string[]
   currencies?: Currency[]
   paymentMethods?: Payment_Methods_Enum[]
   searchParam?: string
@@ -80,6 +81,18 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       where._or = where._or ?? []
 
       where._or.push({ invoice: { status: { _in: filters.statuses } } })
+    }
+
+    if (isFilterValid(filters.countries)) {
+      where._or = where._or ?? []
+
+      where._or.push({
+        courses: {
+          course: {
+            residingCountry: { _in: filters.countries },
+          },
+        },
+      })
     }
 
     return where

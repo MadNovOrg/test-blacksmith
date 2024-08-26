@@ -127,6 +127,7 @@ export const FilterByCourseResidingCountry: React.FC<
       options={options}
       title={t('filters.residing-country')}
       onChange={_onChange}
+      data-testid="course-residing-country-filter"
     />
   )
 }
