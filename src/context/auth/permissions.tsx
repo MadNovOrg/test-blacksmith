@@ -19,7 +19,7 @@ import {
   hasGotPassForTrainerCourse,
   ICourseCategoryUserAttends,
 } from '@app/modules/resources/utils'
-import { Course, CourseInput, RoleName } from '@app/types'
+import { AwsRegions, Course, CourseInput, RoleName } from '@app/types'
 import {
   getCourseAssistants,
   getCourseLeadTrainer,
@@ -531,14 +531,13 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         .map(certificate => certificate.courseLevel)
 
       if (
-        anyPass(
-          [
-            acl.isBookingContact,
-            acl.isOrgKeyContact,
-            acl.isTrainer,
-            acl.isUser,
-          ] || attendedTrainerCourse,
-        )()
+        anyPass([
+          acl.isBookingContact,
+          acl.isOrgKeyContact,
+          acl.isTrainer,
+          acl.isUser,
+          () => Boolean(attendedTrainerCourse),
+        ])()
       ) {
         return Boolean(
           currentUserCertificates?.length ||
@@ -916,7 +915,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])(),
 
     canManageKnowledgeHubAccess: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+    isUK: () => import.meta.env.VITE_AWS_REGION === AwsRegions.UK,
+    isAustralia: () => import.meta.env.VITE_AWS_REGION === AwsRegions.Australia,
   })
+
   return acl
 }
 
