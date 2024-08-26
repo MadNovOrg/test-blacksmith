@@ -1,26 +1,5 @@
 # @teamteach/hub
 
-## 4.8.0
-
-### Minor Changes
-
-- e48cf01: Organizations filter by country
-- 71055f4: Display the replaced user on order details
-- 244d9b2: Application improvements: Course search field as table column (no more computed field calculation at every search), removed alphabetical ordering on users page, organization statistics (individuals count, certifications counts by their status, org members upcoming enrollments, etc.) as table values, with neccesary triggers on tables and cron job trigger every day at 12:10 AM.
-- 9e736de: Mark cancelled attendee line item as Cancelled
-
-### Patch Changes
-
-- c486739: Display Vietnam instead of Viet Nam
-- a12f114: Zip code is not required on venue form
-- 527548e: Fix org count on organizations page
-- 33dbc3b: Change Organisation filter placeholder spelling to UK version on course details.
-- a19ea09: Handle old version modules for course participants
-- 2a95321: Allocate trainer role after grade is PASS and evaluation is submitted.
-- 6d5f25e: Do NOT include not attended participants in grading functionalities
-- 079dc86: Fix All courses back button on course's builder page
-- eba41e6: Org selection bar on manage courses page for booking contact in case of Open courses
-
 ## 4.7.0
 
 ### Minor Changes
