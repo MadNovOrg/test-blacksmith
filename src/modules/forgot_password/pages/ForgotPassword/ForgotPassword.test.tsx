@@ -52,7 +52,7 @@ describe('page: ForgotPassword', () => {
 
     await submitForm('')
 
-    await waitForText('Please enter your email')
+    await waitForText('Please enter a valid email address')
 
     expect(AuthMock).not.toHaveBeenCalled()
     expect(mockNavigate).not.toHaveBeenCalled()

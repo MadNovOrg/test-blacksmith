@@ -18,6 +18,7 @@ import { SubmitHandler, useForm, FormProvider } from 'react-hook-form'
 import { Trans } from 'react-i18next'
 import { noop } from 'ts-essentials'
 import { useMutation, useQuery } from 'urql'
+import isEmail from 'validator/lib/isEmail'
 import { InferType } from 'yup'
 
 import useWorldCountries, {
@@ -106,7 +107,12 @@ export const ReplaceParticipantDialog: React.FC<
 
   const schema = yup.object({
     profile: yup.object({
-      email: schemas.email(_t).required(requiredMsg(_t, 'email')),
+      email: schemas
+        .email(_t)
+        .required(requiredMsg(_t, 'email'))
+        .test('is-email', t('validation-errors.email-invalid'), email => {
+          return isEmail(email)
+        }),
       firstName: yup.string().required(requiredMsg(_t, 'first-name')),
       surname: yup.string().required(requiredMsg(_t, 'surname')),
     }),

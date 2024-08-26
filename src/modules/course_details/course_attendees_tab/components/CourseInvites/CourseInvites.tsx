@@ -17,6 +17,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { useQuery } from 'urql'
+import isEmail from 'validator/lib/isEmail'
 import * as XLSX from 'xlsx'
 import * as yup from 'yup'
 
@@ -40,8 +41,6 @@ type Props = {
   onExportError?: () => void
 }
 
-const emailSchema = yup.string().email().required()
-
 export const CourseInvites = ({
   course,
   attendeesCount = 0,
@@ -53,6 +52,13 @@ export const CourseInvites = ({
   const allowAddAttendeesAfterCourseEnded = useFeatureFlagEnabled(
     'invite-attendees-after-course-ended',
   )
+
+  const emailSchema = yup
+    .string()
+    .required()
+    .test('is-email', t('validation-errors.email-invalid'), email => {
+      return isEmail(email)
+    })
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -161,7 +167,7 @@ export const CourseInvites = ({
       setSaving(false)
       setError((err as Error).message)
     }
-  }, [invites, emails, closeModal, newEmail, invitesLeft])
+  }, [emails, newEmail, emailSchema, invitesLeft, invites, closeModal])
 
   const errorMessage = useMemo(() => {
     if (!error) {

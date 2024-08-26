@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import isEmail from 'validator/lib/isEmail'
 import * as yup from 'yup'
 
 import { Establishment } from '@app/types'
@@ -49,7 +50,9 @@ export const getSchema = ({
           name: t('components.add-organisation.fields.organisation-email'),
         }),
       )
-      .email(t('validation-errors.email-invalid')),
+      .test('is-email', t('validation-errors.email-invalid'), email => {
+        return isEmail(email)
+      }),
     addressLine1: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.primary-address-line'),

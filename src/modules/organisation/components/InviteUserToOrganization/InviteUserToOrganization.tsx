@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 import { useDebounce } from 'use-debounce'
+import isEmail from 'validator/lib/isEmail'
 
 import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
@@ -107,8 +108,10 @@ export const InviteUserToOrganization = () => {
         .of(
           yup
             .string()
-            .email(t('validation-errors.email-invalid'))
-            .required(t('validation-errors.email-invalid')),
+            .required(t('validation-errors.email-invalid'))
+            .test('is-email', t('validation-errors.email-invalid'), email => {
+              return isEmail(email)
+            }),
         )
         .required()
         .min(1, requiredMsg(t, 'pages.invite-to-org.work-email')),

@@ -49,7 +49,9 @@ describe(`Waitlist: ${Form.name}`, () => {
     await waitFor(() => {
       expect(screen.getByText(/first name is required/i)).toBeInTheDocument()
       expect(screen.getByText(/surname is required/i)).toBeInTheDocument()
-      expect(screen.getByText(/please enter your email/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/please enter a valid email address/i),
+      ).toBeInTheDocument()
       expect(screen.getByText(/phone is required/i)).toBeInTheDocument()
       expect(
         screen.getByText(/organisation name is required/i),

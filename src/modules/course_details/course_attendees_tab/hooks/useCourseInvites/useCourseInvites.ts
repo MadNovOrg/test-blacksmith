@@ -2,6 +2,7 @@ import { differenceInSeconds } from 'date-fns'
 import { isPast } from 'date-fns'
 import { useCallback, useMemo } from 'react'
 import { gql, useMutation, useQuery } from 'urql'
+import isEmail from 'validator/lib/isEmail'
 import * as yup from 'yup'
 
 import {
@@ -81,7 +82,17 @@ export const CANCEL_INVITE = gql`
   }
 `
 
-const emailsSchema = yup.array(yup.string().email().required()).min(1)
+const emailsSchema = yup
+  .array(
+    yup
+      .string()
+      .email()
+      .required()
+      .test('is-email', email => {
+        return isEmail(email)
+      }),
+  )
+  .min(1)
 
 export default function useCourseInvites({
   courseId,

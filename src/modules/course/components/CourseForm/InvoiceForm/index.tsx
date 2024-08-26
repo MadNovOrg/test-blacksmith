@@ -2,6 +2,7 @@ import { Box, Grid, TextField } from '@mui/material'
 import { t, TFunction } from 'i18next'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
+import isEmail from 'validator/lib/isEmail'
 import { InferType } from 'yup'
 
 import { OrgSelector } from '@app/components/OrgSelector'
@@ -25,8 +26,10 @@ export function formSchema(t: TFunction) {
 
     email: yup
       .string()
-      .email(t('validation-errors.email-invalid'))
-      .required(requiredMsg(t, 'email')),
+      .required(requiredMsg(t, 'email'))
+      .test('is-email', t('validation-errors.email-invalid'), email => {
+        return isEmail(email)
+      }),
 
     phone: schemas.phone(t),
 

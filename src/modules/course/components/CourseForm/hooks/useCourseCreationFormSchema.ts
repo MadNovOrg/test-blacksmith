@@ -4,6 +4,7 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import isEmail from 'validator/lib/isEmail'
 
 import useWorldCountries, {
   WorldCountriesCodes,
@@ -29,7 +30,6 @@ import {
   validateStrategies,
 } from '../components/StrategyToggles/StrategyToggles'
 import { hasRenewalCycle, Countries_Code, getAccountCode } from '../helpers'
-
 interface Props {
   courseInput?: CourseInput
   isCreation: boolean
@@ -153,7 +153,16 @@ export const useCourseCreationFormSchema = ({
                     .string()
                     .required(requiredMsg(t, 'first-name')),
                   lastName: yup.string().required(requiredMsg(t, 'surname')),
-                  email: schemas.email(t).required(requiredMsg(t, 'email')),
+                  email: schemas
+                    .email(t)
+                    .required(requiredMsg(t, 'email'))
+                    .test(
+                      'is-email',
+                      t('validation-errors.email-invalid'),
+                      email => {
+                        return isEmail(email)
+                      },
+                    ),
                 }),
               }
             : null),

@@ -1,6 +1,7 @@
 import { TFunction } from 'i18next'
 import { isPossiblePhoneNumber } from 'libphonenumber-js'
 import { matchIsValidTel } from 'mui-tel-input'
+import isEmail from 'validator/lib/isEmail'
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
 
@@ -30,7 +31,7 @@ yup.addMethod(yup.string, 'isPossiblePhoneNumber', function (t: TFunction) {
 yup.addMethod(yup.number, 'allowEmptyNumberField', function () {
   return this.transform(function (value, originalValue) {
     if (this.isType(value)) return value
-    if (!originalValue || !originalValue.trim()) {
+    if (!originalValue?.trim()) {
       return null
     }
     return originalValue
@@ -42,7 +43,9 @@ const schemas = {
     const email = yup
       .string()
       .transform(currentValue => currentValue.trim().toLowerCase())
-      .email(t('validation-errors.email-invalid'))
+      .test('is-email', t('validation-errors.email-invalid'), email => {
+        return isEmail(email ?? '')
+      })
     return email
   },
 

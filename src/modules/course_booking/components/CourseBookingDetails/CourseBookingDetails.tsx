@@ -24,6 +24,7 @@ import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import isEmail from 'validator/lib/isEmail'
 
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
@@ -179,7 +180,12 @@ export const CourseBookingDetails: React.FC<
           yup.object({
             firstName: yup.string().required(requiredMsg(t, 'first-name')),
             lastName: yup.string().required(requiredMsg(t, 'last-name')),
-            email: schemas.email(t).required(requiredMsg(t, 'email')),
+            email: schemas
+              .email(t)
+              .required(requiredMsg(t, 'email'))
+              .test('is-email', t('validation-errors.email-invalid'), email => {
+                return isEmail(email)
+              }),
             ...(isAddressInfoRequired
               ? {
                   addressLine1: yup.string().required(requiredMsg(t, 'line1')),
@@ -232,7 +238,12 @@ export const CourseBookingDetails: React.FC<
       bookingContact: yup.object({
         firstName: yup.string().required(requiredMsg(t, 'first-name')),
         lastName: yup.string().required(requiredMsg(t, 'last-name')),
-        email: schemas.email(t).required(requiredMsg(t, 'email')),
+        email: schemas
+          .email(t)
+          .required(requiredMsg(t, 'email'))
+          .test('is-email', t('validation-errors.email-invalid'), email => {
+            return isEmail(email)
+          }),
       }),
 
       paymentMethod: yup

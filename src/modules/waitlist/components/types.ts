@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import isEmail from 'validator/lib/isEmail'
 
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
@@ -9,7 +10,12 @@ export const getFormSchema = (t: TFunction) => {
 
     surname: yup.string().required(requiredMsg(t, 'surname')),
 
-    email: schemas.email(t).required(t('validation-errors.email-required')),
+    email: schemas
+      .email(t)
+      .required(t('validation-errors.email-required'))
+      .test('is-email', t('validation-errors.email-invalid'), email => {
+        return isEmail(email)
+      }),
 
     phone: schemas.phone(t).required(),
 

@@ -19,6 +19,7 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
+import isEmail from 'validator/lib/isEmail'
 import * as yup from 'yup'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
@@ -62,8 +63,10 @@ export const LoginPage = () => {
           email: yup
             .string()
             .transform(currentValue => currentValue.trim())
-            .email(t('validation-errors.email-invalid'))
-            .required(t('validation-errors.email-required')),
+            .required(t('validation-errors.email-required'))
+            .test('is-email', t('validation-errors.email-invalid'), email => {
+              return isEmail(email)
+            }),
           password: yup
             .string()
             .required(t('validation-errors.password-required')),
