@@ -5,18 +5,19 @@ import { yup } from '@app/schemas'
 import { RoleName } from '@app/types'
 
 export type FormInputs = {
-  code: string
-  description: string
-  type: Promo_Code_Type_Enum
   amount: number
   appliesTo: APPLIES_TO // Frontend only. Needed for yup schema
-  levels: Course_Level_Enum[]
+  bookerSingleUse: boolean
+  code: string
   courses: number[]
+  createdBy: string
+  description: string
+  duplicated: boolean
+  levels: Course_Level_Enum[]
+  type: Promo_Code_Type_Enum
+  usesMax: number | null
   validFrom: Date | null
   validTo: Date | null
-  bookerSingleUse: boolean
-  usesMax: number | null
-  createdBy: string
 }
 
 export enum AMOUNT_PRESETS {
@@ -85,6 +86,9 @@ export const schema = ({ t }: { t: TFunction }) => {
       .transform(value => (Number.isNaN(value) ? undefined : value))
       .nullable()
       .min(1),
+    duplicated: yup
+      .boolean()
+      .oneOf([false], t('pages.promoCodes.fld-code-dup')),
   })
 }
 

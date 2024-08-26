@@ -94,20 +94,22 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   } = useForm<FormInputs>({
     resolver: yupResolver(schema({ t })),
     defaultValues: {
-      code: '',
-      description: '',
-      type: Promo_Code_Type_Enum.Percent,
       amount: DEFAULT_AMOUNT_PER_TYPE[Promo_Code_Type_Enum.Percent],
       appliesTo: APPLIES_TO.ALL,
-      levels: [],
+      bookerSingleUse: true,
+      code: '',
       courses: [],
+      createdBy: profile?.id,
+      description: '',
+      duplicated: false,
+      levels: [],
+      type: Promo_Code_Type_Enum.Percent,
+      usesMax: null,
       validFrom: startOfDay(new Date()),
       validTo: null,
-      usesMax: null,
-      bookerSingleUse: true,
-      createdBy: profile?.id,
     },
   })
+
   const values = watch()
   const [debouncedCode] = useDebounce(values.code, 300)
   const [{ data, error, fetching: promoCodesFetching }] = useQuery<
@@ -127,7 +129,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     GetPromoCodesQueryVariables
   >({
     query: GET_PROMO_CODES,
-    variables: { where: { code: { _eq: debouncedCode } } },
+    variables: { where: { code: { _eq: debouncedCode.trim() } } },
     pause: !debouncedCode,
   })
   const [{ fetching: disablePromoCodeLoading }, disablePromoCodeMutation] =
@@ -135,10 +137,12 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       DISABLE_PROMO_CODE,
     )
 
-  const [{ fetching: upsertPromoCodeLoading }, upsertPromoCodeMutation] =
-    useMutation<UpsertPromoCodeMutation, UpsertPromoCodeMutationVariables>(
-      UPSERT_PROMO_CODE,
-    )
+  const [
+    { fetching: upsertPromoCodeLoading, error: upsertPromoCodeError },
+    upsertPromoCodeMutation,
+  ] = useMutation<UpsertPromoCodeMutation, UpsertPromoCodeMutationVariables>(
+    UPSERT_PROMO_CODE,
+  )
 
   useEffect(() => {
     if (data) {
@@ -181,12 +185,12 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (data && data.promoCodes[0].code === values.code) return
     try {
       if (promoCodes?.promoCodes.length) {
-        setError('code', { message: t('pages.promoCodes.fld-code-dup') })
+        setValue('duplicated', true, { shouldValidate: true })
       } else {
-        clearErrors('code')
+        setValue('duplicated', false, { shouldValidate: true })
       }
     } catch (err) {
-      setError('code', { message: t('pages.promoCodes.fld-code-dup-failed') })
+      setError('code', { message: t('pages.promoCodes.fld-code-dup') })
     }
   }, 2000)
 
@@ -195,7 +199,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       clearErrors('code')
       checkDuplicateCode()
     }
-  }, [values.code, checkDuplicateCode, clearErrors])
+  }, [checkDuplicateCode, clearErrors, upsertPromoCodeError, values.code])
 
   useEffect(() => {
     if (!createdBy && !isEdit) {
@@ -290,12 +294,13 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [activeRole, data?.promoCodes, values])
 
   const upsertPromoCode = async () => {
-    const promoCode = omit(values, ['appliesTo', 'courses'])
+    const promoCode = omit(values, ['appliesTo', 'courses', 'duplicated'])
     const { data } = await upsertPromoCodeMutation({
       promoCondition: isEdit ? { id: { _eq: id } } : { id: { _is_null: true } },
       promoCode: {
         id: isEdit ? id : undefined,
         ...promoCode,
+        code: promoCode.code.trim(),
         approvedBy: sendForApproval ? null : profile?.id,
         courses: {
           data: values.courses.map(c => {
@@ -304,6 +309,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
         },
       },
     })
+
     if (data) return navigate('..')
   }
 
@@ -388,8 +394,12 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
             placeholder={t('pages.promoCodes.fld-code-label')}
             inputProps={{ 'data-testid': 'fld-code' }}
             {...register('code')}
-            error={!!formState.errors.code}
-            helperText={formState.errors.code?.message ?? ' '}
+            error={!!formState.errors.code || !!formState.errors.duplicated}
+            helperText={
+              formState.errors.code?.message ??
+              formState.errors.duplicated?.message ??
+              ''
+            }
             disabled={disabled}
           />
           <TextField
