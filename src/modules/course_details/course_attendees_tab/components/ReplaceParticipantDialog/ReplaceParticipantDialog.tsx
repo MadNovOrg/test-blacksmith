@@ -68,6 +68,7 @@ export type Props = {
     id: string
     fullName: string
     avatar?: string
+    healtAndSafetyConsent?: boolean
   }
   course?: Course
 }
@@ -354,7 +355,7 @@ export const ReplaceParticipantDialog: React.FC<
                 control={
                   <Checkbox
                     {...methods.register('termsAccepted')}
-                    data-testId="terms-checkbox"
+                    data-testid="terms-checkbox"
                   />
                 }
                 label={

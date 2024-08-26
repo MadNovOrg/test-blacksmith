@@ -1,15 +1,20 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
   GetCourseParticipantOrderQuery,
   ReplaceParticipantError,
   ReplaceParticipantMutation,
   ReplaceParticipantMutationVariables,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import { buildCourse } from '@test/mock-data-utils'
 
 import {
   Mode,
@@ -17,7 +22,14 @@ import {
   ReplaceParticipantDialog,
 } from './ReplaceParticipantDialog'
 
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
+}))
+
 describe(ReplaceParticipantDialog.name, () => {
+  beforeAll(() => {
+    useFeatureFlagEnabled('course-residing-country')
+  })
   it('should display participant information', () => {
     const client = {
       executeMutation: () => never,
@@ -212,6 +224,53 @@ describe(ReplaceParticipantDialog.name, () => {
     await waitFor(() => {
       expect(screen.getByTestId('replace-submit')).toBeEnabled()
     })
+  })
+
+  it('should display only UK countries for postal address', async () => {
+    const client = {
+      executeMutation: () => never,
+      executeQuery: () => never,
+    } as unknown as Client
+
+    const participant: Props['participant'] = {
+      id: chance.guid(),
+      fullName: chance.name(),
+      avatar: chance.url(),
+    }
+    const course = buildCourse({
+      overrides: {
+        deliveryType: Course_Delivery_Type_Enum.Virtual,
+        type: Course_Type_Enum.Open,
+        level: Course_Level_Enum.Level_1,
+        residingCountry: 'GB-ENG',
+      },
+    })
+
+    render(
+      <Provider value={client}>
+        <ReplaceParticipantDialog participant={participant} course={course} />
+      </Provider>,
+    )
+
+    const countriesSelector = screen.getByTestId(
+      'countries-selector-autocomplete',
+    )
+    countriesSelector.focus()
+    const textField = within(countriesSelector).getByTestId(
+      'countries-selector-input',
+    )
+    expect(textField).toBeInTheDocument()
+    await userEvent.type(textField, 'e')
+
+    expect(screen.queryByTestId('country-GB-ENG')).toBeInTheDocument()
+    await userEvent.clear(within(textField).getByRole('combobox'))
+
+    await userEvent.type(textField, 'wales')
+    expect(screen.queryByTestId('country-GB-WLS')).toBeInTheDocument
+    await userEvent.clear(within(textField).getByRole('combobox'))
+
+    await userEvent.type(textField, 'romania')
+    expect(screen.queryByTestId('country-RO')).not.toBeInTheDocument
   })
 
   it('should display related orders invoice number', async () => {

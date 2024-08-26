@@ -102,7 +102,10 @@ export const CourseBookingDone: React.FC<
                       values={{ orderNumber: order?.xeroInvoiceNumber }}
                     >
                       {acl.canViewOrders() ? (
-                        <Link href={`/orders/${order?.id}`} />
+                        <Link
+                          href={`/orders/${order?.id}`}
+                          data-testid="order-link"
+                        />
                       ) : (
                         <></>
                       )}
@@ -111,7 +114,10 @@ export const CourseBookingDone: React.FC<
                 )}
 
                 {noOrder ? null : (
-                  <Typography variant="subtitle1">
+                  <Typography
+                    variant="subtitle1"
+                    data-testid="order-success-msg"
+                  >
                     {t('pages.book-course.order-success-msg')}
                   </Typography>
                 )}

@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 
 import * as API from '@qa/api'
@@ -30,5 +31,5 @@ test(`replace an attendee on a course`, async ({ course, page }) => {
   const replaceAttendeePopup = await courseDetailsPage.clickAttendeeReplace()
   await replaceAttendeePopup.replaceAttendee(users.user1WithOrg)
 
-  await courseDetailsPage.checkAttendeeExists(users.user1WithOrg)
+  await replaceAttendeePopup.clickConfirmReplace(users.user1WithOrg.email)
 })

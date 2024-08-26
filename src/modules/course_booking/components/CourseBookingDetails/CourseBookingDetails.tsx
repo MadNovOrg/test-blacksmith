@@ -156,7 +156,7 @@ export const CourseBookingDetails: React.FC<
     [course, residingCountryEnabled],
   )
 
-  const { checkUKsCountryName, getLabel, isUKCountry } = useWorldCountries()
+  const { getLabel, isUKCountry } = useWorldCountries()
 
   const qtyOptions = useMemo(
     () => Array.from({ length: availableSeats }, (_, i) => i + 1),
@@ -194,19 +194,12 @@ export const CourseBookingDetails: React.FC<
                   country: yup.string().required(requiredMsg(t, 'country')),
                   postCode: yup
                     .string()
-                    .when('country', ([country], schema) => {
-                      if (country && !checkUKsCountryName(country)) {
-                        return schema
-                      }
-
-                      return schema
-                        .required(requiredMsg(t, 'post-code'))
-                        .test(
-                          'is-uk-postcode',
-                          t('validation-errors.invalid-postcode'),
-                          isValidUKPostalCode,
-                        )
-                    }),
+                    .required(requiredMsg(t, 'post-code'))
+                    .test(
+                      'is-uk-postcode',
+                      t('validation-errors.invalid-postcode'),
+                      isValidUKPostalCode,
+                    ),
                 }
               : {}),
           }),
@@ -270,7 +263,7 @@ export const CourseBookingDetails: React.FC<
           otherwise: schema => schema,
         }),
     })
-  }, [t, isAddressInfoRequired, checkUKsCountryName])
+  }, [t, isAddressInfoRequired])
 
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -369,9 +362,9 @@ export const CourseBookingDetails: React.FC<
     const participants = participantsProfiles
     participants[index] = {}
     const newParticipant = {
-      email: profile?.email || '',
-      firstName: profile?.givenName || '',
-      lastName: profile?.familyName || '',
+      email: profile?.email ?? '',
+      firstName: profile?.givenName ?? '',
+      lastName: profile?.familyName ?? '',
       addressLine1: '',
       addressLine2: '',
       city: '',
@@ -396,9 +389,9 @@ export const CourseBookingDetails: React.FC<
     setValue(
       'bookingContact',
       {
-        email: profile?.email || '',
-        firstName: profile?.givenName || '',
-        lastName: profile?.familyName || '',
+        email: profile?.email ?? '',
+        firstName: profile?.givenName ?? '',
+        lastName: profile?.familyName ?? '',
       },
       { shouldValidate: true },
     )
@@ -468,44 +461,17 @@ export const CourseBookingDetails: React.FC<
   const showRegistrantSuggestions =
     values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
 
-  const checkIsParticipantUKCountry = useCallback(
-    (index: number) => {
-      if (!values.participants[index].country) return true
-
-      return checkUKsCountryName(values.participants[index].country)
-    },
-    [checkUKsCountryName, values.participants],
-  )
-
   const onCountryChange = useCallback(
     async (index: number, countryCode: string | null) => {
       const postCode = values.participants[index].postCode
-      const isPreviousCountryUKs = checkUKsCountryName(
-        values.participants[index].country,
-      )
 
       setValue(`participants.${index}.country`, getLabel(countryCode) ?? '')
       await trigger(`participants.${index}.country`)
-
-      const isCurrentCountryUKs = checkUKsCountryName(
-        values.participants[index].country,
-      )
-
-      if (
-        (errors.participants && errors.participants[index]?.postCode) ||
-        (postCode && isCurrentCountryUKs !== isPreviousCountryUKs)
-      ) {
+      if (errors.participants?.[index]?.postCode || postCode) {
         await trigger(`participants.${index}.postCode`)
       }
     },
-    [
-      checkUKsCountryName,
-      errors.participants,
-      getLabel,
-      setValue,
-      trigger,
-      values.participants,
-    ],
+    [errors.participants, getLabel, setValue, trigger, values.participants],
   )
   const courseTimezone = useMemo(() => {
     return course?.schedule.length ? course?.schedule[0].timeZone : undefined
@@ -586,7 +552,11 @@ export const CourseBookingDetails: React.FC<
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">
               <FormControl fullWidth sx={{ bgcolor: 'grey.200' }}>
-                <InputLabel variant="standard" htmlFor="qty-select">
+                <InputLabel
+                  variant="standard"
+                  htmlFor="qty-select"
+                  data-testid="qty-select"
+                >
                   {t('qty')}
                 </InputLabel>
                 <NativeSelect
@@ -904,7 +874,7 @@ export const CourseBookingDetails: React.FC<
         <Typography variant="subtitle1" fontWeight="500">
           {t('registration')}
         </Typography>
-        <Box bgcolor="common.white" p={2} mb={4}>
+        <Box bgcolor="common.white" p={2} mb={4} data-testid="registrants-box">
           {booking.participants.map((_, index) => {
             const emailValue = values.participants[index]?.email
             const emailDuplicated =
@@ -981,7 +951,7 @@ export const CourseBookingDetails: React.FC<
                     />
                   </Grid>
                   {isAddressInfoRequired ? (
-                    <Grid item md={12}>
+                    <Grid item md={12} data-testid="address-form">
                       <Typography variant="subtitle1">
                         {t('common.postal-address')}
                       </Typography>
@@ -1059,27 +1029,13 @@ export const CourseBookingDetails: React.FC<
                           }
                           id="postCode"
                           inputProps={{ 'data-testid': 'postCode' }}
-                          label={
-                            checkIsParticipantUKCountry(index)
-                              ? t(
-                                  'components.venue-selector.modal.fields.postCode',
-                                )
-                              : t(
-                                  'components.venue-selector.modal.fields.zipCode',
-                                )
-                          }
-                          placeholder={
-                            checkIsParticipantUKCountry(index)
-                              ? t('common.addr.postCode')
-                              : t('common.addr.zipCode')
-                          }
+                          label={t(
+                            'components.venue-selector.modal.fields.postCode',
+                          )}
+                          placeholder={t('common.addr.postCode')}
                           required
                           sx={{ bgcolor: 'grey.100' }}
-                          type={
-                            checkIsParticipantUKCountry(index)
-                              ? 'text'
-                              : 'number'
-                          }
+                          type={'text'}
                           variant="filled"
                           {...register(`participants.${index}.postCode`)}
                           InputLabelProps={{
@@ -1087,20 +1043,16 @@ export const CourseBookingDetails: React.FC<
                               values.participants[index].postCode,
                             ),
                           }}
-                          InputProps={
-                            checkIsParticipantUKCountry(index)
-                              ? {
-                                  endAdornment: (
-                                    <Tooltip
-                                      title={t('post-code-tooltip')}
-                                      data-testid="post-code-tooltip"
-                                    >
-                                      <InfoIcon color={'action'} />
-                                    </Tooltip>
-                                  ),
-                                }
-                              : undefined
-                          }
+                          InputProps={{
+                            endAdornment: (
+                              <Tooltip
+                                title={t('post-code-tooltip')}
+                                data-testid="post-code-tooltip"
+                              >
+                                <InfoIcon color={'action'} />
+                              </Tooltip>
+                            ),
+                          }}
                         />
                       </Box>
                       <Box mb={3}>
@@ -1116,6 +1068,7 @@ export const CourseBookingDetails: React.FC<
                             onChange={async (_, code) =>
                               await onCountryChange(index, code)
                             }
+                            onlyUKCountries={true}
                             value={values.participants[index].country}
                           />
                         ) : (
@@ -1234,7 +1187,12 @@ export const CourseBookingDetails: React.FC<
           <Button variant="text" color="primary" href="/">
             {t('cancel')}
           </Button>
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            data-testid="review-and-confirm"
+          >
             {t('pages.book-course.step-2')}
           </Button>
         </Box>

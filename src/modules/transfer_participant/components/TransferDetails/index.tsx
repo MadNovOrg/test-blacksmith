@@ -181,6 +181,7 @@ export const TransferDetails: React.FC<
         <TextField
           fullWidth
           required
+          data-testid="reasonForTransfer"
           variant="filled"
           error={!!errors.transferReason}
           helperText={<>{errors.transferReason?.message}</>}

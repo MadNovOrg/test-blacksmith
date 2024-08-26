@@ -1,9 +1,13 @@
 import * as fs from 'fs'
 
-import { addDays, format } from 'date-fns'
+import { addDays, addMonths, format } from 'date-fns'
 
 import { TARGET_ENV, TEMP_DIR } from './constants'
-import { CourseTableRow, ModuleGroup } from './data/types'
+import {
+  CourseTableRow,
+  ModuleGroup,
+  TransferEligibleCourses,
+} from './data/types'
 
 type KeyValue = {
   name: string
@@ -563,6 +567,65 @@ export const searchBildTrainerModerator = () => {
             },
           ],
           __typename: 'SearchTrainer',
+        },
+      ],
+    },
+  }
+}
+
+export const createOrderForBooking = (orderId: string) => {
+  return {
+    data: {
+      order: {
+        id: orderId,
+        success: true,
+        error: null,
+        __typename: 'CreateOrderOutput',
+      },
+    },
+  }
+}
+
+export const getOrderForBookingDone = (
+  orderId: string,
+  xeroInvoiceNumber: string,
+) => {
+  return {
+    data: {
+      order: {
+        id: orderId,
+        xeroInvoiceNumber: xeroInvoiceNumber,
+        paymentMethod: 'INVOICE',
+        __typename: 'order',
+      },
+    },
+  }
+}
+
+export const getTransferEligibleCourses = (
+  transferEligibleCourses: TransferEligibleCourses,
+) => {
+  return {
+    data: {
+      eligibleTransferCourses: [
+        {
+          id: transferEligibleCourses.courseId,
+          freeSlots: 1,
+          courseCode: transferEligibleCourses.courseCode,
+          courseResidingCountry: 'GB-ENG',
+          startDate: addMonths(new Date(), 1).toISOString(),
+          endDate: addMonths(new Date(), 2).toISOString(),
+          virtualLink: null,
+          venue: null,
+          venueName: transferEligibleCourses.venueName,
+          venueCity: transferEligibleCourses.venueCity,
+          venueCountry: transferEligibleCourses.venueCountry,
+          level: transferEligibleCourses.level,
+          reaccreditation: transferEligibleCourses.reaccreditation,
+          type: transferEligibleCourses.type,
+          deliveryType: transferEligibleCourses.deliveryType,
+          timezone: 'Europe/London',
+          __typename: 'TransferCourse',
         },
       ],
     },

@@ -20,6 +20,7 @@ export const users = {
     email: 'ops@teamteach.testinator.com',
     password: 'Test12345!',
     country: 'England',
+    organization: { name: 'London First School' },
     countryCode: 'GB-ENG',
     job_title: 'CEO',
   },

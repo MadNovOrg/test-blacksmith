@@ -919,6 +919,100 @@ describe('page: TransferDetails', () => {
     expect(reviewAndConfirmBtn).toBeEnabled()
   })
 
+  it(`allows only uk countries in the country selector when transfering to a VIRTUAL `, async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      end: addDays(new Date(), 1).toISOString(),
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      type: Course_Type_Enum.Open,
+      residingCountry: UKsCodes.GB_ENG,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      deliveryType: CourseDeliveryType.Virtual,
+      endDate: new Date().toISOString(),
+      freeSlots: 2,
+      level: CourseLevel.Level_1,
+      reaccreditation: false,
+      startDate: new Date().toISOString(),
+      type: CourseType.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
+      const { fees } = useTransferParticipantContext()
+
+      return (
+        <>
+          <p>{fees?.type}</p>
+          <p>{fees?.customFee}</p>
+        </>
+      )
+    }
+
+    render(
+      <Provider value={client}>
+        <TransferParticipantProvider
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] },
+    )
+    const countriesSelector = screen.getByTestId(
+      'countries-selector-autocomplete',
+    )
+    expect(countriesSelector).toBeInTheDocument()
+    countriesSelector.focus()
+
+    const textField = within(countriesSelector).getByTestId(
+      'countries-selector-input',
+    )
+    expect(textField).toBeInTheDocument()
+
+    await userEvent.type(textField, 'England')
+    expect(screen.queryByTestId('country-GB-ENG')).toBeInTheDocument()
+    await userEvent.clear(within(textField).getByRole('combobox'))
+
+    await userEvent.type(textField, 'Romania')
+    expect(screen.queryByTestId('country-RO')).not.toBeInTheDocument()
+    await userEvent.clear(within(textField).getByRole('combobox'))
+
+    await userEvent.type(textField, 'wales')
+    expect(screen.queryByTestId('country-GB-WLS')).toBeInTheDocument()
+  })
+
   it(`disable review and confirm button when transfer to UK Virtual course if postal address fields are not filled`, async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {

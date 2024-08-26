@@ -2,6 +2,11 @@
 /* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 
+import {
+  Course_Delivery_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+
 import * as API from '@qa/api'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course, TransferEligibleCourses } from '@qa/data/types'
@@ -9,17 +14,34 @@ import { users } from '@qa/data/users'
 import { MyCoursesPage } from '@qa/fixtures/pages/courses/MyCoursesPage.fixture'
 import { stateFilePath, StoredCredentialKey } from '@qa/util'
 
-const allowedRoles = ['userOrgAdmin']
-// No 'salesAdmin' see https://behaviourhub.atlassian.net/browse/TTHP-1532
+const allowedRoles = ['admin', 'ops', 'userOrgAdmin']
+
+const address = {
+  addresLine1: '123 Fake Street',
+  addresLine2: 'Fake Town',
+  city: 'Fake City',
+  postcode: 'TW1 1AA',
+  country: 'England',
+}
 
 const createCourses = async (): Promise<Course[]> => {
   const courses: Course[] = []
-  for (let i = 0; i < 2; i++) {
-    const course = UNIQUE_COURSE()
-    course.organization = { name: 'London First School' }
-    course.id = (await API.course.insertCourse(course, users.trainer.email)).id
-    courses.push(course)
-  }
+
+  const nonVirtualCourse = UNIQUE_COURSE()
+  nonVirtualCourse.type = Course_Type_Enum.Open
+  nonVirtualCourse.id = (
+    await API.course.insertCourse(nonVirtualCourse, users.trainer.email)
+  ).id
+  courses.push(nonVirtualCourse)
+
+  const virtualCourse = UNIQUE_COURSE()
+  virtualCourse.deliveryType = Course_Delivery_Type_Enum.Virtual
+  virtualCourse.type = Course_Type_Enum.Open
+  virtualCourse.id = (
+    await API.course.insertCourse(virtualCourse, users.trainer.email)
+  ).id
+  courses.push(virtualCourse)
+
   return courses
 }
 
@@ -37,20 +59,19 @@ const test = base.extend<{ courses: Course[] }>({
 })
 
 allowedRoles.forEach(role => {
-  test(`${role} can transfer an attendee to another course @smoke`, async ({
-    browser,
-    courses,
-  }) => {
+  test(`${role} can transfer an attendee to a virtual course ${
+    role === 'admin' ? '@smoke' : ''
+  }`, async ({ browser, courses }) => {
     const transferEligibleCourse: TransferEligibleCourses = {
       courseId: courses[1].id,
       level: courses[1].level,
       type: courses[1].type,
       deliveryType: courses[1].deliveryType,
       reaccreditation: courses[1].reaccreditation,
-      courseCode: courses[1].course_code ?? '',
-      venueName: courses[1].schedule[0].venue?.name ?? '',
-      venueCity: courses[1].schedule[0].venue?.city ?? '',
-      venueCountry: courses[1].schedule[0].venue?.country ?? '',
+      courseCode: `L1.V.OP-${courses[1].id}`,
+      venueName: null,
+      venueCity: null,
+      venueCountry: null,
     }
     const transferReason = 'Automated test'
     const context = await browser.newContext({
@@ -69,16 +90,13 @@ allowedRoles.forEach(role => {
       transferEligibleCourse,
     )
     await courseTransferPage.clickTransferDetails()
-    if (role !== 'userOrgAdmin') {
-      await courseTransferPage.clickApplyTermsAsTransferFee()
-    }
+    await courseTransferPage.clickApplyTermsAsTransferFee()
+
     await courseTransferPage.setTransferReason(transferReason)
+    await courseTransferPage.fillPostalAddressDetails(address)
 
     await courseTransferPage.clickReviewAndConfirm()
-    await courseTransferPage.clickConfirmTransfer(
-      courses[1].id, // courseId
-      transferReason,
-    )
+    await courseTransferPage.clickConfirmTransfer(courses[1].id, transferReason)
 
     /*
     After confirming the transfer, we execute a mutation to transfer the attendee to the new course.

@@ -495,6 +495,7 @@ export const CourseBookingReview: React.FC<
             checked={accept}
           />
         }
+        data-testid="accept-terms"
         label={
           isUKCountry(course?.residingCountry) ? (
             <Typography variant="body2">
@@ -583,6 +584,7 @@ export const CourseBookingReview: React.FC<
           onClick={handleConfirmBooking}
           disabled={!accept}
           loading={creatingOrder}
+          data-testid="confirm-button"
         >
           {t('pages.book-course.complete-booking')}
         </LoadingButton>

@@ -142,3 +142,34 @@ export type OrderCreation = {
 export type CourseOrderCreation = {
   order_id: string
 }
+export type RegistrantAddress = {
+  addresLine1: string
+  addresLine2: string
+  city: string
+  postcode: string
+  country: string
+}
+
+export type VirtualCourseRegistrant = {
+  email: string
+  address: RegistrantAddress
+}
+
+export type VirtualCourseBookingDetails = {
+  organization: string
+  bookingContactEmail: string
+  registrants: VirtualCourseRegistrant[]
+  invoiceDetails: InvoiceDetails
+  orderId: string
+}
+export type TransferEligibleCourses = {
+  courseId: number
+  level: string
+  type: string
+  deliveryType: string
+  reaccreditation: boolean
+  courseCode: string
+  venueName: string | null
+  venueCity: string | null
+  venueCountry: string | null
+}

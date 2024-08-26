@@ -170,7 +170,11 @@ export const UNIQUE_COURSE: () => Course = () => ({
       start: addMonths(new Date(new Date().setHours(8, 0)), 2),
       end: addMonths(new Date(new Date().setHours(17, 0)), 2),
       venue: buildVenue({
-        overrides: { name: 'Queen Elizabeth II Centre' },
+        overrides: {
+          name: 'Queen Elizabeth II Centre',
+          country: 'England',
+          countryCode: 'GB-ENG',
+        },
       }),
     },
   ],

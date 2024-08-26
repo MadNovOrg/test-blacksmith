@@ -9,6 +9,7 @@ import { CourseHeader } from '@qa/fixtures/components/CourseHeader.fixture'
 import { UiTable } from '@qa/fixtures/components/UiTable.fixture'
 import { BasePage } from '@qa/fixtures/pages/BasePage.fixture'
 
+import { BookingDetailsPage } from '../../booking/BookingDetailsPage.fixture'
 import { CourseGradingPage } from '../CourseGradingPage.fixture'
 import { CourseTransferPage } from '../CourseTransferPage.fixture'
 
@@ -52,6 +53,7 @@ export class CourseDetailsPage extends BasePage {
   readonly startDateLabel: Locator
   readonly endDateLabel: Locator
   readonly dateFormat: string
+  readonly addRegistrantsButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -108,6 +110,9 @@ export class CourseDetailsPage extends BasePage {
     this.startDateLabel = this.page.locator('[data-testid="startDate-label"]')
     this.endDateLabel = this.page.locator('[data-testid="endDate-label"]')
     this.dateFormat = 'd MMMM yyyy'
+    this.addRegistrantsButton = this.page.locator(
+      '[data-testid="add-registrants-btn"]',
+    )
   }
 
   async goto(courseId: string) {
@@ -213,7 +218,8 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async clickAttendeeTransfer(): Promise<CourseTransferPage> {
-    await this.page.locator('[data-testid=attendee-transfer]').click()
+    await this.page.getByTestId('attendee-transfer').click()
+
     return new CourseTransferPage(this.page)
   }
 
@@ -353,5 +359,10 @@ export class CourseDetailsPage extends BasePage {
         }
       })
     }
+  }
+
+  async clickAddRegistrantsButton() {
+    await this.addRegistrantsButton.click()
+    return new BookingDetailsPage(this.page)
   }
 }

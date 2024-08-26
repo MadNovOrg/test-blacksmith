@@ -2,14 +2,11 @@ import InfoIcon from '@mui/icons-material/Info'
 import { Box, Grid, TextField, Tooltip, Typography } from '@mui/material'
 import { t } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
 import CountriesSelector from '@app/components/CountriesSelector'
-import useWorldCountries, {
-  UKsCountriesCodes,
-} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { yup } from '@app/schemas'
 import { requiredMsg, isValidUKPostalCode } from '@app/util'
@@ -46,14 +43,6 @@ export const ParticipantPostalAddressForm = () => {
   )
 
   const { getLabel } = useWorldCountries()
-
-  const checkIsParticipantUKCountry = useCallback(() => {
-    if (!values.inviteeCountry) return true
-
-    return (Object.values(UKsCountriesCodes) as string[]).includes(
-      values.inviteeCountry,
-    )
-  }, [values.inviteeCountry])
 
   return (
     <Grid item md={12}>
@@ -115,33 +104,25 @@ export const ParticipantPostalAddressForm = () => {
           helperText={errors.inviteePostCode?.message}
           id="postCode"
           inputProps={{ 'data-testid': 'postCode' }}
-          label={
-            checkIsParticipantUKCountry()
-              ? t('components.venue-selector.modal.fields.postCode')
-              : t('components.venue-selector.modal.fields.zipCode')
-          }
+          label={t('components.venue-selector.modal.fields.postCode')}
           placeholder={t('common.addr.postCode')}
           sx={{ bgcolor: 'grey.100' }}
-          type={checkIsParticipantUKCountry() ? 'text' : 'number'}
+          type={'text'}
           variant="filled"
           {...register('inviteePostCode')}
           InputLabelProps={{
             shrink: Boolean(values.inviteePostCode),
           }}
-          InputProps={
-            checkIsParticipantUKCountry()
-              ? {
-                  endAdornment: (
-                    <Tooltip
-                      title={t('post-code-tooltip')}
-                      data-testid="post-code-tooltip"
-                    >
-                      <InfoIcon color={'action'} />
-                    </Tooltip>
-                  ),
-                }
-              : undefined
-          }
+          InputProps={{
+            endAdornment: (
+              <Tooltip
+                title={t('post-code-tooltip')}
+                data-testid="post-code-tooltip"
+              >
+                <InfoIcon color={'action'} />
+              </Tooltip>
+            ),
+          }}
           required
         />
       </Box>
@@ -157,6 +138,7 @@ export const ParticipantPostalAddressForm = () => {
             }}
             value={values.inviteeCountryCode}
             onBlur={() => trigger('inviteeCountry')}
+            onlyUKCountries={true}
           />
         ) : (
           <CountryDropdown
