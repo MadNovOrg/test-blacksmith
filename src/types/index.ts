@@ -919,3 +919,8 @@ export type Strategy = {
   modules?: BILDModule[]
   groups?: BILDModuleGroup[]
 }
+
+export enum AwsRegions {
+  UK = 'eu-west-2',
+  Australia = 'ap-southeast-2',
+}

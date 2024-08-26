@@ -16,7 +16,9 @@ import './i18n/config'
 
 import App from './App'
 import { ErrorPage } from './components/ErrorPage'
+import { amplifyConfig } from './lib/amplify'
 import theme from './theme'
+import { AwsRegions } from './types'
 
 import.meta.env.VITE_APP_VERSION
   ? console.info(`App version is ${import.meta.env.VITE_APP_VERSION}`)
@@ -40,13 +42,7 @@ Sentry.init({
   ),
 })
 
-Amplify.configure({
-  Auth: {
-    region: import.meta.env.VITE_AWS_REGION,
-    userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID,
-    userPoolWebClientId: import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID,
-  },
-})
+Amplify.configure(amplifyConfig[import.meta.env.VITE_AWS_REGION as AwsRegions])
 
 TagManager.initialize({ gtmId: import.meta.env.VITE_GTM_ID })
 

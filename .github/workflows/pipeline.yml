@@ -23,6 +23,8 @@ on:
         required: true
       cognito_user_pool_client_id:
         required: true
+      cognito_user_pool_id_au:
+      cognito_user_pool_client_id_au:
       hasura_endpoint:
         required: true
       hasura_ws_endpoint:
@@ -84,6 +86,8 @@ jobs:
           VITE_AWS_REGION: ${{ inputs.aws_region }}
           VITE_COGNITO_USER_POOL_ID: ${{ secrets.cognito_user_pool_id }}
           VITE_COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.cognito_user_pool_client_id }}
+          VITE_COGNITO_USER_POOL_ID_AU: ${{ secrets.cognito_user_pool_id_au }}
+          VITE_COGNITO_USER_POOL_CLIENT_ID_AU: ${{ secrets.cognito_user_pool_client_id_au }}
           VITE_HASURA_GRAPHQL_API: '${{ secrets.hasura_endpoint }}/v1/graphql'
           VITE_HASURA_WS_GRAPHQL_API: '${{ secrets.hasura_ws_endpoint }}/v1/graphql'
           VITE_BASE_WORDPRESS_URL: '${{ secrets.wp_host }}'
