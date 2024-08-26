@@ -37,7 +37,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
+        run: pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm lint
@@ -69,7 +69,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
+        run: pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
 
       - name: Test
         run: |

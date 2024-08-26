@@ -3,7 +3,7 @@ name: E2E smoke tests
 on:
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   e2e-smoke-tests:
@@ -20,7 +20,7 @@ jobs:
       postgres:
         image: postgres:14
         ports:
-        - 6432:6432
+          - 6432:6432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: root
@@ -33,7 +33,7 @@ jobs:
       pgbouncer:
         image: edoburu/pgbouncer:latest
         ports:
-        - 5432:5432
+          - 5432:5432
         env:
           DB_USER: postgres
           DB_PASSWORD: root
@@ -47,60 +47,60 @@ jobs:
       graphql-engine:
         image: hasura/graphql-engine:v2.28.2-ce.cli-migrations-v3
         ports:
-        - 8080:8080
+          - 8080:8080
         env:
           HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@pgbouncer:5432/tth-db
           HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
           HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
           HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}'
     steps:
-    - name: Set Environment Variables
-      run: |
-        echo "CI=${{ env.CI }}" >> $GITHUB_ENV
+      - name: Set Environment Variables
+        run: |
+          echo "CI=${{ env.CI }}" >> $GITHUB_ENV
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v3
-      with:
-        version: 8
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
-    - name: Build
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18.14.2'
-        cache: 'pnpm'
+      - name: Build
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.14.2'
+          cache: 'pnpm'
 
-    - name: Install dependencies
-      run: pnpm pkg delete scripts.prepare && pnpm i
+      - name: Install dependencies
+        run: pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
 
-    - name: Hasura Migration
-      run: |
-        cp hasura/.env.sample hasura/.env
-        pnpm hasura metadata apply
-        pnpm hasura migrate apply --database-name default
-        pnpm hasura migrate status --database-name default
-        pnpm hasura metadata reload
-        pnpm hasura migrate apply --goto 101 --database-name default
-        pnpm hasura migrate status --database-name default
-        pnpm hasura migrate apply --database-name default
-        pnpm hasura migrate status --database-name default
-        pnpm hasura metadata reload
+      - name: Hasura Migration
+        run: |
+          cp hasura/.env.sample hasura/.env
+          pnpm hasura metadata apply
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
+          pnpm hasura migrate apply --goto 101 --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura migrate apply --database-name default
+          pnpm hasura migrate status --database-name default
+          pnpm hasura metadata reload
 
-    - name: Hasura Seed Data
-      run: pnpm hasura seed apply --database-name default
+      - name: Hasura Seed Data
+        run: pnpm hasura seed apply --database-name default
 
-    - name: Playwright setup
-      run: pnpm playwright install --with-deps
+      - name: Playwright setup
+        run: pnpm playwright install --with-deps
 
-    - name: Playwright tests
-      id: playwright
-      run: pnpm nx e2e:smoke @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      - name: Playwright tests
+        id: playwright
+        run: pnpm nx e2e:smoke @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
-    - name: Playwright report
-      uses: actions/upload-artifact@v3
-      if: failure() && steps.playwright.outcome == 'failure'
-      with:
-        name: test-artifacts
-        path: test-results
+      - name: Playwright report
+        uses: actions/upload-artifact@v3
+        if: failure() && steps.playwright.outcome == 'failure'
+        with:
+          name: test-artifacts
+          path: test-results

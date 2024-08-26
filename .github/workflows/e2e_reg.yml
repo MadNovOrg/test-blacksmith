@@ -60,7 +60,7 @@ jobs:
           key: playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
+        run: pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
