@@ -16,7 +16,7 @@ import * as Sentry from '@sentry/react'
 import { cond, constant, matches, stubTrue } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
@@ -24,14 +24,15 @@ import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Level_Enum,
+  GetCourseByIdQuery,
   ModuleSettingsQuery,
   SaveCourseModulesBildMutation,
   SaveCourseModulesBildMutationVariables,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
+import { SaveCourse } from '@app/modules/course/pages/CreateCourse/useSaveCourse'
 import { SAVE_COURSE_MODULES_BILD } from '@app/modules/course/queries/save-course-modules-bild'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
-import { Strategy } from '@app/types'
 import {
   LoadingStatus,
   formatDurationShort,
@@ -39,6 +40,7 @@ import {
 } from '@app/util'
 
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
+import { getBackButtonForBuilderPage } from '../../utils'
 import { Hero } from '../Hero/Hero'
 import { ModuleAccordion } from '../ICMCourseBuilderV2/components/ModuleAccordion/ModuleAccordion'
 import { useModuleSettings } from '../ICMCourseBuilderV2/hooks/useModuleSettings'
@@ -47,55 +49,47 @@ import { LeftPane, PanesContainer, RightPane } from '../Panes/Panes'
 import { StrategyAccordion } from './components/StrategyAccordion'
 import { StrategyAccordionSummary } from './components/StrategyAccordionSummary'
 import { hasKeyStartingWith } from './helpers'
-import { getDisabledStrategies, getPreselectedModules } from './utils'
+import {
+  getDisabledStrategies,
+  getPreselectedModules,
+  transformBILDModules,
+} from './utils'
 
-function transformSelection(selectedModules: Record<string, boolean>) {
-  const transformedSelection: Record<string, Strategy> = {}
-
-  Object.keys(selectedModules).forEach(key => {
-    if (selectedModules[key]) {
-      const [strategyName, ...parts] = key.split('.')
-
-      if (!transformedSelection[strategyName]) {
-        transformedSelection[strategyName] = {
-          groups: [],
-          modules: [],
-        }
-      }
-
-      if (parts.length === 2) {
-        const [groupName, moduleName] = parts
-
-        const existingGroup = transformedSelection[strategyName].groups?.find(
-          group => group.name === groupName,
-        )
-
-        let group = transformedSelection[strategyName].groups?.find(
-          group => group.name === groupName,
-        ) ?? {
-          name: groupName,
-          modules: [],
-        }
-
-        if (!existingGroup) {
-          transformedSelection[strategyName].groups?.push(group)
-        } else {
-          group = existingGroup
-        }
-
-        group.modules.push({ name: moduleName })
-      } else if (parts.length === 1) {
-        const [module] = parts
-
-        transformedSelection[strategyName].modules?.push({ name: module })
-      }
-    }
-  })
-
-  return transformedSelection
+export type BILDBuilderCourseData = {
+  course: Pick<
+    Exclude<GetCourseByIdQuery['course'], null | undefined>,
+    | 'bildStrategies'
+    | 'conversion'
+    | 'course_code'
+    | 'curriculum'
+    | 'deliveryType'
+    | 'go1Integration'
+    | 'id'
+    | 'isDraft'
+    | 'level'
+    | 'name'
+    | 'reaccreditation'
+    | 'type'
+    | 'updatedAt'
+  > & {
+    organization?: { name: string }
+    schedule: (Pick<
+      Exclude<GetCourseByIdQuery['course'], null | undefined>['schedule'][0],
+      'end' | 'start' | 'timeZone'
+    > & { venue?: { name: string; city: string } | null })[]
+  }
 }
 
-type BILDCourseBuilderProps = unknown
+type BILDCourseBuilderProps = {
+  data?: BILDBuilderCourseData
+  initialStrategyModules?: Record<string, boolean>
+  onModuleSelectionChange?: (data: {
+    bildModules: ModuleSettingsQuery['moduleSettings']
+    modulesDuration: number
+    strategyModules: Record<string, boolean>
+  }) => void
+  onSubmit?: SaveCourse
+}
 
 const mapCourseLevelToDuration = cond([
   [
@@ -143,9 +137,10 @@ const mapCourseLevelToDuration = cond([
 
 export const BILDCourseBuilder: React.FC<
   React.PropsWithChildren<BILDCourseBuilderProps>
-> = () => {
+> = ({ data, initialStrategyModules, onModuleSelectionChange, onSubmit }) => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+  const { pathname } = useLocation()
 
   const navigate = useNavigate()
   const { acl } = useAuth()
@@ -172,10 +167,19 @@ export const BILDCourseBuilder: React.FC<
 
   const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
-  const [{ data: courseData, error: courseDataError }] = useCourseToBuild({
-    courseId: Number(courseId),
-    withStrategies: true,
-  })
+  const [{ data: existingCourseData, error: courseDataError }] =
+    useCourseToBuild({
+      courseId: Number(courseId),
+      pause: Boolean(data),
+      withStrategies: true,
+    })
+
+  const courseData = useMemo(
+    () => data ?? existingCourseData,
+    [data, existingCourseData],
+  )
+
+  const isExistingCourse = !data && courseId
 
   const [
     { data: moduleSettingsData, error: modulesError, fetching: modulesLoading },
@@ -214,18 +218,28 @@ export const BILDCourseBuilder: React.FC<
     return courseLevel === Course_Level_Enum.BildRegular
   }, [courseData?.course])
 
-  const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
+  const courseLoadingStatus = isExistingCourse
+    ? getSWRLoadingStatus(courseData, courseDataError)
+    : LoadingStatus.SUCCESS
 
   const setInitialStrategyModules = useCallback(() => {
-    setSelectedStrategyModules(
-      courseData?.course
-        ? getPreselectedModules({
-            courseLevel: courseData.course.level,
-            courseStrategies: courseData.course.bildStrategies ?? [],
-            allStrategies: bildStrategies,
-          })
-        : {},
-    )
+    if (
+      initialStrategyModules &&
+      Object.entries(initialStrategyModules ?? {}).length
+    ) {
+      setSelectedStrategyModules(initialStrategyModules)
+    } else {
+      setSelectedStrategyModules(
+        courseData?.course
+          ? getPreselectedModules({
+              courseLevel: courseData.course.level,
+              courseStrategies: courseData.course.bildStrategies ?? [],
+              allStrategies: bildStrategies,
+            })
+          : {},
+      )
+    }
+
     setDisabledStrategies(
       courseData?.course
         ? getDisabledStrategies({
@@ -235,7 +249,7 @@ export const BILDCourseBuilder: React.FC<
         : {},
     )
     setSubmitError(undefined)
-  }, [bildStrategies, courseData?.course])
+  }, [bildStrategies, courseData?.course, initialStrategyModules])
 
   useEffect(() => {
     if (courseData && Object.keys(selectedStrategyModules).length === 0) {
@@ -311,6 +325,21 @@ export const BILDCourseBuilder: React.FC<
     return total
   }, [selectedStrategyModules, courseStrategies])
 
+  useEffect(() => {
+    if (onModuleSelectionChange) {
+      onModuleSelectionChange({
+        bildModules: selectedModules,
+        modulesDuration: estimatedDuration,
+        strategyModules: selectedStrategyModules,
+      })
+    }
+  }, [
+    estimatedDuration,
+    onModuleSelectionChange,
+    selectedModules,
+    selectedStrategyModules,
+  ])
+
   const handleSubmit = async () => {
     const course = courseData?.course
     if (!course) return
@@ -332,32 +361,31 @@ export const BILDCourseBuilder: React.FC<
             { name: t(`common.bild-strategies.${strategyName}`) },
           ),
         )
-        return
       }
     })
 
     if (hasError) return
 
-    const transformedSelection = transformSelection(selectedStrategyModules)
-    const modulesSelection: Record<string, { groups: []; modules: unknown[] }> =
-      {}
-
-    selectedModules.forEach(moduleSetting => {
-      modulesSelection[
-        moduleSetting.module.displayName ?? moduleSetting.module.name
-      ] = {
-        groups: [],
-        modules: moduleSetting.module.lessons.items,
-      }
-    })
+    let id = Number(courseId)
+    let courseCode = courseData?.course?.course_code
 
     try {
-      await saveStrategies({
-        courseId: course.id,
-        modules: { ...transformedSelection, ...modulesSelection },
-        duration: estimatedDuration,
-        status: null,
-      })
+      if (onSubmit) {
+        const resp = await onSubmit()
+
+        id = Number(resp?.id)
+        courseCode = resp?.courseCode
+      } else {
+        await saveStrategies({
+          courseId: course.id,
+          modules: transformBILDModules({
+            modules: selectedModules,
+            strategyModules: selectedStrategyModules,
+          }),
+          duration: estimatedDuration,
+          status: null,
+        })
+      }
     } catch (e) {
       Sentry.captureException(e)
     }
@@ -367,20 +395,26 @@ export const BILDCourseBuilder: React.FC<
         label: (
           <Trans
             i18nKey="pages.trainer-base.create-course.new-course.submitted-course"
-            values={{ code: course.course_code }}
+            values={{ code: courseCode }}
           >
             <Link
               underline="always"
-              href={`/manage-courses/all/${course.id}/details`}
+              href={`/${
+                acl.isInternalUser() ? 'manage-courses/all' : 'courses'
+              }/${id}/details`}
             >
-              {course.course_code}
+              {courseCode}
             </Link>
           </Trans>
         ),
       })
     }
 
-    navigate('../details')
+    navigate(
+      `/${
+        acl.isInternalUser() ? 'manage-courses/all' : 'courses'
+      }/${id}/details`,
+    )
   }
 
   useEffect(() => {
@@ -417,6 +451,14 @@ export const BILDCourseBuilder: React.FC<
     }
   }, [moduleSettingsData])
 
+  const backButton = useMemo(() => {
+    return getBackButtonForBuilderPage({
+      editMode: false,
+      existsCourse: Boolean(courseId) && !pathname.includes('draft'),
+      isInternalUser: acl.isInternalUser(),
+    })
+  }, [acl, courseId, pathname])
+
   if (courseLoadingStatus === LoadingStatus.SUCCESS && !courseData?.course) {
     return (
       <NotFound
@@ -445,10 +487,7 @@ export const BILDCourseBuilder: React.FC<
 
       {bildStrategies.length && courseData?.course && !modulesLoading && (
         <Box pb={6}>
-          <BackButton
-            label={t('pages.course-participants.back-button')}
-            to={acl.isInternalUser() ? '/manage-courses/all' : '/courses'}
-          />
+          <BackButton label={backButton.label} to={backButton.to} />
 
           {submitError || saveStrategiesResult.error ? (
             <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
@@ -665,7 +704,6 @@ export const BILDCourseBuilder: React.FC<
                   variant="outlined"
                   onClick={setInitialStrategyModules}
                   disabled={false}
-                  data-testid="submit-button"
                   fullWidth
                 >
                   {t('common.clear')}

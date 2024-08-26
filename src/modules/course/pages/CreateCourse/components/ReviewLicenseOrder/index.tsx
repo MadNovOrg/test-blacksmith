@@ -62,6 +62,11 @@ export const ReviewLicenseOrder: React.FC<
   }, [setCurrentStepKey])
 
   const handleSubmitButtonClick = async () => {
+    if (acl.isTrainer() && courseData?.type === Course_Type_Enum.Indirect) {
+      navigate(`/courses/new/modules`)
+      return
+    }
+
     const savedCourse = await saveCourse()
 
     if (savedCourse?.id) {

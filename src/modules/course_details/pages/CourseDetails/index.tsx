@@ -478,7 +478,11 @@ export const CourseDetails = () => {
                     <EditIcon
                       sx={{ ml: 2, cursor: 'pointer' }}
                       data-testid="course-edit-tab"
-                      onClick={() => navigate(`/courses/${course.id}/modules`)}
+                      onClick={() =>
+                        navigate(`/courses/${course.id}/modules`, {
+                          state: { editMode: true },
+                        })
+                      }
                     />
                   ) : null}
                 </PillTabList>

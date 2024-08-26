@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { noop } from 'ts-essentials'
 import { Client, Provider } from 'urql'
-import { fromValue } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import { CourseToBuildQuery, Course_Level_Enum } from '@app/generated/graphql'
 import {
@@ -12,12 +12,19 @@ import {
 import { BILDModule, BILDModuleGroup, BildStrategies } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent, within } from '@test/index'
+import {
+  chance,
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+  within,
+} from '@test/index'
 
 import { buildCourse } from '../../test-utils'
 import { useModuleSettings } from '../ICMCourseBuilderV2/hooks/useModuleSettings'
 
-import { BILDCourseBuilder } from './BILDCourseBuilder'
+import { BILDBuilderCourseData, BILDCourseBuilder } from './BILDCourseBuilder'
 
 vi.mock('@app/modules/course/hooks/useBildStrategies')
 vi.mock('../ICMCourseBuilderV2/hooks/useModuleSettings')
@@ -107,6 +114,125 @@ describe('component: BILDCourseBuilder', () => {
       </Provider>,
       {},
       { initialEntries: [`/courses/${courseId}/modules`] },
+    )
+
+    expect(screen.getByText('Modules Available')).toBeInTheDocument()
+    expect(screen.getByText('Course Summary')).toBeInTheDocument()
+    expect(screen.getByText('Course 1')).toBeInTheDocument()
+
+    const leftPane = screen.getByTestId('all-modules')
+
+    expect(within(leftPane).getByLabelText('Module AA')).toBeDisabled()
+    expect(within(leftPane).getByLabelText('Module BB')).not.toBeDisabled()
+
+    const rightPane = screen.getByTestId('course-modules')
+
+    expect(within(rightPane).getByLabelText('Module AA')).toBeInTheDocument()
+    expect(
+      within(rightPane).queryByLabelText('Module BB'),
+    ).not.toBeInTheDocument()
+
+    await userEvent.click(within(leftPane).getByLabelText('Module BB'))
+
+    expect(within(rightPane).queryByLabelText('Module BB')).toBeInTheDocument()
+
+    await userEvent.click(
+      within(leftPane).getByLabelText('Group 1', { exact: false }),
+    )
+
+    expect(within(rightPane).queryByLabelText('Module CC')).toBeInTheDocument()
+    expect(within(rightPane).queryByLabelText('Module DD')).toBeInTheDocument()
+
+    await userEvent.click(
+      within(leftPane).getByTestId(
+        `strategy-${BildStrategies.RestrictiveTertiaryIntermediate}`,
+      ),
+    )
+
+    await userEvent.click(within(leftPane).getByTestId(`expand-button-Group 2`))
+
+    expect(
+      within(leftPane).queryByTestId(
+        `module-${BildStrategies.RestrictiveTertiaryIntermediate}.Group 2.Module EE`,
+      ),
+    ).toBeInTheDocument()
+
+    await userEvent.click(
+      within(leftPane).getByTestId(
+        `module-${BildStrategies.RestrictiveTertiaryIntermediate}.Group 2.Module EE`,
+      ),
+    )
+
+    expect(within(rightPane).queryByLabelText('Module EE')).toBeInTheDocument()
+    expect(within(rightPane).queryByLabelText('Module MM')).toBeInTheDocument()
+  })
+
+  it('renders course builder with course data instead of course id query param', async () => {
+    const primaryStrategy = buildStrategy({
+      name: BildStrategies.Primary,
+      modules: {
+        modules: [buildBILDModule({ name: 'Module AA' })],
+      },
+    })
+
+    const restrictiveIntermediateStrategy = buildStrategy({
+      name: BildStrategies.RestrictiveTertiaryIntermediate,
+      modules: {
+        modules: [buildBILDModule({ name: 'Module BB' })],
+        groups: [
+          buildBILDModuleGroup({
+            name: 'Group 1',
+            modules: [
+              { name: 'Module CC', mandatory: false, duration: 10 },
+              { name: 'Module DD', mandatory: false, duration: 20 },
+            ],
+          }),
+          buildBILDModuleGroup({
+            name: 'Group 2',
+            modules: [
+              buildBILDModule({
+                name: 'Module EE',
+                mandatory: false,
+                duration: 10,
+              }),
+              buildBILDModule({
+                name: 'Module MM',
+                mandatory: true,
+                duration: 20,
+              }),
+            ],
+          }),
+        ],
+      },
+    })
+
+    useBildStrategiesMocked.mockReturnValue({
+      strategies: [primaryStrategy, restrictiveIntermediateStrategy],
+      isLoading: false,
+      error: undefined,
+      status: LoadingStatus.SUCCESS,
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <BILDCourseBuilder
+          data={{
+            course: buildCourse({
+              name: 'Course 1',
+              bildStrategies: [
+                { strategyName: BildStrategies.Primary },
+                {
+                  strategyName: BildStrategies.RestrictiveTertiaryIntermediate,
+                },
+              ],
+            }) as BILDBuilderCourseData['course'],
+          }}
+        />
+      </Provider>,
     )
 
     expect(screen.getByText('Modules Available')).toBeInTheDocument()
@@ -363,6 +489,94 @@ describe('component: BILDCourseBuilder', () => {
     ).not.toBeInTheDocument()
 
     expect(screen.queryByText(/\b(\d+)\s+mins\b/i)).not.toBeInTheDocument()
+  })
+
+  it('submit course builder with no course id, but course data provided instead', async () => {
+    const primaryStrategy = buildStrategy({
+      name: BildStrategies.Primary,
+      modules: {
+        modules: [buildBILDModule({ name: 'Module AA' })],
+      },
+    })
+
+    const restrictiveIntermediateStrategy = buildStrategy({
+      name: BildStrategies.RestrictiveTertiaryIntermediate,
+      modules: {
+        modules: [buildBILDModule({ name: 'Module BB' })],
+        groups: [
+          buildBILDModuleGroup({
+            name: 'Group 1',
+            modules: [
+              buildBILDModule({
+                name: 'Module CC',
+                mandatory: false,
+                duration: 10,
+              }),
+              buildBILDModule({
+                name: 'Module DD',
+                mandatory: false,
+                duration: 20,
+              }),
+            ],
+          }),
+          buildBILDModuleGroup({
+            name: 'Group 2',
+            modules: [
+              buildBILDModule({
+                name: 'Module EE',
+                mandatory: false,
+                duration: 10,
+              }),
+              buildBILDModule({
+                name: 'Module MM',
+                mandatory: true,
+                duration: 20,
+              }),
+            ],
+          }),
+        ],
+      },
+    })
+
+    useBildStrategiesMocked.mockReturnValue({
+      strategies: [primaryStrategy, restrictiveIntermediateStrategy],
+      isLoading: false,
+      error: undefined,
+      status: LoadingStatus.SUCCESS,
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    const onSubmit = vitest.fn()
+    const onBildModuleChange = vitest.fn()
+
+    render(
+      <Provider value={client}>
+        <BILDCourseBuilder
+          data={{
+            course: buildCourse({
+              level: Course_Level_Enum.BildRegular,
+              name: 'Course 1',
+              bildStrategies: [
+                {
+                  strategyName: BildStrategies.Primary,
+                },
+              ],
+            }) as BILDBuilderCourseData['course'],
+          }}
+          onSubmit={onSubmit}
+          onModuleSelectionChange={onBildModuleChange}
+        />
+      </Provider>,
+      {},
+    )
+
+    expect(onBildModuleChange).toHaveBeenCalled()
+
+    fireEvent.click(screen.getByTestId('submit-button'))
+    expect(onSubmit).toHaveBeenCalled()
   })
 })
 

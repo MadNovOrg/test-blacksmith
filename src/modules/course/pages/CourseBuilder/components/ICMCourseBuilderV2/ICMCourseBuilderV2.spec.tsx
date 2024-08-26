@@ -27,6 +27,71 @@ import { ICMCourseBuilderV2 } from './ICMCourseBuilderV2'
 
 const user = userEvent.setup()
 
+it('override onSubmit method', async () => {
+  const course = buildCourse({
+    type: Course_Type_Enum.Indirect,
+    level: Course_Level_Enum.AdvancedTrainer,
+  }) as NonNullable<CourseToBuildQuery['course']> & {
+    organization: { name: string }
+  }
+
+  const onModulesChange = vi.fn()
+  const onSubmit = vi.fn()
+
+  const moduleSetting = buildModuleSetting({ mandatory: false, duration: 30 })
+
+  const client = {
+    executeMutation: () => never,
+    executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+      if (query === COURSE_TO_BUILD_QUERY) {
+        return fromValue<{ data: CourseToBuildQuery }>({
+          data: {
+            course,
+          },
+        })
+      }
+
+      if (query === MODULE_SETTINGS_QUERY) {
+        return fromValue<{ data: ModuleSettingsQuery }>({
+          data: {
+            moduleSettings: [moduleSetting],
+          },
+        })
+      }
+    },
+  } as unknown as Client
+
+  render(
+    <Provider value={client}>
+      <ICMCourseBuilderV2
+        data={{ course }}
+        onModuleSelectionChange={onModulesChange}
+        onSubmit={onSubmit}
+      />
+    </Provider>,
+  )
+
+  const availableModules = screen.getByTestId('available-modules')
+
+  const moduleGroupLabel = within(availableModules).getByLabelText(
+    moduleSetting.module.name,
+    {
+      exact: false,
+    },
+  )
+
+  await userEvent.click(moduleGroupLabel)
+
+  expect(onModulesChange).toHaveBeenCalled()
+
+  const submitBtn = screen.getByRole('button', { name: /submit/i })
+  expect(submitBtn).toBeEnabled()
+
+  await userEvent.click(submitBtn)
+
+  expect(onSubmit).toHaveBeenCalled()
+})
+
 it('toggles a module selection', async () => {
   const course = buildCourse({
     type: Course_Type_Enum.Closed,
@@ -334,7 +399,7 @@ it.each([
   },
 )
 
-// https://behaviourhub.atlassian.net/browse/TTHP-3619 - Advanced Trainer Re-accreditation
+//behaviourhub.atlassian.net/browse/TTHP-3619 - Advanced Trainer Re-accreditation
 it.each([[Course_Level_Enum.AdvancedTrainer, true]])(
   'does not display the time commitment modal if course is %s level and reaccreditation is %b',
   async (level, reaccreditation) => {

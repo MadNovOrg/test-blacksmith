@@ -30,6 +30,9 @@ import { DraftConfirmationDialog } from '@app/modules/trainer_courses/components
 import { useCreateCourse } from './components/CreateCourseProvider'
 import { CreateCourseSteps } from './components/CreateCourseSteps'
 
+const excludeCourseStepsPathnames = ['/courses/new/modules']
+const whiteBackgroundPathnames = ['/courses/new/modules']
+
 export const CreateCoursePage = () => {
   const [searchParams] = useSearchParams()
   const location = useLocation()
@@ -37,6 +40,10 @@ export const CreateCoursePage = () => {
 
   const { acl } = useAuth()
   const navigate = useNavigate()
+
+  const isDraftCourseBuilderPage = useMemo(() => {
+    return draftId && location.pathname.includes('modules')
+  }, [draftId, location.pathname])
 
   const {
     completedSteps,
@@ -60,6 +67,11 @@ export const CreateCoursePage = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const isDraft = location.pathname.indexOf('draft') > -1
+
+  const includeCourseSteps = !(
+    excludeCourseStepsPathnames.includes(location.pathname) ||
+    isDraftCourseBuilderPage
+  )
 
   const courseType = useMemo(() => {
     const qsType =
@@ -86,7 +98,14 @@ export const CreateCoursePage = () => {
   }
 
   return (
-    <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
+    <FullHeightPageLayout
+      bgcolor={
+        whiteBackgroundPathnames.includes(location.pathname) ||
+        isDraftCourseBuilderPage
+          ? undefined
+          : theme.palette.grey[100]
+      }
+    >
       <Helmet>
         <title>
           {location.pathname.includes('drafts')
@@ -96,37 +115,43 @@ export const CreateCoursePage = () => {
               })}
         </title>
       </Helmet>
-      <Container maxWidth="lg" sx={{ pt: 2 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ pt: includeCourseSteps ? 2 : 0 }}
+        disableGutters
+      >
         <Box display="flex" flexDirection={isMobile ? 'column' : 'row'}>
-          <Box width={400} display="flex" flexDirection="column" pr={4}>
-            <Sticky top={20}>
-              <Box mb={2}>
-                <BackButton
-                  label={
-                    isDraft
-                      ? t('pages.create-course.back-to-all-drafts-button')
-                      : t('pages.create-course.back-to-all-courses-button')
-                  }
-                  to={isDraft ? '/drafts' : '/courses'}
-                />
-              </Box>
-              <Box mb={isMobile ? 2 : 7}>
-                <Typography variant="h2" mb={2}>
-                  {t(`pages.create-course.${courseType}-course-title`)}
-                </Typography>
-              </Box>
+          {!includeCourseSteps ? null : (
+            <Box width={400} display="flex" flexDirection="column" pr={4}>
+              <Sticky top={20}>
+                <Box mb={2}>
+                  <BackButton
+                    label={
+                      isDraft
+                        ? t('pages.create-course.back-to-all-drafts-button')
+                        : t('pages.create-course.back-to-all-courses-button')
+                    }
+                    to={isDraft ? '/drafts' : '/courses'}
+                  />
+                </Box>
+                <Box mb={isMobile ? 2 : 7}>
+                  <Typography variant="h2" mb={2}>
+                    {t(`pages.create-course.${courseType}-course-title`)}
+                  </Typography>
+                </Box>
 
-              <CreateCourseSteps
-                completedSteps={completedSteps ?? []}
-                type={courseType}
-                currentStepKey={currentStepKey ?? undefined}
-                blendedLearning={courseData?.blendedLearning ?? false}
-              />
-            </Sticky>
-          </Box>
+                <CreateCourseSteps
+                  completedSteps={completedSteps ?? []}
+                  type={courseType}
+                  currentStepKey={currentStepKey ?? undefined}
+                  blendedLearning={courseData?.blendedLearning ?? false}
+                />
+              </Sticky>
+            </Box>
+          )}
 
           <Box flex={1}>
-            <Box mt={isMobile ? 0 : 8}>
+            <Box mt={isMobile || !includeCourseSteps ? 0 : 8}>
               <Outlet />
             </Box>
           </Box>

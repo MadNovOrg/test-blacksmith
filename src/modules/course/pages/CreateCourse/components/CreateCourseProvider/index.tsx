@@ -14,6 +14,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Type_Enum,
+  ModuleSettingsQuery,
   SetCourseDraftMutation,
   SetCourseDraftMutationVariables,
 } from '@app/generated/graphql'
@@ -87,6 +88,37 @@ export const CreateCourseProvider: React.FC<
   const [currentStepKey, setCurrentStepKey] = useState<StepsEnum | null>(
     initialValue?.currentStepKey ?? null,
   )
+
+  const [curriculum, setCurriculum] = useState<{
+    curriculum: ModuleSettingsQuery['moduleSettings'][0]['module'][]
+    modulesDuration: number
+  } | null>(null)
+
+  const [bildStrategyModules, setBildStrategyModules] = useState<{
+    modules: Record<string, boolean>
+    modulesDuration: number
+  } | null>(null)
+
+  const [bildModules, setBildModules] = useState<
+    ModuleSettingsQuery['moduleSettings'] | null
+  >(null)
+
+  const selectedBildStrategiesLength = useMemo(() => {
+    return [
+      courseData?.bildStrategies?.NON_RESTRICTIVE_TERTIARY,
+      courseData?.bildStrategies?.PRIMARY,
+      courseData?.bildStrategies?.RESTRICTIVE_TERTIARY_ADVANCED,
+      courseData?.bildStrategies?.RESTRICTIVE_TERTIARY_INTERMEDIATE,
+      courseData?.bildStrategies?.SECONDARY,
+    ].filter(Boolean).length
+  }, [
+    courseData?.bildStrategies?.NON_RESTRICTIVE_TERTIARY,
+    courseData?.bildStrategies?.PRIMARY,
+    courseData?.bildStrategies?.RESTRICTIVE_TERTIARY_ADVANCED,
+    courseData?.bildStrategies?.RESTRICTIVE_TERTIARY_INTERMEDIATE,
+    courseData?.bildStrategies?.SECONDARY,
+  ])
+
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined,
   )
@@ -121,6 +153,22 @@ export const CreateCourseProvider: React.FC<
         ),
     )
   }, [courseData?.type, pathname, profile?.id, searchParams])
+
+  useEffect(() => {
+    setBildModules(null)
+    setCurriculum(null)
+  }, [
+    courseData?.accreditedBy,
+    courseData?.conversion,
+    courseData?.courseLevel,
+    courseData?.reaccreditation,
+    courseData?.type,
+    go1Licensing,
+  ])
+
+  useEffect(() => {
+    setBildStrategyModules(null)
+  }, [courseData?.accreditedBy, selectedBildStrategiesLength])
 
   const seniorOrPrincipalLead = useMemo(() => {
     return trainers.some(t =>
@@ -288,12 +336,15 @@ export const CreateCourseProvider: React.FC<
 
   const value: ContextValue = useMemo(() => {
     return {
+      bildModules,
+      bildStrategyModules,
       completedSteps,
       completeStep,
       courseData,
       courseName,
       courseType,
       currentStepKey,
+      curriculum,
       draftName,
       exceptions,
       expenses,
@@ -302,8 +353,11 @@ export const CreateCourseProvider: React.FC<
       invoiceDetails,
       pricing: { amount: 0, error: false },
       saveDraft,
+      setBildModules,
+      setBildStrategyModules,
       setCourseData,
       setCurrentStepKey,
+      setCurriculum,
       setExpenses,
       setGo1Licensing,
       setInvoiceDetails,
@@ -313,12 +367,15 @@ export const CreateCourseProvider: React.FC<
       trainers,
     }
   }, [
+    bildModules,
+    bildStrategyModules,
     completedSteps,
     completeStep,
     courseData,
     courseName,
     courseType,
     currentStepKey,
+    curriculum,
     draftName,
     exceptions,
     expenses,

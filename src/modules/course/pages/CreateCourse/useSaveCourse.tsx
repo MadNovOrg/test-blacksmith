@@ -45,6 +45,8 @@ import {
 } from '@app/types'
 import { LoadingStatus, getMandatoryCourseMaterialsCost } from '@app/util'
 
+import { transformBILDModules } from '../CourseBuilder/components/BILDCourseBuilder/utils'
+
 import { useCreateCourse } from './components/CreateCourseProvider'
 import { getCourseRenewalCycle } from './utils'
 
@@ -154,13 +156,16 @@ export function useSaveCourse(): {
   saveCourse: SaveCourse
 } {
   const {
+    bildModules,
+    bildStrategyModules,
     courseData,
-    expenses,
-    trainers,
-    go1Licensing,
-    exceptions,
     courseName,
+    curriculum,
+    exceptions,
+    expenses,
+    go1Licensing,
     invoiceDetails,
+    trainers,
   } = useCreateCourse()
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry } = useWorldCountries()
@@ -321,6 +326,28 @@ export function useSaveCourse(): {
         course: {
           /// TODO: Delete this after Arlo migration
           arloReferenceId: courseData.arloReferenceId,
+
+          bildModules:
+            courseData.accreditedBy === Accreditors_Enum.Bild &&
+            (bildStrategyModules || bildModules)
+              ? {
+                  data: [
+                    {
+                      modules: transformBILDModules({
+                        strategyModules: bildStrategyModules?.modules ?? {},
+                        modules: bildModules ?? [],
+                      }),
+                    },
+                  ],
+                }
+              : undefined,
+
+          curriculum: curriculum?.curriculum ?? undefined,
+          modulesDuration:
+            courseData.accreditedBy === Accreditors_Enum.Icm
+              ? curriculum?.modulesDuration ?? 0
+              : bildStrategyModules?.modulesDuration ?? 0,
+
           name: courseName,
           deliveryType: courseData.deliveryType,
           accreditedBy: courseData.accreditedBy,
@@ -533,10 +560,14 @@ export function useSaveCourse(): {
     profile?.email,
     profile?.phone,
     insertCourse,
+    bildStrategyModules,
+    bildModules,
+    curriculum?.curriculum,
+    curriculum?.modulesDuration,
     courseName,
     isOpenCourse,
-    expenses,
     mandatoryCourseMaterialsCostEnabled,
+    expenses,
     courseHasManualPrice,
     setDateTimeTimeZone,
     draftId,

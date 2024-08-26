@@ -64,7 +64,8 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
         </title>
       </Helmet>
 
-      {courseData?.course?.accreditedBy === Accreditors_Enum.Icm ? (
+      {courseData &&
+      courseData?.course?.accreditedBy === Accreditors_Enum.Icm ? (
         <ICMCourseBuilderV2 editMode={editMode ?? false} />
       ) : null}
 

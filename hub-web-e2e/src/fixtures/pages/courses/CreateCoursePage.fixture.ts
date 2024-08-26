@@ -330,15 +330,12 @@ export class CreateCoursePage extends BasePage {
   }> {
     await this.nextPageButton.click()
     await this.proceedOnExceptions()
-    const response = await this.page.waitForResponse(
-      res =>
-        res.request().url().includes('/graphql') &&
-        (res.request().postData() as string).includes('insert_course'),
-    )
-    const data = await response.json()
+
+    await this.page.waitForURL(/.*\/courses\/new\/modules/)
+
     return {
-      id: data.data.insertCourse.id,
-      courseCode: data.data.insertCourse.course_code,
+      id: 0,
+      courseCode: 'code',
     }
   }
 

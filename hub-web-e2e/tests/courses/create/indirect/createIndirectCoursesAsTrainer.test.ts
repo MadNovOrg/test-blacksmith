@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-conditional-in-test */
 import { test as base, expect } from '@playwright/test'
 
 import {
@@ -73,8 +74,8 @@ indirectLevels.forEach(level => {
         )[0].optionalModules.map(module => module.name),
       )
     }
-    await courseBuilderPage.clickSubmitButton()
-    course.id = courseBuilder.id
+    const { newCourse } = await courseBuilderPage.clickSubmitButton()
+    course.id = newCourse?.id as number
     courseIDToDelete = course.id
     coursesListPage.waitForPageLoad()
     expect(page.url()).toContain(course.id.toString())
@@ -100,7 +101,7 @@ indirectLevels.forEach(level => {
       deliveryType: Course_Delivery_Type_Enum.F2F,
     })
 
-    const createCourse = await createCoursePage.clickCreateCourseButton()
+    await createCoursePage.clickCreateCourseButton()
     const courseBuilderPage = new CourseBuilderPage(page)
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
@@ -109,8 +110,8 @@ indirectLevels.forEach(level => {
         )[0].optionalModules.map(module => module.name),
       )
     }
-    await courseBuilderPage.clickSubmitButton()
-    course.id = createCourse.id
+    const { newCourse } = await courseBuilderPage.clickSubmitButton()
+    course.id = newCourse?.id as number
     await coursesListPage.waitForPageLoad()
     expect(page.url()).toContain(course.id.toString())
   })
@@ -132,9 +133,8 @@ indirectLevels.forEach(level => {
       deliveryType: Course_Delivery_Type_Enum.F2F,
       reaccreditation: true,
     })
-    const createCourse = await createCoursePage.clickCreateCourseButton()
-    course.id = createCourse.id
-    course.course_code = createCourse.courseCode
+    await createCoursePage.clickCreateCourseButton()
+
     const courseBuilderPage = new CourseBuilderPage(page)
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
@@ -143,7 +143,10 @@ indirectLevels.forEach(level => {
         )[0].optionalModules.map(module => module.name),
       )
     }
-    await courseBuilderPage.clickSubmitButton()
+    const { newCourse } = await courseBuilderPage.clickSubmitButton()
+    course.id = newCourse?.id as number
+    course.course_code = newCourse?.course_code as string
+
     expect(page.url()).toContain(course.id.toString())
   })
 })
@@ -165,9 +168,10 @@ test(`create indirect course --- ${Course_Level_Enum.Advanced} as trainer @smoke
     ...course,
     level: Course_Level_Enum.Advanced,
   })
-  const createCourse = await createCoursePage.clickCreateCourseButton()
-  course.id = createCourse.id
+  await createCoursePage.clickCreateCourseButton()
+
   const courseBuilderPage = new CourseBuilderPage(page)
-  await courseBuilderPage.clickSubmitButton()
+  const { newCourse } = await courseBuilderPage.clickSubmitButton()
+  course.id = newCourse?.id as number
   expect(page.url()).toContain(course.id.toString())
 })

@@ -308,15 +308,16 @@ insert_permissions:
         - course_status
         - course_type
         - created_at
+        - curriculum
         - description
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
         - id
         - is_draft
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name

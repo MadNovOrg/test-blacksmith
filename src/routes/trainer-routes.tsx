@@ -11,6 +11,7 @@ import { CreateCourseForm } from '@app/modules/course/pages/CreateCourse/compone
 import { LicenseOrderDetails } from '@app/modules/course/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewLicenseOrder } from '@app/modules/course/pages/CreateCourse/components/ReviewLicenseOrder'
 import { ManageCourses } from '@app/modules/course/pages/ManageCourses/ManageCourses'
+import { TrainerCourseBuilder } from '@app/modules/course/pages/TrainerCourseBuilder/TrainerCourseBuilder'
 import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
 import { EvaluationSummary } from '@app/modules/course_details/course_evaluation_tab/pages/InternalEvaluationSummary'
 import { CourseCertificationDetails } from '@app/modules/course_details/pages/CourseCertificationDetails/CourseCertificationDetails'
@@ -44,6 +45,7 @@ const TrainerBaseRoutes = () => {
 
         <Route path="new" element={<CreateCourse />}>
           <Route index element={<CreateCourseForm />} />
+          <Route path="modules" element={<TrainerCourseBuilder />} />
           <Route path="assign-trainers" element={<AssignTrainers />} />
           <Route
             path="license-order-details"
@@ -71,6 +73,7 @@ const TrainerBaseRoutes = () => {
       <Route path="drafts">
         <Route index element={<DraftCourses />} />
         <Route path=":id" element={<CreateCourse />}>
+          <Route path="modules" element={<TrainerCourseBuilder />} />
           <Route index element={<CreateCourseForm />} />
           <Route path="assign-trainers" element={<AssignTrainers />} />
           <Route

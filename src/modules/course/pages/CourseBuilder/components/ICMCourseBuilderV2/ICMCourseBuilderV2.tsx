@@ -1,9 +1,9 @@
 import { Alert, Box, CircularProgress, Container, Link } from '@mui/material'
 import * as Sentry from '@sentry/react'
 import { cond, constant, matches, stubTrue } from 'lodash-es'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { CombinedError } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
@@ -14,11 +14,14 @@ import {
   Color_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
+  GetCourseByIdQuery,
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 
+import { SaveCourse } from '../../../CreateCourse/useSaveCourse'
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
+import { getBackButtonForBuilderPage } from '../../utils'
 import { Hero } from '../Hero/Hero'
 import { getMinimumTimeCommitment } from '../ICMCourseBuilder/helpers'
 
@@ -30,7 +33,41 @@ import { useModuleSettings } from './hooks/useModuleSettings'
 import { useSaveCourseDraft } from './hooks/useSaveCourseDraft'
 import { useSubmitModules } from './hooks/useSubmitModules'
 
-type Props = { editMode?: boolean }
+export type ICMBuilderCourseData = {
+  course: Pick<
+    Exclude<GetCourseByIdQuery['course'], null | undefined>,
+    | 'conversion'
+    | 'course_code'
+    | 'curriculum'
+    | 'deliveryType'
+    | 'go1Integration'
+    | 'id'
+    | 'isDraft'
+    | 'level'
+    | 'name'
+    | 'reaccreditation'
+    | 'type'
+    | 'updatedAt'
+  > & {
+    organization?: { name: string }
+    schedule: (Pick<
+      Exclude<GetCourseByIdQuery['course'], null | undefined>['schedule'][0],
+      'end' | 'start' | 'timeZone'
+    > & { venue?: { name: string; city: string } | null })[]
+  }
+}
+
+export type OnSubmitICMCourseBuilderArgs = {
+  curriculum: ModuleSettingsQuery['moduleSettings'][0]['module'][]
+  duration: number
+}
+
+type Props = {
+  data?: ICMBuilderCourseData
+  editMode?: boolean
+  onModuleSelectionChange?: (data: OnSubmitICMCourseBuilderArgs) => void
+  onSubmit?: SaveCourse
+}
 
 const courseBuilderWarning: Partial<Record<Course_Level_Enum, string>> = {
   [Course_Level_Enum.Level_1]: 'course-l1-info',
@@ -66,11 +103,15 @@ export const MAX_COURSE_DURATION_MAP = {
 }
 
 export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
+  data,
   editMode,
+  onModuleSelectionChange,
+  onSubmit,
 }) => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
   const { acl } = useAuth()
+  const { pathname } = useLocation()
 
   const navigate = useNavigate()
 
@@ -78,21 +119,22 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     useState(false)
 
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
-  const courseCreated = Boolean(getSnackbarMessage('course-created'))
+  const courseCreatedMessage = Boolean(getSnackbarMessage('course-created'))
 
   const modulesSelectionRef =
     useRef<ModuleSettingsQuery['moduleSettings'][0]['module'][]>()
 
-  const [{ data: courseData, fetching: fetchingCourse, error: courseError }] =
-    useCourseToBuild({ courseId: Number(courseId) })
+  const [
+    { data: existingCourseData, fetching: fetchingCourse, error: courseError },
+  ] = useCourseToBuild({ courseId: Number(courseId), pause: Boolean(data) })
+
+  const courseData = useMemo(() => {
+    return data ?? existingCourseData
+  }, [data, existingCourseData])
 
   const [, saveDraft] = useSaveCourseDraft()
   const [
-    {
-      data: submitModulesData,
-      error: submitModulesError,
-      fetching: submittingModules,
-    },
+    { error: submitModulesError, fetching: submittingModules },
     submitModules,
   ] = useSubmitModules()
 
@@ -120,121 +162,123 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       : 0
   }, [courseData])
 
-  const mapCourseLevelToDescription = cond([
-    [
-      matches({
-        level: Course_Level_Enum.Level_1,
-        type: Course_Type_Enum.Open,
-      }),
-      constant({ duration: '6 hour', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Level_1Bs,
-        type: Course_Type_Enum.Closed,
-      }),
-      constant({ duration: '6-hour', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Level_1,
-      }),
-      constant({
-        duration: '6 hours',
-        translationKey: 'ICM-description-choose-modules',
-      }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Level_2,
-        reaccreditation: true,
-      }),
-      constant({
-        duration: '6 hours',
-        translationKey: 'ICM-description-choose-modules',
-      }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Level_2,
-        type: Course_Type_Enum.Open,
-      }),
-      constant({ duration: '12 hour', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Level_2,
-      }),
-      constant({
-        duration: '12 hours',
-        translationKey: 'ICM-description-choose-modules',
-      }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Advanced,
-      }),
-      constant({
-        duration: '6 hours',
-        translationKey: 'ICM-description-choose-modules',
-      }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.IntermediateTrainer,
-        reaccreditation: true,
-      }),
-      constant({ duration: '2 day', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.IntermediateTrainer,
-      }),
-      constant({ duration: '5 day', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.AdvancedTrainer,
-        reaccreditation: true,
-      }),
-      constant({ duration: '3 day', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.AdvancedTrainer,
-      }),
-      constant({ duration: '4 day', translationKey: 'ICM-description' }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.FoundationTrainerPlus,
-        reaccreditation: true,
-      }),
-      constant({
-        duration: '1 day',
-        translationKey: 'foundation-trainer-plus-choose-modules',
-      }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.FoundationTrainerPlus,
-      }),
-      constant({
-        duration: '3 day',
-        translationKey: 'foundation-trainer-plus-choose-modules',
-      }),
-    ],
-    [
-      matches({
-        level: Course_Level_Enum.Level_1Bs,
-      }),
-      constant({
-        duration: '6-hour',
-        translationKey: 'ICM-description',
-      }),
-    ],
-    [stubTrue, constant(null)],
-  ])
+  const mapCourseLevelToDescription = useMemo(() => {
+    return cond([
+      [
+        matches({
+          level: Course_Level_Enum.Level_1,
+          type: Course_Type_Enum.Open,
+        }),
+        constant({ duration: '6 hour', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Level_1Bs,
+          type: Course_Type_Enum.Closed,
+        }),
+        constant({ duration: '6-hour', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Level_1,
+        }),
+        constant({
+          duration: '6 hours',
+          translationKey: 'ICM-description-choose-modules',
+        }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Level_2,
+          reaccreditation: true,
+        }),
+        constant({
+          duration: '6 hours',
+          translationKey: 'ICM-description-choose-modules',
+        }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Level_2,
+          type: Course_Type_Enum.Open,
+        }),
+        constant({ duration: '12 hour', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Level_2,
+        }),
+        constant({
+          duration: '12 hours',
+          translationKey: 'ICM-description-choose-modules',
+        }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Advanced,
+        }),
+        constant({
+          duration: '6 hours',
+          translationKey: 'ICM-description-choose-modules',
+        }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.IntermediateTrainer,
+          reaccreditation: true,
+        }),
+        constant({ duration: '2 day', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.IntermediateTrainer,
+        }),
+        constant({ duration: '5 day', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.AdvancedTrainer,
+          reaccreditation: true,
+        }),
+        constant({ duration: '3 day', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.AdvancedTrainer,
+        }),
+        constant({ duration: '4 day', translationKey: 'ICM-description' }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.FoundationTrainerPlus,
+          reaccreditation: true,
+        }),
+        constant({
+          duration: '1 day',
+          translationKey: 'foundation-trainer-plus-choose-modules',
+        }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.FoundationTrainerPlus,
+        }),
+        constant({
+          duration: '3 day',
+          translationKey: 'foundation-trainer-plus-choose-modules',
+        }),
+      ],
+      [
+        matches({
+          level: Course_Level_Enum.Level_1Bs,
+        }),
+        constant({
+          duration: '6-hour',
+          translationKey: 'ICM-description',
+        }),
+      ],
+      [stubTrue, constant(null)],
+    ])
+  }, [])
 
   const courseDescription = useMemo<string>(() => {
     if (!courseData?.course) return ''
@@ -268,36 +312,86 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     )
   }, [courseData?.course])
 
-  const handleModulesChange: CallbackFn = ({
-    selectedIds,
-    previousIds,
-    estimatedDuration,
-  }) => {
-    modulesSelectionRef.current = moduleSettingsData?.moduleSettings
-      .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
-      .map(moduleSetting => ({
-        ...moduleSetting.module,
-        mandatory: moduleSetting.mandatory,
-      }))
+  const handleModulesChange: CallbackFn = useCallback(
+    ({ selectedIds, previousIds, estimatedDuration }) => {
+      modulesSelectionRef.current = moduleSettingsData?.moduleSettings
+        .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
+        .map(moduleSetting => ({
+          ...moduleSetting.module,
+          mandatory: moduleSetting.mandatory,
+        }))
 
-    estimatedDurationRef.current = estimatedDuration
+      estimatedDurationRef.current = estimatedDuration
 
-    if (previousIds && previousIds.length !== selectedIds.length) {
-      saveDraft({
-        id: Number(courseId),
-        curriculum: modulesSelectionRef.current,
-      })
-    }
-  }
+      if (onModuleSelectionChange && modulesSelectionRef.current) {
+        onModuleSelectionChange({
+          curriculum: modulesSelectionRef.current,
+          duration: estimatedDuration,
+        })
+      }
 
-  const confirmModules = () => {
+      if (previousIds && previousIds.length !== selectedIds.length) {
+        saveDraft({
+          id: Number(courseId),
+          curriculum: modulesSelectionRef.current,
+        })
+      }
+    },
+    [
+      courseId,
+      moduleSettingsData?.moduleSettings,
+      onModuleSelectionChange,
+      saveDraft,
+    ],
+  )
+
+  const confirmModules = useCallback(async () => {
     setIsTimeCommitmentModalOpen(false)
+    let courseCode = ''
+    let id = Number(courseId)
+
     try {
-      submitModules({
-        id: Number(courseId),
-        curriculum: modulesSelectionRef.current,
-        duration: estimatedDurationRef.current ?? 0,
-      })
+      if (onSubmit) {
+        const resp = await onSubmit()
+        courseCode = resp?.courseCode ?? ''
+        id = Number(resp?.id)
+      } else {
+        await submitModules({
+          id: Number(courseId),
+          curriculum: modulesSelectionRef.current,
+          duration: estimatedDurationRef.current ?? 0,
+        })
+
+        courseCode = courseData?.course?.course_code ?? ''
+      }
+
+      if (!courseCreatedMessage && courseCode && courseId) {
+        addSnackbarMessage('course-submitted', {
+          label: (
+            <Trans
+              i18nKey="pages.trainer-base.create-course.new-course.submitted-course"
+              values={{ code: courseCode }}
+            >
+              <Link
+                underline="always"
+                href={`/${
+                  acl.isInternalUser() ? 'manage-courses/all' : 'courses'
+                }/${id}/details`}
+              >
+                {courseCode}
+              </Link>
+            </Trans>
+          ),
+        })
+      }
+
+      if (id) {
+        navigate(
+          acl.isInternalUser()
+            ? `/manage-courses/all/${id}/details`
+            : `/courses/${id}/details`,
+        )
+      }
     } catch (e) {
       Sentry.captureException(e)
     }
@@ -305,43 +399,56 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     if (submitModulesError) {
       throw new CombinedError(submitModulesError)
     }
-  }
+  }, [
+    acl,
+    addSnackbarMessage,
+    courseCreatedMessage,
+    courseData?.course?.course_code,
+    courseId,
+    navigate,
+    onSubmit,
+    submitModules,
+    submitModulesError,
+  ])
 
-  const handleModulesSubmit: CallbackFn = ({
-    selectedIds,
-    estimatedDuration,
-  }) => {
-    modulesSelectionRef.current = moduleSettingsData?.moduleSettings
-      .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
-      .map(moduleSetting => ({
-        ...moduleSetting.module,
-        mandatory: moduleSetting.mandatory,
-      }))
+  const handleModulesSubmit: CallbackFn = useCallback(
+    ({ selectedIds, estimatedDuration }) => {
+      modulesSelectionRef.current = moduleSettingsData?.moduleSettings
+        .filter(moduleSetting => selectedIds.includes(moduleSetting.module.id))
+        .map(moduleSetting => ({
+          ...moduleSetting.module,
+          mandatory: moduleSetting.mandatory,
+        }))
 
-    estimatedDurationRef.current = estimatedDuration
+      estimatedDurationRef.current = estimatedDuration
 
-    if (minimumTimeCommitment) {
-      setIsTimeCommitmentModalOpen(true)
-    } else {
-      confirmModules()
-    }
-  }
+      if (minimumTimeCommitment) {
+        setIsTimeCommitmentModalOpen(true)
+      } else {
+        confirmModules()
+      }
+    },
+    [confirmModules, minimumTimeCommitment, moduleSettingsData?.moduleSettings],
+  )
 
-  const validateSelection = (selectedIds: string[]): boolean => {
-    const selectedModules = moduleSettingsData?.moduleSettings.filter(
-      moduleSetting => selectedIds.includes(moduleSetting.module.id),
-    )
-
-    if (courseData?.course?.level === Course_Level_Enum.Level_2) {
-      return Boolean(
-        selectedModules?.some(
-          moduleSetting => moduleSetting.color === Color_Enum.Purple,
-        ),
+  const validateSelection = useCallback(
+    (selectedIds: string[]): boolean => {
+      const selectedModules = moduleSettingsData?.moduleSettings.filter(
+        moduleSetting => selectedIds.includes(moduleSetting.module.id),
       )
-    }
 
-    return true
-  }
+      if (courseData?.course?.level === Course_Level_Enum.Level_2) {
+        return Boolean(
+          selectedModules?.some(
+            moduleSetting => moduleSetting.color === Color_Enum.Purple,
+          ),
+        )
+      }
+
+      return true
+    },
+    [courseData?.course?.level, moduleSettingsData?.moduleSettings],
+  )
 
   const hasEstimatedDuration =
     courseData?.course?.level &&
@@ -352,37 +459,13 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       Course_Level_Enum.FoundationTrainerPlus,
     ].includes(courseData?.course?.level)
 
-  useEffect(() => {
-    if (submitModulesData?.update_course_by_pk?.id && courseData?.course) {
-      if (!courseCreated) {
-        addSnackbarMessage('course-submitted', {
-          label: (
-            <Trans
-              i18nKey="pages.trainer-base.create-course.new-course.submitted-course"
-              values={{ code: courseData.course.course_code }}
-            >
-              <Link
-                underline="always"
-                href={`/${
-                  acl.isInternalUser() ? 'manage-courses/all' : 'courses'
-                }/${courseData.course.id}/details`}
-              >
-                {courseData.course.course_code}
-              </Link>
-            </Trans>
-          ),
-        })
-      }
-      navigate('../details')
-    }
-  }, [
-    navigate,
-    addSnackbarMessage,
-    courseCreated,
-    submitModulesData,
-    courseData?.course,
-    acl,
-  ])
+  const backButton: { label: string; to: string | undefined } = useMemo(() => {
+    return getBackButtonForBuilderPage({
+      editMode: Boolean(editMode),
+      existsCourse: Boolean(courseId) && !pathname.includes('draft'),
+      isInternalUser: acl.isInternalUser(),
+    })
+  }, [acl, courseId, editMode, pathname])
 
   if (!fetchingCourse && !courseData?.course && !courseError) {
     return (
@@ -418,10 +501,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       ) : null}
       {moduleSettingsData?.moduleSettings && courseData?.course && (
         <Box pb={6}>
-          <BackButton
-            label={t('pages.course-participants.back-button')}
-            to={acl.isInternalUser() ? '/manage-courses/all' : '/courses'}
-          />
+          <BackButton label={backButton.label} to={backButton.to} />
           {courseData.course ? (
             <Hero
               course={courseData.course}

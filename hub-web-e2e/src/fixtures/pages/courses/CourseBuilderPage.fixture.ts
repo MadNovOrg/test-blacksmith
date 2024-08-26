@@ -1,5 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { InsertCourseMutation } from '@app/generated/graphql'
+
+import { waitForGraphQLResponse } from '@qa/commands'
 import { ModuleGroup } from '@qa/data/types'
 import { delay, sortModulesByName } from '@qa/util'
 
@@ -20,7 +23,6 @@ export class CourseBuilderPage extends BasePage {
   readonly estimatedDuration: Locator
   readonly submitButton: Locator
   readonly clearButton: Locator
-  readonly confirmWarningDialog: Locator
   readonly timeCommitmentDialog: Locator
   readonly confirmDialogSubmitButton: string
 
@@ -47,9 +49,7 @@ export class CourseBuilderPage extends BasePage {
     this.estimatedDuration = this.page.locator('data-testid=progress-bar-label')
     this.submitButton = this.page.locator('data-testid=submit-button')
     this.clearButton = this.page.locator('data-testid=clear-button')
-    this.confirmWarningDialog = this.page.locator(
-      'data-testid=confirm-warning-dialog',
-    )
+
     this.confirmDialogSubmitButton = 'data-testid=dialog-confirm-button'
     this.timeCommitmentDialog = this.page.locator(
       'data-testid=time-commitment-dialog',
@@ -89,12 +89,29 @@ export class CourseBuilderPage extends BasePage {
     )
   }
 
-  async clickSubmitButton(): Promise<CourseDetailsPage> {
+  async clickSubmitButton(): Promise<{
+    courseDetailsPage: CourseDetailsPage
+    newCourse: InsertCourseMutation['insertCourse']
+  }> {
+    await this.page.route(`**/v1/graphql`, async route => {
+      const request = route.request()
+      if (JSON.stringify(request.postDataJSON()).includes('insertCourse')) {
+        const postData = request.postDataJSON()
+        expect(postData).toHaveProperty('variables.course.curriculum')
+      }
+
+      await route.continue()
+    })
+
     await this.submitButton.click()
-    await this.confirmTimeCommitmentDialog()
-    await this.confirmCourseBuilderDialog()
+
+    const resp = await this.confirmTimeCommitmentDialog()
+
     await expect(this.submitButton).toBeHidden()
-    return new CourseDetailsPage(this.page)
+    return {
+      courseDetailsPage: new CourseDetailsPage(this.page),
+      newCourse: resp,
+    }
   }
 
   async confirmTimeCommitmentDialog() {
@@ -103,27 +120,14 @@ export class CourseBuilderPage extends BasePage {
         .locator(this.confirmDialogSubmitButton)
         .click()
     }
+    const resp = (await waitForGraphQLResponse(
+      this.page,
+      'insertCourse',
+    )) as InsertCourseMutation
+
     await expect(this.timeCommitmentDialog).toBeHidden()
-  }
 
-  async confirmCourseBuilderDialog() {
-    if (await this.confirmWarningDialog.isVisible()) {
-      await this.confirmWarningDialog
-        .locator(this.confirmDialogSubmitButton)
-        .click()
-    }
-    await expect(this.confirmWarningDialog).toBeHidden()
-  }
-
-  async clickConfirmWarningSubmitButton(): Promise<CourseDetailsPage> {
-    await this.submitButton.click()
-    if (await this.confirmWarningDialog.isVisible()) {
-      await this.confirmWarningDialog
-        .locator('button:has-text("Confirm")')
-        .click()
-    }
-    await expect(this.confirmWarningDialog).toBeHidden()
-    return new CourseDetailsPage(this.page)
+    return resp.insertCourse
   }
 
   async checkAvailableModules(modules: ModuleGroup[]) {

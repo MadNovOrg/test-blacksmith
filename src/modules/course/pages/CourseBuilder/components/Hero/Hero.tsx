@@ -46,11 +46,6 @@ export const Hero: React.FC<Props> = ({
         )}
         {slots?.afterTitle ? (
           <Typography variant="body2" mt={2} data-testid="course-description">
-            {/* {courseDescription !== ''
-            ? courseDescription
-            : t('pages.trainer-base.create-course.new-course.description', {
-                duration: maxDuration ? maxDuration / 60 : 0,
-              })} */}
             {slots.afterTitle}
           </Typography>
         ) : null}

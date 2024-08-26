@@ -1,24 +1,25 @@
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, ModuleSettingsQuery } from '@app/generated/graphql'
 import { Strategies } from '@app/modules/course/hooks/useBildStrategies'
-import { BildStrategies } from '@app/types'
+import { BildStrategies, Strategy } from '@app/types'
 
 export function getPreselectedModules({
-  courseStrategies,
   allStrategies,
   courseLevel,
+  courseStrategies,
 }: {
-  courseStrategies: { strategyName: string }[]
   allStrategies: Strategies
+
   courseLevel: Course_Level_Enum
+  courseStrategies: { strategyName: string }[]
 }) {
+  const preselectedModules: Record<string, boolean> = {}
+
   const isTrainerLevelCourse = courseLevel
     ? [
         Course_Level_Enum.BildIntermediateTrainer,
         Course_Level_Enum.BildAdvancedTrainer,
       ].includes(courseLevel)
     : false
-
-  const preselectedModules: Record<string, boolean> = {}
 
   const hasPrimary = courseStrategies.some(s => s.strategyName === 'PRIMARY')
   const hasSecondary = courseStrategies.some(
@@ -110,4 +111,72 @@ function isBILDTrainerCourse(courseLevel: Course_Level_Enum) {
     Course_Level_Enum.BildIntermediateTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
   ].includes(courseLevel)
+}
+
+function transformSelection(selectedModules: Record<string, boolean>) {
+  const transformedSelection: Record<string, Strategy> = {}
+
+  Object.keys(selectedModules).forEach(key => {
+    if (selectedModules[key]) {
+      const [strategyName, ...parts] = key.split('.')
+
+      if (!transformedSelection[strategyName]) {
+        transformedSelection[strategyName] = {
+          groups: [],
+          modules: [],
+        }
+      }
+
+      if (parts.length === 2) {
+        const [groupName, moduleName] = parts
+
+        const existingGroup = transformedSelection[strategyName].groups?.find(
+          group => group.name === groupName,
+        )
+
+        let group = transformedSelection[strategyName].groups?.find(
+          group => group.name === groupName,
+        ) ?? {
+          name: groupName,
+          modules: [],
+        }
+
+        if (!existingGroup) {
+          transformedSelection[strategyName].groups?.push(group)
+        } else {
+          group = existingGroup
+        }
+
+        group.modules.push({ name: moduleName })
+      } else if (parts.length === 1) {
+        const [module] = parts
+
+        transformedSelection[strategyName].modules?.push({ name: module })
+      }
+    }
+  })
+
+  return transformedSelection
+}
+
+export const transformBILDModules = ({
+  modules,
+  strategyModules,
+}: {
+  modules: ModuleSettingsQuery['moduleSettings']
+  strategyModules: Record<string, boolean>
+}) => {
+  const transformedSelection = transformSelection(strategyModules)
+  const modulesSelection: Record<string, Strategy> = {}
+
+  modules.forEach(moduleSetting => {
+    modulesSelection[
+      moduleSetting.module.displayName ?? moduleSetting.module.name
+    ] = {
+      groups: [],
+      modules: moduleSetting.module.lessons.items,
+    }
+  })
+
+  return { ...transformedSelection, ...modulesSelection }
 }

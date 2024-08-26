@@ -49,7 +49,20 @@ export const MODULE_SETTINGS_QUERY = gql`
   }
 `
 
-export function useModuleSettings(course: CourseToBuildQuery['course']) {
+export function useModuleSettings(
+  course:
+    | Pick<
+        Exclude<CourseToBuildQuery['course'], null | undefined>,
+        | 'conversion'
+        | 'deliveryType'
+        | 'go1Integration'
+        | 'level'
+        | 'reaccreditation'
+        | 'type'
+      >
+    | undefined
+    | null,
+) {
   return useQuery<ModuleSettingsQuery, ModuleSettingsQueryVariables>({
     query: MODULE_SETTINGS_QUERY,
     pause: !course,

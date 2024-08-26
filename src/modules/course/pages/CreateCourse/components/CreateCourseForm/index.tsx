@@ -87,7 +87,7 @@ export const CreateCourseForm = () => {
   const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
     'international-indirect',
   )
-  const { savingStatus, saveCourse, allowCreateCourse } = useSaveCourse()
+  const { savingStatus, allowCreateCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
   const { t } = useTranslation()
@@ -203,16 +203,12 @@ export const CreateCourseForm = () => {
       courseType === Course_Type_Enum.Indirect &&
       !acl.isInternalUser()
     ) {
-      const savedCourse = await saveCourse()
-
-      if (savedCourse?.id) {
-        navigate(`/courses/${savedCourse.id}/modules`)
-      }
+      navigate(`./modules`)
     } else {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./assign-trainers')
     }
-  }, [acl, completeStep, courseData, courseType, navigate, profile, saveCourse])
+  }, [acl, completeStep, courseData, courseType, navigate, profile])
 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
 
@@ -327,14 +323,21 @@ export const CreateCourseForm = () => {
     })
   }, [courseData?.residingCountry, displayConnectFeeCondition])
 
-  const nextStepButtonLabel =
-    courseData?.blendedLearning &&
-    courseData.type === Course_Type_Enum.Indirect &&
-    !acl.isInternalUser()
-      ? 'order-details-button-text'
-      : courseType === Course_Type_Enum.Indirect && !acl.isInternalUser()
-      ? 'course-builder-button-text'
-      : 'select-trainers-button-text'
+  const nextStepButtonLabel = useMemo(() => {
+    if (
+      courseData?.blendedLearning &&
+      courseData.type === Course_Type_Enum.Indirect &&
+      !acl.isInternalUser()
+    ) {
+      return 'order-details-button-text'
+    }
+
+    if (courseType === Course_Type_Enum.Indirect && !acl.isInternalUser()) {
+      return 'course-builder-button-text'
+    }
+
+    return 'select-trainers-button-text'
+  }, [acl, courseData?.blendedLearning, courseData?.type, courseType])
 
   const showTrainerRatioWarning = useMemo(() => {
     return (

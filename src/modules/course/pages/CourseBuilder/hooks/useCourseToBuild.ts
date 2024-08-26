@@ -44,12 +44,14 @@ export const COURSE_TO_BUILD_QUERY = gql`
 
 export function useCourseToBuild({
   courseId,
-  withStrategies,
+  pause = false,
   withModules = true,
+  withStrategies,
 }: {
   courseId: number
-  withStrategies?: boolean
+  pause?: boolean
   withModules?: boolean
+  withStrategies?: boolean
 }) {
   return useQuery<CourseToBuildQuery, CourseToBuildQueryVariables>({
     query: COURSE_TO_BUILD_QUERY,
@@ -57,5 +59,6 @@ export function useCourseToBuild({
       ? { id: courseId, withModules, withStrategies }
       : undefined,
     requestPolicy: 'cache-and-network',
+    pause,
   })
 }

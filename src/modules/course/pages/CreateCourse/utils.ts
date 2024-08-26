@@ -9,8 +9,12 @@ import {
   Course_Level_Enum,
   Course_Renewal_Cycle_Enum,
   Course_Type_Enum,
+  ModuleSettingsQuery,
 } from '@app/generated/graphql'
 import { Go1LicensingPrices, ValidCourseInput } from '@app/types'
+
+import { BILDBuilderCourseData } from '../CourseBuilder/components/BILDCourseBuilder/BILDCourseBuilder'
+import { ICMBuilderCourseData } from '../CourseBuilder/components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 
 export const PRICE_PER_LICENSE = 50
 
@@ -143,4 +147,55 @@ export const getCourseRenewalCycle = (courseData: ValidCourseInput) => {
   if (courseData.courseLevel === Course_Level_Enum.Level_1Bs)
     return Course_Renewal_Cycle_Enum.One
   return null
+}
+
+export type BuilderCourseData<T> = T extends Accreditors_Enum.Icm
+  ? ICMBuilderCourseData
+  : T extends Accreditors_Enum.Bild
+  ? BILDBuilderCourseData
+  : never
+
+export const mapCourseFormInputToBuilderCourseData = ({
+  courseData,
+  curriculum = [],
+  go1Integration = false,
+  name,
+}: {
+  courseData: ValidCourseInput
+  curriculum?: ModuleSettingsQuery['moduleSettings'][0]['module'][]
+  go1Integration?: boolean
+  name: string
+}): BuilderCourseData<Accreditors_Enum> => {
+  return {
+    course: {
+      ...courseData,
+      course_code: '',
+      curriculum: curriculum.length ? curriculum : undefined,
+      deliveryType: courseData.deliveryType,
+      go1Integration,
+      id: 0,
+      isDraft: false,
+      level: courseData.courseLevel,
+      name,
+      schedule: [
+        {
+          end: courseData.endDate.toISOString(),
+          start: courseData.startDate.toISOString(),
+          timeZone: courseData.timeZone?.timeZoneId as string,
+          venue: courseData.venue,
+        },
+      ],
+      type: courseData.type,
+      updatedAt: '',
+      ...(courseData.accreditedBy === Accreditors_Enum.Bild
+        ? {
+            bildStrategies: Object.entries(courseData.bildStrategies)
+              .filter(([, value]) => value === true)
+              .map(([key]) => ({
+                strategyName: key,
+              })),
+          }
+        : {}),
+    },
+  }
 }
