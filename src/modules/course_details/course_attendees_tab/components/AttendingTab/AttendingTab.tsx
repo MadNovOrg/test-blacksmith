@@ -210,7 +210,8 @@ export const AttendingTab = ({
         (courseParticipants?.some(participant =>
           canViewRowActions(participant),
         ) &&
-          acl.isOrgAdmin())
+          courseStarted(course) &&
+          (acl.isOrgAdmin() || acl.isOrgKeyContact()))
           ? {
               id: 'attendance',
               label: 'Attendance',
@@ -433,7 +434,8 @@ export const AttendingTab = ({
                         ) : null}
                         {canToggleAttendance ||
                         (canViewRowActions(courseParticipant) &&
-                          acl.isOrgAdmin()) ? (
+                          courseStarted(course) &&
+                          (acl.isOrgAdmin() || acl.isOrgKeyContact())) ? (
                           <TableCell width={180}>
                             <AttendingToggle
                               participant={courseParticipant}
