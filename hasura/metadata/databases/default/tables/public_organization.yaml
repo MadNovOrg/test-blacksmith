@@ -36,6 +36,15 @@ configuration:
     xero_contact_id: xeroContactId
   custom_root_fields: {}
 object_relationships:
+  - name: main_organisations
+    using:
+      manual_configuration:
+        column_mapping:
+          id: main_organisation_id
+        insertion_order: null
+        remote_table:
+          name: organization
+          schema: public
   - name: organization_dfe_establishment
     using:
       manual_configuration:
@@ -46,6 +55,15 @@ object_relationships:
           name: dfe_establishment
           schema: public
 array_relationships:
+  - name: affiliated_organisations
+    using:
+      manual_configuration:
+        column_mapping:
+          main_organisation_id: id
+        insertion_order: null
+        remote_table:
+          name: organization
+          schema: public
   - name: go1LicensesHistory
     using:
       foreign_key_constraint_on:
@@ -160,12 +178,13 @@ insert_permissions:
         - dfe_establishment_id
         - geo_coordinates
         - go1_licenses
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
-        - organisation_type
         - sector
         - tags
         - xero_contact_id
@@ -176,15 +195,16 @@ insert_permissions:
         - address
         - attributes
         - contact_details
-        - geo_coordinates
         - dfe_establishment_id
+        - geo_coordinates
         - go1_licenses
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
-        - organisation_type
         - sector
         - tags
         - xero_contact_id
@@ -214,11 +234,12 @@ insert_permissions:
         - dfe_establishment_id
         - geo_coordinates
         - go1_licenses
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
-        - organisation_type
         - sector
         - tags
         - xero_contact_id
@@ -232,11 +253,12 @@ insert_permissions:
         - dfe_establishment_id
         - geo_coordinates
         - go1_licenses
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
-        - organisation_type
         - sector
         - tags
         - xero_contact_id
@@ -286,6 +308,7 @@ select_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
         - organisation_type
         - original_record
@@ -304,24 +327,25 @@ select_permissions:
   - role: ld
     permission:
       columns:
-        - id
-        - name
-        - tags
-        - contact_details
-        - attributes
         - address
-        - dfe_establishment_id
-        - preferences
-        - original_record
+        - attributes
+        - contact_details
         - created_at
+        - dfe_establishment_id
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - main_organisation_id
+        - name
+        - organisation_type
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
         - updated_at
         - xero_contact_id
-        - sector
-        - region
-        - go1_licenses
-        - geo_coordinates
-        - reserved_go1_licenses
-        - organisation_type
       computed_fields:
         - addressEachText
         - postCode
@@ -330,24 +354,25 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - name
-        - go1_licenses
-        - reserved_go1_licenses
         - address
         - attributes
         - contact_details
+        - created_at
         - dfe_establishment_id
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - main_organisation_id
+        - name
+        - organisation_type
         - original_record
         - preferences
-        - tags
-        - geo_coordinates
         - region
-        - organisation_type
+        - reserved_go1_licenses
         - sector
-        - xero_contact_id
-        - created_at
+        - tags
         - updated_at
-        - id
+        - xero_contact_id
       computed_fields:
         - addressEachText
         - postCode
@@ -356,24 +381,25 @@ select_permissions:
   - role: sales-representative
     permission:
       columns:
-        - name
-        - go1_licenses
-        - reserved_go1_licenses
         - address
         - attributes
         - contact_details
+        - created_at
         - dfe_establishment_id
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - main_organisation_id
+        - name
+        - organisation_type
         - original_record
         - preferences
-        - tags
-        - geo_coordinates
         - region
-        - organisation_type
+        - reserved_go1_licenses
         - sector
-        - xero_contact_id
-        - created_at
+        - tags
         - updated_at
-        - id
+        - xero_contact_id
       computed_fields:
         - addressEachText
         - postCode
@@ -390,13 +416,14 @@ select_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
         - sector
-        - organisation_type
         - tags
         - updated_at
         - xero_contact_id
@@ -417,6 +444,7 @@ select_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
         - organisation_type
         - original_record
@@ -444,6 +472,7 @@ select_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
         - organisation_type
         - original_record
@@ -469,10 +498,11 @@ select_permissions:
         - dfe_establishment_id
         - geo_coordinates
         - id
+        - main_organisation_id
         - name
+        - organisation_type
         - preferences
         - region
-        - organisation_type
         - sector
         - tags
         - updated_at
@@ -493,12 +523,13 @@ select_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
-        - organisation_type
         - sector
         - tags
         - updated_at
@@ -518,12 +549,13 @@ update_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
+        - organisation_type
         - original_record
         - preferences
         - region
         - reserved_go1_licenses
-        - organisation_type
         - sector
         - tags
         - xero_contact_id
@@ -552,6 +584,7 @@ update_permissions:
         - can_access_knowledge_hub
         - contact_details
         - geo_coordinates
+        - main_organisation_id
         - name
         - organisation_type
         - preferences
@@ -571,6 +604,7 @@ update_permissions:
         - geo_coordinates
         - go1_licenses
         - id
+        - main_organisation_id
         - name
         - organisation_type
         - original_record
