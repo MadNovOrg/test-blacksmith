@@ -45,6 +45,14 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       where.paymentMethod = { _in: filters.paymentMethods }
     }
 
+    if (isFilterValid(filters.countries)) {
+      where.courses = {
+        course: {
+          residingCountry: { _in: filters.countries },
+        },
+      }
+    }
+
     if (isFilterValid(filters.searchParam)) {
       where._or = []
       where._or.push({
@@ -81,18 +89,6 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       where._or = where._or ?? []
 
       where._or.push({ invoice: { status: { _in: filters.statuses } } })
-    }
-
-    if (isFilterValid(filters.countries)) {
-      where._or = where._or ?? []
-
-      where._or.push({
-        courses: {
-          course: {
-            residingCountry: { _in: filters.countries },
-          },
-        },
-      })
     }
 
     return where

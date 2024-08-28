@@ -24,11 +24,12 @@ import { noop } from '@app/util'
 
 type Props = {
   onChange: (selected: string[]) => void
+  saveOnPageRefresh?: boolean
 }
 
 export const FilterByCourseResidingCountry: React.FC<
   React.PropsWithChildren<Props>
-> = ({ onChange = noop }) => {
+> = ({ onChange = noop, saveOnPageRefresh = true }) => {
   const { t } = useTranslation()
   const { getLabel: getCountryLabel } = useWorldCountries()
 
@@ -96,34 +97,54 @@ export const FilterByCourseResidingCountry: React.FC<
       .filter(c => c.title)
   }, [countries, getCountryLabel])
 
-  const [selected, setSelected] = useQueryParam(
+  const [selectedInQueryParams, setSelectedInQueryParams] = useQueryParam(
     'country',
     CourseResidingCountryParam,
   )
 
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([])
+
   const options = useMemo(() => {
     return residingCountryOptions?.map(o => ({
       ...o,
-      selected: selected.includes(o.id),
+      selected: saveOnPageRefresh
+        ? selectedInQueryParams.includes(o.id)
+        : selectedOptions.includes(o.id),
     }))
-  }, [residingCountryOptions, selected])
+  }, [
+    residingCountryOptions,
+    saveOnPageRefresh,
+    selectedInQueryParams,
+    selectedOptions,
+  ])
 
   const _onChange = useCallback(
     (opts: FilterOption<string>[]) => {
       const sel = opts?.flatMap(o => (o.selected ? o.id : []))
-      setSelected(sel)
+      if (saveOnPageRefresh) {
+        setSelectedInQueryParams(sel)
+      } else {
+        setSelectedOptions(sel)
+      }
+
       onChange(sel)
     },
-    [onChange, setSelected],
+    [onChange, saveOnPageRefresh, setSelectedInQueryParams],
   )
 
   useEffectOnce(() => {
-    onChange(selected)
+    if (saveOnPageRefresh) {
+      onChange(selectedInQueryParams)
+    }
   })
 
   return (
     <FilterAccordion
-      defaultExpanded={selected.length > 0}
+      defaultExpanded={
+        saveOnPageRefresh
+          ? selectedInQueryParams.length > 0
+          : selectedOptions.length > 0
+      }
       options={options}
       title={t('filters.residing-country')}
       onChange={_onChange}

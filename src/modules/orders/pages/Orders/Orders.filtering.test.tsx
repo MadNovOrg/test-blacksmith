@@ -235,15 +235,11 @@ describe('page: Orders filtering', () => {
     await waitFor(() => {
       expect(queryVariables.where).toEqual(
         expect.objectContaining({
-          _or: [
-            {
-              courses: {
-                course: {
-                  residingCountry: { _in: ['GB-ENG'] },
-                },
-              },
+          courses: {
+            course: {
+              residingCountry: { _in: ['GB-ENG'] },
             },
-          ],
+          },
         }),
       )
     })

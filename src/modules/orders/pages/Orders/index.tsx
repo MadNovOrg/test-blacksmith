@@ -74,6 +74,7 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <FilterByOrderStatuses onChange={onFilterChange} />
                 <FilterByCourseResidingCountry
                   onChange={onCountryFilterChange}
+                  saveOnPageRefresh={false}
                 />
               </Stack>
             </Box>
