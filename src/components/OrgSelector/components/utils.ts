@@ -117,7 +117,13 @@ export const getSchema = ({
               'organisationPhoneNumber',
               t('validation-errors.invalid-phone'),
               (value: string | undefined, context) => {
-                if (value === context.parent.countryCallingCode) return true
+                if (
+                  //if user has not interacted with phone number field, the context.parent.countryCallingCode will be undefined
+                  !context.parent.countryCallingCode ||
+                  value === context?.parent?.countryCallingCode
+                ) {
+                  return true
+                }
 
                 return isPossibleNumber(value ?? '')
               },
