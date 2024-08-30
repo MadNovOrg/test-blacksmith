@@ -9,6 +9,9 @@ import React, { FC } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
+import { Shards } from '@app/util'
+
 import { useJobTitles } from '../../hooks/useJobTitles'
 
 export type JobTitleSelectorProps = {
@@ -31,7 +34,9 @@ export const JobTitleSelector: FC<
   React.PropsWithChildren<JobTitleSelectorProps>
 > = function ({ errors, register, values }) {
   const { t } = useTranslation()
-  const jobTitles = useJobTitles()
+  const { acl } = useAuth()
+  const isUKRegion = acl.isUK()
+  const jobTitles = useJobTitles(isUKRegion ? Shards.UK : Shards.ANZ)
 
   return (
     <Box>

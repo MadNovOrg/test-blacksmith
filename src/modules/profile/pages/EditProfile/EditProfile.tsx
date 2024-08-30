@@ -89,7 +89,7 @@ import { UPDATE_PROFILE_ROLES_MUTATION } from '@app/modules/profile/queries/upda
 import { UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/modules/profile/queries/update-trainer-role-types'
 import { schemas } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import { Shards, INPUT_DATE_FORMAT } from '@app/util'
 
 import {
   avatarSize,
@@ -132,7 +132,7 @@ export const EditProfilePage: React.FC<
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
-  const jobTitles = useJobTitles()
+  const jobTitles = useJobTitles(acl.isUK() ? Shards.UK : Shards.ANZ)
   const orgId = searchParams.get('orgId')
   const minimalAge = subYears(new Date(), 16)
   const importCertificateModalRef = useRef<

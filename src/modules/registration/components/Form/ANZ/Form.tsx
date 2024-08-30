@@ -41,13 +41,11 @@ import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLea
 import { gqlRequest } from '@app/lib/gql-request'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
+  DEFAULT_AUSTRALIA_PHONE_COUNTRY,
 } from '@app/modules/profile/components/PhoneNumberInput'
-import { Organization } from '@app/types'
+import { SIGN_UP_MUTATION } from '@app/modules/registration/queries'
+import { FormInputs, getFormSchema } from '@app/modules/registration/utils'
 import { INPUT_DATE_FORMAT } from '@app/util'
-
-import { SIGN_UP_MUTATION } from '../../queries'
-import { FormInputs, getFormSchema } from '../../utils'
 
 const TextField = styled(MuiTextField)(() => ({
   '& .MuiInput-root': {
@@ -95,11 +93,11 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      country: getCountryLabel('GB-ENG'),
-      countryCode: 'GB-ENG',
+      country: getCountryLabel('AU'),
+      countryCode: 'AU',
       dob: undefined,
       phone: '',
-      phoneCountryCode: DEFAULT_PHONE_COUNTRY,
+      phoneCountryCode: DEFAULT_AUSTRALIA_PHONE_COUNTRY,
     },
   })
 
@@ -129,6 +127,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         country: data.country,
         countryCode: data.countryCode,
       }
+
       if (organizationData) {
         const { data: newOrganizationData } = await insertOrganisation(
           organizationData,
@@ -158,7 +157,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
       onSignUp(data.email, data.password)
     } catch (err) {
-      console.log(err)
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'
       setError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
@@ -175,10 +173,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         return
       }
       if (isHubOrg(org)) {
-        setValue('organization', org as Organization, {
+        setValue('organization', org, {
           shouldValidate: true,
         })
-        return
       }
     },
     [setValue],
@@ -306,6 +303,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
+          defaultCountry={DEFAULT_AUSTRALIA_PHONE_COUNTRY}
           error={!!errors.phone}
           helperText={errors.phone?.message}
           handleManualError={isError => setIsManualFormError(isError)}
@@ -372,7 +370,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         placeholder={
           isSearchOnlyByPostCodeEnabled
             ? undefined
-            : t('components.org-selector.post-code-and-name-placeholder')
+            : t('components.org-selector.post-code-and-name-placeholder-anz')
         }
         label={
           isSearchOnlyByPostCodeEnabled

@@ -20,6 +20,7 @@ vi.mock('@app/context/auth', async () => ({
     loadProfile: vi.fn(),
     acl: {
       isAustralia: vi.fn().mockReturnValue(false),
+      isUK: vi.fn().mockReturnValue(true),
     },
   }),
 }))
@@ -43,6 +44,7 @@ describe('page: AutoRegister', () => {
       loadProfile: loadProfileMock,
       acl: {
         isAustralia: vi.fn().mockReturnValue(false),
+        isUK: vi.fn().mockReturnValue(true),
       },
     } as unknown as AuthContextType)
 
@@ -70,6 +72,7 @@ describe('page: AutoRegister', () => {
       loadProfile: loadProfileMock,
       acl: {
         isAustralia: vi.fn().mockReturnValue(false),
+        isUK: vi.fn().mockReturnValue(true),
       },
     } as unknown as AuthContextType)
 
@@ -191,6 +194,7 @@ describe('page: AutoRegister', () => {
       loadProfile: loadProfileMock,
       acl: {
         isAustralia: vi.fn().mockReturnValue(false),
+        isUK: vi.fn().mockReturnValue(true),
       },
     } as unknown as AuthContextType)
 

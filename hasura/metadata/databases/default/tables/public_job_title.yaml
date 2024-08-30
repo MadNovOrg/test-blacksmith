@@ -6,45 +6,54 @@ select_permissions:
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: booking-contact
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: finance
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: ld
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: organization-key-contact
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: sales-admin
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: sales-representative
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: trainer
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: tt-admin
     permission:
       columns:
+        - shard
         - title
         - created_at
         - updated_at
@@ -54,14 +63,17 @@ select_permissions:
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: unverified
     permission:
       columns:
         - title
+        - shard
       filter: {}
   - role: user
     permission:
       columns:
         - title
+        - shard
       filter: {}

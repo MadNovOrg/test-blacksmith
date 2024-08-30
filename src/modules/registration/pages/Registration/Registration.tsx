@@ -14,8 +14,8 @@ import {
 } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { MUTATION as INSERT_PROFILE_TEMP } from '@app/modules/profile/queries/insert-profile-temp'
-
-import { Form } from '../../components/Form/Form'
+import { Form as ANZForm } from '@app/modules/registration/components/Form/ANZ/Form'
+import { Form as UKForm } from '@app/modules/registration/components/Form/UK/Form'
 
 type LocationState = { from: { pathname: string; search: string } }
 
@@ -24,11 +24,12 @@ const bookingState = { pathname: '/booking/details' }
 export const RegistrationPage: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
-  const { login, profile } = useAuth()
+  const { login, profile, acl } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const location = useLocation()
+  const isUKRegion = acl.isUK()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -125,12 +126,19 @@ export const RegistrationPage: React.FC<
           </Button>
         </Typography>
       </Box>
-
-      <Form
-        onSignUp={onSignUp}
-        courseId={courseId ? +courseId : null}
-        quantity={quantity ? +quantity : null}
-      />
+      {isUKRegion ? (
+        <UKForm
+          onSignUp={onSignUp}
+          courseId={courseId ? +courseId : null}
+          quantity={quantity ? +quantity : null}
+        />
+      ) : (
+        <ANZForm
+          onSignUp={onSignUp}
+          courseId={courseId ? +courseId : null}
+          quantity={quantity ? +quantity : null}
+        />
+      )}
     </AppLayoutMinimal>
   )
 }

@@ -8,10 +8,13 @@ import {
 
 import { Query as JobTitlesQuery } from './get-job-titles'
 
-export const useJobTitles = () => {
+export const useJobTitles = (shard: string) => {
   const response = useQuery<GetJobTitlesQuery, GetJobTitlesQueryVariables>({
     query: JobTitlesQuery,
     requestPolicy: 'cache-and-network',
+    variables: {
+      shard,
+    },
   })
 
   const positions = useMemo(() => {

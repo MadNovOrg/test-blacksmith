@@ -129,6 +129,11 @@ export enum LoadingStatus {
   ERROR = 'ERROR',
 }
 
+export enum Shards {
+  ANZ = 'ANZ',
+  UK = 'UK',
+}
+
 export function getSWRLoadingStatus(
   data?: object,
   error?: Error,

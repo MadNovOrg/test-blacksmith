@@ -308,6 +308,7 @@
     "placeholder": "Start typing organisation post code, address or name",
     "post-code-placeholder": "Start typing organisation post code",
     "post-code-and-name-placeholder": "Start typing organisation name or post code/zip code",
+    "post-code-and-name-placeholder-anz": "Start typing organisation name or post code",
     "no-results": "No organisations found",
     "no-individuals": "No individuals found",
     "start-typing": "Please start typing for suggestions.",
