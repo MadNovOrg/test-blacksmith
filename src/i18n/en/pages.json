@@ -1270,6 +1270,15 @@
         "country": "Country",
         "postalAndZipCode": "Post code/ZIP code"
       },
+      "organisation-region": {
+        "region": "Region",
+        "stateTerritory": "State/Territory",
+        "state": "State",
+        "territory": "Territory"
+      },
+      "link-to-main-organisation": "Link to another organisation",
+      "select-main-organisation": "Select the organisation it affiliates with",
+      "main-organisation": "Main organisation",
       "head-first-name": "First name",
       "head-surname": "Surname",
       "organisation-main-contact-email-address": "Organisation main contact email address",

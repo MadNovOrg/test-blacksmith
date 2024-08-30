@@ -37,7 +37,7 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { FormPanel } from '@app/components/FormPanel'
-import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
+import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
 import { OrgSelector } from '@app/components/OrgSelector'
 import {
   isXeroSuggestion,
@@ -61,7 +61,7 @@ import {
   defaultValues,
   getFormSchema,
   mapDfePropsToSchema,
-} from '../../utils'
+} from '../../../utils/UK'
 
 type Props = {
   isEditMode?: boolean

@@ -1,6 +1,10 @@
 table:
   name: organization_type
   schema: public
+object_relationships:
+  - name: organisation_sector
+    using:
+      foreign_key_constraint_on: sector
 select_permissions:
   - role: anonymous
     permission:

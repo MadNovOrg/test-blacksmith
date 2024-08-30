@@ -63,6 +63,7 @@ export type OrgSelectorProps = {
   userOrgIds?: string[]
   value?: Pick<Organization, 'name' | 'id'> | null
   canSearchByAddress?: boolean
+  showOnlyMainOrgs?: boolean
 }
 
 export type SuggestionOption = {

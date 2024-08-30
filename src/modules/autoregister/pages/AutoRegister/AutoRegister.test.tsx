@@ -16,7 +16,12 @@ import { AutoRegisterPage } from './AutoRegister'
 
 vi.mock('@app/context/auth', async () => ({
   ...((await vi.importActual('@app/context/auth')) as object),
-  useAuth: vi.fn().mockReturnValue({ loadProfile: vi.fn() }),
+  useAuth: vi.fn().mockReturnValue({
+    loadProfile: vi.fn(),
+    acl: {
+      isAustralia: vi.fn().mockReturnValue(false),
+    },
+  }),
 }))
 
 const useAuthMock = vi.mocked(useAuth)
@@ -36,6 +41,9 @@ describe('page: AutoRegister', () => {
 
     useAuthMock.mockReturnValue({
       loadProfile: loadProfileMock,
+      acl: {
+        isAustralia: vi.fn().mockReturnValue(false),
+      },
     } as unknown as AuthContextType)
 
     render(
@@ -60,6 +68,9 @@ describe('page: AutoRegister', () => {
 
     useAuthMock.mockReturnValue({
       loadProfile: loadProfileMock,
+      acl: {
+        isAustralia: vi.fn().mockReturnValue(false),
+      },
     } as unknown as AuthContextType)
 
     // mock GET_ORG_BY_ID query with success response
@@ -178,6 +189,9 @@ describe('page: AutoRegister', () => {
 
     useAuthMock.mockReturnValue({
       loadProfile: loadProfileMock,
+      acl: {
+        isAustralia: vi.fn().mockReturnValue(false),
+      },
     } as unknown as AuthContextType)
 
     const orgId = chance.guid()

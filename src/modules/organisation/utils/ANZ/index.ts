@@ -1,0 +1,248 @@
+import { isFuture } from 'date-fns'
+import { TFunction } from 'i18next'
+import { Maybe } from 'yup'
+
+import {
+  CourseLevel,
+  OrganizationProfile,
+  UpcominEnrollment,
+} from '@app/generated/graphql'
+import { yup } from '@app/schemas'
+
+export type FormInputs = {
+  name: string
+  orgEmail: string
+  orgPhone: string
+  organisationType: string
+  orgTypeSpecifyOther?: string
+  sector: string
+  headFirstName: string
+  headSurname: string
+  headEmailAddress: string
+  settingName: string
+  website: string
+  addressLine1: string
+  addressLine2: string
+  city: string
+  country: string
+  region?: string
+  countryCode: string
+  postcode: string
+  workEmail?: string
+  mainOrgId?: string
+  mainOrgName?: string
+}
+
+export const defaultValues = {
+  name: '',
+  orgEmail: '',
+  orgPhone: '',
+  organisationType: '',
+  sector: '',
+  localAuthority: '',
+  ofstedRating: '',
+  ofstedLastInspection: null,
+  headFirstName: '',
+  headSurname: '',
+  headEmailAddress: '',
+  settingName: '',
+  website: '',
+  workEmail: '',
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  country: '',
+  countryCode: 'AU',
+  postcode: '',
+}
+
+export const getFormSchema = (
+  t: TFunction,
+  _t: TFunction,
+  linkToMainOrg: boolean,
+) =>
+  yup.object({
+    name: yup.string().required(
+      _t('validation-errors.required-field', {
+        name: t('fields.organization-name'),
+      }),
+    ),
+    sector: yup.string().required(
+      _t('validation-errors.required-field', {
+        name: t('fields.organization-sector'),
+      }),
+    ),
+    organisationType: yup.string().required(
+      _t('validation-errors.required-field', {
+        name: t('fields.organization-type'),
+      }),
+    ),
+    orgTypeSpecifyOther: yup.string().when('organisationType', {
+      is: (value: string) => value && value.toLocaleLowerCase() === 'other',
+      then: schema =>
+        schema.required(
+          _t('validation-errors.required-field', {
+            name: t('fields.organisation-specify-other'),
+          }),
+        ),
+    }),
+
+    orgPhone: yup
+
+      .string()
+      .required(
+        _t('validation-errors.required-field', {
+          name: t('fields.organization-phone'),
+        }),
+      )
+      .phoneNumber(_t)
+      .isPossiblePhoneNumber(_t),
+    orgEmail: yup
+      .string()
+      .required(
+        _t('validation-errors.required-field', {
+          name: t('fields.organization-email'),
+        }),
+      )
+      .email(_t('validation-errors.email-invalid')),
+    website: yup.string(),
+    workEmail: yup.string().email(_t('validation-errors.email-invalid')),
+    localAuthority: yup.string(),
+    ofstedRating: yup.string().nullable(),
+    ofstedLastInspection: yup.date().nullable(),
+    addressLine1: yup.string().required(
+      _t('validation-errors.required-field', {
+        name: t('fields.addresses.line1'),
+      }),
+    ),
+    addressLine2: yup.string(),
+    city: yup.string().required(
+      _t('validation-errors.required-composed-field', {
+        field1: t('fields.addresses.town'),
+        field2: t('fields.addresses.city'),
+      }),
+    ),
+    country: yup.string().required(
+      _t('validation-errors.required-field', {
+        name: t('fields.addresses.country'),
+      }),
+    ),
+    postcode: yup.string(),
+    region: yup.string().when('countryCode', (data: string[], schema) => {
+      const countryCode = data[0]
+      if (countryCode === 'AU') {
+        return schema.required(
+          _t('validation-errors.required-composed-field', {
+            field1: t('fields.organisation-region.state'),
+            field2: t('fields.organisation-region.territory'),
+          }),
+        )
+      }
+      if (countryCode === 'NZ') {
+        return schema.required(
+          _t('validation-errors.required-field', {
+            name: t('fields.organisation-region.region'),
+          }),
+        )
+      }
+      return schema.nullable()
+    }),
+    ...(linkToMainOrg
+      ? {
+          mainOrgName: yup.string().required(
+            _t('validation-errors.required-field', {
+              name: t('fields.main-organisation'),
+            }),
+          ),
+        }
+      : {}),
+  })
+
+const isEnrollmentEndDateInFuture = (enrollment: Maybe<UpcominEnrollment>) => {
+  const endDate = enrollment?.course?.schedule?.[0]?.end
+  if (!endDate) return false
+  return isFuture(new Date(endDate))
+}
+
+export type profilesByLevelType = Map<CourseLevel, OrganizationProfile[]>
+
+export const filterProfilesByEnrollments = (
+  profilesByLevel: profilesByLevelType,
+) => {
+  const filteredProfilesByLevel: profilesByLevelType = new Map()
+
+  profilesByLevel.forEach((profiles, level) => {
+    const notEndedCourses = profiles.map(profile => ({
+      ...profile,
+      upcomingEnrollments: profile?.upcomingEnrollments?.filter(enrollment =>
+        isEnrollmentEndDateInFuture(enrollment),
+      ),
+    }))
+
+    if (notEndedCourses.length) {
+      filteredProfilesByLevel.set(level, notEndedCourses)
+    }
+  })
+
+  return filteredProfilesByLevel
+}
+
+export const filterOrganisationProfilesById = (
+  profilesByOrganisation: profilesByLevelType,
+  profilesByLvl: profilesByLevelType,
+) => {
+  const filteredOrganisations: profilesByLevelType = new Map()
+
+  const idsInProfiles = new Set<string[]>()
+
+  profilesByLvl.forEach(profiles => {
+    profiles.forEach(profile => {
+      if (profile?.id) {
+        idsInProfiles.add(profile.id)
+      }
+    })
+  })
+
+  profilesByOrganisation.forEach((profiles, level) => {
+    const filteredProfiles = profiles.filter(profile =>
+      idsInProfiles?.has(profile.id),
+    )
+
+    if (filteredProfiles.length) {
+      filteredOrganisations.set(level, filteredProfiles)
+    }
+  })
+
+  return filteredOrganisations
+}
+
+export const australiaRegions = [
+  'Australian Capital Territory',
+  'New South Wales',
+  'Northern Territory',
+  'Tasmania',
+  'Queensland',
+  'South Australia',
+  'Victoria',
+  'Western Australia',
+]
+
+export const newZealandRegions = [
+  'Northland',
+  'Auckland',
+  'Waikato',
+  'Bay of Plenty',
+  'Gisborne',
+  "Hawke's Bay",
+  'Taranaki',
+  'Manawatu-Wanganui',
+  'Wellington',
+  'Tasman',
+  'Nelson',
+  'Marlborough',
+  'West Coast',
+  'Canterbury',
+  'Otago',
+  'Southland',
+  'Chatham Islands County',
+]

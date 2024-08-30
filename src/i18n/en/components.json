@@ -70,6 +70,10 @@
   "organization-dropdown": {
     "title": "Select Organisations"
   },
+  "organisation-region": {
+    "region": "Region",
+    "stateTerritory": "State/Territory"
+  },
   "suspense-loading": {
     "text": "Loading..."
   },

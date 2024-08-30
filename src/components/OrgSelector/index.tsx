@@ -66,6 +66,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     countryCode,
     searchOnlyByPostCode = false,
     canSearchByAddress = true,
+    showOnlyMainOrgs = false,
     label,
     ...props
   }) {
@@ -164,8 +165,21 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         orConditions.push({ _and: address })
       }
 
+      if (showOnlyMainOrgs) {
+        return {
+          _and: [
+            { _or: orConditions },
+            { main_organisation_id: { _is_null: true } },
+          ],
+        }
+      }
       return { _or: orConditions }
-    }, [debouncedQuery, searchOnlyByPostCode, canSearchByAddress])
+    }, [
+      debouncedQuery,
+      searchOnlyByPostCode,
+      canSearchByAddress,
+      showOnlyMainOrgs,
+    ])
 
     const [{ data: hubOrgs, fetching: orgsFetching }, refetchOrganisations] =
       useQuery<GetOrganizationsQuery, GetOrganizationsQueryVariables>({

@@ -21,6 +21,15 @@ vi.mock('posthog-js/react', () => ({
 }))
 const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
+vi.mock('@app/context/auth', async () => ({
+  ...((await vi.importActual('@app/context/auth')) as object),
+  useAuth: vi.fn().mockReturnValue({
+    acl: {
+      isAustralia: vi.fn().mockReturnValue(false),
+    },
+  }),
+}))
+
 describe('page: ReplaceParticipantDialog.', () => {
   const {
     result: {

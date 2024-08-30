@@ -13,7 +13,7 @@ import {
   filterOrganisationProfilesById,
   filterProfilesByEnrollments,
   profilesByLevelType,
-} from '../utils'
+} from '../utils/UK'
 
 export const GET_ORG_PROFILES = gql`
   query GetOrganizationProfiles($input: OrganizationProfilesInput!) {

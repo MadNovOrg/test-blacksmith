@@ -21,6 +21,15 @@ export const useOrgType = (sector: string, international = false) => {
     case 'hsc_adult':
       sectorMap.set(sector, Organisation_Sector_Enum.HscAdult)
       break
+    case 'anz_edu':
+      sectorMap.set(sector, Organisation_Sector_Enum.AnzEdu)
+      break
+    case 'anz_ss':
+      sectorMap.set(sector, Organisation_Sector_Enum.AnzSs)
+      break
+    case 'anz_health':
+      sectorMap.set(sector, Organisation_Sector_Enum.AnzHealth)
+      break
     default:
       'other'
   }

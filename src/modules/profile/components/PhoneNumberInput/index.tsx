@@ -19,6 +19,7 @@ export interface PhoneNumberSelection {
 }
 
 export const DEFAULT_PHONE_COUNTRY = 'GB'
+export const DEFAULT_AUSTRALIA_PHONE_COUNTRY = 'AU'
 
 export type PhoneNumberInputProps = {
   value: PhoneNumberSelection

@@ -387,6 +387,26 @@ export default function useWorldCountries() {
     [],
   )
 
+  const ANZCountriesCodes: CountryISOCode[] = useMemo(
+    () => [
+      'AU',
+      'NZ',
+      'PG',
+      'FJ',
+      'SB',
+      'FM',
+      'VU',
+      'WS',
+      'KI',
+      'TO',
+      'MH',
+      'PW',
+      'TV',
+      'NR',
+    ],
+    [],
+  )
+
   const countriesCodesWithUKs: WorldCountriesCodes[] = useMemo(
     () => [
       'GB-ENG',
@@ -415,6 +435,37 @@ export default function useWorldCountries() {
     },
     [],
   )
+  const isAustraliaCountry = useCallback(
+    (
+      countryCode:
+        | CountryISOCode
+        | UKsCountriesCode
+        | string
+        | null
+        | undefined,
+    ) => {
+      if (!countryCode) return false
+
+      return countryCode === 'AU'
+    },
+    [],
+  )
+
+  const isNewZealandCountry = useCallback(
+    (
+      countryCode:
+        | CountryISOCode
+        | UKsCountriesCode
+        | string
+        | null
+        | undefined,
+    ) => {
+      if (!countryCode) return false
+
+      return countryCode === 'NZ'
+    },
+    [],
+  )
 
   const checkUKsCountryName = useCallback(
     (country: string | null | undefined) => {
@@ -438,9 +489,12 @@ export default function useWorldCountries() {
     countries,
     countriesCodesWithUKs,
     countriesISOCodes,
+    ANZCountriesCodes,
     getLabel,
     getUKCountryCodeByCountryName,
     isUKCountry,
+    isAustraliaCountry,
+    isNewZealandCountry,
   }
 }
 

@@ -36,11 +36,11 @@ configuration:
     xero_contact_id: xeroContactId
   custom_root_fields: {}
 object_relationships:
-  - name: main_organisations
+  - name: main_organisation
     using:
       manual_configuration:
         column_mapping:
-          id: main_organisation_id
+          main_organisation_id: id
         insertion_order: null
         remote_table:
           name: organization
@@ -59,7 +59,7 @@ array_relationships:
     using:
       manual_configuration:
         column_mapping:
-          main_organisation_id: id
+          id: main_organisation_id
         insertion_order: null
         remote_table:
           name: organization

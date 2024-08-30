@@ -13,6 +13,8 @@ export const ORGANIZATION = gql`
     updatedAt
     xeroContactId
     sector
+    region
+    main_organisation_id
     geoCoordinates
     organisationType
   }

@@ -13,14 +13,17 @@ import {
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { UPDATE_ORG_MUTATION } from '@app/modules/organisation/queries/update-org'
 
-import { OrganizationForm } from '../../components/OrganizationForm'
-import { FormInputs } from '../../utils'
+import { OrganizationForm as ANZOrganisationForm } from '../../components/OrganizationForm/ANZ'
+import { OrganizationForm as UKOrganisationForm } from '../../components/OrganizationForm/UK'
+import { FormInputs as ANZFormInputs } from '../../utils/ANZ'
+import { FormInputs as UKFormInputs } from '../../utils/UK'
 
 export const EditOrgDetails: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { profile, acl } = useAuth()
   const { isUKCountry } = useWorldCountries()
+  const isUKRegion = acl.isUK()
 
   const [{}, updateOrganisation] = useMutation<
     UpdateOrgMutation,
@@ -32,7 +35,7 @@ export const EditOrgDetails: React.FC<
     orgId: id ?? '',
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
-    withDfEEstablishment: true,
+    withDfEEstablishment: isUKRegion,
   })
 
   const org = data?.orgs.length
@@ -64,11 +67,14 @@ export const EditOrgDetails: React.FC<
           isValid(new Date(orgDetail.attributes.ofstedLastInspection))
             ? new Date(orgDetail?.attributes.ofstedLastInspection)
             : null,
+        mainOrgId: orgDetail.main_organisation_id,
+        mainOrgName: orgDetail?.main_organisation?.name,
+        region: orgDetail.region,
       }))[0]
     : null
 
-  const onSubmit = useCallback(
-    async (data: FormInputs) => {
+  const onSubmitUK = useCallback(
+    async (data: UKFormInputs) => {
       if (!id) return
       const orgDataToBeUpdated = {
         id,
@@ -113,11 +119,62 @@ export const EditOrgDetails: React.FC<
     [id, isUKCountry, navigate, updateOrganisation],
   )
 
+  const onSubmitANZ = useCallback(
+    async (data: ANZFormInputs) => {
+      if (!id) return
+      const orgDataToBeUpdated = {
+        id,
+        org: {
+          name: data.name.trim(),
+          sector: data.sector,
+          region: data.region,
+          main_organisation_id: data.mainOrgId,
+          organisationType:
+            data.organisationType?.toLocaleLowerCase() === 'other'
+              ? data.orgTypeSpecifyOther
+              : data.organisationType,
+          attributes: {
+            email: data.orgEmail.toLowerCase(),
+            phone: data.orgPhone,
+            headFirstName: data.headFirstName,
+            headSurname: data.headSurname,
+            headEmailAddress: data.headEmailAddress,
+            settingName: data.settingName,
+            website: data.website,
+          },
+          address: {
+            line1: data.addressLine1,
+            line2: data.addressLine2,
+            city: data.city,
+            country: data.country,
+            countryCode: data.countryCode,
+            postCode: data.postcode,
+          },
+        },
+      }
+      await updateOrganisation(orgDataToBeUpdated)
+      navigate('..?tab=DETAILS')
+    },
+    [id, navigate, updateOrganisation],
+  )
+
   if (!org) return null
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>
-      <OrganizationForm onSubmit={onSubmit} isEditMode editOrgData={org} />
+      {isUKRegion ? (
+        <UKOrganisationForm
+          onSubmit={onSubmitUK}
+          isEditMode
+          editOrgData={org}
+        />
+      ) : (
+        <ANZOrganisationForm
+          onSubmit={onSubmitANZ}
+          isEditMode
+          editOrgData={org}
+        />
+      )}
     </Box>
   )
 }

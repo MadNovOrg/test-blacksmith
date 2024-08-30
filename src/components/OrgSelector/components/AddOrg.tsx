@@ -17,7 +17,7 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown/CountryDropdown'
 import { Dialog } from '@app/components/dialogs'
-import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown'
+import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
 import { isDfeSuggestion } from '@app/components/OrgSelector/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import {

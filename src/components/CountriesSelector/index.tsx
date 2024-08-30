@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
 
 export type CountriesSelectorProps = {
@@ -38,13 +39,15 @@ const CountriesSelector = ({
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
+    ANZCountriesCodes: australiaCountries,
     getLabel,
     isUKCountry,
   } = useWorldCountries()
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const isINDIRECTcourse = courseType === Course_Type_Enum.Indirect
 
-  let countriesList = countries
+  let countriesList = acl.isAustralia() ? australiaCountries : countries
 
   if (
     (isUKCountry(courseResidingCountry) &&
