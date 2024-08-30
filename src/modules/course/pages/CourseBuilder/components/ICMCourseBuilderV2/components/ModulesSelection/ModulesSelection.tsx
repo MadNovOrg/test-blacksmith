@@ -37,6 +37,7 @@ export type CallbackFn = ({
 
 type Props = {
   availableModules: ModuleSettingsQuery['moduleSettings']
+  displayModulesDuration?: boolean
   initialSelection?: string[]
   onChange?: CallbackFn
   onSubmit?: CallbackFn
@@ -51,6 +52,7 @@ type Props = {
 
 export const ModulesSelection: React.FC<Props> = ({
   availableModules,
+  displayModulesDuration = true,
   initialSelection = [],
   showDuration,
   maxDuration = 0,
@@ -205,7 +207,7 @@ export const ModulesSelection: React.FC<Props> = ({
                             <span> *</span>
                           ) : null}
                         </Typography>
-                        {moduleSetting.duration ? (
+                        {displayModulesDuration && moduleSetting.duration ? (
                           <Typography variant="body2" color="white">
                             {t('minimum')}{' '}
                             <span data-testid="module-duration">
@@ -292,7 +294,7 @@ export const ModulesSelection: React.FC<Props> = ({
                           ) : null}
                         </span>
                       </Typography>
-                      {moduleSetting.duration ? (
+                      {displayModulesDuration && moduleSetting.duration ? (
                         <Typography variant="body2" color="white">
                           {t('minimum')}{' '}
                           <span data-testid="module-duration">

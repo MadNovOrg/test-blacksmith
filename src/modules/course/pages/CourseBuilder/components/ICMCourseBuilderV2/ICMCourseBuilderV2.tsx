@@ -12,6 +12,7 @@ import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Color_Enum,
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   GetCourseByIdQuery,
@@ -459,6 +460,18 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       Course_Level_Enum.FoundationTrainerPlus,
     ].includes(courseData?.course?.level)
 
+  const isLevel1VirtualCourse = useMemo(
+    () =>
+      courseData?.course?.type === Course_Type_Enum.Closed &&
+      courseData?.course?.level === Course_Level_Enum.Level_1 &&
+      courseData?.course?.deliveryType === Course_Delivery_Type_Enum.Virtual,
+    [
+      courseData?.course?.deliveryType,
+      courseData?.course?.level,
+      courseData?.course?.type,
+    ],
+  )
+
   const backButton: { label: string; to: string | undefined } = useMemo(() => {
     return getBackButtonForBuilderPage({
       editMode: Boolean(editMode),
@@ -531,6 +544,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
             onSubmit={handleModulesSubmit}
             submitting={submittingModules}
             showDuration={hasEstimatedDuration}
+            displayModulesDuration={!isLevel1VirtualCourse}
             maxDuration={maxDuration}
             validateSelection={validateSelection}
             slots={{
