@@ -71,20 +71,23 @@ export const ReviewAndConfirm = () => {
     GetOrderReducedQuery,
     GetOrderReducedQueryVariables
   >({
-    query: GET_ORDER_REDUCED,
-    variables: { orderId: savedCourse.orderId },
     pause: !savedCourse.orderId,
+    query: GET_ORDER_REDUCED,
+    requestPolicy: 'network-only',
+    variables: { orderId: savedCourse.orderId },
   })
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
   }, [setCurrentStepKey])
+
   const [startPolling, polling] = usePollQuery(
     () =>
       getOrderReduced({
         requestPolicy: 'network-only',
       }),
     () => !!orderCompleted?.order?.xeroInvoiceNumber,
+    { maxPolls: 30, interval: 2000 }, // 1 minute
   )
 
   useEffect(() => {
@@ -121,7 +124,7 @@ export const ReviewAndConfirm = () => {
     startPolling,
     polling,
     savedCourse,
-    orderCompleted,
+    orderCompleted?.order?.xeroInvoiceNumber,
     addSnackbarMessage,
     t,
     acl,
