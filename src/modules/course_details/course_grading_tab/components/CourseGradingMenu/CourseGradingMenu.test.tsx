@@ -29,14 +29,14 @@ describe('component: CourseGradingMenu', () => {
     const menu = screen.getByTestId('course-grading-options')
 
     expect(
-      within(menu).getByText(t('pages.course-grading.grade-pass')),
-    ).toBeInTheDocument()
+      within(menu).queryByText(t('pages.course-grading.grade-pass')),
+    ).not.toBeInTheDocument()
     expect(
       within(menu).getByText(t('pages.course-grading.grade-fail')),
     ).toBeInTheDocument()
     expect(
-      within(menu).queryByText(t('pages.course-grading.grade-non-physical')),
-    ).not.toBeInTheDocument()
+      within(menu).getByText(t('pages.course-grading.grade-non-physical')),
+    ).toBeInTheDocument()
     expect(
       within(menu).queryByText(t('pages.course-grading.grade-assist-only')),
     ).not.toBeInTheDocument()

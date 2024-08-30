@@ -9,10 +9,13 @@ export function getAvailableGrades(
   deliveryType: Course_Delivery_Type_Enum,
 ): Grade_Enum[] {
   if (
-    (deliveryType === Course_Delivery_Type_Enum.Virtual &&
-      courseLevel === Course_Level_Enum.Level_1) ||
-    deliveryType === Course_Delivery_Type_Enum.Mixed
+    deliveryType === Course_Delivery_Type_Enum.Virtual &&
+    courseLevel === Course_Level_Enum.Level_1
   ) {
+    return [Grade_Enum.ObserveOnly, Grade_Enum.Fail]
+  }
+
+  if (deliveryType === Course_Delivery_Type_Enum.Mixed) {
     return [Grade_Enum.Pass, Grade_Enum.Fail]
   }
 
