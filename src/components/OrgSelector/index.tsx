@@ -269,17 +269,18 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       localSavedOrgToBeCreated,
     ])
 
-    const noOptionsText = q ? (
-      <Typography variant="body2">
-        {dfeFetching || orgsFetching
-          ? t('loading')
-          : t('components.org-selector.no-results')}
-      </Typography>
-    ) : (
-      <Typography variant="body2">
-        {t('components.org-selector.start-typing')}
-      </Typography>
-    )
+    const noOptionsText = useMemo(() => {
+      let text = ''
+
+      if (q) {
+        if (dfeFetching || orgsFetching) text = t('loading')
+        else text = t('components.org-selector.no-results')
+      } else {
+        text = t('components.org-selector.start-typing')
+      }
+
+      return <Typography variant="body2">{text}</Typography>
+    }, [dfeFetching, orgsFetching, q, t])
 
     function renderAddress(option: Option) {
       if (!isHubOrg(option) && !isDfeSuggestion(option)) return ''

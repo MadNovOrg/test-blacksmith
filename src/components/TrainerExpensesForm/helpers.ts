@@ -17,11 +17,7 @@ export function transportMethodToDropdownItem(
 function isTransportError(
   error: NonNullish<ExpensesErrors['transport']>[0],
   field: string,
-): field is
-  | 'accommodationCost'
-  | 'flightDays'
-  | 'accommodationNights'
-  | 'accommodationCost' {
+): field is 'accommodationCost' | 'flightDays' | 'accommodationNights' {
   return Boolean(error && field in error)
 }
 
@@ -43,8 +39,10 @@ export function getError(
     return message
   }
 
-  const transportError = errors.transport && errors.transport[idx]
-  const miscellaneousError = errors.miscellaneous && errors.miscellaneous[idx]
+  const transportError = errors.transport ? errors.transport[idx] : undefined
+  const miscellaneousError = errors.miscellaneous
+    ? errors.miscellaneous[idx]
+    : undefined
 
   if (transportError && isTransportError(transportError, field)) {
     message = transportError[field]?.message

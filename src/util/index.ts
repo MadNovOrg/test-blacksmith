@@ -585,51 +585,63 @@ export const INVOICE_STATUS_COLOR: Record<
   [Xero_Invoice_Status_Enum.Voided]: 'default',
 }
 
-// more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
-export function getProfileCertificationLevels(
+function getAdvancedTrainerLevel(
   certificates: { courseLevel: string; status: CertificateStatus }[],
-): (Course_Level_Enum | CourseLevel | null)[] {
-  const levels = []
-
+): Course_Level_Enum | null {
   const advancedTrainer = certificates?.find(
     c => c.courseLevel === Course_Level_Enum.AdvancedTrainer,
   )
   if (advancedTrainer) {
-    levels.push(Course_Level_Enum.AdvancedTrainer)
     if (advancedTrainer.status !== CertificateStatus.ExpiredRecently) {
-      return levels
+      return Course_Level_Enum.AdvancedTrainer
     }
   }
+  return null
+}
 
+function getAdvancedLevel(
+  certificates: { courseLevel: string; status: CertificateStatus }[],
+): Course_Level_Enum | null {
   if (certificates?.find(c => c.courseLevel === Course_Level_Enum.Advanced)) {
-    levels.push(Course_Level_Enum.Advanced)
+    return Course_Level_Enum.Advanced
   }
+  return null
+}
 
-  // There is no specification on how the rule should be for BILD.
-  //So here is just a logic to show the higher one treating BILD as separate certification
-  if (
-    certificates?.find(
-      c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer,
-    )
-  ) {
-    levels.push(Course_Level_Enum.BildAdvancedTrainer)
-  } else {
-    const bildHierarchy = [
-      Course_Level_Enum.BildIntermediateTrainer,
-      Course_Level_Enum.BildRegular,
-    ]
+function getBildLevel(
+  certificates: { courseLevel: string; status: CertificateStatus }[],
+): Course_Level_Enum | null {
+  return certificates?.find(
+    c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer,
+  )
+    ? Course_Level_Enum.BildAdvancedTrainer
+    : null
+}
 
-    for (const level of bildHierarchy) {
-      const certificate = certificates?.find(c => c.courseLevel === level)
-      if (certificate) {
-        levels.push(level)
-        if (certificate.status !== CertificateStatus.ExpiredRecently) {
-          break
-        }
+function addBildHierarchyLevels(
+  certificates: { courseLevel: string; status: CertificateStatus }[],
+  levels: (Course_Level_Enum | CourseLevel)[],
+) {
+  const bildHierarchy = [
+    Course_Level_Enum.BildIntermediateTrainer,
+    Course_Level_Enum.BildRegular,
+  ]
+
+  for (const level of bildHierarchy) {
+    const certificate = certificates?.find(c => c.courseLevel === level)
+    if (certificate) {
+      levels.push(level)
+      if (certificate.status !== CertificateStatus.ExpiredRecently) {
+        break
       }
     }
   }
+}
 
+function addHierarchyLevels(
+  certificates: { courseLevel: string; status: CertificateStatus }[],
+  levels: (Course_Level_Enum | CourseLevel)[],
+) {
   const hierarchy = [
     Course_Level_Enum.IntermediateTrainer,
     Course_Level_Enum.Level_2,
@@ -640,10 +652,37 @@ export function getProfileCertificationLevels(
     if (certificate) {
       levels.push(level)
       if (certificate.status !== CertificateStatus.ExpiredRecently) {
-        return levels
+        return
       }
     }
   }
+}
+
+// more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
+export function getProfileCertificationLevels(
+  certificates: { courseLevel: string; status: CertificateStatus }[],
+): (Course_Level_Enum | CourseLevel | null)[] {
+  const levels = []
+
+  const advancedTrainerLevel = getAdvancedTrainerLevel(certificates)
+  if (advancedTrainerLevel) {
+    levels.push(advancedTrainerLevel)
+    return levels
+  }
+
+  const advancedLevel = getAdvancedLevel(certificates)
+  if (advancedLevel) {
+    levels.push(advancedLevel)
+  }
+
+  const bildLevel = getBildLevel(certificates)
+  if (bildLevel) {
+    levels.push(bildLevel)
+  } else {
+    addBildHierarchyLevels(certificates, levels)
+  }
+
+  addHierarchyLevels(certificates, levels)
 
   return levels.length > 0 ? levels : [null]
 }
@@ -805,29 +844,32 @@ export const getCourseStatus = (courseData: {
   )
 
   let courseStatus: AllCourseStatuses = Course_Status_Enum.Scheduled
+
   if (courseData.status === Course_Status_Enum.Cancelled) {
-    courseStatus = Course_Status_Enum.Cancelled
-  } else if (courseData.cancellationRequest) {
-    courseStatus = AdminOnlyCourseStatus.CancellationRequested
-  } else {
-    if (courseEnded) {
-      courseStatus = Course_Status_Enum.Completed
-    }
-    if (participant) {
-      // user participated in the course
-      if (!participant.attended && courseEnded) {
-        courseStatus = AttendeeOnlyCourseStatus.NotAttended
-      } else if (!participant.healthSafetyConsent) {
-        courseStatus = AttendeeOnlyCourseStatus.InfoRequired
-      } else if (
-        courseData.evaluation_answers_aggregate &&
-        !evaluated &&
-        courseEnded
-      ) {
-        courseStatus = Course_Status_Enum.EvaluationMissing
-      } else if (!participant.grade && courseEnded) {
-        courseStatus = Course_Status_Enum.GradeMissing
-      }
+    return Course_Status_Enum.Cancelled
+  }
+
+  if (courseData.cancellationRequest) {
+    return AdminOnlyCourseStatus.CancellationRequested
+  }
+
+  if (courseEnded) {
+    courseStatus = Course_Status_Enum.Completed
+  }
+  if (participant) {
+    // user participated in the course
+    if (!participant.attended && courseEnded) {
+      courseStatus = AttendeeOnlyCourseStatus.NotAttended
+    } else if (!participant.healthSafetyConsent) {
+      courseStatus = AttendeeOnlyCourseStatus.InfoRequired
+    } else if (
+      courseData.evaluation_answers_aggregate &&
+      !evaluated &&
+      courseEnded
+    ) {
+      courseStatus = Course_Status_Enum.EvaluationMissing
+    } else if (!participant.grade && courseEnded) {
+      courseStatus = Course_Status_Enum.GradeMissing
     }
   }
   return courseStatus

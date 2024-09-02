@@ -159,15 +159,7 @@ export function canBeBlended(
   const isVirtual = deliveryType === Course_Delivery_Type_Enum.Virtual
 
   const types = {
-    [Course_Type_Enum.Open]: () => {
-      if (!courseLevel) return false
-
-      if (isVirtual) {
-        // OPEN + Virtual can never be blended
-      }
-
-      return false
-    },
+    [Course_Type_Enum.Open]: () => false,
 
     [Course_Type_Enum.Closed]: () => {
       if (!courseLevel) return false

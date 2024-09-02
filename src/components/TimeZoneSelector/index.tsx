@@ -1,7 +1,7 @@
 import { Autocomplete, Box, TextField } from '@mui/material'
 import { BaseTextFieldProps } from '@mui/material/TextField/TextField'
 import { addMinutes, format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useTimeZones, { TimeZoneDataType } from '@app/hooks/useTimeZones'
@@ -44,94 +44,131 @@ const TimeZoneSelector = ({
   const [timeZoneOptions, setTimeZoneOptions] = useState<TimeZoneDataType[]>([])
   const [initialValueOnEdit, setInitialValueOnEdit] = useState<boolean>(false)
 
-  useEffect(() => {
-    const getTimeZoneByLatLong = async () => {
-      if (editCourse && value?.timeZoneId && !initialValueOnEdit) {
-        if (ignoreVenue) {
-          const timeZones = getTimeZonesByCountryCode(code, date)
+  const shouldInitializeValue = useCallback((): boolean => {
+    return Boolean(editCourse && value?.timeZoneId && !initialValueOnEdit)
+  }, [editCourse, initialValueOnEdit, value?.timeZoneId])
 
-          setTimeZoneOptions(timeZones)
-        } else {
-          setTimeZoneOptions([
-            {
-              timeZoneId: value.timeZoneId,
-              rawOffset: getTimeZoneOffset(value.timeZoneId, date),
-            },
-          ])
-        }
+  const shouldFetchTimeZoneByCoordinates = useCallback((): boolean => {
+    return Boolean(!ignoreVenue && venue?.geoCoordinates)
+  }, [ignoreVenue, venue?.geoCoordinates])
 
-        setInitialValueOnEdit(true)
-        return
-      } else {
-        if (!ignoreVenue && venue?.geoCoordinates) {
-          const coordinates = venue.geoCoordinates
-            ?.replace(/[()]/g, '')
-            .split(',')
-
-          if (
-            Array.isArray(coordinates) &&
-            coordinates.every(element => typeof element === 'string')
-          ) {
-            const timeZone = await getTimeZoneLatLng(
-              coordinates[0],
-              coordinates[1],
-              date,
-            )
-
-            if (timeZone) {
-              setTimeZoneOptions([timeZone])
-
-              onChange(timeZone)
-
-              return
-            }
-          }
-        }
-
-        if (code) {
-          const timeZones = getTimeZonesByCountryCode(code, date)
-
-          setTimeZoneOptions(timeZones)
-
-          const currentTimeZoneInOptions = timeZones.find(
-            zone => zone.timeZoneId === value?.timeZoneId,
-          )
-
-          // The same time zone can have different GMT because of Day Save Time
-          const isSameTimeZoneWithDifferentGMT =
-            currentTimeZoneInOptions &&
-            value?.rawOffset &&
-            convertTimeZoneOffset(value.rawOffset) !=
-              convertTimeZoneOffset(currentTimeZoneInOptions.rawOffset)
-
-          if (!(value?.timeZoneId && Boolean(currentTimeZoneInOptions))) {
-            onChange(timeZones.length === 1 ? timeZones[0] : null)
-          } else if (isSameTimeZoneWithDifferentGMT) {
-            onChange(currentTimeZoneInOptions)
-          }
-
-          return
-        }
-
-        setTimeZoneOptions([])
-      }
+  const handleInitialValue = useCallback(() => {
+    if (ignoreVenue) {
+      const timeZones = getTimeZonesByCountryCode(code, date)
+      setTimeZoneOptions(timeZones)
+    } else {
+      setTimeZoneOptions([
+        {
+          timeZoneId: value?.timeZoneId as string,
+          rawOffset: getTimeZoneOffset(value?.timeZoneId as string, date),
+        },
+      ])
     }
-
-    getTimeZoneByLatLong().then()
+    setInitialValueOnEdit(true)
   }, [
     code,
     date,
-    editCourse,
-    getTimeZoneLatLng,
     getTimeZoneOffset,
     getTimeZonesByCountryCode,
     ignoreVenue,
-    initialValueOnEdit,
-    onChange,
-    value?.rawOffset,
     value?.timeZoneId,
-    venue?.geoCoordinates,
   ])
+
+  const fetchTimeZoneByCoordinates = useCallback(async () => {
+    const coordinates = venue?.geoCoordinates?.replace(/[()]/g, '').split(',')
+
+    if (
+      Array.isArray(coordinates) &&
+      coordinates.every(element => typeof element === 'string')
+    ) {
+      const timeZone = await getTimeZoneLatLng(
+        coordinates[0],
+        coordinates[1],
+        date,
+      )
+
+      if (timeZone) {
+        setTimeZoneOptions([timeZone])
+        onChange(timeZone)
+
+        return timeZone
+      }
+    }
+
+    return null
+  }, [date, getTimeZoneLatLng, onChange, venue?.geoCoordinates])
+
+  const findCurrentTimeZoneInOptions = useCallback(
+    (timeZones: TimeZoneDataType[]) => {
+      return timeZones.find(zone => zone.timeZoneId === value?.timeZoneId)
+    },
+    [value?.timeZoneId],
+  )
+
+  const checkSameTimeZoneWithDifferentGMT = useCallback(
+    (currentTimeZoneInOptions: TimeZoneDataType | undefined) => {
+      return (
+        currentTimeZoneInOptions &&
+        value?.rawOffset &&
+        convertTimeZoneOffset(value.rawOffset) !=
+          convertTimeZoneOffset(currentTimeZoneInOptions.rawOffset)
+      )
+    },
+    [value?.rawOffset],
+  )
+
+  const handleCountryCodeTimeZones = useCallback(() => {
+    const timeZones = getTimeZonesByCountryCode(code, date)
+    setTimeZoneOptions(timeZones)
+
+    const currentTimeZoneInOptions = findCurrentTimeZoneInOptions(timeZones)
+    const isSameTimeZoneWithDifferentGMT = checkSameTimeZoneWithDifferentGMT(
+      currentTimeZoneInOptions,
+    )
+
+    if (!currentTimeZoneInOptions) {
+      onChange(timeZones.length === 1 ? timeZones[0] : null)
+    } else if (isSameTimeZoneWithDifferentGMT) {
+      onChange(currentTimeZoneInOptions)
+    }
+  }, [
+    checkSameTimeZoneWithDifferentGMT,
+    code,
+    date,
+    findCurrentTimeZoneInOptions,
+    getTimeZonesByCountryCode,
+    onChange,
+  ])
+
+  const getTimeZoneByLatLong = useCallback(async () => {
+    if (shouldInitializeValue()) {
+      handleInitialValue()
+      return
+    }
+
+    if (shouldFetchTimeZoneByCoordinates()) {
+      const tz = await fetchTimeZoneByCoordinates()
+      if (tz) return
+    }
+
+    if (code) {
+      handleCountryCodeTimeZones()
+      return
+    }
+
+    setTimeZoneOptions([])
+  }, [
+    code,
+    fetchTimeZoneByCoordinates,
+    handleCountryCodeTimeZones,
+    handleInitialValue,
+    shouldFetchTimeZoneByCoordinates,
+    shouldInitializeValue,
+  ])
+
+  useEffect(() => {
+    getTimeZoneByLatLong().then()
+  }, [getTimeZoneByLatLong])
 
   return (
     <Autocomplete

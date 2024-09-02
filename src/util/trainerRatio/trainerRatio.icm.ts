@@ -44,15 +44,32 @@ export const ratio = (
   increment,
 })
 
+const getRatioForIndirectCourse = ({
+  courseLevel,
+  reaccreditation,
+  usesAOL,
+}: TrainerRatioCriteria) => {
+  if (
+    (courseLevel === Level_1 || courseLevel === Level_2) &&
+    !reaccreditation &&
+    !usesAOL
+  ) {
+    return ratio(1, 24, 12)
+  }
+
+  if (courseLevel === Advanced) {
+    return ratio(1, 16, 8)
+  }
+
+  if (courseLevel === Level_1Bs) {
+    return ratio(1, 18, 12)
+  }
+
+  return null
+}
+
 const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
-  const {
-    courseLevel,
-    deliveryType,
-    isUKCountry,
-    reaccreditation,
-    type,
-    usesAOL,
-  } = criteria
+  const { courseLevel, deliveryType, isUKCountry, type } = criteria
 
   if (
     !isUKCountry &&
@@ -66,21 +83,8 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
     return ratio(0, 24, 12)
 
   if (type === Indirect) {
-    if (
-      (courseLevel === Level_1 || courseLevel === Level_2) &&
-      !reaccreditation &&
-      !usesAOL
-    ) {
-      return ratio(1, 24, 12)
-    }
-
-    if (courseLevel === Advanced) {
-      return ratio(1, 16, 8)
-    }
-
-    if (courseLevel === Level_1Bs) {
-      return ratio(1, 18, 12)
-    }
+    const indirectCourseRatio = getRatioForIndirectCourse(criteria)
+    if (indirectCourseRatio) return indirectCourseRatio
   }
 
   if (

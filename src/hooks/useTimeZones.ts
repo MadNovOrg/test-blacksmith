@@ -54,7 +54,10 @@ export default function useTimeZones() {
   )
 
   const getTimeZonesByCountryCode = useCallback(
-    (code: CountryISOCode | string | undefined, date?: Date | number) => {
+    (
+      code: CountryISOCode | string | undefined,
+      date?: Date | number,
+    ): TimeZoneDataType[] => {
       if (!code) return []
 
       const timeZones = getTimeZonesByCode(isUKCountry(code) ? 'GB' : code)
