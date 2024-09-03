@@ -1,9 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import InfoIcon from '@mui/icons-material/Info'
 import { LoadingButton } from '@mui/lab'
-import { Button, TextField, Tooltip, Grid, Typography } from '@mui/material'
+import { Button, TextField, Grid, Typography } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
@@ -15,38 +13,31 @@ import useWorldCountries, {
   UKsCountriesCode,
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown/CountryDropdown'
 import { Dialog } from '@app/components/dialogs'
-import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
-import { isDfeSuggestion } from '@app/components/OrgSelector/utils'
+import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/ANZ'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
+import { useAuth } from '@app/context/auth'
 import {
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
 } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import PhoneNumberInput, {
-  PhoneNumberSelection,
-} from '@app/modules/profile/components/PhoneNumberInput'
-import { Address, Establishment } from '@app/types'
+import { RegionSelector } from '@app/modules/organisation/components/RegionSelector'
+import { Address } from '@app/types'
 import { saveNewOrganizationDataInLocalState } from '@app/util'
 
-import {
-  getSchema,
-  getDefaultValues,
-  AddNewOrganizationFormInputs as FormInput,
-} from './utils'
+import { getSchema, getDefaultValues, FormInputs } from './utils'
 
 type Props = {
   onSuccess: (org: InsertOrgLeadMutation['org']) => void
   onClose: VoidFunction
-  option: Establishment | { name: string }
+  orgName: string
   countryCode: CountryCode | UKsCountriesCode | ExceptionsCountriesCode
 }
 
 export const AddOrg: FC<PropsWithChildren<Props>> = function ({
-  option,
+  orgName,
   countryCode,
   onSuccess,
   onClose,
@@ -54,32 +45,20 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   const { t, _t } = useScopedTranslation('components.add-organisation')
   const [{ data: organisationData, fetching: loading }, insertOrganisation] =
     useInsertNewOrganization()
-  const addOrgCountriesSelectorEnabled = useFeatureFlagEnabled(
-    'add-organization-country',
-  )
+  const { acl } = useAuth()
+  const isAustraliaRegion = acl.isAustralia()
 
   const { pathname } = useLocation()
 
-  const useInternationalCountriesSelector = useMemo(() => {
-    return Boolean(addOrgCountriesSelectorEnabled)
-  }, [addOrgCountriesSelectorEnabled])
-
-  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
-
-  const [isInUK, setIsInUK] = useState(isUKCountry(countryCode))
+  const { getLabel: getCountryLabel } = useWorldCountries()
   const [specifyOther, setSpecifyOther] = useState(false)
-  const isDFESuggestion = isDfeSuggestion(option)
-
   const schema = getSchema({
     t: _t,
-    useInternationalCountriesSelector,
-    isInUK,
-    isDfeSuggestion: isDFESuggestion,
   })
 
   const defaultValues = useMemo(
-    () => getDefaultValues({ option, countryCode, getCountryLabel }),
-    [countryCode, getCountryLabel, option],
+    () => getDefaultValues({ orgName, countryCode, getCountryLabel }),
+    [countryCode, getCountryLabel, orgName],
   )
 
   const {
@@ -89,14 +68,14 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     watch,
     setValue,
     trigger,
-  } = useForm<FormInput>({
+  } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues,
   })
 
   const values = watch()
 
-  const onSubmit = async (data: FormInput) => {
+  const onSubmit = async (data: FormInputs) => {
     const vars: InsertOrgLeadMutationVariables = {
       name: data.organisationName,
       sector: data.sector,
@@ -110,25 +89,11 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         country: data.country,
         countryCode: data.countryCode,
         postCode: data.postCode,
+        region: data.region,
       } as Address,
       attributes: {
         email: data.organisationEmail,
-        ...(isDFESuggestion
-          ? {
-              phone: data.organisationPhoneNumber,
-              localAuthority: option.localAuthority,
-              headFirstName: option.headFirstName,
-              headLastName: option.headLastName,
-              headTitle: option.headTitle,
-              headPreferredJobTitle: option.headJobTitle,
-              ofstedRating: option.ofstedRating
-                ?.toUpperCase()
-                .replace(' ', '_'),
-              ofstedLastInspection: option.ofstedLastInspection,
-            }
-          : null),
       },
-      dfeId: isDFESuggestion ? option.id : undefined,
     }
 
     if (['/registration', '/auto-register'].includes(pathname)) {
@@ -143,10 +108,10 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   }
 
   useEffect(() => {
-    if (schema && errors.postCode && !isInUK) {
+    if (schema && errors.postCode) {
       trigger('postCode')
     }
-  }, [errors.postCode, isInUK, schema, trigger])
+  }, [errors.postCode, schema, trigger])
 
   useEffect(() => {
     setValue('organisationType', '')
@@ -157,11 +122,8 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   }, [onSuccess, organisationData?.org, organisationData?.org?.name])
 
   useEffect(() => {
-    setSpecifyOther(
-      values.sector !== 'other' &&
-        values.organisationType?.toLocaleLowerCase() === 'other',
-    )
-  }, [setSpecifyOther, specifyOther, values.organisationType, values.sector])
+    setSpecifyOther(values.organisationType?.toLocaleLowerCase() === 'other')
+  }, [setSpecifyOther, specifyOther, values.organisationType])
 
   return (
     <Dialog
@@ -176,31 +138,30 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         <Typography mb={2}>{_t('org-address')}</Typography>
         <Grid container gap={3} mb={3} flexDirection={'column'}>
           <Grid item>
-            {useInternationalCountriesSelector ? (
-              <CountriesSelector
-                onChange={(_, code) => {
-                  if (code) {
-                    setValue(
-                      'country',
-                      getCountryLabel(code as WorldCountriesCodes) ?? '',
-                    )
-                    setValue('countryCode', code)
-                    setIsInUK(isUKCountry(code as CountryCode))
-                  }
-                }}
-                value={values.countryCode}
-                onlyUKCountries={isDFESuggestion}
-              />
-            ) : (
-              <CountryDropdown
-                register={register('country')}
-                required
-                error={Boolean(errors.country)}
-                errormessage={errors.country?.message}
-                value={values.country}
-                label={t('fields.residing-country')}
-              />
-            )}
+            <CountriesSelector
+              onChange={(_, code) => {
+                if (code) {
+                  setValue(
+                    'country',
+                    getCountryLabel(code as WorldCountriesCodes) ?? '',
+                  )
+                  setValue('countryCode', code)
+                  setValue('region', '', { shouldValidate: true })
+                }
+              }}
+              value={values.countryCode}
+              onlyUKCountries={false}
+            />
+          </Grid>
+          <Grid item>
+            <RegionSelector
+              countryCode={values.countryCode}
+              error={Boolean(errors.region)}
+              errormessage={errors.region?.message}
+              register={register('region')}
+              required
+              value={values.region ?? ''}
+            />
           </Grid>
           <Grid item>
             <TextField
@@ -208,7 +169,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               label={t('fields.primary-address-line')}
               variant="filled"
               error={!!errors.addressLine1}
-              disabled={Boolean(isDFESuggestion && defaultValues.addressLine1)}
+              disabled={false}
               helperText={errors.addressLine1?.message}
               {...register('addressLine1')}
               inputProps={{ 'data-testid': 'addr-line2' }}
@@ -220,7 +181,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             <TextField
               id="secondaryAddressLine"
               label={t('fields.secondary-address-line')}
-              disabled={Boolean(isDFESuggestion && defaultValues.addressLine2)}
+              disabled={false}
               variant="filled"
               {...register('addressLine2')}
               inputProps={{ 'data-testid': 'addr-line2' }}
@@ -235,7 +196,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               variant="filled"
               placeholder={t('addr.city')}
               error={!!errors.city}
-              disabled={Boolean(isDFESuggestion && defaultValues.city)}
+              disabled={false}
               helperText={errors.city?.message}
               {...register('city')}
               inputProps={{ 'data-testid': 'city' }}
@@ -248,30 +209,18 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             <TextField
               id={'postCode'}
               label={_t(
-                'pages.create-organization.fields.addresses.postalAndZipCode',
+                `pages.create-organization.fields.addresses.${
+                  isAustraliaRegion ? 'postcode' : 'postalAndZipCode'
+                }`,
               )}
               variant="filled"
               error={!!errors.postCode}
-              disabled={Boolean(isDFESuggestion && defaultValues.postCode)}
+              disabled={false}
               helperText={errors.postCode?.message}
               {...register('postCode')}
               inputProps={{ 'data-testid': 'postCode' }}
               fullWidth
-              required={isInUK}
-              InputProps={
-                isInUK
-                  ? {
-                      endAdornment: (
-                        <Tooltip
-                          title={_t('post-code-tooltip')}
-                          data-testid="post-code-tooltip"
-                        >
-                          <InfoIcon color={'action'} />
-                        </Tooltip>
-                      ),
-                    }
-                  : {}
-              }
+              required={false}
             />
           </Grid>
         </Grid>
@@ -290,7 +239,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               variant="filled"
               placeholder={t('org-name-placeholder')}
               error={!!errors.organisationName}
-              disabled={Boolean(isDFESuggestion && defaultValues.city)}
+              disabled={false}
               helperText={errors.organisationName?.message}
               {...register('organisationName')}
               inputProps={{ 'data-testid': 'org-name' }}
@@ -318,7 +267,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                 value={values.organisationType}
                 disabled={!values.sector}
                 error={errors.organisationType?.message}
-                international={!isInUK}
+                international={true}
               />
             ) : (
               <TextField
@@ -361,35 +310,6 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               required
             />
           </Grid>
-          {isDFESuggestion ? (
-            <Grid item>
-              <PhoneNumberInput
-                label={t('fields.organisation-phone')}
-                variant="filled"
-                sx={{ bgcolor: 'grey.100' }}
-                inputProps={{
-                  sx: { height: 40 },
-                  'data-testid': 'org-phone',
-                }}
-                error={!!errors.organisationPhoneNumber}
-                helperText={errors.organisationPhoneNumber?.message}
-                value={{
-                  phoneNumber: values.organisationPhoneNumber ?? '',
-                  countryCode: '',
-                }}
-                onChange={({
-                  phoneNumber,
-                  countryCallingCode,
-                }: PhoneNumberSelection) => {
-                  setValue('countryCallingCode', `+${countryCallingCode}`)
-                  setValue('organisationPhoneNumber', phoneNumber, {
-                    shouldValidate: true,
-                  })
-                }}
-                fullWidth
-              />
-            </Grid>
-          ) : null}
         </Grid>
 
         <Grid mt={3} display="flex" justifyContent="flex-end" item>

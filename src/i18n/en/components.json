@@ -72,7 +72,9 @@
   },
   "organisation-region": {
     "region": "Region",
-    "stateTerritory": "State/Territory"
+    "stateTerritory": "State/Territory",
+    "state": "State",
+    "territory": "Territory"
   },
   "suspense-loading": {
     "text": "Loading..."
@@ -337,7 +339,11 @@
       "city": "Town/City",
       "postCode": "Post code",
       "zipCode": "Zip code",
-      "residing-country": "Residing Country"
+      "residing-country": "Residing Country",
+      "region": "Region",
+      "stateTerritory": "State/Territory",
+      "state": "State",
+      "territory": "Territory"
     }
   },
   "user-selector": {

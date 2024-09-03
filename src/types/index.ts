@@ -166,6 +166,7 @@ export type Address = {
   country: string
   countryCode: string
   type: string
+  region?: string
 } & Base
 
 export type ContactDetail = {

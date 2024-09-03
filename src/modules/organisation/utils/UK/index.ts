@@ -58,12 +58,7 @@ export const defaultValues = {
   postcode: '',
 }
 
-export const getFormSchema = (
-  t: TFunction,
-  _t: TFunction,
-  isInUK: boolean,
-  addOrgCountriesSelectorEnabled: boolean,
-) =>
+export const getFormSchema = (t: TFunction, _t: TFunction, isInUK: boolean) =>
   yup.object({
     name: yup.string().required(
       _t('validation-errors.required-field', {
@@ -130,28 +125,9 @@ export const getFormSchema = (
         name: t('fields.addresses.country'),
       }),
     ),
-    ...(addOrgCountriesSelectorEnabled
+
+    ...(isInUK
       ? {
-          ...(isInUK
-            ? {
-                postcode: yup
-                  .string()
-                  .required(
-                    _t('validation-errors.required-field', {
-                      name: t('fields.addresses.postcode'),
-                    }),
-                  )
-                  .test(
-                    'is-uk-postcode',
-                    _t('validation-errors.invalid-postcode'),
-                    isValidUKPostalCode,
-                  ),
-              }
-            : {
-                postcode: yup.string(),
-              }),
-        }
-      : {
           postcode: yup
             .string()
             .required(
@@ -164,7 +140,11 @@ export const getFormSchema = (
               _t('validation-errors.invalid-postcode'),
               isValidUKPostalCode,
             ),
+        }
+      : {
+          postcode: yup.string(),
         }),
+
     dfeId: yup.string().nullable(),
   })
 

@@ -39,7 +39,9 @@ import {
 } from '@app/generated/graphql'
 import { organizationData as localStateOrganization } from '@app/util'
 
-import { AddOrg } from './components/AddOrg'
+import { AddOrg as ANZAddOrg } from './components/ANZ/AddOrg'
+import { AddOrg as UKAddOrg } from './components/UK/AddOrg'
+
 type OptionToAdd = Dfe_Establishment | { id?: string; name: string }
 type Option = Organization | OptionToAdd
 
@@ -73,12 +75,13 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const { t } = useTranslation()
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-    const { profile } = useAuth()
+    const { profile, acl } = useAuth()
     const [open, setOpen] = useState(false)
     const [adding, setAdding] = useState<OptionToAdd | null>()
     const [q, setQ] = useState('')
     const [debouncedQuery] = useDebounce(q, 300)
     const localSavedOrgToBeCreated = useOrganizationToBeCreatedOnRegistration()
+    const isUKRegion = acl.isUK()
 
     useEffect(() => {
       if (q) setOpen(true)
@@ -290,9 +293,16 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             line2: option.addressLineTwo,
             city: option.town,
             postCode: option.postcode,
+            region: null,
           }
         : option.address ?? {}
-      return [address.line1, address.line2, address.city, address.postCode]
+      return [
+        address.line1,
+        address.line2,
+        address.city,
+        address.postCode,
+        address.region,
+      ]
         .filter(Boolean)
         .join(', ')
     }
@@ -486,12 +496,21 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
           {...props}
         />
         {adding ? (
-          <AddOrg
-            option={adding}
-            countryCode={(countryCode as CountryCode) ?? 'GB-ENG'}
-            onClose={handleClose}
-            onSuccess={handleSuccess}
-          />
+          isUKRegion ? (
+            <UKAddOrg
+              option={adding}
+              countryCode={(countryCode as CountryCode) ?? 'GB-ENG'}
+              onClose={handleClose}
+              onSuccess={handleSuccess}
+            />
+          ) : (
+            <ANZAddOrg
+              orgName={adding.name}
+              countryCode={(countryCode as CountryCode) ?? 'AU'}
+              onClose={handleClose}
+              onSuccess={handleSuccess}
+            />
+          )
         ) : null}
       </>
     )

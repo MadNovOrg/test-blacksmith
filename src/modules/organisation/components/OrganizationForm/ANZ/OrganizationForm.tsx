@@ -14,7 +14,6 @@ import {
   FormControlLabel,
 } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import {
   PropsWithChildren,
   FC,
@@ -32,7 +31,6 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { FormPanel } from '@app/components/FormPanel'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/ANZ'
 import { OrgSelector } from '@app/components/OrgSelector'
@@ -84,8 +82,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
   const { acl } = useAuth()
   const isAustraliaRegion = acl.isAustralia()
-  const addOrgCountriesSelectorEnabled =
-    useFeatureFlagEnabled('add-organization-country') ?? true
 
   const { getLabel: getCountryLabel } = useWorldCountries()
 
@@ -280,40 +276,31 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
               <FormPanel>
                 <Grid container gap={3} flexDirection={'column'}>
                   <Grid item>
-                    {addOrgCountriesSelectorEnabled ? (
-                      <CountriesSelector
-                        onlyUKCountries={false}
-                        onChange={(_, code) => {
-                          if (code) {
-                            setValue(
-                              'country',
-                              getCountryLabel(code as WorldCountriesCodes) ??
-                                '',
-                            )
-                            setValue('countryCode', code)
-                          }
-                        }}
-                        value={values.countryCode}
-                      />
-                    ) : (
-                      <CountryDropdown
-                        error={Boolean(errors.country)}
-                        errormessage={errors.country?.message}
-                        register={register('country')}
-                        required
-                        value={values.country ?? ''}
-                        label={t('fields.addresses.country')}
-                      />
-                    )}
+                    <CountriesSelector
+                      onlyUKCountries={false}
+                      onChange={(_, code) => {
+                        if (code) {
+                          setValue(
+                            'country',
+                            getCountryLabel(code as WorldCountriesCodes) ?? '',
+                          )
+                          setValue('countryCode', code)
+                          setValue('region', '', { shouldValidate: true })
+                        }
+                      }}
+                      value={values.countryCode}
+                    />
                   </Grid>
-                  <RegionSelector
-                    countryCode={values.countryCode}
-                    error={Boolean(errors.region)}
-                    errormessage={errors.region?.message}
-                    register={register('region')}
-                    required
-                    value={values.region ?? ''}
-                  />
+                  <Grid item>
+                    <RegionSelector
+                      countryCode={values.countryCode}
+                      error={Boolean(errors.region)}
+                      errormessage={errors.region?.message}
+                      register={register('region')}
+                      required
+                      value={values.region ?? ''}
+                    />
+                  </Grid>
                   <Grid item>
                     <TextField
                       id="line1"

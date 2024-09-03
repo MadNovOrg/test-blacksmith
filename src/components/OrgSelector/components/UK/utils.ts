@@ -6,16 +6,14 @@ import * as yup from 'yup'
 import { Establishment } from '@app/types'
 import { isValidUKPostalCode } from '@app/util'
 
-import { isDfeSuggestion } from '../utils'
+import { isDfeSuggestion } from '../../utils'
 
 export const getSchema = ({
   t,
-  useInternationalCountriesSelector,
   isInUK,
   isDfeSuggestion,
 }: {
   t: TFunction
-  useInternationalCountriesSelector: boolean
   isInUK: boolean
   isDfeSuggestion: boolean
 }) => {
@@ -68,28 +66,8 @@ export const getSchema = ({
         field2: t('pages.create-organization.fields.addresses.city'),
       }),
     ),
-    ...(useInternationalCountriesSelector
+    ...(isInUK
       ? {
-          ...(isInUK
-            ? {
-                postCode: yup
-                  .string()
-                  .required(
-                    t('validation-errors.required-field', {
-                      name: t('components.add-organisation.fields.postCode'),
-                    }),
-                  )
-                  .test(
-                    'is-uk-postcode',
-                    t('validation-errors.invalid-postcode'),
-                    isValidUKPostalCode,
-                  ),
-              }
-            : {
-                postCode: yup.string(),
-              }),
-        }
-      : {
           postCode: yup
             .string()
             .required(
@@ -102,8 +80,10 @@ export const getSchema = ({
               t('validation-errors.invalid-postcode'),
               isValidUKPostalCode,
             ),
+        }
+      : {
+          postCode: yup.string(),
         }),
-
     country: yup.string().required(
       t('validation-errors.required-field', {
         name: t('components.add-organisation.fields.country'),

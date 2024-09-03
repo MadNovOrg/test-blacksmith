@@ -17,7 +17,6 @@ import {
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { CountryCode } from 'libphonenumber-js'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import {
   PropsWithChildren,
   FC,
@@ -35,7 +34,6 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { FormPanel } from '@app/components/FormPanel'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
 import { OrgSelector } from '@app/components/OrgSelector'
@@ -101,9 +99,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const navigate = useNavigate()
   const { t, _t } = useScopedTranslation('pages.create-organization')
 
-  const addOrgCountriesSelectorEnabled =
-    useFeatureFlagEnabled('add-organization-country') ?? true
-
   const {
     checkUKsCountryName,
     getLabel: getCountryLabel,
@@ -123,10 +118,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   defaultValues.country =
     getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
 
-  const schema = useMemo(
-    () => getFormSchema(t, _t, isInUK, addOrgCountriesSelectorEnabled),
-    [t, _t, isInUK, addOrgCountriesSelectorEnabled],
-  )
+  const schema = useMemo(() => getFormSchema(t, _t, isInUK), [t, _t, isInUK])
   const {
     control,
     formState: { errors },
@@ -399,40 +391,28 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
               <FormPanel>
                 <Grid container gap={3} flexDirection={'column'}>
                   <Grid item>
-                    {addOrgCountriesSelectorEnabled ? (
-                      <CountriesSelector
-                        onlyUKCountries={
-                          Boolean(values.dfeId) || preFilledDfEProps.size > 0
-                        }
-                        onChange={(_, code) => {
-                          if (code) {
-                            setValue(
-                              'country',
-                              getCountryLabel(code as WorldCountriesCodes) ??
-                                '',
-                            )
-                            setValue('countryCode', code)
-                            setIsInUK(isUKCountry(code))
+                    <CountriesSelector
+                      onlyUKCountries={
+                        Boolean(values.dfeId) || preFilledDfEProps.size > 0
+                      }
+                      onChange={(_, code) => {
+                        if (code) {
+                          setValue(
+                            'country',
+                            getCountryLabel(code as WorldCountriesCodes) ?? '',
+                          )
+                          setValue('countryCode', code)
+                          setIsInUK(isUKCountry(code))
 
-                            if (!isUKCountry(code)) {
-                              setValue('localAuthority', '')
-                              setValue('ofstedLastInspection', null)
-                              setValue('ofstedRating', '')
-                            }
+                          if (!isUKCountry(code)) {
+                            setValue('localAuthority', '')
+                            setValue('ofstedLastInspection', null)
+                            setValue('ofstedRating', '')
                           }
-                        }}
-                        value={values.countryCode}
-                      />
-                    ) : (
-                      <CountryDropdown
-                        error={Boolean(errors.country)}
-                        errormessage={errors.country?.message}
-                        register={register('country')}
-                        required
-                        value={values.country ?? ''}
-                        label={t('fields.addresses.country')}
-                      />
-                    )}
+                        }
+                      }}
+                      value={values.countryCode}
+                    />
                   </Grid>
                   <Grid item>
                     <TextField

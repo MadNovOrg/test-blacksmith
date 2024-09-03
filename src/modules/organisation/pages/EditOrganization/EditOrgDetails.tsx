@@ -69,7 +69,7 @@ export const EditOrgDetails: React.FC<
             : null,
         mainOrgId: orgDetail.main_organisation_id,
         mainOrgName: orgDetail?.main_organisation?.name,
-        region: orgDetail.region,
+        region: orgDetail.address.region,
       }))[0]
     : null
 
@@ -127,7 +127,6 @@ export const EditOrgDetails: React.FC<
         org: {
           name: data.name.trim(),
           sector: data.sector,
-          region: data.region,
           main_organisation_id: data.mainOrgId,
           organisationType:
             data.organisationType?.toLocaleLowerCase() === 'other'
@@ -149,6 +148,7 @@ export const EditOrgDetails: React.FC<
             country: data.country,
             countryCode: data.countryCode,
             postCode: data.postcode,
+            region: data.region,
           },
         },
       }

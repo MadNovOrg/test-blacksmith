@@ -1,7 +1,6 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 
-import { render, screen, fireEvent, renderHook } from '@test/index'
+import { render, screen, renderHook } from '@test/index'
 
 import { AddOrg } from './AddOrg'
 const option = {
@@ -9,9 +8,6 @@ const option = {
   urn: 'urn',
   name: 'name',
 }
-vi.mock('posthog-js/react', () => ({
-  useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
-}))
 
 describe('AddOrg component', () => {
   const {
@@ -30,14 +26,17 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.zipCode') &&
         label !== t('components.add-organisation.fields.postCode') &&
         label !==
-          t('components.add-organisation.fields.organisation-specify-other'),
+          t('components.add-organisation.fields.organisation-specify-other') &&
+        label !== t('components.add-organisation.fields.region') &&
+        label !== t('components.add-organisation.fields.state') &&
+        label !== t('components.add-organisation.fields.territory') &&
+        label !== t('components.add-organisation.fields.organisation-phone'),
     ),
   ])('renders % field', async field => {
-    useFeatureFlagEnabled('add-organization-country')
     render(
       <AddOrg
-        option={option}
-        countryCode={'GB-ENG'}
+        orgName={option.name}
+        countryCode={'AU'}
         onSuccess={vi.fn()}
         onClose={vi.fn()}
       />,
@@ -53,39 +52,21 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.postCode') &&
         label !== t('components.add-organisation.fields.zipCode') &&
         label !==
-          t('components.add-organisation.fields.organisation-specify-other'),
+          t('components.add-organisation.fields.organisation-specify-other') &&
+        label !== t('components.add-organisation.fields.stateTerritory') &&
+        label !== t('components.add-organisation.fields.state') &&
+        label !== t('components.add-organisation.fields.territory') &&
+        label !== t('components.add-organisation.fields.organisation-phone'),
     ),
   ])('renders % field', async field => {
-    useFeatureFlagEnabled('add-organization-country')
     render(
       <AddOrg
-        option={option}
-        countryCode={'RO'}
+        orgName={option.name}
+        countryCode={'NZ'}
         onSuccess={vi.fn()}
         onClose={vi.fn()}
       />,
     )
     expect(screen.getByText(field)).toBeInTheDocument()
-  })
-
-  it('should display the Postcode tooltip message on hover', async () => {
-    render(
-      <AddOrg
-        option={option}
-        countryCode={'GB-ENG'}
-        onSuccess={vi.fn()}
-        onClose={vi.fn()}
-      />,
-    )
-
-    expect(screen.getByText('Add Organisation')).toBeInTheDocument()
-
-    const tooltipElement = screen.getByTestId('post-code-tooltip')
-
-    fireEvent.mouseOver(tooltipElement)
-    const tooltipMessage = await screen.findByText(
-      t('common.post-code-tooltip'),
-    )
-    expect(tooltipMessage).toBeInTheDocument()
   })
 })

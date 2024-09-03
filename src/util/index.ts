@@ -509,6 +509,7 @@ export function renderOrgAddress(org?: {
     state: string
     postCode: string
     country: string
+    region?: string
   }
 }) {
   if (!org?.address) return ''
@@ -519,6 +520,7 @@ export function renderOrgAddress(org?: {
     org.address.state,
     org.address.postCode,
     org.address.country,
+    org.address.region,
   ]
     .filter(Boolean)
     .join(', ')
