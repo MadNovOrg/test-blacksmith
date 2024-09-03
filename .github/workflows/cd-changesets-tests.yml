@@ -19,7 +19,7 @@ jobs:
     if: startsWith(github.head_ref, 'changeset-release/')
     name: Lint & Typecheck
     env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
+      NODE_OPTIONS: '--max-old-space-size=4096'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,7 +29,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: latest
 
       - name: Build
         uses: actions/setup-node@v4
@@ -49,11 +49,11 @@ jobs:
     if: startsWith(github.head_ref, 'changeset-release/')
     name: test
     env:
-      NODE_OPTIONS: "--max-old-space-size=4096"
+      NODE_OPTIONS: '--max-old-space-size=4096'
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        shard: [ 1, 2, 3, 4 ]
+        shard: [1, 2, 3, 4]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,7 +62,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: latest
       - name: Build
         uses: actions/setup-node@v4
         with:
