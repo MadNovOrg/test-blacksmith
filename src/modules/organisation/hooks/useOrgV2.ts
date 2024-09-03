@@ -132,16 +132,26 @@ export default function useOrgV2({
       conditions = {}
     } else if (!contact) {
       conditions = {
-        members: {
-          _and: [
-            {
-              profile_id: {
-                _eq: profileId,
+        _or: [
+          {
+            members: {
+              _and: [
+                { profile_id: { _eq: profileId } },
+                { isAdmin: { _eq: true } },
+              ],
+            },
+          },
+          {
+            main_organisation: {
+              members: {
+                _and: [
+                  { profile_id: { _eq: profileId } },
+                  { isAdmin: { _eq: true } },
+                ],
               },
             },
-            { isAdmin: { _eq: true } },
-          ],
-        },
+          },
+        ],
       }
     } else {
       switch (contact) {
