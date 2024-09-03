@@ -18,18 +18,21 @@ import { useAuth } from '@app/context/auth'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrgDetailsTab'
+import { OrgDetailsTab as ANZOrgDetailsTab } from '@app/modules/organisation/tabs/ANZ/OrgDetailsTab'
+import { OrgDetailsTab as UKOrgDetailsTab } from '@app/modules/organisation/tabs/OrgDetailsTab'
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
+import { AffiliatedOrgsTab } from '../../tabs/AffiliatedOrgsTab'
 import { LicensesTab } from '../../tabs/Licenses/LicensesTab'
 import { OrgPermissionsTab } from '../../tabs/OrgPermissionsTab/OrgPermissionsTab'
 
 export enum OrgDashboardTabs {
   OVERVIEW = 'OVERVIEW',
   DETAILS = 'DETAILS',
+  AFFILIATED = 'AFFILIATED',
   INDIVIDUALS = 'INDIVIDUALS',
   LICENSES = 'LICENSES',
   PERMISSIONS = 'PERMISSIONS',
@@ -47,7 +50,8 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
   const navigate = useNavigate()
-
+  const isAustraliaRegion = acl.isAustralia()
+  const isUKRegion = acl.isUK()
   const {
     data: allOrgs,
     fetching,
@@ -78,7 +82,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
   const [selectedTab, setSelectedTab] = useState(
-    initialTab || OrgDashboardTabs.OVERVIEW,
+    initialTab ?? OrgDashboardTabs.OVERVIEW,
   )
 
   return (
@@ -145,6 +149,15 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                         value={OrgDashboardTabs.DETAILS}
                         data-testid="org-details"
                       />
+                      {isAustraliaRegion && !org?.main_organisation ? (
+                        <Tab
+                          label={t(
+                            'pages.org-details.tabs.affiliated-orgs.title',
+                          )}
+                          value={OrgDashboardTabs.AFFILIATED}
+                          data-testid="affiliated-orgs"
+                        />
+                      ) : null}
                       <Tab
                         label={t('pages.org-details.tabs.users.title')}
                         value={OrgDashboardTabs.INDIVIDUALS}
@@ -169,8 +182,21 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </TabPanel>
 
                     <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.DETAILS}>
-                      <OrgDetailsTab orgId={id} />
+                      {isUKRegion ? (
+                        <UKOrgDetailsTab orgId={id} />
+                      ) : (
+                        <ANZOrgDetailsTab orgId={id} />
+                      )}
                     </TabPanel>
+
+                    {isAustraliaRegion && !org?.main_organisation ? (
+                      <TabPanel
+                        sx={{ p: 0 }}
+                        value={OrgDashboardTabs.AFFILIATED}
+                      >
+                        <AffiliatedOrgsTab orgId={id} />
+                      </TabPanel>
+                    ) : null}
 
                     <TabPanel
                       sx={{ p: 0 }}

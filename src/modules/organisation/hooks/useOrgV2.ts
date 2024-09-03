@@ -33,6 +33,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $withAggregateData: Boolean = false
     $withDfEEstablishment: Boolean = false
     $withMainOrganisation: Boolean = false
+    $withAffiliatedOrganisationsCount: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -51,6 +52,12 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
       main_organisation @include(if: $withMainOrganisation) {
         id
         name
+      }
+      affiliated_organisations_aggregate
+        @include(if: $withAffiliatedOrganisationsCount) {
+        aggregate {
+          count
+        }
       }
       members @include(if: $withMembers) {
         profile {
@@ -102,6 +109,7 @@ type UseOrgV2Input = {
   withSpecificOrganisation?: boolean
   withDfEEstablishment?: boolean
   withMainOrganisation?: boolean
+  withAffiliatedOrganisationsCount?: boolean
 }
 
 export default function useOrgV2({
@@ -121,6 +129,7 @@ export default function useOrgV2({
   withSpecificOrganisation,
   withDfEEstablishment = false,
   withMainOrganisation = true,
+  withAffiliatedOrganisationsCount = false,
 }: UseOrgV2Input) {
   let conditions: Organization_Bool_Exp = {}
   if (orgId !== ALL_ORGS) {
@@ -211,6 +220,7 @@ export default function useOrgV2({
       withAggregateData,
       withDfEEstablishment,
       withMainOrganisation,
+      withAffiliatedOrganisationsCount,
     },
   })
 

@@ -21,10 +21,10 @@ import {
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { useAuth } from '@app/context/auth'
 import { CertificateStatus } from '@app/generated/graphql'
-import { OrgUsersTable } from '@app/modules/organisation/components/OrgUsersTable'
 import { useOrgMembers } from '@app/modules/organisation/hooks/useOrgMembers'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
+import { OrgUsersTable } from '@app/modules/organisation/tabs/components/OrgUsersTable'
 import theme from '@app/theme'
 
 import useOrganisationPendingInvites from '../hooks/useOrganisationPendingInvites'

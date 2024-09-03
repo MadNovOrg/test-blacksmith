@@ -30,11 +30,10 @@ import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
 import { EditOrgUserModal } from '@app/modules/organisation/components/EditOrgUserModal'
+import { useOrgMembers } from '@app/modules/organisation/hooks/useOrgMembers'
 import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import theme from '@app/theme'
 import { getProfileCertificationLevels } from '@app/util'
-
-import { useOrgMembers } from '../../hooks/useOrgMembers'
 
 type OrgUsersTableParams = {
   orgId: string

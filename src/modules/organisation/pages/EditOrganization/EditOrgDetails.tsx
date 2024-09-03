@@ -67,7 +67,7 @@ export const EditOrgDetails: React.FC<
           isValid(new Date(orgDetail.attributes.ofstedLastInspection))
             ? new Date(orgDetail?.attributes.ofstedLastInspection)
             : null,
-        mainOrgId: orgDetail.main_organisation_id,
+        mainOrgId: orgDetail.main_organisation?.id,
         mainOrgName: orgDetail?.main_organisation?.name,
         region: orgDetail.address.region,
       }))[0]

@@ -14,7 +14,7 @@ import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
-import { MEMBERS_QUERY } from '../../hooks/useOrgMembers'
+import { MEMBERS_QUERY } from '../../../hooks/useOrgMembers'
 
 import { OrgUsersTable } from './OrgUsersTable'
 

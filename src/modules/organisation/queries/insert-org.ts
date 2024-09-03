@@ -14,14 +14,12 @@ export const INSERT_ORGANISATION_MUTATION = gql`
     $invites: [organization_invites_insert_input!] = []
     $dfeEstablishmentId: uuid
     $mainOrgId: uuid
-    $region: String
   ) {
     org: insert_organization_one(
       object: {
         name: $name
         sector: $sector
         main_organisation_id: $mainOrgId
-        region: $region
         organisationType: $organisationType
         address: $address
         attributes: $attributes

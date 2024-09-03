@@ -67,6 +67,8 @@
   "courses": "Courses",
   "drafts": "Drafts",
   "draft": "Draft",
+  "affiliated-orgs": "Affiliated Organisations",
+  "unlink-organisation": "Unlink Organisation",
   "manage-courses": "Manage Courses",
   "contacts": "Contacts",
   "community": "Community",
@@ -565,7 +567,10 @@
   "org-sectors": {
     "edu": "Education",
     "hsc_adult": "Adults Health and Social Care",
-    "hsc_child": "Childrens Health and Social Care"
+    "hsc_child": "Childrens Health and Social Care",
+    "anz_edu": "Education",
+    "anz_ss": "Social Services",
+    "anz_health": "Health"
   },
   "org-email": "Organisation email",
   "org-type": "Organisation type",

@@ -1323,7 +1323,8 @@
           "town-or-city": "Town/City",
           "postcode": "Post code",
           "country": "Country",
-          "zip-code": "Zip code"
+          "zip-code": "Zip code",
+          "state-territory-region": "State/Territory/Region"
         },
         "additional-details": {
           "title": "Additional details",
@@ -1342,6 +1343,19 @@
           "expiring-soon-certifications": "Expiring soon",
           "expired-certifications": "Expired certifications"
         }
+      },
+      "affiliated-orgs": {
+        "title": "Affiliated organisations",
+        "add-an-affiliate": "Add an affiliate",
+        "no-affiliated-orgs": "No affiliated organisations",
+        "manage-affiliated-org": "Manage organisation",
+        "cols-name": "Name",
+        "cols-country": "Country",
+        "cols-region-state-territory": "Region/State/Territory",
+        "cols-sector": "Sector",
+        "cols-last-activity": "Last activity",
+        "cols-created-on": "Created on",
+        "cols-actions": "Actions"
       },
       "users": {
         "title": "Individuals",

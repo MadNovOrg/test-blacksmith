@@ -95,7 +95,6 @@ export const CreateOrganization = () => {
       const organisationDataObject = {
         name: data.name.trim(),
         sector: data.sector,
-        region: data.region,
         mainOrgId: data.mainOrgId,
         organisationType: (!otherOrgType
           ? data.organisationType
@@ -116,6 +115,7 @@ export const CreateOrganization = () => {
           country: data.country,
           countryCode: data.countryCode,
           postCode: data.postcode,
+          region: data.region,
         } as Address,
         xeroId,
         invites: data.workEmail
