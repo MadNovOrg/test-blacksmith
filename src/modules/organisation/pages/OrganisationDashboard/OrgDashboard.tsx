@@ -7,6 +7,7 @@ import {
   Stack,
   Tab,
   Typography,
+  Link,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
@@ -15,13 +16,14 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { Organization } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { OrgDetailsTab as ANZOrgDetailsTab } from '@app/modules/organisation/tabs/ANZ/OrgDetailsTab'
-import { OrgDetailsTab as UKOrgDetailsTab } from '@app/modules/organisation/tabs/OrgDetailsTab'
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
+import { OrgDetailsTab as UKOrgDetailsTab } from '@app/modules/organisation/tabs/UK/OrgDetailsTab'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
@@ -61,6 +63,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
     shallow: true,
+    withMainOrganisation: isAustraliaRegion,
     ...(id !== ALL_ORGS
       ? { withSpecificOrganisation: true, specificOrgId: id }
       : []),
@@ -84,6 +87,29 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [selectedTab, setSelectedTab] = useState(
     initialTab ?? OrgDashboardTabs.OVERVIEW,
   )
+
+  const affiliatedOrgAsPlainText = (orgName: string) => {
+    return (
+      <Typography>
+        {t('pages.org-details.main-organisation-plain-text', {
+          orgName: orgName,
+        })}
+      </Typography>
+    )
+  }
+
+  const affiliatedOrgBasedOnRole = (
+    mainOrg: Pick<Organization, 'id' | 'name'>,
+  ) => {
+    return acl.isOrgAdmin(org?.id) ? (
+      affiliatedOrgAsPlainText(mainOrg.name)
+    ) : (
+      <Typography>
+        {t('pages.org-details.main-organisation')}
+        <Link href={`/organisations/${mainOrg.id}`}>{mainOrg.name}</Link>
+      </Typography>
+    )
+  }
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
@@ -111,12 +137,16 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
               </Alert>
             ) : null}
 
-            {allOrgs?.orgs.length === 1 ? (
-              <Typography variant="h1" p={4}>
-                {org?.name}
-              </Typography>
+            {allOrgs?.orgs?.length === 1 ? (
+              <Box sx={{ mb: '10px' }}>
+                <Typography variant="h1" sx={{ padding: '32px 10px 10px 0px' }}>
+                  {org?.name}
+                </Typography>
+                {acl.isOrgAdmin(org?.id) && org?.main_organisation
+                  ? affiliatedOrgAsPlainText(org.main_organisation.name)
+                  : null}
+              </Box>
             ) : null}
-
             {!fetching && !error ? (
               <>
                 {allOrgs && allOrgs.orgs.length > 1 ? (
@@ -128,6 +158,9 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                             ? org?.name
                             : t('pages.org-details.all-organizations')}
                         </Typography>
+                        {org?.main_organisation
+                          ? affiliatedOrgBasedOnRole(org.main_organisation)
+                          : null}
                       </Sticky>
                     </Box>
                   </Box>

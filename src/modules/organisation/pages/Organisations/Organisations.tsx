@@ -158,7 +158,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     const colRegion = cols.find(({ id }) => id === 'region')
     if (colRegion) {
       return {
-        isEmpty: !data?.orgs.some(org => org?.region),
+        isEmpty: !data?.orgs.some(org => org?.address.region),
         id: colRegion.id,
       }
     }
@@ -315,7 +315,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </TableCell>
                     <TableCell>{org?.address.country}</TableCell>
                     {!showRegionCol.isEmpty ? (
-                      <TableCell>{org?.region}</TableCell>
+                      <TableCell>{org?.address.region}</TableCell>
                     ) : null}
                     <TableCell>
                       {t(`common.org-sectors.${org.sector}`)}

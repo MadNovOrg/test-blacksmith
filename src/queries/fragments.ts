@@ -19,6 +19,10 @@ export const ORGANIZATION = gql`
     }
     geoCoordinates
     organisationType
+    main_organisation {
+      id
+      name
+    }
   }
 `
 

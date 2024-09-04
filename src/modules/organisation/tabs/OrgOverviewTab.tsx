@@ -25,11 +25,10 @@ import {
   OrganizationProfile,
 } from '@app/generated/graphql'
 import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
+import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import { ALL_ORGS } from '@app/util'
-
-import { useOrganisationProfiles } from '../hooks/useOrganisationProfiles'
 
 import { OrgIndividuals } from './components/OrgIndividuals'
 import { OrgSummaryList } from './components/OrgSummaryList'

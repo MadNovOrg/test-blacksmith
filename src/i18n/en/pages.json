@@ -1297,6 +1297,8 @@
   "org-details": {
     "org-not-found": "Organisation not found.",
     "back-to-organizations": "Back to organisations",
+    "main-organisation": "Affiliated with ",
+    "main-organisation-plain-text": "Affiliated with {{orgName}}",
     "tabs": {
       "details": {
         "title": "Details",
