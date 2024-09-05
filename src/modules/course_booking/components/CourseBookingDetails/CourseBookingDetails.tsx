@@ -31,8 +31,8 @@ import useWorldCountries, {
   UKsCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CountryDropdown } from '@app/components/CountryDropdown'
-import { OrgSelector } from '@app/components/OrgSelector'
-import { isHubOrg } from '@app/components/OrgSelector/utils'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { isHubOrg } from '@app/components/OrgSelector/UK/utils'
 import {
   Profile as UserSelectorProfile,
   UserSelector,

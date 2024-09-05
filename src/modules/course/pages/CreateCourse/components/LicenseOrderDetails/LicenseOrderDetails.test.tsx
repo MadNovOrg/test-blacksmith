@@ -16,7 +16,7 @@ import { CreateCourseProvider, useCreateCourse } from '../CreateCourseProvider'
 
 import { LicenseOrderDetails } from '.'
 
-vi.mock('@app/components/OrgSelector', () => ({
+vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(({ onChange }) => {
     return (
       <input

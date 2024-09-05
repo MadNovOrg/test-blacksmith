@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { Establishment } from '@app/types'
 import { isValidUKPostalCode } from '@app/util'
 
-import { isDfeSuggestion } from '../../utils'
+import { isDfeSuggestion } from '../../UK/utils'
 
 export const getSchema = ({
   t,

@@ -12,7 +12,7 @@ import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-vi.mock('@app/components/OrgSelector', () => ({
+vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(() => <p>Org Selector</p>),
 }))
 

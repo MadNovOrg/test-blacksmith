@@ -12,9 +12,9 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import { CountryCode } from 'libphonenumber-js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -29,6 +29,7 @@ import useAffiliatedOrganisations from '../hooks/useAffiliatedOrganisations'
 import useOrgV2 from '../hooks/useOrgV2'
 import { useUnlinkAffiliatedOrganisation } from '../hooks/useUnlinkAffiliatedOrganisation'
 
+import { AddAffiliatedOrgModal } from './components/AddAffiliatedOrgModal'
 import { ManageAffiliatedOrgsMenu } from './components/ManageAffiliatedOrgsMenu'
 
 type AffiliatedOrgsTabParams = {
@@ -42,8 +43,7 @@ export const AffiliatedOrgsTab: React.FC<
   const { profile, acl } = useAuth()
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
-
-  const navigate = useNavigate()
+  const [showAddAffiliateModal, setShowAddAffiliateModal] = useState(false)
 
   const { data, fetching, error } = useOrgV2({
     orgId,
@@ -53,11 +53,8 @@ export const AffiliatedOrgsTab: React.FC<
     withAffiliatedOrganisationsCount: true,
   })
 
-  const { data: affiliatedOrgs } = useAffiliatedOrganisations(
-    orgId,
-    perPage,
-    currentPage * perPage,
-  )
+  const { data: affiliatedOrgs, reexecute: fetchAffiliatedOrgs } =
+    useAffiliatedOrganisations(orgId, perPage, currentPage * perPage)
 
   const org = data?.orgs.length ? data.orgs[0] : null
 
@@ -149,6 +146,13 @@ export const AffiliatedOrgsTab: React.FC<
     },
     [],
   )
+  const handleCloseAddAffiliateModal = useCallback(() => {
+    setShowAddAffiliateModal(false)
+  }, [])
+  const handleSubmitAddAffiliateOrgModal = useCallback(() => {
+    setShowAddAffiliateModal(false)
+    fetchAffiliatedOrgs({ requestPolicy: 'network-only' })
+  }, [fetchAffiliatedOrgs])
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       <Box display="flex" justifyContent="space-between">
@@ -162,7 +166,7 @@ export const AffiliatedOrgsTab: React.FC<
             sx={{
               width: '250px',
             }}
-            onClick={() => navigate(`/organisations/${orgId}/invite`)}
+            onClick={() => setShowAddAffiliateModal(true)}
             data-testid="add-an-affiliate"
           >
             {t('pages.org-details.tabs.affiliated-orgs.add-an-affiliate')}
@@ -179,7 +183,15 @@ export const AffiliatedOrgsTab: React.FC<
           <CircularProgress />
         </Stack>
       ) : null}
-
+      {showAddAffiliateModal ? (
+        <AddAffiliatedOrgModal
+          mainOrgId={orgId}
+          mainOrgName={org?.name ?? ''}
+          mainOrgCountryCode={(org?.address?.countryCode as CountryCode) ?? ''}
+          onClose={handleCloseAddAffiliateModal}
+          onSave={handleSubmitAddAffiliateOrgModal}
+        />
+      ) : null}
       {!fetching && !error && org ? (
         <Box sx={{ mt: '20px' }}>
           <TableContainer component={Paper} elevation={0}>
@@ -233,18 +245,18 @@ export const AffiliatedOrgsTab: React.FC<
                 ))}
               </TableBody>
             </Table>
-            {count ? (
-              <TablePagination
-                component="div"
-                count={count}
-                page={currentPage}
-                onPageChange={(_, page) => setCurrentPage(page)}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPage={perPage}
-                rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
-              />
-            ) : null}
           </TableContainer>
+          {count ? (
+            <TablePagination
+              component="div"
+              count={count}
+              page={currentPage}
+              onPageChange={(_, page) => setCurrentPage(page)}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              rowsPerPage={perPage}
+              rowsPerPageOptions={DEFAULT_PAGINATION_ROW_OPTIONS}
+            />
+          ) : null}
         </Box>
       ) : null}
     </Box>

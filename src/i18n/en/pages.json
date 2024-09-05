@@ -1357,7 +1357,17 @@
         "cols-sector": "Sector",
         "cols-last-activity": "Last activity",
         "cols-created-on": "Created on",
-        "cols-actions": "Actions"
+        "cols-actions": "Actions",
+        "add-affiliate": {
+          "title": "Add an affiliate organisation",
+          "description": "All affiliated organisations will be able to use Blended learning licences of the ",
+          "org-selector-placeholder": "Organisation to add as an affiliate",
+          "close-button": "Close",
+          "confirm-button": "Confirm",
+          "validation-errors": {
+            "affiliate-org-required": "OrgansGsation is required"
+          }
+        }
       },
       "users": {
         "title": "Individuals",

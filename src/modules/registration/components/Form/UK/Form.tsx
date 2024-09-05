@@ -29,12 +29,12 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
 import {
   CallbackOption,
   isHubOrg,
   useOrganizationToBeCreatedOnRegistration,
-} from '@app/components/OrgSelector/utils'
+} from '@app/components/OrgSelector/UK/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'

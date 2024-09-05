@@ -573,6 +573,7 @@ update_permissions:
         - region
         - organisation_type
         - sector
+        - main_organisation_id
         - tags
       filter: {}
       check: null

@@ -23,8 +23,8 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { OrgSelector } from '@app/components/OrgSelector'
-import { CallbackOption } from '@app/components/OrgSelector/utils'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { CallbackOption } from '@app/components/OrgSelector/UK/utils'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileMutation,

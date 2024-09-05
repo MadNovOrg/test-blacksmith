@@ -28,8 +28,8 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { OrgSelector } from '@app/components/OrgSelector'
-import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/utils'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,

@@ -12,7 +12,7 @@ import { renderForm, selectBildCategory, selectLevel } from './test-utils'
 
 import { CourseForm } from '.'
 
-vi.mock('@app/components/OrgSelector', () => ({
+vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(() => <p>Org Selector</p>),
 }))
 

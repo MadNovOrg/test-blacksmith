@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
-import { OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { AuthContextType } from '@app/context/auth/types'
 import {
   UpdateProfileMutation,
@@ -40,7 +40,7 @@ const OrgSelectorMock: React.FC<ComponentProps<typeof OrgSelector>> = props => {
   )
 }
 
-vi.mock('@app/components/OrgSelector', () => ({
+vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(),
 }))
 

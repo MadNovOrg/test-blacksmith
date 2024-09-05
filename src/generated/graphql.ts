@@ -61515,6 +61515,14 @@ export type GetOrganizationStatisticsQueryVariables = Exact<{
 
 export type GetOrganizationStatisticsQuery = { __typename?: 'query_root', organizations_statistics: Array<{ __typename?: 'organizations_statistics', id: any, organization_id: any, active_certifications: number, expired_recently_certifications: number, expiring_soon_certifications: number, individuals: number, on_hold_certifications: number }> };
 
+export type LinkAffiliatedOrganisationMutationVariables = Exact<{
+  mainOrgId: Scalars['uuid'];
+  affiliatedOrgId: Scalars['uuid'];
+}>;
+
+
+export type LinkAffiliatedOrganisationMutation = { __typename?: 'mutation_root', update_organization_by_pk?: { __typename?: 'organization', id: any } | null };
+
 export type OrgMembersQueryVariables = Exact<{
   offset: Scalars['Int'];
   limit: Scalars['Int'];

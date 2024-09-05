@@ -180,14 +180,11 @@ describe(OrganizationForm.name, () => {
     const orgSelector = screen.getByLabelText(t('fields.organization-name'), {
       exact: false,
     })
-    await userEvent.type(orgSelector, 'UK Test Organisation')
+    await userEvent.type(orgSelector, 'AU Test Organisation')
 
-    const linkToMainOrgCheckbox = screen.getByTestId(
-      'link-to-main-org-checkbox',
-    )
-    expect(linkToMainOrgCheckbox).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('checkbox'))
 
-    await userEvent.click(linkToMainOrgCheckbox)
+    expect(screen.queryByTestId('main-org')).not.toBeInTheDocument()
 
     const sectorDropdown = screen.getByTestId('sector-select')
     await userEvent.click(within(sectorDropdown).getByRole('button'))

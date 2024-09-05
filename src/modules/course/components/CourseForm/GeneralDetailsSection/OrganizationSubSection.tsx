@@ -4,8 +4,8 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'
 import { useQuery } from 'urql'
 
-import { OrgSelector } from '@app/components/OrgSelector'
-import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/utils'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
 import {
   Profile as UserSelectorProfile,
   UserSelector,

@@ -33,11 +33,11 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { FormPanel } from '@app/components/FormPanel'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/ANZ'
-import { OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector/ANZ'
 import {
   isXeroSuggestion,
   CallbackOption,
-} from '@app/components/OrgSelector/utils'
+} from '@app/components/OrgSelector/ANZ/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
@@ -116,7 +116,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const { data: orgTypes } = useOrgType(values.sector, true)
 
   const mainOrganisation: Pick<Organization, 'id' | 'name'> = {
-    id: values.mainOrgId,
+    id: values.mainOrgId ?? '',
     name: values.mainOrgName ?? '',
   }
 
@@ -133,6 +133,13 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     },
     [setValue],
   )
+  const handleCheckboxChange = useCallback(() => {
+    setLinkToMainOrg(!linkToMainOrg)
+    if (!linkToMainOrg) {
+      setValue('mainOrgId', '')
+      setValue('mainOrgName', '')
+    }
+  }, [linkToMainOrg, setValue])
 
   const onOrgSelected = useCallback(
     async (org: CallbackOption) => {
@@ -291,16 +298,14 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       value={values.countryCode}
                     />
                   </Grid>
-                  <Grid item>
-                    <RegionSelector
-                      countryCode={values.countryCode}
-                      error={Boolean(errors.region)}
-                      errormessage={errors.region?.message}
-                      register={register('region')}
-                      required
-                      value={values.region ?? ''}
-                    />
-                  </Grid>
+                  <RegionSelector
+                    countryCode={values.countryCode}
+                    error={Boolean(errors.region)}
+                    errormessage={errors.region?.message}
+                    register={register('region')}
+                    required
+                    value={values.region ?? ''}
+                  />
                   <Grid item>
                     <TextField
                       id="line1"
@@ -417,9 +422,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                   <FormControlLabel
                     control={
                       <Checkbox
-                        onChange={e => {
-                          setLinkToMainOrg(e.target.checked)
-                        }}
+                        onClick={handleCheckboxChange}
                         checked={linkToMainOrg}
                         data-testid="link-to-main-org-checkbox"
                       />
@@ -443,6 +446,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       }}
                       showDfeResults={false}
                       showOnlyMainOrgs={true}
+                      allowedOrgCountryCode={values.countryCode}
                     />
                   ) : null}
                   <Grid item>

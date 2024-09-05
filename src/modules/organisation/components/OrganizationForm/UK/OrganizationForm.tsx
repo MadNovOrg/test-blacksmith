@@ -36,13 +36,13 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { FormPanel } from '@app/components/FormPanel'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
-import { OrgSelector } from '@app/components/OrgSelector'
+import { OrgSelector } from '@app/components/OrgSelector/UK'
 import {
   isXeroSuggestion,
   isDfeSuggestion,
   ofstedRating,
   CallbackOption,
-} from '@app/components/OrgSelector/utils'
+} from '@app/components/OrgSelector/UK/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import { Sticky } from '@app/components/Sticky'

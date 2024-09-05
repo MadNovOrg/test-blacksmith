@@ -25,7 +25,7 @@ import {
   isXeroSuggestion,
   OrgSelectorProps,
   useOrganizationToBeCreatedOnRegistration,
-} from '@app/components/OrgSelector/utils'
+} from '@app/components/OrgSelector/UK/utils'
 import { useAuth } from '@app/context/auth'
 import {
   FindEstablishmentQuery,
@@ -39,8 +39,8 @@ import {
 } from '@app/generated/graphql'
 import { organizationData as localStateOrganization } from '@app/util'
 
-import { AddOrg as ANZAddOrg } from './components/ANZ/AddOrg'
-import { AddOrg as UKAddOrg } from './components/UK/AddOrg'
+import { AddOrg as ANZAddOrg } from '../components/ANZ/AddOrg'
+import { AddOrg as UKAddOrg } from '../components/UK/AddOrg'
 
 type OptionToAdd = Dfe_Establishment | { id?: string; name: string }
 type Option = Organization | OptionToAdd
@@ -68,7 +68,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     countryCode,
     searchOnlyByPostCode = false,
     canSearchByAddress = true,
-    showOnlyMainOrgs = false,
     label,
     ...props
   }) {
@@ -168,21 +167,8 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
         orConditions.push({ _and: address })
       }
 
-      if (showOnlyMainOrgs) {
-        return {
-          _and: [
-            { _or: orConditions },
-            { main_organisation_id: { _is_null: true } },
-          ],
-        }
-      }
       return { _or: orConditions }
-    }, [
-      debouncedQuery,
-      searchOnlyByPostCode,
-      canSearchByAddress,
-      showOnlyMainOrgs,
-    ])
+    }, [debouncedQuery, searchOnlyByPostCode, canSearchByAddress])
 
     const [{ data: hubOrgs, fetching: orgsFetching }, refetchOrganisations] =
       useQuery<GetOrganizationsQuery, GetOrganizationsQueryVariables>({

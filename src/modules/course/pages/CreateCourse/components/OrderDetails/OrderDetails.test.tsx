@@ -31,7 +31,7 @@ const CreateCourseContextConsumer: React.FC<
   return <>{invoiceDetails?.orgId ? <p>Invoice details are saved!</p> : null}</>
 }
 
-vi.mock('@app/components/OrgSelector', () => ({
+vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(({ onChange }) => {
     return (
       <input

@@ -15,7 +15,7 @@ vi.mock('@app/hooks/use-fetcher')
 vi.mock('@app/lib/gql-request')
 vi.mock('aws-amplify')
 vi.mock('@app/modules/profile/hooks/useJobTitles')
-vi.mock('@app/components/OrgSelector', () => ({
+vi.mock('@app/components/OrgSelector/ANZ', () => ({
   OrgSelector: vi.fn(({ onChange }) => {
     return (
       <input
