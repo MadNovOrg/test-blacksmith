@@ -184,7 +184,7 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
             </Grid>
           </>
         ) : null}
-        (
+
         <Grid item>
           {/* timezone final wording::::This is a placeholder and is to be updated with the final wording provided by the client
                 see https://behaviourhub.atlassian.net/browse/TTHP-2915
@@ -193,7 +193,6 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
             {t('timezone-info')}
           </Alert>
         </Grid>
-        )
       </Grid>
     </LocalizationProvider>
   )
