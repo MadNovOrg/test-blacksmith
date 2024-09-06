@@ -11,7 +11,6 @@ import {
 } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
 import { uniqueId } from 'lodash/fp'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
@@ -72,10 +71,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { acl } = useAuth()
   const { getLabel, isUKCountry } = useWorldCountries()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
-
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
 
   const [{ data, fetching }] = useCourseOrders({ orderId: id ?? '' })
 
@@ -441,49 +436,41 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             <Box>
                               <CourseTitleAndDuration
                                 showCourseLink
-                                showCourseDuration={!residingCountryEnabled}
+                                showCourseDuration={false}
                                 course={{
                                   id: Number(course?.id) ?? '',
                                   course_code: course?.course_code,
-                                  ...(residingCountryEnabled
-                                    ? {}
-                                    : {
-                                        start: courseStart,
-                                        end: courseEnd,
-                                      }),
+
                                   level:
                                     course?.level as unknown as Course_Level_Enum,
                                   reaccreditation: course?.reaccreditation,
                                   residingCountry: course?.residingCountry,
                                 }}
                               />
-                              {residingCountryEnabled ? (
-                                <Typography
-                                  data-testid={'order-timezone-info'}
-                                  gutterBottom
-                                  color="grey.700"
-                                  width={'90%'}
-                                >
-                                  {_t('dates.withTime', {
-                                    date: timeZoneScheduleDateTime()
-                                      .courseStart,
-                                  })}{' '}
-                                  {formatGMTDateTimeByTimeZone(
-                                    timeZoneScheduleDateTime().courseStart,
-                                    courseTimezone,
-                                    false,
-                                  )}{' '}
-                                  -{' '}
-                                  {_t('dates.withTime', {
-                                    date: timeZoneScheduleDateTime().courseEnd,
-                                  })}{' '}
-                                  {formatGMTDateTimeByTimeZone(
-                                    timeZoneScheduleDateTime().courseEnd,
-                                    courseTimezone,
-                                    true,
-                                  )}
-                                </Typography>
-                              ) : null}
+                              <Typography
+                                data-testid={'order-timezone-info'}
+                                gutterBottom
+                                color="grey.700"
+                                width={'90%'}
+                              >
+                                {_t('dates.withTime', {
+                                  date: timeZoneScheduleDateTime().courseStart,
+                                })}{' '}
+                                {formatGMTDateTimeByTimeZone(
+                                  timeZoneScheduleDateTime().courseStart,
+                                  courseTimezone,
+                                  false,
+                                )}{' '}
+                                -{' '}
+                                {_t('dates.withTime', {
+                                  date: timeZoneScheduleDateTime().courseEnd,
+                                })}{' '}
+                                {formatGMTDateTimeByTimeZone(
+                                  timeZoneScheduleDateTime().courseEnd,
+                                  courseTimezone,
+                                  true,
+                                )}
+                              </Typography>
                             </Box>
                             <Box textAlign="end" data-testid="'order-quantity'">
                               <Typography variant="caption">

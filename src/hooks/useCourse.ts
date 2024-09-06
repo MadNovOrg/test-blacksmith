@@ -1,4 +1,3 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useMemo } from 'react'
 import { type OperationContext, useQuery } from 'urql'
 
@@ -25,10 +24,6 @@ export default function useCourse(courseId: string): {
 } {
   const { acl, activeRole, profile } = useAuth()
 
-  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
-
   const [{ data, error }, mutate] = useQuery<
     GetCourseByIdQuery,
     GetCourseByIdQueryVariables
@@ -44,7 +39,7 @@ export default function useCourse(courseId: string): {
         acl.isInternalUser() || acl.isOrgAdmin() || acl.isTrainer(),
       withInternationalFinance:
         acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
-      withFreeCourseCourseMaterials: mandatoryCourseMaterialsCostEnabled,
+      withFreeCourseCourseMaterials: true,
     },
   })
 

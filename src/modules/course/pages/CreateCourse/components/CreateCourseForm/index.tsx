@@ -14,7 +14,6 @@ import {
   useTheme,
 } from '@mui/material'
 import omit from 'lodash-es/omit'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -84,9 +83,6 @@ export const CreateCourseForm = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { isUKCountry } = useWorldCountries()
 
-  const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect',
-  )
   const { savingStatus, allowCreateCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
@@ -104,8 +100,7 @@ export const CreateCourseForm = () => {
 
   const { certifications } = useProfile(profile?.id)
   const displayConnectFeeCondition =
-    !isInternationalIndirectEnabled ||
-    (isINDIRECTcourse && isUKCountry(courseData?.residingCountry))
+    isINDIRECTcourse && isUKCountry(courseData?.residingCountry)
 
   const [consentFlags, setConsentFlags] = useState({
     healthLeaflet: false,

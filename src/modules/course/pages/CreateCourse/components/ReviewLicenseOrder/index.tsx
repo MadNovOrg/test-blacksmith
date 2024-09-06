@@ -3,7 +3,6 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Button, Stack, Typography } from '@mui/material'
 import { parseISO } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -28,9 +27,6 @@ export const ReviewLicenseOrder: React.FC<
     useCreateCourse()
   const { saveCourse, savingStatus } = useSaveCourse()
   const { addSnackbarMessage } = useSnackbar()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const hasSavingError = savingStatus === LoadingStatus.ERROR
@@ -134,26 +130,19 @@ export const ReviewLicenseOrder: React.FC<
               })}`}
             />
             <InfoRow
-              label={
-                residingCountryEnabled
-                  ? `${_t('dates.time', {
-                      date: startDate,
-                    })} ${formatGMTDateTimeByTimeZone(
-                      startDate as Date,
-                      courseTimezone,
-                      false,
-                    )} - ${_t('dates.time', {
-                      date: endDate,
-                    })} ${formatGMTDateTimeByTimeZone(
-                      endDate as Date,
-                      courseTimezone,
-                      true,
-                    )} `
-                  : _t('dates.timeFromTo', {
-                      from: courseData.startDateTime,
-                      to: courseData.endDateTime,
-                    })
-              }
+              label={`${_t('dates.time', {
+                date: startDate,
+              })} ${formatGMTDateTimeByTimeZone(
+                startDate as Date,
+                courseTimezone,
+                false,
+              )} - ${_t('dates.time', {
+                date: endDate,
+              })} ${formatGMTDateTimeByTimeZone(
+                endDate as Date,
+                courseTimezone,
+                true,
+              )} `}
             />
           </InfoPanel>
         ) : null}

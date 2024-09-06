@@ -59,7 +59,7 @@ export const buildTrainerCourse = build<TrainerCourseQueryFragment>({
     schedule: [
       {
         id: perBuild(() => chance.guid()),
-        timeZone: perBuild(() => chance.string()),
+        timeZone: perBuild(() => 'Europe/London'),
         venue: {
           id: perBuild(() => chance.guid()),
           name: perBuild(() => chance.string()),

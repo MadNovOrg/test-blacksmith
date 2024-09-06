@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { isBefore, isPast } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -49,41 +48,14 @@ export const useCourseCreationFormSchema = ({
   const { acl, profile } = useAuth()
   const { countriesCodesWithUKs, isUKCountry } = useWorldCountries()
 
-  const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
-    'open-icm-course-international-finance',
-  )
-
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-
-  const internationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect',
-  )
-
-  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
-
-  const isInternationalFinanceEnabled = useMemo(
-    () => Boolean(openIcmInternationalFinanceEnabled),
-    [openIcmInternationalFinanceEnabled],
-  )
-
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled],
-  )
-
   const isCourseInUK = isUKCountry(
     courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY,
   )
 
-  const residingCountry = internationalIndirectEnabled
-    ? acl.isTrainer() && profile?.countryCode
+  const residingCountry =
+    acl.isTrainer() && profile?.countryCode
       ? profile?.countryCode
       : Countries_Code.DEFAULT_RESIDING_COUNTRY
-    : Countries_Code.DEFAULT_RESIDING_COUNTRY
 
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isClosedCourse = courseType === Course_Type_Enum.Closed
@@ -171,21 +143,17 @@ export const useCourseCreationFormSchema = ({
             .required(t('components.course-form.course-level-required')),
           blendedLearning: yup.bool(),
           reaccreditation: yup.bool(),
-          ...(isResidingCountryEnabled
-            ? {
-                residingCountry: yup
-                  .string()
-                  .test(
-                    'is-valid-value',
-                    requiredMsg(t, 'components.course-form.residing-country'),
-                    value => {
-                      return countriesCodesWithUKs.includes(
-                        value as WorldCountriesCodes,
-                      )
-                    },
-                  ),
-              }
-            : {}),
+          residingCountry: yup
+            .string()
+            .test(
+              'is-valid-value',
+              requiredMsg(t, 'components.course-form.residing-country'),
+              value => {
+                return countriesCodesWithUKs.includes(
+                  value as WorldCountriesCodes,
+                )
+              },
+            ),
           deliveryType: yup
             .mixed()
             .oneOf([
@@ -259,13 +227,9 @@ export const useCourseCreationFormSchema = ({
                   ),
               }
             : null),
-          ...(isResidingCountryEnabled
-            ? {
-                timeZone: yup
-                  .object()
-                  .required(t('components.course-form.timezone-required')),
-              }
-            : null),
+          timeZone: yup
+            .object()
+            .required(t('components.course-form.timezone-required')),
           maxParticipants: yup
             .number()
             .typeError(t('components.course-form.max-participants-required'))
@@ -348,7 +312,7 @@ export const useCourseCreationFormSchema = ({
             }),
           specialInstructions: yup.string().nullable().default(''),
           parkingInstructions: yup.string().nullable().default(''),
-          ...(isClosedCourse && mandatoryCourseMaterialsCostEnabled
+          ...(isClosedCourse
             ? {
                 freeCourseMaterials: yup
                   .number()
@@ -399,25 +363,21 @@ export const useCourseCreationFormSchema = ({
               s.required(t('components.course-form.renewal-cycle-required')),
             otherwise: s => s.nullable(),
           }),
-          ...(isInternationalFinanceEnabled
-            ? {
-                priceCurrency: yup.string().when('residingCountry', {
-                  is: (residingCountry: WorldCountriesCodes) =>
-                    !isIndirectCourse && !isUKCountry(residingCountry),
-                  then: schema =>
-                    schema.required(requiredMsg(t, 'common.currency-word')),
-                }),
-                includeVAT: yup
-                  .bool()
-                  .nullable()
-                  .when('residingCountry', {
-                    is: (residingCountry: WorldCountriesCodes) =>
-                      !isUKCountry(residingCountry),
-                    then: schema =>
-                      schema.required(requiredMsg(t, 'vat')).default(false),
-                  }),
-              }
-            : {}),
+          priceCurrency: yup.string().when('residingCountry', {
+            is: (residingCountry: WorldCountriesCodes) =>
+              !isIndirectCourse && !isUKCountry(residingCountry),
+            then: schema =>
+              schema.required(requiredMsg(t, 'common.currency-word')),
+          }),
+          includeVAT: yup
+            .bool()
+            .nullable()
+            .when('residingCountry', {
+              is: (residingCountry: WorldCountriesCodes) =>
+                !isUKCountry(residingCountry),
+              then: schema =>
+                schema.required(requiredMsg(t, 'vat')).default(false),
+            }),
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .when((values: CourseInput[], schema: any) => {
@@ -447,15 +407,12 @@ export const useCourseCreationFormSchema = ({
       isOpenCourse,
       isClosedCourse,
       isIndirectCourse,
-      isResidingCountryEnabled,
       countriesCodesWithUKs,
       hasMinParticipants,
       isCreation,
       courseInput?.maxParticipants,
       courseInput?.startDate,
       courseInput?.accreditedBy,
-      mandatoryCourseMaterialsCostEnabled,
-      isInternationalFinanceEnabled,
       acl,
       trainerRatioNotMet,
       courseType,
@@ -527,11 +484,7 @@ export const useCourseCreationFormSchema = ({
       timeZone: courseInput?.timeZone,
       includeVAT: courseInput?.includeVAT ?? (isCreation && isCourseInUK),
       renewalCycle: courseInput?.renewalCycle,
-      ...(isResidingCountryEnabled
-        ? {
-            residingCountry: courseInput?.residingCountry ?? residingCountry,
-          }
-        : {}),
+      residingCountry: courseInput?.residingCountry ?? residingCountry,
     }),
     [
       courseInput?.accreditedBy,
@@ -574,7 +527,6 @@ export const useCourseCreationFormSchema = ({
       courseType,
       isCreation,
       isCourseInUK,
-      isResidingCountryEnabled,
     ],
   )
 

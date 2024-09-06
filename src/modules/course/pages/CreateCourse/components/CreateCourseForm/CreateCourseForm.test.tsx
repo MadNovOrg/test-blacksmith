@@ -1,7 +1,6 @@
 import { fireEvent, renderHook } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
@@ -74,8 +73,6 @@ describe('component: CreateCourseForm', () => {
   } = renderHook(() => useTranslation())
 
   beforeAll(() => {
-    useFeatureFlagEnabled('course-residing-country')
-    useFeatureFlagEnabled('international-indirect')
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
 
     useZoomMeetingUrlMocked.mockReturnValue({

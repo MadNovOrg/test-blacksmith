@@ -1,4 +1,3 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -30,7 +29,6 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
 }))
 vi.mock('posthog-js/react')
 const useCoursePriceMock = vi.mocked(useCoursePrice)
-const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('component: CourseForm - OPEN', () => {
   const type = Course_Type_Enum.Open
@@ -192,48 +190,7 @@ describe('component: CourseForm - OPEN', () => {
     expect(reacc).toBeChecked()
   })
 
-  it('doesnt require a residing country if feature flag is disabled', async () => {
-    useFeatureFlagEnabledMock.mockResolvedValueOnce(false)
-    await waitFor(() =>
-      render(<CourseForm type={type} />, {
-        auth: {
-          activeRole: RoleName.TT_ADMIN,
-        },
-      }),
-    )
-
-    expect(
-      screen.queryByText(t('components.course-form.residing-country')),
-    ).not.toBeInTheDocument()
-  })
-
-  it('requires a residing country if feature flag is enabled', async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
-
-    const course = buildCourse({
-      overrides: { accreditedBy: Accreditors_Enum.Icm, type },
-    })
-    await waitFor(() =>
-      render(
-        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
-        {
-          auth: {
-            activeRole: RoleName.TT_ADMIN,
-          },
-        },
-      ),
-    )
-    await waitFor(() =>
-      expect(
-        screen.queryByText(t('components.course-form.residing-country')),
-      ).toBeInTheDocument(),
-    )
-  })
-
   it('requires price for an international OPEN course accredited by ICM and with enabled flag', async () => {
-    // Mock course-residing-country and open-icm-course-international-finance to be enabled
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
-
     const course = buildCourse({
       overrides: { accreditedBy: Accreditors_Enum.Icm, type },
     })
@@ -273,9 +230,6 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('does not display Finance section on create course when residing country is UK', async () => {
-    // Mock course-residing-country and open-icm-course-international-finance to be enabled
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
-
     const course = buildCourse({
       overrides: {
         accreditedBy: Accreditors_Enum.Icm,

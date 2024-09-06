@@ -1,5 +1,4 @@
 import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -36,11 +35,6 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
 
   const { acl } = useAuth()
 
-  const levelOneBSEnabled = !!useFeatureFlagEnabled('level-one-bs')
-  const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect',
-  )
-
   useEffect(() => {
     onChangeRef.current = onChange
   }, [onChange])
@@ -49,25 +43,9 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
     () =>
       acl.allowedCourseLevels(
         courseType,
-        getLevels(courseType, courseAccreditor).filter(level => {
-          const shouldNotIncludeLevelOneBS =
-            (!levelOneBSEnabled ||
-              (!isInternationalIndirectEnabled &&
-                courseType === Course_Type_Enum.Indirect)) &&
-            level === Course_Level_Enum.Level_1Bs
-
-          if (shouldNotIncludeLevelOneBS) return false
-
-          return true
-        }),
+        getLevels(courseType, courseAccreditor),
       ),
-    [
-      acl,
-      courseType,
-      courseAccreditor,
-      levelOneBSEnabled,
-      isInternationalIndirectEnabled,
-    ],
+    [acl, courseType, courseAccreditor],
   )
 
   const selected = value && levels.includes(value) ? value : levels[0]

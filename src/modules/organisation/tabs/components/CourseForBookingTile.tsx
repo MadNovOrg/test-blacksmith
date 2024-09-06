@@ -8,7 +8,6 @@ import {
 } from '@mui/material'
 import { differenceInDays, format, formatDistanceToNowStrict } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -34,14 +33,6 @@ export const CourseForBookingTile: React.FC<
   React.PropsWithChildren<CourseForBookingTileParams>
 > = ({ course, variant = 'default', showDistance, distance }) => {
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled],
-  )
 
   const { acl } = useAuth()
   const { t } = useTranslation()
@@ -55,12 +46,8 @@ export const CourseForBookingTile: React.FC<
   const dateLabel = useMemo(() => {
     const timeZone = course.schedules[0].timeZone ?? 'Europe/London'
 
-    const start = isResidingCountryEnabled
-      ? utcToZonedTime(new Date(course.schedules[0].start), timeZone)
-      : new Date(course.schedules[0].start)
-    const end = isResidingCountryEnabled
-      ? utcToZonedTime(new Date(course.schedules[0].end), timeZone)
-      : new Date(course.schedules[0].end)
+    const start = utcToZonedTime(new Date(course.schedules[0].start), timeZone)
+    const end = utcToZonedTime(new Date(course.schedules[0].end), timeZone)
 
     if (course.id == 11014) {
       console.log('start', start, 'end', end)
@@ -76,30 +63,25 @@ export const CourseForBookingTile: React.FC<
         })}-${t('dates.defaultShort', {
           date: end,
         })} (${days} ${t('common.days')})`
-  }, [course.id, course.schedules, isResidingCountryEnabled, t])
+  }, [course.id, course.schedules, t])
 
   const venue = course.schedules[0].venue
 
   const dateSecondLabel = useMemo(() => {
     const timeZone = course.schedules[0].timeZone ?? 'Europe/London'
 
-    const start = isResidingCountryEnabled
-      ? utcToZonedTime(new Date(course.schedules[0].start), timeZone)
-      : new Date(course.schedules[0].start)
-    const end = isResidingCountryEnabled
-      ? utcToZonedTime(new Date(course.schedules[0].end), timeZone)
-      : new Date(course.schedules[0].end)
+    const start = utcToZonedTime(new Date(course.schedules[0].start), timeZone)
+    const end = utcToZonedTime(new Date(course.schedules[0].end), timeZone)
 
     let weekDayPart = format(start, 'iii')
     if (differenceInDays(start, end) !== 0) {
       weekDayPart += `-${format(end, 'iii')}`
     }
-    return `${weekDayPart} • ${format(start, 'p')}${
-      isResidingCountryEnabled
-        ? ` ${formatGMTDateTimeByTimeZone(start, timeZone)}`
-        : ''
-    }`
-  }, [course.schedules, formatGMTDateTimeByTimeZone, isResidingCountryEnabled])
+    return `${weekDayPart} • ${format(
+      start,
+      'p',
+    )}${` ${formatGMTDateTimeByTimeZone(start, timeZone)}`}`
+  }, [course.schedules, formatGMTDateTimeByTimeZone])
 
   const distanceLabel = useMemo(() => {
     if (!course.schedules[0].start) return ''

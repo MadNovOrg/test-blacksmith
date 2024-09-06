@@ -171,8 +171,12 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    expect(screen.getByText('12 May 2022, 06:30 AM')).toBeInTheDocument()
-    expect(screen.getByText('15 May 2022, 07:30 AM')).toBeInTheDocument()
+    expect(
+      screen.getByText('12 May 2022, 06:30 AM (GMT+01:00) Europe/London'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('15 May 2022, 07:30 AM (GMT+01:00) Europe/London'),
+    ).toBeInTheDocument()
   })
 
   it('displays correct trainer info if a logged in user is not a trainer', () => {

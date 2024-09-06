@@ -1,6 +1,5 @@
 import { addDays } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
@@ -38,11 +37,6 @@ import {
 } from '../TransferParticipantProvider'
 
 import { TransferDetails } from '.'
-
-vi.mock('posthog-js/react', () => ({
-  useFeatureFlagEnabled: vi.fn(),
-}))
-const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('page: TransferDetails', () => {
   const {
@@ -518,7 +512,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`displays correct course timezone`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -613,7 +606,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`displays default England/London timezone`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -706,7 +698,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`display postal address fields when transfer to UK Virtual course`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -799,7 +790,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`enable review and confirm button when transfer to UK Virtual course on all fields filled`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -920,7 +910,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`allows only uk countries in the country selector when transfering to a VIRTUAL `, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -1014,7 +1003,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`disable review and confirm button when transfer to UK Virtual course if postal address fields are not filled`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -1127,7 +1115,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`enable review and confirm button when transfer to UK F2F course`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({
@@ -1214,7 +1201,6 @@ describe('page: TransferDetails', () => {
   })
 
   it(`do not display postal address fields when transfer to UK F2F course`, async () => {
-    useFeatureFlagEnabledMock.mockResolvedValue(true)
     const client = {
       executeQuery: () =>
         fromValue({

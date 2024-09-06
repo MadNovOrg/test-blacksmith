@@ -1,6 +1,5 @@
 import { Box, Typography, TypographyProps } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,17 +20,9 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
   timeZone,
   ...props
 }) => {
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-
   const { t } = useTranslation()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const { isUKCountry } = useWorldCountries()
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled],
-  )
 
   const timeZoneScheduleDateTime = useMemo(() => {
     if (!timeZone) return { start, end }
@@ -47,7 +38,7 @@ export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
         <Typography color="grey.700" mb={1} {...props}>
           {t('dates.defaultShort', { date: start })}
         </Typography>
-        {isResidingCountryEnabled && Boolean(timeZone) ? (
+        {timeZone ? (
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography color="grey.700" {...props}>
               {`${t('pages.course-participants.course-beggins')} ${t(

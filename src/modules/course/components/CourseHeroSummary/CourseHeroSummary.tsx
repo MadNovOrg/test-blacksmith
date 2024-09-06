@@ -19,7 +19,6 @@ import {
 } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
 import { pick } from 'lodash'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -68,14 +67,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   slots,
   isManaged = false,
 }) => {
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled],
-  )
   const { t } = useTranslation()
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
@@ -236,15 +227,13 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     color="secondary"
                     data-testid="startDate-label"
                   >
-                    {isResidingCountryEnabled
-                      ? `${t('dates.withTime', {
-                          date: timeZoneSchedule.start,
-                        })} ${formatGMTDateTimeByTimeZone(
-                          course.schedule[0].start,
-                          course.schedule[0].timeZone,
-                          true,
-                        )}`
-                      : t('dates.withTime', { date: course.schedule[0].start })}
+                    {`${t('dates.withTime', {
+                      date: timeZoneSchedule.start,
+                    })} ${formatGMTDateTimeByTimeZone(
+                      course.schedule[0].start,
+                      course.schedule[0].timeZone,
+                      true,
+                    )}`}
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -258,15 +247,13 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                     color="secondary"
                     data-testid="endDate-label"
                   >
-                    {isResidingCountryEnabled
-                      ? `${t('dates.withTime', {
-                          date: timeZoneSchedule.end,
-                        })} ${formatGMTDateTimeByTimeZone(
-                          course.schedule[0].end,
-                          course.schedule[0].timeZone,
-                          true,
-                        )}`
-                      : t('dates.withTime', { date: course.schedule[0].end })}
+                    {`${t('dates.withTime', {
+                      date: timeZoneSchedule.end,
+                    })} ${formatGMTDateTimeByTimeZone(
+                      course.schedule[0].end,
+                      course.schedule[0].timeZone,
+                      true,
+                    )}`}
                   </Typography>
                 </ListItemText>
               </ListItem>

@@ -7,7 +7,6 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import TextField from '@mui/material/TextField'
 import { merge } from 'lodash-es'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
@@ -71,10 +70,6 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   const resolvedLabels = merge(defaultLabels, optionLabels)
 
   const orgAdminMode = mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
-
-  const isInternationalAttendeeTransferEnabled = useFeatureFlagEnabled(
-    'international-attendee-transfer',
-  )
 
   const { watch, control, register, formState, setValue } =
     useFormContext<FormValues>()
@@ -160,7 +155,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  {isInternationalAttendeeTransferEnabled && priceCurrency
+                  {priceCurrency
                     ? CurrenciesSymbols[priceCurrency as CurrencyCode]
                     : CurrenciesSymbols[defaultCurrency]}
                 </InputAdornment>

@@ -2,7 +2,6 @@ import { Alert, Grid, Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { addDays, isValid as isValidDate } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback } from 'react'
 import { useFormContext, Controller, useWatch } from 'react-hook-form'
 
@@ -28,9 +27,6 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
     formState: { errors },
   } = useFormContext<CourseInput>()
   const { t } = useScopedTranslation('components.course-form')
-  const isResidingCountryEnabled = !!useFeatureFlagEnabled(
-    'course-residing-country',
-  )
 
   const deliveryType = useWatch({ control, name: 'deliveryType' })
   const venue = useWatch({ control, name: 'venue' })
@@ -49,7 +45,6 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
   const isStartDateTimeSet = !!startDateTime && isValidDate(startDateTime)
 
   const displayTimeZoneSelector =
-    isResidingCountryEnabled &&
     isStartDateTimeSet &&
     ((deliveryType !== Course_Delivery_Type_Enum.Virtual && venue) ||
       (deliveryType === Course_Delivery_Type_Enum.Virtual && residingCountry))
@@ -189,16 +184,16 @@ export const CourseDatesSubSection = ({ isCreation }: Props) => {
             </Grid>
           </>
         ) : null}
-        {isResidingCountryEnabled ? (
-          <Grid item>
-            {/* timezone final wording::::This is a placeholder and is to be updated with the final wording provided by the client
+        (
+        <Grid item>
+          {/* timezone final wording::::This is a placeholder and is to be updated with the final wording provided by the client
                 see https://behaviourhub.atlassian.net/browse/TTHP-2915
             */}
-            <Alert severity="info" sx={{ mt: 1 }}>
-              {t('timezone-info')}
-            </Alert>
-          </Grid>
-        ) : null}
+          <Alert severity="info" sx={{ mt: 1 }}>
+            {t('timezone-info')}
+          </Alert>
+        </Grid>
+        )
       </Grid>
     </LocalizationProvider>
   )

@@ -1,13 +1,11 @@
 import InfoIcon from '@mui/icons-material/Info'
 import { Box, Grid, TextField, Tooltip, Typography } from '@mui/material'
 import { t } from 'i18next'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { yup } from '@app/schemas'
 import { requiredMsg, isValidUKPostalCode } from '@app/util'
 
@@ -38,9 +36,6 @@ export const ParticipantPostalAddressForm = () => {
     trigger,
   } = useFormContext<FormValues>()
   const values = getValues()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
 
   const { getLabel } = useWorldCountries()
 
@@ -127,29 +122,18 @@ export const ParticipantPostalAddressForm = () => {
         />
       </Box>
       <Box mb={3}>
-        {residingCountryEnabled ? (
-          <CountriesSelector
-            required
-            error={Boolean(errors.inviteeCountry)}
-            helperText={errors.inviteeCountry?.message}
-            onChange={(_, code) => {
-              setValue('inviteeCountry', getLabel(code) ?? '')
-              setValue('inviteeCountryCode', code)
-            }}
-            value={values.inviteeCountryCode}
-            onBlur={() => trigger('inviteeCountry')}
-            onlyUKCountries={true}
-          />
-        ) : (
-          <CountryDropdown
-            required
-            register={register('inviteeCountry')}
-            error={Boolean(errors.inviteeCountry?.message)}
-            value={values.inviteeCountry ?? ''}
-            errormessage={errors.inviteeCountry?.message}
-            label={t('country')}
-          />
-        )}
+        <CountriesSelector
+          required
+          error={Boolean(errors.inviteeCountry)}
+          helperText={errors.inviteeCountry?.message}
+          onChange={(_, code) => {
+            setValue('inviteeCountry', getLabel(code) ?? '')
+            setValue('inviteeCountryCode', code)
+          }}
+          value={values.inviteeCountryCode}
+          onBlur={() => trigger('inviteeCountry')}
+          onlyUKCountries={true}
+        />
       </Box>
     </Grid>
   )

@@ -30,7 +30,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/arlo/callback'
   - name: canApplyPromoCode
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/promocode/can-apply'
     permissions:
       - role: unverified
@@ -96,11 +96,6 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
-  - name: curriculumSync
-    definition:
-      kind: synchronous
-      handler: '{{ACTIONS_HOST}}/course/curriculum-sync/bulk'
-    comment: curriculumSync
   - name: declineInvite
     definition:
       kind: synchronous
@@ -138,14 +133,14 @@ actions:
     comment: Delete users
   - name: eligibleTransferCourses
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/transfer/eligible-courses'
     permissions:
       - role: user
     comment: eligibleTransferCourses
   - name: exportBlendedLearningCourseData
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/go1/export'
     permissions:
       - role: booking-contact
@@ -160,12 +155,12 @@ actions:
       - role: finance
   - name: fetchPlans
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/stripe/prices/list'
     comment: Fetches membership plans
   - name: getCoursePricing
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/course/price'
     permissions:
       - role: user
@@ -173,21 +168,21 @@ actions:
     comment: getCoursePricing
   - name: getInvite
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getOrgInvite
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/organization/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getOrganizationProfiles
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/organization/profiles'
     permissions:
       - role: sales-representative
@@ -197,7 +192,7 @@ actions:
       - role: tt-admin
   - name: getXeroInvoicesForOrders
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices'
     permissions:
       - role: sales-admin
@@ -241,14 +236,14 @@ actions:
     comment: importUsers
   - name: initAuth
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/user/auth'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: isUserSubscribedToMembership
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
     comment: Checks whether user is subscribed to membership
   - name: joinWaitlist
@@ -271,7 +266,7 @@ actions:
     comment: joinWaitlist
   - name: knowledgeHubResources
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/knowledge-hub/resources'
     permissions:
       - role: user
@@ -302,14 +297,14 @@ actions:
     comment: Creates a membership plan
   - name: podcast
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/podcasts/single'
     permissions:
       - role: user
     comment: Podcast
   - name: podcasts
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/podcasts'
     permissions:
       - role: user
@@ -358,7 +353,7 @@ actions:
     comment: The action will create a schedule event for sending about training surveys to certified attendees
   - name: searchTrainers
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/trainers/search'
     permissions:
       - role: sales-admin
@@ -446,13 +441,13 @@ actions:
       - role: tt-admin
   - name: xeroConnect
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/setup'
     permissions:
       - role: tt-admin
   - name: xeroContactSearch
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
       - role: booking-contact
@@ -471,19 +466,19 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/disconnect'
   - name: xeroInvoicesStatus
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices/status'
     permissions:
       - role: sales-admin
       - role: tt-admin
   - name: xeroSync
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices/sync'
     comment: Sync Xero Invoices with the hub invoices
   - name: zoomUsers
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/zoom/get-users'
     permissions:
       - role: user

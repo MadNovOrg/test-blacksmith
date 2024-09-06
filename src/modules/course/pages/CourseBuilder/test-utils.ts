@@ -69,7 +69,7 @@ export function buildCourse(
     },
     schedule: [
       {
-        timeZone: chance.string(),
+        timeZone: 'Europe/London',
         venue: {
           name: chance.name(),
           city: chance.name(),

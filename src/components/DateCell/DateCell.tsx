@@ -1,6 +1,5 @@
 import { TableCell, Box, Typography } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,14 +8,10 @@ import useTimeZones from '@app/hooks/useTimeZones'
 export function DateCell({
   date,
   timeZone,
-}: {
+}: Readonly<{
   date: Date
   timeZone?: string
-}) {
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-  const isResidingCountryEnabled = !!residingCountryEnabled
+}>) {
   const { t } = useTranslation()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
@@ -31,19 +26,17 @@ export function DateCell({
         <Box>
           <Typography variant="body2" gutterBottom>
             {t('dates.defaultShort', {
-              date: isResidingCountryEnabled ? UTCDate : date,
+              date: UTCDate,
             })}
           </Typography>
           <Typography variant="body2" whiteSpace="nowrap">
             {t('dates.time', {
-              date: isResidingCountryEnabled ? UTCDate : date,
+              date: UTCDate,
             })}
           </Typography>
-          {isResidingCountryEnabled ? (
-            <Typography variant="body2" whiteSpace="nowrap">
-              {formatGMTDateTimeByTimeZone(UTCDate, timeZone)}
-            </Typography>
-          ) : null}
+          <Typography variant="body2" whiteSpace="nowrap">
+            {formatGMTDateTimeByTimeZone(UTCDate, timeZone)}
+          </Typography>
         </Box>
       )}
     </TableCell>

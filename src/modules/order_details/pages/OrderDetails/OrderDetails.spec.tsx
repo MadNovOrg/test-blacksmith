@@ -175,15 +175,7 @@ describe('page: OrderDetails', () => {
     )
     expect(
       screen.getByTestId('order-course-title').textContent,
-    ).toMatchInlineSnapshot(`"Level One  - 8 hours "`)
-    expect(
-      screen.getByTestId('order-course-duration').textContent,
-    ).toMatchInlineSnapshot(
-      `"${format(new Date(courseStartDate), 'd LLL yyyyhh:mm a')} - ${format(
-        new Date(courseEndDate),
-        'hh:mm a',
-      )}(local time)"`,
-    )
+    ).toMatchInlineSnapshot(`"Level One "`)
   })
 
   it('renders order line items', () => {
@@ -566,6 +558,7 @@ describe('page: OrderDetails', () => {
                 {
                   order: {
                     ...order,
+
                     invoice,
                     registrants: [],
                     organization: {
@@ -576,8 +569,9 @@ describe('page: OrderDetails', () => {
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
                   quantity: 1,
+                  course: baseCourse,
                 },
-              ],
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -645,8 +639,9 @@ describe('page: OrderDetails', () => {
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
                   quantity: 1,
+                  course: baseCourse,
                 },
-              ],
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -700,8 +695,9 @@ describe('page: OrderDetails', () => {
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
                   quantity: 1,
+                  course: baseCourse,
                 },
-              ],
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -765,8 +761,9 @@ describe('page: OrderDetails', () => {
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
                   quantity: 1,
+                  course: baseCourse,
                 },
-              ],
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }
@@ -824,8 +821,9 @@ describe('page: OrderDetails', () => {
                     },
                   } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
                   quantity: 1,
+                  course: baseCourse,
                 },
-              ],
+              ] as unknown as GetCourseOrdersQuery['orders'],
             },
           })
         }

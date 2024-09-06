@@ -1,4 +1,3 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -170,13 +169,6 @@ export function useSaveCourse(): {
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry } = useWorldCountries()
 
-  const InternationalFinanceEnabled = useFeatureFlagEnabled(
-    'open-icm-course-international-finance',
-  )
-  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
-
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
   const { id: draftId } = useParams()
@@ -194,11 +186,6 @@ export function useSaveCourse(): {
   const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
   const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
 
-  const isInternationalFlagEnabled = useMemo(
-    () => Boolean(InternationalFinanceEnabled),
-    [InternationalFinanceEnabled],
-  )
-
   const courseHasManualPrice = courseWithManualPrice({
     accreditedBy: courseData?.accreditedBy as Accreditors_Enum,
     courseType: courseData?.type as Course_Type_Enum,
@@ -206,7 +193,6 @@ export function useSaveCourse(): {
     blendedLearning: Boolean(courseData?.blendedLearning),
     maxParticipants: courseData?.maxParticipants ?? 0,
     residingCountry: courseData?.residingCountry as WorldCountriesCodes,
-    internationalFlagEnabled: isInternationalFlagEnabled,
   })
 
   const courseWithNoPrice = useMemo(() => {
@@ -380,7 +366,7 @@ export function useSaveCourse(): {
             ? { min_participants: courseData.minParticipants }
             : null),
           max_participants: courseData.maxParticipants,
-          ...(isClosedCourse && mandatoryCourseMaterialsCostEnabled
+          ...(isClosedCourse
             ? {
                 free_course_materials: courseData.freeCourseMaterials,
               }
@@ -464,7 +450,7 @@ export function useSaveCourse(): {
                 expenses: {
                   data: prepareExpensesData(
                     expenses,
-                    mandatoryCourseMaterialsCostEnabled ?? false,
+                    true,
                     courseData.freeCourseMaterials ?? 0,
                     courseData.maxParticipants ?? 0,
                     (courseData.priceCurrency as CurrencyEnum) ?? Currency.GBP,
@@ -566,7 +552,6 @@ export function useSaveCourse(): {
     curriculum?.modulesDuration,
     courseName,
     isOpenCourse,
-    mandatoryCourseMaterialsCostEnabled,
     expenses,
     courseHasManualPrice,
     setDateTimeTimeZone,

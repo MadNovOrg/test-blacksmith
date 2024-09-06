@@ -1,5 +1,4 @@
 import { addHours } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
@@ -52,11 +51,6 @@ for (const trainer of trainers) {
 }
 
 describe('component: ReviewAndConfirm', () => {
-  beforeEach(() => {
-    useFeatureFlagEnabled('mandatory-course-materials-cost')
-    useFeatureFlagEnabled('course-residing-country')
-  })
-
   it('renders alert if course is not found', async () => {
     const client = {
       executeQuery: () => never,

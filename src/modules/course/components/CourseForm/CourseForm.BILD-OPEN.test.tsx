@@ -1,5 +1,4 @@
 import { t } from 'i18next'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
@@ -29,7 +28,6 @@ vi.mock('posthog-js/react', () => ({
 }))
 
 const useCoursePriceMock = vi.mocked(useCoursePrice)
-const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('CourseForm - open BILD', () => {
   beforeEach(() => {
@@ -186,9 +184,6 @@ describe('CourseForm - open BILD', () => {
   )
 
   it("doesn't allow changing residing country", async () => {
-    useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) => flag === 'course-residing-country',
-    )
     renderForm(Course_Type_Enum.Closed)
     await selectBildCategory()
 

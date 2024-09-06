@@ -66,7 +66,6 @@ export const courseWithManualPrice = ({
   blendedLearning,
   maxParticipants,
   residingCountry,
-  internationalFlagEnabled,
 }: {
   accreditedBy: Accreditors_Enum
   courseType: Course_Type_Enum
@@ -74,7 +73,6 @@ export const courseWithManualPrice = ({
   blendedLearning: boolean
   maxParticipants: number
   residingCountry: WorldCountriesCodes
-  internationalFlagEnabled: boolean
 }) => {
   const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
@@ -102,9 +100,6 @@ export const courseWithManualPrice = ({
   }
 
   if (!isUKcountry && (isClosedCourse || isOpenCourse) && isICMcourse) {
-    if (!internationalFlagEnabled) {
-      return false
-    }
     return true
   }
 

@@ -1,5 +1,4 @@
 import userEvent from '@testing-library/user-event'
-import { Chance } from 'chance'
 import { addHours } from 'date-fns/esm'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,8 +21,6 @@ import {
 import { render, renderHook, screen, within } from '@test/index'
 
 import { buildUserCourse } from '../../utils/test-utils'
-
-const chance = new Chance()
 
 describe('Booking contact and Org key contact manage courses page', () => {
   const {
@@ -195,7 +192,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
             id: 'id1',
             start: addHours(new Date(), 1),
             end: addHours(new Date(), 1),
-            timeZone: String(chance.timezone()),
+            timeZone: 'Europe/London',
           },
         ],
       },
@@ -268,7 +265,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
             id: 'id1',
             start: addHours(new Date(), -2),
             end: addHours(new Date(), -1),
-            timeZone: String(chance.timezone()),
+            timeZone: 'Europe/London',
           },
         ],
         status: Course_Status_Enum.GradeMissing,

@@ -23,7 +23,6 @@ import {
 import { differenceInSeconds } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
 import jwtDecode from 'jwt-decode'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -57,13 +56,7 @@ import {
 export const InvitationPage = () => {
   const { t } = useTranslation()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled],
-  )
+
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -139,23 +132,22 @@ export const InvitationPage = () => {
   )
   const startDate = useMemo(() => {
     if (invite) {
-      return isResidingCountryEnabled
-        ? utcToZonedTime(new Date(invite.startDate), invite.timeZone as string)
-        : new Date(invite.startDate)
+      return utcToZonedTime(
+        new Date(invite.startDate),
+        invite.timeZone as string,
+      )
     }
 
     return null
-  }, [invite, isResidingCountryEnabled])
+  }, [invite])
 
   const endDate = useMemo(() => {
     if (invite) {
-      return isResidingCountryEnabled
-        ? utcToZonedTime(new Date(invite.endDate), invite.timeZone as string)
-        : new Date(invite.endDate)
+      return utcToZonedTime(new Date(invite.endDate), invite.timeZone as string)
     }
 
     return null
-  }, [invite, isResidingCountryEnabled])
+  }, [invite])
 
   const courseTrainerName = useMemo(
     () => (invite ? invite.trainerName : null),
@@ -317,28 +309,20 @@ export const InvitationPage = () => {
                   <Typography variant="body2" gutterBottom>
                     {`${t('dates.withTime', {
                       date: startDate,
-                    })}${
-                      isResidingCountryEnabled
-                        ? ` ${formatGMTDateTimeByTimeZone(
-                            startDate,
-                            invite.timeZone ?? 'Europe/London',
-                            true,
-                          )}`
-                        : ''
-                    }`}
+                    })}${` ${formatGMTDateTimeByTimeZone(
+                      startDate,
+                      invite.timeZone ?? 'Europe/London',
+                      true,
+                    )}`}`}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
                     {`${t('dates.withTime', {
                       date: endDate,
-                    })}${
-                      isResidingCountryEnabled
-                        ? ` ${formatGMTDateTimeByTimeZone(
-                            endDate as Date,
-                            invite.timeZone ?? 'Europe/London',
-                            true,
-                          )}`
-                        : ''
-                    }`}
+                    })}${` ${formatGMTDateTimeByTimeZone(
+                      endDate as Date,
+                      invite.timeZone ?? 'Europe/London',
+                      true,
+                    )}`}`}
                   </Typography>
                 </>
               ) : null}

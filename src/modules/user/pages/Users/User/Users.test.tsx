@@ -334,10 +334,7 @@ describe('page: Users', () => {
     useProfilesMocked.mockImplementation(
       ({ where }: GetProfilesQueryVariables) => {
         const conditions = where?._or ?? []
-        console.log(
-          'conditions-------------------------------------------',
-          conditions,
-        )
+
         const profiles =
           conditions.length >= 3
             ? conditions[3]?.country?._ilike === `%${keyword}%`

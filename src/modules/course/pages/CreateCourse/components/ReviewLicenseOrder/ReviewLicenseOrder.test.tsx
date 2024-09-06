@@ -1,5 +1,6 @@
-import { addHours, addMonths, addWeeks, format } from 'date-fns'
+import { addHours, addMonths, addWeeks } from 'date-fns'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -13,7 +14,7 @@ import {
   Course_Trainer_Type_Enum,
   InsertCourseMutation,
 } from '@app/generated/graphql'
-import { dateFormats } from '@app/i18n/config'
+import useTimeZones from '@app/hooks/useTimeZones'
 import {
   Draft,
   Organization,
@@ -21,7 +22,14 @@ import {
   TrainerRoleTypeName,
 } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import {
+  chance,
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitFor,
+} from '@test/index'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
 
@@ -34,6 +42,18 @@ function createFetchingClient() {
 }
 
 describe('component: ReviewLicenseOrder', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
+  const {
+    result: {
+      current: { formatGMTDateTimeByTimeZone },
+    },
+  } = renderHook(() => useTimeZones())
+
   it('displays an alert if there is no course or pricing data in the context', () => {
     render(
       <Provider value={createFetchingClient()}>
@@ -97,19 +117,16 @@ describe('component: ReviewLicenseOrder', () => {
 
     expect(
       screen.getByText(
-        `${format(startDate, dateFormats.date_long)} - ${format(
-          endDate,
-          dateFormats.date_long,
-        )}`,
-      ),
-    ).toBeInTheDocument()
-
-    expect(
-      screen.getByText(
-        `${format(startDate, dateFormats.date_onlyTime)} - ${format(
-          endDate,
-          dateFormats.date_onlyTime,
-        )}`,
+        `${t('dates.time', {
+          date: startDate,
+        })} ${formatGMTDateTimeByTimeZone(
+          startDate,
+          'Europe/London',
+          false,
+        )} - ${t('dates.time', {
+          date: endDate,
+        })} ${formatGMTDateTimeByTimeZone(endDate, 'Europe/London')} `,
+        { exact: false },
       ),
     ).toBeInTheDocument()
 

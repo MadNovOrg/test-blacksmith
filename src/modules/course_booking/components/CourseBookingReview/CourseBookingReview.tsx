@@ -12,7 +12,6 @@ import {
 import Big from 'big.js'
 import { isPast } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -54,12 +53,7 @@ export const CourseBookingReview: React.FC<
   const { course, booking, amounts, placeOrder } = useBooking()
   const { isUKCountry } = useWorldCountries()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-  const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
+
   const [accept, setAccept] = useState(false)
   const [creatingOrder, setCreatingOrder] = useState(false)
   const [error, setError] = useState<{
@@ -202,47 +196,30 @@ export const CourseBookingReview: React.FC<
             <Typography gutterBottom fontWeight="600">
               {course?.name ?? ''}
             </Typography>
-            {residingCountryEnabled ? (
-              <>
-                <Typography gutterBottom color="grey.700">
-                  {t('start')}:{' '}
-                  {t('dates.withTime', {
-                    date: timeZoneScheduleDateTime.courseStart,
-                  })}{' '}
-                  {formatGMTDateTimeByTimeZone(
-                    timeZoneScheduleDateTime.courseStart,
-                    courseTimezone,
-                    true,
-                  )}
-                </Typography>
-                <Typography gutterBottom color="grey.700">
-                  {t('end')}:{' '}
-                  {t('dates.withTime', {
-                    date: timeZoneScheduleDateTime.courseEnd,
-                  })}{' '}
-                  {formatGMTDateTimeByTimeZone(
-                    timeZoneScheduleDateTime.courseEnd,
-                    courseTimezone,
-                    true,
-                  )}
-                </Typography>
-              </>
-            ) : (
-              <>
-                <Typography gutterBottom color="grey.700">
-                  {t('start')}:{' '}
-                  {t('dates.withTime', {
-                    date: course?.dates?.aggregate?.start?.date,
-                  })}
-                </Typography>
-                <Typography gutterBottom color="grey.700">
-                  {t('end')}:{' '}
-                  {t('dates.withTime', {
-                    date: course?.dates?.aggregate?.end?.date,
-                  })}
-                </Typography>
-              </>
-            )}
+            <>
+              <Typography gutterBottom color="grey.700">
+                {t('start')}:{' '}
+                {t('dates.withTime', {
+                  date: timeZoneScheduleDateTime.courseStart,
+                })}{' '}
+                {formatGMTDateTimeByTimeZone(
+                  timeZoneScheduleDateTime.courseStart,
+                  courseTimezone,
+                  true,
+                )}
+              </Typography>
+              <Typography gutterBottom color="grey.700">
+                {t('end')}:{' '}
+                {t('dates.withTime', {
+                  date: timeZoneScheduleDateTime.courseEnd,
+                })}{' '}
+                {formatGMTDateTimeByTimeZone(
+                  timeZoneScheduleDateTime.courseEnd,
+                  courseTimezone,
+                  true,
+                )}
+              </Typography>
+            </>
 
             <Typography color="grey.700">
               {t('pages.book-course.venue')}:{' '}
@@ -346,30 +323,28 @@ export const CourseBookingReview: React.FC<
             </Typography>
           </Box>
         ))}
-        {mandatoryCourseMaterialsEnabled ? (
-          <>
-            <Divider sx={{ my: 2 }} />
-            <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography color="grey.700">
-                {t('mandatory-course-materials', {
-                  quantity: booking.quantity,
-                })}
-              </Typography>
-              <Typography color="grey.700">
-                {formatCurrency(
-                  {
-                    amount: getMandatoryCourseMaterialsCost(
-                      booking.quantity,
-                      booking.currency,
-                    ),
-                    currency: booking.currency,
-                  },
-                  t,
-                )}
-              </Typography>
-            </Box>
-          </>
-        ) : null}
+        <>
+          <Divider sx={{ my: 2 }} />
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('mandatory-course-materials', {
+                quantity: booking.quantity,
+              })}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(
+                {
+                  amount: getMandatoryCourseMaterialsCost(
+                    booking.quantity,
+                    booking.currency,
+                  ),
+                  currency: booking.currency,
+                },
+                t,
+              )}
+            </Typography>
+          </Box>
+        </>
         {booking.trainerExpenses > 0 ? (
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">

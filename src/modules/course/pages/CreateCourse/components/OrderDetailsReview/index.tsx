@@ -1,7 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 import Big from 'big.js'
 import { parseISO } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -32,18 +31,11 @@ export const OrderDetailsReview: React.FC = () => {
     useCreateCourse()
 
   const currency = courseData?.priceCurrency ?? defaultCurrency
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
   const courseMaterialsCost = useMemo(() => {
     if (
-      mandatoryCourseMaterialsCostEnabled &&
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
@@ -53,16 +45,10 @@ export const OrderDetailsReview: React.FC = () => {
       )
     }
     return 0
-  }, [
-    courseData?.freeCourseMaterials,
-    courseData?.maxParticipants,
-    currency,
-    mandatoryCourseMaterialsCostEnabled,
-  ])
+  }, [courseData?.freeCourseMaterials, courseData?.maxParticipants, currency])
 
   const freeCourseMaterialsCost = useMemo(() => {
     if (
-      mandatoryCourseMaterialsCostEnabled &&
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
@@ -72,11 +58,7 @@ export const OrderDetailsReview: React.FC = () => {
       )
     }
     return 0
-  }, [
-    courseData?.freeCourseMaterials,
-    currency,
-    mandatoryCourseMaterialsCostEnabled,
-  ])
+  }, [courseData?.freeCourseMaterials, currency])
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -222,29 +204,21 @@ export const OrderDetailsReview: React.FC = () => {
           {courseName}
         </Typography>
 
-        {residingCountryEnabled ? (
-          <Typography data-testid="course-dates">
-            {`${t('dates.withTime', {
-              date: startDate,
-            })} ${formatGMTDateTimeByTimeZone(
-              startDate as Date,
-              courseTimezone,
-              false,
-            )} - ${t('dates.withTime', {
-              date: endDate,
-            })} ${formatGMTDateTimeByTimeZone(
-              endDate as Date,
-              courseTimezone,
-              true,
-            )} `}
-          </Typography>
-        ) : (
-          <Typography color="dimGrey.main" data-testid="course-dates">
-            {t('dates.withTime', { date: startDate })} -{' '}
-            {t('dates.withTime', { date: endDate })}{' '}
-            {t('pages.create-course.review-and-confirm.local-time-mention')}
-          </Typography>
-        )}
+        <Typography data-testid="course-dates">
+          {`${t('dates.withTime', {
+            date: startDate,
+          })} ${formatGMTDateTimeByTimeZone(
+            startDate as Date,
+            courseTimezone,
+            false,
+          )} - ${t('dates.withTime', {
+            date: endDate,
+          })} ${formatGMTDateTimeByTimeZone(
+            endDate as Date,
+            courseTimezone,
+            true,
+          )} `}
+        </Typography>
       </InfoPanel>
 
       <InfoPanel>
@@ -324,36 +298,34 @@ export const OrderDetailsReview: React.FC = () => {
         />
       </InfoPanel>
 
-      {mandatoryCourseMaterialsCostEnabled ? (
-        <InfoPanel>
-          <PageRow
-            label={t(
-              'pages.create-course.review-and-confirm.mandatory-course-materials',
-              {
-                count: courseData?.maxParticipants,
-              },
-            )}
-            value={t('common.currency', {
-              amount: courseMaterialsCost,
-              currency,
-            })}
-            testId="mandatory-course-materials-row"
-          />
-          <PageRow
-            label={t(
-              'pages.create-course.review-and-confirm.free-course-materials',
-              {
-                count: courseData?.freeCourseMaterials,
-              },
-            )}
-            value={t('common.currency', {
-              amount: freeCourseMaterialsCost,
-              currency,
-            })}
-            testId="free-course-materials-row"
-          />
-        </InfoPanel>
-      ) : null}
+      <InfoPanel>
+        <PageRow
+          label={t(
+            'pages.create-course.review-and-confirm.mandatory-course-materials',
+            {
+              count: courseData?.maxParticipants,
+            },
+          )}
+          value={t('common.currency', {
+            amount: courseMaterialsCost,
+            currency,
+          })}
+          testId="mandatory-course-materials-row"
+        />
+        <PageRow
+          label={t(
+            'pages.create-course.review-and-confirm.free-course-materials',
+            {
+              count: courseData?.freeCourseMaterials,
+            },
+          )}
+          value={t('common.currency', {
+            amount: freeCourseMaterialsCost,
+            currency,
+          })}
+          testId="free-course-materials-row"
+        />
+      </InfoPanel>
 
       <InfoPanel>
         <Stack spacing={1}>

@@ -18,7 +18,6 @@ import {
 import Big from 'big.js'
 import { utcToZonedTime } from 'date-fns-tz'
 import { groupBy, filter } from 'lodash'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
@@ -53,7 +52,6 @@ import {
   formSchema as invoiceDetailsFormSchema,
   InvoiceForm,
 } from '@app/modules/course/components/CourseForm/InvoiceForm'
-import { CourseDuration } from '@app/modules/course_details/components/CourseDuration'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'
@@ -125,12 +123,7 @@ export const CourseBookingDetails: React.FC<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-  const mandatoryCourseMaterialsEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
+
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
     course,
@@ -146,14 +139,13 @@ export const CourseBookingDetails: React.FC<
   const isIntlEnabled = useMemo(
     () =>
       [
-        Boolean(residingCountryEnabled),
         Boolean(course),
         course?.accreditedBy === Accreditors_Enum.Icm,
         course?.type === Course_Type_Enum.Open,
         course?.deliveryType === Course_Delivery_Type_Enum.Virtual,
         course?.level === Course_Level_Enum.Level_1,
       ].every(el => el),
-    [course, residingCountryEnabled],
+    [course],
   )
 
   const { getLabel, isUKCountry } = useWorldCountries()
@@ -521,34 +513,21 @@ export const CourseBookingDetails: React.FC<
               <Typography gutterBottom fontWeight="600">
                 {course?.name}
               </Typography>
-              {residingCountryEnabled ? (
-                <Typography>
-                  {`${t('dates.withTime', {
-                    date: timeZoneScheduleDateTime.courseStart,
-                  })} ${formatGMTDateTimeByTimeZone(
-                    timeZoneScheduleDateTime.courseStart,
-                    courseTimezone,
-                    false,
-                  )} - ${t('dates.withTime', {
-                    date: timeZoneScheduleDateTime.courseEnd,
-                  })} ${formatGMTDateTimeByTimeZone(
-                    timeZoneScheduleDateTime.courseEnd,
-                    courseTimezone,
-                    true,
-                  )} `}
-                </Typography>
-              ) : (
-                <CourseDuration
-                  start={new Date(course?.dates.aggregate?.start?.date)}
-                  end={new Date(course?.dates.aggregate?.end?.date)}
-                  courseResidingCountry={course?.residingCountry}
-                  timeZone={
-                    course?.schedule.length
-                      ? course?.schedule[0].timeZone
-                      : undefined
-                  }
-                />
-              )}
+              <Typography>
+                {`${t('dates.withTime', {
+                  date: timeZoneScheduleDateTime.courseStart,
+                })} ${formatGMTDateTimeByTimeZone(
+                  timeZoneScheduleDateTime.courseStart,
+                  courseTimezone,
+                  false,
+                )} - ${t('dates.withTime', {
+                  date: timeZoneScheduleDateTime.courseEnd,
+                })} ${formatGMTDateTimeByTimeZone(
+                  timeZoneScheduleDateTime.courseEnd,
+                  courseTimezone,
+                  true,
+                )} `}
+              </Typography>
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">
               <FormControl fullWidth sx={{ bgcolor: 'grey.200' }}>
@@ -600,27 +579,25 @@ export const CourseBookingDetails: React.FC<
               )}
             </Typography>
           </Box>
-          {mandatoryCourseMaterialsEnabled ? (
-            <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography color="grey.700">
-                {t('mandatory-course-materials', {
-                  quantity: booking.quantity,
-                })}
-              </Typography>
-              <Typography color="grey.700">
-                {formatCurrency(
-                  {
-                    amount: getMandatoryCourseMaterialsCost(
-                      booking.quantity,
-                      booking.currency,
-                    ),
-                    currency: booking.currency,
-                  },
-                  t,
-                )}
-              </Typography>
-            </Box>
-          ) : null}
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('mandatory-course-materials', {
+                quantity: booking.quantity,
+              })}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(
+                {
+                  amount: getMandatoryCourseMaterialsCost(
+                    booking.quantity,
+                    booking.currency,
+                  ),
+                  currency: booking.currency,
+                },
+                t,
+              )}
+            </Typography>
+          </Box>
 
           {booking.trainerExpenses > 0 ? (
             <Box display="flex" justifyContent="space-between" mb={1}>

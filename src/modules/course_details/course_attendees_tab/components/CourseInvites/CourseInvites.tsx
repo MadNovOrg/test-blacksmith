@@ -11,7 +11,6 @@ import {
   useTheme,
 } from '@mui/material'
 import { saveAs } from 'file-saver'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -49,9 +48,6 @@ export const CourseInvites = ({
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
-  const allowAddAttendeesAfterCourseEnded = useFeatureFlagEnabled(
-    'invite-attendees-after-course-ended',
-  )
 
   const emailSchema = yup
     .string()
@@ -282,8 +278,7 @@ export const CourseInvites = ({
   const displayInviteTools =
     !courseCancelledOrDraft &&
     ((!courseHasEnded && allowInvites) ||
-      (!!allowAddAttendeesAfterCourseEnded &&
-        acl.canInviteAttendeesAfterCourseEnded(course.type)))
+      acl.canInviteAttendeesAfterCourseEnded(course.type))
 
   return (
     <>

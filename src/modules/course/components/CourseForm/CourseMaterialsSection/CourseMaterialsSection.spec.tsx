@@ -1,5 +1,4 @@
 import { renderHook, waitFor, within } from '@testing-library/react'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import {
   Accreditors_Enum,
@@ -28,9 +27,6 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
 }))
 
 describe(`component: ${CourseMaterialsSection.name}`, () => {
-  beforeEach(() => {
-    useFeatureFlagEnabled('mandatory-course-materials-cost')
-  })
   const {
     result: {
       current: { t },

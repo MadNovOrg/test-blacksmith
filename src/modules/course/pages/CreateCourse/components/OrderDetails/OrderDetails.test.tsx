@@ -1,6 +1,5 @@
 import { addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -54,10 +53,6 @@ vi.mock('posthog-js/react', () => ({
 }))
 
 describe('component: OrderDetails', () => {
-  beforeEach(() => {
-    useFeatureFlagEnabled('mandatory-course-materials-cost')
-  })
-
   it('displays course details, and pricing with trainer expenses for an ICM course', async () => {
     const courseDate = new Date(1, 1, 2023)
 
@@ -239,11 +234,6 @@ describe('component: OrderDetails', () => {
   })
 
   it('[MCM FF Disabled] displays course details, and pricing with trainer expenses for an ICM course', async () => {
-    vi.mock('posthog-js/react', () => ({
-      useFeatureFlagEnabled: vi.fn().mockResolvedValue(false),
-    }))
-    useFeatureFlagEnabled('mandatory-course-materials-cost')
-
     const courseDate = new Date(1, 1, 2023)
 
     const client = {
@@ -326,10 +316,6 @@ describe('component: OrderDetails', () => {
 
   it('[MCM FF Disabled] displays course details, and pricing with trainer expenses for a BILD course', async () => {
     const courseDate = new Date(1, 1, 2023)
-    vi.mock('posthog-js/react', () => ({
-      useFeatureFlagEnabled: vi.fn().mockResolvedValue(false),
-    }))
-    useFeatureFlagEnabled('mandatory-course-materials-cost')
 
     const client = {
       executeQuery: ({ query }: { query: DocumentNode }) => {

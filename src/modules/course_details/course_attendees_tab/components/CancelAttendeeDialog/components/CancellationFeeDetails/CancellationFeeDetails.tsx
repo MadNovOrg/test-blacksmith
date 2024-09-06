@@ -8,7 +8,6 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { PropsWithChildren } from 'react'
 import {
   FieldErrors,
@@ -57,9 +56,6 @@ export const CancellationFeeDetails: React.FC<
 }) => {
   const { t } = useTranslation()
 
-  const isInternationalAttendeeTransferEnabled = useFeatureFlagEnabled(
-    'international-attendee-transfer',
-  )
   return (
     <Box>
       {showEditFeePercent ? (
@@ -145,7 +141,7 @@ export const CancellationFeeDetails: React.FC<
           InputProps={{
             endAdornment: (
               <Typography variant="body1" color="grey.600">
-                {isInternationalAttendeeTransferEnabled && currency
+                {currency
                   ? CurrenciesSymbols[currency as CurrencyCode]
                   : CurrenciesSymbols[defaultCurrency]}
               </Typography>

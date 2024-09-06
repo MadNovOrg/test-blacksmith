@@ -1,5 +1,4 @@
 import { t } from 'i18next'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -23,8 +22,6 @@ import { CourseForm } from '.'
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn(),
 }))
-
-const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('component: CourseForm - CLOSED', () => {
   const type = Course_Type_Enum.Closed
@@ -376,9 +373,6 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows changing the residing country', async () => {
-    useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) => flag === 'course-residing-country',
-    )
     renderForm(type)
 
     expect(

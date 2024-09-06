@@ -18,13 +18,11 @@ import {
   Radio,
   FormHelperText,
 } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo } from 'react'
 import { useFormContext, Controller, useWatch } from 'react-hook-form'
 
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { InfoPanel } from '@app/components/InfoPanel'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import { VenueSelector } from '@app/components/VenueSelector'
@@ -73,14 +71,6 @@ export const GeneralDetailsSection = ({
   const { changeCountryOnCourseLevelChange } = useCourseFormEffects()
   const { t, _t } = useScopedTranslation('components.course-form')
 
-  const isResidingCountryEnabled = !!useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-
-  const isInternationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect',
-  )
-
   const courseType = useWatch({ control, name: 'type' }) as Course_Type_Enum
   const accreditedBy = useWatch({ control, name: 'accreditedBy' })
   const residingCountry = useWatch({ control, name: 'residingCountry' })
@@ -111,10 +101,7 @@ export const GeneralDetailsSection = ({
   const usesAOL =
     useWatch({ control, name: 'usesAOL' }) && shouldShowAOL && !isL1BS
 
-  const shouldShowCountrySelector =
-    isResidingCountryEnabled &&
-    !isBild &&
-    (!isIndirectCourse || (isIndirectCourse && isInternationalIndirectEnabled))
+  const shouldShowCountrySelector = !isBild
 
   const {
     canBlended,
@@ -152,17 +139,8 @@ export const GeneralDetailsSection = ({
   ].includes(deliveryType)
 
   const disableBlended = useMemo(() => {
-    return (
-      isIndirectCourse &&
-      isInternationalIndirectEnabled &&
-      !isUKCountry(residingCountry)
-    )
-  }, [
-    isInternationalIndirectEnabled,
-    isIndirectCourse,
-    isUKCountry,
-    residingCountry,
-  ])
+    return isIndirectCourse && !isUKCountry(residingCountry)
+  }, [isIndirectCourse, isUKCountry, residingCountry])
 
   useEffect(() => {
     const mustChange = !canBlended && blendedLearning
@@ -181,16 +159,10 @@ export const GeneralDetailsSection = ({
   }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
 
   const disableCountrySelector = useMemo(() => {
-    return (
-      isIndirectCourse &&
-      isInternationalIndirectEnabled &&
-      !isCreation &&
-      acl.isTrainer()
-    )
-  }, [acl, isCreation, isIndirectCourse, isInternationalIndirectEnabled])
+    return isIndirectCourse && !isCreation && acl.isTrainer()
+  }, [acl, isCreation, isIndirectCourse])
   useEffect(() => {
     if (
-      isInternationalIndirectEnabled &&
       acl.isTrainer() &&
       isCreation &&
       isIndirectCourse &&
@@ -198,14 +170,7 @@ export const GeneralDetailsSection = ({
     ) {
       setValue('residingCountry', profile?.countryCode)
     }
-  }, [
-    acl,
-    isCreation,
-    isIndirectCourse,
-    isInternationalIndirectEnabled,
-    profile?.countryCode,
-    setValue,
-  ])
+  }, [acl, isCreation, isIndirectCourse, profile?.countryCode, setValue])
 
   useEffect(() => {
     const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
@@ -352,8 +317,7 @@ export const GeneralDetailsSection = ({
                       disabled={disabledFields.has('aolCountry')}
                       data-testid="aol-country-selector"
                     >
-                      {isResidingCountryEnabled &&
-                      isInternationalIndirectEnabled ? (
+                      {
                         <CountriesSelector
                           required
                           onChange={(_, code) => {
@@ -368,16 +332,7 @@ export const GeneralDetailsSection = ({
                           courseType={courseType}
                           disabled={disableCountrySelector}
                         />
-                      ) : (
-                        <CountryDropdown
-                          label={_t('country')}
-                          errormessage={errors.aolCountry?.message}
-                          required
-                          register={register('aolCountry')}
-                          value={aolCountry}
-                          error={Boolean(errors.aolCountry?.message)}
-                        />
-                      )}
+                      }
                     </FormControl>
                   </Grid>
 
@@ -397,12 +352,7 @@ export const GeneralDetailsSection = ({
                           })
                         }}
                         usesAOL={usesAOL}
-                        country={
-                          (isResidingCountryEnabled &&
-                          isInternationalIndirectEnabled
-                            ? getCountryLabel(aolCountry)
-                            : aolCountry) ?? ''
-                        }
+                        country={getCountryLabel(aolCountry) ?? ''}
                         disabled={
                           !aolCountry || disabledFields.has('aolRegion')
                         }
@@ -711,11 +661,7 @@ export const GeneralDetailsSection = ({
           <VenueSelector
             isBILDcourse={isBild}
             courseType={courseType}
-            courseResidingCountry={
-              isIndirectCourse && !isInternationalIndirectEnabled
-                ? 'GB-ENG'
-                : residingCountry
-            }
+            courseResidingCountry={residingCountry}
             {...register('venue')}
             onChange={venue => {
               return setValue('venue', venue ?? null, {

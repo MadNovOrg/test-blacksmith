@@ -1,4 +1,3 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React from 'react'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
@@ -27,9 +26,6 @@ vi.mock('posthog-js/react', () => ({
 }))
 
 describe(ReplaceParticipantDialog.name, () => {
-  beforeAll(() => {
-    useFeatureFlagEnabled('course-residing-country')
-  })
   it('should display participant information', () => {
     const client = {
       executeMutation: () => never,

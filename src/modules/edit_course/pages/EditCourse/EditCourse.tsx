@@ -14,7 +14,6 @@ import {
   useTheme,
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -157,9 +156,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { isUKCountry } = useWorldCountries()
 
   const course = courseInfo?.course
-  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
 
   const courseInput: CourseInput | undefined = useMemo(() => {
     return course ? courseToCourseInput(course) : undefined
@@ -463,7 +459,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                         : null,
                   }
                 : {}),
-              ...(mandatoryCourseMaterialsCostEnabled && isClosedCourse
+              ...(isClosedCourse
                 ? {
                     free_course_materials: courseData.freeCourseMaterials ?? 0,
                   }
@@ -580,7 +576,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       updateCourse,
       getCourseName,
       isUKCountry,
-      mandatoryCourseMaterialsCostEnabled,
       courseDiffs,
       setDateTimeTimeZone,
       insertAudit,

@@ -204,7 +204,7 @@ describe('component: CourseBuilder', () => {
         {
           end: '2023-07-28T17:00Z',
           start: '2023-07-28T09:00Z',
-          timeZone: 'GMT+00:00',
+          timeZone: 'Europe/London',
           venue: { name: 'Venue', city: 'City' },
         },
       ],
@@ -255,10 +255,10 @@ describe('component: CourseBuilder', () => {
     ).toMatchInlineSnapshot(`"Location: Venue, City"`)
     expect(
       screen.getByTestId('course-start-date').textContent,
-    ).toMatchInlineSnapshot(`"Starts: 28 July 2023, 10:00 AM"`)
+    ).toMatchInlineSnapshot(`"Starts: 28 July 2023, 10:00 AM (GMT+01:00)"`)
     expect(
       screen.getByTestId('course-end-date').textContent,
-    ).toMatchInlineSnapshot(`"Ends: 28 July 2023, 06:00 PM"`)
+    ).toMatchInlineSnapshot(`"Ends: 28 July 2023, 06:00 PM (GMT+01:00)"`)
   })
 
   it('saves course as draft and saves chosen modules when a module group is clicked', async () => {

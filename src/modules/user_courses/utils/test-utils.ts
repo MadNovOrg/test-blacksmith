@@ -59,7 +59,7 @@ export const buildUserCourse = build<
           name: chance.word(),
           city: chance.city(),
         },
-        timeZone: String(chance.timezone()),
+        timeZone: 'Europe/London',
         virtualLink: null,
       },
     ],

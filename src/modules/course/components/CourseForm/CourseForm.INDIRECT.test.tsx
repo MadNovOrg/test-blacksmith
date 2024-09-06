@@ -304,10 +304,6 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows changing the residing country', async () => {
-    useFeatureFlagEnabledMock.mockImplementation(
-      (flag: string) =>
-        flag === 'course-residing-country' || flag === 'international-indirect',
-    )
     renderForm(type)
 
     expect(

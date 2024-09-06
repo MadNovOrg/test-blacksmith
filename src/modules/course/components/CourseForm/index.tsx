@@ -1,6 +1,5 @@
 import { Stack } from '@mui/material'
 import { isDate, isValid as isValidDate } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
   Dispatch,
   RefObject,
@@ -92,22 +91,6 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   // Used for:
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
   // - Closed course ICM residing country https://behaviourhub.atlassian.net/browse/TTHP-3529
-  const openIcmInternationalFinanceEnabled = useFeatureFlagEnabled(
-    'open-icm-course-international-finance',
-  )
-
-  const internationalIndirectEnabled = !!useFeatureFlagEnabled(
-    'international-indirect',
-  )
-
-  const mandatoryCourseMaterialsCostEnabled = useFeatureFlagEnabled(
-    'mandatory-course-materials-cost',
-  )
-
-  const isInternationalFinanceEnabled = useMemo(
-    () => Boolean(openIcmInternationalFinanceEnabled),
-    [openIcmInternationalFinanceEnabled],
-  )
 
   const {
     register,
@@ -154,8 +137,8 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
    * if the PostHog feature flag is enabled
    */
   const showInternationalFinanceSection = useMemo(
-    () => isInternationalFinanceEnabled && !isUKCountry(values.residingCountry),
-    [isInternationalFinanceEnabled, isUKCountry, values.residingCountry],
+    () => !isUKCountry(values.residingCountry),
+    [isUKCountry, values.residingCountry],
   )
 
   // CLOSED course shows two fields by default: Sales Representative & Source
@@ -184,11 +167,9 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       blendedLearning: values.blendedLearning,
       maxParticipants: values.maxParticipants ?? 0,
       residingCountry: values.residingCountry as WorldCountriesCodes,
-      internationalFlagEnabled: isInternationalFinanceEnabled,
     })
   }, [
     courseType,
-    isInternationalFinanceEnabled,
     values.accreditedBy,
     values.blendedLearning,
     values.courseLevel,
@@ -250,7 +231,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   })
 
   const courseResidingCountry =
-    internationalIndirectEnabled && acl.isTrainer() && profile?.countryCode
+    acl.isTrainer() && profile?.countryCode
       ? profile?.countryCode
       : Countries_Code.DEFAULT_RESIDING_COUNTRY
 
@@ -403,7 +384,7 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             isCreation={isCreation}
           />
 
-          {isClosedCourse && mandatoryCourseMaterialsCostEnabled ? (
+          {isClosedCourse ? (
             <CourseMaterialsSection isCreation={isCreation} />
           ) : null}
 

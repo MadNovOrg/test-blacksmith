@@ -1,6 +1,5 @@
 import { Box, BoxProps, Typography } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -17,14 +16,6 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
 }) => {
   const { t } = useTranslation()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
-  const residingCountryEnabled = useFeatureFlagEnabled(
-    'course-residing-country',
-  )
-
-  const isResidingCountryEnabled = useMemo(
-    () => residingCountryEnabled,
-    [residingCountryEnabled],
-  )
 
   const timeZoneScheduleDateTime = useMemo(() => {
     const timeZone = data.schedule[0].timeZone ?? 'Europe/London'
@@ -84,17 +75,11 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
         </Typography>
         <Typography display="inline" variant="body2">
           {`${t('dates.withTime', {
-            date: isResidingCountryEnabled
-              ? timeZoneScheduleDateTime.start
-              : data.schedule[0].start,
-          })}${
-            isResidingCountryEnabled
-              ? ` ${formatGMTDateTimeByTimeZone(
-                  timeZoneScheduleDateTime.start,
-                  data.schedule[0].timeZone,
-                )}`
-              : ''
-          }`}
+            date: timeZoneScheduleDateTime.start,
+          })}${` ${formatGMTDateTimeByTimeZone(
+            timeZoneScheduleDateTime.start,
+            data.schedule[0].timeZone,
+          )}`}`}
         </Typography>
       </Box>
       <Box data-testid="course-end-date">
@@ -103,17 +88,11 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
         </Typography>
         <Typography display="inline" variant="body2">
           {`${t('dates.withTime', {
-            date: isResidingCountryEnabled
-              ? timeZoneScheduleDateTime.end
-              : data.schedule[0].end,
-          })}${
-            isResidingCountryEnabled
-              ? ` ${formatGMTDateTimeByTimeZone(
-                  timeZoneScheduleDateTime.end,
-                  data.schedule[0].timeZone,
-                )}`
-              : ''
-          }`}
+            date: timeZoneScheduleDateTime.end,
+          })}${` ${formatGMTDateTimeByTimeZone(
+            timeZoneScheduleDateTime.end,
+            data.schedule[0].timeZone,
+          )}`}`}
         </Typography>
       </Box>
       <Box data-testid="course-type">
