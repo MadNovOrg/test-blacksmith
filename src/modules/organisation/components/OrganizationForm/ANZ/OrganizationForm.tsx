@@ -183,7 +183,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
       }
     }
   }, [isEditMode, editOrgData, setValue])
-
   useEffect(() => {
     if (
       orgTypes &&

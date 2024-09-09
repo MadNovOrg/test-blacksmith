@@ -81,8 +81,7 @@ export const AddAffiliatedOrgModal = ({
     <Dialog
       open
       onClose={onClose}
-      minWidth={800}
-      maxWidth={1800}
+      minWidth={600}
       slots={{
         Title: () => (
           <Typography variant="h4" fontWeight={600}>

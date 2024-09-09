@@ -20,6 +20,7 @@ import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { Organization } from '@app/generated/graphql'
+import { useTableChecks } from '@app/hooks/useTableChecks'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
@@ -27,10 +28,11 @@ import {
 
 import useAffiliatedOrganisations from '../hooks/useAffiliatedOrganisations'
 import useOrgV2 from '../hooks/useOrgV2'
-import { useUnlinkAffiliatedOrganisation } from '../hooks/useUnlinkAffiliatedOrganisation'
 
 import { AddAffiliatedOrgModal } from './components/AddAffiliatedOrgModal'
+import { ManageAffiliatedOrgsButton } from './components/ManageAffiliatedOrgsButton/ManageAffiliatedOrgsButton'
 import { ManageAffiliatedOrgsMenu } from './components/ManageAffiliatedOrgsMenu'
+import { RemoveAffiliatedOrgModal } from './components/RemoveAffiliatedOrgModal'
 
 type AffiliatedOrgsTabParams = {
   orgId: string
@@ -44,6 +46,11 @@ export const AffiliatedOrgsTab: React.FC<
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const [showAddAffiliateModal, setShowAddAffiliateModal] = useState(false)
+  const [showRemoveAffiliateModal, setShowRemoveAffiliateModal] =
+    useState(false)
+  const [affiliateToUnlinkId, setAffiliateToUnlinkId] = useState<string>('')
+
+  const { selected, checkbox, isSelected, setSelected } = useTableChecks()
 
   const { data, fetching, error } = useOrgV2({
     orgId,
@@ -59,13 +66,13 @@ export const AffiliatedOrgsTab: React.FC<
   const org = data?.orgs.length ? data.orgs[0] : null
 
   const count = org?.affiliated_organisations_aggregate?.aggregate?.count
-  const [, unlinkAffiliatedOrganisation] = useUnlinkAffiliatedOrganisation()
 
   const cols = useMemo(() => {
     const _t = (col: string) =>
       t(`pages.org-details.tabs.affiliated-orgs.cols-${col}`)
 
     const madatoryCols = [
+      checkbox.headCol(affiliatedOrgs?.organizations.map(org => org.id) ?? []),
       {
         id: 'name',
         label: _t('name'),
@@ -102,16 +109,7 @@ export const AffiliatedOrgsTab: React.FC<
       ...madatoryCols,
       ...(acl.canLinkToMainOrg() ? actionCols : []),
     ] as Col[]
-  }, [acl, t])
-
-  const handleUnlinkOrganisation = useCallback(
-    (orgId: string) => {
-      unlinkAffiliatedOrganisation({
-        affiliatedOrgId: orgId,
-      })
-    },
-    [unlinkAffiliatedOrganisation],
-  )
+  }, [acl, affiliatedOrgs?.organizations, checkbox, t])
 
   const showRegionCol = useMemo(() => {
     const colRegion = cols.find(({ id }) => id === 'region')
@@ -146,13 +144,32 @@ export const AffiliatedOrgsTab: React.FC<
     },
     [],
   )
+
+  const affiliatedOrgIds = useMemo(() => {
+    return [...Array.from(selected), affiliateToUnlinkId].filter(Boolean)
+  }, [affiliateToUnlinkId, selected])
+
   const handleCloseAddAffiliateModal = useCallback(() => {
     setShowAddAffiliateModal(false)
   }, [])
+
   const handleSubmitAddAffiliateOrgModal = useCallback(() => {
     setShowAddAffiliateModal(false)
     fetchAffiliatedOrgs({ requestPolicy: 'network-only' })
   }, [fetchAffiliatedOrgs])
+
+  const handleCloseRemoveAffiliateModal = useCallback(() => {
+    setShowRemoveAffiliateModal(false)
+    setAffiliateToUnlinkId('')
+  }, [])
+
+  const handleSubmitRemoveAffiliatedOrgsModal = useCallback(() => {
+    setShowRemoveAffiliateModal(false)
+    setAffiliateToUnlinkId('')
+    setSelected([])
+    fetchAffiliatedOrgs({ requestPolicy: 'network-only' })
+  }, [fetchAffiliatedOrgs, setSelected])
+
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       <Box display="flex" justifyContent="space-between">
@@ -160,17 +177,27 @@ export const AffiliatedOrgsTab: React.FC<
           {t('pages.org-details.tabs.affiliated-orgs.title')}
         </Typography>
         {acl.canLinkToMainOrg() ? (
-          <Button
-            variant="contained"
-            size="large"
-            sx={{
-              width: '250px',
-            }}
-            onClick={() => setShowAddAffiliateModal(true)}
-            data-testid="add-an-affiliate"
-          >
-            {t('pages.org-details.tabs.affiliated-orgs.add-an-affiliate')}
-          </Button>
+          <Box display={'flex'}>
+            <ManageAffiliatedOrgsButton
+              disabled={affiliatedOrgIds.length < 1}
+              handleClick={() => setShowRemoveAffiliateModal(true)}
+            />
+
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                width: '250px',
+                height: '50px',
+                ml: '20px',
+                mr: '10px',
+              }}
+              onClick={() => setShowAddAffiliateModal(true)}
+              data-testid="add-an-affiliate"
+            >
+              {t('pages.org-details.tabs.affiliated-orgs.add-an-affiliate')}
+            </Button>
+          </Box>
         ) : null}
       </Box>
 
@@ -183,6 +210,7 @@ export const AffiliatedOrgsTab: React.FC<
           <CircularProgress />
         </Stack>
       ) : null}
+
       {showAddAffiliateModal ? (
         <AddAffiliatedOrgModal
           mainOrgId={orgId}
@@ -192,6 +220,15 @@ export const AffiliatedOrgsTab: React.FC<
           onSave={handleSubmitAddAffiliateOrgModal}
         />
       ) : null}
+
+      {showRemoveAffiliateModal ? (
+        <RemoveAffiliatedOrgModal
+          affiliatedOrgsIds={affiliatedOrgIds}
+          onClose={handleCloseRemoveAffiliateModal}
+          onSave={handleSubmitRemoveAffiliatedOrgsModal}
+        />
+      ) : null}
+
       {!fetching && !error && org ? (
         <Box sx={{ mt: '20px' }}>
           <TableContainer component={Paper} elevation={0}>
@@ -210,7 +247,16 @@ export const AffiliatedOrgsTab: React.FC<
                   <TableRow
                     key={`affiliated-org-${affiliatedOrg.id}`}
                     data-testid={`affiliated-org-${affiliatedOrg.id}`}
+                    sx={{
+                      backgroundColor: isSelected(affiliatedOrg.id)
+                        ? 'grey.50'
+                        : '',
+                    }}
                   >
+                    {checkbox.rowCell(
+                      affiliatedOrg.id,
+                      !acl.canLinkToMainOrg(),
+                    )}
                     <TableCell>{affiliatedOrg.name}</TableCell>
                     <TableCell>{affiliatedOrg.address?.country}</TableCell>
                     {!showRegionCol.isEmpty ? (
@@ -235,9 +281,10 @@ export const AffiliatedOrgsTab: React.FC<
                           affiliatedOrg={
                             affiliatedOrg as Organization['affiliated_organisations'][0]
                           }
-                          onUnlinkClick={item =>
-                            handleUnlinkOrganisation(item.id)
-                          }
+                          onUnlinkClick={item => {
+                            setAffiliateToUnlinkId(item.id)
+                            setShowRemoveAffiliateModal(true)
+                          }}
                         />
                       </TableCell>
                     ) : null}

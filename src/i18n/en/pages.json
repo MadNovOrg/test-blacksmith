@@ -1365,8 +1365,16 @@
           "close-button": "Close",
           "confirm-button": "Confirm",
           "validation-errors": {
-            "affiliate-org-required": "OrgansGsation is required"
+            "affiliate-org-required": "Organisation is required"
           }
+        },
+        "remove-affiliate": {
+          "title": "Unlink organisations",
+          "description":"Unlinking organisations will make them standalone and unaffiliated. All Blended Learning licenses associated to their previous affiliation will be unavailable.",
+          "close-button": "Close",
+          "confirm-button": "Confirm",
+          "label": "Manage Selected",
+          "action-unlink": "Unlink organisations"
         }
       },
       "users": {

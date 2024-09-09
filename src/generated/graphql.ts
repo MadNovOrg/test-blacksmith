@@ -61604,6 +61604,13 @@ export type UnlinkAffiliatedOrganisationMutationVariables = Exact<{
 
 export type UnlinkAffiliatedOrganisationMutation = { __typename?: 'mutation_root', update_organization_by_pk?: { __typename?: 'organization', id: any } | null };
 
+export type UnlinkMultipleAffiliatedOrganisationsMutationVariables = Exact<{
+  affiliatedOrgsIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+}>;
+
+
+export type UnlinkMultipleAffiliatedOrganisationsMutation = { __typename?: 'mutation_root', update_organization_many?: Array<{ __typename?: 'organization_mutation_response', affected_rows: number } | null> | null };
+
 export type GetUpcomingEnrollmentsStatsQueryVariables = Exact<{
   where: Upcoming_Enrollments_Bool_Exp;
 }>;
