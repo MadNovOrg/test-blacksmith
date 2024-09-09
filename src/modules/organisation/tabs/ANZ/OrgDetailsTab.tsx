@@ -9,7 +9,7 @@ import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { sectors } from '@app/modules/course_booking/utils'
-import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/DeleteOrgModal'
+import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/ANZ/DeleteOrgModal'
 import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 
 type OrgDetailsTabParams = {

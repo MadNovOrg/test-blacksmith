@@ -61485,6 +61485,13 @@ export type OrdersQueryVariables = Exact<{
 
 export type OrdersQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null, courses: Array<{ __typename?: 'course_order', course?: { __typename?: 'course', course_code?: string | null } | null }> }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
+export type GetMainOrganisationDetailsForDeleteQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type GetMainOrganisationDetailsForDeleteQuery = { __typename?: 'query_root', orgs?: { __typename?: 'organization', members: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, courses: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, orders: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null }, affiliatedOrgs: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } } | null };
+
 export type GetOrganisationDetailsForDeleteQueryVariables = Exact<{
   orgId: Scalars['uuid'];
 }>;

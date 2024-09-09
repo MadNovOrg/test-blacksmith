@@ -1306,8 +1306,10 @@
         "count-members": "{{num}} individuals",
         "count-courses": "{{num}} courses",
         "count-orders": "{{num}} orders",
+        "count-affiliatedOrgs": "{{num}} affiliated organisations",
         "confirm-deleting": "Deleting {{name}} will remove all record of this organisation from the system. This action cannot be undone.",
         "cannot-be-deleted": "{{name}} cannot be deleted as there are still individual(s), order(s) or course(s) associated to this organisation.",
+        "cannot-be-deleted-with-main-org": "{{name}} cannot be deleted as there are still individual(s), order(s), course(s) or affiliated organisations associated to this organisation.",
         "delete-organisation": "Delete Organisation",
         "organization-details-section": {
           "title": "Organisation details",

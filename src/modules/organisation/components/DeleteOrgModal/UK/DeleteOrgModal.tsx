@@ -21,7 +21,7 @@ import {
   GetOrganisationDetailsForDeleteQueryVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { GET_ORGANISATION_DETAILS_FOR_DELETE } from '@app/modules/organisation/components/DeleteOrgModal/queries'
+import { GET_ORGANISATION_DETAILS_FOR_DELETE } from '@app/modules/organisation/components/DeleteOrgModal/UK/queries'
 import { DELETE_ORG } from '@app/modules/organisation/queries/delete-org'
 
 type OrgAggregateData = {

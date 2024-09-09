@@ -2,9 +2,9 @@ import sanitize from 'sanitize-html'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
-import { GetOrganisationDetailsForDeleteQuery } from '@app/generated/graphql'
+import { GetMainOrganisationDetailsForDeleteQuery } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/DeleteOrgModal'
+import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/ANZ/DeleteOrgModal'
 
 import { render, renderHook, screen } from '@test/index'
 import { chance } from '@test/index'
@@ -26,12 +26,13 @@ describe(DeleteOrgModal.name, () => {
   it('should render the modal with correct content if delete is allowed', () => {
     const client = {
       executeQuery: () =>
-        fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
+        fromValue<{ data: GetMainOrganisationDetailsForDeleteQuery }>({
           data: {
             orgs: {
               members: { aggregate: { count: 0 } },
               courses: { aggregate: { count: 0 } },
               orders: { aggregate: { count: 0 } },
+              affiliatedOrgs: { aggregate: { count: 0 } },
             },
           },
         }),
@@ -70,12 +71,13 @@ describe(DeleteOrgModal.name, () => {
   it('should render the modal with correct content if delete is NOT allowed', () => {
     const client = {
       executeQuery: () =>
-        fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
+        fromValue<{ data: GetMainOrganisationDetailsForDeleteQuery }>({
           data: {
             orgs: {
               members: { aggregate: { count: 0 } },
               courses: { aggregate: { count: 0 } },
               orders: { aggregate: { count: 1 } },
+              affiliatedOrgs: { aggregate: { count: 0 } },
             },
           },
         }),
@@ -102,7 +104,7 @@ describe(DeleteOrgModal.name, () => {
 
     expect(
       getByText(
-        t('cannot-be-deleted', {
+        t('cannot-be-deleted-with-main-org', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
         }),
@@ -124,12 +126,13 @@ describe(DeleteOrgModal.name, () => {
   it('should render the modal with correct organisation linked entities', () => {
     const client = {
       executeQuery: () =>
-        fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
+        fromValue<{ data: GetMainOrganisationDetailsForDeleteQuery }>({
           data: {
             orgs: {
               members: { aggregate: { count: 1 } },
               courses: { aggregate: { count: 0 } },
               orders: { aggregate: { count: 1 } },
+              affiliatedOrgs: { aggregate: { count: 3 } },
             },
           },
         }),
@@ -156,7 +159,7 @@ describe(DeleteOrgModal.name, () => {
 
     expect(
       getByText(
-        t('cannot-be-deleted', {
+        t('cannot-be-deleted-with-main-org', {
           interpolation: { escapeValue: false },
           name: sanitizedOrgName,
         }),
@@ -168,6 +171,7 @@ describe(DeleteOrgModal.name, () => {
     expect(
       screen.queryByText(t('count-courses', { num: 0 })),
     ).not.toBeInTheDocument()
+    expect(getByText(t('count-affiliatedOrgs', { num: 3 }))).toBeInTheDocument()
 
     expect(
       screen.queryByText(
