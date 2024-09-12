@@ -1296,7 +1296,9 @@
     "organization-admin-details": "Organisation admin details",
     "organization-admin-details-subtitle": "Please assign an administrator to this organisation. An Organisation Admin can invite additional users to their organisation.",
     "email-alert": "Please make sure the email is entered correctly.",
-    "save-organization": "Save organisation"
+    "save-organization": "Save organisation",
+    "edit-main-with-affiliate-warning": "The Residing Country cannot be edited because the organisation has affiliates linked to the current residing country.",
+    "edit-affiliated-warning":"The Residing Country cannot be edited because the main organisation must reside in the same country as an affiliate organisation." 
   },
   "org-details": {
     "org-not-found": "Organisation not found.",

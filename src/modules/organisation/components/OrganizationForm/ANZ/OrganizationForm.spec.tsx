@@ -400,4 +400,116 @@ describe(OrganizationForm.name, () => {
 
     expect(submitMock).toHaveBeenCalled()
   })
+
+  it('disables country selector and link to main org checkbox on edit if org is main', () => {
+    render(
+      <OrganizationForm
+        onSubmit={submitMock}
+        isEditMode={true}
+        editOrgData={{
+          id: chance.guid(),
+          name: chance.name(),
+          sector: 'anz_ss',
+          organisationType: 'Catholic Education',
+          attributes: {
+            email: chance.email(),
+            phone: chance.phone(),
+            headFirstName: chance.first(),
+            headSurname: chance.last(),
+            headEmailAddress: chance.email(),
+            website: chance.url(),
+          },
+          address: {
+            country: 'Australia',
+            countryCode: 'AU',
+            city: chance.city(),
+            line1: chance.address(),
+            postCode: chance.postcode(),
+            region: 'Tasmania',
+          },
+          affiliatedOrgCount: 2,
+        }}
+      />,
+    )
+    // Check Residing Country
+    const countrySelector = screen.getByLabelText(/residing country/i, {
+      exact: false,
+    })
+    expect(countrySelector).toBeDisabled()
+    expect(
+      screen.getByText(t('edit-main-with-affiliate-warning')),
+    ).toBeInTheDocument()
+
+    // Check Link to Main Org Checkbox
+    const linkToMainOrgCheckbox = screen.getByLabelText(
+      /link to another organisation/i,
+      {
+        exact: false,
+      },
+    )
+    expect(linkToMainOrgCheckbox).toBeDisabled()
+    expect(linkToMainOrgCheckbox).not.toBeChecked()
+  })
+
+  it('disables country selector, renders main org and disables main org selector on edit if org is affiliate', () => {
+    const mainOrgId = chance.guid()
+    const mainOrgName = chance.name()
+    render(
+      <OrganizationForm
+        onSubmit={submitMock}
+        isEditMode={true}
+        editOrgData={{
+          id: chance.guid(),
+          name: chance.name(),
+          sector: 'anz_ss',
+          organisationType: 'Catholic Education',
+          attributes: {
+            email: chance.email(),
+            phone: chance.phone(),
+            headFirstName: chance.first(),
+            headSurname: chance.last(),
+            headEmailAddress: chance.email(),
+            website: chance.url(),
+          },
+          address: {
+            country: 'Australia',
+            countryCode: 'AU',
+            city: chance.city(),
+            line1: chance.address(),
+            postCode: chance.postcode(),
+            region: 'Tasmania',
+          },
+          affiliatedOrgCount: 0,
+          main_organisation_id: mainOrgId,
+          mainOrgName: mainOrgName,
+        }}
+      />,
+    )
+
+    // Check Residing Country
+    const countrySelector = screen.getByLabelText(/residing country/i, {
+      exact: false,
+    })
+    expect(countrySelector).toBeDisabled()
+    expect(screen.getByText(t('edit-affiliated-warning'))).toBeInTheDocument()
+
+    // Check Link to Main Org Checkbox
+    const linkToMainOrgCheckbox = screen.getByLabelText(
+      /link to another organisation/i,
+      {
+        exact: false,
+      },
+    )
+    expect(linkToMainOrgCheckbox).toBeDisabled()
+    expect(linkToMainOrgCheckbox).toBeChecked()
+
+    const orgSelector = screen.getByLabelText(
+      /select the organisation it affiliates with/i,
+      {
+        exact: false,
+      },
+    )
+    expect(orgSelector).toBeDisabled()
+    expect(orgSelector).toHaveValue(mainOrgName)
+  })
 })

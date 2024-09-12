@@ -65,6 +65,8 @@ type Props = {
   editOrgData?: Partial<Organization> & {
     country?: string
     countryCode?: string
+    mainOrgName?: string
+    affiliatedOrgCount?: number
   }
 }
 
@@ -91,7 +93,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   )
 
   const [orgTypeListLoaded, setOrgTypeListLoaded] = useState<boolean>(false)
-  const [linkToMainOrg, setLinkToMainOrg] = useState<boolean>(true)
+  const [linkToMainOrg, setLinkToMainOrg] = useState<boolean>(
+    isEditMode ? Boolean(editOrgData?.main_organisation_id) : true,
+  )
 
   defaultValues.country =
     getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
@@ -153,7 +157,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     },
     [isEditMode, setValue, setXeroId],
   )
-
   const onMainOrgSelected = useCallback(
     async (org: CallbackOption) => {
       setValue('mainOrgId', org?.id ?? '')
@@ -240,6 +243,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     values.organisationType,
   ])
 
+  const isMainOrg = Boolean(editOrgData?.affiliatedOrgCount)
+  const isAffiliatedOrg = Boolean(editOrgData?.main_organisation_id)
+
   return (
     <Container maxWidth="lg" sx={{ py: 2 }}>
       <Box
@@ -283,6 +289,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                 <Grid container gap={3} flexDirection={'column'}>
                   <Grid item>
                     <CountriesSelector
+                      disabled={isEditMode && (isMainOrg || isAffiliatedOrg)}
                       onlyUKCountries={false}
                       onChange={(_, code) => {
                         if (code) {
@@ -297,6 +304,22 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       value={values.countryCode}
                     />
                   </Grid>
+                  {isMainOrg ? (
+                    <Alert
+                      severity="warning"
+                      sx={{ backgroundColor: '#fdedb5' }}
+                    >
+                      {t('edit-main-with-affiliate-warning')}
+                    </Alert>
+                  ) : null}
+                  {isAffiliatedOrg ? (
+                    <Alert
+                      severity="warning"
+                      sx={{ backgroundColor: '#fdedb5' }}
+                    >
+                      {t('edit-affiliated-warning')}
+                    </Alert>
+                  ) : null}
                   <RegionSelector
                     countryCode={values.countryCode}
                     error={Boolean(errors.region)}
@@ -424,6 +447,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                         onClick={handleCheckboxChange}
                         checked={linkToMainOrg}
                         data-testid="link-to-main-org-checkbox"
+                        disabled={isEditMode}
                       />
                     }
                     label={t('fields.link-to-main-organisation')}
@@ -439,6 +463,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       allowAdding
                       autocompleteMode={true}
                       onChange={onMainOrgSelected}
+                      disabled={isEditMode}
                       onInputChange={onMainOrgInputChange}
                       textFieldProps={{
                         variant: 'filled',
