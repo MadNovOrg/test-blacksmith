@@ -23,7 +23,8 @@ import { InvitationPage } from '@app/modules/invitation/pages/Invitation'
 import { OrgInvitationPage } from '@app/modules/invitation/pages/Invitation/OrgInvitation'
 import { LoginPage } from '@app/modules/login/pages/Login'
 import { LogoutPage } from '@app/modules/logout/pages/Logout'
-import { Onboarding } from '@app/modules/onboarding/pages/Onboarding/Onboarding'
+import { Onboarding as ANZOnboarding } from '@app/modules/onboarding/pages/ANZ/Onboarding'
+import { Onboarding as UKOnboarding } from '@app/modules/onboarding/pages/UK/Onboarding'
 import { RegistrationPage } from '@app/modules/registration/pages/Registration'
 import { ResetPasswordPage } from '@app/modules/reset_password/pages/ResetPassword'
 import { WaitlistRoutes } from '@app/modules/waitlist/routes'
@@ -111,10 +112,10 @@ function LoggedOutRoutes() {
 }
 
 function LoggedInRoutes() {
-  const { activeRole, profile } = useAuth()
+  const { activeRole, profile, acl } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-
+  const isUKRegion = acl.isUK()
   /**
    * The pathname is used for redirect to invitations links,
    * being not authenticated and prevent home page redirect to
@@ -179,7 +180,7 @@ function LoggedInRoutes() {
         element={
           <AppLayoutMinimal width={628}>
             <Suspense fallback={<AppLoading />}>
-              <Onboarding />
+              {isUKRegion ? <UKOnboarding /> : <ANZOnboarding />}
             </Suspense>
           </AppLayoutMinimal>
         }

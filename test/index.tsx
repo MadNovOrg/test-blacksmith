@@ -20,6 +20,7 @@ import { defaultProviders, Providers } from './providers'
 const chance = new Chance()
 
 export const VALID_PHONE_NUMBER = '2011111111'
+export const AUSTRALIA_VALID_PHONE_NUMBER = '0491111111'
 
 type TestRouterProps = { initialEntries?: string[] }
 

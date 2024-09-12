@@ -4,16 +4,6 @@ import { useMemo } from 'react'
 import { Organization } from '@app/types'
 import { organizationData as localSavedOrgToBeCreated } from '@app/util'
 
-export enum OfstedRatingEnum {
-  OUTSTANDING = 'Outstanding',
-  INADEQUATE = 'Inadequate',
-  REQUIRES_IMPROVEMENT = 'Requires improvement',
-  INSUFFICIENT_EVIDENCE = 'Insufficient evidence',
-  SERIOUS_WEAKNESSES = 'Serious Weaknesses',
-  GOOD = 'Good',
-  SPECIAL_MEASURES = 'Special Measures',
-}
-
 export type XeroSuggestion = {
   id: string
   contactID: string

@@ -153,16 +153,14 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               onlyUKCountries={false}
             />
           </Grid>
-          <Grid item>
-            <RegionSelector
-              countryCode={values.countryCode}
-              error={Boolean(errors.region)}
-              errormessage={errors.region?.message}
-              register={register('region')}
-              required
-              value={values.region ?? ''}
-            />
-          </Grid>
+          <RegionSelector
+            countryCode={values.countryCode}
+            error={Boolean(errors.region)}
+            errormessage={errors.region?.message}
+            register={register('region')}
+            required
+            value={values.region ?? ''}
+          />
           <Grid item>
             <TextField
               id="primaryAddressLine"
