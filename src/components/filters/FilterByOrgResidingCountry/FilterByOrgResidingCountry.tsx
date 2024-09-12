@@ -96,6 +96,7 @@ export const FilterByOrgResidingCountry = ({
       onChange={_onChange}
       options={options}
       title={t('filters.residing-country')}
+      data-testid="FilterByCountry"
     />
   )
 }

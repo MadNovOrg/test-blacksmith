@@ -1,20 +1,26 @@
 import React, { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { noop } from '@app/util'
 
 import { FilterAccordion, FilterOption } from '../../FilterAccordion'
 
 type Props = {
+  isUKRegion?: boolean
   onChange: (selected: string[]) => void
 }
-
-const sectors = ['edu', 'hsc_adult', 'hsc_child']
 
 export const FilterByOrgSector: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+  const isUKRegion = acl.isUK()
+
+  const sectors = isUKRegion
+    ? ['edu', 'hsc_adult', 'hsc_child']
+    : ['anz_edu', 'anz_ss', 'anz_health']
 
   const [options, setOptions] = useState<FilterOption[]>(() => {
     return sectors.map(sector => ({

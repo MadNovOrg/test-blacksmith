@@ -8,7 +8,7 @@ import { useAuth } from '@app/context/auth'
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { TrainerCourses } from '@app/modules/trainer_courses/pages/MyCourses'
 import {
   ManageContactRoleCourses,

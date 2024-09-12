@@ -10,7 +10,7 @@ import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { sectors } from '@app/modules/course_booking/utils'
 import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/ANZ/DeleteOrgModal'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 
 type OrgDetailsTabParams = {
   orgId: string

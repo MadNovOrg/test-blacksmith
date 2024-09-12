@@ -5,7 +5,7 @@ import {
   GetOrganisationDetailsQuery,
   SaveOrganisationInvitesMutation,
 } from '@app/generated/graphql'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { RoleName } from '@app/types'
 
 import {
@@ -20,7 +20,7 @@ import { buildOrganization } from '@test/mock-data-utils'
 
 import { InviteUserToOrganisation } from '.'
 
-vi.mock('@app/modules/organisation/hooks/useOrgV2')
+vi.mock('@app/modules/organisation/hooks/UK/useOrgV2')
 
 const useOrganisationMock = vi.mocked(useOrgV2)
 const orgId = chance.guid()

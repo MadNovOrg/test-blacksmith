@@ -12,6 +12,7 @@ export const GET_AFFILIATED_ORGANISATIONS_QUERY = gql`
     $mainOrgId: uuid!
     $limit: Int
     $offset: Int
+    $withMembers: Boolean = false
   ) {
     organizations: organization(
       where: { main_organisation_id: { _eq: $mainOrgId } }
@@ -23,7 +24,11 @@ export const GET_AFFILIATED_ORGANISATIONS_QUERY = gql`
       address
       sector
       createdAt
-      updatedAt
+      members @include(if: $withMembers) {
+        profile {
+          lastActivity
+        }
+      }
     }
   }
 `
@@ -32,13 +37,14 @@ export default function useAffiliatedOrganisations(
   mainOrgId: string,
   limit: number,
   offset: number,
+  withMembers: boolean,
 ) {
   const [{ data, error, fetching: loading }, reexecute] = useQuery<
     GetAffiliatedOrganisationsQuery,
     GetAffiliatedOrganisationsQueryVariables
   >({
     query: GET_AFFILIATED_ORGANISATIONS_QUERY,
-    variables: { mainOrgId, limit, offset },
+    variables: { mainOrgId, limit, offset, withMembers },
   })
 
   return useMemo(

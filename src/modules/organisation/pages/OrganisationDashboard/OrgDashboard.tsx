@@ -19,15 +19,15 @@ import { useAuth } from '@app/context/auth'
 import { Organization } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
-import { OrgDetailsTab as ANZOrgDetailsTab } from '@app/modules/organisation/tabs/ANZ/OrgDetailsTab'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
+import { OrgDetailsTab as ANZOrgDetailsTab } from '@app/modules/organisation/tabs/ANZ/OrgDetailsTab/OrgDetailsTab'
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
 import { OrgDetailsTab as UKOrgDetailsTab } from '@app/modules/organisation/tabs/UK/OrgDetailsTab'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
-import { AffiliatedOrgsTab } from '../../tabs/AffiliatedOrgsTab'
+import { AffiliatedOrgsTab } from '../../tabs/ANZ/AffiliatedOrgsTab/AffiliatedOrgsTab'
 import { LicensesTab } from '../../tabs/Licenses/LicensesTab'
 import { OrgPermissionsTab } from '../../tabs/OrgPermissionsTab/OrgPermissionsTab'
 
@@ -87,6 +87,8 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [selectedTab, setSelectedTab] = useState(
     initialTab ?? OrgDashboardTabs.OVERVIEW,
   )
+
+  const showAffiliatedOrgsTab = isAustraliaRegion && !org?.main_organisation
 
   const affiliatedOrgAsPlainText = (orgName: string) => {
     return (
@@ -167,7 +169,14 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                 ) : null}
 
                 {id && id !== ALL_ORGS ? (
-                  <TabContext value={selectedTab}>
+                  <TabContext
+                    value={
+                      selectedTab === OrgDashboardTabs.AFFILIATED &&
+                      !showAffiliatedOrgsTab
+                        ? OrgDashboardTabs.OVERVIEW
+                        : selectedTab
+                    }
+                  >
                     <TabList
                       onChange={(_, value) => setSelectedTab(value)}
                       variant="scrollable"

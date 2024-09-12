@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
+import { maxBy } from 'lodash-es'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,18 +22,17 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { Organization } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
+import useAffiliatedOrganisations from '@app/modules/organisation/hooks/ANZ/useAffiliatedOrganisations'
+import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
 } from '@app/util'
 
-import useAffiliatedOrganisations from '../hooks/useAffiliatedOrganisations'
-import useOrgV2 from '../hooks/useOrgV2'
-
-import { AddAffiliatedOrgModal } from './components/AddAffiliatedOrgModal'
-import { ManageAffiliatedOrgsButton } from './components/ManageAffiliatedOrgsButton/ManageAffiliatedOrgsButton'
-import { ManageAffiliatedOrgsMenu } from './components/ManageAffiliatedOrgsMenu'
-import { RemoveAffiliatedOrgModal } from './components/RemoveAffiliatedOrgModal'
+import { AddAffiliatedOrgModal } from '../../components/AddAffiliatedOrgModal'
+import { ManageAffiliatedOrgsButton } from '../../components/ManageAffiliatedOrgsButton/ManageAffiliatedOrgsButton'
+import { ManageAffiliatedOrgsMenu } from '../../components/ManageAffiliatedOrgsMenu'
+import { RemoveAffiliatedOrgModal } from '../../components/RemoveAffiliatedOrgModal'
 
 type AffiliatedOrgsTabParams = {
   orgId: string
@@ -61,7 +61,7 @@ export const AffiliatedOrgsTab: React.FC<
   })
 
   const { data: affiliatedOrgs, reexecute: fetchAffiliatedOrgs } =
-    useAffiliatedOrganisations(orgId, perPage, currentPage * perPage)
+    useAffiliatedOrganisations(orgId, perPage, currentPage * perPage, true)
 
   const org = data?.orgs.length ? data.orgs[0] : null
 
@@ -136,6 +136,18 @@ export const AffiliatedOrgsTab: React.FC<
 
     return cols
   }, [cols, showRegionCol])
+
+  const affiliatedOrgsLastActivityData = useMemo(() => {
+    const lastActivity: { [key: string]: Date | undefined } = {}
+
+    affiliatedOrgs?.organizations.forEach(affiliatedOrg => {
+      lastActivity[affiliatedOrg.id] = maxBy(
+        affiliatedOrg.members,
+        'profile.lastActivity',
+      )?.profile.lastActivity
+    })
+    return lastActivity
+  }, [affiliatedOrgs?.organizations])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -266,9 +278,13 @@ export const AffiliatedOrgsTab: React.FC<
                       {t(`common.org-sectors.${affiliatedOrg.sector}`)}
                     </TableCell>
                     <TableCell>
-                      {t('dates.withTime', {
-                        date: affiliatedOrg.updatedAt,
-                      })}
+                      {affiliatedOrgsLastActivityData[affiliatedOrg?.id]
+                        ? t('dates.withTime', {
+                            date: affiliatedOrgsLastActivityData[
+                              affiliatedOrg?.id
+                            ],
+                          })
+                        : t('indeterminate')}
                     </TableCell>
                     <TableCell>
                       {t('dates.withTime', {

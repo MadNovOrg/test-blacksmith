@@ -65,6 +65,16 @@ export const OrgOverviewTab: React.FC<
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
 
+  const isUKRegion = acl.isUK()
+
+  const showAllOrgsButton = useMemo(() => {
+    if (isUKRegion) return true
+    if (!acl.isOrgAdmin()) return true
+    return profile?.organizations.some(
+      org => !org.organization.main_organisation,
+    )
+  }, [acl, isUKRegion, profile])
+
   const [certificateStatus, setCertificateStatus] = useQueryParam(
     'status',
     withDefault(
@@ -195,13 +205,15 @@ export const OrgOverviewTab: React.FC<
               <Typography variant="h4">
                 {t('pages.org-details.tabs.overview.organization-summary')}
               </Typography>
-              <Button
-                variant="outlined"
-                onClick={() => navigate('/organisations/list')}
-                data-testid="see-all-organisations"
-              >
-                {t('pages.org-details.tabs.overview.see-all-organizations')}
-              </Button>
+              {showAllOrgsButton ? (
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate('/organisations/list')}
+                  data-testid="see-all-organisations"
+                >
+                  {t('pages.org-details.tabs.overview.see-all-organizations')}
+                </Button>
+              ) : null}
             </Box>
 
             <OrgSummaryList orgId={orgId} />

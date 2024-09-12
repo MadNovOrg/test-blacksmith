@@ -7,17 +7,22 @@ import { InviteUserToOrganization } from './components/InviteUserToOrganization/
 import { CreateOrganization } from './pages/CreateOrganization/CreateOrganization'
 import { EditOrgDetails } from './pages/EditOrganization/EditOrgDetails'
 import { OrgDashboard } from './pages/OrganisationDashboard/OrgDashboard'
-import Organizations from './pages/Organisations/Organisations'
+import { Organizations as ANZOrganisations } from './pages/Organisations/ANZ/Organisations'
+import { Organizations as UKOrganisations } from './pages/Organisations/UK/Organisations'
 
 export const OrganisationRoutes: React.FC = () => {
   const { acl } = useAuth()
+  const isUkRegion = acl.isUK()
   return (
     <Routes>
       <Route index element={<Navigate replace to="all" />} />
       {acl.canCreateOrgs() ? (
         <Route path="new" element={<CreateOrganization />} />
       ) : null}
-      <Route path="list" element={<Organizations />} />
+      <Route
+        path="list"
+        element={isUkRegion ? <UKOrganisations /> : <ANZOrganisations />}
+      />
       <Route path=":id">
         <Route index element={<OrgDashboard />} />
         {acl.canEditOrgs() ? (

@@ -10,7 +10,6 @@ export const ORGANIZATION = gql`
     address
     preferences
     createdAt
-    updatedAt
     xeroContactId
     sector
     main_organisation {

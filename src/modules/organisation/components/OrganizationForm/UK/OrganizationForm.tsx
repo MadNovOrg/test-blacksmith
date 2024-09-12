@@ -49,17 +49,16 @@ import { Sticky } from '@app/components/Sticky'
 import { Dfe_Establishment, Organization } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useOrgType } from '@app/modules/organisation/hooks/useOrgType'
-import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
-import { OfstedRating } from '@app/types'
-import { getTruthyObjectProps, INPUT_DATE_FORMAT } from '@app/util'
-
 import {
   FormInputs,
   MapDfePropsToSchemaKeys,
   defaultValues,
   getFormSchema,
   mapDfePropsToSchema,
-} from '../../../utils/UK'
+} from '@app/modules/organisation/utils/UK'
+import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
+import { OfstedRating } from '@app/types'
+import { getTruthyObjectProps, INPUT_DATE_FORMAT } from '@app/util'
 
 type Props = {
   isEditMode?: boolean

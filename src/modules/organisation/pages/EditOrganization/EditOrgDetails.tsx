@@ -10,7 +10,7 @@ import {
   UpdateOrgMutation,
   UpdateOrgMutationVariables,
 } from '@app/generated/graphql'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { UPDATE_ORG_MUTATION } from '@app/modules/organisation/queries/update-org'
 
 import { OrganizationForm as ANZOrganisationForm } from '../../components/OrganizationForm/ANZ'

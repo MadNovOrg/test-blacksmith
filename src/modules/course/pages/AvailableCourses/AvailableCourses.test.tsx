@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next'
 
 import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { RoleName } from '@app/types'
 
 import { render, screen, act, renderHook, userEvent } from '@test/index'
 
 import { AvailableCourses } from './AvailableCourses'
 
-vi.mock('@app/modules/organisation/hooks/useOrgV2')
+vi.mock('@app/modules/organisation/hooks/UK/useOrgV2')
 vi.mock('@app/modules/admin/hooks/useUpcomingCourses')
 
 describe('AvailableCourse', () => {

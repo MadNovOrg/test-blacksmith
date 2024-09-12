@@ -1086,10 +1086,12 @@
         "members-count": "Members Count",
         "country": "Country",
         "region": "Region",
+        "state-territory-region": "State/Territory/Region",
         "sector": "Sector",
         "last-activity": "Last activity",
         "created-on": "Created on",
-        "group": "Group"
+        "group": "Group",
+        "affiliates-count": "Affiliates Count"
       },
       "add-new-organization": "Add new organisation",
       "export": {
@@ -1097,7 +1099,9 @@
         "dates-non-null": "Please insert dates",
         "date-interval": "The maximum exportable is one year at time",
         "blended-learning": "Export blended learning license summary"
-      }
+      },
+      "affiliates": "{{filteredCount}} / {{totalCount}}",
+      "no-affiliated-organizations": "No affiliated organisations"
     },
     "back-to-settings": "Back to settings",
     "back-to-user-mgmt": "Back to user management",

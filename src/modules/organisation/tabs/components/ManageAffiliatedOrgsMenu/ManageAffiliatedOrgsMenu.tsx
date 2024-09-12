@@ -11,7 +11,10 @@ import {
 enum AffiliatedOrgAction {
   Unlink,
 }
-type AffiliatedOrganisation = Organization['affiliated_organisations'][0]
+type AffiliatedOrganisation = Pick<
+  Organization['affiliated_organisations'][0],
+  'id' | 'name'
+>
 type ManageAffiliatedOrgsMenuProps = {
   onUnlinkClick: (item: AffiliatedOrganisation) => void
   affiliatedOrg: AffiliatedOrganisation

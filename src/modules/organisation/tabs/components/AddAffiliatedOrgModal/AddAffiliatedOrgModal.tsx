@@ -82,6 +82,7 @@ export const AddAffiliatedOrgModal = ({
       open
       onClose={onClose}
       minWidth={600}
+      data-testid="add-affiliated-org-modal"
       slots={{
         Title: () => (
           <Typography variant="h4" fontWeight={600}>

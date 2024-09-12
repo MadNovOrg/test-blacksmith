@@ -5,7 +5,6 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useUnlinkMultipleAffiliatedOrganisations } from '@app/modules/organisation/hooks/useUnlinkMultiplAffiliatedOrganisations'
 
 export type RemoveAffiliatedOrgModalProps = {
-  affiliatedOrgId?: string
   affiliatedOrgsIds?: (string | number)[]
   onClose: () => void
   onSave: () => void
@@ -34,6 +33,7 @@ export const RemoveAffiliatedOrgModal = ({
       open
       onClose={onClose}
       minWidth={600}
+      data-testid="remove-affiliated-org-modal"
       slots={{
         Title: () => (
           <Typography variant="h4" fontWeight={600}>
@@ -51,14 +51,14 @@ export const RemoveAffiliatedOrgModal = ({
         }}
       >
         <Button
-          data-testid="close-link-affiliate-org-button"
+          data-testid="close-unlink-affiliate-org-button"
           type="button"
           onClick={onClose}
         >
           {t('close-button')}
         </Button>
         <Button
-          data-testid="confirm-link-affiliate-org-button"
+          data-testid="confirm-unlink-affiliate-org-button"
           onClick={onSubmit}
           type="button"
           color="primary"

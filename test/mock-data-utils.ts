@@ -118,6 +118,22 @@ export const buildAddress = build<Address>({
   },
 })
 
+export const buildANZAddress = build<Address>({
+  fields: {
+    id: perBuild(() => chance.guid()),
+    createdAt: new Date().toISOString(),
+    line1: perBuild(() => chance.address()),
+    line2: perBuild(() => chance.address()),
+    city: 'Sydney',
+    postCode: perBuild(() => chance.postcode()),
+    country: 'Australia',
+    countryCode: 'AU',
+    state: perBuild(() => chance.state()),
+    type: perBuild(() => chance.word()),
+    region: 'Australian Capital Territory',
+  },
+})
+
 export const buildBlExportDataAttendee =
   build<BlendedLearningAttendeeExportData>({
     fields: {
@@ -173,6 +189,59 @@ export const buildOrganization = build<Organization>({
     preferences: {},
     go1Licenses: 0,
     organizationType: perBuild(() => chance.word()),
+  },
+})
+
+export const buildANZMainOrganisation = build<Organization>({
+  fields: {
+    id: perBuild(() => chance.guid()),
+    createdAt: new Date().toISOString(),
+    name: perBuild(() => chance.word({ length: 3 })),
+    tags: [
+      perBuild(() => chance.word()),
+      perBuild(() => chance.word()),
+      perBuild(() => chance.word()),
+    ],
+    members_aggregate: {
+      aggregate: { count: perBuild(() => chance.integer({ max: 100 })) },
+    },
+    contactDetails: [{ type: 'email', value: perBuild(() => chance.email()) }],
+    attributes: { attribute: 'value', phone: perBuild(() => chance.phone()) },
+    address: buildANZAddress(),
+    sector: 'Education',
+    organizationType: 'State Education',
+    region: perBuild(() => chance.word()),
+    preferences: {},
+    go1Licenses: 0,
+    affiliated_organisations: [],
+    affiliated_organisations_aggregate: {
+      aggregate: { count: 0 },
+    },
+  },
+})
+
+export const buildANZAffiliatedOrganisation = build<Organization>({
+  fields: {
+    id: perBuild(() => chance.guid()),
+    createdAt: new Date().toISOString(),
+    name: perBuild(() => chance.word({ length: 3 })),
+    tags: [
+      perBuild(() => chance.word()),
+      perBuild(() => chance.word()),
+      perBuild(() => chance.word()),
+    ],
+    members_aggregate: {
+      aggregate: { count: perBuild(() => chance.integer({ max: 100 })) },
+    },
+    contactDetails: [{ type: 'email', value: perBuild(() => chance.email()) }],
+    attributes: { attribute: 'value', phone: perBuild(() => chance.phone()) },
+    address: buildANZAddress(),
+    sector: 'anz_edu',
+    organizationType: 'State Education',
+    region: perBuild(() => chance.word()),
+    preferences: {},
+    go1Licenses: 0,
+    affiliated_organisations: [],
   },
 })
 

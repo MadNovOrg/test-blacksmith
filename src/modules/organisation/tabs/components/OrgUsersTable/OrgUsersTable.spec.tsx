@@ -10,11 +10,10 @@ import {
   OrgMembersQueryVariables,
 } from '@app/generated/graphql'
 import { dateFormats } from '@app/i18n/config'
+import { MEMBERS_QUERY } from '@app/modules/organisation/hooks/useOrgMembers'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
-
-import { MEMBERS_QUERY } from '../../../hooks/useOrgMembers'
 
 import { OrgUsersTable } from './OrgUsersTable'
 

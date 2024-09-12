@@ -19,7 +19,7 @@ import { useDebounce } from 'use-debounce'
 
 import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { useAuth } from '@app/context/auth'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { RoleName } from '@app/types'
 
 import useOrganisationByName from '../../hooks/useOrganisationByName'

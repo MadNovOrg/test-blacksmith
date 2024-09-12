@@ -35,13 +35,12 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import theme from '@app/theme'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
 } from '@app/util'
-
-import useOrgV2 from '../../hooks/useOrgV2'
 
 export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()

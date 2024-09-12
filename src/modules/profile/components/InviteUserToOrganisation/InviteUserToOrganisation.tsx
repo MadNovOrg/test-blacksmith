@@ -31,8 +31,8 @@ import {
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import useOrganisationByName from '@app/modules/organisation/hooks/useOrganisationByName'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/profile/queries/save-org-invites'
 
 export type InviteUserToOrganisationProps = {

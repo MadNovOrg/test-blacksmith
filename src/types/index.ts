@@ -186,6 +186,10 @@ export type Organization = {
   sector: string
   organizationType: string
   go1Licenses?: number
+  main_organisation_id?: string
+  main_organisation?: Organization
+  affiliated_organisations?: Organization[]
+  affiliated_organisations_aggregate?: { aggregate: { count: number } }
 } & Base
 
 export type OrganizationMember = {

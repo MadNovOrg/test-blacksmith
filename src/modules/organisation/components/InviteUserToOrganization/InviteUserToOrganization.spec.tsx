@@ -9,7 +9,7 @@ import {
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
-import useOrgV2 from '@app/modules/organisation/hooks/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/organisation/queries/save-org-invites'
 import { RoleName } from '@app/types'
 
@@ -21,7 +21,7 @@ import { OrgIndividualsSubtabs } from '../../tabs/OrgIndividualsTab'
 
 import { InviteUserToOrganization } from './InviteUserToOrganization'
 
-vi.mock('@app/modules/organisation/hooks/useOrgV2')
+vi.mock('@app/modules/organisation/hooks/UK/useOrgV2')
 
 const useOrganisationMock = vi.mocked(useOrgV2)
 
