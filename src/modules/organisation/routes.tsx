@@ -3,7 +3,8 @@ import { Route, Navigate, Routes } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { AvailableCourses } from '@app/modules/course/pages/AvailableCourses/AvailableCourses'
 
-import { InviteUserToOrganization } from './components/InviteUserToOrganization/InviteUserToOrganization'
+import { InviteUserToOrganization as ANZInviteUserToOrganization } from './components/InviteUserToOrganization/ANZ/InviteUserToOrganization'
+import { InviteUserToOrganization as UKInviteUserToOrganization } from './components/InviteUserToOrganization/UK/InviteUserToOrganization'
 import { CreateOrganization } from './pages/CreateOrganization/CreateOrganization'
 import { EditOrgDetails as ANZEditOrgDetails } from './pages/EditOrganization/ANZ/EditOrgDetails'
 import { EditOrgDetails as UKEditOrgDetails } from './pages/EditOrganization/UK/EditOrgDetails'
@@ -33,7 +34,16 @@ export const OrganisationRoutes: React.FC = () => {
           />
         ) : null}
         {acl.canEditOrAddOrganizations() ? (
-          <Route path="invite" element={<InviteUserToOrganization />} />
+          <Route
+            path="invite"
+            element={
+              isUKRegion ? (
+                <UKInviteUserToOrganization />
+              ) : (
+                <ANZInviteUserToOrganization />
+              )
+            }
+          />
         ) : null}
         <Route path="courses" element={<AvailableCourses />} />
       </Route>

@@ -9,19 +9,18 @@ import {
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
-import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
+import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/OrgDashboard'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/organisation/queries/save-org-invites'
+import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent } from '@test/index'
-import { buildOrganization } from '@test/mock-data-utils'
-
-import { OrgDashboardTabs } from '../../pages/OrganisationDashboard/OrgDashboard'
-import { OrgIndividualsSubtabs } from '../../tabs/OrgIndividualsTab'
+import { buildANZMainOrganisation } from '@test/mock-data-utils'
 
 import { InviteUserToOrganization } from './InviteUserToOrganization'
 
-vi.mock('@app/modules/organisation/hooks/UK/useOrgV2')
+vi.mock('@app/modules/organisation/hooks/ANZ/useOrgV2')
 
 const useOrganisationMock = vi.mocked(useOrgV2)
 
@@ -51,6 +50,7 @@ it('validates that at least one email has been entered', async () => {
 it('validates that entered email is valid', async () => {
   const client = {
     executeMutation: () => never,
+    executeQuery: () => never,
   } as unknown as Client
 
   useOrganisationMock.mockReturnValue({
@@ -91,7 +91,7 @@ it('displays an error message that user already exist within organization', asyn
     fetching: false,
     data: {
       orgs: [
-        buildOrganization({ overrides: { id: orgId } }),
+        buildANZMainOrganisation({ overrides: { id: orgId } }),
       ] as unknown as GetOrganisationDetailsQuery['orgs'],
       orgsCount: { aggregate: { count: 1 } },
       specificOrg: [],
@@ -162,7 +162,7 @@ it('saves org invites and redirects back to the organization individuals tab', a
     fetching: false,
     data: {
       orgs: [
-        buildOrganization({ overrides: { id: orgId } }),
+        buildANZMainOrganisation({ overrides: { id: orgId } }),
       ] as unknown as GetOrganisationDetailsQuery['orgs'],
       orgsCount: { aggregate: { count: 1 } },
       specificOrg: [],
@@ -204,7 +204,7 @@ it('allows an org admin to invite another org admin', async () => {
     fetching: false,
     data: {
       orgs: [
-        buildOrganization({
+        buildANZMainOrganisation({
           overrides: { id: orgId },
         }),
       ] as unknown as GetOrganisationDetailsQuery['orgs'],

@@ -45,7 +45,13 @@ export default async function (
   return {
     profile: profile as ProfileType,
     isOrgAdmin: Boolean(profile?.managedOrgIds?.length),
-    managedOrgIds: profile?.managedOrgIds.map(o => o.organization_id),
+    managedOrgIds: profile?.managedOrgIds.flatMap(o => {
+      const orgIds = [o.organization_id]
+      const affiliatedIds = o.organization?.affiliated_organisations?.map(
+        a => a.id,
+      )
+      return Array.from(new Set([...orgIds, ...affiliatedIds]))
+    }),
     claims,
     emailVerified: idToken.payload.email_verified,
   }

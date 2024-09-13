@@ -9,6 +9,11 @@ export const GET_USER_PROFILE = gql`
       ...Profile
       managedOrgIds: organizations(where: { isAdmin: { _eq: true } }) {
         organization_id
+        organization {
+          affiliated_organisations {
+            id
+          }
+        }
       }
       trainerRoles: trainer_role_types {
         trainer_role_type {
