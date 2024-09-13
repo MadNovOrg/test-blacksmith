@@ -35,20 +35,22 @@ import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery, Grade_Enum } from '@app/generated/graphql'
 import { CoursePrerequisitesAlert } from '@app/modules/course_details/components/CoursePrerequisitesAlert'
 import { Avatar } from '@app/modules/profile/components/Avatar'
+import { CertificationsTable } from '@app/modules/profile/components/CertificationsTable'
+import { CourseAsTrainer } from '@app/modules/profile/components/CourseAsTrainer'
+import { CoursesTable } from '@app/modules/profile/components/CoursesTable'
+import { InviteUserToOrganisation } from '@app/modules/profile/components/InviteUserToOrganisation/ANZ'
+import { OrganisationsTable } from '@app/modules/profile/components/OrganisationsTable'
 import { ProfileArchiveDialog } from '@app/modules/profile/components/ProfileArchiveDialog'
+import { ProfileDeleteDialog } from '@app/modules/profile/components/ProfileDeleteDialog'
+import {
+  TableMenu,
+  TableMenuSelections,
+} from '@app/modules/profile/components/TableMenu'
+import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
 import useProfile from '@app/modules/profile/hooks/useProfile'
+import { getRoleColor } from '@app/modules/profile/utils/ANZ/helpers'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
-
-import { CertificationsTable } from '../../components/CertificationsTable'
-import { CourseAsTrainer } from '../../components/CourseAsTrainer'
-import { CoursesTable } from '../../components/CoursesTable'
-import { InviteUserToOrganisation } from '../../components/InviteUserToOrganisation'
-import { OrganisationsTable } from '../../components/OrganisationsTable'
-import { ProfileDeleteDialog } from '../../components/ProfileDeleteDialog'
-import { TableMenu, TableMenuSelections } from '../../components/TableMenu'
-import { UserGo1License } from '../../components/UserGo1License'
-import { getRoleColor } from '../../utils/UK/helpers'
 
 type ViewProfilePageProps = unknown
 

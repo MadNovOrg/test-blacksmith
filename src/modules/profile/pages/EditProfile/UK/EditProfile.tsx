@@ -96,7 +96,7 @@ import {
   rolesFormSchema,
 } from '@app/modules/profile/components/EditRoles/UK'
 import { ImportCertificateModal } from '@app/modules/profile/components/ImportCertificateModal'
-import { InviteUserToOrganisation } from '@app/modules/profile/components/InviteUserToOrganisation'
+import { InviteUserToOrganisation } from '@app/modules/profile/components/InviteUserToOrganisation/UK'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import { ProfilePermissions } from '@app/modules/profile/components/Permissions/Permissions'
 import PhoneNumberInput, {

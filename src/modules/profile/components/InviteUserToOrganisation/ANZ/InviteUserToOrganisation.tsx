@@ -31,7 +31,7 @@ import {
   SaveOrganisationInvitesMutationVariables,
   SaveOrgInviteError,
 } from '@app/generated/graphql'
-import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
+import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 import useOrganisationByName from '@app/modules/organisation/hooks/useOrganisationByName'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/profile/queries/save-org-invites'
 
@@ -71,12 +71,26 @@ export const InviteUserToOrganisation: React.FC<
     () =>
       acl.isOrgAdmin() && !acl.isInternalUser()
         ? {
-            members: {
-              _and: {
-                isAdmin: { _eq: true },
-                profile_id: { _eq: profile?.id },
+            _or: [
+              {
+                members: {
+                  _and: [
+                    { profile_id: { _eq: profile?.id } },
+                    { isAdmin: { _eq: true } },
+                  ],
+                },
               },
-            },
+              {
+                main_organisation: {
+                  members: {
+                    _and: [
+                      { profile_id: { _eq: profile?.id } },
+                      { isAdmin: { _eq: true } },
+                    ],
+                  },
+                },
+              },
+            ],
           }
         : {},
     [acl, profile],
@@ -176,6 +190,7 @@ export const InviteUserToOrganisation: React.FC<
       onSubmit={handleSubmit(submit)}
       p={3}
       noValidate
+      minWidth={600}
       autoComplete="off"
       aria-autocomplete="none"
       data-testid="edit-invite-user"

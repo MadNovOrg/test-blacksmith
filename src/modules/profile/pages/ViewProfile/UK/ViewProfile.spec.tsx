@@ -3,7 +3,7 @@ import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
 import useProfile from '@app/modules/profile/hooks/useProfile'
-import { ViewProfilePage } from '@app/modules/profile/pages/ViewProfile'
+import { ViewProfilePage } from '@app/modules/profile/pages/ViewProfile/UK'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
