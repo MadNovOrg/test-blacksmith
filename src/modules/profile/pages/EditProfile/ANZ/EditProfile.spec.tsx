@@ -5,12 +5,11 @@ import { fromValue, never } from 'wonka'
 import { GetUserKnowledgeHubAccessQuery } from '@app/generated/graphql'
 import useProfile from '@app/modules/profile/hooks/useProfile'
 import useRoles from '@app/modules/profile/hooks/useRoles'
+import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '@app/modules/profile/queries/get-user-knowledge-hub-access'
 import { RoleName } from '@app/types'
 
 import { render, renderHook, screen } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
-
-import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '../../queries/get-user-knowledge-hub-access'
 
 import { EditProfilePage } from './EditProfile'
 

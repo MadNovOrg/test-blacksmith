@@ -1,5 +1,5 @@
-export * from './pages/EditProfile'
+export * from './pages/EditProfile/UK'
 
 export * from './pages/ViewProfile'
 
-export * from './utils/helpers'
+export * from './utils/UK/helpers'

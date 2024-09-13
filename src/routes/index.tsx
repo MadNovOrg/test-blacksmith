@@ -31,9 +31,14 @@ import { WaitlistRoutes } from '@app/modules/waitlist/routes'
 import { Welcome } from '@app/modules/welcome/pages/Welcome/Welcome'
 import { RoleName } from '@app/types'
 
-const ProfileRoutes = React.lazy(
-  () => import('../modules/profile/routes/profile'),
+const UKProfileRoutes = React.lazy(
+  () => import('../modules/profile/routes/UK/profile'),
 )
+
+const ANZProfileRoutes = React.lazy(
+  () => import('../modules/profile/routes/ANZ/profile'),
+)
+
 const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
 const UserRoutes = React.lazy(() => import('./user-routes'))
 const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
@@ -115,7 +120,9 @@ function LoggedInRoutes() {
   const { activeRole, profile, acl } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+
   const isUKRegion = acl.isUK()
+
   /**
    * The pathname is used for redirect to invitations links,
    * being not authenticated and prevent home page redirect to
@@ -155,7 +162,7 @@ function LoggedInRoutes() {
         path="profile/*"
         element={
           <AppShell>
-            <ProfileRoutes />
+            {isUKRegion ? <UKProfileRoutes /> : <ANZProfileRoutes />}
           </AppShell>
         }
       />

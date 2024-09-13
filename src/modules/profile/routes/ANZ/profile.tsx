@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 
-import { EditProfilePage } from '../pages/EditProfile'
-import { ViewProfilePage } from '../pages/ViewProfile'
+import { EditProfilePage } from '../../pages/EditProfile/ANZ'
+import { ViewProfilePage } from '../../pages/ViewProfile'
 
 const ProfileRoutes = () => {
   return (

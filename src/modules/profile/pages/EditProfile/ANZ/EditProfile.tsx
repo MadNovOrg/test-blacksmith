@@ -71,26 +71,6 @@ import {
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
 import { positions } from '@app/modules/course_booking/utils'
-import { Avatar } from '@app/modules/profile/components/Avatar'
-import { CertificationsAlerts } from '@app/modules/profile/components/CertificationsAlerts'
-import { ImportCertificateModal } from '@app/modules/profile/components/ImportCertificateModal'
-import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
-} from '@app/modules/profile/components/PhoneNumberInput'
-import { useJobTitles } from '@app/modules/profile/hooks/useJobTitles'
-import useProfile from '@app/modules/profile/hooks/useProfile'
-import useRoles from '@app/modules/profile/hooks/useRoles'
-import useTrainerRoleTypes from '@app/modules/profile/hooks/useTrainerRoleTypes'
-import { REMOVE_ORG_MEMBER_MUTATION } from '@app/modules/profile/queries/remove-org-member'
-import { UPDATE_ORG_MEMBER_MUTATION } from '@app/modules/profile/queries/update-org-member'
-import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
-import { UPDATE_PROFILE_ROLES_MUTATION } from '@app/modules/profile/queries/update-profile-roles'
-import { UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/modules/profile/queries/update-trainer-role-types'
-import { schemas } from '@app/schemas'
-import { RoleName, TrainerRoleTypeName } from '@app/types'
-import { Shards, INPUT_DATE_FORMAT } from '@app/util'
-
 import {
   avatarSize,
   BILDRolesNames,
@@ -104,19 +84,38 @@ import {
   OrgMemberType,
   salesRole,
   salesRolesNames,
-  trainerRolesNames,
   UserRoleName,
   userRolesNames,
   userSubRoles,
-} from '../..'
+} from '@app/modules/profile'
+import { Avatar } from '@app/modules/profile/components/Avatar'
+import { CertificationsAlerts } from '@app/modules/profile/components/CertificationsAlerts'
 import {
   EditRoles,
   RolesFields,
   rolesFormSchema,
-} from '../../components/EditRoles'
-import { InviteUserToOrganisation } from '../../components/InviteUserToOrganisation'
-import { ProfilePermissions } from '../../components/Permissions/Permissions'
-import { UserGo1License } from '../../components/UserGo1License'
+} from '@app/modules/profile/components/EditRoles/ANZ'
+import { ImportCertificateModal } from '@app/modules/profile/components/ImportCertificateModal'
+import { InviteUserToOrganisation } from '@app/modules/profile/components/InviteUserToOrganisation'
+import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
+import { ProfilePermissions } from '@app/modules/profile/components/Permissions/Permissions'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY,
+} from '@app/modules/profile/components/PhoneNumberInput'
+import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
+import { useJobTitles } from '@app/modules/profile/hooks/useJobTitles'
+import useProfile from '@app/modules/profile/hooks/useProfile'
+import useRoles from '@app/modules/profile/hooks/useRoles'
+import useTrainerRoleTypes from '@app/modules/profile/hooks/useTrainerRoleTypes'
+import { REMOVE_ORG_MEMBER_MUTATION } from '@app/modules/profile/queries/remove-org-member'
+import { UPDATE_ORG_MEMBER_MUTATION } from '@app/modules/profile/queries/update-org-member'
+import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
+import { UPDATE_PROFILE_ROLES_MUTATION } from '@app/modules/profile/queries/update-profile-roles'
+import { UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/modules/profile/queries/update-trainer-role-types'
+import { trainerRolesNames } from '@app/modules/profile/utils/ANZ/helpers'
+import { schemas } from '@app/schemas'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { Shards, INPUT_DATE_FORMAT } from '@app/util'
 
 export const EditProfilePage: React.FC<
   React.PropsWithChildren<unknown>
@@ -607,7 +606,6 @@ export const EditProfilePage: React.FC<
           if (obj.userRole === RoleName.TRAINER) {
             updatedTrainerRoles.push(
               obj.trainerRoles.trainerRole,
-              obj.trainerRoles.BILDRole,
               obj.trainerRoles.moderatorRole
                 ? TrainerRoleTypeName.MODERATOR
                 : undefined,

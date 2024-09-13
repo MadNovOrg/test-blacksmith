@@ -48,7 +48,7 @@ import { OrganisationsTable } from '../../components/OrganisationsTable'
 import { ProfileDeleteDialog } from '../../components/ProfileDeleteDialog'
 import { TableMenu, TableMenuSelections } from '../../components/TableMenu'
 import { UserGo1License } from '../../components/UserGo1License'
-import { getRoleColor } from '../../utils/helpers'
+import { getRoleColor } from '../../utils/UK/helpers'
 
 type ViewProfilePageProps = unknown
 

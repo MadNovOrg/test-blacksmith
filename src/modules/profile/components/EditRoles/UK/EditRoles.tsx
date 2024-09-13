@@ -21,10 +21,6 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
-import { yup } from '@app/schemas'
-import { RoleName, TrainerRoleTypeName } from '@app/types'
-import { capitalize } from '@app/util'
-
 import {
   employeeRolesNames,
   salesRolesNames,
@@ -33,9 +29,12 @@ import {
   EmployeeRoleName,
   employeeRole,
   salesRole,
-  trainerRolesNames,
   BILDRolesNames,
-} from '../..'
+} from '@app/modules/profile'
+import { trainerRolesNames } from '@app/modules/profile/utils/UK/helpers'
+import { yup } from '@app/schemas'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { capitalize } from '@app/util'
 
 export function rolesFormSchema() {
   return yup
