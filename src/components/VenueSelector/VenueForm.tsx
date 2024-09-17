@@ -282,13 +282,13 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
             <Controller
               name="postCode"
               control={control}
-              rules={{ required: !acl.isTTAdmin() }}
+              rules={{ required: UKCountry && !acl.isTTAdmin() }}
               render={({ field, fieldState }) => (
                 <TextField
                   disabled={preFilledFields.has('postCode')}
                   fullWidth
                   variant="filled"
-                  required={UKCountry}
+                  required={UKCountry && !acl.isTTAdmin()}
                   error={fieldState.invalid}
                   label={
                     UKCountry
