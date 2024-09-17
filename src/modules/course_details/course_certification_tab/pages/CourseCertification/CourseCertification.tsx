@@ -11,6 +11,7 @@ import {
   useTheme,
 } from '@mui/material'
 import pdf from '@react-pdf/renderer'
+import { allPass } from 'lodash/fp'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useQuery } from 'urql'
 
@@ -29,6 +30,7 @@ import {
   Grade_Enum,
   Course_Level_Enum,
   CertificateStatus,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
@@ -116,6 +118,24 @@ export const CourseCertification: React.FC<
     )
   }, [certificate])
 
+  const grade = useMemo(() => {
+    const displayNonPhysicalGrade = allPass([
+      () => courseParticipant?.course?.level === Course_Level_Enum.Level_1,
+      () =>
+        courseParticipant?.course?.deliveryType ===
+        Course_Delivery_Type_Enum.Virtual,
+      () => courseParticipant?.grade === Grade_Enum.Pass,
+    ])()
+
+    if (displayNonPhysicalGrade) return Grade_Enum.ObserveOnly
+
+    return courseParticipant?.grade ?? Grade_Enum.Pass
+  }, [
+    courseParticipant?.course?.deliveryType,
+    courseParticipant?.course?.level,
+    courseParticipant?.grade,
+  ])
+
   if (fetching) {
     return (
       <Stack
@@ -139,7 +159,6 @@ export const CourseCertification: React.FC<
   }
 
   const certificationNumber = certificate.number ?? ''
-  const grade = courseParticipant?.grade ?? Grade_Enum.Pass
 
   if (courseParticipant && !courseParticipant?.grade) {
     return (
