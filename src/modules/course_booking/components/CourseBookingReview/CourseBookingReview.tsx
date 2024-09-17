@@ -509,7 +509,9 @@ export const CourseBookingReview: React.FC<
                       aria-label={`${t('more-information')} (${t(
                         'opens-new-window',
                       )})`}
-                      href={`${import.meta.env.VITE_INFO_URL}`}
+                      href={`${
+                        import.meta.env.VITE_BASE_TEAMTEACH
+                      }/team-teach-connect/`}
                     />
                   ),
                 }}
