@@ -15,6 +15,7 @@ export type ParamsType = {
   withParticipants?: boolean
   withInternationalFinance?: boolean
   withFreeCourseCourseMaterials?: boolean
+  withCreatedById?: boolean
 }
 
 export const QUERY = gql`
@@ -30,9 +31,11 @@ export const QUERY = gql`
     $withParticipants: Boolean = false
     $withInternationalFinance: Boolean = false
     $withFreeCourseCourseMaterials: Boolean = false
+    $withCreatedById: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
+      createdById @include(if: $withCreatedById)
       isDraft
       # TODO: Delete this after Arlo migration
       arloReferenceId @include(if: $withArloRefId)

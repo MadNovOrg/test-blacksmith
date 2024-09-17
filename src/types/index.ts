@@ -35,6 +35,7 @@ export type Course = {
   arloReferenceId?: string
   id: number
   createdAt: string
+  createdById?: string
   updatedAt?: string
   name: string
   residingCountry: string

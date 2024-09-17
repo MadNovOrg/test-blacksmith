@@ -12,15 +12,18 @@ import { QUERY, ResponseType } from '@app/queries/courses/get-course-by-id'
 import { RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
-export default function useCourse(courseId: string): {
+export default function useCourse(
+  courseId: string,
+  options: { includeCreatedById?: boolean } = {},
+): {
   data?: {
     course: ResponseType['course']
     isTrainer?: boolean
     trainerAcceptedInvite?: boolean
   }
-  error?: Error
-  status: LoadingStatus
   mutate: (opts?: Partial<OperationContext> | undefined) => void
+  status: LoadingStatus
+  error?: Error
 } {
   const { acl, activeRole, profile } = useAuth()
 
@@ -40,6 +43,7 @@ export default function useCourse(courseId: string): {
       withInternationalFinance:
         acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
       withFreeCourseCourseMaterials: true,
+      withCreatedById: options.includeCreatedById,
     },
   })
 

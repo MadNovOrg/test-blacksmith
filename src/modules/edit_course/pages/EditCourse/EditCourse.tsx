@@ -66,6 +66,7 @@ import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
+  getExceptionsToIgnoreOnEditForTrainer,
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
 } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
@@ -151,7 +152,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     data: courseInfo,
     status: courseStatus,
     mutate: mutateCourse,
-  } = useCourse(id ?? '')
+  } = useCourse(id ?? '', { includeCreatedById: acl.isTrainer() })
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry } = useWorldCountries()
 
@@ -704,23 +705,25 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
     if (!allowCourseEditWithoutScheduledPrice) return
 
+    const checkCourseExceptionsData = {
+      ...courseData,
+      accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
+      bildStrategies: courseData.bildStrategies ?? {},
+      courseLevel: courseData.courseLevel ?? Course_Level_Enum.Level_1,
+      type: courseData.type,
+      maxParticipants: courseData.maxParticipants ?? 0,
+      startDateTime: courseData.startDateTime ?? new Date(),
+      hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+      usesAOL: courseData.usesAOL,
+      isTrainer: acl.isTrainer(),
+      isETA: isETA,
+      isEmployerAOL: isEmployerAOL,
+      isUKCountry: isUKCountry(courseData.residingCountry),
+    }
+
     if (courseData.type !== Course_Type_Enum.Open && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
-        {
-          ...courseData,
-          accreditedBy: courseData.accreditedBy ?? Accreditors_Enum.Icm,
-          bildStrategies: courseData.bildStrategies ?? {},
-          courseLevel: courseData.courseLevel ?? Course_Level_Enum.Level_1,
-          type: courseData.type,
-          maxParticipants: courseData.maxParticipants ?? 0,
-          startDateTime: courseData.startDateTime ?? new Date(),
-          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
-          usesAOL: courseData.usesAOL,
-          isTrainer: acl.isTrainer(),
-          isETA: isETA,
-          isEmployerAOL: isEmployerAOL,
-          isUKCountry: isUKCountry(courseData.residingCountry),
-        },
+        checkCourseExceptionsData,
         [
           ...trainersData.lead.map(leader => ({
             type: Course_Trainer_Type_Enum.Leader,
@@ -738,7 +741,18 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             levels: mod.levels,
           })),
         ],
+        [
+          ...(acl.isTrainer()
+            ? getExceptionsToIgnoreOnEditForTrainer({
+                courseCreatedBy: course?.createdById,
+                courseData: checkCourseExceptionsData,
+                courseInput,
+                currentProfileId: profile.id,
+              })
+            : []),
+        ],
       )
+
       if (
         canRescheduleCourseEndDate ||
         (!autoapproved && !alignedWithProtocol)
@@ -759,12 +773,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     profile,
     trainersData,
     allowCourseEditWithoutScheduledPrice,
-    acl,
-    editCourse,
     seniorOrPrincipalLead,
+    acl,
     isETA,
     isEmployerAOL,
     isUKCountry,
+    editCourse,
+    course?.createdById,
+    courseInput,
     canRescheduleCourseEndDate,
     autoapproved,
     alignedWithProtocol,

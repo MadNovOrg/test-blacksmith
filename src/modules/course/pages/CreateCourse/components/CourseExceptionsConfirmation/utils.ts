@@ -1,4 +1,5 @@
 import { differenceInDays, isFuture } from 'date-fns'
+import { isEqual, pick } from 'lodash'
 
 import { getACL } from '@app/context/auth/permissions'
 import {
@@ -10,7 +11,7 @@ import {
   Course_Type_Enum,
   Course_Exception_Enum,
 } from '@app/generated/graphql'
-import { TrainerInput } from '@app/types'
+import { CourseInput, TrainerInput } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 import {
   getRequiredAssistants,
@@ -49,6 +50,68 @@ export type TrainerData = {
   }[]
 }[]
 
+const isTrainerRatioDependenciesEdited = ({
+  initialData,
+  updatedData,
+}: {
+  initialData: CourseData
+  updatedData: Partial<CourseInput>
+}) => {
+  const dependenciesToCompare = [
+    'accreditedBy',
+    'deliveryType',
+    'courseLevel',
+    'maxParticipants',
+    'reaccreditation',
+    'type',
+    'usesAOL',
+  ]
+
+  const pickedInitialData = pick(initialData, dependenciesToCompare)
+  const pickedUpdatedData = pick(updatedData, dependenciesToCompare)
+
+  return !isEqual(pickedInitialData, pickedUpdatedData)
+}
+
+export const getExceptionsToIgnoreOnEditForTrainer = ({
+  courseCreatedBy,
+  courseData,
+  courseInput,
+  currentProfileId,
+}: {
+  courseCreatedBy?: string
+  courseData: CourseData
+  courseInput?: Partial<CourseInput>
+  currentProfileId: string
+}): Course_Exception_Enum[] => {
+  const exceptionsToIgnore: Course_Exception_Enum[] = [
+    Course_Exception_Enum.LeadTrainerInGracePeriod,
+  ]
+
+  const doesTrainerEditsForeignCourse =
+    courseCreatedBy && courseCreatedBy !== currentProfileId
+
+  if (!doesTrainerEditsForeignCourse) return []
+
+  if (
+    courseInput?.startDateTime &&
+    courseInput?.startDateTime.getTime() === courseData.startDateTime.getTime()
+  )
+    exceptionsToIgnore.push(Course_Exception_Enum.OutsideNoticePeriod)
+
+  if (
+    courseInput &&
+    !isTrainerRatioDependenciesEdited({
+      initialData: courseData,
+      updatedData: courseInput,
+    })
+  ) {
+    exceptionsToIgnore.push(Course_Exception_Enum.TrainerRatioNotMet)
+  }
+
+  return exceptionsToIgnore
+}
+
 export const isOutsideOfNoticePeriod = (
   courseData: Pick<CourseData, 'startDateTime'>,
 ) => {
@@ -67,9 +130,11 @@ export const isLeadTrainerInGracePeriod = (
     REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseData.type][
       courseData.courseLevel
     ]
+
   const matchingLevels = (leader.levels ?? []).filter(
     l => allowedLevels.indexOf(l.courseLevel as Course_Level_Enum) != -1,
   )
+
   const result = !matchingLevels.some(level =>
     isFuture(new Date(level.expiryDate)),
   )
@@ -118,8 +183,12 @@ export function checkCourseDetailsForExceptions(
 ): Course_Exception_Enum[] {
   const exceptions: Course_Exception_Enum[] = []
 
+  const ignoreOutsideNoticePeriodException = ignoreExceptions.includes(
+    Course_Exception_Enum.OutsideNoticePeriod,
+  )
+
   if (
-    !ignoreExceptions.includes(Course_Exception_Enum.OutsideNoticePeriod) &&
+    !ignoreOutsideNoticePeriodException &&
     isOutsideOfNoticePeriod(courseData)
   ) {
     exceptions.push(Course_Exception_Enum.OutsideNoticePeriod)
@@ -134,8 +203,12 @@ export function checkCourseDetailsForExceptions(
     exceptions.push(Course_Exception_Enum.LeadTrainerInGracePeriod)
   }
 
+  const ignoreTrainerRatioException = ignoreExceptions.includes(
+    Course_Exception_Enum.TrainerRatioNotMet,
+  )
+
   if (
-    !ignoreExceptions.includes(Course_Exception_Enum.TrainerRatioNotMet) &&
+    !ignoreTrainerRatioException &&
     isTrainersRatioNotMet(
       {
         level: courseData.courseLevel as Course_Level_Enum,
