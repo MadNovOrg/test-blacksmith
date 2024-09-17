@@ -313,7 +313,7 @@ export function canBeReacc(
           Course_Level_Enum.Level_1,
           Course_Level_Enum.FoundationTrainerPlus,
         ]
-        return levels.includes(courseLevel)
+        if (levels.includes(courseLevel)) return !blended
       }
 
       return false
