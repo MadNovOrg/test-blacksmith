@@ -153,7 +153,7 @@
   "important": "Important",
   "subtotal": "Subtotal",
   "course-cost": "Course Cost",
-  "mandatory-course-materials":"Mandatory Course Materials x {{quantity}}",
+  "mandatory-course-materials": "Mandatory Course Materials x {{quantity}}",
   "location": "Location",
   "custom-vat": "VAT ({{amount}}%)",
   "vat": "VAT (20%)",
@@ -743,7 +743,6 @@
   "privacy-policy": "Privacy Policy",
   "more-information": "More Information",
   "cookie-policy": "Cookie Policy",
-  "right-to-withdrawal": "Right to Withdrawal",
   "opens-new-window": "opens in a new window",
   "socials": {
     "facebook": "Facebook",

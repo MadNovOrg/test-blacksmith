@@ -44,10 +44,6 @@ export const AppFooter = () => {
       href: `${origin}/policies-procedures/cookie-policy/`,
       labelKey: 'cookie-policy',
     },
-    {
-      href: import.meta.env.VITE_MANAGE_ACCOUNT_URL,
-      labelKey: 'right-to-withdrawal',
-    },
   ]
 
   return (
