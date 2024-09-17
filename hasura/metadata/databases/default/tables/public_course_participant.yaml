@@ -660,8 +660,8 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      interval_sec: 10
-      num_retries: 3
+      interval_sec: 600
+      num_retries: 5
       timeout_sec: 10
     webhook: '{{EVENTS_HOST}}/go1/link'
   - name: issue_go1_license
