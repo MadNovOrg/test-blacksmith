@@ -59,35 +59,6 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('2a87bbc4-b2da-42c9-b721-355511189057', '2f848f4d-436f-45db-95e4-77daa2d25e37', 'cognito'), -- merge7.user@teamteach.testinator.com
 ('77e4959c-d73e-41a1-ab58-4f691044437d', 'd1a9f1bb-b927-4498-9649-42bd2965ca5b', 'cognito'); -- merge8.user@teamteach.testinator.com
 
--- Adding participant role to all participants
-INSERT INTO profile_role (profile_id, role_id) VALUES
-('fdedead5-1218-4332-8199-8b2bdce414a7', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('11935252-570f-42ef-a141-5cdf8f78270d', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('41e9fa1d-0712-43cd-8571-bbf219ab016b', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('127ac7f5-9c91-4b1c-8c13-13e226d60f78', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('47b5b128-0a47-4094-86f6-87005eb12d71', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('2e06729d-7436-427a-a5cf-ff7c9496b85c', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('b5702c04-35a6-4c55-b24a-592dc0a05142', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('43ead544-671c-46fb-ba8f-b5858c83a2d8', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('ae8f617c-2411-42aa-9501-f2f08b16a76e', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('6896b053-0d36-45b4-889c-9472d846c4a1', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('fbe6eb48-ad58-40f9-9388-07e743240ce3', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('d1b97054-357e-4a53-9a43-4acf8353a465', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('bdc08f2a-6a23-4a53-9587-65f32d16c41e', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('bb3e469d-044b-416a-9831-282e6a2c5af7', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('f858c22c-3996-4137-a205-099e4521491f', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('ab528bc4-0d66-417f-8a34-eed6b949ea27', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('1054214f-1f5b-4d94-a381-ab6fba404f41', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('5a7f3010-cd40-454a-88d9-c93935c039ec', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('5ef68528-fb02-4462-8261-689930075d15', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge1.user@teamteach.testinator.com
-('8e80fda2-ed5a-4284-b95a-cbec399303f5', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge2.user@teamteach.testinator.com
-('720fce28-3c62-4ca9-ac28-10012bc07663', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge3.user@teamteach.testinator.com
-('e19d8f15-f7e6-477f-8080-dcb3ca20ba1b', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge4.user@teamteach.testinator.com
-('3df19e95-4410-49a5-bdb1-fc56e1548317', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge5.user@teamteach.testinator.com
-('5ca8978e-bac6-436c-8cee-4ad107180f45', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge6.user@teamteach.testinator.com
-('2f848f4d-436f-45db-95e4-77daa2d25e37', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge7.user@teamteach.testinator.com
-('d1a9f1bb-b927-4498-9649-42bd2965ca5b', '151f0884-a8c8-48e2-a619-c4434864ea67'); -- merge8.user@teamteach.testinator.com
-
 INSERT INTO organization (id, name, original_record) VALUES
 ('46c34024-ea2f-4146-962d-c3e0fc3b923b', 'Example organization', '{}');
 

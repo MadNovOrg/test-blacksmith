@@ -45,16 +45,7 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('6ea4e91b-9856-4533-9544-949caba236fb', (SELECT id from role WHERE name = 'trainer')),
 ('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', (SELECT id from role WHERE name = 'trainer')),
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', (SELECT id from role WHERE name = 'trainer')),
-('dccd780a-9745-4972-a43e-95ec3ef361df', (SELECT id from role WHERE name = 'trainer')),
--- users
-('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', (SELECT id from role WHERE name = 'user')),
-('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', (SELECT id from role WHERE name = 'user')),
-('749791ef-e4c4-4a5f-881a-461e4724138d', (SELECT id from role WHERE name = 'user')),
-('6ea4e91b-9856-4533-9544-949caba236fb', (SELECT id from role WHERE name = 'user')),
-('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', (SELECT id from role WHERE name = 'user')),
-('88072bb2-10e0-4417-b9ce-ec05265b8b56', (SELECT id from role WHERE name = 'user')),
-('dccd780a-9745-4972-a43e-95ec3ef361df', (SELECT id from role WHERE name = 'user'));
-
+('dccd780a-9745-4972-a43e-95ec3ef361df', (SELECT id from role WHERE name = 'trainer'));
 INSERT INTO profile_role (profile_id, role_id) VALUES
 ('6407ca25-d1d2-4a3d-863a-4b2a0a56c0e4', (SELECT id from role WHERE name = 'booking-contact')); -- tt.booking@teamteach.testinator.com
 
