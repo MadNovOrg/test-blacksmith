@@ -116,6 +116,11 @@ function LoggedOutRoutes() {
   )
 }
 
+const doNotRedirectToOnboardingPathnames = [
+  'accept-invite',
+  'accept-org-invite',
+]
+
 function LoggedInRoutes() {
   const { activeRole, profile, acl } = useAuth()
   const navigate = useNavigate()
@@ -134,14 +139,17 @@ function LoggedInRoutes() {
 
   useEffect(() => {
     if (
-      !profile?.givenName ||
-      !profile.familyName ||
-      !profile.phone ||
-      !profile.dob
+      !doNotRedirectToOnboardingPathnames.some(path =>
+        location.pathname.includes(path),
+      ) &&
+      (!profile?.givenName ||
+        !profile.familyName ||
+        !profile.phone ||
+        !profile.dob)
     ) {
       navigate('onboarding')
     }
-  }, [profile, navigate])
+  }, [profile, navigate, location.pathname])
 
   if (!activeRole) return null
 
