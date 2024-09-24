@@ -324,6 +324,11 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         continue
       }
 
+      const mcmDiscount =
+        course?.type === Course_Type_Enum.Open
+          ? getMandatoryCourseMaterialsCost(1, booking.currency)
+          : 0
+
       const courseCost = booking.price * booking.quantity
 
       discounts[code] = {
@@ -331,13 +336,21 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         type: promoCode.type as Promo_Code_Type_Enum,
         amountCurrency:
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
-            ? booking.price * promoCode.amount
-            : (courseCost * promoCode.amount) / 100,
+            ? booking.price * promoCode.amount + mcmDiscount
+            : (courseCost * promoCode.amount) / 100 +
+              mcmDiscount * booking.quantity,
       }
     }
 
     setBooking(b => ({ ...b, discounts }))
-  }, [booking.price, booking.quantity, booking.promoCodes, promoCodes])
+  }, [
+    booking.price,
+    booking.quantity,
+    booking.promoCodes,
+    promoCodes,
+    booking.currency,
+    course?.type,
+  ])
 
   const addPromo = useCallback<ContextType['addPromo']>(
     (code: PromoCodeOutput) => {
@@ -381,8 +394,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         freeSpacesDiscount,
       0,
     )
-    const vat =
-      ((subtotalDiscounted - mandatoryCourseMaterialsCost) * booking.vat) / 100
+    const vat = Math.max(
+      ((subtotalDiscounted - mandatoryCourseMaterialsCost) * booking.vat) / 100,
+      0,
+    )
     const amountDue = subtotalDiscounted + vat
 
     const paymentProcessingFee =

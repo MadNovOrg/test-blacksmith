@@ -171,12 +171,17 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     (p: XeroPhone) => p?.phoneType === XeroPhoneType.Default,
   )
 
-  const [discountAmount, discountLineItem] = useMemo(() => {
-    const discountLineItem = invoice?.lineItems?.find((li: XeroLineItem) =>
+  const [discountAmount] = useMemo(() => {
+    const discountLineItem = invoice?.lineItems?.filter((li: XeroLineItem) =>
       isDiscountLineItem(li),
+    ) as XeroLineItem[]
+
+    const amount = discountLineItem?.reduce(
+      (acc, current) => acc + current?.lineAmount ?? 0,
+      0,
     )
 
-    return [discountLineItem?.lineAmount ?? 0, discountLineItem]
+    return [amount, discountLineItem]
   }, [invoice?.lineItems])
 
   const processingFee = useMemo(() => {
@@ -700,7 +705,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             data-testid="free-spaces-discount"
                           >
                             {_t('common.currency', {
-                              amount: discountLineItem?.lineAmount,
+                              amount: discountAmount,
                               currency: invoice?.currencyCode,
                             })}
                           </Typography>
