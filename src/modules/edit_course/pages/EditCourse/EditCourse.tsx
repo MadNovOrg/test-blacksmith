@@ -742,7 +742,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           })),
         ],
         [
-          ...(acl.isTrainer()
+          ...(acl.isTrainer() &&
+          course?.status !== Course_Status_Enum.ExceptionsApprovalPending
             ? getExceptionsToIgnoreOnEditForTrainer({
                 courseCreatedBy: course?.createdById,
                 courseData: checkCourseExceptionsData,
@@ -779,6 +780,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     isEmployerAOL,
     isUKCountry,
     editCourse,
+    course?.status,
     course?.createdById,
     courseInput,
     canRescheduleCourseEndDate,
