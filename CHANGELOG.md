@@ -1,5 +1,49 @@
 # @teamteach/hub
 
+## 4.9.0
+
+### Minor Changes
+
+- 50134ad: Allow only UK countries in postal address.
+- b2a3c70: Add DFE urn column to organization table
+- ff0a5ed: Invite individual to organisations ANZ adjsutments. Change managedOrgIds array from auth to include affiliated org ids.
+- 7202547: Validate email addresses in accordance with the RFC2822 standard
+- f8ab157: Adjust invite individual to org from profile for ANZ
+- 6eb256b: Registration form adjustments for ANZ.
+- 3926a5a: Adjust onboarding flow for ANZ.
+- a9bec89: Organisations page ANZ adjustments.
+- ef5107b: Add phone number input on DfE Organisation form
+- 0a47c03: Affiliated organisation dashboard adjustments.
+- fd41fa9: Adds region specific permission
+- 086a84a: Edit organisation ANZ adjustments.
+- 395f11b: Unlink affiliated organisations
+- ea19200: Delete organisations adjustments
+- 831231d: Edit Profile page adjustments
+- 86100b3: Update trainer course creation workflow, submit course after course builder step completion
+- ded539b: Allow org admin of main organisation to view statistics about affiliated orgs.
+- 059d40a: Create main/affiliated organisations relationships.
+- 0037eb9: Create organisation as internal user
+- a2a9027: Allow internal users to add affiliated organisations
+- ed12301: Allow org key contact to view participants' attendance
+- 9ac35a4: Adjust main organisation dashboard for ANZ.
+- 1d30579: Create organisation as external user
+
+### Patch Changes
+
+- 774b0d9: Fix more info link on booking review page
+- c707ab6: Increase retry times and interval for go1 link endpoint
+- 1535c7e: Do not require onboarding on invite accept
+- 62ca31a: Replace Pass grade with Non Physical grade on Level 1 Virtual courses
+- 9430b8f: Remove right to withdrawal on footer
+- d3a7789: Assign by default 'user' role
+- 7a6c937: Filter orders by course residing country
+- 8d841e0: Do not re-throw course exception when trainer edit foreign course
+- f79621d: Fix orders filter by country
+- 54885df: Restrict creation of Closed L1 Virtual blended learning & reaccreditation course
+- 25b7f77: Fix negative VAT
+- a7eae8f: Allow create venue without postcode for admin role
+- e1432f1: Trim Promo Code on duplicate validation
+
 ## 4.8.0
 
 ### Minor Changes
