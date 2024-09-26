@@ -384,6 +384,7 @@ export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
 export const buildCourse = build<Course>({
   fields: {
     id: perBuild(() => chance.integer({ min: 10000 })),
+    attendeesCount: { aggregate: { count: 0 } },
     name: perBuild(() => chance.sentence({ words: 5 })),
     status: Course_Status_Enum.Scheduled,
     createdAt: new Date().toISOString(),
@@ -412,6 +413,7 @@ export const buildCourse = build<Course>({
         count: 0,
       },
     },
+    participantsPendingInvites: { aggregate: { count: 0 } },
     modulesAgg: { aggregate: { count: 0 } },
     moduleGroupIds: [],
     bookingContactInviteData: undefined,

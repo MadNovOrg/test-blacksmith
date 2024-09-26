@@ -34,6 +34,8 @@ export type Course = {
   // TODO: Delete this after Arlo migration
   arloReferenceId?: string
   id: number
+  attendeesCount?: { aggregate: { count: number } }
+  participantsPendingInvites?: { aggregate: { count: number } }
   createdAt: string
   createdById?: string
   updatedAt?: string

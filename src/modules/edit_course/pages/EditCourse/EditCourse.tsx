@@ -152,7 +152,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     data: courseInfo,
     status: courseStatus,
     mutate: mutateCourse,
-  } = useCourse(id ?? '', { includeCreatedById: acl.isTrainer() })
+  } = useCourse(id ?? '', {
+    includeCreatedById: acl.isTrainer(),
+    includePendingInvitesCount: true,
+  })
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry } = useWorldCountries()
 
@@ -929,6 +932,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     trainerRatioNotMet={showTrainerRatioWarning}
                     allowCourseEditWithoutScheduledPrice={
                       setAllowCourseEditWithoutScheduledPrice
+                    }
+                    currentNumberOfParticipantsAndInvitees={
+                      (course?.attendeesCount?.aggregate.count ?? 0) +
+                      (course?.participantsPendingInvites?.aggregate.count ?? 0)
                     }
                   />
                 </Box>

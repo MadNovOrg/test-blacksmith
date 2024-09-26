@@ -13,6 +13,7 @@ export type ParamsType = {
   withOrders?: boolean
   withArloRefId: boolean
   withParticipants?: boolean
+  withParticipantsPendingInvitesCount?: boolean
   withInternationalFinance?: boolean
   withFreeCourseCourseMaterials?: boolean
   withCreatedById?: boolean
@@ -32,6 +33,7 @@ export const QUERY = gql`
     $withInternationalFinance: Boolean = false
     $withFreeCourseCourseMaterials: Boolean = false
     $withCreatedById: Boolean = false
+    $withParticipantsPendingInvitesCount: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
@@ -195,6 +197,14 @@ export const QUERY = gql`
       }
       courseExceptions {
         exception
+      }
+
+      participantsPendingInvites: course_invites_aggregate(
+        where: { status: { _eq: PENDING } }
+      ) @include(if: $withParticipantsPendingInvitesCount) {
+        aggregate {
+          count
+        }
       }
     }
   }

@@ -1583,6 +1583,100 @@ describe(EditCourse.name, () => {
     })
   })
 
+  it('displays error message if number of max participants is less than the sum of participants count and pending invites count', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Closed,
+        residingCountry: 'GB-ENG', // specifically set the country to UK
+        accreditedBy: Accreditors_Enum.Icm,
+        max_participants: 5,
+        free_course_materials: 2,
+        attendeesCount: { aggregate: { count: 2 } },
+        participantsPendingInvites: { aggregate: { count: 2 } },
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === COURSE_PRICE_QUERY) {
+          return fromValue<{ data: CoursePriceQuery }>({
+            data: {
+              coursePrice: [
+                {
+                  level: Course_Level_Enum.Level_1,
+                  type: Course_Type_Enum.Closed,
+                  blended: false,
+                  reaccreditation: false,
+                  pricingSchedules: [
+                    {
+                      priceAmount: 150,
+                      priceCurrency: Currency.Aud,
+                    },
+                  ],
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: closedCourse.id,
+              level: Course_Level_Enum.Level_1,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] },
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+
+    await userEvent.clear(maxParticipantsInput)
+    await userEvent.type(maxParticipantsInput, '3')
+
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    expect(
+      screen.queryByText(
+        t('components.course-form.min-required-max-participants'),
+      ),
+    ).toBeInTheDocument()
+  })
+
   it('mandatory course materials should display correctly', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const startDate = addDays(new Date(), 2)

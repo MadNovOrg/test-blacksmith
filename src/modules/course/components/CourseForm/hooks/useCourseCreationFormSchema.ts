@@ -34,6 +34,7 @@ interface Props {
   isCreation: boolean
   courseType: Course_Type_Enum
   trainerRatioNotMet?: boolean
+  currentNumberOfParticipantsAndInvitees?: number
 }
 
 const accountCodeValue = getAccountCode()
@@ -43,6 +44,7 @@ export const useCourseCreationFormSchema = ({
   isCreation,
   courseType,
   trainerRatioNotMet,
+  currentNumberOfParticipantsAndInvitees = 0,
 }: Props) => {
   const { t } = useTranslation()
   const { acl, profile } = useAuth()
@@ -265,6 +267,24 @@ export const useCourseCreationFormSchema = ({
                   return true
                 }
               },
+            )
+            .test(
+              'min-required-max-participants',
+              t('components.course-form.min-required-max-participants'),
+              maxParticipantsVal => {
+                if (isCreation) return true
+
+                if (
+                  maxParticipantsVal &&
+                  currentNumberOfParticipantsAndInvitees
+                ) {
+                  return (
+                    maxParticipantsVal >= currentNumberOfParticipantsAndInvitees
+                  )
+                }
+
+                return true
+              },
             ),
           usesAOL: yup.boolean(),
           aolCountry: yup
@@ -407,12 +427,13 @@ export const useCourseCreationFormSchema = ({
       isOpenCourse,
       isClosedCourse,
       isIndirectCourse,
-      countriesCodesWithUKs,
       hasMinParticipants,
       isCreation,
       courseInput?.maxParticipants,
       courseInput?.startDate,
       courseInput?.accreditedBy,
+      countriesCodesWithUKs,
+      currentNumberOfParticipantsAndInvitees,
       acl,
       trainerRatioNotMet,
       courseType,

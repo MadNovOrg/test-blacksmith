@@ -67,6 +67,7 @@ interface Props {
   }>
   trainerRatioNotMet?: boolean
   allowCourseEditWithoutScheduledPrice?: Dispatch<SetStateAction<boolean>>
+  currentNumberOfParticipantsAndInvitees?: number
 }
 
 export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
@@ -78,15 +79,18 @@ export const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   methodsRef,
   trainerRatioNotMet,
   allowCourseEditWithoutScheduledPrice = noop,
+  currentNumberOfParticipantsAndInvitees = 0,
 }) => {
   const { t } = useTranslation()
   const { acl, profile } = useAuth()
   const { isUKCountry } = useWorldCountries()
+
   const { methods } = useCourseCreationFormSchema({
     courseInput,
     isCreation,
     courseType,
     trainerRatioNotMet,
+    currentNumberOfParticipantsAndInvitees,
   })
   // Used for:
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
