@@ -60368,6 +60368,16 @@ export type GetDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string
 
 export type GetDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
 
+export type GetAnzDistinctCourseResidingCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAnzDistinctCourseResidingCountriesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', residingCountry?: string | null }> };
+
+export type GetAnzDistinctCourseVenueCountriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAnzDistinctCourseVenueCountriesQuery = { __typename?: 'query_root', venue: Array<{ __typename?: 'venue', countryCode?: string | null }> };
+
 export type GetDistinctOrgResidingCountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 

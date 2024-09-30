@@ -11,9 +11,12 @@ import {
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import {
+  GET_ANZ_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY,
+  GET_ANZ_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY,
   GET_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY,
   GET_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY,
 } from '@app/components/filters/FilterByCourseResidingCountry/queries/get-distinct-course-countries'
+import { useAuth } from '@app/context/auth'
 import {
   GetDistinctCourseResidingCountriesQuery,
   GetDistinctCourseResidingCountriesQueryVariables,
@@ -31,11 +34,14 @@ export const FilterByCourseResidingCountry: React.FC<
   React.PropsWithChildren<Props>
 > = ({ onChange = noop, saveOnPageRefresh = true }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const { getLabel: getCountryLabel } = useWorldCountries()
 
-  const { countriesCodesWithUKs } = useWorldCountries()
+  const { ANZCountriesCodes, countriesCodesWithUKs } = useWorldCountries()
   const CourseResidingCountryParam = withDefault(
-    createEnumArrayParam<string>(countriesCodesWithUKs),
+    createEnumArrayParam<string>(
+      acl.isAustralia() ? ANZCountriesCodes : countriesCodesWithUKs,
+    ),
     [] as string[],
   )
   const [venueCountries, setVenueCountries] = useState<string[]>([])
@@ -44,7 +50,9 @@ export const FilterByCourseResidingCountry: React.FC<
     GetDistinctCourseResidingCountriesQuery,
     GetDistinctCourseResidingCountriesQueryVariables
   >({
-    query: GET_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY,
+    query: acl.isAustralia()
+      ? GET_ANZ_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY
+      : GET_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY,
     requestPolicy: 'cache-and-network',
   })
 
@@ -52,7 +60,9 @@ export const FilterByCourseResidingCountry: React.FC<
     GetDistinctCourseVenueCountriesQuery,
     GetDistinctCourseVenueCountriesQueryVariables
   >({
-    query: GET_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY,
+    query: acl.isAustralia()
+      ? GET_ANZ_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY
+      : GET_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY,
     requestPolicy: 'cache-and-network',
   })
 
