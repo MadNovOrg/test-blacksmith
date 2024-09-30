@@ -454,7 +454,9 @@
       "free-spaces_one": "Free space x {{count}}",
       "free-spaces_other": "Free spaces x {{count}}",
       "vat": "VAT (20%)",
+      "gst": "GST (10%)",
       "no-vat": "VAT (0%)",
+      "no-gst": "GST (0%)",
       "local-time-mention": "(local time)",
       "amount-due": "Amount due {{currency}}",
       "caption": {
@@ -1298,7 +1300,7 @@
     "email-alert": "Please make sure the email is entered correctly.",
     "save-organization": "Save organisation",
     "edit-main-with-affiliate-warning": "The Residing Country cannot be edited because the organisation has affiliates linked to the current residing country.",
-    "edit-affiliated-warning":"The Residing Country cannot be edited because the main organisation must reside in the same country as an affiliate organisation." 
+    "edit-affiliated-warning": "The Residing Country cannot be edited because the main organisation must reside in the same country as an affiliate organisation."
   },
   "org-details": {
     "org-not-found": "Organisation not found.",
@@ -1378,7 +1380,7 @@
         },
         "remove-affiliate": {
           "title": "Unlink organisations",
-          "description":"Unlinking organisations will make them standalone and unaffiliated. All Blended Learning licenses associated to their previous affiliation will be unavailable.",
+          "description": "Unlinking organisations will make them standalone and unaffiliated. All Blended Learning licenses associated to their previous affiliation will be unavailable.",
           "close-button": "Close",
           "confirm-button": "Confirm",
           "label": "Manage Selected",

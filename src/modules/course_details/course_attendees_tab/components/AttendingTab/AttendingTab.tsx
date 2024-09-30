@@ -26,7 +26,7 @@ import {
   SendCourseInformationMutationVariables,
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
-import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/CourseDetailsFilters'
+import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters'
 import { CancelAttendeeDialog } from '@app/modules/course_details/course_attendees_tab/components/CancelAttendeeDialog'
 import { ManageAttendanceMenu } from '@app/modules/course_details/course_attendees_tab/components/ManageAttendanceMenu'
 import {

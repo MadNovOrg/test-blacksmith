@@ -5,14 +5,16 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
+import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Currency } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import useTimeZones from '@app/hooks/useTimeZones'
-import { InvoiceDetails } from '@app/modules/course/components/CourseForm/InvoiceDetails'
+import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
 import { TransportMethod } from '@app/types'
 import {
   getFreeCourseMaterialsCost,
+  getGSTAmount,
   getMandatoryCourseMaterialsCost,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
@@ -26,9 +28,14 @@ import { PageRow } from './PageRow'
 
 export const OrderDetailsReview: React.FC = () => {
   const { t } = useTranslation()
-  const { isUKCountry } = useWorldCountries()
+  const { isUKCountry, isAustraliaCountry } = useWorldCountries()
   const { courseData, courseName, trainers, expenses, invoiceDetails } =
     useCreateCourse()
+
+  const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
+  const {
+    acl: { isAustralia },
+  } = useAuth()
 
   const currency = courseData?.priceCurrency ?? defaultCurrency
 
@@ -147,23 +154,32 @@ export const OrderDetailsReview: React.FC = () => {
         .add(courseMaterialsCost)
         .add(freeCourseMaterialsCost)
 
-      const vat = new Big(
-        courseData.includeVAT || isUKCountry(courseData?.residingCountry)
-          ? getVatAmount(
-              subtotal
-                .minus(courseMaterialsCost)
-                .minus(freeCourseMaterialsCost)
-                .toNumber(),
-            )
-          : 0,
-      )
-      const amountDue = subtotal.add(vat)
+      const totalWithTax = subtotal
+        .minus(courseMaterialsCost)
+        .minus(freeCourseMaterialsCost)
+        .toNumber()
+
+      const vat = () => {
+        if (
+          isAustralia() &&
+          (courseData.includeVAT ||
+            isAustraliaCountry(courseData?.residingCountry))
+        ) {
+          return getGSTAmount(totalWithTax)
+        }
+
+        if (courseData.includeVAT || isUKCountry(courseData?.residingCountry)) {
+          return getVatAmount(totalWithTax)
+        }
+        return 0
+      }
+      const amountDue = subtotal.add(new Big(vat()))
 
       return [
         courseBasePrice.round().toNumber(),
         subtotal.round().toNumber(),
         freeSpacesDiscount.round().toNumber(),
-        vat.round().toNumber(),
+        new Big(vat()).round().toNumber(),
         amountDue.round().toNumber(),
       ]
     }, [
@@ -172,6 +188,8 @@ export const OrderDetailsReview: React.FC = () => {
       courseMaterialsCost,
       freeCourseMaterialsCost,
       isUKCountry,
+      isAustralia,
+      isAustraliaCountry,
     ])
 
   const courseVenue = courseData?.venue
@@ -190,6 +208,19 @@ export const OrderDetailsReview: React.FC = () => {
   const courseTimezone = courseData?.timeZone
     ? courseData?.timeZone.timeZoneId
     : undefined
+
+  const taxType = () => {
+    if (isAustralia()) {
+      return {
+        withTax: 'pages.create-course.review-and-confirm.gst',
+        withoutTax: 'pages.create-course.review-and-confirm.no-gst',
+      }
+    }
+    return {
+      withTax: 'pages.create-course.review-and-confirm.vat',
+      withoutTax: 'pages.create-course.review-and-confirm.no-vat',
+    }
+  }
 
   return (
     <Stack spacing="2px">
@@ -350,8 +381,8 @@ export const OrderDetailsReview: React.FC = () => {
             label={t(
               courseData?.includeVAT ||
                 courseData?.accreditedBy === Accreditors_Enum.Bild
-                ? 'pages.create-course.review-and-confirm.vat'
-                : 'pages.create-course.review-and-confirm.no-vat',
+                ? taxType().withTax
+                : taxType().withoutTax,
             )}
             value={t('common.currency', { amount: vat, currency })}
             testId="vat-row"

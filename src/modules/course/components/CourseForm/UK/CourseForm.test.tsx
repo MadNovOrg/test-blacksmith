@@ -12,17 +12,25 @@ import {
 import { act, render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { renderForm } from './test-utils'
+import { renderForm } from '../test-utils'
 
-import { CourseForm } from '.'
+import { UkCourseForm } from '.'
 
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
 
+vi.mock('@app/components/OrgSelector/UK', () => ({
+  OrgSelector: vi.fn(() => <p>Org Selector</p>),
+}))
+
+vi.mock('@app/components/VenueSelector', () => ({
+  VenueSelector: vi.fn(() => <p>Venue Selector</p>),
+}))
+
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
-describe('component: CourseForm', () => {
+describe('component: UkCourseForm', () => {
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
       priceCurrency: 'GBP',
@@ -32,7 +40,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if F2F delivery type', async () => {
     await waitFor(() => {
-      renderForm(Course_Type_Enum.Closed)
+      renderForm({ type: Course_Type_Enum.Closed })
     })
 
     await userEvent.click(screen.getByLabelText('Face to face'))
@@ -42,7 +50,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if VIRTUAL delivery type', async () => {
     await waitFor(() => {
-      renderForm(Course_Type_Enum.Closed)
+      renderForm({ type: Course_Type_Enum.Closed })
     })
 
     await userEvent.click(screen.getByLabelText('Virtual'))
@@ -52,7 +60,7 @@ describe('component: CourseForm', () => {
 
   it('displays venue selector if MIXED delivery type', async () => {
     await waitFor(() => {
-      renderForm(Course_Type_Enum.Closed)
+      renderForm({ type: Course_Type_Enum.Closed })
     })
 
     await userEvent.click(screen.getByLabelText('Both'))
@@ -62,7 +70,7 @@ describe('component: CourseForm', () => {
 
   it('displays organisation selector and booking contact user selector if course type is closed', async () => {
     await waitFor(() => {
-      renderForm(Course_Type_Enum.Closed)
+      renderForm({ type: Course_Type_Enum.Closed })
     })
 
     expect(screen.getByText('Org Selector')).toBeInTheDocument()
@@ -76,7 +84,7 @@ describe('component: CourseForm', () => {
 
     await waitFor(() => {
       render(
-        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
+        <UkCourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {
             activeCertificates: [Course_Level_Enum.IntermediateTrainer],
@@ -113,7 +121,7 @@ describe('component: CourseForm', () => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
     await waitFor(() => {
-      renderForm(Course_Type_Enum.Closed)
+      renderForm({ type: Course_Type_Enum.Closed })
     })
 
     act(() => {

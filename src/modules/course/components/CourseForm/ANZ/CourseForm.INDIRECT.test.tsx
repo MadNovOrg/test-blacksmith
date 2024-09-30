@@ -7,11 +7,11 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { screen, userEvent, waitFor, within } from '@test/index'
 
-import { renderForm, selectDelivery, selectLevel } from './test-utils'
+import { renderForm, selectLevel, selectDelivery } from '../test-utils'
 
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
@@ -26,17 +26,18 @@ const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('component: CourseForm - INDIRECT', () => {
   const type = Course_Type_Enum.Indirect
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
 
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
-      priceCurrency: 'GBP',
+      priceCurrency: 'AUD',
       priceAmount: 100,
     })
   })
 
   // Delivery
   it('allows INDIRECT+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
 
@@ -46,7 +47,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+LEVEL_2 to be F2F or MIXED', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
 
@@ -56,7 +57,12 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+ADVANCED to be F2F', async () => {
-    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.AdvancedTrainer,
+      }),
+    )
 
     await selectLevel(Course_Level_Enum.Advanced)
 
@@ -67,7 +73,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
   // Blended
   it('allows INDIRECT+LEVEL_1+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -81,7 +87,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+LEVEL_1+MIXED to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -92,7 +98,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_1+VIRTUAL to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Virtual)
@@ -106,7 +112,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_2+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -120,7 +126,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+LEVEL_2+MIXED to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -131,7 +137,12 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('restricts INDIRECT+ADVANCED+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.AdvancedTrainer,
+      }),
+    )
 
     await selectLevel(Course_Level_Enum.Advanced)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -143,7 +154,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
   // Reaccreditation
   it('allows INDIRECT+LEVEL_1+F2F to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -156,7 +167,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_1+MIXED to be Reaccreditation but not Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -173,7 +184,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_1+VIRTUAL to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Virtual)
@@ -186,7 +197,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_2+F2F to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -199,7 +210,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   it('allows INDIRECT+LEVEL_2+MIXED to be Reaccreditation but not Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -226,7 +237,7 @@ describe('component: CourseForm - INDIRECT', () => {
       async level => {
         useFeatureFlagEnabledMock.mockReturnValue(true)
 
-        renderForm(type, level)
+        renderForm({ type, certificateLevel: level })
 
         const select = screen.getByTestId('course-level-select')
         await userEvent.click(within(select).getByRole('button'))
@@ -239,7 +250,10 @@ describe('component: CourseForm - INDIRECT', () => {
     it('show Level 1 Behaviour Support for trainers with Foundation Trainer Plus certificate', async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(type, Course_Level_Enum.FoundationTrainerPlus)
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainerPlus,
+      })
 
       const select = screen.getByTestId('course-level-select')
       await userEvent.click(within(select).getByRole('button'))
@@ -251,7 +265,10 @@ describe('component: CourseForm - INDIRECT', () => {
     it('allows re-accreditation to be selected', async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(type, Course_Level_Enum.FoundationTrainerPlus)
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainerPlus,
+      })
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
 
@@ -264,7 +281,10 @@ describe('component: CourseForm - INDIRECT', () => {
     it('allows Face to face and Mixed delivery type, but not Virtual', async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(type, Course_Level_Enum.FoundationTrainerPlus)
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainerPlus,
+      })
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
 
@@ -273,38 +293,42 @@ describe('component: CourseForm - INDIRECT', () => {
       expect(screen.getByLabelText('Both')).toBeEnabled()
     })
 
-    it('preselects course residing country to England if an internal role creates the course', async () => {
+    it('preselects course residing country to Australia if an internal role creates the course', async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(type, Course_Level_Enum.IntermediateTrainer, RoleName.TT_ADMIN)
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.IntermediateTrainer,
+        role: RoleName.TT_ADMIN,
+      })
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
 
       const country = screen.getByLabelText('Course Residing Country')
-      expect(country).toHaveValue('England')
+      expect(country).toHaveValue('Australia')
     })
 
     it("preselects course residing country to trainer's country if they have the trainer role selected", async () => {
       useFeatureFlagEnabledMock.mockReturnValue(true)
 
-      renderForm(
+      renderForm({
         type,
-        Course_Level_Enum.FoundationTrainerPlus,
-        RoleName.TRAINER,
-        {
-          countryCode: 'MD',
+        certificateLevel: Course_Level_Enum.FoundationTrainerPlus,
+        role: RoleName.TRAINER,
+        profile: {
+          countryCode: 'AU',
         },
-      )
+      })
 
       await selectLevel(Course_Level_Enum.Level_1Bs)
 
       const country = screen.getByLabelText('Course Residing Country')
-      expect(country).toHaveValue('Moldova, Republic of')
+      expect(country).toHaveValue('Australia')
     })
   })
 
   it('allows changing the residing country', async () => {
-    renderForm(type)
+    renderForm({ type })
 
     expect(
       screen.getByLabelText(t('components.course-form.residing-country')),

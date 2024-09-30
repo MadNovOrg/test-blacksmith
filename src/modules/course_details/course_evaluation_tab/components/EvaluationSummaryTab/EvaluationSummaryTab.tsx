@@ -32,8 +32,8 @@ import {
   GetEvaluationsQueryVariables,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/CourseDetailsFilters'
-import { OrgAndName } from '@app/modules/course/components/CourseForm/CourseDetailsFilters/utils'
+import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters'
+import { OrgAndName } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters/utils'
 import { QUERY as GET_EVALUATION_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-evaluations'
 import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { Course, SortOrder } from '@app/types'

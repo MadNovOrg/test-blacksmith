@@ -3,7 +3,7 @@ import { type FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { defaultCurrency } from '@app/components/CurrencySelector'
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { ExpensesInput, TransportMethod } from '@app/types'
 import { getTrainerSubsistenceCost } from '@app/util'
 
@@ -24,6 +24,7 @@ export const ExpensesDetails: FC<ExpensesDetailsProps> = ({
   const { t } = useTranslation()
   const { isUKCountry } = useWorldCountries()
   const { courseData } = useCreateCourse()
+  const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
   const currency = courseData?.priceCurrency ?? defaultCurrency
 
   const accommodationRow = useMemo(() => {

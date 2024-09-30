@@ -5,6 +5,7 @@ import { useQuery, gql } from 'urql'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   CoursePriceQuery,
@@ -61,18 +62,31 @@ export function useCoursePrice(courseData?: {
   blended: boolean
   maxParticipants: number | null
 }) {
-  const { isUKCountry } = useWorldCountries()
+  const {
+    acl: { isAustralia },
+  } = useAuth()
+  const { isUKCountry, isAustraliaCountry } = useWorldCountries()
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = courseData?.accreditedBy === Accreditors_Enum.Icm
   const isCLOSEDcourse = courseData?.courseType === Course_Type_Enum.Closed
   const isLevel2 = courseData?.courseLevel === Course_Level_Enum.Level_2
   const isBlended = Boolean(courseData?.blended)
 
-  const pauseQuery =
-    !courseData ||
-    !isValid(courseData?.startDateTime) ||
-    isBILDcourse ||
-    !isUKCountry(courseData.residingCountry)
+  const pauseQuery = useMemo(() => {
+    if (isAustralia()) {
+      return (
+        !courseData ||
+        !isValid(courseData?.startDateTime) ||
+        !isAustraliaCountry(courseData.residingCountry)
+      )
+    }
+    return (
+      !courseData ||
+      !isValid(courseData?.startDateTime) ||
+      isBILDcourse ||
+      !isUKCountry(courseData.residingCountry)
+    )
+  }, [courseData, isAustralia, isAustraliaCountry, isBILDcourse, isUKCountry])
 
   const [{ data }] = useQuery<CoursePriceQuery, CoursePriceQueryVariables>({
     query: COURSE_PRICE_QUERY,

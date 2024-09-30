@@ -9,14 +9,14 @@ import {
   Controller,
 } from 'react-hook-form'
 
-import { defaultCurrency } from '@app/components/CurrencySelector'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { FindProfilesQuery } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { CourseInput, Profile, RoleName } from '@app/types'
 
-import { SourceDropdown } from '../components/SourceDropdown'
-import { DisabledFields } from '../index'
+import { DisabledFields } from '../..'
+import { SourceDropdown } from '../SourceDropdown'
 
 interface Props {
   showSalesRepr: boolean
@@ -43,6 +43,7 @@ const BildCourseFinanceSection: React.FC<React.PropsWithChildren<Props>> = ({
   setValue,
   control,
 }) => {
+  const { defaultCurrency } = useCurrencies()
   return (
     <InfoPanel
       title={t('components.course-form.finance-section-title')}

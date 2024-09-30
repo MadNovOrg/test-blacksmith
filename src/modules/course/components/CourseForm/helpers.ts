@@ -11,7 +11,12 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { BildStrategies, CourseInput, CourseLevel } from '@app/types'
+import {
+  AwsRegions,
+  BildStrategies,
+  CourseInput,
+  CourseLevel,
+} from '@app/types'
 
 function parseTime(time: string) {
   let hours = 0
@@ -116,6 +121,7 @@ export function getLevels(
 export enum Countries_Code {
   DEFAULT_RESIDING_COUNTRY = 'GB-ENG',
   IRELAND = 'IE',
+  AUSTRALIA = 'AU',
 }
 
 export function canBeBlendedBild(
@@ -578,14 +584,21 @@ export function displayClosedCourseSalesRepr({
   accreditedBy,
   courseType,
   residingCountry,
+  region = AwsRegions.UK,
 }: {
   accreditedBy: Accreditors_Enum
   courseType: Course_Type_Enum
   residingCountry: WorldCountriesCodes
+  region?: AwsRegions
 }) {
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
   const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
+  const isAustralia = ['AU'].includes(residingCountry)
+
+  if (region === AwsRegions.Australia && isAustralia && isClosedCourse) {
+    return true
+  }
 
   if (isUKcountry && isClosedCourse && isICMcourse) {
     return true

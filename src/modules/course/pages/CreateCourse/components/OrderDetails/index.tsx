@@ -18,7 +18,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
   InvoiceForm,
   formSchema,
-} from '@app/modules/course/components/CourseForm/InvoiceForm'
+} from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'
 

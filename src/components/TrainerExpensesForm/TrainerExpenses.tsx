@@ -23,17 +23,15 @@ import { useTranslation } from 'react-i18next'
 import { DropdownMenu } from '@app/components/DropdownMenu'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  useCurrencies,
+  CurrencyKey,
+} from '@app/hooks/useCurrencies/useCurrencies'
 import { useCreateCourse } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { ExpensesInput, TrainerInput, TransportMethod } from '@app/types'
 import { DEFAULT_ACCOMMODATION_COST_PER_NIGHT, noop } from '@app/util'
-
-import {
-  CurrenciesSymbols,
-  CurrencyCode,
-  defaultCurrency,
-} from '../CurrencySelector'
 
 import { getError, transportMethodToDropdownItem } from './helpers'
 
@@ -166,9 +164,10 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { courseData } = useCreateCourse()
+  const { defaultCurrency, activeCurrencies } = useCurrencies()
   const priceCurrencySymbol =
-    CurrenciesSymbols[
-      (courseData?.priceCurrency as CurrencyCode) ?? defaultCurrency
+    activeCurrencies[
+      (courseData?.priceCurrency as CurrencyKey) ?? defaultCurrency
     ]
   const shouldShowCurrency =
     courseData?.type === Course_Type_Enum.Closed &&

@@ -1,5 +1,4 @@
 import { t } from 'i18next'
-import React from 'react'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
@@ -7,9 +6,9 @@ import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { renderForm, selectBildCategory, selectLevel } from './test-utils'
+import { renderForm, selectBildCategory, selectLevel } from '../test-utils'
 
-import { CourseForm } from '.'
+import { UkCourseForm } from '.'
 
 vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(() => <p>Org Selector</p>),
@@ -29,7 +28,7 @@ vi.mock('posthog-js/react', () => ({
 
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
-describe('CourseForm - open BILD', () => {
+describe('UkCourseForm - open BILD', () => {
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
       priceCurrency: 'GBP',
@@ -39,7 +38,7 @@ describe('CourseForm - open BILD', () => {
   ;[RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS].forEach(role => {
     it(`allows ${role} to create open BILD course`, async () => {
       await waitFor(() => {
-        render(<CourseForm type={Course_Type_Enum.Open} />, {
+        render(<UkCourseForm type={Course_Type_Enum.Open} />, {
           auth: { activeRole: role },
         })
       })
@@ -50,7 +49,7 @@ describe('CourseForm - open BILD', () => {
 
   it('displays BILD Intermediate Trainer and BILD Advanced trainer course levels', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -79,7 +78,7 @@ describe('CourseForm - open BILD', () => {
 
   it('allows face to face and mixed delivery types if BILD Intermediate trainer course', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -94,7 +93,7 @@ describe('CourseForm - open BILD', () => {
 
   it('allows only face to face delivery type if BILD Advanced trainer course', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -109,7 +108,7 @@ describe('CourseForm - open BILD', () => {
 
   it("doesn't allow blended learning on open BILD courses", async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -121,7 +120,7 @@ describe('CourseForm - open BILD', () => {
 
   it("disables reaccreditation if it's a conversion open BILD course", async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -134,7 +133,7 @@ describe('CourseForm - open BILD', () => {
 
   it("disables conversion if it's a reaccreditation course", async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -147,7 +146,7 @@ describe('CourseForm - open BILD', () => {
 
   it('displays price field for open BILD course', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Open} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -167,7 +166,7 @@ describe('CourseForm - open BILD', () => {
     'enables Virtual and Mixed delivery for %s when conversion course is selected',
     async level => {
       await waitFor(() => {
-        render(<CourseForm type={Course_Type_Enum.Closed} />, {
+        render(<UkCourseForm type={Course_Type_Enum.Closed} />, {
           auth: { activeRole: RoleName.TT_ADMIN },
         })
       })
@@ -184,7 +183,7 @@ describe('CourseForm - open BILD', () => {
   )
 
   it("doesn't allow changing residing country", async () => {
-    renderForm(Course_Type_Enum.Closed)
+    renderForm({ type: Course_Type_Enum.Closed })
     await selectBildCategory()
 
     expect(

@@ -1,5 +1,4 @@
 import { t } from 'i18next'
-import React from 'react'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
@@ -7,9 +6,9 @@ import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-import { renderForm, selectBildCategory, selectLevel } from './test-utils'
+import { renderForm, selectBildCategory, selectLevel } from '../test-utils'
 
-import { CourseForm } from '.'
+import { UkCourseForm } from '.'
 
 vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(() => <p>Org Selector</p>),
@@ -29,7 +28,7 @@ vi.mock('posthog-js/react', () => ({
 
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
-describe('CourseForm - indirect BILD', () => {
+describe('UkCourseForm - indirect BILD', () => {
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
       priceCurrency: 'GBP',
@@ -39,7 +38,7 @@ describe('CourseForm - indirect BILD', () => {
   ;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
     it(`allows ${role} to create a BILD course`, async () => {
       await waitFor(() => {
-        render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+        render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
           auth: {
             activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
             activeRole: role,
@@ -57,7 +56,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('allows a trainer with a BILD Intermediate trainer certificate to create a BILD course', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
           activeRole: RoleName.TRAINER,
@@ -74,7 +73,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('allows a trainer with an BILD Advanced trainer certificate to create a BILD course', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -91,7 +90,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it(`displays only ${Course_Level_Enum.BildRegular} course level`, async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -124,7 +123,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it("doesn't allow a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Intermediate trainer certified", async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
           activeRole: RoleName.TRAINER,
@@ -141,7 +140,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('allows a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Advanced trainer certified', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -158,7 +157,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('enables Blended learning toggle if Primary strategy is selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -182,7 +181,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('enables Virtual delivery type if Primary srategy is the only one selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -203,7 +202,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('allows both blended learning and reaccreditation toggles to be selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -228,7 +227,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it('allows mixed delivery only if primary strategy is selected', async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -250,7 +249,7 @@ describe('CourseForm - indirect BILD', () => {
 
   it("doesn't show AOL checkbox", async () => {
     await waitFor(() => {
-      render(<CourseForm type={Course_Type_Enum.Indirect} />, {
+      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
           activeRole: RoleName.TRAINER,
@@ -265,7 +264,7 @@ describe('CourseForm - indirect BILD', () => {
   })
 
   it("doesn't allow changing residing country", async () => {
-    renderForm(Course_Type_Enum.Closed)
+    renderForm({ type: Course_Type_Enum.Closed })
     await selectBildCategory()
 
     expect(

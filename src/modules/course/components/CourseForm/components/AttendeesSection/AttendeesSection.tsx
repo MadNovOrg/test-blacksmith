@@ -8,7 +8,7 @@ import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { type CourseInput } from '@app/types'
 
-import { type DisabledFields } from '..'
+import { DisabledFields } from '../..'
 
 type Props = {
   disabledFields: Set<DisabledFields>

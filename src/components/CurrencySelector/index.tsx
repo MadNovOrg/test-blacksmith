@@ -5,35 +5,20 @@ import TextField, {
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const CurrenciesCodes = {
-  ['$']: 'USD',
-  ['AUD $']: 'AUD',
-  ['NZD $']: 'NZD',
-  ['£']: 'GBP',
-  ['€']: 'EUR',
-} as const
-
-export const defaultCurrency = CurrenciesCodes['£']
-
-export type CurrenciesLabels = keyof typeof CurrenciesCodes
-export type CurrencyCode = (typeof CurrenciesCodes)[CurrenciesLabels]
-
-export const CurrenciesSymbols = Object.fromEntries(
-  Object.entries(CurrenciesCodes).map(([label, code]) => [code, label]),
-) as {
-  [key in CurrenciesLabels as (typeof CurrenciesCodes)[key]]: key
-}
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 
 const CurrencySelector = ({
   error,
   helperText,
   ...props
 }: StandardTextFieldProps) => {
-  const { t } = useTranslation()
-  const currencies = useMemo<CurrenciesLabels[]>(
-    () => Object.keys(CurrenciesCodes) as CurrenciesLabels[],
-    [],
+  const { activeCurrencies, currencyBySymbol } = useCurrencies()
+
+  const currencies = useMemo(
+    () => Object.values(activeCurrencies),
+    [activeCurrencies],
   )
+  const { t } = useTranslation()
 
   return (
     <TextField
@@ -47,7 +32,7 @@ const CurrencySelector = ({
       variant="filled"
     >
       {currencies.map(option => (
-        <MenuItem key={option} value={CurrenciesCodes[option]}>
+        <MenuItem key={option} value={currencyBySymbol[option]}>
           {option}
         </MenuItem>
       ))}

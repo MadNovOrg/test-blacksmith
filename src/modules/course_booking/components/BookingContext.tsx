@@ -14,6 +14,7 @@ import { useLocation } from 'react-router-dom'
 import { useMutation, useQuery } from 'urql'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Source_Enum,
@@ -149,6 +150,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   children,
 }) => {
   const { t } = useTranslation()
+  const {
+    acl: { isAustralia },
+  } = useAuth()
   const location = useLocation()
   const [orderId, setOrderId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
@@ -270,6 +274,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         () => Boolean(profile?.course?.residingCountry),
         () => !isUKCountry(profile?.course?.residingCountry),
       ])()
+
       // doesnt reset if booking already contains data in it
       if (pricing && !booking.participants) {
         setBooking({
@@ -277,7 +282,12 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
           participants: [],
           price: pricing.priceAmount,
           currency: pricing.priceCurrency,
-          vat: isInternationalCourse && !profile?.course?.includeVAT ? 0 : 20,
+          vat:
+            isInternationalCourse && !profile?.course?.includeVAT
+              ? 0
+              : isAustralia()
+              ? 10
+              : 20,
           promoCodes: [],
           discounts: {},
           orgId: '',
@@ -313,6 +323,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     courseHasPrice,
     courseResidingCountry,
     isBILDcourse,
+    isAustralia,
   ])
 
   useEffect(() => {

@@ -1,24 +1,21 @@
-import React from 'react'
+import { FC } from 'react'
 
+import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseForm } from '@app/modules/course/components/CourseForm'
 import useZoomMeetingUrl from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
 import { Profile, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
-vi.mock('@app/components/OrgSelector/UK', () => ({
-  OrgSelector: vi.fn(() => <p>Org Selector</p>),
-}))
+import { AnzCourseForm } from './ANZ'
+import { UkCourseForm } from './UK'
 
-vi.mock('@app/components/VenueSelector', () => ({
-  VenueSelector: vi.fn(() => <p>Venue Selector</p>),
-}))
+import { Props } from '.'
 
 export const ZOOM_MOCKED_URL = 'https://us99web.zoom.us/j/99999?pwd=mockP4ss'
 vi.mock('@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink')
@@ -66,13 +63,29 @@ export async function selectBildCategory() {
   await userEvent.click(within(screen.getByRole('listbox')).getByText(/bild/i))
 }
 
-export const renderForm = (
-  type: Course_Type_Enum,
-  certificateLevel: Course_Level_Enum = Course_Level_Enum.IntermediateTrainer,
-  role: RoleName = RoleName.USER,
-  profile?: Partial<Profile>,
-) => {
-  return render(<CourseForm type={type} isCreation={true} />, {
+export const renderForm = ({
+  type,
+  certificateLevel = Course_Level_Enum.IntermediateTrainer,
+  role = RoleName.USER,
+  profile,
+  props,
+}: {
+  type: Course_Type_Enum
+  certificateLevel?: Course_Level_Enum
+  role?: RoleName
+  profile?: Partial<Profile>
+  props?: Props
+}) => {
+  const FormToRender: FC<Props> = props => {
+    const {
+      acl: { isAustralia },
+    } = useAuth()
+    if (isAustralia()) {
+      return <AnzCourseForm {...props} />
+    }
+    return <UkCourseForm {...props} />
+  }
+  return render(<FormToRender {...props} type={type} isCreation={true} />, {
     auth: {
       activeCertificates: [certificateLevel],
       activeRole: role,

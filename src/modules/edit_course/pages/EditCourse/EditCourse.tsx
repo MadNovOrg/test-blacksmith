@@ -55,8 +55,8 @@ import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/modules/course/components/ChooseTrainers'
 import {
-  CourseForm,
   DisabledFields,
+  CourseForm,
 } from '@app/modules/course/components/CourseForm'
 import {
   hasRenewalCycle,

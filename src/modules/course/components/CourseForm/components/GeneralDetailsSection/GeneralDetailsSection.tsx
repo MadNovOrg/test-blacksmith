@@ -36,14 +36,14 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { type CourseInput } from '@app/types'
 
-import { type DisabledFields } from '..'
-import { InstructionAccordionField } from '../components/AccordionTextField'
-import { CourseLevelDropdown } from '../components/CourseLevelDropdown'
-import { StrategyToggles } from '../components/StrategyToggles/StrategyToggles'
-import { Countries_Code } from '../helpers'
-import { useCourseFormEffects } from '../hooks/useCourseFormEffects'
-import { useCoursePermissions } from '../hooks/useCoursePermissions'
-import { useSpecialInstructions } from '../hooks/useSpecialInstructions'
+import { DisabledFields } from '../..'
+import { Countries_Code } from '../../helpers'
+import { useCourseFormEffects } from '../../hooks/useCourseFormEffects'
+import { useCoursePermissions } from '../../hooks/useCoursePermissions'
+import { useSpecialInstructions } from '../../hooks/useSpecialInstructions'
+import { InstructionAccordionField } from '../AccordionTextField'
+import { CourseLevelDropdown } from '../CourseLevelDropdown'
+import { StrategyToggles } from '../StrategyToggles/StrategyToggles'
 
 import { CourseDatesSubSection } from './CourseDatesSubSection'
 import { OrganizationSubSection } from './OrganizationSubSection'
@@ -51,15 +51,21 @@ import { OrganizationSubSection } from './OrganizationSubSection'
 type Props = {
   disabledFields: Set<DisabledFields>
   isCreation?: boolean
+  withBILD?: boolean
 }
 
 export const GeneralDetailsSection = ({
   disabledFields,
   isCreation,
+  withBILD = true,
 }: Props) => {
   const { acl, profile } = useAuth()
   const theme = useTheme()
-  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+  const {
+    getLabel: getCountryLabel,
+    isUKCountry,
+    isAustraliaCountry,
+  } = useWorldCountries()
   const {
     register,
     control,
@@ -139,8 +145,10 @@ export const GeneralDetailsSection = ({
   ].includes(deliveryType)
 
   const disableBlended = useMemo(() => {
+    if (acl.isAustralia())
+      return isIndirectCourse && !isAustraliaCountry(residingCountry)
     return isIndirectCourse && !isUKCountry(residingCountry)
-  }, [isIndirectCourse, isUKCountry, residingCountry])
+  }, [isIndirectCourse, isUKCountry, residingCountry, acl, isAustraliaCountry])
 
   useEffect(() => {
     const mustChange = !canBlended && blendedLearning
@@ -263,14 +271,16 @@ export const GeneralDetailsSection = ({
                     value={`${Accreditors_Enum.Icm}`}
                     data-testid={`course-category-option-${Accreditors_Enum.Icm}`}
                   >
-                    ICM
+                    {Accreditors_Enum.Icm}
                   </MenuItem>
-                  <MenuItem
-                    value={`${Accreditors_Enum.Bild}`}
-                    data-testid={`course-category-option-${Accreditors_Enum.Bild}`}
-                  >
-                    BILD
-                  </MenuItem>
+                  {withBILD ? (
+                    <MenuItem
+                      value={`${Accreditors_Enum.Bild}`}
+                      data-testid={`course-category-option-${Accreditors_Enum.Bild}`}
+                    >
+                      {Accreditors_Enum.Bild}
+                    </MenuItem>
+                  ) : null}
                 </Select>
               )}
             />

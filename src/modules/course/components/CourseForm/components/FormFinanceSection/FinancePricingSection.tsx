@@ -16,14 +16,15 @@ import {
 } from 'react-hook-form'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import CurrencySelector, {
-  defaultCurrency,
-} from '@app/components/CurrencySelector'
+import CurrencySelector from '@app/components/CurrencySelector'
 import { InfoRow } from '@app/components/InfoPanel'
+import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { CourseInput } from '@app/types'
+import { getGSTAmount, getVatAmount } from '@app/util'
 
-import { DisabledFields } from '../index'
+import { DisabledFields } from '../..'
 
 interface Props {
   isCreateCourse: boolean
@@ -54,6 +55,10 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { isUKCountry } = useWorldCountries()
   const isLevel2 = courseLevel === Course_Level_Enum.Level_2
+  const { defaultCurrency } = useCurrencies(residingCountry)
+  const {
+    acl: { isAustralia },
+  } = useAuth()
 
   const disabledVATandCurrency = useMemo(() => {
     if (!isCreateCourse) {
@@ -76,6 +81,20 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
     () => !isUKCountry(residingCountry),
     [isUKCountry, residingCountry],
   )
+
+  const taxAmount = (price: number) => {
+    if (isAustralia()) {
+      return getGSTAmount(price)
+    }
+    return getVatAmount(price)
+  }
+
+  const taxType = () => {
+    if (isAustralia()) {
+      return t('gst')
+    }
+    return t('vat')
+  }
 
   return (
     <>
@@ -129,7 +148,7 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
                       data-testid="includeVAT-switch"
                     />
                   }
-                  label={t('vat')}
+                  label={taxType()}
                 />
               )}
             />
@@ -146,7 +165,7 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
             amount:
               Number(price ?? 0) +
               (includeVAT
-                ? new Big(((price ?? 0) * 20) / 100).round(2).toNumber()
+                ? new Big(taxAmount(price ?? 0)).round(2).toNumber()
                 : 0),
             currency: priceCurrency ?? defaultCurrency,
           })}

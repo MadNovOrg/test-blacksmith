@@ -12,7 +12,7 @@ import { useSnackbar } from '@app/context/snackbar'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
-import { InvoiceDetails } from '@app/modules/course/components/CourseForm/InvoiceDetails'
+import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'

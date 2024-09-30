@@ -349,6 +349,19 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
   }
 
+  const taxType = () => {
+    if (acl.isAustralia()) {
+      return {
+        withTax: _t('gst'),
+        withoutTax: _t('no-gst'),
+      }
+    }
+    return {
+      withTax: _t('vat'),
+      withoutTax: _t('no-vat'),
+    }
+  }
+
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Helmet>
@@ -737,7 +750,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       </ItemRow>
                       <ItemRow data-testid="order-vat">
                         <Typography color="grey.700">
-                          {t(invoice?.totalTax ? 'vat' : 'no-vat')}
+                          {invoice?.totalTax
+                            ? taxType().withTax
+                            : taxType().withoutTax}
                         </Typography>
                         <Typography color="grey.700">
                           {_t('common.currency', {

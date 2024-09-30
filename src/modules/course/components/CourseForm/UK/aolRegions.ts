@@ -1,4 +1,3 @@
-// TODO: Delete this in favor of using the values stored in the database -> `country_region` table
 export default {
   England: [
     'Barking and Dagenham',

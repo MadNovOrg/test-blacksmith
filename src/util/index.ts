@@ -800,6 +800,8 @@ export const getTrainerSubsistenceCost = (nights = 0, isUKCountry = true) =>
   isUKCountry ? nights * 30 : 0
 
 export const getVatAmount = (amount = 0) => amount * 0.2
+// Equivalent to UK VAT ( GST -> Goods and Service Tax) which is 10%
+export const getGSTAmount = (amount = 0) => amount * 0.1
 
 export const max = (...values: number[] | number[][]) => {
   const data = values.flat()

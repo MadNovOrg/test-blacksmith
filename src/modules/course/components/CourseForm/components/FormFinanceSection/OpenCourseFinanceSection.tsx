@@ -5,7 +5,7 @@ import { FieldErrors, UseFormRegister, Control } from 'react-hook-form'
 import { InfoPanel } from '@app/components/InfoPanel'
 import { CourseInput } from '@app/types'
 
-import { DisabledFields } from '..'
+import { DisabledFields } from '../..'
 
 import FinancePricingSection from './FinancePricingSection'
 

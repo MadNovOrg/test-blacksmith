@@ -22,7 +22,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
   formSchema,
   InvoiceForm,
-} from '@app/modules/course/components/CourseForm/InvoiceForm'
+} from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import orgLicensesWithHistory from '@app/queries/go1-licensing/org-licenses-with-history'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'

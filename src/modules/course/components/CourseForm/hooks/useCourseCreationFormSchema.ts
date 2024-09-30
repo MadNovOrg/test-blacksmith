@@ -8,7 +8,6 @@ import isEmail from 'validator/lib/isEmail'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { defaultCurrency } from '@app/components/CurrencySelector'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -17,6 +16,7 @@ import {
   Course_Source_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { priceFieldIsMandatory } from '@app/modules/course/pages/CreateCourse/utils'
 import { schemas, yup } from '@app/schemas'
 import { CourseInput } from '@app/types'
@@ -48,16 +48,25 @@ export const useCourseCreationFormSchema = ({
 }: Props) => {
   const { t } = useTranslation()
   const { acl, profile } = useAuth()
-  const { countriesCodesWithUKs, isUKCountry } = useWorldCountries()
+  const { countriesCodesWithUKs, isUKCountry, isAustraliaCountry } =
+    useWorldCountries()
+  const { defaultCurrency } = useCurrencies(courseInput?.residingCountry)
+
+  const defaultResidingCountry = () => {
+    if (acl.isAustralia()) {
+      return Countries_Code.AUSTRALIA
+    }
+    return Countries_Code.DEFAULT_RESIDING_COUNTRY
+  }
 
   const isCourseInUK = isUKCountry(
-    courseInput?.residingCountry ?? Countries_Code.DEFAULT_RESIDING_COUNTRY,
+    courseInput?.residingCountry ?? defaultResidingCountry(),
   )
 
   const residingCountry =
     acl.isTrainer() && profile?.countryCode
       ? profile?.countryCode
-      : Countries_Code.DEFAULT_RESIDING_COUNTRY
+      : defaultResidingCountry()
 
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isClosedCourse = courseType === Course_Type_Enum.Closed
@@ -384,8 +393,11 @@ export const useCourseCreationFormSchema = ({
             otherwise: s => s.nullable(),
           }),
           priceCurrency: yup.string().when('residingCountry', {
-            is: (residingCountry: WorldCountriesCodes) =>
-              !isIndirectCourse && !isUKCountry(residingCountry),
+            is: (residingCountry: WorldCountriesCodes) => {
+              if (acl.isAustralia() && isAustraliaCountry(residingCountry))
+                return false
+              return !isIndirectCourse && !isUKCountry(residingCountry)
+            },
             then: schema =>
               schema.required(requiredMsg(t, 'common.currency-word')),
           }),
@@ -393,24 +405,34 @@ export const useCourseCreationFormSchema = ({
             .bool()
             .nullable()
             .when('residingCountry', {
-              is: (residingCountry: WorldCountriesCodes) =>
-                !isUKCountry(residingCountry),
+              is: (residingCountry: WorldCountriesCodes) => {
+                if (acl.isAustralia() && isAustraliaCountry(residingCountry))
+                  return false
+                return !isUKCountry(residingCountry)
+              },
               then: schema =>
                 schema.required(requiredMsg(t, 'vat')).default(false),
             }),
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .when((values: CourseInput[], schema: any) => {
-          const showPriceField = priceFieldIsMandatory({
-            accreditedBy: values[0].accreditedBy as Accreditors_Enum,
-            blendedLearning: values[0].blendedLearning,
-            maxParticipants: values[0].maxParticipants ?? 0,
-            courseLevel: values[0].courseLevel as Course_Level_Enum,
-            courseType,
-            residingCountry: values[0].residingCountry as Countries_Code,
-          })
-
-          if (showPriceField) {
+          const showPriceField = () => {
+            if (
+              acl.isAustralia() &&
+              isAustraliaCountry(values[0].residingCountry)
+            ) {
+              return false
+            }
+            return priceFieldIsMandatory({
+              accreditedBy: values[0].accreditedBy as Accreditors_Enum,
+              blendedLearning: values[0].blendedLearning,
+              maxParticipants: values[0].maxParticipants ?? 0,
+              courseLevel: values[0].courseLevel as Course_Level_Enum,
+              courseType,
+              residingCountry: values[0].residingCountry as Countries_Code,
+            })
+          }
+          if (showPriceField()) {
             return schema.shape({
               price: yup
                 .number()
@@ -438,6 +460,7 @@ export const useCourseCreationFormSchema = ({
       trainerRatioNotMet,
       courseType,
       isUKCountry,
+      isAustraliaCountry,
     ],
   )
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
@@ -503,7 +526,11 @@ export const useCourseCreationFormSchema = ({
       price: courseInput?.price,
       priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
       timeZone: courseInput?.timeZone,
-      includeVAT: courseInput?.includeVAT ?? (isCreation && isCourseInUK),
+      includeVAT:
+        courseInput?.includeVAT ??
+        (isCreation &&
+          ((acl.isAustralia() && isAustraliaCountry(residingCountry)) ||
+            isCourseInUK)),
       renewalCycle: courseInput?.renewalCycle,
       residingCountry: courseInput?.residingCountry ?? residingCountry,
     }),
@@ -548,9 +575,11 @@ export const useCourseCreationFormSchema = ({
       courseType,
       isCreation,
       isCourseInUK,
+      defaultCurrency,
+      acl,
+      isAustraliaCountry,
     ],
   )
-
   const methods = useForm<CourseInput>({
     resolver: yupResolver(formSchema),
     mode: 'all',

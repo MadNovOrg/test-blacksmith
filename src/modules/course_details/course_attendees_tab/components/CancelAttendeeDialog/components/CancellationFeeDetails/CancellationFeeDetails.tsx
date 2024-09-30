@@ -16,13 +16,12 @@ import {
 } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 
-import {
-  CurrenciesSymbols,
-  CurrencyCode,
-  defaultCurrency,
-} from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { CancellationFeeType } from '@app/generated/graphql'
+import {
+  useCurrencies,
+  CurrencyKey,
+} from '@app/hooks/useCurrencies/useCurrencies'
 import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
 
 import { FormInput } from '../../types'
@@ -55,6 +54,7 @@ export const CancellationFeeDetails: React.FC<
   onSetFeeType,
 }) => {
   const { t } = useTranslation()
+  const { defaultCurrency, activeCurrencies } = useCurrencies()
 
   return (
     <Box>
@@ -142,8 +142,8 @@ export const CancellationFeeDetails: React.FC<
             endAdornment: (
               <Typography variant="body1" color="grey.600">
                 {currency
-                  ? CurrenciesSymbols[currency as CurrencyCode]
-                  : CurrenciesSymbols[defaultCurrency]}
+                  ? activeCurrencies[currency as CurrencyKey]
+                  : activeCurrencies[defaultCurrency]}
               </Typography>
             ),
           }}

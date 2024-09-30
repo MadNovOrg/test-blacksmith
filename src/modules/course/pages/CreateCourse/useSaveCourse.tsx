@@ -20,7 +20,7 @@ import {
   RemoveCourseDraftMutationVariables,
   Course_Trainer_Insert_Input,
   Course_Level_Enum,
-  Currency as CurrencyEnum,
+  Currency,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import {
@@ -40,7 +40,6 @@ import {
   CourseExpenseType,
   ExpensesInput,
   TransportMethod,
-  Currency,
 } from '@app/types'
 import { LoadingStatus, getMandatoryCourseMaterialsCost } from '@app/util'
 
@@ -54,7 +53,7 @@ const prepareExpensesData = (
   mandatoryCourseMaterialsCostEnabled: boolean,
   freeCourseMaterials: number,
   maxParticipants: number,
-  currency: CurrencyEnum,
+  currency: Currency,
 ): Array<Course_Expenses_Insert_Input> => {
   const courseExpenses: Array<Course_Expenses_Insert_Input> = []
 
@@ -63,7 +62,7 @@ const prepareExpensesData = (
       data: {
         type: CourseExpenseType.Materials,
         cost: getMandatoryCourseMaterialsCost(
-          maxParticipants - freeCourseMaterials ?? 0,
+          maxParticipants - freeCourseMaterials,
           currency,
         ),
       },
@@ -294,7 +293,9 @@ export function useSaveCourse(): {
           courseData.type === Course_Type_Enum.Closed
             ? courseData.maxParticipants
             : 0,
-        currency: courseData.priceCurrency ?? Currency.GBP,
+        currency:
+          courseData.priceCurrency ??
+          (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
         vat: calculateVATrate,
         user: {
           fullName: profile?.fullName,
@@ -453,7 +454,8 @@ export function useSaveCourse(): {
                     true,
                     courseData.freeCourseMaterials ?? 0,
                     courseData.maxParticipants ?? 0,
-                    (courseData.priceCurrency as CurrencyEnum) ?? Currency.GBP,
+                    (courseData.priceCurrency as Currency) ??
+                      (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
                   ),
                 },
               }
@@ -517,7 +519,7 @@ export function useSaveCourse(): {
         return {
           id: String(insertedCourse.id),
           courseCode: String(insertedCourse.course_code),
-          hasExceptions: exceptions.length > 0 ?? false,
+          hasExceptions: exceptions.length > 0,
           orderId: insertedCourse.orders?.length
             ? insertedCourse.orders[0].order?.id
             : undefined,

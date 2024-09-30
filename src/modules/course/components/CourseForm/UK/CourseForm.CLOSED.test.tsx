@@ -15,20 +15,20 @@ import { CourseInput, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
-import { renderForm, selectDelivery, selectLevel } from './test-utils'
+import { renderForm, selectDelivery, selectLevel } from '../test-utils'
 
-import { CourseForm } from '.'
+import { UkCourseForm } from '.'
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn(),
 }))
 
-describe('component: CourseForm - CLOSED', () => {
+describe('component: UkCourseForm - CLOSED', () => {
   const type = Course_Type_Enum.Closed
 
   // Delivery
   it('allows CLOSED+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
 
@@ -38,7 +38,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+LEVEL_2 to be F2F or MIXED', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
 
@@ -49,11 +49,11 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED to be F2F', async () => {
     await waitFor(() =>
-      renderForm(
+      renderForm({
         type,
-        Course_Level_Enum.IntermediateTrainer,
-        RoleName.TT_ADMIN,
-      ),
+        certificateLevel: Course_Level_Enum.IntermediateTrainer,
+        role: RoleName.TT_ADMIN,
+      }),
     )
 
     await selectLevel(Course_Level_Enum.Advanced)
@@ -64,7 +64,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+INTERMEDIATE_TRAINER to be F2F', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
 
@@ -74,7 +74,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED_TRAINER to be F2F', async () => {
-    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
+    await waitFor(() =>
+      renderForm({ type, certificateLevel: Course_Level_Enum.AdvancedTrainer }),
+    )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
 
@@ -85,7 +87,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   // Blended
   it('allows CLOSED+LEVEL_1+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -99,7 +101,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+LEVEL_1+MIXED to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -110,7 +112,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_1+VIRTUAL to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Virtual)
@@ -124,7 +126,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -138,7 +140,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+MIXED to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -153,11 +155,11 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('restricts CLOSED+ADVANCED+F2F to be Blended', async () => {
     await waitFor(() =>
-      renderForm(
+      renderForm({
         type,
-        Course_Level_Enum.IntermediateTrainer,
-        RoleName.TT_ADMIN,
-      ),
+        certificateLevel: Course_Level_Enum.IntermediateTrainer,
+        role: RoleName.TT_ADMIN,
+      }),
     )
 
     await selectLevel(Course_Level_Enum.Advanced)
@@ -169,7 +171,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+INTERMEDIATE_TRAINER+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -180,7 +182,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('restricts CLOSED+ADVANCED_TRAINER+F2F to be Blended', async () => {
-    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
+    await waitFor(() =>
+      renderForm({ type, certificateLevel: Course_Level_Enum.AdvancedTrainer }),
+    )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -192,7 +196,7 @@ describe('component: CourseForm - CLOSED', () => {
 
   // Reaccreditation
   it('allows CLOSED+LEVEL_1+F2F to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -205,7 +209,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_1+MIXED to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -218,7 +222,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_1+VIRTUAL to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Virtual)
@@ -231,7 +235,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+F2F to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -244,7 +248,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+LEVEL_2+MIXED to be Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
@@ -257,7 +261,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+INTERMEDIATE_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -273,7 +277,9 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows CLOSED+ADVANCED_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
-    await waitFor(() => renderForm(type, Course_Level_Enum.AdvancedTrainer))
+    await waitFor(() =>
+      renderForm({ type, certificateLevel: Course_Level_Enum.AdvancedTrainer }),
+    )
 
     await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -290,11 +296,11 @@ describe('component: CourseForm - CLOSED', () => {
 
   it('displays price field for a Level two blended closed course that has 8 or less participants', async () => {
     await waitFor(() =>
-      renderForm(
+      renderForm({
         type,
-        Course_Level_Enum.IntermediateTrainer,
-        RoleName.TT_ADMIN,
-      ),
+        certificateLevel: Course_Level_Enum.IntermediateTrainer,
+        role: RoleName.TT_ADMIN,
+      }),
     )
 
     await selectLevel(Course_Level_Enum.Level_2)
@@ -347,7 +353,7 @@ describe('component: CourseForm - CLOSED', () => {
 
     render(
       <Provider value={client}>
-        <CourseForm courseInput={{} as CourseInput} type={type} />
+        <UkCourseForm courseInput={{} as CourseInput} type={type} />
       </Provider>,
       {
         auth: {
@@ -373,7 +379,7 @@ describe('component: CourseForm - CLOSED', () => {
   })
 
   it('allows changing the residing country', async () => {
-    renderForm(type)
+    renderForm({ type })
 
     expect(
       screen.getByLabelText(t('components.course-form.residing-country')),

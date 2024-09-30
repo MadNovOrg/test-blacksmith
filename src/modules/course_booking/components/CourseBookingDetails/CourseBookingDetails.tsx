@@ -47,11 +47,11 @@ import {
   PaymentMethod,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
-import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import {
   formSchema as invoiceDetailsFormSchema,
   InvoiceForm,
-} from '@app/modules/course/components/CourseForm/InvoiceForm'
+} from '@app/modules/course/components/CourseForm/components/InvoiceForm'
+import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { schemas, yup } from '@app/schemas'
 import { InvoiceDetails, NonNullish, Profile } from '@app/types'
@@ -488,6 +488,12 @@ export const CourseBookingDetails: React.FC<
     }
   }, [courseStartDate, courseEndDate, courseTimezone])
 
+  const taxType = () => {
+    if (acl.isAustralia()) {
+      return t('custom-gst', { amount: booking.vat })
+    }
+    return t('custom-vat', { amount: booking.vat })
+  }
   return (
     <FormProvider {...methods}>
       <Helmet>
@@ -666,9 +672,7 @@ export const CourseBookingDetails: React.FC<
           </Box>
 
           <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">
-              {t('custom-vat', { amount: booking.vat })}
-            </Typography>
+            <Typography color="grey.700">{taxType()}</Typography>
             <Typography color="grey.700">
               {formatCurrency(
                 {

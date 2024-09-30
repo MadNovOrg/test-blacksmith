@@ -18,10 +18,15 @@ export const useCourseFormEffects = () => {
 
   const wasCountryAlreadyChanged = !!dirtyFields.residingCountry
 
+  const defaultResidingCountry = useCallback(() => {
+    if (acl.isAustralia()) return Countries_Code.AUSTRALIA
+    return Countries_Code.DEFAULT_RESIDING_COUNTRY
+  }, [acl])
+
   const changeCountryOnCourseLevelChange = useCallback(
     (
       newCourseLevel: string,
-      courseResidingCountry: string = Countries_Code.DEFAULT_RESIDING_COUNTRY,
+      courseResidingCountry: string = defaultResidingCountry(),
     ) => {
       if (wasCountryAlreadyChanged) return courseResidingCountry
 
@@ -34,7 +39,7 @@ export const useCourseFormEffects = () => {
 
       if (acl.isTrainer())
         if (
-          courseResidingCountry !== Countries_Code.DEFAULT_RESIDING_COUNTRY &&
+          courseResidingCountry !== defaultResidingCountry() &&
           newCourseLevel === Course_Level_Enum.Level_1Bs
         )
           return courseResidingCountry
@@ -45,9 +50,15 @@ export const useCourseFormEffects = () => {
       )
         return Countries_Code.IRELAND
 
-      return Countries_Code.DEFAULT_RESIDING_COUNTRY
+      return defaultResidingCountry()
     },
-    [wasCountryAlreadyChanged, acl, isIndirectCourse, profile?.countryCode],
+    [
+      wasCountryAlreadyChanged,
+      acl,
+      isIndirectCourse,
+      profile?.countryCode,
+      defaultResidingCountry,
+    ],
   )
 
   return {

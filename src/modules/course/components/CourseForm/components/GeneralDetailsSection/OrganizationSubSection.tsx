@@ -21,7 +21,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/modules/profile/queries/get-not-detailed-profile'
 import { RoleName, type CourseInput } from '@app/types'
 
-import { type DisabledFields } from '..'
+import { DisabledFields } from '../..'
 
 type Props = {
   disabledFields: Set<DisabledFields>

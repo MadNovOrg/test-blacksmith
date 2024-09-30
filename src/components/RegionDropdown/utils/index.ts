@@ -1,4 +1,4 @@
-import aolRegions from '@app/modules/course/components/CourseForm/aolRegions'
+import aolRegions from '@app/modules/course/components/CourseForm/UK/aolRegions'
 
 export function getAOLCountries() {
   return Object.keys(aolRegions)

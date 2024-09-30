@@ -2,7 +2,7 @@ import Big from 'big.js'
 import { type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { defaultCurrency } from '@app/components/CurrencySelector'
+import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { ExpensesInput, TransportMethod } from '@app/types'
 import { formatCurrency, getTrainerCarCostPerMile } from '@app/util'
 
@@ -26,6 +26,7 @@ const TransportExpenseRow: FC<TransportExpenseRowProps> = ({
 }) => {
   const { method, value, flightDays } = expense
   const { courseData } = useCreateCourse()
+  const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
   const currency = courseData?.priceCurrency ?? defaultCurrency
   const { t } = useTranslation()
   const amount =
@@ -79,6 +80,7 @@ const MiscellaneousExpenseRow: FC<MiscellaneousExpenseRowProps> = ({
 }) => {
   const { name, value } = expense
   const { courseData } = useCreateCourse()
+  const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
   const currency = courseData?.priceCurrency ?? defaultCurrency
   const { t } = useTranslation()
 

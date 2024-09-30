@@ -11,9 +11,9 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { type CourseInput } from '@app/types'
 
-import { CourseDatePicker } from '../components/CourseDatePicker'
-import { CourseTimePicker } from '../components/CourseTimePicker'
-import { makeDate } from '../helpers'
+import { makeDate } from '../../helpers'
+import { CourseDatePicker } from '../CourseDatePicker'
+import { CourseTimePicker } from '../CourseTimePicker'
 
 type Props = {
   isCreation?: boolean

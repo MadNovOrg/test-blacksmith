@@ -13,8 +13,8 @@ import { Course_Level_Enum, FindProfilesQuery } from '@app/generated/graphql'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { CourseInput, Profile, RoleName } from '@app/types'
 
-import { SourceDropdown } from '../components/SourceDropdown'
-import { DisabledFields } from '../index'
+import { DisabledFields } from '../..'
+import { SourceDropdown } from '../SourceDropdown'
 
 import FinancePricingSection from './FinancePricingSection'
 

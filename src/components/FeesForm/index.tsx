@@ -12,6 +12,10 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
 import { TransferFeeType } from '@app/generated/graphql'
+import {
+  useCurrencies,
+  CurrencyKey,
+} from '@app/hooks/useCurrencies/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
   ContextValue,
@@ -20,12 +24,6 @@ import {
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { customFeeFormat } from '@app/util'
-
-import {
-  CurrenciesSymbols,
-  CurrencyCode,
-  defaultCurrency,
-} from '../CurrencySelector'
 
 export const schema = yup.object({
   feeType: yup
@@ -60,6 +58,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   defaultValues,
 }) => {
   const { t, _t } = useScopedTranslation('components.fees-form')
+  const { defaultCurrency, activeCurrencies } = useCurrencies()
 
   const defaultLabels: Record<TransferFeeType, string> = {
     [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
@@ -156,8 +155,8 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
               startAdornment: (
                 <InputAdornment position="start">
                   {priceCurrency
-                    ? CurrenciesSymbols[priceCurrency as CurrencyCode]
-                    : CurrenciesSymbols[defaultCurrency]}
+                    ? activeCurrencies[priceCurrency as CurrencyKey]
+                    : activeCurrencies[defaultCurrency]}
                 </InputAdornment>
               ),
             }}

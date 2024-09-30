@@ -10,8 +10,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals"]
   },
-  "include": ["./src", "./test", "./playwright"],
+  "include": ["./src/**/*", "./test", "./playwright"],
   "extends": "./tsconfig.base.json"
 }

@@ -20,9 +20,9 @@ import {
 } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { renderForm, selectDelivery, selectLevel } from './test-utils'
+import { renderForm, selectLevel, selectDelivery } from '../test-utils'
 
-import { CourseForm } from '.'
+import { UkCourseForm } from '.'
 
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
@@ -30,7 +30,7 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
 vi.mock('posthog-js/react')
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
-describe('component: CourseForm - OPEN', () => {
+describe('component: UkCourseForm - OPEN', () => {
   const type = Course_Type_Enum.Open
   const {
     result: {
@@ -47,7 +47,7 @@ describe('component: CourseForm - OPEN', () => {
 
   // Delivery
   it('restricts OPEN+LEVEL_1 to be F2F or VIRTUAL', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
 
@@ -57,7 +57,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+INTERMEDIATE_TRAINER to be F2F', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
 
@@ -68,7 +68,7 @@ describe('component: CourseForm - OPEN', () => {
 
   it('restricts OPEN+ADVANCED_TRAINER to be F2F', async () => {
     await waitFor(() =>
-      render(<CourseForm type={type} />, {
+      render(<UkCourseForm type={type} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
@@ -84,7 +84,7 @@ describe('component: CourseForm - OPEN', () => {
 
   // Blended
   it('restricts OPEN+LEVEL_1+F2F to Non-blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -95,7 +95,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+LEVEL_1+VIRTUAL to Non-blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Virtual)
@@ -106,7 +106,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+INTERMEDIATE_TRAINER+F2F to Non-blended', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -118,7 +118,7 @@ describe('component: CourseForm - OPEN', () => {
 
   it('restricts OPEN+ADVANCED_TRAINER+F2F to Non-blended', async () => {
     await waitFor(() =>
-      render(<CourseForm type={type} />, {
+      render(<UkCourseForm type={type} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
@@ -135,7 +135,7 @@ describe('component: CourseForm - OPEN', () => {
 
   // Reaccreditation
   it('restricts OPEN+LEVEL_1+F2F to New Certificate', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -146,7 +146,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('restricts OPEN+LEVEL_1+VIRTUAL to New Certificate', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -157,7 +157,7 @@ describe('component: CourseForm - OPEN', () => {
   })
 
   it('allows OPEN+INTERMEDIATE_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
-    await waitFor(() => renderForm(type))
+    await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
@@ -172,7 +172,7 @@ describe('component: CourseForm - OPEN', () => {
 
   it('allows OPEN+ADVANCED_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
     await waitFor(() =>
-      render(<CourseForm type={type} />, {
+      render(<UkCourseForm type={type} />, {
         auth: {
           activeCertificates: [Course_Level_Enum.AdvancedTrainer],
         },
@@ -196,7 +196,7 @@ describe('component: CourseForm - OPEN', () => {
     })
     await waitFor(() =>
       render(
-        <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
+        <UkCourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {
             activeRole: RoleName.TT_ADMIN,
@@ -239,7 +239,7 @@ describe('component: CourseForm - OPEN', () => {
     })
     await waitFor(() =>
       render(
-        <CourseForm
+        <UkCourseForm
           courseInput={courseToCourseInput(course)}
           type={type}
           isCreation={true}

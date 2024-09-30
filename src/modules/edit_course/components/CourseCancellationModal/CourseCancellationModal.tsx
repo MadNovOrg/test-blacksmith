@@ -20,11 +20,6 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
-import {
-  CurrenciesSymbols,
-  CurrencyCode,
-  defaultCurrency,
-} from '@app/components/CurrencySelector'
 import { NumericTextField } from '@app/components/NumericTextField'
 import {
   CancelCourseMutation,
@@ -33,6 +28,10 @@ import {
   Course_Cancellation_Fee_Type_Enum as CourseCancelFeeTypes,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import {
+  useCurrencies,
+  CurrencyKey,
+} from '@app/hooks/useCurrencies/useCurrencies'
 import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
 import { CANCEL_COURSE_MUTATION } from '@app/modules/edit_course/queries/cancel-course'
 import { getCancellationTermsFee } from '@app/modules/edit_course/utils/shared'
@@ -69,6 +68,9 @@ export const CourseCancellationModal: React.FC<
   React.PropsWithChildren<CourseCancellationModalProps>
 > = function ({ course, onClose, onSubmit }) {
   const { t } = useTranslation()
+  const { defaultCurrency, activeCurrencies } = useCurrencies(
+    course?.residingCountry,
+  )
 
   const [feeType, setFeeType] = useState<CourseCancelFeeTypes | null>(null)
   const [reasonType, setReasonType] = useState('')
@@ -304,8 +306,8 @@ export const CourseCancellationModal: React.FC<
                 endAdornment: (
                   <Typography variant="body1" color="grey.600">
                     {course.priceCurrency
-                      ? CurrenciesSymbols[course.priceCurrency as CurrencyCode]
-                      : CurrenciesSymbols[defaultCurrency]}
+                      ? activeCurrencies[course.priceCurrency as CurrencyKey]
+                      : activeCurrencies[defaultCurrency]}
                   </Typography>
                 ),
               }}
