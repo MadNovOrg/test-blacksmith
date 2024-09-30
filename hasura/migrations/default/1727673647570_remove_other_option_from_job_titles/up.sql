@@ -1,0 +1,1 @@
+DELETE FROM job_title WHERE title = 'Other' AND shard = 'ANZ';

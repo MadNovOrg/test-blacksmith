@@ -18,6 +18,7 @@ export const UKsCountriesCodes = {
 } as const
 
 export const ExceptionsCountriesCodes = {
+  FM: 'Federated States of Micronesia',
   VN: 'Vietnam',
   XK: 'Kosovo',
 } as const
