@@ -20,7 +20,12 @@ import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/use
 import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
 import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
 import useProfile from '@app/modules/profile/hooks/useProfile'
-import { BildStrategies, ValidCourseInput, RoleName } from '@app/types'
+import {
+  BildStrategies,
+  ValidCourseInput,
+  RoleName,
+  AwsRegions,
+} from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
 import {
@@ -73,6 +78,8 @@ describe('component: CreateCourseForm', () => {
   } = renderHook(() => useTranslation())
 
   beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
 
     useZoomMeetingUrlMocked.mockReturnValue({

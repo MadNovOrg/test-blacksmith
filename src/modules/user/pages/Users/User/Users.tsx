@@ -486,6 +486,15 @@ export const Users = () => {
                 data-testid="FilterTrainerType"
               />
               <FilterByCourseLevel
+                excludedStatuses={
+                  acl.isAustralia()
+                    ? new Set([
+                        Course_Level_Enum.BildAdvancedTrainer,
+                        Course_Level_Enum.BildIntermediateTrainer,
+                        Course_Level_Enum.BildRegular,
+                      ])
+                    : undefined
+                }
                 title={t('certificate-level')}
                 onChange={setFilteredByCertificateLEvel}
               />

@@ -23,7 +23,7 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
@@ -43,6 +43,10 @@ const { t } = getI18n()
 const blendedLearningLabel = t('common.blended-learning')
 
 describe('trainers-pages/MyCourses', () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
+
   setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
   describe('Actionable courses table', () => {
@@ -1022,5 +1026,53 @@ describe('trainers-pages/MyCourses', () => {
         exclude: [course],
       })
     })
+  })
+})
+
+describe('trainers-pages/MyCourses Australia', () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+  })
+
+  beforeEach(() => {
+    expect(import.meta.env.VITE_AWS_REGION).toBe(AwsRegions.Australia)
+  })
+
+  it('do not display filter accredited by', () => {
+    const course = buildTrainerCourse()
+    const filteredCourse = buildTrainerCourse()
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const courses = variables.where?.accreditedBy?._in?.includes(
+          Accreditors_Enum.Bild,
+        )
+          ? [filteredCourse]
+          : [course]
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>,
+    )
+
+    expect(screen.queryByTestId('filter-accredited-by')).not.toBeInTheDocument()
   })
 })

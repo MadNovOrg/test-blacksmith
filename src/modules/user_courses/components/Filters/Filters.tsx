@@ -229,6 +229,15 @@ export function Filters({ forManaging = false, onChange }: Props) {
             onChange={setFilterCourseResidingCountries}
           />
           <FilterByCourseLevel
+            excludedStatuses={
+              acl.isAustralia()
+                ? new Set([
+                    Course_Level_Enum.BildAdvancedTrainer,
+                    Course_Level_Enum.BildIntermediateTrainer,
+                    Course_Level_Enum.BildRegular,
+                  ])
+                : undefined
+            }
             title={t('course-level')}
             onChange={setFilterLevel}
           />

@@ -788,7 +788,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])(),
 
     canCreateBildCourse: (type: Course_Type_Enum) => {
-      if (!activeRole) {
+      if (acl.isAustralia() || !activeRole) {
         return false
       }
 

@@ -2,6 +2,7 @@ import { setMedia } from 'mock-match-media'
 import { getI18n } from 'react-i18next'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { AwsRegions } from '@app/types'
 
 import { act, render, screen, userEvent } from '@test/index'
 
@@ -22,7 +23,11 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
 
-describe(`component: ${GeneralDetailsSection.name}`, () => {
+describe(`component: ${GeneralDetailsSection.name} UK`, () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
+
   it('validates that end date must be after start date', async () => {
     setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
@@ -164,4 +169,21 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
       ).not.toBeInTheDocument()
     },
   )
+})
+
+describe(`component: ${GeneralDetailsSection.name} Australia`, () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+  })
+
+  beforeEach(() => {
+    expect(import.meta.env.VITE_AWS_REGION).toBe(AwsRegions.Australia)
+  })
+
+  it('do not displays AOL checkbox for indirect course type', async () => {
+    renderForm(Course_Type_Enum.Indirect)
+    await selectLevel(Course_Level_Enum.Level_2)
+
+    expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
+  })
 })

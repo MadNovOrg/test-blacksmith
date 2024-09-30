@@ -289,6 +289,15 @@ export function Filters({ onChange }: Props) {
             onChange={setFilterCourseResidingCountries}
           />
           <FilterByCourseLevel
+            excludedStatuses={
+              acl.isAustralia()
+                ? new Set([
+                    Course_Level_Enum.BildAdvancedTrainer,
+                    Course_Level_Enum.BildIntermediateTrainer,
+                    Course_Level_Enum.BildRegular,
+                  ])
+                : undefined
+            }
             title={t('course-level')}
             onChange={setFilterLevel}
           />
@@ -329,12 +338,15 @@ export function Filters({ onChange }: Props) {
           )}
 
           <FilterByCourseStatusWarnings onChange={onStatusWarningChange} />
-          <FilterAccordion
-            title={t('filters.accredited-by')}
-            options={accreditedByOptions}
-            onChange={onAccreditedByChange}
-            data-testid="filter-accredited-by"
-          />
+          {acl.isUK() ? (
+            <FilterAccordion
+              title={t('filters.accredited-by')}
+              options={accreditedByOptions}
+              onChange={onAccreditedByChange}
+              data-testid="filter-accredited-by"
+            />
+          ) : null}
+
           <FilterByCourseDeliveryType onChange={setFilterDeliveryType} />
           {acl.isTrainer() || acl.isInternalUser() ? (
             <FilterByTrainerCourseType

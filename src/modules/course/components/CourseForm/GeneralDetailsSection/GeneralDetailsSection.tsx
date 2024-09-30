@@ -97,7 +97,7 @@ export const GeneralDetailsSection = ({
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
   const shouldShowAOL =
-    isIndirectCourse && isUKCountry(residingCountry) && !isBild
+    acl.isUK() && isIndirectCourse && isUKCountry(residingCountry) && !isBild
   const usesAOL =
     useWatch({ control, name: 'usesAOL' }) && shouldShowAOL && !isL1BS
 
@@ -451,7 +451,9 @@ export const GeneralDetailsSection = ({
             <>
               <TextField
                 sx={{ mt: theme.spacing(2) }}
-                label={'Arlo reference'}
+                label={
+                  acl.isAustralia() ? 'Internal reference' : 'Arlo reference'
+                }
                 variant="filled"
                 {...register(`arloReferenceId`)}
                 fullWidth

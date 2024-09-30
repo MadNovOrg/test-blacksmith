@@ -35,6 +35,7 @@ describe('CourseTitleCell', () => {
     acl: {
       canBuildCourse: vi.fn(() => true),
       isInternalUser: vi.fn(() => true),
+      isUK: vi.fn().mockReturnValue(true),
     },
     activeRole: RoleName.TRAINER,
   }

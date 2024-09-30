@@ -41,7 +41,7 @@ export function CourseTitleCell({ course }: { course: TableCourse }) {
       {course.arloReferenceId && acl.isInternalUser() ? (
         <>
           <Typography variant="body2" data-testid="arlo-reference-label">
-            Arlo reference:
+            {`${acl.isUK() ? 'Arlo' : 'Internal'} reference:`}
           </Typography>
           <Typography
             variant="body2"
