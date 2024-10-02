@@ -1,5 +1,6 @@
 import FacebookIcon from '@mui/icons-material/Facebook'
 import InstagramIcon from '@mui/icons-material/Instagram'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import YouTubeIcon from '@mui/icons-material/YouTube'
 import {
@@ -16,16 +17,21 @@ import {
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { FOOTER_HEIGHT } from '@app/theme'
 
 import { AppLogo } from '../AppLogo'
 
 export const AppFooter = () => {
   const { t } = useTranslation()
-  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
-  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const { acl } = useAuth()
+
+  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
+
+  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
 
   const links = [
     {
@@ -91,6 +97,18 @@ export const AppFooter = () => {
           <Typography color={theme.palette.common.white} mr={1}>
             {t('components.footer.follow')}
           </Typography>
+          {acl.isAustralia() ? (
+            <Link
+              href="https://www.linkedin.com/company/team-teach-asia-pacific/"
+              mr={1}
+              target="_blank"
+              component={'a'}
+              aria-label={`${t('socials.linkedIn')} (${t('opens-new-window')})`}
+            >
+              <LinkedInIcon htmlColor={theme.palette.common.white} />
+            </Link>
+          ) : null}
+
           <Link
             href="https://www.facebook.com/Team-Teach-Ltd-109897753752813/"
             mr={1}
