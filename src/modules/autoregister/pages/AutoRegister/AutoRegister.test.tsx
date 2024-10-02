@@ -238,3 +238,33 @@ describe('page: AutoRegister', () => {
     expect(orgNameSelector).toHaveValue(orgName)
   })
 })
+
+describe('page: AutoRegister ANZ', () => {
+  it('renders component correctly', () => {
+    const loadProfileMock = vi.fn().mockResolvedValue(null)
+
+    useAuthMock.mockReturnValue({
+      loadProfile: loadProfileMock,
+      acl: {
+        isAustralia: vi.fn().mockReturnValue(true),
+        isUK: vi.fn().mockReturnValue(false),
+      },
+    } as unknown as AuthContextType)
+
+    render(
+      <Provider value={createFetchingClient()}>
+        <Routes>
+          <Route path="/auto-register" element={<AutoRegisterPage />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/auto-register?token=${chance.guid()}`] },
+    )
+
+    const pageTitle = t(`common.create-free-account-ANZ`)
+    const pageTitleSelector = screen.getByTestId('page-title')
+
+    expect(pageTitleSelector).toBeInTheDocument()
+    expect(pageTitleSelector).toHaveTextContent(pageTitle)
+  })
+})

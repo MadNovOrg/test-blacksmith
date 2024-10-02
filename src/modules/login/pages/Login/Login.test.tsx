@@ -1,4 +1,7 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { AwsRegions } from '@app/types'
 
 import {
   render,
@@ -9,6 +12,7 @@ import {
   screen,
   waitForText,
   userEvent,
+  renderHook,
 } from '@test/index'
 
 import { LoginPage } from './Login'
@@ -102,5 +106,25 @@ describe('Login', () => {
     await waitForCalls(providers.auth.login, 1)
 
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true })
+  })
+})
+
+describe('Login ANZ', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+  })
+
+  it('shows ANZ login wording', async () => {
+    render(<LoginPage />)
+
+    expect(
+      screen.queryByText(t('pages.login.login-in-tt-ANZ')),
+    ).toBeInTheDocument()
   })
 })

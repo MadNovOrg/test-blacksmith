@@ -18,7 +18,7 @@ import { Form } from '../../components/Form'
 export const AutoRegisterPage: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
-  const { profile } = useAuth()
+  const { acl, profile } = useAuth()
   const { t } = useTranslation()
 
   const theme = useTheme()
@@ -67,7 +67,7 @@ export const AutoRegisterPage: React.FC<
           align={isMobile ? 'center' : 'left'}
           data-testid="page-title"
         >
-          {t('create-free-account')}
+          {t(`create-free-account${acl.isAustralia() ? '-ANZ' : ''}`)}
         </Typography>
       </Box>
 

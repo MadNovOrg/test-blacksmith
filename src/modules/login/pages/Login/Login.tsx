@@ -144,7 +144,7 @@ export const LoginPage = () => {
         variant="h3"
         sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
       >
-        {t('pages.login.login-in-tt')}
+        {t(`pages.login.login-in-tt${auth.acl.isAustralia() ? '-ANZ' : ''}`)}
       </Typography>
 
       <Box
