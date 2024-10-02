@@ -21,6 +21,7 @@ import { useSnackbar } from '@app/context/snackbar'
 import {
   BildStrategy,
   Course_Exception_Enum,
+  Course_Level_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -130,6 +131,7 @@ export const AssignTrainers = () => {
   const { addSnackbarMessage } = useSnackbar()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isAustraliaRegion = acl.isAustralia()
 
   const navigate = useNavigate()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
@@ -305,6 +307,12 @@ export const AssignTrainers = () => {
   }, [acl, courseData])
 
   const showTrainerRatioWarning = useMemo(() => {
+    if (
+      isAustraliaRegion &&
+      courseData?.courseLevel === Course_Level_Enum.FoundationTrainer
+    ) {
+      return false
+    }
     return (
       courseData?.courseLevel &&
       isTrainersRatioNotMet(
@@ -322,7 +330,7 @@ export const AssignTrainers = () => {
         })),
       )
     )
-  }, [acl, courseData, isUKCountry, trainers])
+  }, [acl, isAustraliaRegion, courseData, isUKCountry, trainers])
 
   if (!courseData) {
     return (
@@ -366,7 +374,12 @@ export const AssignTrainers = () => {
         />
 
         {showTrainerRatioWarning ? (
-          <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+          <Alert
+            severity="warning"
+            variant="outlined"
+            sx={{ mt: 1 }}
+            data-testid="trainer-ratio-exception"
+          >
             {t(
               `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
             )}

@@ -1,5 +1,6 @@
 import { addDays, addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
+import posthog from 'posthog-js'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
@@ -727,6 +728,94 @@ describe(EditCourse.name, () => {
             coursePrice: [
               {
                 level: Course_Level_Enum.Level_1,
+                type: Course_Type_Enum.Open,
+                blended: false,
+                reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 150,
+                    priceCurrency: Currency.Aud,
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      executeMutation: () =>
+        fromValue<{ data: UpdateCourseMutation }>({
+          data: {
+            updateCourse: {
+              id: openCourse.id,
+              level: Course_Level_Enum.Level_1,
+            },
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/${openCourse.id}`] },
+    )
+
+    const errorBanner = screen.queryByTestId('price-error-banner')
+    const saveButton = screen.getByTestId('save-button')
+    await userEvent.click(saveButton)
+
+    await waitFor(() => {
+      // ensure there's no price error banner shown
+      expect(errorBanner).not.toBeInTheDocument()
+
+      // ensure it succesfully navigates back to course details page
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/courses/${openCourse.id}/details`,
+      )
+    })
+  })
+
+  it('allows editing an ICM OPEN course with Australia country and Foundation Trainer Level that has a scheduled price', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+    vi.spyOn(posthog, 'getFeatureFlag').mockResolvedValue(true)
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const openCourse = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Open,
+        residingCountry: 'AU',
+        level: Course_Level_Enum.FoundationTrainer,
+        accreditedBy: Accreditors_Enum.Icm,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              timeZone: 'Australia/Sydney',
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: openCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                level: Course_Level_Enum.FoundationTrainer,
                 type: Course_Type_Enum.Open,
                 blended: false,
                 reaccreditation: false,

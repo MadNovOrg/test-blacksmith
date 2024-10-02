@@ -1369,6 +1369,7 @@ export enum CourseLevel {
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
   BildRegular = 'BILD_REGULAR',
+  FoundationTrainer = 'FOUNDATION_TRAINER',
   FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
@@ -22254,6 +22255,7 @@ export enum Course_Level_Enum {
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
   BildRegular = 'BILD_REGULAR',
+  FoundationTrainer = 'FOUNDATION_TRAINER',
   FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
@@ -26170,8 +26172,6 @@ export type Course_Pricing_Changelog_Variance_Fields = {
 
 /** unique or primary key constraints on table "course_pricing" */
 export enum Course_Pricing_Constraint {
-  /** unique or primary key constraint on columns "level", "blended", "reaccreditation", "type", "shard" */
-  CoursePricingBlendedLevelTypeReaccreditationShardKey = 'course_pricing_blended_level_type_reaccreditation_shard_key',
   /** unique or primary key constraint on columns "id" */
   CoursePricingPkey = 'course_pricing_pkey',
   /** unique or primary key constraint on columns "level", "blended", "reaccreditation", "type", "price_currency" */
@@ -44670,7 +44670,9 @@ export type Organization = {
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
+  type?: Maybe<Scalars['String']>;
   updatedAt: Scalars['timestamptz'];
+  urn?: Maybe<Scalars['String']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
 
@@ -44993,7 +44995,9 @@ export type Organization_Bool_Exp = {
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
   sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
+  type?: InputMaybe<String_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  urn?: InputMaybe<String_Comparison_Exp>;
   xeroContactId?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -45068,7 +45072,9 @@ export type Organization_Insert_Input = {
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  urn?: InputMaybe<Scalars['String']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
 };
 
@@ -45380,7 +45386,9 @@ export type Organization_Max_Fields = {
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
+  urn?: Maybe<Scalars['String']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
 
@@ -45396,7 +45404,9 @@ export type Organization_Max_Order_By = {
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
+  urn?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
 };
 
@@ -45722,7 +45732,9 @@ export type Organization_Min_Fields = {
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
+  urn?: Maybe<Scalars['String']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
 
@@ -45738,7 +45750,9 @@ export type Organization_Min_Order_By = {
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
+  urn?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
 };
 
@@ -45796,7 +45810,9 @@ export type Organization_Order_By = {
   reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
+  urn?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
 };
 
@@ -45854,7 +45870,11 @@ export enum Organization_Select_Column {
   /** column name */
   Tags = 'tags',
   /** column name */
+  Type = 'type',
+  /** column name */
   UpdatedAt = 'updatedAt',
+  /** column name */
+  Urn = 'urn',
   /** column name */
   XeroContactId = 'xeroContactId'
 }
@@ -45891,7 +45911,9 @@ export type Organization_Set_Input = {
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  urn?: InputMaybe<Scalars['String']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
 };
 
@@ -45962,7 +45984,9 @@ export type Organization_Stream_Cursor_Value_Input = {
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  urn?: InputMaybe<Scalars['String']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
 };
 
@@ -46177,7 +46201,11 @@ export enum Organization_Update_Column {
   /** column name */
   Tags = 'tags',
   /** column name */
+  Type = 'type',
+  /** column name */
   UpdatedAt = 'updatedAt',
+  /** column name */
+  Urn = 'urn',
   /** column name */
   XeroContactId = 'xeroContactId'
 }
@@ -49827,9 +49855,9 @@ export type Query_Root = {
   course_invite_status_aggregate: Course_Invite_Status_Aggregate;
   /** fetch data from the table: "course_invite_status" using primary key columns */
   course_invite_status_by_pk?: Maybe<Course_Invite_Status>;
-  /** fetch data from the table: "course_invites" */
+  /** An array relationship */
   course_invites: Array<Course_Invites>;
-  /** fetch aggregated fields from the table: "course_invites" */
+  /** An aggregate relationship */
   course_invites_aggregate: Course_Invites_Aggregate;
   /** fetch data from the table: "course_invites" using primary key columns */
   course_invites_by_pk?: Maybe<Course_Invites>;
@@ -53771,9 +53799,9 @@ export type Subscription_Root = {
   course_invite_status_by_pk?: Maybe<Course_Invite_Status>;
   /** fetch data from the table in a streaming manner: "course_invite_status" */
   course_invite_status_stream: Array<Course_Invite_Status>;
-  /** fetch data from the table: "course_invites" */
+  /** An array relationship */
   course_invites: Array<Course_Invites>;
-  /** fetch aggregated fields from the table: "course_invites" */
+  /** An aggregate relationship */
   course_invites_aggregate: Course_Invites_Aggregate;
   /** fetch data from the table: "course_invites" using primary key columns */
   course_invites_by_pk?: Maybe<Course_Invites>;

@@ -30,7 +30,6 @@ export const CourseForm: FC<Props> = props => {
   const {
     acl: { isAustralia },
   } = useAuth()
-
   if (isAustralia()) {
     return <AnzCourseForm {...props} />
   }

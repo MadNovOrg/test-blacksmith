@@ -270,6 +270,7 @@
     "BILD_REGULAR": "BILD Certified",
     "BILD_INTERMEDIATE_TRAINER": "BILD Intermediate Trainer",
     "BILD_ADVANCED_TRAINER": "BILD Advanced Trainer",
+    "FOUNDATION_TRAINER": "Foundation Trainer",
     "FOUNDATION_TRAINER_PLUS": "Foundation Trainer Plus"
   },
   "bild-strategies": {

@@ -1,3 +1,4 @@
+import posthog from 'posthog-js'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -32,6 +33,7 @@ const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: AnzCourseForm - OPEN', () => {
   vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+  vi.spyOn(posthog, 'getFeatureFlag').mockReturnValue(true)
   const type = Course_Type_Enum.Open
   const {
     result: {
@@ -83,6 +85,16 @@ describe('component: AnzCourseForm - OPEN', () => {
     expect(screen.getByLabelText('Both')).toBeDisabled()
   })
 
+  it('restricts OPEN+Foundation Trainer to be F2F', async () => {
+    await waitFor(() => renderForm({ type }))
+
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
+
+    expect(screen.getByLabelText('Face to face')).toBeDisabled()
+    expect(screen.getByLabelText('Virtual')).toBeEnabled()
+    expect(screen.getByLabelText('Both')).toBeEnabled()
+  })
+
   // Blended
   it('restricts OPEN+LEVEL_1+F2F to Non-blended', async () => {
     await waitFor(() => renderForm({ type }))
@@ -111,6 +123,16 @@ describe('component: AnzCourseForm - OPEN', () => {
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
+
+    const blended = screen.getByLabelText('Blended learning')
+    expect(blended).toBeDisabled()
+    expect(blended).not.toBeChecked()
+  })
+
+  it('restricts OPEN+FoundationTrainer to Non-blended', async () => {
+    await waitFor(() => renderForm({ type }))
+
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -162,6 +184,34 @@ describe('component: AnzCourseForm - OPEN', () => {
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
+
+    const reacc = screen.getByLabelText('Reaccreditation')
+    expect(reacc).toBeEnabled()
+    expect(reacc).not.toBeChecked()
+
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows OPEN+FoundationTrainer+Mixed to New Certificate and Reaccreditation', async () => {
+    await waitFor(() => renderForm({ type }))
+
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
+
+    const reacc = screen.getByLabelText('Reaccreditation')
+    expect(reacc).toBeEnabled()
+    expect(reacc).not.toBeChecked()
+
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows OPEN+FoundationTrainer+Virtual to New Certificate and Reaccreditation', async () => {
+    await waitFor(() => renderForm({ type }))
+
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
 
     const reacc = screen.getByLabelText('Reaccreditation')
     expect(reacc).toBeEnabled()

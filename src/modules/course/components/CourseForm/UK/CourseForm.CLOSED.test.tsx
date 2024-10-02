@@ -11,7 +11,7 @@ import {
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
-import { CourseInput, RoleName } from '@app/types'
+import { AwsRegions, CourseInput, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -24,6 +24,7 @@ vi.mock('posthog-js/react', () => ({
 }))
 
 describe('component: UkCourseForm - CLOSED', () => {
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
   const type = Course_Type_Enum.Closed
 
   // Delivery

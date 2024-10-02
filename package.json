@@ -46,6 +46,8 @@
     "hasura:migrate:apply": "pnpm hasura migrate apply",
     "hasura:migrate:all:up": "pnpm hasura migrate apply --database-name default",
     "hasura:migrate:all:down": "pnpm hasura migrate apply --type down --version 101 --database-name default",
+    "hasura:migrate:down": "pnpm hasura migrate apply --down",
+    "hasura:migrate:down:au": "pnpm hasura migrate apply --endpoint http://localhost:8081 --down",
     "hasura:squash": "pnpm hasura migrate squash",
     "hasura:seed:apply": "pnpm hasura seed apply --database-name default",
     "hasura:console:au": "pnpm hasura console --endpoint http://localhost:8081 --console-port 9696",

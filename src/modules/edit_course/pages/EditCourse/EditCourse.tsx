@@ -129,6 +129,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { profile, acl, activeRole } = useAuth()
   const navigate = useNavigate()
+  const isAustraliaRegion = acl.isAustralia()
 
   const [courseData, setCourseData] = useState<CourseInput>()
   const [courseDataValid, setCourseDataValid] = useState(false)
@@ -796,7 +797,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       !courseData?.courseLevel ||
       !courseData?.type ||
       !courseData?.maxParticipants ||
-      !courseData?.accreditedBy
+      !courseData?.accreditedBy ||
+      (isAustraliaRegion &&
+        courseData.courseLevel === Course_Level_Enum.FoundationTrainer)
     )
       return false
 
@@ -832,6 +835,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [
     acl,
     courseData,
+    isAustraliaRegion,
     isUKCountry,
     trainersData?.assist,
     trainersData?.lead,

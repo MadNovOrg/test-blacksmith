@@ -1,5 +1,6 @@
 import { format, getYear, isBefore, isEqual, isValid } from 'date-fns'
 import { TFunction } from 'i18next'
+import posthog from 'posthog-js'
 
 import {
   UKsCountriesCodes,
@@ -10,13 +11,9 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
-} from '@app/generated/graphql'
-import {
-  AwsRegions,
-  BildStrategies,
-  CourseInput,
   CourseLevel,
-} from '@app/types'
+} from '@app/generated/graphql'
+import { AwsRegions, BildStrategies, CourseInput } from '@app/types'
 
 function parseTime(time: string) {
   let hours = 0
@@ -59,7 +56,54 @@ export function isEndDateTimeBeforeStartDateTime(
     )
   }
 }
+export function getANZLevels(courseType: Course_Type_Enum) {
+  const types = {
+    [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Open}`]: () => {
+      const baseLevels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
+      ]
 
+      const expanedLevels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.FoundationTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
+      ]
+      return posthog.getFeatureFlag('foundation-trainer-level')
+        ? expanedLevels
+        : baseLevels
+    },
+
+    [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Closed}`]: () => {
+      return [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
+      ]
+    },
+
+    [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Indirect}`]: () => {
+      return [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+      ]
+    },
+  }
+
+  return types[`${Accreditors_Enum.Icm}-${courseType}`]()
+}
 export function getLevels(
   courseType: Course_Type_Enum,
   courseAccreditor: Accreditors_Enum,
@@ -358,6 +402,122 @@ export function canBeReacc(
   return types[courseType]()
 }
 
+export function canBeReaccANZ(
+  courseType: Course_Type_Enum,
+  courseLevel: Course_Level_Enum | '',
+  deliveryType: Course_Delivery_Type_Enum,
+  blended: boolean,
+) {
+  const isF2F = deliveryType === Course_Delivery_Type_Enum.F2F
+  const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
+  const isVirtual = deliveryType === Course_Delivery_Type_Enum.Virtual
+  const isFTEnabled = posthog.getFeatureFlag('foundation-trainer-level')
+  const types = {
+    [Course_Type_Enum.Open]: () => {
+      if (!courseLevel) return false
+
+      if (isF2F) {
+        const levels = [
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.IntermediateTrainer,
+          Course_Level_Enum.AdvancedTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
+        ]
+        if (levels.includes(courseLevel)) return !blended
+      }
+
+      if (isMixed) {
+        // OPEN + Mixed can only be Level 2 or 3-Day Safety Responses Trainer
+        const levels = [
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.FoundationTrainerPlus,
+        ]
+        if (isFTEnabled) {
+          levels.push(Course_Level_Enum.FoundationTrainer)
+        }
+        if (levels.includes(courseLevel)) return !blended
+      }
+
+      if (isVirtual && isFTEnabled) {
+        return courseLevel === Course_Level_Enum.FoundationTrainer
+      }
+
+      return false
+    },
+
+    [Course_Type_Enum.Closed]: () => {
+      if (!courseLevel) return false
+
+      if (isF2F) {
+        if (courseLevel === Course_Level_Enum.Level_1) {
+          return !blended
+        }
+
+        const levels = [
+          Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.IntermediateTrainer,
+          Course_Level_Enum.AdvancedTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
+        ]
+        return levels.includes(courseLevel)
+      }
+
+      if (isMixed) {
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.FoundationTrainerPlus,
+          Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_2,
+        ]
+        return levels.includes(courseLevel)
+      }
+
+      if (isVirtual) {
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.FoundationTrainerPlus,
+        ]
+        if (levels.includes(courseLevel)) return !blended
+      }
+
+      return false
+    },
+
+    [Course_Type_Enum.Indirect]: () => {
+      if (!courseLevel) return false
+
+      if (isF2F) {
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Level_1Bs,
+        ]
+        return levels.includes(courseLevel)
+      }
+
+      if (isMixed) {
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Level_1Bs,
+        ]
+        return levels.includes(courseLevel)
+      }
+
+      if (isVirtual) {
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_1Bs]
+        return levels.includes(courseLevel)
+      }
+
+      return false
+    },
+  }
+
+  return types[courseType]()
+}
+
 export function canBeF2FBild() {
   return true
 }
@@ -498,6 +658,53 @@ export function canBeMixed(
   return types[courseType]()
 }
 
+export function canBeANZMixed(
+  courseType: Course_Type_Enum,
+  courseLevel: Course_Level_Enum | '',
+) {
+  const types = {
+    [Course_Type_Enum.Open]: () => {
+      if (!courseLevel) return false
+
+      const levels = [
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.FoundationTrainerPlus,
+      ]
+
+      if (posthog.getFeatureFlag('foundation-trainer-level')) {
+        levels.push(Course_Level_Enum.FoundationTrainer)
+      }
+      return levels.includes(courseLevel)
+    },
+
+    [Course_Type_Enum.Closed]: () => {
+      if (!courseLevel) return false
+
+      const levels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.FoundationTrainerPlus,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
+      ]
+      return levels.includes(courseLevel)
+    },
+
+    [Course_Type_Enum.Indirect]: () => {
+      if (!courseLevel) return false
+
+      const levels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
+      ]
+      return levels.includes(courseLevel)
+    },
+  }
+
+  return types[courseType]()
+}
+
 export function canBeVirtual(
   courseType: Course_Type_Enum,
   courseLevel: Course_Level_Enum | '',
@@ -507,6 +714,39 @@ export function canBeVirtual(
       if (!courseLevel) return false
 
       const levels = [Course_Level_Enum.Level_1]
+      return levels.includes(courseLevel)
+    },
+
+    [Course_Type_Enum.Closed]: () => {
+      if (!courseLevel) return false
+
+      const levels = [Course_Level_Enum.Level_1]
+      return levels.includes(courseLevel)
+    },
+
+    [Course_Type_Enum.Indirect]: () => {
+      if (!courseLevel) return false
+
+      const levels = [] as Course_Level_Enum[]
+      return levels.includes(courseLevel)
+    },
+  }
+
+  return types[courseType]()
+}
+
+export function canBeANZVirtual(
+  courseType: Course_Type_Enum,
+  courseLevel: Course_Level_Enum | '',
+) {
+  const types = {
+    [Course_Type_Enum.Open]: () => {
+      if (!courseLevel) return false
+
+      const levels = [Course_Level_Enum.Level_1]
+      if (posthog.getFeatureFlag('foundation-trainer-level')) {
+        levels.push(Course_Level_Enum.FoundationTrainer)
+      }
       return levels.includes(courseLevel)
     },
 

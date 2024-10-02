@@ -9,7 +9,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 
-import { getLevels } from '../../helpers'
+import { getANZLevels, getLevels } from '../../helpers'
 
 type SelectValue = Course_Level_Enum | ''
 
@@ -34,7 +34,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   const onChangeRef = useRef<Props['onChange'] | undefined>()
 
   const { acl } = useAuth()
-
+  const isUKRegion = acl.isUK()
   useEffect(() => {
     onChangeRef.current = onChange
   }, [onChange])
@@ -43,9 +43,11 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
     () =>
       acl.allowedCourseLevels(
         courseType,
-        getLevels(courseType, courseAccreditor),
+        isUKRegion
+          ? getLevels(courseType, courseAccreditor)
+          : getANZLevels(courseType),
       ),
-    [acl, courseType, courseAccreditor],
+    [acl, isUKRegion, courseType, courseAccreditor],
   )
 
   const selected = value && levels.includes(value) ? value : levels[0]

@@ -57,7 +57,6 @@ export const CreateCoursePage = () => {
   } = useCreateCourse()
 
   const { data: draftData, name: draftName, fetching } = useCourseDraft(draftId)
-
   useEffect(() => {
     if (draftData.courseData && !courseData) {
       initializeData(draftData, draftName ?? undefined)

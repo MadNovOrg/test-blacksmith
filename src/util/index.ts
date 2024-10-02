@@ -899,6 +899,7 @@ export function formatCurrency(
 export const GRACE_PERIOD_PER_LEVEL = {
   [Course_Level_Enum.Level_1]: 0,
   [Course_Level_Enum.Level_2]: 0,
+  [Course_Level_Enum.FoundationTrainer]: 3,
   [Course_Level_Enum.FoundationTrainerPlus]: 3,
   [Course_Level_Enum.Advanced]: 0,
   [Course_Level_Enum.BildRegular]: 0,
@@ -938,6 +939,10 @@ const DEFAULT_TRAINER_CERTIFICATES_FOR_LEVEL = {
   [Course_Level_Enum.BildRegular]: [
     Course_Level_Enum.BildIntermediateTrainer,
     Course_Level_Enum.BildAdvancedTrainer,
+  ],
+  [Course_Level_Enum.FoundationTrainer]: [
+    Course_Level_Enum.IntermediateTrainer,
+    Course_Level_Enum.AdvancedTrainer,
   ],
   [Course_Level_Enum.FoundationTrainerPlus]: [
     Course_Level_Enum.IntermediateTrainer,

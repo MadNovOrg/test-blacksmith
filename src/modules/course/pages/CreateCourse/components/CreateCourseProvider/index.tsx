@@ -216,7 +216,6 @@ export const CreateCourseProvider: React.FC<
     isUKCountry,
     trainers,
   ])
-
   const initializeData = useCallback(
     (data: Draft, draftName: string | undefined = undefined) => {
       setCompletedSteps(data.completedSteps ?? [])

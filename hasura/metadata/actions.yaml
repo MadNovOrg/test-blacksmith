@@ -571,6 +571,9 @@ custom_types:
         - description: null
           is_deprecated: null
           value: FOUNDATION_TRAINER_PLUS
+        - description: null
+          is_deprecated: null
+          value: FOUNDATION_TRAINER_PLUS
     - name: SearchTrainerAvailability
       values:
         - description: null

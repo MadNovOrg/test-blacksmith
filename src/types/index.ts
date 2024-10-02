@@ -307,17 +307,6 @@ export enum CourseState {
   COMPLETED = 'COMPLETED',
 }
 
-export enum CourseLevel {
-  Level_1 = 'LEVEL_1',
-  Level_2 = 'LEVEL_2',
-  Advanced = 'ADVANCED',
-  BildRegular = 'BILD_REGULAR',
-  IntermediateTrainer = 'INTERMEDIATE_TRAINER',
-  AdvancedTrainer = 'ADVANCED_TRAINER',
-  BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
-  BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
-}
-
 export enum BildStrategies {
   Primary = 'PRIMARY',
   Secondary = 'SECONDARY',

@@ -7,7 +7,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { screen, userEvent, waitFor, within } from '@test/index'
 
@@ -25,6 +25,7 @@ const useCoursePriceMock = vi.mocked(useCoursePrice)
 const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 describe('component: CourseForm - INDIRECT', () => {
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
   const type = Course_Type_Enum.Indirect
 
   beforeEach(() => {

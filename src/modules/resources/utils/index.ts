@@ -8,6 +8,7 @@ export enum TrainerCoursesEnum {
   AdvancedTrainer = 'ADVANCED_TRAINER',
   BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
+  FoundationTrainer = 'FOUNDATION_TRAINER',
   FoundationTrainerPlus = 'FOUNDATION_TRAINER_PLUS',
 }
 

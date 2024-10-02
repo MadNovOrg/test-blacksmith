@@ -10,6 +10,8 @@ import { CourseInput, TrainerRoleTypeName } from '@app/types'
 import { bildStrategiesToArray } from '@app/util'
 
 import {
+  canBeANZMixed,
+  canBeANZVirtual,
   canBeBlended,
   canBeBlendedBild,
   canBeConversion,
@@ -18,6 +20,7 @@ import {
   canBeMixed,
   canBeMixedBild,
   canBeReacc,
+  canBeReaccANZ,
   canBeReaccBild,
   canBeVirtual,
   canBeVirtualBild,
@@ -49,35 +52,58 @@ export const useCoursePermissions = (
   const isICM = accreditedBy === Accreditors_Enum.Icm
   const isBild = accreditedBy === Accreditors_Enum.Bild
 
+  const isAustraliaRegion = acl.isAustralia()
   const canBlended = isICM
     ? canBeBlended(type, courseLevel as Course_Level_Enum, deliveryType)
     : canBeBlendedBild(type, courseLevel as Course_Level_Enum, bildStrategies)
 
-  const canReacc = isICM
-    ? canBeReacc(
+  const canReacc = () => {
+    if (isAustraliaRegion) {
+      return canBeReaccANZ(
         type,
         courseLevel as Course_Level_Enum,
         deliveryType,
         isBlended,
       )
-    : canBeReaccBild(type, bildStrategies, isBlended, conversion)
+    }
+    if (!isICM) {
+      return canBeReaccBild(type, bildStrategies, isBlended, conversion)
+    }
+    return canBeReacc(
+      type,
+      courseLevel as Course_Level_Enum,
+      deliveryType,
+      isBlended,
+    )
+  }
 
   const canF2F = isICM
     ? canBeF2F(type, courseLevel as Course_Level_Enum)
     : canBeF2FBild()
 
-  const canVirtual = isICM
-    ? canBeVirtual(type, courseLevel as Course_Level_Enum)
-    : canBeVirtualBild(type, bildStrategies, conversion)
+  const canVirtual = () => {
+    if (isAustraliaRegion) {
+      return canBeANZVirtual(type, courseLevel as Course_Level_Enum)
+    }
+    if (!isICM) {
+      return canBeVirtualBild(type, bildStrategies, conversion)
+    }
+    return canBeVirtual(type, courseLevel as Course_Level_Enum)
+  }
+  const canMixed = () => {
+    if (isAustraliaRegion) {
+      return canBeANZMixed(type, courseLevel as Course_Level_Enum)
+    }
 
-  const canMixed = isICM
-    ? canBeMixed(type, courseLevel as Course_Level_Enum)
-    : canBeMixedBild(
+    if (!isICM) {
+      return canBeMixedBild(
         courseLevel as Course_Level_Enum,
         bildStrategies ? bildStrategiesToArray(bildStrategies) : [],
         conversion,
       )
-
+    }
+    return canBeMixed(type, courseLevel as Course_Level_Enum)
+  }
   const conversionEnabled =
     isBild && canBeConversion(reaccreditation, courseLevel)
 

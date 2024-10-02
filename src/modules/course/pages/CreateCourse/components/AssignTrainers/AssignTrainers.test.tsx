@@ -1,8 +1,9 @@
+import posthog from 'posthog-js'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
-import { Course_Type_Enum } from '@app/generated/graphql'
-import { RoleName, ValidCourseInput } from '@app/types'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import { AwsRegions, RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import { render, screen, within, waitFor } from '@test/index'
@@ -112,5 +113,38 @@ describe('component: AssignTrainers', () => {
     expect(picked).toStrictEqual([])
 
     expect(screen.getByTestId('AssignTrainers-submit')).toBeDisabled()
+  })
+
+  it('does not show trainer ratio warning if level is Foundation Trainer', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    vi.spyOn(posthog, 'getFeatureFlag').mockReturnValue(true)
+    const overrides = {
+      max_participants: 99999,
+      trainers: [],
+      level: Course_Level_Enum.FoundationTrainer,
+    }
+    const course = buildCourse({ overrides })
+
+    render(
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          initialValue={{
+            courseData: courseToCourseInput(course) as ValidCourseInput,
+          }}
+          courseType={Course_Type_Enum.Open}
+        >
+          <AssignTrainers />
+        </CreateCourseProvider>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('AssignTrainers-form')).toBeInTheDocument()
+    })
+
+    expect(
+      screen.queryByTestId('trainer-ratio-exception'),
+    ).not.toBeInTheDocument()
   })
 })

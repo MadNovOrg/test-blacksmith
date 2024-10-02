@@ -18,6 +18,7 @@ import {
   Radio,
   FormHelperText,
 } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo } from 'react'
 import { useFormContext, Controller, useWatch } from 'react-hook-form'
 
@@ -109,6 +110,7 @@ export const GeneralDetailsSection = ({
 
   const shouldShowCountrySelector = !isBild
 
+  const isFTEnabled = useFeatureFlagEnabled('foundation-trainer-level')
   const {
     canBlended,
     canF2F,
@@ -156,7 +158,7 @@ export const GeneralDetailsSection = ({
   }, [canBlended, setValue, blendedLearning])
 
   useEffect(() => {
-    const mustChange = !canReacc && reaccreditation
+    const mustChange = !canReacc() && reaccreditation
     if (mustChange) {
       const newReaccreditationValue = false
       setValue('reaccreditation', newReaccreditationValue)
@@ -182,7 +184,7 @@ export const GeneralDetailsSection = ({
 
   useEffect(() => {
     const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
-    const mustChange = !canMixed && isMixed
+    const mustChange = !canMixed() && isMixed
     if (mustChange) {
       const newDeliveryType = Course_Delivery_Type_Enum.F2F
       setValue('deliveryType', newDeliveryType)
@@ -438,6 +440,12 @@ export const GeneralDetailsSection = ({
                   ) {
                     setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
                   }
+                  if (
+                    isFTEnabled &&
+                    newCourseLevel === Course_Level_Enum.FoundationTrainer
+                  ) {
+                    setValue('deliveryType', Course_Delivery_Type_Enum.Virtual)
+                  }
                   resetSpecialInstructionsToDefault({
                     newCourseLevel,
                   })
@@ -522,7 +530,9 @@ export const GeneralDetailsSection = ({
               control={control}
               render={({ field }) => (
                 <FormControlLabel
-                  disabled={!canReacc || disabledFields.has('reaccreditation')}
+                  disabled={
+                    !canReacc() || disabledFields.has('reaccreditation')
+                  }
                   control={
                     <Switch
                       {...field}
@@ -650,7 +660,7 @@ export const GeneralDetailsSection = ({
               value={Course_Delivery_Type_Enum.Virtual}
               control={
                 <Radio
-                  disabled={!canVirtual || disabledFields.has('deliveryType')}
+                  disabled={!canVirtual() || disabledFields.has('deliveryType')}
                 />
               }
               label={t('virtual-option-label')}
@@ -660,7 +670,7 @@ export const GeneralDetailsSection = ({
               value={Course_Delivery_Type_Enum.Mixed}
               control={
                 <Radio
-                  disabled={!canMixed || disabledFields.has('deliveryType')}
+                  disabled={!canMixed() || disabledFields.has('deliveryType')}
                 />
               }
               label={t('mixed-option-label')}

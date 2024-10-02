@@ -2,7 +2,7 @@ import { t } from 'i18next'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -29,6 +29,7 @@ vi.mock('posthog-js/react', () => ({
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('UkCourseForm - closed BILD', () => {
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
       priceCurrency: 'GBP',

@@ -7,7 +7,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import {
@@ -31,6 +31,7 @@ vi.mock('posthog-js/react')
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: UkCourseForm - OPEN', () => {
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
   const type = Course_Type_Enum.Open
   const {
     result: {

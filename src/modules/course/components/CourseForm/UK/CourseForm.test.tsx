@@ -3,6 +3,7 @@ import { setMedia } from 'mock-match-media'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
+import { AwsRegions } from '@app/types'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -31,6 +32,7 @@ vi.mock('@app/components/VenueSelector', () => ({
 const useCoursePriceMock = vi.mocked(useCoursePrice)
 
 describe('component: UkCourseForm', () => {
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({
       priceCurrency: 'GBP',
