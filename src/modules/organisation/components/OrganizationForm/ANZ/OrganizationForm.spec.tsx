@@ -11,6 +11,7 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { GET_ORG_TYPES } from '@app/modules/organisation/queries/get-org-types'
+import { RoleName } from '@app/types'
 
 import {
   chance,
@@ -511,5 +512,62 @@ describe(OrganizationForm.name, () => {
     )
     expect(orgSelector).toBeDisabled()
     expect(orgSelector).toHaveValue(mainOrgName)
+  })
+  ;[
+    RoleName.TT_ADMIN,
+    RoleName.TT_OPS,
+    RoleName.SALES_ADMIN,
+    RoleName.SALES_REPRESENTATIVE,
+  ].forEach(roleName => {
+    it(`displays the Edit the organisation affiliation link for ${roleName}`, () => {
+      const mainOrgId = chance.guid()
+      const mainOrgName = chance.name()
+
+      const client = {
+        executeQuery: () => never,
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <OrganizationForm
+            onSubmit={submitMock}
+            isEditMode={true}
+            editOrgData={{
+              id: chance.guid(),
+              name: chance.name(),
+              sector: 'anz_ss',
+              organisationType: 'Catholic Education',
+              attributes: {
+                email: chance.email(),
+                phone: chance.phone(),
+                headFirstName: chance.first(),
+                headSurname: chance.last(),
+                headEmailAddress: chance.email(),
+                website: chance.url(),
+              },
+              address: {
+                country: 'Australia',
+                countryCode: 'AU',
+                city: chance.city(),
+                line1: chance.address(),
+                postCode: chance.postcode(),
+                region: 'Tasmania',
+              },
+              affiliatedOrgCount: 0,
+              main_organisation_id: mainOrgId,
+              mainOrgName: mainOrgName,
+            }}
+          />
+          ,
+        </Provider>,
+        {
+          auth: {
+            activeRole: roleName,
+          },
+        },
+      )
+
+      expect(screen.getByTestId('edit-affiliation-link')).toBeInTheDocument()
+    })
   })
 })

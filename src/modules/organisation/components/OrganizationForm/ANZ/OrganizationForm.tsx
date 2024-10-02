@@ -12,6 +12,7 @@ import {
   useTheme,
   Checkbox,
   FormControlLabel,
+  Link,
 } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
 import {
@@ -65,6 +66,7 @@ type Props = {
   editOrgData?: Partial<Organization> & {
     country?: string
     countryCode?: string
+    main_organisation_id?: string
     mainOrgName?: string
     affiliatedOrgCount?: number
   }
@@ -121,9 +123,15 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const { data: orgTypes } = useOrgType(values.sector, true)
 
   const mainOrganisation: Pick<Organization, 'id' | 'name'> = {
-    id: values.mainOrgId ?? '',
+    id: values.main_organisation_id ?? '',
     name: values.mainOrgName ?? '',
   }
+
+  const isMainOrg = Boolean(editOrgData?.affiliatedOrgCount)
+  const isAffiliatedOrg = Boolean(editOrgData?.main_organisation_id)
+
+  const showEditOrgAffiliationLink =
+    isEditMode && !isMainOrg && acl.canLinkToMainOrg()
 
   const onOrgInputChange = useCallback(
     (value: string) => {
@@ -144,7 +152,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const handleCheckboxChange = useCallback(() => {
     setLinkToMainOrg(!linkToMainOrg)
     if (!linkToMainOrg) {
-      setValue('mainOrgId', '')
+      setValue('main_organisation_id', '')
       setValue('mainOrgName', '')
     }
   }, [linkToMainOrg, setValue])
@@ -163,7 +171,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   )
   const onMainOrgSelected = useCallback(
     async (org: CallbackOption) => {
-      setValue('mainOrgId', org?.id ?? '')
+      setValue('main_organisation_id', org?.id ?? '')
       setValue('mainOrgName', org?.name ?? '', { shouldValidate: true })
     },
     [setValue],
@@ -246,9 +254,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     sectorState,
     values.organisationType,
   ])
-
-  const isMainOrg = Boolean(editOrgData?.affiliatedOrgCount)
-  const isAffiliatedOrg = Boolean(editOrgData?.main_organisation_id)
 
   return (
     <Container maxWidth="lg" sx={{ py: 2 }}>
@@ -446,17 +451,36 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       />
                     )}
                   </Grid>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onClick={handleCheckboxChange}
-                        checked={linkToMainOrg}
-                        data-testid="link-to-main-org-checkbox"
-                        disabled={isEditMode}
-                      />
-                    }
-                    label={t('fields.link-to-main-organisation')}
-                  />
+                  <Grid
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onClick={handleCheckboxChange}
+                          checked={linkToMainOrg}
+                          data-testid="link-to-main-org-checkbox"
+                          disabled={isEditMode}
+                        />
+                      }
+                      label={t('fields.link-to-main-organisation')}
+                    />
+                    {showEditOrgAffiliationLink ? (
+                      <Typography
+                        color="primary"
+                        data-testid="edit-affiliation-link"
+                      >
+                        <Link
+                          href={`/organisations/${mainOrganisation.id}?tab=AFFILIATED`}
+                        >
+                          {t('fields.edit-the-org-affiliation')}
+                        </Link>
+                      </Typography>
+                    ) : null}
+                  </Grid>
                   {linkToMainOrg ? (
                     <OrgSelector
                       data-testid="main-org"

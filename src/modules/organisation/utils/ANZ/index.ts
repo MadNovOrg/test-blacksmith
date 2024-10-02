@@ -29,7 +29,7 @@ export type FormInputs = {
   countryCode: string
   postcode: string
   workEmail?: string
-  mainOrgId?: string
+  main_organisation_id?: string
   mainOrgName?: string
 }
 

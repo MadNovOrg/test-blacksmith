@@ -625,18 +625,27 @@ update_permissions:
         - contact_details
         - geo_coordinates
         - name
+        - main_organisation_id
         - preferences
         - region
         - organisation_type
         - sector
         - tags
       filter:
-        members:
-          _and:
-            - is_admin:
-                _eq: true
-            - profile_id:
-                _eq: X-Hasura-User-Id
+        _or:
+          - members:
+              _and:
+                - is_admin:
+                    _eq: true
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+          - main_organisation:
+              members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
   - role: tt-admin

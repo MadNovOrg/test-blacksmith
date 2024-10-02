@@ -68,7 +68,7 @@ export const EditOrgDetails: React.FC<
         org: {
           name: data.name.trim(),
           sector: data.sector,
-          main_organisation_id: data.mainOrgId,
+          main_organisation_id: data.main_organisation_id,
           organisationType:
             data.organisationType?.toLocaleLowerCase() === 'other'
               ? data.orgTypeSpecifyOther
