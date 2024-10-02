@@ -212,7 +212,13 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     const colRegion = cols.find(({ id }) => id === 'region')
     if (colRegion) {
       return {
-        isEmpty: !data?.orgs.some(org => org?.address.region),
+        isEmpty:
+          !data?.orgs.some(org => org?.address.region) &&
+          !data?.orgs.some(org =>
+            org?.affiliated_organisations?.some(
+              affiliatedOrg => affiliatedOrg?.address.region,
+            ),
+          ),
         id: colRegion.id,
       }
     }

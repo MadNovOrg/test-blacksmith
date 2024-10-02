@@ -225,12 +225,20 @@ update_permissions:
           - profile_id:
               _eq: X-Hasura-User-Id
           - organization:
-              members:
-                _and:
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
+              _or:
+                - members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                - main_organisation:
+                    members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
   - role: ld
@@ -252,12 +260,20 @@ delete_permissions:
           - profile_id:
               _eq: X-Hasura-User-Id
           - organization:
-              members:
-                _and:
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
-                  - is_admin:
-                      _eq: true
+              _or:
+                - members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                - main_organisation:
+                    members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
 event_triggers:
   - name: organization_member_insert
     definition:
