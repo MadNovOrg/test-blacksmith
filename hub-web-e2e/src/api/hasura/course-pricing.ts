@@ -19,13 +19,14 @@ export const INSERT_COURSE_PRICING_SCHEDULE = gql`
     $priceAmount: numeric!
     $effectiveFrom: date!
     $effectiveTo: date!
+    $priceCurrency: String = "GBP"
   ) {
     course_pricing_schedule: insert_course_pricing_schedule_one(
       object: {
         id: $id
         coursePricingId: $coursePricingId
         priceAmount: $priceAmount
-        priceCurrency: "GBP"
+        priceCurrency: $priceCurrency
         effectiveFrom: $effectiveFrom
         effectiveTo: $effectiveTo
       }
@@ -41,6 +42,7 @@ export const GET_COURSE_PRICING_SCHEDULE = gql`
     $level: course_level_enum!
     $blended: Boolean = false
     $reaccreditation: Boolean = false
+    $priceCurrency: String = "GBP"
   ) {
     course_pricing(
       where: {
@@ -48,6 +50,7 @@ export const GET_COURSE_PRICING_SCHEDULE = gql`
         level: { _eq: $level }
         blended: { _eq: $blended }
         reaccreditation: { _eq: $reaccreditation }
+        priceCurrency: { _eq: $priceCurrency }
       }
     ) {
       id

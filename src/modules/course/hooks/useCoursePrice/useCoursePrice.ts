@@ -13,9 +13,10 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies'
 
 export const COURSE_PRICE_QUERY = gql`
-  query CoursePrice($startDate: date) {
+  query CoursePrice($startDate: date, $priceCurrency: String!) {
     coursePrice: course_pricing {
       level
       type
@@ -31,6 +32,7 @@ export const COURSE_PRICE_QUERY = gql`
                 { effectiveTo: { _is_null: true } }
               ]
             }
+            { priceCurrency: { _eq: $priceCurrency } }
           ]
         }
       ) {
@@ -65,6 +67,7 @@ export function useCoursePrice(courseData?: {
   const {
     acl: { isAustralia },
   } = useAuth()
+  const { defaultCurrency } = useCurrencies()
   const { isUKCountry, isAustraliaCountry } = useWorldCountries()
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = courseData?.accreditedBy === Accreditors_Enum.Icm
@@ -95,6 +98,7 @@ export function useCoursePrice(courseData?: {
           startDate: isValid(courseData?.startDateTime)
             ? courseData.startDateTime?.toISOString()
             : undefined,
+          priceCurrency: defaultCurrency,
         }
       : undefined,
     pause: pauseQuery,

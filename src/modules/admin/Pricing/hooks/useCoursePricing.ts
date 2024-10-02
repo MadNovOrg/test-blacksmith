@@ -8,12 +8,14 @@ import {
   GetPricingQuery,
   GetPricingQueryVariables,
 } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies'
 
 export const GET_PRICING = gql`
   query GetPricing(
     $where: course_pricing_bool_exp
     $limit: Int = 20
     $offset: Int = 0
+    $priceCurrency: String = "GBP"
   ) {
     course_pricing(
       order_by: [
@@ -35,7 +37,10 @@ export const GET_PRICING = gql`
       xeroCode
       blended
       updatedAt
-      pricingSchedules(order_by: { effectiveFrom: asc }) {
+      pricingSchedules(
+        order_by: { effectiveFrom: asc }
+        where: { priceCurrency: { _eq: $priceCurrency } }
+      ) {
         id
         coursePricingId
         effectiveFrom
@@ -43,7 +48,9 @@ export const GET_PRICING = gql`
         priceAmount
         priceCurrency
       }
-      pricingSchedules_aggregate {
+      pricingSchedules_aggregate(
+        where: { priceCurrency: { _eq: $priceCurrency } }
+      ) {
         aggregate {
           count
         }
@@ -81,14 +88,16 @@ export const useCoursePricing = ({
   limit,
   offset,
 }: UseCoursePricingProps) => {
+  const { defaultCurrency } = useCurrencies()
+
   const levelsWhere = useMemo(() => {
     const levels = filters.levels
-    return levels && levels.length ? { level: { _in: levels } } : {}
+    return levels?.length ? { level: { _in: levels } } : {}
   }, [filters.levels])
 
   const typesWhere = useMemo(() => {
     const types = filters.type
-    return types && types.length ? { type: { _in: types } } : {}
+    return types?.length ? { type: { _in: types } } : {}
   }, [filters.type])
 
   const blendedWhere = useMemo(() => {
@@ -112,9 +121,11 @@ export const useCoursePricing = ({
         ...typesWhere,
         ...blendedWhere,
         ...reaccreditationWhere,
+        priceCurrency: { _eq: defaultCurrency },
       },
       limit,
       offset,
+      priceCurrency: defaultCurrency,
     },
   })
 

@@ -1,0 +1,29 @@
+INSERT INTO "public"."course_pricing" (
+    "type", 
+    "level", 
+    "blended", 
+    "reaccreditation", 
+    "price_amount", 
+    "price_currency", 
+    "xero_code"
+) 
+VALUES 
+    (
+        E'OPEN', 
+        E'LEVEL_2', 
+        false, 
+        false, 
+        0, 
+        E'AUD', 
+        E'LEVEL2.OP'
+    ),
+    (
+        E'OPEN', 
+        E'LEVEL_1', 
+        false, 
+        false, 
+        0, 
+        E'AUD', 
+        E'LEVEL1.OP'
+    )
+ON CONFLICT DO NOTHING;

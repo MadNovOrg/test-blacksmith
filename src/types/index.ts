@@ -19,6 +19,7 @@ import {
   Course_Trainer_Type_Enum,
   CourseTrainerType as GeneratedCourseTrainerType,
   FindProfilesQuery,
+  Currency,
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
@@ -688,10 +689,6 @@ export enum OrderStatus {
   AUTHORISED = 'AUTHORISED',
   PAID = 'PAID',
   VOIDED = 'VOIDED',
-}
-
-export enum Currency {
-  GBP = 'GBP',
 }
 
 export type LegacyCertificate = {

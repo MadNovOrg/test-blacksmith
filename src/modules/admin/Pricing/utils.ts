@@ -63,6 +63,7 @@ export const getInitialRows = (
     effectiveFrom: schedule.effectiveFrom,
     effectiveTo: schedule.effectiveTo,
     priceAmount: schedule.priceAmount,
+    priceCurrency: schedule.priceCurrency,
     isNew: false,
   }))
 }

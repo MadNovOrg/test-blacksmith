@@ -14,13 +14,14 @@ export const INSERT_COURSE_PRICING = gql`
     $priceAmount: numeric!
     $effectiveFrom: date!
     $effectiveTo: date!
+    $priceCurrency: String!
   ) {
     course_pricing_schedule: insert_course_pricing_schedule_one(
       object: {
         id: $id
         coursePricingId: $coursePricingId
         priceAmount: $priceAmount
-        priceCurrency: "GBP"
+        priceCurrency: $priceCurrency
         effectiveFrom: $effectiveFrom
         effectiveTo: $effectiveTo
       }

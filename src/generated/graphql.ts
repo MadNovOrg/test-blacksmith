@@ -26174,8 +26174,8 @@ export enum Course_Pricing_Constraint {
   CoursePricingBlendedLevelTypeReaccreditationShardKey = 'course_pricing_blended_level_type_reaccreditation_shard_key',
   /** unique or primary key constraint on columns "id" */
   CoursePricingPkey = 'course_pricing_pkey',
-  /** unique or primary key constraint on columns "level", "blended", "reaccreditation", "type" */
-  CoursePricingTypeLevelBlendedReaccreditationKey = 'course_pricing_type_level_blended_reaccreditation_key'
+  /** unique or primary key constraint on columns "level", "blended", "reaccreditation", "type", "price_currency" */
+  CoursePricingTypeReaccreditationBlendedLevelPriceCurrenc = 'course_pricing_type_reaccreditation_blended_level_price_currenc'
 }
 
 /** input type for incrementing numeric columns in table "course_pricing" */
@@ -60527,6 +60527,7 @@ export type GetPricingQueryVariables = Exact<{
   where?: InputMaybe<Course_Pricing_Bool_Exp>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -60545,6 +60546,7 @@ export type InsertCoursePricingScheduleMutationVariables = Exact<{
   priceAmount: Scalars['numeric'];
   effectiveFrom: Scalars['date'];
   effectiveTo: Scalars['date'];
+  priceCurrency?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -60704,6 +60706,7 @@ export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<
 
 export type CoursePriceQueryVariables = Exact<{
   startDate?: InputMaybe<Scalars['date']>;
+  priceCurrency: Scalars['String'];
 }>;
 
 

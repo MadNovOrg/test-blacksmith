@@ -27,6 +27,7 @@ import {
   GetCoursesWithPricingQuery,
   GetCoursesWithPricingQueryVariables,
 } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies'
 import { CoursesWithAvailablePricing } from '@app/modules/admin/Pricing/components'
 import {
   PricingDetails,
@@ -54,6 +55,7 @@ export const CoursePricingDataGrid = ({
 }) => {
   const client = useClient()
   const { profile } = useAuth()
+  const { defaultCurrency } = useCurrencies()
   const [{ error: deleteCoursePricingError }, deleteCoursePricingSchedule] =
     useDeleteCoursePricing()
   const [{ error: insertCoursePricingError }, insertCoursePricingSchedule] =
@@ -165,6 +167,7 @@ export const CoursePricingDataGrid = ({
         id: rowAfterChange.id,
         coursePricingId: pricing?.id,
         priceAmount: rowAfterChange.priceAmount,
+        priceCurrency: defaultCurrency,
         effectiveFrom: zonedTimeToUtc(
           new Date(rowAfterChange.effectiveFrom),
           'GMT',
@@ -307,15 +310,19 @@ export const CoursePricingDataGrid = ({
       field: 'priceAmount',
       headerName: t('pages.course-pricing.cols-price'),
       type: 'number',
+      width: 100,
       editable: true,
       align: 'left',
       headerAlign: 'left',
       sortable: false,
       valueFormatter: (params: GridValueFormatterParams<number>) => {
+        const currency = rows.find(row => row.id === params.id)?.priceCurrency
+
         if (params.value == null) {
           return ''
         }
-        return t('currency', { amount: params.value.toFixed(2) })
+
+        return t('currency', { amount: params.value.toFixed(2), currency })
       },
     },
     {
