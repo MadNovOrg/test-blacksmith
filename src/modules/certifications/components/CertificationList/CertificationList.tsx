@@ -157,6 +157,7 @@ export const CertificationList: React.FC<
           accreditedBy={p.course.accreditedBy}
           blendedLearning={p.course.go1Integration}
           reaccreditation={p.course.reaccreditation}
+          isAustralia={acl.isAustralia()}
         />,
       ])
       if (tuples.length > 1) {
@@ -171,7 +172,7 @@ export const CertificationList: React.FC<
         saveAs(await pdf(document).toBlob(), fileName)
       }
     },
-    [],
+    [acl],
   )
 
   return (

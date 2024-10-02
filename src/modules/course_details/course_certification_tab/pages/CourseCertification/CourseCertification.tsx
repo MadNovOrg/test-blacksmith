@@ -191,7 +191,6 @@ export const CourseCertification: React.FC<
               <Box sx={{ mb: 2 }} mx="auto">
                 {gradesToCertificateIconMapping[grade] ?? null}
               </Box>
-
               {acl.canOverrideGrades() ? (
                 <Box mb={3}>
                   <Typography color={theme.palette.grey[700]} fontWeight={600}>
@@ -228,6 +227,7 @@ export const CourseCertification: React.FC<
                         }
                         blendedLearning={certificate.blendedLearning ?? false}
                         reaccreditation={certificate.reaccreditation ?? false}
+                        isAustralia={acl.isAustralia()}
                       />
                     }
                     fileName="certificate.pdf"

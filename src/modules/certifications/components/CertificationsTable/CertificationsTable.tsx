@@ -90,6 +90,7 @@ export const CertificationsTable: React.FC<
           accreditedBy={c.course?.accreditedBy ?? Accreditors_Enum.Icm}
           blendedLearning={Boolean(c.course?.go1Integration)}
           reaccreditation={Boolean(c.course?.reaccreditation)}
+          isAustralia={acl.isAustralia()}
         />,
       ])
       if (tuples.length > 1) {
@@ -104,7 +105,7 @@ export const CertificationsTable: React.FC<
         saveAs(await pdf(document).toBlob(), fileName)
       }
     },
-    [],
+    [acl],
   )
 
   return (

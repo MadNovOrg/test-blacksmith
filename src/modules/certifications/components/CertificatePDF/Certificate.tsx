@@ -112,6 +112,7 @@ type CertificateDocumentProps = {
   accreditedBy: Accreditors_Enum
   blendedLearning: boolean
   reaccreditation: boolean
+  isAustralia?: boolean
 }
 
 export const CertificateDocument: React.FC<
@@ -125,6 +126,7 @@ export const CertificateDocument: React.FC<
   accreditedBy,
   blendedLearning,
   reaccreditation,
+  isAustralia = false,
 }) => {
   const { t } = useTranslation()
 
@@ -187,7 +189,13 @@ export const CertificateDocument: React.FC<
               marginBottom: theme.spacing(2),
             }}
           >
-            {t(`common.course-certificate.course-title-${accreditedBy}`)}
+            {t(
+              `common.course-certificate.course-title-${accreditedBy}${
+                accreditedBy === Accreditors_Enum.Icm && isAustralia
+                  ? '-ANZ'
+                  : ''
+              }`,
+            )}
           </Text>
         )}
 
@@ -293,7 +301,11 @@ export const CertificateDocument: React.FC<
           })}
         </Text>
         <Text style={styles.footer}>
-          {t(`common.course-certificate.certificate-footer-${accreditedBy}`)}
+          {t(
+            `common.course-certificate.certificate-footer-${accreditedBy}${
+              accreditedBy === Accreditors_Enum.Icm && isAustralia ? '-ANZ' : ''
+            }`,
+          )}
         </Text>
       </Page>
     </Document>

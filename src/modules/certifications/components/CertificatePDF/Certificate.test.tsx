@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { ForeignScript } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   Accreditors_Enum,
@@ -5,11 +7,17 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, waitFor } from '@test/index'
+import { chance, render, renderHook, screen, waitFor } from '@test/index'
 
 import { CertificateDocument } from './Certificate'
 
 describe('CertificateDocument', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   const defaultProps = {
     accreditedBy: Accreditors_Enum.Icm,
     blendedLearning: false,
@@ -17,9 +25,45 @@ describe('CertificateDocument', () => {
     courseLevel: Course_Level_Enum.Level_1,
     expiryDate: '2024-12-31',
     grade: Grade_Enum.Pass,
+    isAustralia: false,
     participantName: 'John Doe',
     reaccreditation: false,
   }
+
+  it("should display UK's content for non-Australian certificates", async () => {
+    render(<CertificateDocument {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(t('common.course-certificate.course-title-ICM')),
+      ).toBeInTheDocument()
+    })
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(t('common.course-certificate.certificate-footer-ICM')),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("should display ANZ's content for Australian certificates", async () => {
+    const props = { ...defaultProps, isAustralia: true }
+    render(<CertificateDocument {...props} />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(t('common.course-certificate.course-title-ICM-ANZ')),
+      ).toBeInTheDocument()
+    })
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          t('common.course-certificate.certificate-footer-ICM-ANZ'),
+        ),
+      ).toBeInTheDocument()
+    })
+  })
 
   test.each([
     [ForeignScript.ARABIC, 'محمد أحمد'],
