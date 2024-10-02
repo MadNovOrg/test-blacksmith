@@ -104,6 +104,7 @@ export const RegistrationPage: React.FC<
           color="secondary"
           mb={1}
           align={isMobile ? 'center' : 'left'}
+          textAlign={'center'}
         >
           {t(`create-free-account${acl.isAustralia() ? '-ANZ' : ''}`)}
         </Typography>

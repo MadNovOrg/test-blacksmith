@@ -162,7 +162,7 @@
     "max-participants-required": "Maximum number of attendees is required field",
     "max-participants-positive": "Maximum number of attendees must be a positive number",
     "max-participants-exceeded": "Number of participants cannot be greater than ",
-    "min-required-max-participants": "The max number of participants cannot be less that the sum of current attendees count and pending invites count",
+    "min-required-max-participants": "The max number of participants cannot be less than the sum of current attendees count and pending invites count",
     "attendees-number-exceeds-trainer-ratio-message": "Number of attendees exceeds current trainer ratio",
     "venue-required": "Venue is required field",
     "online-meeting-link-label": "Online meeting link",

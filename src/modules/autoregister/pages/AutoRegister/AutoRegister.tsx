@@ -66,6 +66,7 @@ export const AutoRegisterPage: React.FC<
           mb={1}
           align={isMobile ? 'center' : 'left'}
           data-testid="page-title"
+          textAlign={'center'}
         >
           {t(`create-free-account${acl.isAustralia() ? '-ANZ' : ''}`)}
         </Typography>
