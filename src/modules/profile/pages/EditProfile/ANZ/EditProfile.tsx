@@ -962,6 +962,7 @@ export const EditProfilePage: React.FC<
                       error={!!errors.country}
                       helperText={errors.country?.message || ''}
                       value={profile.countryCode}
+                      showAllCountries={true}
                     />
                   </Grid>
                   <Grid item xs={12} sm={12} md={6} lg={6}>

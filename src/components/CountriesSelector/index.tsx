@@ -20,6 +20,7 @@ export type CountriesSelectorProps = {
   isBILDcourse?: boolean
   onBlur?: () => void
   onlyUKCountries?: boolean
+  showAllCountries?: boolean
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -36,6 +37,7 @@ const CountriesSelector = ({
   onlyUKCountries = false,
   required,
   value,
+  showAllCountries,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -48,6 +50,12 @@ const CountriesSelector = ({
   const isINDIRECTcourse = courseType === Course_Type_Enum.Indirect
 
   let countriesList = acl.isAustralia() ? australiaCountries : countries
+
+  // In regards to the user's profile,
+  // We set the australia countries for australia env to be the default, and have the entire list of countries where needed
+  if (showAllCountries) {
+    countriesList = countries
+  }
 
   if (
     (isUKCountry(courseResidingCountry) &&

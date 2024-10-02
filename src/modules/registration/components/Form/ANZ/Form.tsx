@@ -294,6 +294,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             }
           }}
           value={values.countryCode}
+          showAllCountries={true}
         />
       </Box>
 

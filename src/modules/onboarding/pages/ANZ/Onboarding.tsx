@@ -223,6 +223,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                 }
               }}
               value={values.countryCode}
+              showAllCountries={true}
             />
           </Grid>
 

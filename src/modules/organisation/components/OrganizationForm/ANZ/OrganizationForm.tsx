@@ -109,6 +109,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     handleSubmit,
     register,
     setValue,
+    getValues,
     trigger,
     watch,
   } = useForm<FormInputs>({
@@ -133,9 +134,12 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
 
   const onMainOrgInputChange = useCallback(
     (value: string) => {
-      setValue('mainOrgName', value ?? '', { shouldValidate: true })
+      const currentValue = getValues('mainOrgName')
+      if (currentValue !== value) {
+        setValue('mainOrgName', value ?? '', { shouldValidate: true })
+      }
     },
-    [setValue],
+    [getValues, setValue],
   )
   const handleCheckboxChange = useCallback(() => {
     setLinkToMainOrg(!linkToMainOrg)
@@ -299,6 +303,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                           )
                           setValue('countryCode', code)
                           setValue('region', '', { shouldValidate: true })
+                          setValue('mainOrgName', '', { shouldValidate: true })
                         }
                       }}
                       value={values.countryCode}
