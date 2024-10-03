@@ -420,8 +420,8 @@
     "min-max-num-value": "The value must be between {{ min }} and {{ max }}"
   },
   "validation-notice": "All fields are mandatory.",
-  "create-free-account": "Create your free Team Teach Connect account",
-  "create-free-account-ANZ": "Create your free Team Teach Connect - Australia and New Zealand account",
+  "create-free-account": "Create your Team Teach Connect account",
+  "create-free-account-ANZ": "Create your Team Teach Connect - Australia and New Zealand account",
   "have-account": "Have an account?",
   "login": "Login",
   "course-registration": "Course Registration",
