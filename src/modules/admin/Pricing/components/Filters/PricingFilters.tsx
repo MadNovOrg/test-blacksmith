@@ -5,13 +5,21 @@ import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlended
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
 import { FilterByCourseType } from '@app/components/filters/FilterByCourseType'
 import { FilterByReaccreditation } from '@app/components/filters/FilterByReaccreditation'
-import { Course_Type_Enum } from '@app/generated/graphql'
+import { useAuth } from '@app/context/auth'
+import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 
 import { BILD_COURSE_LEVELS } from '../../utils'
 
 type Props = { onChange: (next: Record<string, unknown>) => void }
 
 export const PricingFilters: React.FC<Props> = ({ onChange }) => {
+  const {
+    acl: { isUK },
+  } = useAuth()
+  const excludedLevels = new Set(BILD_COURSE_LEVELS)
+  if (isUK()) {
+    excludedLevels.add(Course_Level_Enum.FoundationTrainer)
+  }
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
     withDefault(BooleanParam, false),
@@ -52,7 +60,7 @@ export const PricingFilters: React.FC<Props> = ({ onChange }) => {
     <>
       <FilterByCourseLevel
         onChange={onLevelsChange}
-        excludedStatuses={new Set(BILD_COURSE_LEVELS)}
+        excludedStatuses={excludedLevels}
       />
       <FilterByCourseType
         onChange={onTypeChange}

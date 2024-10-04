@@ -296,7 +296,7 @@ export function Filters({ onChange }: Props) {
                     Course_Level_Enum.BildIntermediateTrainer,
                     Course_Level_Enum.BildRegular,
                   ])
-                : undefined
+                : new Set([Course_Level_Enum.FoundationTrainer])
             }
             title={t('course-level')}
             onChange={setFilterLevel}

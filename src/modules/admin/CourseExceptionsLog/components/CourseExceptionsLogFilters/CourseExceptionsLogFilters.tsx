@@ -61,7 +61,7 @@ export const CourseExceptionsLogFilters: FC<PropsWithChildren<Props>> = ({
                 Course_Level_Enum.BildIntermediateTrainer,
                 Course_Level_Enum.BildRegular,
               ])
-            : undefined
+            : new Set([Course_Level_Enum.FoundationTrainer])
         }
         onChange={useCallback(
           level => onChange({ source: 'course-level', value: level }),
