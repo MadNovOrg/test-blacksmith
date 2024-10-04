@@ -103,13 +103,13 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const affiliatedOrgBasedOnRole = (
     mainOrg: Pick<Organization, 'id' | 'name'>,
   ) => {
-    return acl.isOrgAdmin(org?.id) ? (
-      affiliatedOrgAsPlainText(mainOrg.name)
-    ) : (
+    return acl.canViewOrg(mainOrg.id) ? (
       <Typography>
         {t('pages.org-details.main-organisation')}
         <Link href={`/organisations/${mainOrg.id}`}>{mainOrg.name}</Link>
       </Typography>
+    ) : (
+      affiliatedOrgAsPlainText(mainOrg.name)
     )
   }
 

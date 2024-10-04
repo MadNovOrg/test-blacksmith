@@ -76,7 +76,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       },
       {
         id: 'region',
-        label: t('pages.admin.organizations.columns.region'),
+        label: t('pages.admin.organizations.columns.state-territory-region'),
         sorting: true,
       },
       {

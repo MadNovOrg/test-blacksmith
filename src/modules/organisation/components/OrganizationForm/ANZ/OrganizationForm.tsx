@@ -127,7 +127,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
     name: values.mainOrgName ?? '',
   }
 
-  const isMainOrg = Boolean(editOrgData?.affiliatedOrgCount)
+  const isMainOrg = !editOrgData?.main_organisation_id
   const isAffiliatedOrg = Boolean(editOrgData?.main_organisation_id)
 
   const showEditOrgAffiliationLink =
