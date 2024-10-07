@@ -924,7 +924,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.isSalesAdmin,
         acl.isSalesRepresentative,
       ])(),
-    canViewOrg: (orgId: string) => acl.isInternalUser || acl.isOrgAdmin(orgId),
+    canViewOrg: (orgId: string) =>
+      acl.isInternalUser() || acl.isOrgAdmin(orgId),
   })
 
   return acl
