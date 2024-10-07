@@ -128,6 +128,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   }
 
   const isMainOrg = !editOrgData?.main_organisation_id
+  const hasAffiliatedOrgs = (editOrgData?.affiliatedOrgCount ?? 0) > 0
   const isAffiliatedOrg = Boolean(editOrgData?.main_organisation_id)
 
   const showEditOrgAffiliationLink =
@@ -298,7 +299,9 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                 <Grid container gap={3} flexDirection={'column'}>
                   <Grid item>
                     <CountriesSelector
-                      disabled={isEditMode && (isMainOrg || isAffiliatedOrg)}
+                      disabled={
+                        isEditMode && (hasAffiliatedOrgs || isAffiliatedOrg)
+                      }
                       onlyUKCountries={false}
                       onChange={(_, code) => {
                         if (code) {
@@ -314,7 +317,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                       value={values.countryCode}
                     />
                   </Grid>
-                  {isMainOrg ? (
+                  {hasAffiliatedOrgs ? (
                     <Alert
                       severity="warning"
                       sx={{ backgroundColor: '#fdedb5' }}

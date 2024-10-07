@@ -77,7 +77,6 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       {
         id: 'region',
         label: t('pages.admin.organizations.columns.state-territory-region'),
-        sorting: true,
       },
       {
         id: 'sector',
@@ -87,7 +86,6 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       {
         id: 'lastActivity',
         label: t('pages.admin.organizations.columns.last-activity'),
-        sorting: true,
       },
       {
         id: 'createdAt',
@@ -200,7 +198,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     data?.orgs?.forEach(org => {
       org.affiliated_organisations?.forEach(affiliatedOrg => {
         lastActivity[affiliatedOrg.id] = maxBy(
-          affiliatedOrg.members,
+          affiliatedOrg?.members,
           'profile.lastActivity',
         )?.profile.lastActivity
       })
@@ -213,10 +211,10 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     if (colRegion) {
       return {
         isEmpty:
-          !data?.orgs.some(org => org?.address.region) &&
+          !data?.orgs.some(org => org?.address?.region) &&
           !data?.orgs.some(org =>
             org?.affiliated_organisations?.some(
-              affiliatedOrg => affiliatedOrg?.address.region,
+              affiliatedOrg => affiliatedOrg?.address?.region,
             ),
           ),
         id: colRegion.id,
@@ -267,10 +265,13 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     return countries
   }, [acl, allOrganisationsData])
 
-  const cellSx = {
-    maxWidth: '129.33px',
-    minWidth: '129.33px',
+  const cellStyle = {
+    maxWidth: '130px',
+    minWidth: '130px',
+    alignContent: 'center',
   }
+
+  const cellSx = { textAlign: 'center' }
 
   const borderBottomStyle = {
     borderBottom: '0.031rem solid #c9c8c7',
@@ -358,6 +359,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                 order={sorting.dir}
                 orderBy={sorting.by}
                 onRequestSort={sorting.onSort}
+                sx={{ '.MuiTableCell-root': { textAlign: 'center' } }}
               />
               <TableBody>
                 {fetching && (
@@ -396,40 +398,41 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                           )}
                         </IconButton>
                       </TableCell>
-                      <TableCell style={cellSx}>
+                      <TableCell style={cellStyle} sx={cellSx}>
                         <Link href={`../${org?.id}`} variant="body2">
                           {org?.name}
                         </Link>
                       </TableCell>
-                      <TableCell style={cellSx}>
+                      <TableCell style={cellStyle} sx={cellSx}>
                         {org?.address.country}
                       </TableCell>
                       {!showRegionCol.isEmpty ? (
-                        <TableCell style={cellSx}>
+                        <TableCell style={cellStyle} sx={cellSx}>
                           {org?.address.region}
                         </TableCell>
                       ) : null}
-                      <TableCell style={cellSx}>
+                      <TableCell style={cellStyle} sx={cellSx}>
                         {t(`common.org-sectors.${org.sector}`)}
                       </TableCell>
-                      <TableCell style={cellSx}>
+                      <TableCell style={cellStyle} sx={cellSx}>
                         {lastActivityData[org?.id]
                           ? t('dates.withTime', {
                               date: lastActivityData[org?.id],
                             })
                           : t('indeterminate')}
                       </TableCell>
-                      <TableCell style={cellSx}>
+                      <TableCell style={cellStyle} sx={cellSx}>
                         {t('dates.withTime', {
                           date: org?.createdAt,
                         })}
                       </TableCell>
                       <TableCell
-                        style={cellSx}
+                        style={cellStyle}
                         sx={{
                           display: 'flex',
                           justifyContent: 'center',
                           mt: '7px',
+                          textAlign: 'center',
                         }}
                       >
                         <Chip
@@ -464,7 +467,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                                       affiliatedOrg => (
                                         <TableRow
                                           key={affiliatedOrg.id}
-                                          data-testid={`affiliated-org-row-${affiliatedOrg.id}`}
+                                          data-testid={`affiliated-org-row-${affiliatedOrg?.id}`}
                                         >
                                           <TableCell
                                             style={{
@@ -472,7 +475,10 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                                               maxWidth: '50px',
                                             }}
                                           />
-                                          <TableCell style={cellSx}>
+                                          <TableCell
+                                            style={cellStyle}
+                                            sx={cellSx}
+                                          >
                                             <Link
                                               href={`../${affiliatedOrg?.id}`}
                                               variant="body2"
@@ -480,18 +486,33 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                                               {affiliatedOrg?.name}
                                             </Link>
                                           </TableCell>
-                                          <TableCell style={cellSx}>
-                                            {affiliatedOrg.address.country}
+                                          <TableCell
+                                            style={cellStyle}
+                                            sx={cellSx}
+                                          >
+                                            {affiliatedOrg?.address?.country}
                                           </TableCell>
-                                          <TableCell style={cellSx}>
-                                            {affiliatedOrg.address.region}
+                                          <TableCell
+                                            style={{
+                                              minWidth: '162px',
+                                              maxWidth: '162px',
+                                            }}
+                                            sx={{ textAlign: 'center' }}
+                                          >
+                                            {affiliatedOrg?.address?.region}
                                           </TableCell>
-                                          <TableCell style={cellSx}>
+                                          <TableCell
+                                            style={cellStyle}
+                                            sx={cellSx}
+                                          >
                                             {t(
-                                              `common.org-sectors.${affiliatedOrg.sector}`,
+                                              `common.org-sectors.${affiliatedOrg?.sector}`,
                                             )}
                                           </TableCell>
-                                          <TableCell style={cellSx}>
+                                          <TableCell
+                                            style={cellStyle}
+                                            sx={cellSx}
+                                          >
                                             {affiliatedOrgsLastActivityData[
                                               org?.id
                                             ]
@@ -502,12 +523,18 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                                                 })
                                               : t('indeterminate')}
                                           </TableCell>
-                                          <TableCell style={cellSx}>
+                                          <TableCell
+                                            style={cellStyle}
+                                            sx={cellSx}
+                                          >
                                             {t('dates.withTime', {
                                               date: affiliatedOrg?.createdAt,
                                             })}
                                           </TableCell>
-                                          <TableCell style={cellSx} />
+                                          <TableCell
+                                            style={cellStyle}
+                                            sx={cellSx}
+                                          />
                                         </TableRow>
                                       ),
                                     )}
