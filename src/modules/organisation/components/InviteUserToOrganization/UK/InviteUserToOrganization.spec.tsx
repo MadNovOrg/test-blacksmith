@@ -65,7 +65,10 @@ it('validates that entered email is valid', async () => {
     </Provider>,
   )
 
-  await userEvent.type(screen.getByLabelText(/work email/i), 'email@email.com ')
+  await userEvent.type(
+    screen.getByLabelText(/work email/i),
+    '@email@email.com ',
+  )
 
   await userEvent.click(screen.getByRole('button', { name: /invite user/i }))
 

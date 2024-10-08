@@ -120,7 +120,7 @@ export const InviteUserToOrganization = () => {
             .string()
             .required(t('validation-errors.email-invalid'))
             .test('is-email', t('validation-errors.email-invalid'), email => {
-              return isEmail(email)
+              return isEmail(email.trim())
             }),
         )
         .required()

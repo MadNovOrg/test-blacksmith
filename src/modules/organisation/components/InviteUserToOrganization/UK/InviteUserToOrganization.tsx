@@ -110,7 +110,7 @@ export const InviteUserToOrganization = () => {
             .string()
             .required(t('validation-errors.email-invalid'))
             .test('is-email', t('validation-errors.email-invalid'), email => {
-              return isEmail(email)
+              return isEmail(email.trim())
             }),
         )
         .required()
@@ -120,7 +120,7 @@ export const InviteUserToOrganization = () => {
 
   const {
     handleSubmit,
-    formState: { errors, isSubmitted },
+    formState: { errors },
     watch,
     setValue,
     control,
@@ -279,7 +279,7 @@ export const InviteUserToOrganization = () => {
                       freeSolo
                       autoSelect
                       onChange={(_, v) =>
-                        setValue('emails', v, { shouldValidate: isSubmitted })
+                        setValue('emails', v, { shouldValidate: true })
                       }
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => (
