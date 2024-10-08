@@ -477,7 +477,11 @@ export const GeneralDetailsSection = ({
                 fullWidth
               />
               <Alert severity="info" sx={{ mt: 2 }}>
-                This only applies to courses that have been migrated from Arlo
+                {t(
+                  acl.isAustralia()
+                    ? 'arlo-migrated-courses-only-anz'
+                    : 'arlo-migrated-courses-only',
+                )}
               </Alert>
             </>
           ) : null}
