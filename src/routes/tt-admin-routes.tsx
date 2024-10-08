@@ -5,7 +5,10 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { AcceptInvite } from '@app/modules/accept_invite/pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/modules/accept_org_invite/pages/AcceptOrgInvite'
-import { ArloConnect, ArloImport } from '@app/modules/admin/Arlo/pages'
+import {
+  ArloConnect,
+  ArloImport as CertificateImport,
+} from '@app/modules/admin/Arlo/pages'
 import { AuditsPage } from '@app/modules/admin/Audits/pages/AuditsPage'
 import { CourseExceptionsLog } from '@app/modules/admin/CourseExceptionsLog/pages/CourseExceptionsLog'
 import {
@@ -160,11 +163,17 @@ const TTAdminRoutes = () => {
             </Route>
           ) : null}
 
-          {acl.canViewArloConnect() ? (
+          {acl.canViewArloConnect() && acl.isUK() ? (
             <Route path="arlo">
               <Route index element={<Navigate replace to="connect" />} />
               <Route path="connect" element={<ArloConnect />} />
-              <Route path="import" element={<ArloImport />} />
+              <Route path="import" element={<CertificateImport />} />
+            </Route>
+          ) : null}
+
+          {acl.isAustralia() ? (
+            <Route path="certificate">
+              <Route path="import" element={<CertificateImport />} />
             </Route>
           ) : null}
 

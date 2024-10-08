@@ -33,6 +33,7 @@ const LEVEL_TERMS: Record<
 > = {
   [Course_Level_Enum.Level_1]: TERMS,
   [Course_Level_Enum.Level_1Bs]: TERMS,
+  [Course_Level_Enum.Level_1Np]: TERMS,
   [Course_Level_Enum.Level_2]: TERMS,
   [Course_Level_Enum.FoundationTrainer]: TERMS,
   [Course_Level_Enum.FoundationTrainerPlus]: TERMS,

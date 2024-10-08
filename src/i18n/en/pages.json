@@ -1251,6 +1251,12 @@
     "import-certificate-success": "Certificate import finished. Found {{ processed }} valid certificate(s) and {{ invalid }} invalid certificate(s). \n{{ added }} new certificate(s) imported.",
     "timeout": "Operation timed out. Check server logs."
   },
+  "anz-import": {
+    "import-certificate-report": "Upload bulk certificates report",
+    "choose-file": "Choose file",
+    "import-certificate-success": "Certificate import finished. Found {{ processed }} valid certificate(s) and {{ invalid }} invalid certificate(s). \n{{ added }} new certificate(s) imported.",
+    "timeout": "Operation timed out. Check server logs."
+  },
   "create-organization": {
     "title": "Create Organisation",
     "organization-address": "Organisation address",

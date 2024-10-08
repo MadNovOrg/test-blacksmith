@@ -11,6 +11,7 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQuery } from 'urql'
 
+import { useAuth } from '@app/context/auth'
 import {
   ImportArloCertificatesMutation,
   ImportArloCertificatesMutationVariables,
@@ -28,6 +29,8 @@ import { arrayBufferToBinaryString } from '../utils/helpers'
 
 export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+  const isAustraliaRegion = acl.isAustralia()
   const [actionId, setActionId] = useState<string>()
   const [importInProgress, setImportInProgress] = useState(false)
   const [result, setResult] = useState<Partial<ImportArloCertificatesOutput>>()
@@ -118,7 +121,11 @@ export const ArloImport: React.FC<React.PropsWithChildren<unknown>> = () => {
     <Container maxWidth="lg" sx={{ py: 5, textAlign: 'center' }}>
       <Stack gap={4} alignItems="center">
         <Typography variant="h1">
-          {t('pages.arlo.import-certificate-report')}
+          {t(
+            `pages.${
+              isAustraliaRegion ? 'anz-import' : 'arlo'
+            }.import-certificate-report`,
+          )}
         </Typography>
 
         {importInProgress ? (
