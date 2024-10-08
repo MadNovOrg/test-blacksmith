@@ -70,6 +70,7 @@ export const GET_COURSE_PARTICIPANTS = gql`
       certificate {
         ...Certificate
       }
+      completed
       completed_evaluation
       order @include(if: $withOrder) {
         ...Order

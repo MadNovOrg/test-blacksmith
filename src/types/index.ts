@@ -446,6 +446,7 @@ export type CourseParticipant = {
   certificate?: CourseCertificate
   certificateChanges?: CourseCertificateChangelog[]
   healthSafetyConsent?: boolean
+  completed: boolean
   completed_evaluation: boolean
 } & Base
 
