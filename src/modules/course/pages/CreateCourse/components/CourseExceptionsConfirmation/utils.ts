@@ -74,15 +74,24 @@ const isTrainerRatioDependenciesEdited = ({
 }
 
 export const getExceptionsToIgnoreOnEditForTrainer = ({
+  courseCreatedBy,
   courseData,
   courseInput,
+  currentProfileId,
 }: {
+  courseCreatedBy?: string
   courseData: CourseData
   courseInput?: Partial<CourseInput>
+  currentProfileId: string
 }): Course_Exception_Enum[] => {
   const exceptionsToIgnore: Course_Exception_Enum[] = [
     Course_Exception_Enum.LeadTrainerInGracePeriod,
   ]
+
+  const doesTrainerEditsForeignCourse =
+    courseCreatedBy && courseCreatedBy !== currentProfileId
+
+  if (!doesTrainerEditsForeignCourse) return []
 
   if (
     courseInput?.startDateTime &&

@@ -15,6 +15,7 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 export default function useCourse(
   courseId: string,
   options: {
+    includeCreatedById?: boolean
     includePendingInvitesCount?: boolean
   } = {},
 ): {
@@ -45,6 +46,7 @@ export default function useCourse(
       withInternationalFinance:
         acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
       withFreeCourseCourseMaterials: true,
+      withCreatedById: options.includeCreatedById,
       withParticipantsPendingInvitesCount: options.includePendingInvitesCount,
     },
   })
