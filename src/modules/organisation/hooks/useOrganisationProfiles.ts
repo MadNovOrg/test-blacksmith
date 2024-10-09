@@ -74,8 +74,6 @@ type UserOrgProfiles = {
   profileId?: string
   showAll?: boolean
   withUpcomingEnrollmentsOnly?: boolean
-  limit?: number
-  offset?: number
   pause?: boolean
 }
 
@@ -84,8 +82,6 @@ export const useOrganisationProfiles = ({
   profileId,
   showAll,
   withUpcomingEnrollmentsOnly,
-  limit,
-  offset,
   pause,
 }: UserOrgProfiles) => {
   const [params] = useSearchParams()
@@ -102,8 +98,6 @@ export const useOrganisationProfiles = ({
         profileId,
         certificateFilter,
         showAll,
-        limit,
-        offset,
       },
     },
     pause: pause ?? false,
