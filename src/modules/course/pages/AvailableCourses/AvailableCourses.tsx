@@ -288,8 +288,12 @@ export const AvailableCourses: React.FC<
                                 Course_Level_Enum.BildAdvancedTrainer,
                                 Course_Level_Enum.BildIntermediateTrainer,
                                 Course_Level_Enum.BildRegular,
+                                Course_Level_Enum.Level_1Np,
                               ])
-                            : new Set([Course_Level_Enum.FoundationTrainer])
+                            : new Set([
+                                Course_Level_Enum.FoundationTrainer,
+                                Course_Level_Enum.Level_1Np,
+                              ])
                         }
                         title={t('course-level')}
                         onChange={setFilteredByCertificateLevel}

@@ -20,6 +20,7 @@ export const PricingFilters: React.FC<Props> = ({ onChange }) => {
   if (isUK()) {
     excludedLevels.add(Course_Level_Enum.FoundationTrainer)
   }
+  excludedLevels.add(Course_Level_Enum.Level_1Np)
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
     withDefault(BooleanParam, false),
