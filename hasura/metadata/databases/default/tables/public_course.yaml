@@ -1683,17 +1683,6 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/booking-contact'
-  - name: course_completed
-    definition:
-      enable_manual: false
-      update:
-        columns:
-          - course_status
-    retry_conf:
-      interval_sec: 60
-      num_retries: 5
-      timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/course/completed'
   - name: course_created
     definition:
       enable_manual: false

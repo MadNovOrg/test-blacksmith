@@ -630,7 +630,6 @@ export const buildParticipant = build<CourseParticipant>({
     order: {} as Order,
     attended: undefined,
     healthSafetyConsent: true,
-    completed: false,
     completed_evaluation: false,
   },
 })

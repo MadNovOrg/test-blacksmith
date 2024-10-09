@@ -151,7 +151,6 @@ select_permissions:
     permission:
       columns:
         - attended
-        - completed
         - completed_evaluation
         - hs_consent
         - course_id
@@ -189,7 +188,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -215,7 +213,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -249,7 +246,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -276,7 +272,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -303,7 +298,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -345,7 +339,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -372,7 +365,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - created_at
@@ -399,7 +391,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - course_id
         - created_at
         - date_graded
@@ -426,7 +417,6 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
-        - completed
         - completed_evaluation
         - course_id
         - date_graded

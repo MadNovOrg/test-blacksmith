@@ -170,16 +170,7 @@ export const AttendingTab = ({
     () =>
       [
         checkbox.headCol(
-          courseParticipants
-            ?.filter(
-              p =>
-                !p.grade &&
-                (p.course.type === Course_Type_Enum.Indirect &&
-                p.course.go1Integration
-                  ? !p.completed
-                  : true),
-            )
-            .map(p => p.id) ?? [],
+          courseParticipants?.filter(p => !p.grade).map(p => p.id) ?? [],
         ),
         {
           id: 'name',
@@ -270,17 +261,8 @@ export const AttendingTab = ({
   )
 
   const canToggleParticipantAttendance = useCallback(
-    ({
-      completed,
-      grade,
-      course: { go1Integration, type },
-    }: CourseParticipant) =>
-      (type === Course_Type_Enum.Indirect && go1Integration
-        ? !completed
-        : true) &&
-      canToggleAttendance &&
-      !isAttendanceDisabled &&
-      !grade,
+    ({ grade }: CourseParticipant) =>
+      canToggleAttendance && !isAttendanceDisabled && !grade,
     [canToggleAttendance, isAttendanceDisabled],
   )
 
