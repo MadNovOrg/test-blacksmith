@@ -233,6 +233,26 @@ export const GeneralDetailsSection = ({
       )}
     >
       <Box mb={2}>
+        {shouldShowCountrySelector ? (
+          <FormControl
+            fullWidth
+            sx={{ mb: theme.spacing(2) }}
+            data-testid="residing-country-selector"
+          >
+            <CountriesSelector
+              onChange={(_, code) => {
+                handleResidingCountryChange(code ?? '')
+              }}
+              value={residingCountry}
+              label={t('residing-country')}
+              error={Boolean(errors.residingCountry?.message)}
+              helperText={errors.residingCountry?.message}
+              isBILDcourse={isBild}
+              courseType={courseType}
+              disabled={disableCountrySelector}
+            />
+          </FormControl>
+        ) : null}
         {acl.canCreateBildCourse(courseType) ? (
           <FormControl variant="filled" sx={{ mb: theme.spacing(2) }} fullWidth>
             <InputLabel id="course-category-label">
@@ -605,27 +625,6 @@ export const GeneralDetailsSection = ({
           <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
             {t('blended-learning-price-label')}
           </Alert>
-        ) : null}
-
-        {shouldShowCountrySelector ? (
-          <FormControl
-            fullWidth
-            sx={{ my: theme.spacing(2) }}
-            data-testid="residing-country-selector"
-          >
-            <CountriesSelector
-              onChange={(_, code) => {
-                handleResidingCountryChange(code ?? '')
-              }}
-              value={residingCountry}
-              label={t('residing-country')}
-              error={Boolean(errors.residingCountry?.message)}
-              helperText={errors.residingCountry?.message}
-              isBILDcourse={isBild}
-              courseType={courseType}
-              disabled={disableCountrySelector}
-            />
-          </FormControl>
         ) : null}
         <Typography mb={2} mt={2} fontWeight={600}>
           {t('delivery-type-section-title')}
