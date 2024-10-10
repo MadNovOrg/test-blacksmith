@@ -69,20 +69,14 @@ describe('component: AnzCourseForm - OPEN', () => {
     expect(screen.getByLabelText('Both')).toBeDisabled()
   })
 
-  it('restricts OPEN+ADVANCED_TRAINER to be F2F', async () => {
-    await waitFor(() =>
-      render(<AnzCourseForm type={type} />, {
-        auth: {
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
-        },
-      }),
-    )
+  it('restricts OPEN+FOUNDATION_TRAINER to be MIXED or VIRTUAL', async () => {
+    await waitFor(() => renderForm({ type }))
 
-    await selectLevel(Course_Level_Enum.AdvancedTrainer)
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
 
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeDisabled()
-    expect(screen.getByLabelText('Both')).toBeDisabled()
+    expect(screen.getByLabelText('Face to face')).toBeDisabled()
+    expect(screen.getByLabelText('Virtual')).toBeEnabled()
+    expect(screen.getByLabelText('Both')).toBeEnabled()
   })
 
   it('restricts OPEN+Foundation Trainer to be F2F', async () => {
@@ -133,23 +127,6 @@ describe('component: AnzCourseForm - OPEN', () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.FoundationTrainer)
-
-    const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
-  })
-
-  it('restricts OPEN+ADVANCED_TRAINER+F2F to Non-blended', async () => {
-    await waitFor(() =>
-      render(<AnzCourseForm type={type} />, {
-        auth: {
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
-        },
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.AdvancedTrainer)
-    await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
@@ -221,22 +198,35 @@ describe('component: AnzCourseForm - OPEN', () => {
     expect(reacc).toBeChecked()
   })
 
-  it('allows OPEN+ADVANCED_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
+  it('allows OPEN+FOUNDATION_TRAINER+MIXED to Reaccreditation', async () => {
     await waitFor(() =>
-      render(<AnzCourseForm type={type} />, {
-        auth: {
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
-        },
+      renderForm({
+        type,
       }),
     )
 
-    await selectLevel(Course_Level_Enum.AdvancedTrainer)
-    await selectDelivery(Course_Delivery_Type_Enum.F2F)
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const reacc = screen.getByLabelText('Reaccreditation')
     expect(reacc).toBeEnabled()
-    expect(reacc).not.toBeChecked()
 
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows OPEN+FOUNDATION_TRAINER+VIRTUAL to Reaccreditation', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.FoundationTrainer)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })

@@ -63,7 +63,6 @@ export function getANZLevels(courseType: Course_Type_Enum) {
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.IntermediateTrainer,
-        Course_Level_Enum.AdvancedTrainer,
         Course_Level_Enum.FoundationTrainerPlus,
       ]
 
@@ -71,7 +70,6 @@ export function getANZLevels(courseType: Course_Type_Enum) {
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.IntermediateTrainer,
-        Course_Level_Enum.AdvancedTrainer,
         Course_Level_Enum.FoundationTrainer,
         Course_Level_Enum.FoundationTrainerPlus,
       ]
@@ -416,9 +414,7 @@ export function canBeReaccANZ(
 
       if (isF2F) {
         const levels = [
-          Course_Level_Enum.Level_2,
           Course_Level_Enum.IntermediateTrainer,
-          Course_Level_Enum.AdvancedTrainer,
           Course_Level_Enum.FoundationTrainerPlus,
         ]
         if (levels.includes(courseLevel)) return !blended
@@ -426,10 +422,7 @@ export function canBeReaccANZ(
 
       if (isMixed) {
         // OPEN + Mixed can only be Level 2 or 3-Day Safety Responses Trainer
-        const levels = [
-          Course_Level_Enum.Level_2,
-          Course_Level_Enum.FoundationTrainerPlus,
-        ]
+        const levels = [Course_Level_Enum.FoundationTrainerPlus]
         if (isFTEnabled) {
           levels.push(Course_Level_Enum.FoundationTrainer)
         }
