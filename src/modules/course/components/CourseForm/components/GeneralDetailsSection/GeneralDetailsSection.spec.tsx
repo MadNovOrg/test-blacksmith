@@ -116,19 +116,16 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
     },
   )
 
-  it.each(Object.values(AwsRegions))(
-    'hides the info alert for advanced trainer course',
-    async appRegion => {
-      vi.stubEnv('VITE_AWS_REGION', appRegion)
-      renderForm({
-        type: Course_Type_Enum.Closed,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-      })
-      await selectLevel(Course_Level_Enum.AdvancedTrainer)
+  it('hides the info alert for advanced trainer course [UK]', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    renderForm({
+      type: Course_Type_Enum.Closed,
+      certificateLevel: Course_Level_Enum.AdvancedTrainer,
+    })
+    await selectLevel(Course_Level_Enum.AdvancedTrainer)
 
-      expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
-    },
-  )
+    expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
+  })
 
   it.each(Object.values(AwsRegions))(
     'shows an info alert for blended learning for indirect courses',

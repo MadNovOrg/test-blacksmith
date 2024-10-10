@@ -5,7 +5,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { AwsRegions, RoleName } from '@app/types'
+import { AwsRegions } from '@app/types'
 
 import { screen, userEvent, waitFor } from '@test/index'
 
@@ -15,7 +15,7 @@ vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn(),
 }))
 
-describe('component: UkCourseForm - CLOSED', () => {
+describe('component: AnzCourseForm - CLOSED', () => {
   vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
   const type = Course_Type_Enum.Closed
 
@@ -40,41 +40,10 @@ describe('component: UkCourseForm - CLOSED', () => {
     expect(screen.getByLabelText('Both')).toBeEnabled()
   })
 
-  it('restricts CLOSED+ADVANCED to be F2F', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.IntermediateTrainer,
-        role: RoleName.TT_ADMIN,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.Advanced)
-
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeDisabled()
-    expect(screen.getByLabelText('Both')).toBeDisabled()
-  })
-
   it('restricts CLOSED+INTERMEDIATE_TRAINER to be F2F', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
-
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeDisabled()
-    expect(screen.getByLabelText('Both')).toBeDisabled()
-  })
-
-  it('restricts CLOSED+ADVANCED_TRAINER to be F2F', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.AdvancedTrainer)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -149,43 +118,10 @@ describe('component: UkCourseForm - CLOSED', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts CLOSED+ADVANCED+F2F to be Blended', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.IntermediateTrainer,
-        role: RoleName.TT_ADMIN,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.Advanced)
-    await selectDelivery(Course_Delivery_Type_Enum.F2F)
-
-    const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
-  })
-
   it('restricts CLOSED+INTERMEDIATE_TRAINER+F2F to be Blended', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
-    await selectDelivery(Course_Delivery_Type_Enum.F2F)
-
-    const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
-  })
-
-  it('restricts CLOSED+ADVANCED_TRAINER+F2F to be Blended', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
@@ -263,27 +199,6 @@ describe('component: UkCourseForm - CLOSED', () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.IntermediateTrainer)
-    await selectDelivery(Course_Delivery_Type_Enum.F2F)
-
-    const blended = screen.getByLabelText('Blended learning')
-    const reacc = screen.getByLabelText('Reaccreditation')
-
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
-    expect(reacc).toBeEnabled()
-    await userEvent.click(reacc)
-    expect(reacc).toBeChecked()
-  })
-
-  it('allows CLOSED+ADVANCED_TRAINER+F2F to be Reaccreditation but not Blended', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.AdvancedTrainer)
     await selectDelivery(Course_Delivery_Type_Enum.F2F)
 
     const blended = screen.getByLabelText('Blended learning')
