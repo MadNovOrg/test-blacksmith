@@ -37,12 +37,14 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
   const locationState = (location.state || {}) as LocationState
+  const from = locationState.from || defaultNextPath
+  const nextUrl = `${from.pathname || '/'}${from.search || ''}`
 
   const continueToNextPage = async () => {
-    const from = locationState.from || defaultNextPath
-    const nextUrl = `${from.pathname || '/'}${from.search || ''}`
     return navigate(nextUrl, { replace: true })
   }
+
+  const displayVerifyLater = nextUrl === '/booking/details'
 
   const handleContinue = async () => {
     const currentUser = await Auth.currentUserPoolUser()
@@ -85,6 +87,7 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
           </Box>
         ) : (
           <Form
+            displayVerifyLater={displayVerifyLater}
             onVerifyLater={continueToNextPage}
             onSuccess={() => setSuccess(true)}
           />
