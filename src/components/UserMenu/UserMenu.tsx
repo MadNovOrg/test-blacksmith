@@ -59,11 +59,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
         onClose={() => setAnchorElUser(null)}
         PaperProps={{ sx: { width: 220 } }}
       >
-        <MenuItem
-          onClick={() =>
-            handleMenuClick(`/${verified ? 'profile' : 'verify'} `)
-          }
-        >
+        <MenuItem onClick={() => handleMenuClick('/profile')}>
           <ListItemIcon>
             <AccountIcon fontSize="small" />
           </ListItemIcon>

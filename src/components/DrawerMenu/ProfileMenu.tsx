@@ -60,9 +60,7 @@ export const ProfileMenu: React.FC<
       />
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List>
-          <ListItemButton
-            onClick={() => navigate(`/${verified ? 'profile' : 'verify'} `)}
-          >
+          <ListItemButton onClick={() => navigate('/profile')}>
             <ListItemIcon>
               <AccountIcon fontSize="small" />
             </ListItemIcon>
