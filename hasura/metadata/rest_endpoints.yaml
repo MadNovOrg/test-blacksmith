@@ -2,8 +2,8 @@
   definition:
     query:
       collection_name: allowed-queries
-      query_name: MyQuery
+      query_name: GetUserKnowledgehubAccess
   methods:
     - GET
-  name: MyQuery
+  name: GetUserKnowledgehubAccess
   url: user/knowledgehub-access/:id
