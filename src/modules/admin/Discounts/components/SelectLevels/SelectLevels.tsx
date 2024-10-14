@@ -5,9 +5,10 @@ import {
   InputAdornment,
   TextField,
 } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 
 import { CLOSED_COURSE_LEVELS } from '../../utils'
@@ -22,6 +23,8 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
   onChange,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+  const isUKRegion = acl.isUK()
   const placeholder = value.length
     ? ''
     : t('components.selectLevels.placeholder')
@@ -29,7 +32,14 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
   const levels = Object.values(Course_Level_Enum).filter(
     level => !CLOSED_COURSE_LEVELS.includes(level),
   )
-  const sortedLevels = [...levels].sort((a, b) => a.localeCompare(b))
+
+  const filteredLevels = useMemo(() => {
+    if (isUKRegion) {
+      return levels.filter(l => l !== Course_Level_Enum.FoundationTrainer)
+    }
+    return levels
+  }, [isUKRegion, levels])
+  const sortedLevels = [...filteredLevels].sort((a, b) => a.localeCompare(b))
 
   const onSelected = (
     ev: React.SyntheticEvent,
