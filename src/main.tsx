@@ -48,11 +48,15 @@ TagManager.initialize({ gtmId: import.meta.env.VITE_GTM_ID })
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById('app')!)
+const posthogApiKey =
+  import.meta.env.VITE_AWS_REGION === AwsRegions.Australia
+    ? import.meta.env.VITE_PUBLIC_POSTHOG_KEY_AU
+    : import.meta.env.VITE_PUBLIC_POSTHOG_KEY
 
 root.render(
   <React.StrictMode>
     <PostHogProvider
-      apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY}
+      apiKey={posthogApiKey}
       options={{
         api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       }}
