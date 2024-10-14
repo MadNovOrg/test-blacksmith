@@ -146,7 +146,9 @@ computed_fields:
 select_permissions:
   - role: anonymous
     permission:
-      columns: []
+      columns:
+        - can_access_knowledge_hub
+        - id
       computed_fields:
         - email
       filter: {}
