@@ -16,7 +16,6 @@ import './i18n/config'
 
 import App from './App'
 import { ErrorPage } from './components/ErrorPage'
-import { amplifyConfig } from './lib/amplify'
 import theme from './theme'
 import { AwsRegions } from './types'
 
@@ -42,7 +41,24 @@ Sentry.init({
   ),
 })
 
-Amplify.configure(amplifyConfig[import.meta.env.VITE_AWS_REGION as AwsRegions])
+if (window.location.host === 'localhost:4000') {
+  // 👆👆 used to set up cognito for anz local development
+  Amplify.configure({
+    Auth: {
+      region: import.meta.env.VITE_AWS_REGION,
+      userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID_ANZ,
+      userPoolWebClientId: import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID_ANZ,
+    },
+  })
+} else {
+  Amplify.configure({
+    Auth: {
+      region: import.meta.env.VITE_AWS_REGION,
+      userPoolId: import.meta.env.VITE_COGNITO_USER_POOL_ID,
+      userPoolWebClientId: import.meta.env.VITE_COGNITO_USER_POOL_CLIENT_ID,
+    },
+  })
+}
 
 TagManager.initialize({ gtmId: import.meta.env.VITE_GTM_ID })
 

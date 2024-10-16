@@ -28,8 +28,6 @@ jobs:
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
-      cognito_user_pool_id_au: ${{ secrets.COGNITO_POOL_ID_STG_AUS }}
-      cognito_user_pool_client_id_au: ${{ secrets.COGNITO_CLIENT_ID_STG_AUS }}
       hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG }}
       hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG }}
       wp_host: ${{ secrets.WP_HOST_STG }}
@@ -50,10 +48,8 @@ jobs:
       mode: 'staging'
       aws_region: 'ap-southeast-2'
     secrets:
-      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
-      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
-      cognito_user_pool_id_au: ${{ secrets.COGNITO_POOL_ID_STG_AUS }}
-      cognito_user_pool_client_id_au: ${{ secrets.COGNITO_CLIENT_ID_STG_AUS }}
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG_AUS }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG_AUS }}
       hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG_AUS }}
       hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG_AUS }}
       wp_host: ${{ secrets.WP_HOST_STG_AUS }}

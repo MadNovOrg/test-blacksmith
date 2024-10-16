@@ -139,10 +139,8 @@ jobs:
     secrets:
       service_role_arn: ${{ matrix.aws_region == 'eu-west-2' && secrets.IAM_SERVICE_DEV || secrets.IAM_SERVICE_DEV_AUS }}
       hasura_admin_pass: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ADMIN_PASS_DEV || secrets.HASURA_ADMIN_PASS_DEV_AUS }}
-      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_DEV }}
-      cognito_user_pool_client_id: ${{secrets.COGNITO_CLIENT_ID_DEV }}
-      cognito_user_pool_id_au: ${{  secrets.COGNITO_POOL_ID_DEV_AUS }}
-      cognito_user_pool_client_id_au: ${{ secrets.COGNITO_CLIENT_ID_DEV_AUS }}
+      cognito_user_pool_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_POOL_ID_DEV ||  secrets.COGNITO_POOL_ID_DEV_AUS }}
+      cognito_user_pool_client_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_CLIENT_ID_DEV || secrets.COGNITO_CLIENT_ID_DEV_AUS }}
       hasura_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ENDPOINT_DEV || secrets.HASURA_ENDPOINT_DEV_AUS }}
       hasura_ws_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_WS_ENDPOINT_DEV || secrets.HASURA_WS_ENDPOINT_DEV_AUS }}
       wp_host: ${{ matrix.aws_region && secrets.WP_HOST_DEV || secrets.WP_HOST_DEV_AUS }}
