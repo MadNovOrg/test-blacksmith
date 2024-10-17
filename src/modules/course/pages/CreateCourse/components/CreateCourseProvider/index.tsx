@@ -263,8 +263,9 @@ export const CreateCourseProvider: React.FC<
         reaccreditation: courseData.reaccreditation,
       },
       t,
+      acl.isUK(),
     )
-  }, [courseData, strategies, t])
+  }, [courseData, strategies, t, acl])
 
   const saveDraft = useCallback(
     async (name?: string): Promise<SaveDraftResult> => {

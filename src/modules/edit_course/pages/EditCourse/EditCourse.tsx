@@ -281,8 +281,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             reaccreditation: courseData?.reaccreditation as boolean,
           },
           t,
+          acl.isUK(),
         )
-  }, [courseData, strategies, t])
+  }, [courseData, strategies, t, acl])
 
   const saveChanges = useCallback(
     async (reviewInput?: FormValues) => {

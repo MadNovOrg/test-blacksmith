@@ -278,10 +278,13 @@ export const transformModulesToGroups = (
 export const generateCourseName = (
   courseData: Pick<Course, 'level' | 'reaccreditation'>,
   t: TFunction,
+  isUKRegion: boolean,
 ) => {
   const courseLevelLabel = t(`common.course-levels.${courseData.level}`)
 
-  return `${t('common.course-name-prefix')}: ${courseLevelLabel} ${
+  return `${t(
+    `common.course-name-prefix-${isUKRegion ? 'UK' : 'ANZ'}`,
+  )}: ${courseLevelLabel} ${
     courseData.reaccreditation ? t('common.reaccreditation') : ''
   }`
 }

@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, ModuleSettingsQuery } from '@app/generated/graphql'
 import { generateCourseName } from '@app/util'
 
@@ -22,6 +23,7 @@ import {
 
 export const TrainerCourseBuilder: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const {
     bildStrategyModules,
@@ -43,6 +45,7 @@ export const TrainerCourseBuilder: React.FC<React.PropsWithChildren> = () => {
             reaccreditation: courseData.reaccreditation,
           },
           t,
+          acl.isUK(),
         )
 
         return mapCourseFormInputToBuilderCourseData({
@@ -54,7 +57,7 @@ export const TrainerCourseBuilder: React.FC<React.PropsWithChildren> = () => {
       }
 
       return null
-    }, [courseData, curriculum, go1Licensing, t])
+    }, [courseData, curriculum, go1Licensing, t, acl])
 
   const onCourseBuilderSubmit = useCallback(() => {
     return saveCourse()

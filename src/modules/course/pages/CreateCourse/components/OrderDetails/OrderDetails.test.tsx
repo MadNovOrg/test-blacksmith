@@ -14,7 +14,7 @@ import {
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { QUERY as BILD_STRATEGIES_QUERY } from '@app/modules/course/queries/get-bild-strategies'
-import { BildStrategies, ValidCourseInput } from '@app/types'
+import { AwsRegions, BildStrategies, ValidCourseInput } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -53,6 +53,9 @@ vi.mock('posthog-js/react', () => ({
 }))
 
 describe('component: OrderDetails', () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
   it('displays course details, and pricing with trainer expenses for an ICM course', async () => {
     const courseDate = new Date(1, 1, 2023)
 

@@ -9,6 +9,7 @@ import {
   Currency,
 } from '@app/generated/graphql'
 import {
+  AwsRegions,
   ExpensesInput,
   RoleName,
   TransportMethod,
@@ -52,6 +53,7 @@ for (const trainer of trainers) {
 
 describe('component: ReviewAndConfirm', () => {
   it('renders alert if course is not found', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     const client = {
       executeQuery: () => never,
     } as unknown as Client
@@ -75,6 +77,7 @@ describe('component: ReviewAndConfirm', () => {
   })
 
   it('renders course summary if course data is in context', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     const schedule = buildCourseSchedule({
       overrides: {
         start: new Date(2023, 1, 1).toISOString(),
@@ -151,6 +154,7 @@ describe('component: ReviewAndConfirm', () => {
   })
 
   it('displays course costs correctly', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     const PRICING_PER_PARTICIPANT = 100
     const NUM_OF_PARTICIPANTS = 10
     const schedule = buildCourseSchedule({
