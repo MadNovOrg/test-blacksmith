@@ -309,10 +309,12 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   }, [values.courseLevel, setValue])
 
   useEffect(() => {
-    if (isCreation && isNewZealandCountry(values.residingCountry)) {
-      setValue('includeVAT', false)
-    } else {
-      setValue('includeVAT', true)
+    if (isCreation) {
+      if (isNewZealandCountry(values.residingCountry)) {
+        setValue('includeVAT', false)
+      } else {
+        setValue('includeVAT', true)
+      }
     }
   }, [isCreation, values.residingCountry, isNewZealandCountry, setValue])
 
