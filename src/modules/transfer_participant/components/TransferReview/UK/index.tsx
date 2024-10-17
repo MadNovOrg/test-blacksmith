@@ -21,19 +21,18 @@ import {
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { CourseInfoPanel } from '@app/modules/transfer_participant/components/CourseInfoPanel'
+import {
+  TransferModeEnum,
+  useTransferParticipantContext,
+} from '@app/modules/transfer_participant/components/TransferParticipantProvider'
+import { TRANSFER_PARTICIPANT } from '@app/modules/transfer_participant/queries/queries'
 import {
   getTransferTermsFee,
   isAddressInfoRequired,
   isTrainTheTrainerCourse,
 } from '@app/modules/transfer_participant/utils'
-
-import { TRANSFER_PARTICIPANT } from '../../queries/queries'
-import { TransferStepsEnum } from '../../utils/types'
-import { CourseInfoPanel } from '../CourseInfoPanel'
-import {
-  TransferModeEnum,
-  useTransferParticipantContext,
-} from '../TransferParticipantProvider'
+import { TransferStepsEnum } from '@app/modules/transfer_participant/utils/types'
 
 export const TransferReview: React.FC<
   React.PropsWithChildren<unknown>

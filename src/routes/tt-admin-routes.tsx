@@ -43,7 +43,8 @@ import { TrainerCourses } from '@app/modules/trainer_courses/pages/MyCourses'
 import { TrainerFeedback } from '@app/modules/trainer_feedback/pages/TrainerFeedback'
 import { ChooseTransferCourse } from '@app/modules/transfer_participant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/modules/transfer_participant/components/TransferDetails'
-import { TransferReview } from '@app/modules/transfer_participant/components/TransferReview'
+import { TransferReview as ANZTransferReview } from '@app/modules/transfer_participant/components/TransferReview/ANZ'
+import { TransferReview as UKTransferReview } from '@app/modules/transfer_participant/components/TransferReview/UK'
 import { AdminTransferParticipantPage } from '@app/modules/transfer_participant/pages/AdminTransferParticipant/AdminTransferParticipant'
 import { UserRoutes } from '@app/modules/user/routes'
 
@@ -97,7 +98,12 @@ const TTAdminRoutes = () => {
           >
             <Route index element={<ChooseTransferCourse />} />
             <Route path="details" element={<TransferDetails />} />
-            <Route path="review" element={<TransferReview />} />
+            <Route
+              path="review"
+              element={
+                acl.isUK() ? <UKTransferReview /> : <ANZTransferReview />
+              }
+            />
           </Route>
         </Route>
       </Route>
@@ -116,7 +122,12 @@ const TTAdminRoutes = () => {
               >
                 <Route index element={<ChooseTransferCourse />} />
                 <Route path="details" element={<TransferDetails />} />
-                <Route path="review" element={<TransferReview />} />
+                <Route
+                  path="review"
+                  element={
+                    acl.isUK() ? <UKTransferReview /> : <ANZTransferReview />
+                  }
+                />
               </Route>
               <Route path="evaluation">
                 <Route path="submit" element={<TrainerFeedback />} />

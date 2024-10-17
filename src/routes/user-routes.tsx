@@ -21,7 +21,8 @@ import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
 import { ChooseTransferCourse } from '@app/modules/transfer_participant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/modules/transfer_participant/components/TransferDetails'
-import { TransferReview } from '@app/modules/transfer_participant/components/TransferReview'
+import { TransferReview as ANZTransferReview } from '@app/modules/transfer_participant/components/TransferReview/ANZ'
+import { TransferReview as UKTransferReview } from '@app/modules/transfer_participant/components/TransferReview/UK'
 import { UserTransferParticipant } from '@app/modules/transfer_participant/pages/UserTransferParticipant/UserTransferParticipant'
 import { AttendeeCourses } from '@app/modules/user_courses/pages/AttendeeCourses'
 
@@ -65,7 +66,12 @@ const UserRoutes = () => {
           <Route path="transfer" element={<UserTransferParticipant />}>
             <Route index element={<ChooseTransferCourse />} />
             <Route path="details" element={<TransferDetails />} />
-            <Route path="review" element={<TransferReview />} />
+            <Route
+              path="review"
+              element={
+                acl.isUK() ? <UKTransferReview /> : <ANZTransferReview />
+              }
+            />
           </Route>
         </Route>
       </Route>
@@ -88,7 +94,12 @@ const UserRoutes = () => {
               >
                 <Route index element={<ChooseTransferCourse />} />
                 <Route path="details" element={<TransferDetails />} />
-                <Route path="review" element={<TransferReview />} />
+                <Route
+                  path="review"
+                  element={
+                    acl.isUK() ? <UKTransferReview /> : <ANZTransferReview />
+                  }
+                />
               </Route>
             </Route>
           </Route>
@@ -118,7 +129,12 @@ const UserRoutes = () => {
                 >
                   <Route index element={<ChooseTransferCourse />} />
                   <Route path="details" element={<TransferDetails />} />
-                  <Route path="review" element={<TransferReview />} />
+                  <Route
+                    path="review"
+                    element={
+                      acl.isUK() ? <UKTransferReview /> : <ANZTransferReview />
+                    }
+                  />
                 </Route>
               ) : null}
             </Route>

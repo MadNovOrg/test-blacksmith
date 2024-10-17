@@ -1,6 +1,9 @@
+import { useAuth } from '@app/context/auth'
 import { Course, CourseParticipant } from '@app/types'
 
-import { VariantMinimal, VariantComplete } from './variants'
+import { VariantMinimal } from './variants'
+import { VariantComplete as ANZVariantComplete } from './variants/VariantComplete/ANZ'
+import { VariantComplete as UKVariantComplete } from './variants/VariantComplete/ANZ'
 
 export type CancelAttendeeDialogVariant = 'minimal' | 'complete'
 
@@ -19,6 +22,7 @@ export const CancelAttendeeDialog = ({
   onClose,
   onSave,
 }: CancelAttendeeDialogProps) => {
+  const { acl } = useAuth()
   switch (variant) {
     case 'minimal':
       return (
@@ -31,8 +35,15 @@ export const CancelAttendeeDialog = ({
       )
     case 'complete':
     default:
-      return (
-        <VariantComplete
+      return acl.isUK() ? (
+        <UKVariantComplete
+          participant={participant}
+          course={course}
+          onClose={onClose}
+          onSubmit={onSave}
+        />
+      ) : (
+        <ANZVariantComplete
           participant={participant}
           course={course}
           onClose={onClose}

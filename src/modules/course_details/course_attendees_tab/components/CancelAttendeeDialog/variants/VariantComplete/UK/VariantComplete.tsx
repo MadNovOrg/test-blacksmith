@@ -29,8 +29,8 @@ import { yup } from '@app/schemas'
 import { Course, CourseParticipant } from '@app/types'
 import { capitalize, customFeeFormat } from '@app/util'
 
-import { Actions, CancellationFeeDetails, Title } from '../../components'
-import { FormInput } from '../../types'
+import { Actions, CancellationFeeDetails, Title } from '../../../components'
+import { FormInput } from '../../../types'
 
 export type VariantCompleteProps = {
   participant: CourseParticipant
@@ -240,12 +240,14 @@ export const VariantComplete = ({
                 <Typography fontWeight={600}>
                   {t('currency', {
                     amount: values.cancellationFee
-                      ? course.includeVAT
-                        ? values.cancellationFee +
-                          new Big((values.cancellationFee * 20) / 100)
-                            .round(2)
-                            .toNumber()
-                        : values.cancellationFee
+                      ? values.cancellationFee +
+                        new Big(
+                          (values.cancellationFee *
+                            (course.includeVAT ? 20 : 0)) / //if includeVat apply 20% tax, else 0%
+                            100,
+                        )
+                          .round(2)
+                          .toNumber()
                       : 0,
                     currency: course.priceCurrency,
                   })}
