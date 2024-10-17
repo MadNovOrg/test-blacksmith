@@ -54,7 +54,7 @@ export const useCourseFormEffects = () => {
       )
         return Countries_Code.IRELAND
 
-      return defaultResidingCountry()
+      return courseResidingCountry
     },
     [
       wasCountryAlreadyChanged,
