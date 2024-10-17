@@ -6,8 +6,8 @@ import { GQLProvider } from './components/GQLProvider'
 import { ScrollToTop } from './components/ScrollToTop'
 import { SnackbarProvider } from './context/snackbar'
 import { useConfigureSentryTags } from './hooks/useConfigureSentryTags'
+import { GTMPageTracker } from './lib/tag-manager'
 import { AppRoutes } from './routes'
-
 import './style.css'
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
             defaultTitle={t('pages.browser-tab-titles.main-title')}
             titleTemplate={`%s - ${t('pages.browser-tab-titles.main-title')}`}
           />
+          <GTMPageTracker />
           <AppRoutes />
         </SnackbarProvider>
       </>
