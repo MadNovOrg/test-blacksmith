@@ -154,7 +154,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     status: courseStatus,
     mutate: mutateCourse,
   } = useCourse(id ?? '', {
-    includeCreatedById: acl.isTrainer(),
     includePendingInvitesCount: true,
   })
   const { setDateTimeTimeZone } = useTimeZones()
@@ -747,13 +746,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           })),
         ],
         [
-          ...(acl.isTrainer() &&
-          course?.status !== Course_Status_Enum.ExceptionsApprovalPending
+          ...(course?.status !== Course_Status_Enum.ExceptionsApprovalPending
             ? getExceptionsToIgnoreOnEditForTrainer({
-                courseCreatedBy: course?.createdById,
                 courseData: checkCourseExceptionsData,
                 courseInput,
-                currentProfileId: profile.id,
               })
             : []),
         ],
@@ -786,7 +782,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     isUKCountry,
     editCourse,
     course?.status,
-    course?.createdById,
     courseInput,
     canRescheduleCourseEndDate,
     autoapproved,
