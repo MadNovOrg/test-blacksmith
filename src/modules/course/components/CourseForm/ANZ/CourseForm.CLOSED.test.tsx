@@ -65,15 +65,18 @@ describe('component: AnzCourseForm - CLOSED', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts CLOSED+LEVEL_1+MIXED to be Blended', async () => {
+  it('allows CLOSED+LEVEL_1+MIXED to be Blended', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
+    expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
+
+    await userEvent.click(blended)
+    expect(blended).toBeChecked()
   })
 
   it('allows CLOSED+LEVEL_1+VIRTUAL to be Blended', async () => {

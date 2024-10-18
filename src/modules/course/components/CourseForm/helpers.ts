@@ -256,6 +256,71 @@ export function canBeBlended(
   return types[courseType]()
 }
 
+export function canBeBlendedANZ(
+  courseType: Course_Type_Enum,
+  courseLevel: Course_Level_Enum | CourseLevel | '',
+  deliveryType: Course_Delivery_Type_Enum,
+) {
+  const isF2F = deliveryType === Course_Delivery_Type_Enum.F2F
+  const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
+  const isVirtual = deliveryType === Course_Delivery_Type_Enum.Virtual
+
+  const types = {
+    [Course_Type_Enum.Open]: () => false,
+
+    [Course_Type_Enum.Closed]: () => {
+      if (!courseLevel) return false
+
+      if (isF2F) {
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_2,
+        ]
+        return levels.includes(courseLevel as Course_Level_Enum)
+      }
+
+      if (isMixed) {
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_2,
+        ]
+        return levels.includes(courseLevel as Course_Level_Enum)
+      }
+
+      if (isVirtual) {
+        const levels = [Course_Level_Enum.Level_1]
+        return levels.includes(courseLevel as Course_Level_Enum)
+      }
+
+      return false
+    },
+
+    [Course_Type_Enum.Indirect]: () => {
+      if (!courseLevel) return false
+
+      if (isF2F) {
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
+        return levels.includes(courseLevel as Course_Level_Enum)
+      }
+
+      if (isMixed) {
+        return false
+      }
+
+      if (isVirtual) {
+        const levels = [Course_Level_Enum.Level_1]
+        return levels.includes(courseLevel as Course_Level_Enum)
+      }
+
+      return false
+    },
+  }
+
+  return types[courseType]()
+}
+
 export function canBeReaccBild(
   courseType: Course_Type_Enum,
   strategies: Record<BildStrategies, boolean> | null,

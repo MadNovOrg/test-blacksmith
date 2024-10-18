@@ -13,6 +13,7 @@ import {
   canBeANZMixed,
   canBeANZVirtual,
   canBeBlended,
+  canBeBlendedANZ,
   canBeBlendedBild,
   canBeConversion,
   canBeF2F,
@@ -54,7 +55,11 @@ export const useCoursePermissions = (
 
   const isAustraliaRegion = acl.isAustralia()
   const canBlended = isICM
-    ? canBeBlended(type, courseLevel as Course_Level_Enum, deliveryType)
+    ? (isAustraliaRegion ? canBeBlendedANZ : canBeBlended)(
+        type,
+        courseLevel as Course_Level_Enum,
+        deliveryType,
+      )
     : canBeBlendedBild(type, courseLevel as Course_Level_Enum, bildStrategies)
 
   const canReacc = () => {
