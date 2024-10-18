@@ -297,6 +297,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           value={values.countryCode}
         />
+        <Typography
+          variant="body1"
+          sx={{ fontSize: '.75rem', color: 'grey' }}
+          data-testid="residing-country-hint-message"
+        >
+          {t('common.validation-hints.residing-country-hint-message')}
+        </Typography>
       </Box>
 
       <Box mb={3}>

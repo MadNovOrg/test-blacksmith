@@ -222,6 +222,13 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               }}
               value={values.countryCode}
             />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: '.75rem', color: 'grey' }}
+              data-testid="residing-country-hint-message"
+            >
+              {_t('common.validation-hints.residing-country-hint-message')}
+            </Typography>
           </Grid>
 
           <Grid item>

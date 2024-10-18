@@ -964,6 +964,17 @@ export const EditProfilePage: React.FC<
                       value={profile.countryCode}
                       showAllCountries={true}
                     />
+                    <Typography
+                      variant="body1"
+                      sx={{ fontSize: '.75rem', color: 'grey' }}
+                      data-testid="residing-country-hint-message"
+                    >
+                      {t(
+                        id
+                          ? 'common.validation-hints.residing-country-user-hint-message'
+                          : 'common.validation-hints.residing-country-hint-message',
+                      )}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12} sm={12} md={6} lg={6}>
                     <PhoneNumberInput

@@ -306,6 +306,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             error={!!errors.country}
             helperText={errors.country?.message || ''}
           />
+          <Typography
+            variant="body1"
+            sx={{ fontSize: '.75rem', color: 'grey' }}
+            data-testid="residing-country-hint-message"
+          >
+            {t('common.validation-hints.residing-country-hint-message')}
+          </Typography>
         </Grid>
 
         <Grid item>
