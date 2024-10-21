@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { BooleanParam, useQueryParam, withDefault } from 'use-query-params'
 
 import { FilterByBlendedLearning } from '@app/components/filters/FilterByBlendedLearning'
@@ -16,11 +16,20 @@ export const PricingFilters: React.FC<Props> = ({ onChange }) => {
   const {
     acl: { isUK },
   } = useAuth()
-  const excludedLevels = new Set(BILD_COURSE_LEVELS)
-  if (isUK()) {
-    excludedLevels.add(Course_Level_Enum.FoundationTrainer)
-  }
-  excludedLevels.add(Course_Level_Enum.Level_1Np)
+
+  const excludedLevels = useMemo(() => {
+    const levels = new Set(BILD_COURSE_LEVELS)
+    levels.add(Course_Level_Enum.Level_1Np) // will become available for ANZ when it will be implemented. for now it was added for the Certificate import tool
+
+    if (isUK()) {
+      levels.add(Course_Level_Enum.FoundationTrainer)
+    } else {
+      levels.add(Course_Level_Enum.Advanced)
+      levels.add(Course_Level_Enum.AdvancedTrainer)
+    }
+    return levels
+  }, [isUK])
+
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
     withDefault(BooleanParam, false),
