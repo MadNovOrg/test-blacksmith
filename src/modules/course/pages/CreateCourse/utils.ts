@@ -7,7 +7,6 @@ import {
 import {
   Accreditors_Enum,
   Course_Level_Enum,
-  Course_Renewal_Cycle_Enum,
   Course_Type_Enum,
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
@@ -135,13 +134,6 @@ export function calculateGo1LicenseCost(
     subtotal: fullPrice.toNumber(),
     allowancePrice: allowancePrice.toNumber(),
   }
-}
-
-export const getCourseRenewalCycle = (courseData: ValidCourseInput) => {
-  if (courseData.renewalCycle) return courseData.renewalCycle
-  if (courseData.courseLevel === Course_Level_Enum.Level_1Bs)
-    return Course_Renewal_Cycle_Enum.One
-  return null
 }
 
 export type BuilderCourseData<T> = T extends Accreditors_Enum.Icm

@@ -58,10 +58,7 @@ import {
   DisabledFields,
   CourseForm,
 } from '@app/modules/course/components/CourseForm'
-import {
-  hasRenewalCycle,
-  isRenewalCycleHiddenFromUI,
-} from '@app/modules/course/components/CourseForm/helpers'
+import { hasRenewalCycle } from '@app/modules/course/components/CourseForm/helpers'
 import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
@@ -70,7 +67,6 @@ import {
   isTrainersRatioNotMet,
   shouldGoIntoExceptionApproval,
 } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { getCourseRenewalCycle } from '@app/modules/course/pages/CreateCourse/utils'
 import { CourseCancellationModal } from '@app/modules/edit_course/components/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/modules/edit_course/components/RegistrantsCancellationModal'
 import { INSERT_COURSE_AUDIT } from '@app/modules/edit_course/queries/insert-course-audit'
@@ -397,8 +393,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 courseType: courseData.type,
                 startDate: courseData.startDate,
                 courseLevel: courseData.courseLevel,
-              }) || isRenewalCycleHiddenFromUI(courseData.courseLevel)
-                ? { renewalCycle: getCourseRenewalCycle(courseData) }
+              })
+                ? { renewalCycle: courseData.renewalCycle }
                 : { renewalCycle: null }),
               ...(courseData.minParticipants
                 ? { min_participants: courseData.minParticipants }

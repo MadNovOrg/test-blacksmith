@@ -915,8 +915,3 @@ export function hasRenewalCycle({
     getYear(startDate) > 2023
   )
 }
-
-export const isRenewalCycleHiddenFromUI = (courseLevel: Course_Level_Enum) => {
-  const levelsToHideRenewalCycle = [Course_Level_Enum.Level_1Bs]
-  return levelsToHideRenewalCycle.includes(courseLevel)
-}

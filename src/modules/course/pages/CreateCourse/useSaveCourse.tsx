@@ -23,10 +23,7 @@ import {
   Currency,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
-import {
-  hasRenewalCycle,
-  isRenewalCycleHiddenFromUI,
-} from '@app/modules/course/components/CourseForm/helpers'
+import { hasRenewalCycle } from '@app/modules/course/components/CourseForm/helpers'
 import { shouldGoIntoExceptionApproval } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   courseWithManualPrice,
@@ -46,7 +43,6 @@ import { LoadingStatus, getMandatoryCourseMaterialsCost } from '@app/util'
 import { transformBILDModules } from '../CourseBuilder/components/BILDCourseBuilder/utils'
 
 import { useCreateCourse } from './components/CreateCourseProvider'
-import { getCourseRenewalCycle } from './utils'
 
 const prepareExpensesData = (
   expenses: Record<string, ExpensesInput>,
@@ -404,9 +400,9 @@ export function useSaveCourse(): {
             courseType: courseData.type,
             startDate: courseData.startDate,
             courseLevel: courseData.courseLevel,
-          }) || isRenewalCycleHiddenFromUI(courseData.courseLevel)
+          })
             ? {
-                renewalCycle: getCourseRenewalCycle(courseData),
+                renewalCycle: courseData.renewalCycle,
               }
             : null),
           ...(courseData.usesAOL
