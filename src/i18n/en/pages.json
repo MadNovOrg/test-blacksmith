@@ -1455,6 +1455,7 @@
           "bild_intermediate_trainer": "BILD Intermediate Trainer ({{ count }})",
           "bild_advanced_trainer": "BILD Advanced Trainer ({{ count }})",
           "advanced_trainer": "Advanced Trainer ({{ count }})",
+          "foundation_trainer": "Foundation Trainer ({{ count }})",
           "foundation_trainer_plus": "Foundation Trainer Plus ({{count}})",
           "no-certification": "No certification ({{ count }})"
         },

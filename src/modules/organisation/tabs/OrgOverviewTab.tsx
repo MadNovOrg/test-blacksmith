@@ -49,6 +49,7 @@ const LEVELS_IN_ORDER = [
   CourseLevel.Level_1,
   CourseLevel.Level_1Bs,
   CourseLevel.Level_2,
+  CourseLevel.FoundationTrainer,
   CourseLevel.FoundationTrainerPlus,
 ]
 
