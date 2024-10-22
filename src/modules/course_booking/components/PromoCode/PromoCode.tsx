@@ -162,17 +162,19 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
         </Box>
       )}
 
-      <Box display="flex" justifyContent="flex-end" mr={-1} mt={2}>
-        <Button
-          size="small"
-          variant="text"
-          color="primary"
-          sx={{ fontWeight: '600' }}
-          onClick={() => setAdding(true)}
-        >
-          {t('pages.book-course.apply-promo')}
-        </Button>
-      </Box>
+      {!adding && !codes.length ? (
+        <Box display="flex" justifyContent="flex-end" mr={-1} mt={2}>
+          <Button
+            size="small"
+            variant="text"
+            color="primary"
+            sx={{ fontWeight: '600' }}
+            onClick={() => setAdding(true)}
+          >
+            {t('pages.book-course.apply-promo')}
+          </Button>
+        </Box>
+      ) : null}
     </Stack>
   )
 }

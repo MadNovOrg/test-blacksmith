@@ -335,11 +335,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         continue
       }
 
-      const mcmDiscount =
-        course?.type === Course_Type_Enum.Open
-          ? getMandatoryCourseMaterialsCost(1, booking.currency)
-          : 0
-
       const courseCost = booking.price * booking.quantity
 
       discounts[code] = {
@@ -347,9 +342,8 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         type: promoCode.type as Promo_Code_Type_Enum,
         amountCurrency:
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
-            ? booking.price * promoCode.amount + mcmDiscount
-            : (courseCost * promoCode.amount) / 100 +
-              mcmDiscount * booking.quantity,
+            ? booking.price * promoCode.amount
+            : (courseCost * promoCode.amount) / 100,
       }
     }
 
@@ -401,7 +395,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const subtotalDiscounted = max(
       subtotal +
         mandatoryCourseMaterialsCost -
-        Number(discount) -
+        Math.min(Number(discount), courseCost) - // If discount is higher than course cost, we should not go negative
         freeSpacesDiscount,
       0,
     )
@@ -417,7 +411,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
             stripeProcessingFeeRate.percent * subtotalDiscounted +
               stripeProcessingFeeRate.flat,
             2,
-          ) // Round cent precision
+          )
         : 0
 
     const total = amountDue + paymentProcessingFee

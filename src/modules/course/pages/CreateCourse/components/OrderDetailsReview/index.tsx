@@ -176,11 +176,11 @@ export const OrderDetailsReview: React.FC = () => {
       const amountDue = subtotal.add(new Big(vat()))
 
       return [
-        courseBasePrice.round().toNumber(),
-        subtotal.round().toNumber(),
-        freeSpacesDiscount.round().toNumber(),
-        new Big(vat()).round().toNumber(),
-        amountDue.round().toNumber(),
+        courseBasePrice.round(2).toNumber(),
+        subtotal.round(2).toNumber(),
+        freeSpacesDiscount.round(2).toNumber(),
+        new Big(vat()).round(2).toNumber(),
+        amountDue.round(2).toNumber(),
       ]
     }, [
       courseData,
