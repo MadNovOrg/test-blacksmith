@@ -1,13 +1,13 @@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { LoadingButton } from '@mui/lab'
-import { Box, Typography, styled } from '@mui/material'
+import { Box, Link, Typography, styled } from '@mui/material'
 import { ChangeEvent, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
-import {
-  ImportStepsEnum as ImportSteps,
-  useImportContext,
-} from '@app/components/ImportSteps'
+import { ImportStepsEnum as ImportSteps } from '@app/components/ImportSteps'
+import { useImportContext } from '@app/components/ImportSteps/context'
+
+import { necessaryColumns } from '../../utils'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -21,9 +21,10 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 })
 
-export const ChooseFile: React.FC = () => {
-  const { t } = useTranslation('pages', { keyPrefix: 'import-users' })
-  const { completeStep, goToStep, fileChosen } = useImportContext()
+export const Upload: React.FC = () => {
+  const { t } = useTranslation('pages', { keyPrefix: 'import-organisations' })
+  const { completeStep, goToStep, importConfigured, fileChosen } =
+    useImportContext()
   const [processing, setProcessing] = useState(false)
 
   const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -52,19 +53,29 @@ export const ChooseFile: React.FC = () => {
     })
 
     setProcessing(false)
-
     fileChosen(data)
+    importConfigured(necessaryColumns)
     completeStep(ImportSteps.CHOOSE)
-    goToStep(ImportSteps.CONFIGURE)
+    goToStep(ImportSteps.PREVIEW)
   }
 
   return (
     <Box>
       <Typography variant="h4" mb={2}>
-        {t('steps.choose.title')}
+        {t('steps.upload.title')}
       </Typography>
 
-      <Typography>{t('steps.choose.description')}</Typography>
+      <Trans
+        i18nKey="steps.upload.description"
+        t={t}
+        components={[
+          <Link
+            key={0}
+            underline="always"
+            href="https://assets.teamteachhub.co.uk/anz_orgs_import_template.xlsx"
+          />,
+        ]}
+      />
 
       <Box mt={4}>
         <LoadingButton
@@ -73,8 +84,9 @@ export const ChooseFile: React.FC = () => {
           loading={processing}
           startIcon={<CloudUploadIcon />}
         >
-          {t('steps.choose.button-text')}
+          {t('steps.upload.button-text')}
           <VisuallyHiddenInput
+            data-testid="upload-orgs-file"
             type="file"
             accept=".xlsx"
             onChange={handleUploadChange}

@@ -38,7 +38,10 @@ import { GradingRoutes } from '@app/modules/grading/routes'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { OrderDetails } from '@app/modules/order_details/pages/OrderDetails'
 import { Orders } from '@app/modules/orders/pages/Orders'
-import { OrganisationRoutes } from '@app/modules/organisation/routes'
+import {
+  AdminOrganisationRoutes,
+  OrganisationRoutes,
+} from '@app/modules/organisation/routes'
 import { TrainerCourses } from '@app/modules/trainer_courses/pages/MyCourses'
 import { TrainerFeedback } from '@app/modules/trainer_feedback/pages/TrainerFeedback'
 import { ChooseTransferCourse } from '@app/modules/transfer_participant/components/ChooseTransferCourse'
@@ -193,6 +196,12 @@ const TTAdminRoutes = () => {
             element={<CourseExceptionsLog />}
           />
           <Route path="audit" element={<AuditsPage />} />
+          {acl.canImportOrganizations() && acl.isAustralia() ? (
+            <Route
+              path="organisations/*"
+              element={<AdminOrganisationRoutes />}
+            />
+          ) : null}
         </Route>
       ) : null}
 

@@ -227,6 +227,14 @@ actions:
       handler: '{{ACTIONS_HOST}}/certificate/import-legacy'
     permissions:
       - role: user
+  - name: importOrganisations
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/import/start'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+    comment: importOrganisations
   - name: importUsers
     definition:
       kind: synchronous
@@ -1016,6 +1024,8 @@ custom_types:
     - name: ImportUsersInput
     - name: ImportUsersConfig
     - name: OrganizationProfilesInput
+    - name: ImportOrganisationsInput
+    - name: ImportOrganisationsConfig
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1115,5 +1125,6 @@ custom_types:
     - name: ImportArloCertificatesError
     - name: FailedImportEntries
     - name: InvalidEntries
+    - name: ImportOrganisationsOutput
   scalars:
     - name: Date

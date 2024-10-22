@@ -5,32 +5,29 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   LinearProgress,
   Stack,
   Typography,
 } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
-import {
-  useImportContext,
-  ImportStepsEnum as ImportSteps,
-} from '@app/components/ImportSteps'
+import { ImportStepsEnum as ImportSteps } from '@app/components/ImportSteps'
+import { useImportContext } from '@app/components/ImportSteps/context'
 import { Import_Job_Status_Enum } from '@app/generated/graphql'
 
-import { useImportUsersJobSubscription } from '../../hooks/useImportUsersJobSubscription'
+import { useImportOrganisationsJobSubscription } from '../../hooks/useImportOrganisationsJobSubscription'
+import { CHUNK_RESULT_ERROR, necessaryColumns } from '../../utils'
 
 export const Importing: React.FC = () => {
-  const { goToStep, completeStep, jobId } = useImportContext()
-  const { t } = useTranslation('pages', { keyPrefix: 'import-users' })
+  const { goToStep, completeStep, jobId, setCurrentStepKey } =
+    useImportContext()
+  const { t } = useTranslation('pages', { keyPrefix: 'import-organisations' })
+  const { pathname } = useLocation()
 
-  const [{ data }] = useImportUsersJobSubscription(jobId)
-
-  useEffect(() => {
-    if (!jobId) {
-      goToStep(ImportSteps.CHOOSE)
-    }
-  }, [jobId, goToStep])
+  const [{ data }] = useImportOrganisationsJobSubscription(jobId)
 
   const result = data?.import_job_by_pk?.result
   const status = data?.import_job_by_pk?.status
@@ -42,14 +39,22 @@ export const Importing: React.FC = () => {
     }
   }, [status, goToStep, completeStep])
 
+  useEffect(() => {
+    if (!jobId) {
+      goToStep(ImportSteps.CHOOSE)
+    }
+  }, [jobId, goToStep])
+
   return (
     <Box>
       <Typography variant="h4" mb={2}>
-        {t('steps.importing.title')}
+        {pathname.includes('import/results')
+          ? t('steps.importing.title-results')
+          : t('steps.importing.title')}
       </Typography>
 
       {!result?.total ? (
-        <Typography>Starting import job...</Typography>
+        <Typography>{t('steps.importing.starting')}</Typography>
       ) : (
         <>
           <Typography mb={4} display="flex">
@@ -97,7 +102,7 @@ export const Importing: React.FC = () => {
               <Accordion disableGutters>
                 <AccordionSummary>
                   <Typography variant="h6">
-                    {t('steps.importing.imported-users', {
+                    {t('steps.importing.imported-organisations', {
                       count: result?.importedCount ?? 0,
                     })}
                   </Typography>
@@ -111,23 +116,53 @@ export const Importing: React.FC = () => {
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">
                     {t('steps.importing.not-imported', {
-                      count: result?.notImportedUsers?.length ?? 0,
+                      count: result?.notImported?.length ?? 0,
                     })}
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Stack spacing={1}>
-                    {result?.notImportedUsers?.map(
-                      (notImported: { email: string; reason: string }) => {
+                    {result?.notImported?.map(
+                      (notImported: {
+                        name: string
+                        reason: string
+                        missingFields?: Array<string>
+                      }) => {
                         return (
-                          <Typography key={notImported.email}>
+                          <Typography key={notImported.name}>
                             {t(
                               [
                                 `steps.importing.not-imported-error-${notImported.reason}`,
                                 'steps.importing.not-imported-error',
                               ],
-                              { email: notImported.email },
+                              { name: notImported.name },
                             )}
+                            {notImported.reason ===
+                            CHUNK_RESULT_ERROR.MissingMandatoryFields ? (
+                              <>
+                                <Typography variant="body2">
+                                  {t(
+                                    'steps.importing.missing-mandatory-fields',
+                                  )}{' '}
+                                  {notImported.missingFields?.map(field => (
+                                    <span key={field}>{`${
+                                      necessaryColumns[
+                                        field as keyof typeof necessaryColumns
+                                      ]
+                                    }${
+                                      (notImported.missingFields || []).indexOf(
+                                        field,
+                                      ) <
+                                      (notImported.missingFields || [])
+                                        ?.length -
+                                        1
+                                        ? ', '
+                                        : ''
+                                    }`}</span>
+                                  ))}
+                                </Typography>
+                              </>
+                            ) : null}
                           </Typography>
                         )
                       },
@@ -135,7 +170,7 @@ export const Importing: React.FC = () => {
                   </Stack>
                 </AccordionDetails>
               </Accordion>
-              {result.notImportedCertificates?.length ? (
+              {result?.notes && result?.notes.length ? (
                 <Accordion
                   disableGutters
                   TransitionProps={{
@@ -144,38 +179,44 @@ export const Importing: React.FC = () => {
                 >
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography variant="h6">
-                      {t('steps.importing.not-imported-certificate', {
-                        count: result.notImportedCertificates?.length,
+                      {t('steps.importing.notes', {
+                        count: result?.notes?.length ?? 0,
                       })}
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Stack spacing={1}>
-                      {result.notImportedCertificates.map(
-                        (notImportedCertificate: {
-                          email: string
-                          number: string
-                          reason: string
-                        }) => (
-                          <Typography key={notImportedCertificate.email}>
-                            {t(
-                              [
-                                `steps.importing.not-imported-certificate-error-${notImportedCertificate.reason}`,
-                                'steps.importing.not-imported-certificate-error',
-                              ],
-                              {
-                                email: notImportedCertificate.email,
-                                number: notImportedCertificate.number,
-                              },
-                            )}
-                          </Typography>
-                        ),
+                      {result?.notes?.map(
+                        (notes: { name: string; reason: string }) => {
+                          return (
+                            <Typography key={notes.name}>
+                              {t(
+                                [
+                                  `steps.importing.not-imported-error-${notes.reason}`,
+                                  'steps.importing.not-imported-error',
+                                ],
+                                { name: notes.name },
+                              )}
+                            </Typography>
+                          )
+                        },
                       )}
                     </Stack>
                   </AccordionDetails>
                 </Accordion>
               ) : null}
             </Stack>
+            <Box display="flex" mt={4} justifyContent="space-between">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  goToStep(ImportSteps.CHOOSE)
+                  setCurrentStepKey(ImportSteps.CHOOSE)
+                }}
+              >
+                {t('steps.importing.new-import')}
+              </Button>
+            </Box>
           </Box>
         </>
       )}

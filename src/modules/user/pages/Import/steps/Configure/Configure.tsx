@@ -18,10 +18,11 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { utils, read } from 'xlsx'
 
+import {
+  useImportContext,
+  ImportStepsEnum as ImportSteps,
+} from '@app/components/ImportSteps'
 import { yup } from '@app/schemas'
-
-import { useImportContext } from '../../context/ImportProvider'
-import { ImportSteps } from '../../types'
 
 function getSchema(t: TFunction) {
   return yup.object({

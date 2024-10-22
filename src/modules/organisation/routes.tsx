@@ -8,6 +8,10 @@ import { InviteUserToOrganization as UKInviteUserToOrganization } from './compon
 import { CreateOrganization } from './pages/CreateOrganization/CreateOrganization'
 import { EditOrgDetails as ANZEditOrgDetails } from './pages/EditOrganization/ANZ/EditOrgDetails'
 import { EditOrgDetails as UKEditOrgDetails } from './pages/EditOrganization/UK/EditOrgDetails'
+import { OrganisationImport } from './pages/Import'
+import { Importing } from './pages/Import/components/Importing'
+import { Preview } from './pages/Import/components/Preview'
+import { Upload } from './pages/Import/components/Upload'
 import { OrgDashboard } from './pages/OrganisationDashboard/OrgDashboard'
 import { Organizations as ANZOrganisations } from './pages/Organisations/ANZ/Organisations'
 import { Organizations as UKOrganisations } from './pages/Organisations/UK/Organisations'
@@ -46,6 +50,19 @@ export const OrganisationRoutes: React.FC = () => {
           />
         ) : null}
         <Route path="courses" element={<AvailableCourses />} />
+      </Route>
+    </Routes>
+  )
+}
+
+export const AdminOrganisationRoutes: React.FC = () => {
+  return (
+    <Routes>
+      <Route path="import" element={<OrganisationImport />}>
+        <Route index element={<Upload />} />
+        <Route path="preview" element={<Preview />} />
+        <Route path="importing" element={<Importing />} />
+        <Route path="results" element={<Importing />} />
       </Route>
     </Routes>
   )

@@ -1,30 +1,32 @@
-import React, {
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react'
+import React, { PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { ImportUsersConfig } from '@app/generated/graphql'
+import {
+  ImportOrganisationsConfig,
+  ImportUsersConfig,
+} from '@app/generated/graphql'
 
-import { ImportSteps } from '../types'
+import { ImportStepsEnum as ImportSteps, ImportStepsEnum } from '..'
 
-type ContextValue = {
+export type ContextValue = {
   data: string | null
   jobId: string | null
-  config: ImportUsersConfig | null
+  config: ImportUsersConfig | ImportOrganisationsConfig | null
   currentStepKey: ImportSteps
   completedSteps: ImportSteps[]
   completeStep: (step: ImportSteps) => void
   goToStep: (step: ImportSteps) => void
   fileChosen: (data: string) => void
-  importConfigured: (config: ImportUsersConfig) => void
+  importConfigured: (
+    config: ImportUsersConfig | ImportOrganisationsConfig,
+  ) => void
   importStarted: (jobId: string) => void
+  setCurrentStepKey: (step: ImportStepsEnum) => void
 }
 
-const ImportContext = React.createContext<ContextValue | undefined>(undefined)
+export const ImportContext = React.createContext<ContextValue | undefined>(
+  undefined,
+)
 
 export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate()
@@ -94,7 +96,7 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
     step => {
       switch (step) {
         case ImportSteps.CHOOSE: {
-          navigate('/admin/users/import')
+          navigate('./')
           break
         }
 
@@ -149,6 +151,7 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
       fileChosen,
       importConfigured,
       importStarted,
+      setCurrentStepKey,
     }),
     [
       completeStep,
@@ -161,20 +164,11 @@ export const ImportProvider: React.FC<PropsWithChildren> = ({ children }) => {
       importConfigured,
       importStarted,
       jobId,
+      setCurrentStepKey,
     ],
   )
 
   return (
     <ImportContext.Provider value={value}>{children}</ImportContext.Provider>
   )
-}
-
-export function useImportContext() {
-  const value = useContext(ImportContext)
-
-  if (value === undefined) {
-    throw new Error('useImportContext must be used within a ImportProvider')
-  }
-
-  return value
 }

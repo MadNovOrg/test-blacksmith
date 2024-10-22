@@ -3354,6 +3354,38 @@ export type ImportLegacyCertificateOutput = {
   trainerRoleAdded: Scalars['Boolean'];
 };
 
+export type ImportOrganisationsConfig = {
+  addressLine1: Scalars['String'];
+  addressLine2?: InputMaybe<Scalars['String']>;
+  city: Scalars['String'];
+  country: Scalars['String'];
+  email: Scalars['String'];
+  mainContactEmail?: InputMaybe<Scalars['String']>;
+  mainContactFirstName?: InputMaybe<Scalars['String']>;
+  mainContactSetting?: InputMaybe<Scalars['String']>;
+  mainContactSurname?: InputMaybe<Scalars['String']>;
+  mainOrganisation?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  organisationAdminEmail?: InputMaybe<Scalars['String']>;
+  phone: Scalars['String'];
+  postcode: Scalars['String'];
+  sector: Scalars['String'];
+  state: Scalars['String'];
+  type: Scalars['String'];
+  website?: InputMaybe<Scalars['String']>;
+};
+
+export type ImportOrganisationsInput = {
+  config: ImportOrganisationsConfig;
+  data: Scalars['String'];
+};
+
+export type ImportOrganisationsOutput = {
+  __typename?: 'ImportOrganisationsOutput';
+  error?: Maybe<Scalars['String']>;
+  jobId?: Maybe<Scalars['String']>;
+};
+
 export type ImportUsersConfig = {
   certificateNumberColumn: Scalars['String'];
   emailColumn: Scalars['String'];
@@ -30551,6 +30583,10 @@ export type Float8_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['float8']>>;
 };
 
+export type Get_Organisation_By_Email_Args = {
+  email?: InputMaybe<Scalars['String']>;
+};
+
 /** Enum table for Go1 licensing changes events */
 export type Go1_History_Events = {
   __typename?: 'go1_history_events';
@@ -31880,9 +31916,9 @@ export type ImportArloCertificates = {
   output?: Maybe<ImportArloCertificatesOutput>;
 };
 
-/** Tracks an import user job */
-export type Import_Users_Job = {
-  __typename?: 'import_users_job';
+/** Tracks an import job */
+export type Import_Job = {
+  __typename?: 'import_job';
   config?: Maybe<Scalars['jsonb']>;
   data?: Maybe<Scalars['String']>;
   finishedOn?: Maybe<Scalars['timestamp']>;
@@ -31890,54 +31926,55 @@ export type Import_Users_Job = {
   result: Scalars['jsonb'];
   startedBy?: Maybe<Scalars['uuid']>;
   startedOn: Scalars['timestamp'];
-  status?: Maybe<Import_Users_Job_Status_Enum>;
+  status?: Maybe<Import_Job_Status_Enum>;
+  type?: Maybe<Import_Job_Type_Enum>;
 };
 
 
-/** Tracks an import user job */
-export type Import_Users_JobConfigArgs = {
+/** Tracks an import job */
+export type Import_JobConfigArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
 
 
-/** Tracks an import user job */
-export type Import_Users_JobResultArgs = {
+/** Tracks an import job */
+export type Import_JobResultArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
 
-/** aggregated selection of "import_users_job" */
-export type Import_Users_Job_Aggregate = {
-  __typename?: 'import_users_job_aggregate';
-  aggregate?: Maybe<Import_Users_Job_Aggregate_Fields>;
-  nodes: Array<Import_Users_Job>;
+/** aggregated selection of "import_job" */
+export type Import_Job_Aggregate = {
+  __typename?: 'import_job_aggregate';
+  aggregate?: Maybe<Import_Job_Aggregate_Fields>;
+  nodes: Array<Import_Job>;
 };
 
-/** aggregate fields of "import_users_job" */
-export type Import_Users_Job_Aggregate_Fields = {
-  __typename?: 'import_users_job_aggregate_fields';
+/** aggregate fields of "import_job" */
+export type Import_Job_Aggregate_Fields = {
+  __typename?: 'import_job_aggregate_fields';
   count: Scalars['Int'];
-  max?: Maybe<Import_Users_Job_Max_Fields>;
-  min?: Maybe<Import_Users_Job_Min_Fields>;
+  max?: Maybe<Import_Job_Max_Fields>;
+  min?: Maybe<Import_Job_Min_Fields>;
 };
 
 
-/** aggregate fields of "import_users_job" */
-export type Import_Users_Job_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Import_Users_Job_Select_Column>>;
+/** aggregate fields of "import_job" */
+export type Import_Job_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Import_Job_Select_Column>>;
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** append existing jsonb value of filtered columns with new jsonb value */
-export type Import_Users_Job_Append_Input = {
+export type Import_Job_Append_Input = {
   config?: InputMaybe<Scalars['jsonb']>;
   result?: InputMaybe<Scalars['jsonb']>;
 };
 
-/** Boolean expression to filter rows from the table "import_users_job". All fields are combined with a logical 'AND'. */
-export type Import_Users_Job_Bool_Exp = {
-  _and?: InputMaybe<Array<Import_Users_Job_Bool_Exp>>;
-  _not?: InputMaybe<Import_Users_Job_Bool_Exp>;
-  _or?: InputMaybe<Array<Import_Users_Job_Bool_Exp>>;
+/** Boolean expression to filter rows from the table "import_job". All fields are combined with a logical 'AND'. */
+export type Import_Job_Bool_Exp = {
+  _and?: InputMaybe<Array<Import_Job_Bool_Exp>>;
+  _not?: InputMaybe<Import_Job_Bool_Exp>;
+  _or?: InputMaybe<Array<Import_Job_Bool_Exp>>;
   config?: InputMaybe<Jsonb_Comparison_Exp>;
   data?: InputMaybe<String_Comparison_Exp>;
   finishedOn?: InputMaybe<Timestamp_Comparison_Exp>;
@@ -31945,35 +31982,36 @@ export type Import_Users_Job_Bool_Exp = {
   result?: InputMaybe<Jsonb_Comparison_Exp>;
   startedBy?: InputMaybe<Uuid_Comparison_Exp>;
   startedOn?: InputMaybe<Timestamp_Comparison_Exp>;
-  status?: InputMaybe<Import_Users_Job_Status_Enum_Comparison_Exp>;
+  status?: InputMaybe<Import_Job_Status_Enum_Comparison_Exp>;
+  type?: InputMaybe<Import_Job_Type_Enum_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "import_users_job" */
-export enum Import_Users_Job_Constraint {
+/** unique or primary key constraints on table "import_job" */
+export enum Import_Job_Constraint {
   /** unique or primary key constraint on columns "id" */
   ImportUsersJobPkey = 'import_users_job_pkey'
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-export type Import_Users_Job_Delete_At_Path_Input = {
+export type Import_Job_Delete_At_Path_Input = {
   config?: InputMaybe<Array<Scalars['String']>>;
   result?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-export type Import_Users_Job_Delete_Elem_Input = {
+export type Import_Job_Delete_Elem_Input = {
   config?: InputMaybe<Scalars['Int']>;
   result?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-export type Import_Users_Job_Delete_Key_Input = {
+export type Import_Job_Delete_Key_Input = {
   config?: InputMaybe<Scalars['String']>;
   result?: InputMaybe<Scalars['String']>;
 };
 
-/** input type for inserting data into table "import_users_job" */
-export type Import_Users_Job_Insert_Input = {
+/** input type for inserting data into table "import_job" */
+export type Import_Job_Insert_Input = {
   config?: InputMaybe<Scalars['jsonb']>;
   data?: InputMaybe<Scalars['String']>;
   finishedOn?: InputMaybe<Scalars['timestamp']>;
@@ -31981,12 +32019,13 @@ export type Import_Users_Job_Insert_Input = {
   result?: InputMaybe<Scalars['jsonb']>;
   startedBy?: InputMaybe<Scalars['uuid']>;
   startedOn?: InputMaybe<Scalars['timestamp']>;
-  status?: InputMaybe<Import_Users_Job_Status_Enum>;
+  status?: InputMaybe<Import_Job_Status_Enum>;
+  type?: InputMaybe<Import_Job_Type_Enum>;
 };
 
 /** aggregate max on columns */
-export type Import_Users_Job_Max_Fields = {
-  __typename?: 'import_users_job_max_fields';
+export type Import_Job_Max_Fields = {
+  __typename?: 'import_job_max_fields';
   data?: Maybe<Scalars['String']>;
   finishedOn?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
@@ -31995,8 +32034,8 @@ export type Import_Users_Job_Max_Fields = {
 };
 
 /** aggregate min on columns */
-export type Import_Users_Job_Min_Fields = {
-  __typename?: 'import_users_job_min_fields';
+export type Import_Job_Min_Fields = {
+  __typename?: 'import_job_min_fields';
   data?: Maybe<Scalars['String']>;
   finishedOn?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
@@ -32004,24 +32043,24 @@ export type Import_Users_Job_Min_Fields = {
   startedOn?: Maybe<Scalars['timestamp']>;
 };
 
-/** response of any mutation on the table "import_users_job" */
-export type Import_Users_Job_Mutation_Response = {
-  __typename?: 'import_users_job_mutation_response';
+/** response of any mutation on the table "import_job" */
+export type Import_Job_Mutation_Response = {
+  __typename?: 'import_job_mutation_response';
   /** number of rows affected by the mutation */
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
-  returning: Array<Import_Users_Job>;
+  returning: Array<Import_Job>;
 };
 
-/** on_conflict condition type for table "import_users_job" */
-export type Import_Users_Job_On_Conflict = {
-  constraint: Import_Users_Job_Constraint;
-  update_columns?: Array<Import_Users_Job_Update_Column>;
-  where?: InputMaybe<Import_Users_Job_Bool_Exp>;
+/** on_conflict condition type for table "import_job" */
+export type Import_Job_On_Conflict = {
+  constraint: Import_Job_Constraint;
+  update_columns?: Array<Import_Job_Update_Column>;
+  where?: InputMaybe<Import_Job_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "import_users_job". */
-export type Import_Users_Job_Order_By = {
+/** Ordering options when selecting data from "import_job". */
+export type Import_Job_Order_By = {
   config?: InputMaybe<Order_By>;
   data?: InputMaybe<Order_By>;
   finishedOn?: InputMaybe<Order_By>;
@@ -32030,21 +32069,22 @@ export type Import_Users_Job_Order_By = {
   startedBy?: InputMaybe<Order_By>;
   startedOn?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
 };
 
-/** primary key columns input for table: import_users_job */
-export type Import_Users_Job_Pk_Columns_Input = {
+/** primary key columns input for table: import_job */
+export type Import_Job_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
-export type Import_Users_Job_Prepend_Input = {
+export type Import_Job_Prepend_Input = {
   config?: InputMaybe<Scalars['jsonb']>;
   result?: InputMaybe<Scalars['jsonb']>;
 };
 
-/** select columns of table "import_users_job" */
-export enum Import_Users_Job_Select_Column {
+/** select columns of table "import_job" */
+export enum Import_Job_Select_Column {
   /** column name */
   Config = 'config',
   /** column name */
@@ -32060,11 +32100,13 @@ export enum Import_Users_Job_Select_Column {
   /** column name */
   StartedOn = 'startedOn',
   /** column name */
-  Status = 'status'
+  Status = 'status',
+  /** column name */
+  Type = 'type'
 }
 
-/** input type for updating data in table "import_users_job" */
-export type Import_Users_Job_Set_Input = {
+/** input type for updating data in table "import_job" */
+export type Import_Job_Set_Input = {
   config?: InputMaybe<Scalars['jsonb']>;
   data?: InputMaybe<Scalars['String']>;
   finishedOn?: InputMaybe<Scalars['timestamp']>;
@@ -32072,157 +32114,158 @@ export type Import_Users_Job_Set_Input = {
   result?: InputMaybe<Scalars['jsonb']>;
   startedBy?: InputMaybe<Scalars['uuid']>;
   startedOn?: InputMaybe<Scalars['timestamp']>;
-  status?: InputMaybe<Import_Users_Job_Status_Enum>;
+  status?: InputMaybe<Import_Job_Status_Enum>;
+  type?: InputMaybe<Import_Job_Type_Enum>;
 };
 
 /** Enum table of import users job status */
-export type Import_Users_Job_Status = {
-  __typename?: 'import_users_job_status';
+export type Import_Job_Status = {
+  __typename?: 'import_job_status';
   name: Scalars['String'];
 };
 
-/** aggregated selection of "import_users_job_status" */
-export type Import_Users_Job_Status_Aggregate = {
-  __typename?: 'import_users_job_status_aggregate';
-  aggregate?: Maybe<Import_Users_Job_Status_Aggregate_Fields>;
-  nodes: Array<Import_Users_Job_Status>;
+/** aggregated selection of "import_job_status" */
+export type Import_Job_Status_Aggregate = {
+  __typename?: 'import_job_status_aggregate';
+  aggregate?: Maybe<Import_Job_Status_Aggregate_Fields>;
+  nodes: Array<Import_Job_Status>;
 };
 
-/** aggregate fields of "import_users_job_status" */
-export type Import_Users_Job_Status_Aggregate_Fields = {
-  __typename?: 'import_users_job_status_aggregate_fields';
+/** aggregate fields of "import_job_status" */
+export type Import_Job_Status_Aggregate_Fields = {
+  __typename?: 'import_job_status_aggregate_fields';
   count: Scalars['Int'];
-  max?: Maybe<Import_Users_Job_Status_Max_Fields>;
-  min?: Maybe<Import_Users_Job_Status_Min_Fields>;
+  max?: Maybe<Import_Job_Status_Max_Fields>;
+  min?: Maybe<Import_Job_Status_Min_Fields>;
 };
 
 
-/** aggregate fields of "import_users_job_status" */
-export type Import_Users_Job_Status_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Import_Users_Job_Status_Select_Column>>;
+/** aggregate fields of "import_job_status" */
+export type Import_Job_Status_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Import_Job_Status_Select_Column>>;
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** Boolean expression to filter rows from the table "import_users_job_status". All fields are combined with a logical 'AND'. */
-export type Import_Users_Job_Status_Bool_Exp = {
-  _and?: InputMaybe<Array<Import_Users_Job_Status_Bool_Exp>>;
-  _not?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
-  _or?: InputMaybe<Array<Import_Users_Job_Status_Bool_Exp>>;
+/** Boolean expression to filter rows from the table "import_job_status". All fields are combined with a logical 'AND'. */
+export type Import_Job_Status_Bool_Exp = {
+  _and?: InputMaybe<Array<Import_Job_Status_Bool_Exp>>;
+  _not?: InputMaybe<Import_Job_Status_Bool_Exp>;
+  _or?: InputMaybe<Array<Import_Job_Status_Bool_Exp>>;
   name?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "import_users_job_status" */
-export enum Import_Users_Job_Status_Constraint {
+/** unique or primary key constraints on table "import_job_status" */
+export enum Import_Job_Status_Constraint {
   /** unique or primary key constraint on columns "name" */
   ImportUsersJobStatusPkey = 'import_users_job_status_pkey'
 }
 
-export enum Import_Users_Job_Status_Enum {
+export enum Import_Job_Status_Enum {
   Failed = 'FAILED',
   InProgress = 'IN_PROGRESS',
   PartiallySucceeded = 'PARTIALLY_SUCCEEDED',
   Succeeded = 'SUCCEEDED'
 }
 
-/** Boolean expression to compare columns of type "import_users_job_status_enum". All fields are combined with logical 'AND'. */
-export type Import_Users_Job_Status_Enum_Comparison_Exp = {
-  _eq?: InputMaybe<Import_Users_Job_Status_Enum>;
-  _in?: InputMaybe<Array<Import_Users_Job_Status_Enum>>;
+/** Boolean expression to compare columns of type "import_job_status_enum". All fields are combined with logical 'AND'. */
+export type Import_Job_Status_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Import_Job_Status_Enum>;
+  _in?: InputMaybe<Array<Import_Job_Status_Enum>>;
   _is_null?: InputMaybe<Scalars['Boolean']>;
-  _neq?: InputMaybe<Import_Users_Job_Status_Enum>;
-  _nin?: InputMaybe<Array<Import_Users_Job_Status_Enum>>;
+  _neq?: InputMaybe<Import_Job_Status_Enum>;
+  _nin?: InputMaybe<Array<Import_Job_Status_Enum>>;
 };
 
-/** input type for inserting data into table "import_users_job_status" */
-export type Import_Users_Job_Status_Insert_Input = {
+/** input type for inserting data into table "import_job_status" */
+export type Import_Job_Status_Insert_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
-export type Import_Users_Job_Status_Max_Fields = {
-  __typename?: 'import_users_job_status_max_fields';
+export type Import_Job_Status_Max_Fields = {
+  __typename?: 'import_job_status_max_fields';
   name?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
-export type Import_Users_Job_Status_Min_Fields = {
-  __typename?: 'import_users_job_status_min_fields';
+export type Import_Job_Status_Min_Fields = {
+  __typename?: 'import_job_status_min_fields';
   name?: Maybe<Scalars['String']>;
 };
 
-/** response of any mutation on the table "import_users_job_status" */
-export type Import_Users_Job_Status_Mutation_Response = {
-  __typename?: 'import_users_job_status_mutation_response';
+/** response of any mutation on the table "import_job_status" */
+export type Import_Job_Status_Mutation_Response = {
+  __typename?: 'import_job_status_mutation_response';
   /** number of rows affected by the mutation */
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
-  returning: Array<Import_Users_Job_Status>;
+  returning: Array<Import_Job_Status>;
 };
 
-/** on_conflict condition type for table "import_users_job_status" */
-export type Import_Users_Job_Status_On_Conflict = {
-  constraint: Import_Users_Job_Status_Constraint;
-  update_columns?: Array<Import_Users_Job_Status_Update_Column>;
-  where?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
+/** on_conflict condition type for table "import_job_status" */
+export type Import_Job_Status_On_Conflict = {
+  constraint: Import_Job_Status_Constraint;
+  update_columns?: Array<Import_Job_Status_Update_Column>;
+  where?: InputMaybe<Import_Job_Status_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "import_users_job_status". */
-export type Import_Users_Job_Status_Order_By = {
+/** Ordering options when selecting data from "import_job_status". */
+export type Import_Job_Status_Order_By = {
   name?: InputMaybe<Order_By>;
 };
 
-/** primary key columns input for table: import_users_job_status */
-export type Import_Users_Job_Status_Pk_Columns_Input = {
+/** primary key columns input for table: import_job_status */
+export type Import_Job_Status_Pk_Columns_Input = {
   name: Scalars['String'];
 };
 
-/** select columns of table "import_users_job_status" */
-export enum Import_Users_Job_Status_Select_Column {
+/** select columns of table "import_job_status" */
+export enum Import_Job_Status_Select_Column {
   /** column name */
   Name = 'name'
 }
 
-/** input type for updating data in table "import_users_job_status" */
-export type Import_Users_Job_Status_Set_Input = {
+/** input type for updating data in table "import_job_status" */
+export type Import_Job_Status_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
-/** Streaming cursor of the table "import_users_job_status" */
-export type Import_Users_Job_Status_Stream_Cursor_Input = {
+/** Streaming cursor of the table "import_job_status" */
+export type Import_Job_Status_Stream_Cursor_Input = {
   /** Stream column input with initial value */
-  initial_value: Import_Users_Job_Status_Stream_Cursor_Value_Input;
+  initial_value: Import_Job_Status_Stream_Cursor_Value_Input;
   /** cursor ordering */
   ordering?: InputMaybe<Cursor_Ordering>;
 };
 
 /** Initial value of the column from where the streaming should start */
-export type Import_Users_Job_Status_Stream_Cursor_Value_Input = {
+export type Import_Job_Status_Stream_Cursor_Value_Input = {
   name?: InputMaybe<Scalars['String']>;
 };
 
-/** update columns of table "import_users_job_status" */
-export enum Import_Users_Job_Status_Update_Column {
+/** update columns of table "import_job_status" */
+export enum Import_Job_Status_Update_Column {
   /** column name */
   Name = 'name'
 }
 
-export type Import_Users_Job_Status_Updates = {
+export type Import_Job_Status_Updates = {
   /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Import_Users_Job_Status_Set_Input>;
+  _set?: InputMaybe<Import_Job_Status_Set_Input>;
   /** filter the rows which have to be updated */
-  where: Import_Users_Job_Status_Bool_Exp;
+  where: Import_Job_Status_Bool_Exp;
 };
 
-/** Streaming cursor of the table "import_users_job" */
-export type Import_Users_Job_Stream_Cursor_Input = {
+/** Streaming cursor of the table "import_job" */
+export type Import_Job_Stream_Cursor_Input = {
   /** Stream column input with initial value */
-  initial_value: Import_Users_Job_Stream_Cursor_Value_Input;
+  initial_value: Import_Job_Stream_Cursor_Value_Input;
   /** cursor ordering */
   ordering?: InputMaybe<Cursor_Ordering>;
 };
 
 /** Initial value of the column from where the streaming should start */
-export type Import_Users_Job_Stream_Cursor_Value_Input = {
+export type Import_Job_Stream_Cursor_Value_Input = {
   config?: InputMaybe<Scalars['jsonb']>;
   data?: InputMaybe<Scalars['String']>;
   finishedOn?: InputMaybe<Scalars['timestamp']>;
@@ -32230,11 +32273,148 @@ export type Import_Users_Job_Stream_Cursor_Value_Input = {
   result?: InputMaybe<Scalars['jsonb']>;
   startedBy?: InputMaybe<Scalars['uuid']>;
   startedOn?: InputMaybe<Scalars['timestamp']>;
-  status?: InputMaybe<Import_Users_Job_Status_Enum>;
+  status?: InputMaybe<Import_Job_Status_Enum>;
+  type?: InputMaybe<Import_Job_Type_Enum>;
 };
 
-/** update columns of table "import_users_job" */
-export enum Import_Users_Job_Update_Column {
+/** columns and relationships of "import_job_type" */
+export type Import_Job_Type = {
+  __typename?: 'import_job_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "import_job_type" */
+export type Import_Job_Type_Aggregate = {
+  __typename?: 'import_job_type_aggregate';
+  aggregate?: Maybe<Import_Job_Type_Aggregate_Fields>;
+  nodes: Array<Import_Job_Type>;
+};
+
+/** aggregate fields of "import_job_type" */
+export type Import_Job_Type_Aggregate_Fields = {
+  __typename?: 'import_job_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Import_Job_Type_Max_Fields>;
+  min?: Maybe<Import_Job_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "import_job_type" */
+export type Import_Job_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Import_Job_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "import_job_type". All fields are combined with a logical 'AND'. */
+export type Import_Job_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Import_Job_Type_Bool_Exp>>;
+  _not?: InputMaybe<Import_Job_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Import_Job_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "import_job_type" */
+export enum Import_Job_Type_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  ImportJobTypePkey = 'import_job_type_pkey'
+}
+
+export enum Import_Job_Type_Enum {
+  Organisations = 'ORGANISATIONS',
+  Users = 'USERS'
+}
+
+/** Boolean expression to compare columns of type "import_job_type_enum". All fields are combined with logical 'AND'. */
+export type Import_Job_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Import_Job_Type_Enum>;
+  _in?: InputMaybe<Array<Import_Job_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Import_Job_Type_Enum>;
+  _nin?: InputMaybe<Array<Import_Job_Type_Enum>>;
+};
+
+/** input type for inserting data into table "import_job_type" */
+export type Import_Job_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Import_Job_Type_Max_Fields = {
+  __typename?: 'import_job_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Import_Job_Type_Min_Fields = {
+  __typename?: 'import_job_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "import_job_type" */
+export type Import_Job_Type_Mutation_Response = {
+  __typename?: 'import_job_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Import_Job_Type>;
+};
+
+/** on_conflict condition type for table "import_job_type" */
+export type Import_Job_Type_On_Conflict = {
+  constraint: Import_Job_Type_Constraint;
+  update_columns?: Array<Import_Job_Type_Update_Column>;
+  where?: InputMaybe<Import_Job_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "import_job_type". */
+export type Import_Job_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: import_job_type */
+export type Import_Job_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "import_job_type" */
+export enum Import_Job_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "import_job_type" */
+export type Import_Job_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "import_job_type" */
+export type Import_Job_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Import_Job_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Import_Job_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "import_job_type" */
+export enum Import_Job_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Import_Job_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Import_Job_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Import_Job_Type_Bool_Exp;
+};
+
+/** update columns of table "import_job" */
+export enum Import_Job_Update_Column {
   /** column name */
   Config = 'config',
   /** column name */
@@ -32250,24 +32430,26 @@ export enum Import_Users_Job_Update_Column {
   /** column name */
   StartedOn = 'startedOn',
   /** column name */
-  Status = 'status'
+  Status = 'status',
+  /** column name */
+  Type = 'type'
 }
 
-export type Import_Users_Job_Updates = {
+export type Import_Job_Updates = {
   /** append existing jsonb value of filtered columns with new jsonb value */
-  _append?: InputMaybe<Import_Users_Job_Append_Input>;
+  _append?: InputMaybe<Import_Job_Append_Input>;
   /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-  _delete_at_path?: InputMaybe<Import_Users_Job_Delete_At_Path_Input>;
+  _delete_at_path?: InputMaybe<Import_Job_Delete_At_Path_Input>;
   /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-  _delete_elem?: InputMaybe<Import_Users_Job_Delete_Elem_Input>;
+  _delete_elem?: InputMaybe<Import_Job_Delete_Elem_Input>;
   /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-  _delete_key?: InputMaybe<Import_Users_Job_Delete_Key_Input>;
+  _delete_key?: InputMaybe<Import_Job_Delete_Key_Input>;
   /** prepend existing jsonb value of filtered columns with new jsonb value */
-  _prepend?: InputMaybe<Import_Users_Job_Prepend_Input>;
+  _prepend?: InputMaybe<Import_Job_Prepend_Input>;
   /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Import_Users_Job_Set_Input>;
+  _set?: InputMaybe<Import_Job_Set_Input>;
   /** filter the rows which have to be updated */
-  where: Import_Users_Job_Bool_Exp;
+  where: Import_Job_Bool_Exp;
 };
 
 export type IsUserSubscribedToMembershipResponse = {
@@ -35228,14 +35410,18 @@ export type Mutation_Root = {
   delete_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** delete single row from the table: "identity_type" */
   delete_identity_type_by_pk?: Maybe<Identity_Type>;
-  /** delete data from the table: "import_users_job" */
-  delete_import_users_job?: Maybe<Import_Users_Job_Mutation_Response>;
-  /** delete single row from the table: "import_users_job" */
-  delete_import_users_job_by_pk?: Maybe<Import_Users_Job>;
-  /** delete data from the table: "import_users_job_status" */
-  delete_import_users_job_status?: Maybe<Import_Users_Job_Status_Mutation_Response>;
-  /** delete single row from the table: "import_users_job_status" */
-  delete_import_users_job_status_by_pk?: Maybe<Import_Users_Job_Status>;
+  /** delete data from the table: "import_job" */
+  delete_import_job?: Maybe<Import_Job_Mutation_Response>;
+  /** delete single row from the table: "import_job" */
+  delete_import_job_by_pk?: Maybe<Import_Job>;
+  /** delete data from the table: "import_job_status" */
+  delete_import_job_status?: Maybe<Import_Job_Status_Mutation_Response>;
+  /** delete single row from the table: "import_job_status" */
+  delete_import_job_status_by_pk?: Maybe<Import_Job_Status>;
+  /** delete data from the table: "import_job_type" */
+  delete_import_job_type?: Maybe<Import_Job_Type_Mutation_Response>;
+  /** delete single row from the table: "import_job_type" */
+  delete_import_job_type_by_pk?: Maybe<Import_Job_Type>;
   /** delete data from the table: "job_title" */
   delete_job_title?: Maybe<Job_Title_Mutation_Response>;
   /** delete single row from the table: "job_title" */
@@ -35388,12 +35574,16 @@ export type Mutation_Root = {
   delete_xero_invoice_status?: Maybe<Xero_Invoice_Status_Mutation_Response>;
   /** delete single row from the table: "xero_invoice_status" */
   delete_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
+  /** execute VOLATILE function "get_organisation_by_email" which returns "organization" */
+  get_organisation_by_email: Array<Organization>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
   /** gradedOnSync */
   gradedOnSync?: Maybe<GradedOnSyncOutput>;
   importArloCertificates: Scalars['uuid'];
   importLegacyCertificate?: Maybe<ImportLegacyCertificateOutput>;
+  /** importOrganisations */
+  importOrganisations?: Maybe<ImportOrganisationsOutput>;
   /** importUsers */
   importUsers?: Maybe<ImportUsersOutput>;
   /** insert data into the table: "about_training_email_scheduled_events" */
@@ -35676,14 +35866,18 @@ export type Mutation_Root = {
   insert_identity_type?: Maybe<Identity_Type_Mutation_Response>;
   /** insert a single row into the table: "identity_type" */
   insert_identity_type_one?: Maybe<Identity_Type>;
-  /** insert data into the table: "import_users_job" */
-  insert_import_users_job?: Maybe<Import_Users_Job_Mutation_Response>;
-  /** insert a single row into the table: "import_users_job" */
-  insert_import_users_job_one?: Maybe<Import_Users_Job>;
-  /** insert data into the table: "import_users_job_status" */
-  insert_import_users_job_status?: Maybe<Import_Users_Job_Status_Mutation_Response>;
-  /** insert a single row into the table: "import_users_job_status" */
-  insert_import_users_job_status_one?: Maybe<Import_Users_Job_Status>;
+  /** insert data into the table: "import_job" */
+  insert_import_job?: Maybe<Import_Job_Mutation_Response>;
+  /** insert a single row into the table: "import_job" */
+  insert_import_job_one?: Maybe<Import_Job>;
+  /** insert data into the table: "import_job_status" */
+  insert_import_job_status?: Maybe<Import_Job_Status_Mutation_Response>;
+  /** insert a single row into the table: "import_job_status" */
+  insert_import_job_status_one?: Maybe<Import_Job_Status>;
+  /** insert data into the table: "import_job_type" */
+  insert_import_job_type?: Maybe<Import_Job_Type_Mutation_Response>;
+  /** insert a single row into the table: "import_job_type" */
+  insert_import_job_type_one?: Maybe<Import_Job_Type>;
   /** insert data into the table: "job_title" */
   insert_job_title?: Maybe<Job_Title_Mutation_Response>;
   /** insert a single row into the table: "job_title" */
@@ -36282,18 +36476,24 @@ export type Mutation_Root = {
   update_identity_type_by_pk?: Maybe<Identity_Type>;
   /** update multiples rows of table: "identity_type" */
   update_identity_type_many?: Maybe<Array<Maybe<Identity_Type_Mutation_Response>>>;
-  /** update data of the table: "import_users_job" */
-  update_import_users_job?: Maybe<Import_Users_Job_Mutation_Response>;
-  /** update single row of the table: "import_users_job" */
-  update_import_users_job_by_pk?: Maybe<Import_Users_Job>;
-  /** update multiples rows of table: "import_users_job" */
-  update_import_users_job_many?: Maybe<Array<Maybe<Import_Users_Job_Mutation_Response>>>;
-  /** update data of the table: "import_users_job_status" */
-  update_import_users_job_status?: Maybe<Import_Users_Job_Status_Mutation_Response>;
-  /** update single row of the table: "import_users_job_status" */
-  update_import_users_job_status_by_pk?: Maybe<Import_Users_Job_Status>;
-  /** update multiples rows of table: "import_users_job_status" */
-  update_import_users_job_status_many?: Maybe<Array<Maybe<Import_Users_Job_Status_Mutation_Response>>>;
+  /** update data of the table: "import_job" */
+  update_import_job?: Maybe<Import_Job_Mutation_Response>;
+  /** update single row of the table: "import_job" */
+  update_import_job_by_pk?: Maybe<Import_Job>;
+  /** update multiples rows of table: "import_job" */
+  update_import_job_many?: Maybe<Array<Maybe<Import_Job_Mutation_Response>>>;
+  /** update data of the table: "import_job_status" */
+  update_import_job_status?: Maybe<Import_Job_Status_Mutation_Response>;
+  /** update single row of the table: "import_job_status" */
+  update_import_job_status_by_pk?: Maybe<Import_Job_Status>;
+  /** update multiples rows of table: "import_job_status" */
+  update_import_job_status_many?: Maybe<Array<Maybe<Import_Job_Status_Mutation_Response>>>;
+  /** update data of the table: "import_job_type" */
+  update_import_job_type?: Maybe<Import_Job_Type_Mutation_Response>;
+  /** update single row of the table: "import_job_type" */
+  update_import_job_type_by_pk?: Maybe<Import_Job_Type>;
+  /** update multiples rows of table: "import_job_type" */
+  update_import_job_type_many?: Maybe<Array<Maybe<Import_Job_Type_Mutation_Response>>>;
   /** update data of the table: "job_title" */
   update_job_title?: Maybe<Job_Title_Mutation_Response>;
   /** update single row of the table: "job_title" */
@@ -37456,25 +37656,37 @@ export type Mutation_RootDelete_Identity_Type_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Import_Users_JobArgs = {
-  where: Import_Users_Job_Bool_Exp;
+export type Mutation_RootDelete_Import_JobArgs = {
+  where: Import_Job_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Import_Users_Job_By_PkArgs = {
+export type Mutation_RootDelete_Import_Job_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Import_Users_Job_StatusArgs = {
-  where: Import_Users_Job_Status_Bool_Exp;
+export type Mutation_RootDelete_Import_Job_StatusArgs = {
+  where: Import_Job_Status_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Import_Users_Job_Status_By_PkArgs = {
+export type Mutation_RootDelete_Import_Job_Status_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Import_Job_TypeArgs = {
+  where: Import_Job_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Import_Job_Type_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -37936,6 +38148,17 @@ export type Mutation_RootDelete_Xero_Invoice_Status_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootGet_Organisation_By_EmailArgs = {
+  args: Get_Organisation_By_Email_Args;
+  distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Order_By>>;
+  where?: InputMaybe<Organization_Bool_Exp>;
+};
+
+
+/** mutation root */
 export type Mutation_RootGo1LicensesChangeArgs = {
   input: Go1LicensesChangeInput;
 };
@@ -37956,6 +38179,12 @@ export type Mutation_RootImportArloCertificatesArgs = {
 /** mutation root */
 export type Mutation_RootImportLegacyCertificateArgs = {
   input: ImportLegacyCertificateInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootImportOrganisationsArgs = {
+  input: ImportOrganisationsInput;
 };
 
 
@@ -38942,30 +39171,44 @@ export type Mutation_RootInsert_Identity_Type_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Import_Users_JobArgs = {
-  objects: Array<Import_Users_Job_Insert_Input>;
-  on_conflict?: InputMaybe<Import_Users_Job_On_Conflict>;
+export type Mutation_RootInsert_Import_JobArgs = {
+  objects: Array<Import_Job_Insert_Input>;
+  on_conflict?: InputMaybe<Import_Job_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Import_Users_Job_OneArgs = {
-  object: Import_Users_Job_Insert_Input;
-  on_conflict?: InputMaybe<Import_Users_Job_On_Conflict>;
+export type Mutation_RootInsert_Import_Job_OneArgs = {
+  object: Import_Job_Insert_Input;
+  on_conflict?: InputMaybe<Import_Job_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Import_Users_Job_StatusArgs = {
-  objects: Array<Import_Users_Job_Status_Insert_Input>;
-  on_conflict?: InputMaybe<Import_Users_Job_Status_On_Conflict>;
+export type Mutation_RootInsert_Import_Job_StatusArgs = {
+  objects: Array<Import_Job_Status_Insert_Input>;
+  on_conflict?: InputMaybe<Import_Job_Status_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Import_Users_Job_Status_OneArgs = {
-  object: Import_Users_Job_Status_Insert_Input;
-  on_conflict?: InputMaybe<Import_Users_Job_Status_On_Conflict>;
+export type Mutation_RootInsert_Import_Job_Status_OneArgs = {
+  object: Import_Job_Status_Insert_Input;
+  on_conflict?: InputMaybe<Import_Job_Status_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Import_Job_TypeArgs = {
+  objects: Array<Import_Job_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Import_Job_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Import_Job_Type_OneArgs = {
+  object: Import_Job_Type_Insert_Input;
+  on_conflict?: InputMaybe<Import_Job_Type_On_Conflict>;
 };
 
 
@@ -41174,52 +41417,72 @@ export type Mutation_RootUpdate_Identity_Type_ManyArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Import_Users_JobArgs = {
-  _append?: InputMaybe<Import_Users_Job_Append_Input>;
-  _delete_at_path?: InputMaybe<Import_Users_Job_Delete_At_Path_Input>;
-  _delete_elem?: InputMaybe<Import_Users_Job_Delete_Elem_Input>;
-  _delete_key?: InputMaybe<Import_Users_Job_Delete_Key_Input>;
-  _prepend?: InputMaybe<Import_Users_Job_Prepend_Input>;
-  _set?: InputMaybe<Import_Users_Job_Set_Input>;
-  where: Import_Users_Job_Bool_Exp;
+export type Mutation_RootUpdate_Import_JobArgs = {
+  _append?: InputMaybe<Import_Job_Append_Input>;
+  _delete_at_path?: InputMaybe<Import_Job_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Import_Job_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Import_Job_Delete_Key_Input>;
+  _prepend?: InputMaybe<Import_Job_Prepend_Input>;
+  _set?: InputMaybe<Import_Job_Set_Input>;
+  where: Import_Job_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Import_Users_Job_By_PkArgs = {
-  _append?: InputMaybe<Import_Users_Job_Append_Input>;
-  _delete_at_path?: InputMaybe<Import_Users_Job_Delete_At_Path_Input>;
-  _delete_elem?: InputMaybe<Import_Users_Job_Delete_Elem_Input>;
-  _delete_key?: InputMaybe<Import_Users_Job_Delete_Key_Input>;
-  _prepend?: InputMaybe<Import_Users_Job_Prepend_Input>;
-  _set?: InputMaybe<Import_Users_Job_Set_Input>;
-  pk_columns: Import_Users_Job_Pk_Columns_Input;
+export type Mutation_RootUpdate_Import_Job_By_PkArgs = {
+  _append?: InputMaybe<Import_Job_Append_Input>;
+  _delete_at_path?: InputMaybe<Import_Job_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Import_Job_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Import_Job_Delete_Key_Input>;
+  _prepend?: InputMaybe<Import_Job_Prepend_Input>;
+  _set?: InputMaybe<Import_Job_Set_Input>;
+  pk_columns: Import_Job_Pk_Columns_Input;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Import_Users_Job_ManyArgs = {
-  updates: Array<Import_Users_Job_Updates>;
+export type Mutation_RootUpdate_Import_Job_ManyArgs = {
+  updates: Array<Import_Job_Updates>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Import_Users_Job_StatusArgs = {
-  _set?: InputMaybe<Import_Users_Job_Status_Set_Input>;
-  where: Import_Users_Job_Status_Bool_Exp;
+export type Mutation_RootUpdate_Import_Job_StatusArgs = {
+  _set?: InputMaybe<Import_Job_Status_Set_Input>;
+  where: Import_Job_Status_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Import_Users_Job_Status_By_PkArgs = {
-  _set?: InputMaybe<Import_Users_Job_Status_Set_Input>;
-  pk_columns: Import_Users_Job_Status_Pk_Columns_Input;
+export type Mutation_RootUpdate_Import_Job_Status_By_PkArgs = {
+  _set?: InputMaybe<Import_Job_Status_Set_Input>;
+  pk_columns: Import_Job_Status_Pk_Columns_Input;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Import_Users_Job_Status_ManyArgs = {
-  updates: Array<Import_Users_Job_Status_Updates>;
+export type Mutation_RootUpdate_Import_Job_Status_ManyArgs = {
+  updates: Array<Import_Job_Status_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Import_Job_TypeArgs = {
+  _set?: InputMaybe<Import_Job_Type_Set_Input>;
+  where: Import_Job_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Import_Job_Type_By_PkArgs = {
+  _set?: InputMaybe<Import_Job_Type_Set_Input>;
+  pk_columns: Import_Job_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Import_Job_Type_ManyArgs = {
+  updates: Array<Import_Job_Type_Updates>;
 };
 
 
@@ -44671,7 +44934,6 @@ export type Organization = {
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
-  type?: Maybe<Scalars['String']>;
   updatedAt: Scalars['timestamptz'];
   urn?: Maybe<Scalars['String']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -44996,7 +45258,6 @@ export type Organization_Bool_Exp = {
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
   sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
-  type?: InputMaybe<String_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   urn?: InputMaybe<String_Comparison_Exp>;
   xeroContactId?: InputMaybe<String_Comparison_Exp>;
@@ -45073,7 +45334,6 @@ export type Organization_Insert_Input = {
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
-  type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   urn?: InputMaybe<Scalars['String']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
@@ -45387,7 +45647,6 @@ export type Organization_Max_Fields = {
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   urn?: Maybe<Scalars['String']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -45405,7 +45664,6 @@ export type Organization_Max_Order_By = {
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
-  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   urn?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45733,7 +45991,6 @@ export type Organization_Min_Fields = {
   region?: Maybe<Scalars['String']>;
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   urn?: Maybe<Scalars['String']>;
   xeroContactId?: Maybe<Scalars['String']>;
@@ -45751,7 +46008,6 @@ export type Organization_Min_Order_By = {
   region?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
-  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   urn?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45811,7 +46067,6 @@ export type Organization_Order_By = {
   reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
-  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   urn?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -45871,8 +46126,6 @@ export enum Organization_Select_Column {
   /** column name */
   Tags = 'tags',
   /** column name */
-  Type = 'type',
-  /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
   Urn = 'urn',
@@ -45912,7 +46165,6 @@ export type Organization_Set_Input = {
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
-  type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   urn?: InputMaybe<Scalars['String']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
@@ -45985,7 +46237,6 @@ export type Organization_Stream_Cursor_Value_Input = {
   reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
-  type?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   urn?: InputMaybe<Scalars['String']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
@@ -46201,8 +46452,6 @@ export enum Organization_Update_Column {
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
-  /** column name */
-  Type = 'type',
   /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
@@ -50068,18 +50317,24 @@ export type Query_Root = {
   /** fetch data from the table: "identity_type" using primary key columns */
   identity_type_by_pk?: Maybe<Identity_Type>;
   importArloCertificates?: Maybe<ImportArloCertificates>;
-  /** fetch data from the table: "import_users_job" */
-  import_users_job: Array<Import_Users_Job>;
-  /** fetch aggregated fields from the table: "import_users_job" */
-  import_users_job_aggregate: Import_Users_Job_Aggregate;
-  /** fetch data from the table: "import_users_job" using primary key columns */
-  import_users_job_by_pk?: Maybe<Import_Users_Job>;
-  /** fetch data from the table: "import_users_job_status" */
-  import_users_job_status: Array<Import_Users_Job_Status>;
-  /** fetch aggregated fields from the table: "import_users_job_status" */
-  import_users_job_status_aggregate: Import_Users_Job_Status_Aggregate;
-  /** fetch data from the table: "import_users_job_status" using primary key columns */
-  import_users_job_status_by_pk?: Maybe<Import_Users_Job_Status>;
+  /** fetch data from the table: "import_job" */
+  import_job: Array<Import_Job>;
+  /** fetch aggregated fields from the table: "import_job" */
+  import_job_aggregate: Import_Job_Aggregate;
+  /** fetch data from the table: "import_job" using primary key columns */
+  import_job_by_pk?: Maybe<Import_Job>;
+  /** fetch data from the table: "import_job_status" */
+  import_job_status: Array<Import_Job_Status>;
+  /** fetch aggregated fields from the table: "import_job_status" */
+  import_job_status_aggregate: Import_Job_Status_Aggregate;
+  /** fetch data from the table: "import_job_status" using primary key columns */
+  import_job_status_by_pk?: Maybe<Import_Job_Status>;
+  /** fetch data from the table: "import_job_type" */
+  import_job_type: Array<Import_Job_Type>;
+  /** fetch aggregated fields from the table: "import_job_type" */
+  import_job_type_aggregate: Import_Job_Type_Aggregate;
+  /** fetch data from the table: "import_job_type" using primary key columns */
+  import_job_type_by_pk?: Maybe<Import_Job_Type>;
   initAuth: InitAuthOutput;
   /** Checks whether user is subscribed to membership */
   isUserSubscribedToMembership?: Maybe<IsUserSubscribedToMembershipResponse>;
@@ -51973,48 +52228,71 @@ export type Query_RootImportArloCertificatesArgs = {
 };
 
 
-export type Query_RootImport_Users_JobArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Select_Column>>;
+export type Query_RootImport_JobArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Order_By>>;
+  where?: InputMaybe<Import_Job_Bool_Exp>;
 };
 
 
-export type Query_RootImport_Users_Job_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Select_Column>>;
+export type Query_RootImport_Job_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Order_By>>;
+  where?: InputMaybe<Import_Job_Bool_Exp>;
 };
 
 
-export type Query_RootImport_Users_Job_By_PkArgs = {
+export type Query_RootImport_Job_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Query_RootImport_Users_Job_StatusArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Status_Select_Column>>;
+export type Query_RootImport_Job_StatusArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Status_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Status_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Status_Order_By>>;
+  where?: InputMaybe<Import_Job_Status_Bool_Exp>;
 };
 
 
-export type Query_RootImport_Users_Job_Status_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Status_Select_Column>>;
+export type Query_RootImport_Job_Status_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Status_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Status_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Status_Order_By>>;
+  where?: InputMaybe<Import_Job_Status_Bool_Exp>;
 };
 
 
-export type Query_RootImport_Users_Job_Status_By_PkArgs = {
+export type Query_RootImport_Job_Status_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Query_RootImport_Job_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Import_Job_Type_Order_By>>;
+  where?: InputMaybe<Import_Job_Type_Bool_Exp>;
+};
+
+
+export type Query_RootImport_Job_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Import_Job_Type_Order_By>>;
+  where?: InputMaybe<Import_Job_Type_Bool_Exp>;
+};
+
+
+export type Query_RootImport_Job_Type_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -54071,22 +54349,30 @@ export type Subscription_Root = {
   /** fetch data from the table in a streaming manner: "identity_type" */
   identity_type_stream: Array<Identity_Type>;
   importArloCertificates?: Maybe<ImportArloCertificates>;
-  /** fetch data from the table: "import_users_job" */
-  import_users_job: Array<Import_Users_Job>;
-  /** fetch aggregated fields from the table: "import_users_job" */
-  import_users_job_aggregate: Import_Users_Job_Aggregate;
-  /** fetch data from the table: "import_users_job" using primary key columns */
-  import_users_job_by_pk?: Maybe<Import_Users_Job>;
-  /** fetch data from the table: "import_users_job_status" */
-  import_users_job_status: Array<Import_Users_Job_Status>;
-  /** fetch aggregated fields from the table: "import_users_job_status" */
-  import_users_job_status_aggregate: Import_Users_Job_Status_Aggregate;
-  /** fetch data from the table: "import_users_job_status" using primary key columns */
-  import_users_job_status_by_pk?: Maybe<Import_Users_Job_Status>;
-  /** fetch data from the table in a streaming manner: "import_users_job_status" */
-  import_users_job_status_stream: Array<Import_Users_Job_Status>;
-  /** fetch data from the table in a streaming manner: "import_users_job" */
-  import_users_job_stream: Array<Import_Users_Job>;
+  /** fetch data from the table: "import_job" */
+  import_job: Array<Import_Job>;
+  /** fetch aggregated fields from the table: "import_job" */
+  import_job_aggregate: Import_Job_Aggregate;
+  /** fetch data from the table: "import_job" using primary key columns */
+  import_job_by_pk?: Maybe<Import_Job>;
+  /** fetch data from the table: "import_job_status" */
+  import_job_status: Array<Import_Job_Status>;
+  /** fetch aggregated fields from the table: "import_job_status" */
+  import_job_status_aggregate: Import_Job_Status_Aggregate;
+  /** fetch data from the table: "import_job_status" using primary key columns */
+  import_job_status_by_pk?: Maybe<Import_Job_Status>;
+  /** fetch data from the table in a streaming manner: "import_job_status" */
+  import_job_status_stream: Array<Import_Job_Status>;
+  /** fetch data from the table in a streaming manner: "import_job" */
+  import_job_stream: Array<Import_Job>;
+  /** fetch data from the table: "import_job_type" */
+  import_job_type: Array<Import_Job_Type>;
+  /** fetch aggregated fields from the table: "import_job_type" */
+  import_job_type_aggregate: Import_Job_Type_Aggregate;
+  /** fetch data from the table: "import_job_type" using primary key columns */
+  import_job_type_by_pk?: Maybe<Import_Job_Type>;
+  /** fetch data from the table in a streaming manner: "import_job_type" */
+  import_job_type_stream: Array<Import_Job_Type>;
   /** fetch data from the table: "job_title" */
   job_title: Array<Job_Title>;
   /** fetch aggregated fields from the table: "job_title" */
@@ -56502,63 +56788,93 @@ export type Subscription_RootImportArloCertificatesArgs = {
 };
 
 
-export type Subscription_RootImport_Users_JobArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Select_Column>>;
+export type Subscription_RootImport_JobArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Order_By>>;
+  where?: InputMaybe<Import_Job_Bool_Exp>;
 };
 
 
-export type Subscription_RootImport_Users_Job_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Select_Column>>;
+export type Subscription_RootImport_Job_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Order_By>>;
+  where?: InputMaybe<Import_Job_Bool_Exp>;
 };
 
 
-export type Subscription_RootImport_Users_Job_By_PkArgs = {
+export type Subscription_RootImport_Job_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Subscription_RootImport_Users_Job_StatusArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Status_Select_Column>>;
+export type Subscription_RootImport_Job_StatusArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Status_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Status_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Status_Order_By>>;
+  where?: InputMaybe<Import_Job_Status_Bool_Exp>;
 };
 
 
-export type Subscription_RootImport_Users_Job_Status_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Import_Users_Job_Status_Select_Column>>;
+export type Subscription_RootImport_Job_Status_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Status_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Import_Users_Job_Status_Order_By>>;
-  where?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
+  order_by?: InputMaybe<Array<Import_Job_Status_Order_By>>;
+  where?: InputMaybe<Import_Job_Status_Bool_Exp>;
 };
 
 
-export type Subscription_RootImport_Users_Job_Status_By_PkArgs = {
+export type Subscription_RootImport_Job_Status_By_PkArgs = {
   name: Scalars['String'];
 };
 
 
-export type Subscription_RootImport_Users_Job_Status_StreamArgs = {
+export type Subscription_RootImport_Job_Status_StreamArgs = {
   batch_size: Scalars['Int'];
-  cursor: Array<InputMaybe<Import_Users_Job_Status_Stream_Cursor_Input>>;
-  where?: InputMaybe<Import_Users_Job_Status_Bool_Exp>;
+  cursor: Array<InputMaybe<Import_Job_Status_Stream_Cursor_Input>>;
+  where?: InputMaybe<Import_Job_Status_Bool_Exp>;
 };
 
 
-export type Subscription_RootImport_Users_Job_StreamArgs = {
+export type Subscription_RootImport_Job_StreamArgs = {
   batch_size: Scalars['Int'];
-  cursor: Array<InputMaybe<Import_Users_Job_Stream_Cursor_Input>>;
-  where?: InputMaybe<Import_Users_Job_Bool_Exp>;
+  cursor: Array<InputMaybe<Import_Job_Stream_Cursor_Input>>;
+  where?: InputMaybe<Import_Job_Bool_Exp>;
+};
+
+
+export type Subscription_RootImport_Job_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Import_Job_Type_Order_By>>;
+  where?: InputMaybe<Import_Job_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootImport_Job_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Import_Job_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Import_Job_Type_Order_By>>;
+  where?: InputMaybe<Import_Job_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootImport_Job_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootImport_Job_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Import_Job_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Import_Job_Type_Bool_Exp>;
 };
 
 
@@ -60575,7 +60891,7 @@ export type InsertCoursePricingScheduleMutationVariables = Exact<{
   priceAmount: Scalars['numeric'];
   effectiveFrom: Scalars['date'];
   effectiveTo: Scalars['date'];
-  priceCurrency?: InputMaybe<Scalars['String']>;
+  priceCurrency: Scalars['String'];
 }>;
 
 
@@ -61808,6 +62124,20 @@ export type GetUpcomingEnrollmentsStatsQueryVariables = Exact<{
 
 export type GetUpcomingEnrollmentsStatsQuery = { __typename?: 'query_root', active_enrollments: { __typename?: 'upcoming_enrollments_aggregate', aggregate?: { __typename?: 'upcoming_enrollments_aggregate_fields', count: number } | null }, on_hold_enrollments: { __typename?: 'upcoming_enrollments_aggregate', aggregate?: { __typename?: 'upcoming_enrollments_aggregate_fields', count: number } | null }, expired_recently_enrollments: { __typename?: 'upcoming_enrollments_aggregate', aggregate?: { __typename?: 'upcoming_enrollments_aggregate_fields', count: number } | null }, expiring_soon_enrollments: { __typename?: 'upcoming_enrollments_aggregate', aggregate?: { __typename?: 'upcoming_enrollments_aggregate_fields', count: number } | null } };
 
+export type ImportOrganisationsJobSubscriptionVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type ImportOrganisationsJobSubscription = { __typename?: 'subscription_root', import_job_by_pk?: { __typename?: 'import_job', id: any, result: any, status?: Import_Job_Status_Enum | null } | null };
+
+export type ImportOrganisationsMutationVariables = Exact<{
+  input: ImportOrganisationsInput;
+}>;
+
+
+export type ImportOrganisationsMutation = { __typename?: 'mutation_root', importOrganisations?: { __typename?: 'ImportOrganisationsOutput', jobId?: string | null, error?: string | null } | null };
+
 export type DeleteOrgMutationVariables = Exact<{
   orgId: Scalars['uuid'];
 }>;
@@ -62133,7 +62463,7 @@ export type ImportUsersJobSubscriptionVariables = Exact<{
 }>;
 
 
-export type ImportUsersJobSubscription = { __typename?: 'subscription_root', import_users_job_by_pk?: { __typename?: 'import_users_job', id: any, result: any, status?: Import_Users_Job_Status_Enum | null } | null };
+export type ImportUsersJobSubscription = { __typename?: 'subscription_root', import_job_by_pk?: { __typename?: 'import_job', id: any, result: any, status?: Import_Job_Status_Enum | null } | null };
 
 export type StartImportUsersJobMutationVariables = Exact<{
   input: ImportUsersInput;
@@ -62194,12 +62524,11 @@ export type GetCourseByIdQueryVariables = Exact<{
   withParticipants?: InputMaybe<Scalars['Boolean']>;
   withInternationalFinance?: InputMaybe<Scalars['Boolean']>;
   withFreeCourseCourseMaterials?: InputMaybe<Scalars['Boolean']>;
-  withCreatedById?: InputMaybe<Scalars['Boolean']>;
   withParticipantsPendingInvitesCount?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', createdById?: any | null, isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, free_course_materials?: number | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, levels: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }>, participantsPendingInvites: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, free_course_materials?: number | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, levels: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }>, participantsPendingInvites: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } } | null };
 
 export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null };
 

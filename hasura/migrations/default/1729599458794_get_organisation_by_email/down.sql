@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS get_organisation_by_email;

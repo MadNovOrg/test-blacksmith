@@ -1,0 +1,6 @@
+function:
+  name: get_organisation_by_email
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: mutation

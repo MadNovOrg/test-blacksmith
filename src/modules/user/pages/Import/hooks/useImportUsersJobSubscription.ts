@@ -7,7 +7,7 @@ import {
 
 const IMPORT_USERS_JOB_SUBSCRIPTION = gql`
   subscription ImportUsersJob($id: uuid!) {
-    import_users_job_by_pk(id: $id) {
+    import_job_by_pk(id: $id) {
       id
       result
       status

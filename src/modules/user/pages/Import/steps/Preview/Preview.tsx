@@ -16,13 +16,17 @@ import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { read, utils } from 'xlsx'
 
-import { useImportContext } from '../../context/ImportProvider'
+import { ImportStepsEnum as ImportSteps } from '@app/components/ImportSteps'
+import { useImportContext } from '@app/components/ImportSteps/context'
+import { ImportUsersConfig } from '@app/generated/graphql'
+
 import { useStartImportUsersJob } from '../../hooks/useStartImportUsersJob'
-import { ImportSteps } from '../../types'
 
 export const Preview: React.FC = () => {
   const { data, goToStep, completeStep, config, importStarted } =
     useImportContext()
+
+  const usersConfig = config as ImportUsersConfig
 
   const { t } = useTranslation('pages', { keyPrefix: 'import-users' })
 
@@ -44,7 +48,7 @@ export const Preview: React.FC = () => {
     }[],
     number,
   ] = useMemo(() => {
-    if (!data || !config) {
+    if (!data || !usersConfig) {
       return [[], 0]
     }
 
@@ -55,18 +59,17 @@ export const Preview: React.FC = () => {
     if (!Array.isArray(usersData)) {
       return [[], 0]
     }
-
     return [
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       usersData.slice(0, 5).map((row: any) => ({
-        firstName: row[config.firstNameColumn],
-        lastName: row[config.lastNameColumn],
-        email: row[config.emailColumn],
-        certificateNumber: row[config.certificateNumberColumn],
+        firstName: row[usersConfig.firstNameColumn],
+        lastName: row[usersConfig.lastNameColumn],
+        email: row[usersConfig.emailColumn],
+        certificateNumber: row[usersConfig.certificateNumberColumn],
       })),
       usersData.length,
     ]
-  }, [config, data])
+  }, [data, usersConfig])
 
   useEffect(() => {
     if (startImportData?.importUsers?.jobId) {
@@ -83,7 +86,7 @@ export const Preview: React.FC = () => {
 
   const handleImportClick = async () => {
     if (data && config) {
-      startImport({ input: { data, config } })
+      startImport({ input: { data, config: usersConfig } })
     }
   }
 

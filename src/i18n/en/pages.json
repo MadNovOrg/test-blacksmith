@@ -1956,5 +1956,67 @@
         "title": "Import results"
       }
     }
+  },
+  "import-organisations": {
+    "title": "Import organisations",
+    "helper-description": "Upon import, organisations will be created, and the organizations admins will receive an email invitation to accept the role (if the email is specified in the uploaded file).",
+    "steps": {
+      "upload": {
+        "title": "Upload .xlsx file",
+        "description": "Use <0><1>this</1></0> template to fill in the organization's information and upload the file.",
+        "button-text": "Upload file"
+      },
+      "preview": {
+        "title": "Preview import",
+        "description": "You are about to import {{count}} organisation(s). Please preview the data extracted from the .xlsx before proceeding with the import.",
+        "button-text": "Start importing",
+        "table-cells": {
+          "name": "Organisation name",
+          "country": "Residing country",
+          "state": "State/Territory",
+          "line1": "Address Line 1",
+          "line2": "Address Line 2",
+          "city": "Town/City",
+          "postcode": "Post code",
+          "sector": "Sector",
+          "type": "Organisation type",
+          "phone": "Organisation phone",
+          "email": "Organisation email",
+          "website": "Organisation website",
+          "main-organisation": "Email of the Main organisation",
+          "main-contact-firstName": "Organisation main contact first name",
+          "main-contact-surname": "Organisation main contact surname",
+          "main-contact-email": "Organisation main contact email",
+          "main-contact-setting": "Organisation main contact setting",
+          "org-admin": "Organisation admin email"
+        }
+      },
+      "importing": {
+        "title": "Importing",
+        "title-results": "Importing results",
+        "starting": "Starting import...",
+        "description": "Please dont close the page as we are importing organisations",
+        "description-pending": "Please don't close the page as we are importing organisations.",
+        "missing-mandatory-fields": "Missing mandatory fields:",
+        "description-success": "Importing organisations has finished succesfully.",
+        "description-failed": "Importing organisations has failed.",
+        "description-partially-succeeded": "Import organisations has finished. Some organisations were not imported.",
+        "imported-organisations_one": "Created {{count}} organisation",
+        "imported-organisations_other": "Created {{count}} organisations",
+        "not-imported_one": "Not created {{count}} organisation",
+        "not-imported_other": "Not created {{count}} organisations",
+        "not-imported-error-ORGANISATION_EXISTS": "Organisation {{name}} already exists",
+        "not-imported-error-MISSING_MANDATORY_FIELDS": "Organisation {{name}} has missing mandatory fields",
+        "not-imported-error-INVALID_EMAIL": "Organisation email for {{name}} is invalid",
+        "not-imported-error-INVALID_PHONE": "Phone number for {{name}} should contain only “+” or numbers",
+        "not-imported-error-MAIN_ORGANISATION_DOES_NOT_EXIST": "Main organisation for {{name}} does not exist in the system or in the uploaded file. The organisation was created as a standalone one.",
+        "not-imported-error": "{{name}} couldn't be imported",
+        "new-import": "New import",
+        "notes": "Notes"
+      },
+      "results": {
+        "title": "Import results"
+      }
+    }
   }
 }
