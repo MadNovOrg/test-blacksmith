@@ -28,14 +28,14 @@ const getOption = (level: string | RegExp, query = false) => {
 }
 
 describe('component: CourseLevelDropdown [UK]', () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
   const {
     result: {
       current: { t },
     },
   } = renderHook(() => useTranslation())
-  beforeAll(() => {
-    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
-  })
 
   it('renders correctly when type is OPEN', async () => {
     render(

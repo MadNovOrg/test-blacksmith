@@ -66,37 +66,51 @@ describe('course exception utils', () => {
 
   describe('isLeadTrainerInGracePeriod', () => {
     it('should return false if no trainers', () => {
-      expect(isLeadTrainerInGracePeriod(defaultCourseData, [])).toBeFalsy()
+      expect(
+        isLeadTrainerInGracePeriod(defaultCourseData, [], false),
+      ).toBeFalsy()
     })
 
     it('should return false if no leader', () => {
       expect(
-        isLeadTrainerInGracePeriod(defaultCourseData, [
-          extend({}, defaultTrainerData, {
-            type: Course_Trainer_Type_Enum.Assistant,
-          }),
-        ]),
+        isLeadTrainerInGracePeriod(
+          defaultCourseData,
+          [
+            extend({}, defaultTrainerData, {
+              type: Course_Trainer_Type_Enum.Assistant,
+            }),
+          ],
+          false,
+        ),
       ).toBeFalsy()
     })
 
     it('should return false if leader with valid certificate for course level', () => {
       expect(
-        isLeadTrainerInGracePeriod(defaultCourseData, [defaultTrainerData]),
+        isLeadTrainerInGracePeriod(
+          defaultCourseData,
+          [defaultTrainerData],
+          false,
+        ),
       ).toBeFalsy()
     })
 
     it('should return true if leader with expired certificate', () => {
       expect(
-        isLeadTrainerInGracePeriod(defaultCourseData, [
-          extend({}, defaultTrainerData, {
-            levels: [
-              {
-                courseLevel: Course_Level_Enum.IntermediateTrainer,
-                expiryDate: new Date('2020-12-30 10:00').toISOString(),
-              },
-            ],
-          }),
-        ]),
+        isLeadTrainerInGracePeriod(
+          defaultCourseData,
+          [
+            extend({}, defaultTrainerData, {
+              levels: [
+                {
+                  courseLevel: Course_Level_Enum.IntermediateTrainer,
+                  expiryDate: new Date('2020-12-30 10:00').toISOString(),
+                },
+              ],
+            }),
+          ],
+          false,
+        ),
       ).toBeTruthy()
     })
   })

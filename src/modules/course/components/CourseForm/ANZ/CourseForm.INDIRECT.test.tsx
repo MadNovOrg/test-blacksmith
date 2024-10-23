@@ -56,21 +56,6 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(screen.getByLabelText('Both')).toBeEnabled()
   })
 
-  it('restricts INDIRECT+ADVANCED to be F2F', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.Advanced)
-
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeDisabled()
-    expect(screen.getByLabelText('Both')).toBeDisabled()
-  })
-
   // Blended
   it('allows INDIRECT+LEVEL_1+F2F to be Blended', async () => {
     await waitFor(() => renderForm({ type }))
@@ -86,14 +71,14 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts INDIRECT+LEVEL_1+MIXED to be Blended', async () => {
+  it('allows INDIRECT+LEVEL_1+MIXED to be Blended', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
+    expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
   })
 
@@ -125,30 +110,14 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeChecked()
   })
 
-  it('restricts INDIRECT+LEVEL_2+MIXED to be Blended', async () => {
+  it('allows INDIRECT+LEVEL_2+MIXED to be Blended', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
 
     const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
-  })
-
-  it('restricts INDIRECT+ADVANCED+F2F to be Blended', async () => {
-    await waitFor(() =>
-      renderForm({
-        type,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-      }),
-    )
-
-    await selectLevel(Course_Level_Enum.Advanced)
-    await selectDelivery(Course_Delivery_Type_Enum.F2F)
-
-    const blended = screen.getByLabelText('Blended learning')
-    expect(blended).toBeDisabled()
+    expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
   })
 
@@ -166,7 +135,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(reacc).toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_1+MIXED to be Reaccreditation but not Blended', async () => {
+  it('allows INDIRECT+LEVEL_1+MIXED to be Reaccreditation & Blended', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_1)
@@ -175,21 +144,7 @@ describe('component: CourseForm - INDIRECT', () => {
     const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
-
-    expect(reacc).toBeEnabled()
-    await userEvent.click(reacc)
-    expect(reacc).toBeChecked()
-  })
-
-  it('allows INDIRECT+LEVEL_1+VIRTUAL to be Reaccreditation', async () => {
-    await waitFor(() => renderForm({ type }))
-
-    await selectLevel(Course_Level_Enum.Level_1)
-    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
-
-    const reacc = screen.getByLabelText('Reaccreditation')
+    expect(blended).toBeEnabled()
 
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
@@ -209,7 +164,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(reacc).toBeChecked()
   })
 
-  it('allows INDIRECT+LEVEL_2+MIXED to be Reaccreditation but not Blended', async () => {
+  it('allows INDIRECT+LEVEL_2+MIXED to be Reaccreditation & Blended', async () => {
     await waitFor(() => renderForm({ type }))
 
     await selectLevel(Course_Level_Enum.Level_2)
@@ -218,8 +173,7 @@ describe('component: CourseForm - INDIRECT', () => {
     const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
-    expect(blended).toBeDisabled()
-    expect(blended).not.toBeChecked()
+    expect(blended).toBeEnabled()
 
     expect(reacc).toBeEnabled()
     await userEvent.click(reacc)
@@ -227,12 +181,7 @@ describe('component: CourseForm - INDIRECT', () => {
   })
 
   describe('Level 1 Behaviour Support', () => {
-    it.each([
-      Course_Level_Enum.IntermediateTrainer,
-      Course_Level_Enum.BildIntermediateTrainer,
-      Course_Level_Enum.AdvancedTrainer,
-      Course_Level_Enum.BildAdvancedTrainer,
-    ])(
+    it.each([Course_Level_Enum.IntermediateTrainer])(
       'do not show Level 1 Behaviour Support for trainers with %s certificate',
       async level => {
         useFeatureFlagEnabledMock.mockReturnValue(true)

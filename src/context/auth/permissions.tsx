@@ -25,6 +25,7 @@ import {
   getCourseLeadTrainer,
   getCourseModerator,
   REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
+  REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ,
 } from '@app/util'
 
 import type { AuthContextType } from './types'
@@ -383,8 +384,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       }
 
       return levels.filter(courseLevel => {
-        const allowedCertificates =
-          REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseType][courseLevel]
+        const allowedCertificates = (
+          acl.isAustralia()
+            ? REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ
+            : REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
+        )[courseType][courseLevel]
         return allowedCertificates.some(allowed =>
           activeCertificates.some(active => active === allowed),
         )

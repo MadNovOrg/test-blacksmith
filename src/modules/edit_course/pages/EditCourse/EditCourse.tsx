@@ -741,6 +741,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             levels: mod.levels,
           })),
         ],
+        acl.isAustralia(),
         [
           ...(course?.status !== Course_Status_Enum.ExceptionsApprovalPending
             ? getExceptionsToIgnoreOnEditForTrainer({

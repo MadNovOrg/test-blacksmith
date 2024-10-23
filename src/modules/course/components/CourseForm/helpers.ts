@@ -93,7 +93,6 @@ export function getANZLevels(courseType: Course_Type_Enum) {
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
-        Course_Level_Enum.Advanced,
       ]
     },
   }
@@ -301,12 +300,21 @@ export function canBeBlendedANZ(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Level_1Bs,
+        ]
         return levels.includes(courseLevel as Course_Level_Enum)
       }
 
       if (isMixed) {
-        return false
+        const levels = [
+          Course_Level_Enum.Level_1,
+          Course_Level_Enum.Level_2,
+          Course_Level_Enum.Level_1Bs,
+        ]
+        return levels.includes(courseLevel as Course_Level_Enum)
       }
 
       if (isVirtual) {
@@ -551,11 +559,6 @@ export function canBeReaccANZ(
           Course_Level_Enum.Level_2,
           Course_Level_Enum.Level_1Bs,
         ]
-        return levels.includes(courseLevel)
-      }
-
-      if (isVirtual) {
-        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_1Bs]
         return levels.includes(courseLevel)
       }
 

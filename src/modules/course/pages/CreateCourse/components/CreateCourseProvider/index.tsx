@@ -206,6 +206,7 @@ export const CreateCourseProvider: React.FC<
         isUKCountry: isUKCountry(courseData.residingCountry),
       },
       trainers,
+      acl.isAustralia(),
     )
   }, [
     courseData,

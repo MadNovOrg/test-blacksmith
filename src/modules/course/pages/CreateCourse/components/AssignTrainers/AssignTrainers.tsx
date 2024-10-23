@@ -277,6 +277,7 @@ export const AssignTrainers = () => {
           isUKCountry: isUKCountry(courseData.residingCountry),
         },
         trainers,
+        acl.isAustralia(),
       )
       if (
         courseData.type === Course_Type_Enum.Closed &&

@@ -269,6 +269,7 @@ export const CreateCourseForm = () => {
             trainer_role_types: profile.trainer_role_types,
           },
         ],
+        acl.isAustralia(),
         ignoreExceptions,
       )
       setCourseExceptions(exceptions)

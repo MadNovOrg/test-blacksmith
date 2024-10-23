@@ -12,7 +12,10 @@ import {
   Course_Exception_Enum,
 } from '@app/generated/graphql'
 import { CourseInput, TrainerInput } from '@app/types'
-import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
+import {
+  REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
+  REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ,
+} from '@app/util'
 import {
   getRequiredAssistants,
   getRequiredLeads,
@@ -112,15 +115,17 @@ export const isOutsideOfNoticePeriod = (
 export const isLeadTrainerInGracePeriod = (
   courseData: Pick<CourseData, 'courseLevel' | 'type'>,
   trainers: TrainerData,
+  isAustralia: boolean,
 ) => {
   const leader = trainers.find(t => {
     return t.type === Course_Trainer_Type_Enum.Leader
   })
   if (!leader) return false
-  const allowedLevels =
-    REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[courseData.type][
-      courseData.courseLevel
-    ]
+  const allowedLevels = (
+    isAustralia
+      ? REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ
+      : REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
+  )[courseData.type][courseData.courseLevel]
 
   const matchingLevels = (leader.levels ?? []).filter(
     l => allowedLevels.indexOf(l.courseLevel as Course_Level_Enum) != -1,
@@ -170,6 +175,7 @@ export const isAdvisedTimeExceeded = (courseData: CourseData) => {
 export function checkCourseDetailsForExceptions(
   courseData: CourseData,
   trainerData: TrainerData,
+  isAustralia: boolean,
   ignoreExceptions: Course_Exception_Enum[] = [],
 ): Course_Exception_Enum[] {
   const exceptions: Course_Exception_Enum[] = []
@@ -189,7 +195,7 @@ export function checkCourseDetailsForExceptions(
     !ignoreExceptions.includes(
       Course_Exception_Enum.LeadTrainerInGracePeriod,
     ) &&
-    isLeadTrainerInGracePeriod(courseData, trainerData)
+    isLeadTrainerInGracePeriod(courseData, trainerData, isAustralia)
   ) {
     exceptions.push(Course_Exception_Enum.LeadTrainerInGracePeriod)
   }
