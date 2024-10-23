@@ -7,7 +7,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { render, renderHook, screen, userEvent, within } from '@test/index'
 
@@ -27,12 +27,15 @@ const getOption = (level: string | RegExp, query = false) => {
   return within(dropdown).getByText(level)
 }
 
-describe('component: CourseLevelDropdown', () => {
+describe('component: CourseLevelDropdown [UK]', () => {
   const {
     result: {
       current: { t },
     },
   } = renderHook(() => useTranslation())
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
 
   it('renders correctly when type is OPEN', async () => {
     render(
@@ -47,12 +50,15 @@ describe('component: CourseLevelDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(4)
+    expect(screen.queryAllByRole('option').length).toBe(5)
 
     expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
     expect(
       getOption(t('common.course-levels.INTERMEDIATE_TRAINER')),
+    ).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.ADVANCED_TRAINER')),
     ).toBeInTheDocument()
     expect(
       getOption(t('common.course-levels.FOUNDATION_TRAINER_PLUS')),
@@ -74,15 +80,16 @@ describe('component: CourseLevelDropdown', () => {
 
     await userEvent.click(screen.getByRole('button'))
 
-    expect(screen.queryAllByRole('option').length).toBe(5)
+    expect(screen.queryAllByRole('option').length).toBe(7)
 
     expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
     expect(
       getOption(t('common.course-levels.INTERMEDIATE_TRAINER')),
     ).toBeInTheDocument()
     expect(
-      getOption(t('common.course-levels.FOUNDATION_TRAINER_PLUS')),
+      getOption(t('common.course-levels.ADVANCED_TRAINER')),
     ).toBeInTheDocument()
     expect(
       screen.getByTestId('course-level-option-LEVEL_1_BS'),
@@ -191,5 +198,45 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
     expect(getOption(t('common.course-levels.ADVANCED'))).toBeInTheDocument()
+  })
+})
+
+describe('component: CourseLevelDropdown [ANZ]', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+  })
+
+  it('renders correctly when type is CLOSED', async () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+
+    render(
+      <CourseLevelDropdown
+        value=""
+        onChange={noop}
+        courseType={Course_Type_Enum.Closed}
+        courseAccreditor={Accreditors_Enum.Icm}
+      />,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+    )
+
+    await userEvent.click(screen.getByRole('button'))
+    expect(screen.queryAllByRole('option').length).toBe(5)
+
+    expect(getOption(t('common.course-levels.LEVEL_1'))).toBeInTheDocument()
+    expect(getOption(t('common.course-levels.LEVEL_2'))).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.INTERMEDIATE_TRAINER')),
+    ).toBeInTheDocument()
+    expect(
+      getOption(t('common.course-levels.FOUNDATION_TRAINER_PLUS')),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('course-level-option-LEVEL_1_BS'),
+    ).toBeInTheDocument()
   })
 })
