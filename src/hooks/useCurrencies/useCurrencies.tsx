@@ -15,6 +15,14 @@ export const anzAvailableCurrencies = {
   NZD: 'NZD $',
 } as const
 
+const currencyAbbreviations = {
+  AUD: 'A$',
+  NZD: 'NZ$',
+  GBP: '£',
+  EUR: '€',
+  USD: '$',
+}
+
 export type CurrencyKey =
   | keyof typeof ukAvailableCurrencies
   | keyof typeof anzAvailableCurrencies
@@ -62,5 +70,11 @@ export const useCurrencies = (residingCountry?: string) => {
       ]),
     )
   }, [activeCurrencies])
-  return { activeCurrencies, defaultCurrency, currencyBySymbol }
+
+  return {
+    activeCurrencies,
+    defaultCurrency,
+    currencyBySymbol,
+    currencyAbbreviations,
+  }
 }

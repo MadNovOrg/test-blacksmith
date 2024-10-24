@@ -1075,3 +1075,9 @@ export const getTruthyObjectProps = <T>(obj: Record<string, unknown>) => {
 
   return props
 }
+
+export const blendedLearningLicensePrice = {
+  AUD: 78,
+  NZD: 88,
+  GBP: 50,
+}

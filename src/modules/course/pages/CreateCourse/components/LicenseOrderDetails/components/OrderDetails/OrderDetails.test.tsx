@@ -8,7 +8,10 @@ import { OrderDetails } from '.'
 
 describe('component: OrderDetails', () => {
   it('calculates correctly if there is a full license allowance', () => {
-    const costs = calculateGo1LicenseCost(2, 6)
+    const costs = calculateGo1LicenseCost({
+      numberOfLicenses: 2,
+      licenseBalance: 4,
+    })
 
     render(<OrderDetails licensesBalance={6} numberOfLicenses={2} {...costs} />)
 
@@ -21,7 +24,10 @@ describe('component: OrderDetails', () => {
   })
 
   it('calculates correctly if there is a partial license allowance', () => {
-    const costs = calculateGo1LicenseCost(2, 1)
+    const costs = calculateGo1LicenseCost({
+      numberOfLicenses: 2,
+      licenseBalance: 1,
+    })
 
     render(<OrderDetails licensesBalance={1} numberOfLicenses={2} {...costs} />)
 
@@ -32,7 +38,10 @@ describe('component: OrderDetails', () => {
   })
 
   it('calculates correctly if there is no license allowance', () => {
-    const costs = calculateGo1LicenseCost(2, 0)
+    const costs = calculateGo1LicenseCost({
+      numberOfLicenses: 2,
+      licenseBalance: 0,
+    })
     render(<OrderDetails licensesBalance={0} numberOfLicenses={2} {...costs} />)
 
     expect(screen.queryByTestId('amount-allowance')).not.toBeInTheDocument()

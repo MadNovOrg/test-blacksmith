@@ -250,7 +250,7 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   ])
 
   useEffect(() => {
-    if (!isCreation) {
+    if (!isCreation && courseType !== Course_Type_Enum.Indirect) {
       allowCourseEditWithoutScheduledPrice(
         courseHasManualPrice ||
           (!courseHasManualPrice && Boolean(coursePrice)) ||
@@ -263,6 +263,7 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     courseHasManualPrice,
     allowCourseEditWithoutScheduledPrice,
     courseWithNoPrice,
+    courseType,
   ])
 
   // set VAT true for all UK countries

@@ -85,6 +85,7 @@ describe('component: ReviewLicenseOrder', () => {
         vat: 20,
         amountDue: 220,
         allowancePrice: 0,
+        gst: 0,
       },
       invoiceDetails: {
         billingAddress: chance.address(),
@@ -188,6 +189,7 @@ describe('component: ReviewLicenseOrder', () => {
         vat: 20,
         amountDue: 220,
         allowancePrice: 0,
+        gst: 0,
       },
       invoiceDetails: {
         billingAddress: 'Billing address',

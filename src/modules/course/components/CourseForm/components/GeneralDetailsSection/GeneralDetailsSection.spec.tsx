@@ -14,10 +14,6 @@ const { t } = getI18n()
 
 const levelOneInfoMessage = t(`components.course-form.course-level-one-info`)
 
-const blendedLearningInfoMessage = t(
-  `components.course-form.blended-learning-price-label`,
-)
-
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
   useCoursePrice: vi.fn(),
 }))
@@ -126,18 +122,6 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
-
-  it.each(Object.values(AwsRegions))(
-    'shows an info alert for blended learning for indirect courses',
-    async appRegion => {
-      vi.stubEnv('VITE_AWS_REGION', appRegion)
-      renderForm({ type: Course_Type_Enum.Indirect })
-
-      await userEvent.click(screen.getByLabelText('Blended learning'))
-
-      expect(screen.getByText(blendedLearningInfoMessage)).toBeInTheDocument()
-    },
-  )
 
   it.each(Object.values(AwsRegions))(
     "doesn't show course renewal cycle panel for an indirect course",

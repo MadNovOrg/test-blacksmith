@@ -24,19 +24,28 @@ export const FullLicenseAllowance = Template.bind({})
 FullLicenseAllowance.args = {
   numberOfLicenses: 2,
   licensesBalance: 4,
-  ...calculateGo1LicenseCost(2, 4),
+  ...calculateGo1LicenseCost({
+    numberOfLicenses: 2,
+    licenseBalance: 4,
+  }),
 }
 
 export const PartialLicenseAllowance = Template.bind({})
 PartialLicenseAllowance.args = {
   numberOfLicenses: 2,
   licensesBalance: 1,
-  ...calculateGo1LicenseCost(2, 1),
+  ...calculateGo1LicenseCost({
+    numberOfLicenses: 2,
+    licenseBalance: 1,
+  }),
 }
 
 export const NoLicenseAllowance = Template.bind({})
 NoLicenseAllowance.args = {
   numberOfLicenses: 5,
   licensesBalance: 0,
-  ...calculateGo1LicenseCost(5, 0),
+  ...calculateGo1LicenseCost({
+    numberOfLicenses: 5,
+    licenseBalance: 0,
+  }),
 }

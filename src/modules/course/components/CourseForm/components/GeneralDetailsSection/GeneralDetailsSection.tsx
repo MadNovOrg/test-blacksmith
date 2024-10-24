@@ -43,6 +43,7 @@ import { useCourseFormEffects } from '../../hooks/useCourseFormEffects'
 import { useCoursePermissions } from '../../hooks/useCoursePermissions'
 import { useSpecialInstructions } from '../../hooks/useSpecialInstructions'
 import { InstructionAccordionField } from '../AccordionTextField'
+import { BlendedLearningCostAlert } from '../BlendedLearningCostAlert'
 import { CourseLevelDropdown } from '../CourseLevelDropdown'
 import { StrategyToggles } from '../StrategyToggles/StrategyToggles'
 
@@ -66,6 +67,7 @@ export const GeneralDetailsSection = ({
     getLabel: getCountryLabel,
     isUKCountry,
     isAustraliaCountry,
+    isNewZealandCountry,
   } = useWorldCountries()
   const {
     register,
@@ -147,10 +149,22 @@ export const GeneralDetailsSection = ({
   ].includes(deliveryType)
 
   const disableBlended = useMemo(() => {
-    if (acl.isAustralia())
-      return isIndirectCourse && !isAustraliaCountry(residingCountry)
+    if (acl.isAustralia()) {
+      return (
+        isIndirectCourse &&
+        !isAustraliaCountry(residingCountry) &&
+        !isNewZealandCountry(residingCountry)
+      )
+    }
     return isIndirectCourse && !isUKCountry(residingCountry)
-  }, [isIndirectCourse, isUKCountry, residingCountry, acl, isAustraliaCountry])
+  }, [
+    isIndirectCourse,
+    isUKCountry,
+    residingCountry,
+    acl,
+    isAustraliaCountry,
+    isNewZealandCountry,
+  ])
 
   useEffect(() => {
     const mustChange = !canBlended && blendedLearning
@@ -622,9 +636,7 @@ export const GeneralDetailsSection = ({
         </Grid>
 
         {blendedLearning && isIndirectCourse ? (
-          <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
-            {t('blended-learning-price-label')}
-          </Alert>
+          <BlendedLearningCostAlert residingCountry={residingCountry ?? ''} />
         ) : null}
         <Typography mb={2} mt={2} fontWeight={600}>
           {t('delivery-type-section-title')}

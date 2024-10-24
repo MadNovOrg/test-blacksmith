@@ -11,11 +11,10 @@ import {
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
 import { Go1LicensingPrices, ValidCourseInput } from '@app/types'
+import { blendedLearningLicensePrice } from '@app/util'
 
 import { BILDBuilderCourseData } from '../CourseBuilder/components/BILDCourseBuilder/BILDCourseBuilder'
 import { ICMBuilderCourseData } from '../CourseBuilder/components/ICMCourseBuilderV2/ICMCourseBuilderV2'
-
-export const PRICE_PER_LICENSE = 50
 
 export const priceFieldIsMandatory = ({
   accreditedBy,
@@ -115,21 +114,42 @@ export const isCourseWithNoPrice = ({
   return courseType === Course_Type_Enum.Indirect && !blendedLearning
 }
 
-export function calculateGo1LicenseCost(
-  numberOfLicenses: number,
-  licenseBalance: number,
-): Go1LicensingPrices {
-  const fullPrice = new Big(numberOfLicenses).times(PRICE_PER_LICENSE)
+export function calculateGo1LicenseCost({
+  numberOfLicenses,
+  licenseBalance,
+  residingCountry,
+  isAustralia,
+}: {
+  numberOfLicenses: number
+  licenseBalance: number
+  residingCountry?: string
+  isAustralia?: boolean
+}): Go1LicensingPrices {
+  const getPricePerLicence = () => {
+    if (isAustralia) {
+      if (['NZ'].includes(residingCountry ?? '')) {
+        return blendedLearningLicensePrice.NZD
+      }
+      return blendedLearningLicensePrice.AUD
+    }
+    return blendedLearningLicensePrice.GBP
+  }
+
+  const fullPrice = new Big(numberOfLicenses).times(getPricePerLicence())
   const allowancePrice =
     numberOfLicenses > licenseBalance
-      ? new Big(licenseBalance).times(PRICE_PER_LICENSE)
-      : new Big(numberOfLicenses).times(PRICE_PER_LICENSE)
+      ? new Big(licenseBalance).times(getPricePerLicence())
+      : new Big(numberOfLicenses).times(getPricePerLicence())
 
   const vat = fullPrice.minus(allowancePrice).times(0.2)
-  const amountDue = fullPrice.minus(allowancePrice).add(vat)
+  const gst = fullPrice.minus(allowancePrice).times(0.1)
+  const amountDue = isAustralia
+    ? fullPrice.minus(allowancePrice).add(gst)
+    : fullPrice.minus(allowancePrice).add(vat)
 
   return {
     vat: vat.toNumber(),
+    gst: gst.toNumber(),
     amountDue: amountDue.toNumber(),
     subtotal: fullPrice.toNumber(),
     allowancePrice: allowancePrice.toNumber(),

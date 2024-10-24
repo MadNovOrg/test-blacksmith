@@ -14,6 +14,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'urql'
 
+import { useAuth } from '@app/context/auth'
 import {
   OrgLicensesWithHistoryQuery,
   OrgLicensesWithHistoryQueryVariables,
@@ -41,6 +42,9 @@ export const LicenseOrderDetails = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const {
+    acl: { isAustralia },
+  } = useAuth()
 
   const {
     setCurrentStepKey,
@@ -83,10 +87,12 @@ export const LicenseOrderDetails = () => {
     },
   })
 
-  const prices = calculateGo1LicenseCost(
-    courseData?.maxParticipants ?? 0,
-    orgData?.organization_by_pk?.go1Licenses ?? 0,
-  )
+  const prices = calculateGo1LicenseCost({
+    numberOfLicenses: courseData?.maxParticipants ?? 0,
+    licenseBalance: orgData?.organization_by_pk?.go1Licenses ?? 0,
+    isAustralia: isAustralia(),
+    residingCountry: courseData?.residingCountry ?? '',
+  })
 
   const onSubmit: SubmitHandler<Inputs> = data => {
     setGo1Licensing({ prices, invoiceDetails: data.invoiceDetails })
@@ -144,6 +150,7 @@ export const LicenseOrderDetails = () => {
         {...prices}
         numberOfLicenses={courseData.maxParticipants}
         licensesBalance={orgData?.organization_by_pk?.go1Licenses ?? 0}
+        residingCountry={courseData.residingCountry}
       />
 
       <Typography variant="h4" mb={2} mt={4}>

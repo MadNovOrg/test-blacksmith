@@ -841,6 +841,7 @@ export type CourseExpenseData =
 export type Go1LicensingPrices = {
   subtotal: number
   vat: number
+  gst: number
   amountDue: number
   allowancePrice: number
 }

@@ -177,7 +177,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     ) as XeroLineItem[]
 
     const amount = discountLineItem?.reduce(
-      (acc, current) => acc + current?.lineAmount ?? 0,
+      (acc, current) => acc + current?.lineAmount,
       0,
     )
 

@@ -10,6 +10,7 @@ import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import { Course_Type_Enum } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
@@ -27,6 +28,11 @@ export const ReviewLicenseOrder: React.FC<
     useCreateCourse()
   const { saveCourse, savingStatus } = useSaveCourse()
   const { addSnackbarMessage } = useSnackbar()
+  const { defaultCurrency, currencyAbbreviations } = useCurrencies(
+    courseData?.residingCountry,
+  )
+
+  const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const hasSavingError = savingStatus === LoadingStatus.ERROR
@@ -92,6 +98,11 @@ export const ReviewLicenseOrder: React.FC<
   const courseTimezone = courseData?.timeZone
     ? courseData?.timeZone.timeZoneId
     : undefined
+
+  const taxType = acl.isAustralia() ? _t('common.gst') : _t('common.vat')
+  const taxAmount = acl.isAustralia()
+    ? go1Licensing?.prices.gst
+    : go1Licensing?.prices.vat
 
   return (
     <Box>
@@ -167,18 +178,22 @@ export const ReviewLicenseOrder: React.FC<
         <InfoPanel>
           <InfoRow
             label={_t('common.subtotal')}
-            value={_t('common.currency', {
+            value={_t('common.amount-with-currency', {
               amount: go1Licensing
-                ? go1Licensing?.prices.subtotal -
-                  (go1Licensing?.prices.allowancePrice ?? 0)
+                ? (
+                    go1Licensing?.prices.subtotal -
+                    (go1Licensing?.prices.allowancePrice ?? 0)
+                  ).toFixed(2)
                 : undefined,
+              currency: currencyAbbreviation,
             })}
           />
           {go1Licensing?.prices.vat ? (
             <InfoRow
-              label={_t('common.vat')}
-              value={_t('common.currency', {
-                amount: go1Licensing.prices.vat,
+              label={taxType}
+              value={_t('common.amount-with-currency', {
+                amount: taxAmount?.toFixed(2),
+                currency: currencyAbbreviation,
               })}
             />
           ) : null}
@@ -187,8 +202,9 @@ export const ReviewLicenseOrder: React.FC<
           <InfoRow>
             <Typography fontWeight="600">{_t('common.amount-due')}</Typography>
             <Typography fontWeight="600">
-              {_t('common.currency', {
-                amount: go1Licensing?.prices.amountDue,
+              {_t('common.amount-with-currency', {
+                amount: go1Licensing?.prices.amountDue.toFixed(2),
+                currency: currencyAbbreviation,
               })}
             </Typography>
           </InfoRow>

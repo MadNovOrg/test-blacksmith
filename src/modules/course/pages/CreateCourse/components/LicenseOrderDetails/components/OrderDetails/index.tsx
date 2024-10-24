@@ -2,6 +2,8 @@ import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
 
 import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
+import { useAuth } from '@app/context/auth'
+import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import theme from '@app/theme'
 
@@ -11,27 +13,41 @@ type Props = {
   numberOfLicenses: number
   licensesBalance: number
   vat: number
+  gst: number
   subtotal: number
   amountDue: number
   allowancePrice: number
+  residingCountry?: string
 }
 
 export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   numberOfLicenses,
   licensesBalance,
   vat,
+  gst,
   subtotal,
   amountDue,
   allowancePrice,
+  residingCountry,
 }) => {
+  const {
+    acl: { isAustralia },
+  } = useAuth()
   const { t, _t } = useScopedTranslation(
     'pages.create-course.license-order-details',
   )
+  const { defaultCurrency, currencyAbbreviations } =
+    useCurrencies(residingCountry)
+
+  const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
 
   const licensesLeft =
     licensesBalance - numberOfLicenses >= 0
       ? licensesBalance - numberOfLicenses
       : 0
+
+  const taxType = isAustralia() ? _t('common.gst') : _t('common.vat')
+  const taxAmount = isAustralia() ? gst : vat
 
   return (
     <Stack spacing="2px">
@@ -45,7 +61,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
           {amountDue > 0 ? (
             <Typography color={theme.palette.grey[600]} mt={1}>
               {t('price-per-attendee', {
-                price: _t('common.currency', { amount: PRICE_PER_LICENSE }),
+                price: _t('common.amount-with-currency', {
+                  amount: PRICE_PER_LICENSE,
+                  currency: currencyAbbreviation,
+                }),
               })}
             </Typography>
           ) : null}
@@ -66,7 +85,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
               data-testid="amount-subtotal"
               mb={1}
             >
-              {_t('common.currency', { amount: subtotal })}
+              {_t('common.amount-with-currency', {
+                amount: subtotal.toFixed(2),
+                currency: currencyAbbreviation,
+              })}
             </Typography>
           </ItemRow>
           {licensesBalance ? (
@@ -80,8 +102,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
                 data-testid="amount-allowance"
               >
                 -
-                {_t('common.currency', {
-                  amount: allowancePrice,
+                {_t('common.amount-with-currency', {
+                  amount: allowancePrice.toFixed(2),
+                  currency: currencyAbbreviation,
                 })}
               </Typography>
             </ItemRow>
@@ -89,7 +112,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
           {vat ? (
             <ItemRow>
               <Typography color={theme.palette.grey[600]} mt={1}>
-                {t('vat')}
+                {taxType}
               </Typography>
 
               <Typography
@@ -97,7 +120,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
                 data-testid="amount-vat"
                 mt={1}
               >
-                {_t('common.currency', { amount: vat })}
+                {_t('common.amount-with-currency', {
+                  amount: taxAmount.toFixed(2),
+                  currency: currencyAbbreviation,
+                })}
               </Typography>
             </ItemRow>
           ) : null}
@@ -109,7 +135,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
             {t('amound-due', { currency: 'GBP' })}
           </Typography>
           <Typography variant="h6" data-testid="amount-due">
-            {_t('common.currency', { amount: amountDue })}
+            {_t('common.amount-with-currency', {
+              amount: amountDue.toFixed(2),
+              currency: currencyAbbreviation,
+            })}
           </Typography>
         </ItemRow>
       </DetailsItemBox>

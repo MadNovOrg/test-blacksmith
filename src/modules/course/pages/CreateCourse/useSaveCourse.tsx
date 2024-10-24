@@ -483,9 +483,9 @@ export function useSaveCourse(): {
           ...(isOpenCourse || isClosedCourse
             ? {
                 includeVAT: courseData.includeVAT,
-                priceCurrency: courseData.priceCurrency,
               }
             : {}),
+          priceCurrency: courseData.priceCurrency,
           ...(courseHasManualPrice
             ? { price: courseData.price ?? undefined }
             : undefined),
