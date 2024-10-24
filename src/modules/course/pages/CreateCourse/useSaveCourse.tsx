@@ -162,7 +162,7 @@ export function useSaveCourse(): {
     trainers,
   } = useCreateCourse()
   const { setDateTimeTimeZone } = useTimeZones()
-  const { isUKCountry } = useWorldCountries()
+  const { isUKCountry, isAustraliaCountry } = useWorldCountries()
 
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
@@ -181,14 +181,16 @@ export function useSaveCourse(): {
   const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
   const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
 
-  const courseHasManualPrice = courseWithManualPrice({
-    accreditedBy: courseData?.accreditedBy as Accreditors_Enum,
-    courseType: courseData?.type as Course_Type_Enum,
-    courseLevel: courseData?.courseLevel as Course_Level_Enum,
-    blendedLearning: Boolean(courseData?.blendedLearning),
-    maxParticipants: courseData?.maxParticipants ?? 0,
-    residingCountry: courseData?.residingCountry as WorldCountriesCodes,
-  })
+  const courseHasManualPrice = acl.isAustralia()
+    ? !isAustraliaCountry(courseData?.residingCountry)
+    : courseWithManualPrice({
+        accreditedBy: courseData?.accreditedBy as Accreditors_Enum,
+        courseType: courseData?.type as Course_Type_Enum,
+        courseLevel: courseData?.courseLevel as Course_Level_Enum,
+        blendedLearning: Boolean(courseData?.blendedLearning),
+        maxParticipants: courseData?.maxParticipants ?? 0,
+        residingCountry: courseData?.residingCountry as WorldCountriesCodes,
+      })
 
   const courseWithNoPrice = useMemo(() => {
     return isCourseWithNoPrice({
