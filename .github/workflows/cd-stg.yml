@@ -40,7 +40,7 @@ jobs:
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-  stg-cd-aus:
+  stg-cd-anz:
     if: ${{ github.event.inputs.region == 'Australia' || github.event.inputs.region == 'Both' }}
     name: Deploy
     uses: ./.github/workflows/pipeline.yml
@@ -48,16 +48,16 @@ jobs:
       mode: 'staging'
       aws_region: 'ap-southeast-2'
     secrets:
-      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG_AUS }}
-      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG_AUS }}
-      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG_AUS }}
-      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG_AUS }}
-      wp_host: ${{ secrets.WP_HOST_STG_AUS }}
-      s3_bucket: ${{ secrets.S3_BUCKET_STG_AUS }}
-      service_role_arn: ${{ secrets.IAM_SERVICE_STG_AUS }}
-      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG_AUS }}
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG_ANZ }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG_ANZ }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG_ANZ }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG_ANZ }}
+      wp_host: ${{ secrets.WP_HOST_STG_ANZ }}
+      s3_bucket: ${{ secrets.S3_BUCKET_STG_ANZ }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_STG_ANZ }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG_ANZ }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}
       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
-      stripe_key: ${{ secrets.STRIPE_KEY_STG_AUS }}
+      stripe_key: ${{ secrets.STRIPE_KEY_STG_ANZ }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
