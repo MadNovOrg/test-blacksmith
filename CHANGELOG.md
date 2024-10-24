@@ -1,5 +1,53 @@
 # @teamteach/hub
 
+## 4.10.0
+
+### Minor Changes
+
+- 56003fa: Rename Positive Behaviour Training to Behaviour Support Training.
+- ae5575a: Adds a hasura REST endpoint to be accesed by KnowledgeHub in order to read profile knowledge hub access
+- 4a662f6: Adjust certificate import tool for ANZ.
+- 90d1d0d: ANZ Edit price table
+- 754fa34: Course residing country filter ANZ
+- cd04be9: Add Open Foundation Trainer course level on ANZ
+- 7c64fb4: Add course pricing for FT anz
+- 5e620ce: Closed Level 2 BL Reacc modules setting
+- cd7e8b6: Adjust onboarding flow for ANZ.
+- 64c3811: Move Course Residing Country selector at the top of the General Details Section.
+- a0de8d7: feat (TTHP-4262) ANZ indirect courses blended learning currencies and prices updates
+- c7a9e8e: Add missing course pricings for ANZ
+- dc428c7: Add Edit org affiliation link for ANZ
+- a0f2e7d: Foundation Trainer course management adjustments
+- 0677637: Add Foundation Trainer course modules.
+- 0a0da4e: Auth pages heading for ANZ
+- 893f85a: Allow main org admin to remove and edit individuals on affiliated orgs
+- f33b239: feat (TTHP-4120): ANZ bulk organisations import
+- bd01f65: Updates Google Tag Manager to trigger page view events on each page switch
+- 2a98bc8: LinkedIn link on footer for ANZ
+- 606a16b: ANZ course certificates
+- 5e52bca: Add Foundation Trainer in the "Individuals By Level" section on Organisations Page.
+- 3e281a6: FT attendee management adjustments
+- cad60dd: Adjus default currencies to work with both ANZ and UK ||| Split Course creation into two separate forms
+- 9a67266: Update to 2 years L1 BS certificates validity
+
+### Patch Changes
+
+- d7841ba: Only one promo code can be applied, and promo code discounts are not applicable to mandatory course materials.
+- f6151d7: Do not allow decrease of course's max participants less than sum of current participants count and pending invites
+- 99ec4c2: Adjust the wording related to ARLO
+- c4740e1: Remove BILD AOL and Arlo references for ANZ
+- 1a33d98: adjust creatable indirect course levels for ANZ
+- 757e218: adjust creatable open course levels for ANZ
+- 42fb7a4: Don't reset residing country when course level changes.
+- 6ceac0c: Don't allow course creation without scheduled price in Australia, for ANZ
+- 7df2db4: Trim email input before validating.
+- d9f1ff5: "Do not re-rise approved exceptions"
+- 13f561a: adjust alert wording related to ARLO for ANZ
+- 6923929: Show all individuals in org summary table.
+- cc8faca: adjust creatable closed course levels for ANZ
+- 4c0b189: add hint message for residing country inputs
+- 3c97e2e: Fix organization invite query not allowing authenticated users to accept invitations
+
 ## 4.9.0
 
 ### Minor Changes
