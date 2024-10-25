@@ -1,5 +1,5 @@
 #### this will trigger a production release on ANZ environment in order to set secrets and deploy the app
-name: RELEASE PROD VERSION
+name: ANZ Manual release
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
     name: PROD-ANZ-RELEASE
     uses: ./.github/workflows/pipeline.yml
     with:
-      version: 4.9.0
+      version: 4.10.0
       aws_region: 'ap-southeast-2'
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD_ANZ }}
