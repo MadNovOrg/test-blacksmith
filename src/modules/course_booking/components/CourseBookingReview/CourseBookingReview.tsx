@@ -162,6 +162,13 @@ export const CourseBookingReview: React.FC<
     }
   }, [courseStartDate, courseEndDate, courseTimezone])
 
+  const taxType = () => {
+    if (acl.isAustralia()) {
+      return t('custom-gst', { amount: booking.vat })
+    }
+    return t('custom-vat', { amount: booking.vat })
+  }
+
   return (
     <Box>
       <Typography variant="subtitle1" fontWeight="500">
@@ -408,9 +415,7 @@ export const CourseBookingReview: React.FC<
         </Box>
         <Divider sx={{ my: 2 }} />
         <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">
-            {t('custom-vat', { amount: booking.vat })}
-          </Typography>
+          <Typography color="grey.700">{taxType()}</Typography>
           <Typography color="grey.700">
             {formatCurrency(
               {
