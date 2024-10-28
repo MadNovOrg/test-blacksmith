@@ -182,9 +182,7 @@ export function useSaveCourse(): {
   const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
 
   const courseHasManualPrice = acl.isAustralia()
-    ? !isAustraliaCountry(courseData?.residingCountry) &&
-      isOpenCourse &&
-      isClosedCourse
+    ? !isAustraliaCountry(courseData?.residingCountry) && !isIndirectCourse
     : courseWithManualPrice({
         accreditedBy: courseData?.accreditedBy as Accreditors_Enum,
         courseType: courseData?.type as Course_Type_Enum,
