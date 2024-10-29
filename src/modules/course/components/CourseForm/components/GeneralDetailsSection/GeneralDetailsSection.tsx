@@ -188,6 +188,7 @@ export const GeneralDetailsSection = ({
   useEffect(() => {
     if (
       acl.isTrainer() &&
+      acl.isUK() &&
       isCreation &&
       isIndirectCourse &&
       !!profile?.countryCode

@@ -64,7 +64,7 @@ export const useCourseCreationFormSchema = ({
   )
 
   const residingCountry =
-    acl.isTrainer() && profile?.countryCode
+    acl.isUK() && acl.isTrainer() && profile?.countryCode
       ? profile?.countryCode
       : defaultResidingCountry()
 

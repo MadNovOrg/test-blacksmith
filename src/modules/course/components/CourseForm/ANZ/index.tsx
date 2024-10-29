@@ -9,7 +9,6 @@ import { noop } from 'ts-essentials'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Level_Enum,
@@ -48,7 +47,6 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   currentNumberOfParticipantsAndInvitees,
 }) => {
   const { t } = useTranslation()
-  const { acl, profile } = useAuth()
   const { isAustraliaCountry, isNewZealandCountry } = useWorldCountries()
   const { methods } = useCourseCreationFormSchema({
     courseInput,
@@ -179,10 +177,7 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     maxParticipants: values.maxParticipants,
   })
 
-  const courseResidingCountry =
-    acl.isTrainer() && profile?.countryCode
-      ? profile?.countryCode
-      : Countries_Code.AUSTRALIA
+  const courseResidingCountry = Countries_Code.AUSTRALIA
 
   useEffectOnce(() => {
     setValue(
