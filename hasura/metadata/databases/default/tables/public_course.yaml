@@ -332,6 +332,7 @@ insert_permissions:
         - organization_key_contact_invite_data
         - organization_key_contact_profile_id
         - parking_instructions
+        - price_currency
         - reaccreditation
         - renewal_cycle
         - residingCountry
