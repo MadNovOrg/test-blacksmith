@@ -6,8 +6,7 @@ import { useAuth } from '@app/context/auth'
 import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import theme from '@app/theme'
-
-const PRICE_PER_LICENSE = 50
+import { getPricePerLicence } from '@app/util'
 
 type Props = {
   numberOfLicenses: number
@@ -62,7 +61,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
             <Typography color={theme.palette.grey[600]} mt={1}>
               {t('price-per-attendee', {
                 price: _t('common.amount-with-currency', {
-                  amount: PRICE_PER_LICENSE,
+                  amount: getPricePerLicence({
+                    isAustralia: isAustralia(),
+                    residingCountry,
+                  }),
                   currency: currencyAbbreviation,
                 }),
               })}

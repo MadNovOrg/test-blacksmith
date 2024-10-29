@@ -1081,3 +1081,19 @@ export const blendedLearningLicensePrice = {
   NZD: 88,
   GBP: 50,
 }
+
+export const getPricePerLicence = ({
+  isAustralia,
+  residingCountry,
+}: {
+  isAustralia?: boolean
+  residingCountry?: string
+}) => {
+  if (isAustralia) {
+    if (residingCountry && ['NZ'].includes(residingCountry)) {
+      return blendedLearningLicensePrice.NZD
+    }
+    return blendedLearningLicensePrice.AUD
+  }
+  return blendedLearningLicensePrice.GBP
+}

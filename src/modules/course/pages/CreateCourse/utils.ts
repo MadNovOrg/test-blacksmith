@@ -11,7 +11,7 @@ import {
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
 import { Go1LicensingPrices, ValidCourseInput } from '@app/types'
-import { blendedLearningLicensePrice } from '@app/util'
+import { getPricePerLicence } from '@app/util'
 
 import { BILDBuilderCourseData } from '../CourseBuilder/components/BILDCourseBuilder/BILDCourseBuilder'
 import { ICMBuilderCourseData } from '../CourseBuilder/components/ICMCourseBuilderV2/ICMCourseBuilderV2'
@@ -125,21 +125,13 @@ export function calculateGo1LicenseCost({
   residingCountry?: string
   isAustralia?: boolean
 }): Go1LicensingPrices {
-  const getPricePerLicence = () => {
-    if (isAustralia) {
-      if (['NZ'].includes(residingCountry ?? '')) {
-        return blendedLearningLicensePrice.NZD
-      }
-      return blendedLearningLicensePrice.AUD
-    }
-    return blendedLearningLicensePrice.GBP
-  }
-
-  const fullPrice = new Big(numberOfLicenses).times(getPricePerLicence())
+  const pricePerLicence = getPricePerLicence({ isAustralia, residingCountry })
+  console.log(pricePerLicence)
+  const fullPrice = new Big(numberOfLicenses).times(pricePerLicence)
   const allowancePrice =
     numberOfLicenses > licenseBalance
-      ? new Big(licenseBalance).times(getPricePerLicence())
-      : new Big(numberOfLicenses).times(getPricePerLicence())
+      ? new Big(licenseBalance).times(pricePerLicence)
+      : new Big(numberOfLicenses).times(pricePerLicence)
 
   const vat = fullPrice.minus(allowancePrice).times(0.2)
   const gst = fullPrice.minus(allowancePrice).times(0.1)
