@@ -72,7 +72,7 @@ export const Upload: React.FC = () => {
           <Link
             key={0}
             underline="always"
-            href="https://assets.teamteachhub.co.uk/anz_orgs_import_template.xlsx"
+            href="https://assets.teamteachhub.co.uk/Import_Organisations_Template.xlsx"
           />,
         ]}
       />

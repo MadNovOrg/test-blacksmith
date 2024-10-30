@@ -10,8 +10,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import uniqBy from 'lodash-es/uniqBy'
 import React, { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
 import { ImportStepsEnum as ImportSteps } from '@app/components/ImportSteps'
@@ -116,7 +117,7 @@ export const Importing: React.FC = () => {
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6">
                     {t('steps.importing.not-imported', {
-                      count: result?.notImported?.length ?? 0,
+                      count: uniqBy(result?.notImported, 'name')?.length ?? 0,
                     })}
                   </Typography>
                 </AccordionSummary>
@@ -129,14 +130,19 @@ export const Importing: React.FC = () => {
                         missingFields?: Array<string>
                       }) => {
                         return (
-                          <Typography key={notImported.name}>
-                            {t(
-                              [
-                                `steps.importing.not-imported-error-${notImported.reason}`,
-                                'steps.importing.not-imported-error',
-                              ],
-                              { name: notImported.name },
-                            )}
+                          <Typography
+                            data-testid={notImported.reason}
+                            key={notImported.name}
+                          >
+                            <Trans
+                              i18nKey={
+                                notImported.reason
+                                  ? `steps.importing.not-imported-error-${notImported.reason}`
+                                  : 'steps.importing.not-imported-error-default'
+                              }
+                              t={t}
+                              values={{ name: notImported.name }}
+                            />
                             {notImported.reason ===
                             CHUNK_RESULT_ERROR.MissingMandatoryFields ? (
                               <>
@@ -189,14 +195,19 @@ export const Importing: React.FC = () => {
                       {result?.notes?.map(
                         (notes: { name: string; reason: string }) => {
                           return (
-                            <Typography key={notes.name}>
-                              {t(
-                                [
-                                  `steps.importing.not-imported-error-${notes.reason}`,
-                                  'steps.importing.not-imported-error',
-                                ],
-                                { name: notes.name },
-                              )}
+                            <Typography
+                              data-testid={notes.reason}
+                              key={notes.name}
+                            >
+                              <Trans
+                                i18nKey={
+                                  notes.reason
+                                    ? `steps.importing.not-imported-error-${notes.reason}`
+                                    : 'steps.importing.not-imported-error-default'
+                                }
+                                t={t}
+                                values={{ name: notes.name }}
+                              />
                             </Typography>
                           )
                         },

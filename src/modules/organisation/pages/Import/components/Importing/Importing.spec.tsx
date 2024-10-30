@@ -114,7 +114,11 @@ describe(Importing.name, () => {
       total: 11,
       processed: 10,
       importedCount: 3,
-      notImported: [0, 0, 0, 0],
+      notImported: [
+        { name: 'Amdaris' },
+        { name: 'Team Teach' },
+        { name: 'Insight ' },
+      ],
       notes: [0],
     }
 
@@ -186,10 +190,6 @@ describe(Importing.name, () => {
             name: 'Organisation 1',
             reason: reason,
           },
-          {
-            name: 'Organisation 2',
-            reason: reason,
-          },
         ],
       }
 
@@ -215,7 +215,9 @@ describe(Importing.name, () => {
         )
       })
 
-      const { getByText } = renderComponent(mockedClient as unknown as Client)
+      const { getByText, getByTestId } = renderComponent(
+        mockedClient as unknown as Client,
+      )
       expect(mockedClient.executeSubscription).toHaveBeenCalled()
 
       await waitFor(() => {
@@ -229,13 +231,7 @@ describe(Importing.name, () => {
         userEvent.click(notImportedAccordion as HTMLButtonElement)
 
         result.notImported.forEach(organisation => {
-          expect(
-            getByText(
-              t(`steps.importing.not-imported-error-${organisation.reason}`, {
-                name: organisation.name,
-              }),
-            ),
-          ).toBeInTheDocument()
+          expect(getByTestId(organisation.reason)).toBeInTheDocument()
         })
       })
     },

@@ -126,7 +126,6 @@ export function calculateGo1LicenseCost({
   isAustralia?: boolean
 }): Go1LicensingPrices {
   const pricePerLicence = getPricePerLicence({ isAustralia, residingCountry })
-  console.log(pricePerLicence)
   const fullPrice = new Big(numberOfLicenses).times(pricePerLicence)
   const allowancePrice =
     numberOfLicenses > licenseBalance
