@@ -77,7 +77,7 @@ export const Preview: React.FC = () => {
           email: row.email,
           website: row.website ?? '',
           mainOrganisation: row.mainOrganisation ?? '',
-          mainContactFirsName: row.mainContactFirstName ?? '',
+          mainContactFirstName: row.mainContactFirstName ?? '',
           mainContactSurname: row.mainContactSurname ?? '',
           mainContactEmail: row.mainContactEmail ?? '',
           mainContactSetting: row.mainContactSetting ?? '',
