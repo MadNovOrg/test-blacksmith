@@ -49,8 +49,8 @@ import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { ConfirmDialog, Dialog } from '@app/components/dialogs'
-import { OrgSelector } from '@app/components/OrgSelector/UK'
-import { CallbackOption } from '@app/components/OrgSelector/UK/utils'
+import { OrgSelector } from '@app/components/OrgSelector/ANZ'
+import { CallbackOption } from '@app/components/OrgSelector/ANZ/utils'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {

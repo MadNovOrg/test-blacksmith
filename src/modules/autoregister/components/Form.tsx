@@ -28,7 +28,8 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { OrgSelector as OrgSelectorANZ } from '@app/components/OrgSelector/ANZ'
+import { OrgSelector as OrgSelectorUK } from '@app/components/OrgSelector/UK'
 import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
 import { useAuth } from '@app/context/auth'
 import {
@@ -370,40 +371,70 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           </LocalizationProvider>
         </Grid>
         <Grid item>
-          <OrgSelector
-            {...register('organization')}
-            allowAdding={
-              isAustralia()
-                ? false
-                : Boolean(values.countryCode) &&
-                  !isUKCountry(values.countryCode)
-            }
-            showTrainerOrgOnly={false}
-            error={errors.organization?.message}
-            value={values.organization ?? undefined}
-            onChange={handleOrganizationSelection}
-            textFieldProps={{
-              variant: 'filled',
-            }}
-            isShallowRetrieval
-            required
-            searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
-            canSearchByAddress={false}
-            countryCode={values.countryCode}
-            placeholder={
-              isSearchOnlyByPostCodeEnabled
-                ? undefined
-                : t('components.org-selector.post-code-and-name-placeholder')
-            }
-            label={
-              isSearchOnlyByPostCodeEnabled
-                ? undefined
-                : t('components.org-selector.residing-org')
-            }
-            showDfeResults={
-              Boolean(values.countryCode) && isUKCountry(values.countryCode)
-            }
-          />
+          {isAustralia() ? (
+            <OrgSelectorANZ
+              {...register('organization')}
+              allowAdding={false}
+              showTrainerOrgOnly={false}
+              error={errors.organization?.message}
+              value={values.organization ?? undefined}
+              onChange={handleOrganizationSelection}
+              textFieldProps={{
+                variant: 'filled',
+              }}
+              isShallowRetrieval
+              required
+              searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+              canSearchByAddress={false}
+              countryCode={values.countryCode}
+              placeholder={
+                isSearchOnlyByPostCodeEnabled
+                  ? undefined
+                  : t('components.org-selector.post-code-and-name-placeholder')
+              }
+              label={
+                isSearchOnlyByPostCodeEnabled
+                  ? undefined
+                  : t('components.org-selector.residing-org')
+              }
+              showDfeResults={false}
+            />
+          ) : (
+            <OrgSelectorUK
+              {...register('organization')}
+              allowAdding={
+                isAustralia()
+                  ? false
+                  : Boolean(values.countryCode) &&
+                    !isUKCountry(values.countryCode)
+              }
+              showTrainerOrgOnly={false}
+              error={errors.organization?.message}
+              value={values.organization ?? undefined}
+              onChange={handleOrganizationSelection}
+              textFieldProps={{
+                variant: 'filled',
+              }}
+              isShallowRetrieval
+              required
+              searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+              canSearchByAddress={false}
+              countryCode={values.countryCode}
+              placeholder={
+                isSearchOnlyByPostCodeEnabled
+                  ? undefined
+                  : t('components.org-selector.post-code-and-name-placeholder')
+              }
+              label={
+                isSearchOnlyByPostCodeEnabled
+                  ? undefined
+                  : t('components.org-selector.residing-org')
+              }
+              showDfeResults={
+                Boolean(values.countryCode) && isUKCountry(values.countryCode)
+              }
+            />
+          )}
         </Grid>
         <Grid item>
           <JobTitleSelector
