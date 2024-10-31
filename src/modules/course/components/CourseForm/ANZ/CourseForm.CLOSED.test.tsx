@@ -12,7 +12,9 @@ import { screen, userEvent, waitFor } from '@test/index'
 import { renderForm, selectDelivery, selectLevel } from '../test-utils'
 
 vi.mock('posthog-js/react', () => ({
-  useFeatureFlagEnabled: vi.fn(),
+  useFeatureFlagEnabled: vi.fn(() => ({
+    'is-blended-learning-toggle-enabled': true,
+  })),
 }))
 
 describe('component: AnzCourseForm - CLOSED', () => {

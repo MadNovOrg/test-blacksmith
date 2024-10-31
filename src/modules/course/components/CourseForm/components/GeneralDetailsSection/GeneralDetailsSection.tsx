@@ -79,6 +79,10 @@ export const GeneralDetailsSection = ({
   } = useFormContext<CourseInput>()
   const { changeCountryOnCourseLevelChange } = useCourseFormEffects()
   const { t, _t } = useScopedTranslation('components.course-form')
+  const isBlendedLearningToggleEnabled = useFeatureFlagEnabled(
+    'is-blended-learning-toggle-enabled',
+  )
+  const isFTEnabled = useFeatureFlagEnabled('foundation-trainer-level')
 
   const courseType = useWatch({ control, name: 'type' }) as Course_Type_Enum
   const accreditedBy = useWatch({ control, name: 'accreditedBy' })
@@ -112,7 +116,6 @@ export const GeneralDetailsSection = ({
 
   const shouldShowCountrySelector = !isBild
 
-  const isFTEnabled = useFeatureFlagEnabled('foundation-trainer-level')
   const {
     canBlended,
     canF2F,
@@ -142,7 +145,6 @@ export const GeneralDetailsSection = ({
       reaccreditation,
       setValue,
     })
-
   const hasSpecialInstructions = [
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
@@ -166,48 +168,9 @@ export const GeneralDetailsSection = ({
     isNewZealandCountry,
   ])
 
-  useEffect(() => {
-    const mustChange = !canBlended && blendedLearning
-    mustChange && setValue('blendedLearning', false)
-  }, [canBlended, setValue, blendedLearning])
-
-  useEffect(() => {
-    const mustChange = !canReacc() && reaccreditation
-    if (mustChange) {
-      const newReaccreditationValue = false
-      setValue('reaccreditation', newReaccreditationValue)
-      resetSpecialInstructionsToDefault({
-        newCourseReacc: newReaccreditationValue,
-      })
-    }
-  }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
-
   const disableCountrySelector = useMemo(() => {
     return isIndirectCourse && !isCreation && acl.isTrainer()
   }, [acl, isCreation, isIndirectCourse])
-  useEffect(() => {
-    if (
-      acl.isTrainer() &&
-      acl.isUK() &&
-      isCreation &&
-      isIndirectCourse &&
-      !!profile?.countryCode
-    ) {
-      setValue('residingCountry', profile?.countryCode)
-    }
-  }, [acl, isCreation, isIndirectCourse, profile?.countryCode, setValue])
-
-  useEffect(() => {
-    const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
-    const mustChange = !canMixed() && isMixed
-    if (mustChange) {
-      const newDeliveryType = Course_Delivery_Type_Enum.F2F
-      setValue('deliveryType', newDeliveryType)
-      resetSpecialInstructionsToDefault({
-        newCourseDeliveryType: newDeliveryType,
-      })
-    }
-  }, [canMixed, deliveryType, resetSpecialInstructionsToDefault, setValue])
 
   const handleResidingCountryChange = (code: string) => {
     setValue('residingCountry', code, {
@@ -232,10 +195,64 @@ export const GeneralDetailsSection = ({
     }
   }
 
+  const shouldDisableBlended = useMemo(() => {
+    // NOTE: This is a temporary condition to disable blended learning for ANZ Indirect and Closed courses.
+    if (acl.isAustralia() && !isBlendedLearningToggleEnabled) return true // TODO: Remove this condition after ANZ blended learning is fully integrated.
+    return (
+      !canBlended || disableBlended || disabledFields.has('blendedLearning')
+    )
+  }, [
+    acl,
+    canBlended,
+    disableBlended,
+    disabledFields,
+    isBlendedLearningToggleEnabled,
+  ])
+
+  useEffect(() => {
+    const mustChange = !canBlended && blendedLearning
+    mustChange && setValue('blendedLearning', false)
+  }, [canBlended, setValue, blendedLearning])
+
+  useEffect(() => {
+    const mustChange = !canReacc() && reaccreditation
+    if (mustChange) {
+      const newReaccreditationValue = false
+      setValue('reaccreditation', newReaccreditationValue)
+      resetSpecialInstructionsToDefault({
+        newCourseReacc: newReaccreditationValue,
+      })
+    }
+  }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
+
   useEffect(() => {
     if (disableBlended)
       setValue('blendedLearning', false, { shouldValidate: true })
   }, [disableBlended, setValue])
+
+  useEffect(() => {
+    if (
+      acl.isTrainer() &&
+      acl.isUK() &&
+      isCreation &&
+      isIndirectCourse &&
+      !!profile?.countryCode
+    ) {
+      setValue('residingCountry', profile?.countryCode)
+    }
+  }, [acl, isCreation, isIndirectCourse, profile?.countryCode, setValue])
+
+  useEffect(() => {
+    const isMixed = deliveryType === Course_Delivery_Type_Enum.Mixed
+    const mustChange = !canMixed() && isMixed
+    if (mustChange) {
+      const newDeliveryType = Course_Delivery_Type_Enum.F2F
+      setValue('deliveryType', newDeliveryType)
+      resetSpecialInstructionsToDefault({
+        newCourseDeliveryType: newDeliveryType,
+      })
+    }
+  }, [canMixed, deliveryType, resetSpecialInstructionsToDefault, setValue])
 
   return (
     <InfoPanel
@@ -545,11 +562,7 @@ export const GeneralDetailsSection = ({
               control={control}
               render={({ field }) => (
                 <FormControlLabel
-                  disabled={
-                    !canBlended ||
-                    disableBlended ||
-                    disabledFields.has('blendedLearning')
-                  }
+                  disabled={shouldDisableBlended}
                   control={
                     <Switch
                       {...field}

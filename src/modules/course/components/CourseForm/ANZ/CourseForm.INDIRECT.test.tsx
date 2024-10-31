@@ -18,7 +18,9 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
 }))
 
 vi.mock('posthog-js/react', () => ({
-  useFeatureFlagEnabled: vi.fn(),
+  useFeatureFlagEnabled: vi.fn(() => ({
+    'is-blended-learning-toggle-enabled': true,
+  })),
 }))
 
 const useCoursePriceMock = vi.mocked(useCoursePrice)
