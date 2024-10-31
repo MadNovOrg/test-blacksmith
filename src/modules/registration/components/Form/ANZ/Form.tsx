@@ -72,9 +72,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [isManualFormError, setIsManualFormError] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [signUpError, setError] = useState('')
+  const [signUpError, setSignUpError] = useState('')
   const organizationData = useOrganizationToBeCreatedOnRegistration()
-  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+  const { getLabel: getCountryLabel } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
 
@@ -108,7 +108,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     if (isManualFormError) return
 
     setLoading(true)
-    setError('')
+    setSignUpError('')
 
     try {
       let input: SignUpMutationVariables['input'] = {
@@ -159,7 +159,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     } catch (err) {
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'
-      setError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
+      setSignUpError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
       setLoading(false)
     }
   }
@@ -361,7 +361,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       <OrgSelector
         required
         {...register('organization')}
-        allowAdding={!isUKCountry(values.countryCode)}
+        allowAdding={false}
         autocompleteMode={false}
         showTrainerOrgOnly={false}
         error={errors.organization?.message}
@@ -385,7 +385,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             ? undefined
             : t('components.org-selector.residing-org')
         }
-        showDfeResults={isUKCountry(values.countryCode)}
+        showDfeResults={false}
       />
 
       <Box>

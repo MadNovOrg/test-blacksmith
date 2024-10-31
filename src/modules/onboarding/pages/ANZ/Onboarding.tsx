@@ -289,7 +289,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Grid item>
             <OrgSelector
               countryCode={values.countryCode}
-              allowAdding
+              allowAdding={false}
               required
               {...register('organization')}
               autocompleteMode={false}

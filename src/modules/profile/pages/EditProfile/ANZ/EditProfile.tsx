@@ -689,7 +689,7 @@ export const EditProfilePage: React.FC<
       return err
     }
   }
-  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+  const { getLabel: getCountryLabel } = useWorldCountries()
   const allPositions = useMemo(() => {
     return uniq([
       ...positions.edu,
@@ -1207,15 +1207,13 @@ export const EditProfilePage: React.FC<
                   >
                     {displayOrgSelector ? (
                       <OrgSelector
-                        allowAdding={
-                          Boolean(values.countryCode) &&
-                          !isUKCountry(values.countryCode)
-                        }
+                        allowAdding={false}
                         required
                         countryCode={values.countryCode}
                         {...register('organization')}
                         autocompleteMode={false}
                         showTrainerOrgOnly={false}
+                        showDfeResults={false}
                         error={errors.organization?.message}
                         isEditProfile={true}
                         userOrgIds={profile?.organizations.map(

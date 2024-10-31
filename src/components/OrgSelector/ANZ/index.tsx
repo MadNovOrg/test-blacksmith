@@ -273,7 +273,6 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     const organizationCreationOrEnquiryButton = useCallback((): string => {
       return t(allowAdding ? 'create' : 'organisation-enquiry')
     }, [allowAdding, t])
-
     return (
       <>
         <Autocomplete
@@ -428,7 +427,10 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
                     color="primary"
                     variant="contained"
                     onClick={() => {
-                      setAdding(option)
+                      allowAdding
+                        ? setAdding(option)
+                        : (window.location.href =
+                            import.meta.env.VITE_ANZ_ORGANISATION_ENQUIRY)
                     }}
                     size="small"
                     fullWidth={isMobile}

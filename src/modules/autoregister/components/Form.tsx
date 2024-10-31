@@ -30,6 +30,7 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
+import { useAuth } from '@app/context/auth'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
@@ -81,6 +82,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const [isManualFormError, setIsManualFormError] = useState(false)
+  const {
+    acl: { isAustralia },
+  } = useAuth()
 
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
@@ -369,7 +373,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           <OrgSelector
             {...register('organization')}
             allowAdding={
-              Boolean(values.countryCode) && !isUKCountry(values.countryCode)
+              isAustralia()
+                ? false
+                : Boolean(values.countryCode) &&
+                  !isUKCountry(values.countryCode)
             }
             showTrainerOrgOnly={false}
             error={errors.organization?.message}
