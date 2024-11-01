@@ -18,6 +18,7 @@ import {
 import Big from 'big.js'
 import { utcToZonedTime } from 'date-fns-tz'
 import { groupBy, filter } from 'lodash'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
@@ -154,7 +155,9 @@ export const CourseBookingDetails: React.FC<
     () => Array.from({ length: availableSeats }, (_, i) => i + 1),
     [availableSeats],
   )
-
+  const hidePaymentByCCOnANZ = useFeatureFlagEnabled(
+    'hide-payment-by-cc-on-anz',
+  )
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
   const isAddressInfoRequired =
     course?.type === Course_Type_Enum.Open &&
@@ -1114,8 +1117,9 @@ export const CourseBookingDetails: React.FC<
               render={({ field }) => {
                 return (
                   <RadioGroup aria-labelledby="payment-method" {...field}>
-                    {acl.canInviteAttendees(Course_Type_Enum.Open) &&
-                    internalBooking ? null : (
+                    {(acl.canInviteAttendees(Course_Type_Enum.Open) &&
+                      internalBooking) ||
+                    (acl.isAustralia() && hidePaymentByCCOnANZ) ? null : (
                       <FormControlLabel
                         // Internal TT users can create booking for open courses
                         // without paying by cc
