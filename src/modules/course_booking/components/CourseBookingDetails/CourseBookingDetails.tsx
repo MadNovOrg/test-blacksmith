@@ -44,6 +44,7 @@ import {
   Course_Level_Enum,
   Course_Source_Enum,
   Course_Type_Enum,
+  Currency,
   FindProfilesQuery,
   PaymentMethod,
 } from '@app/generated/graphql'
@@ -124,6 +125,7 @@ export const CourseBookingDetails: React.FC<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
+  const defaultCurrency = acl.isAustralia() ? Currency.Aud : Currency.Gbp
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
@@ -633,6 +635,7 @@ export const CourseBookingDetails: React.FC<
                 codes={booking.promoCodes}
                 discounts={booking.discounts}
                 courseId={course?.id ?? 0}
+                courseCurrency={course?.priceCurrency ?? defaultCurrency}
                 onAdd={addPromo}
                 onRemove={removePromo}
               />

@@ -24,6 +24,7 @@ type Props = {
   codes: string[]
   discounts: Discounts
   courseId: number
+  courseCurrency: string
   onAdd: (_: PromoCodeOutput) => void
   onRemove: (_: string) => void
 }
@@ -32,6 +33,7 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   codes,
   discounts,
   courseId,
+  courseCurrency,
   onAdd,
   onRemove,
 }) => {
@@ -111,7 +113,11 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
               color="grey.700"
               data-testId="promo-code-discount"
             >
-              - {t('currency', { amount: discounts[c]?.amountCurrency ?? 0 })}
+              -{' '}
+              {t('currency', {
+                amount: discounts[c]?.amountCurrency ?? 0,
+                currency: courseCurrency,
+              })}
             </Typography>
           </Box>
         ))}
