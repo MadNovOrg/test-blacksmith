@@ -368,6 +368,7 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             courseType,
             startDate,
             courseLevel: values.courseLevel as Course_Level_Enum,
+            isAustralia: false,
           }) ? (
             <Controller
               control={control}

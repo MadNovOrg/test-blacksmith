@@ -387,6 +387,7 @@ export const useCourseCreationFormSchema = ({
                 courseType,
                 startDate,
                 courseLevel,
+                isAustralia: acl.isAustralia(),
               }),
             then: s =>
               s.required(t('components.course-form.renewal-cycle-required')),

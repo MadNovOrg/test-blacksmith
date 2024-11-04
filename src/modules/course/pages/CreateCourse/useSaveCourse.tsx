@@ -402,6 +402,7 @@ export function useSaveCourse(): {
             courseType: courseData.type,
             startDate: courseData.startDate,
             courseLevel: courseData.courseLevel,
+            isAustralia: acl.isAustralia(),
           })
             ? {
                 renewalCycle: courseData.renewalCycle,

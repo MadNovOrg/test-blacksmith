@@ -393,6 +393,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 courseType: courseData.type,
                 startDate: courseData.startDate,
                 courseLevel: courseData.courseLevel,
+                isAustralia: acl.isAustralia(),
               })
                 ? { renewalCycle: courseData.renewalCycle }
                 : { renewalCycle: null }),

@@ -902,16 +902,25 @@ export function hasRenewalCycle({
   courseType,
   startDate,
   courseLevel,
+  isAustralia,
 }: {
   courseType: Course_Type_Enum
   startDate: Date
   courseLevel: Course_Level_Enum
+  isAustralia: boolean
 }) {
+  const validCourseTypes = [Course_Type_Enum.Open, Course_Type_Enum.Closed]
+  const validCourseLevels = isAustralia
+    ? [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.FoundationTrainer,
+      ]
+    : [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]
+
   return (
-    [Course_Type_Enum.Open, Course_Type_Enum.Closed].includes(courseType) &&
-    [Course_Level_Enum.Level_1, Course_Level_Enum.Level_2].includes(
-      courseLevel,
-    ) &&
+    validCourseTypes.includes(courseType) &&
+    validCourseLevels.includes(courseLevel) &&
     getYear(startDate) > 2023
   )
 }
