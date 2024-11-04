@@ -43,6 +43,7 @@ export type CourseData = {
   isETA?: boolean
   isEmployerAOL?: boolean
   isUKCountry: boolean
+  isAustraliaRegion: boolean
 }
 export type TrainerData = {
   type: Course_Trainer_Type_Enum
@@ -217,6 +218,7 @@ export function checkCourseDetailsForExceptions(
         usesAOL: courseData.usesAOL,
         isTrainer: courseData.isTrainer ?? false,
         isUKCountry: courseData.isUKCountry,
+        isAustraliaRegion: courseData.isAustraliaRegion,
       },
       trainerData.map(t => ({
         type: t.type,

@@ -32,6 +32,7 @@ export type TrainerRatioCriteria = {
   reaccreditation: boolean
   type: Course_Type_Enum
   usesAOL?: boolean
+  isAustraliaRegion: boolean
 }
 
 export const ratio = (
@@ -44,7 +45,23 @@ export const ratio = (
   increment,
 })
 
-const getRatioForIndirectCourse = ({
+const getANZIndirectCourseRatio = ({ courseLevel }: TrainerRatioCriteria) => {
+  if (courseLevel === Level_1) {
+    return ratio(0, 12, 12)
+  }
+
+  if (courseLevel === Level_2) {
+    return ratio(1, 24, 12)
+  }
+
+  if (courseLevel === Level_1Bs) {
+    return ratio(0, 12, 12)
+  }
+
+  return null
+}
+
+const getUKIndirectCourseRatio = ({
   courseLevel,
   reaccreditation,
   usesAOL,
@@ -69,7 +86,8 @@ const getRatioForIndirectCourse = ({
 }
 
 const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
-  const { courseLevel, deliveryType, isUKCountry, type } = criteria
+  const { courseLevel, deliveryType, isUKCountry, type, isAustraliaRegion } =
+    criteria
 
   if (
     !isUKCountry &&
@@ -83,7 +101,9 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
     return ratio(0, 24, 12)
 
   if (type === Indirect) {
-    const indirectCourseRatio = getRatioForIndirectCourse(criteria)
+    const indirectCourseRatio = isAustraliaRegion
+      ? getANZIndirectCourseRatio(criteria)
+      : getUKIndirectCourseRatio(criteria)
     if (indirectCourseRatio) return indirectCourseRatio
   }
 

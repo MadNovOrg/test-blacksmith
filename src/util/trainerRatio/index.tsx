@@ -22,6 +22,7 @@ export type RatioCourseData = Pick<
   isTrainer: boolean
   isUKCountry: boolean
   usesAOL?: boolean
+  isAustraliaRegion: boolean
 }
 
 export type RatioTrainerData = Pick<
@@ -41,6 +42,7 @@ export function getRequiredAssistants(
       reaccreditation: courseData.reaccreditation ?? false,
       type: courseData.type,
       usesAOL: courseData.usesAOL ?? false,
+      isAustraliaRegion: courseData.isAustraliaRegion,
     })
   } else if (courseData.accreditedBy === Accreditors_Enum.Bild) {
     return getRequiredAssistantsBild({

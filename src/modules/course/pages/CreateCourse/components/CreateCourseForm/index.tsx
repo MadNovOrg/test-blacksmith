@@ -256,6 +256,7 @@ export const CreateCourseForm = () => {
           isETA: isETA,
           isEmployerAOL: isEmployerAOL,
           isUKCountry: isUKCountry(courseData.residingCountry),
+          isAustraliaRegion: acl.isAustralia(),
         },
         [
           ...assistants.map(assistant => ({
@@ -346,6 +347,7 @@ export const CreateCourseForm = () => {
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
           isUKCountry: isUKCountry(courseData.residingCountry),
+          isAustraliaRegion: acl.isAustralia(),
         },
         assistants.map(assistant => ({
           type: Course_Trainer_Type_Enum.Assistant,

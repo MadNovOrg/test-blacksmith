@@ -275,6 +275,7 @@ export const AssignTrainers = () => {
           isETA: isETA,
           isEmployerAOL: isEmployerAOL,
           isUKCountry: isUKCountry(courseData.residingCountry),
+          isAustraliaRegion: acl.isAustralia(),
         },
         trainers,
         acl.isAustralia(),
@@ -324,6 +325,7 @@ export const AssignTrainers = () => {
           usesAOL: courseData.usesAOL,
           isTrainer: acl.isTrainer(),
           isUKCountry: isUKCountry(courseData.residingCountry),
+          isAustraliaRegion: acl.isAustralia(),
         },
         trainers.map(trainer => ({
           type: trainer.type,

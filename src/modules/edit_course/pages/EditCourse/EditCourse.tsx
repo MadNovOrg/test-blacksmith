@@ -719,6 +719,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       isETA: isETA,
       isEmployerAOL: isEmployerAOL,
       isUKCountry: isUKCountry(courseData.residingCountry),
+      isAustraliaRegion: acl.isAustralia(),
     }
 
     if (courseData.type !== Course_Type_Enum.Open && !acl.isTTAdmin()) {
@@ -806,6 +807,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         usesAOL: courseData.usesAOL,
         isTrainer: acl.isTrainer(),
         isUKCountry: isUKCountry(courseData.residingCountry),
+        isAustraliaRegion: acl.isAustralia(),
       },
       [
         ...(trainersData?.assist ?? []).map(assistant => ({

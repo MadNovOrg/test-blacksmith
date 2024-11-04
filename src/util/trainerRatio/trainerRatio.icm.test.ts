@@ -22,6 +22,7 @@ describe('getRequiredTrainersV2', () => {
       maxParticipants: 0,
       reaccreditation: false,
       type: Course_Type_Enum.Open,
+      isAustraliaRegion: false,
     }
   })
 
@@ -630,6 +631,181 @@ describe('getRequiredTrainersV2', () => {
     criteria.courseLevel = courseLevel
     criteria.type = Course_Type_Enum.Indirect
     criteria.isUKCountry = false
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 11,
+        }),
+      ),
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 12,
+        }),
+      ),
+    ).toEqual({
+      min: 0,
+      max: 1,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 })),
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+  })
+})
+
+describe('getRequiredTrainersV2 ANZ', () => {
+  let criteria: TrainerRatioCriteria
+
+  beforeEach(() => {
+    criteria = {
+      courseLevel: Course_Level_Enum.Level_1,
+      deliveryType: Course_Delivery_Type_Enum.F2F,
+      isUKCountry: true,
+      maxParticipants: 0,
+      reaccreditation: false,
+      type: Course_Type_Enum.Open,
+      isAustraliaRegion: true,
+    }
+  })
+
+  it('assist ratio value for L1 Indirect course', () => {
+    criteria.courseLevel = Course_Level_Enum.Level_1
+    criteria.type = Course_Type_Enum.Indirect
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 11,
+        }),
+      ),
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 12,
+        }),
+      ),
+    ).toEqual({
+      min: 0,
+      max: 1,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 13 })),
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 24 })),
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+  })
+
+  it('assist ratio value for L2 Indirect course', () => {
+    criteria.courseLevel = Course_Level_Enum.Level_2
+    criteria.type = Course_Type_Enum.Indirect
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 23,
+        }),
+      ),
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 24,
+        }),
+      ),
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 36 })),
+    ).toEqual({
+      min: 2,
+      max: 3,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 37 })),
+    ).toEqual({
+      min: 3,
+      max: 3,
+    })
+  })
+
+  it('assist ratio value for L1 Indirect course', () => {
+    criteria.courseLevel = Course_Level_Enum.Level_1Bs
+    criteria.type = Course_Type_Enum.Indirect
 
     // Below threshold
     expect(
