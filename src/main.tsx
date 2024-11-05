@@ -1,5 +1,4 @@
 import { ThemeProvider } from '@mui/material/styles'
-import { ExtraErrorData as ExtraErrorDataIntegration } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
 import { Amplify } from 'aws-amplify'
 import { PostHogProvider } from 'posthog-js/react'
@@ -26,9 +25,9 @@ import.meta.env.VITE_APP_VERSION
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
-    new Sentry.BrowserTracing(),
-    new ExtraErrorDataIntegration(),
-    new Sentry.Replay(),
+    Sentry.browserTracingIntegration(),
+    Sentry.extraErrorDataIntegration(),
+    Sentry.replayIntegration(),
   ],
   tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACING_SAMPLE_RATE),
   environment: import.meta.env.VITE_SENTRY_ENVIRONMENT,
