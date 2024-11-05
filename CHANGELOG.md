@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.11.0
+
+### Minor Changes
+
+- a719423: Add British Oversease Territories as countries in the country selector.
+
 ## 4.10.0
 
 ### Minor Changes
