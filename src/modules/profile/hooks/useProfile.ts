@@ -3,6 +3,7 @@ import { cond, constant, stubTrue } from 'lodash-es'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useMutation, useQuery } from 'urql'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import {
   ArchiveProfileMutation,
   ArchiveProfileMutationVariables,
@@ -17,10 +18,10 @@ import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/modules/profile/queri
 import { QUERY } from '@app/modules/profile/queries/get-profile-details'
 import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/modules/profile/queries/update-profile-avatar'
 import { getSWRLoadingStatus } from '@app/util'
-
 type RequiredCertificateCondition = {
   level: Course_Level_Enum
   reaccreditation?: boolean
+  isUKCountry: boolean
 }
 
 const matchRequiredCertificates = cond<
@@ -30,6 +31,7 @@ const matchRequiredCertificates = cond<
   [
     matches({
       level: Course_Level_Enum.Advanced,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.Level_2]),
   ],
@@ -37,6 +39,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.AdvancedTrainer,
       reaccreditation: false,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.IntermediateTrainer]),
   ],
@@ -44,6 +47,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.AdvancedTrainer,
       reaccreditation: true,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.AdvancedTrainer]),
   ],
@@ -51,6 +55,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.BildAdvancedTrainer,
       reaccreditation: false,
+      isUKCountry: true,
     }),
     constant([
       Course_Level_Enum.IntermediateTrainer,
@@ -61,6 +66,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.BildAdvancedTrainer,
       reaccreditation: true,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.BildAdvancedTrainer]),
   ],
@@ -68,6 +74,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.BildIntermediateTrainer,
       reaccreditation: false,
+      isUKCountry: true,
     }),
     constant([
       Course_Level_Enum.Level_1,
@@ -79,6 +86,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.BildIntermediateTrainer,
       reaccreditation: true,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.BildIntermediateTrainer]),
   ],
@@ -86,6 +94,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.IntermediateTrainer,
       reaccreditation: false,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.Level_1, Course_Level_Enum.Level_2]),
   ],
@@ -93,6 +102,7 @@ const matchRequiredCertificates = cond<
     matches({
       level: Course_Level_Enum.IntermediateTrainer,
       reaccreditation: true,
+      isUKCountry: true,
     }),
     constant([Course_Level_Enum.IntermediateTrainer]),
   ],
@@ -113,6 +123,7 @@ export default function useProfile(
   refreshProfileData = false,
   withKnowledgeHubAccess = false,
 ) {
+  const { isUKCountry } = useWorldCountries()
   const [{ data: getProfileResponse, error: getProfileError }, reexecuteQuery] =
     useQuery<GetProfileDetailsQuery, GetProfileDetailsQueryVariables>({
       query: QUERY,
@@ -151,6 +162,7 @@ export default function useProfile(
           const requiredCertificate = matchRequiredCertificates({
             level: c.level,
             reaccreditation: Boolean(c.reaccreditation),
+            isUKCountry: isUKCountry(c.residingCountry),
           })
           if (requiredCertificate.length === 0) {
             return false
@@ -170,7 +182,7 @@ export default function useProfile(
         .filter(Boolean)
     }
     return false
-  }, [getProfileResponse, courseId])
+  }, [getProfileResponse, courseId, isUKCountry])
 
   const updateAvatar = useCallback(
     async (avatar: Array<number>) => {

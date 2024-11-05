@@ -138,6 +138,7 @@ export const QUERY = gql`
       name
       status
       reaccreditation
+      residingCountry
     }
   }
 `
