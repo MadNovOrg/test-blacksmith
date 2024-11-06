@@ -132,8 +132,15 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
 export const getRequiredAssistants = (
   criteria: TrainerRatioCriteria,
 ): RequiredTrainers => {
+  const { maxParticipants, isAustraliaRegion, type } = criteria
+  if (isAustraliaRegion && type !== Indirect) {
+    return {
+      min: 0,
+      max: 0,
+    }
+  }
+
   const ratio = getTrainerRatio(criteria)
-  const { maxParticipants } = criteria
   let assistants = ratio.initialAssistants
   let optionalAssistant = maxParticipants === ratio.threshold
   if (maxParticipants > ratio.threshold) {
