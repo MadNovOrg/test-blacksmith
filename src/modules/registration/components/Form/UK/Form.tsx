@@ -41,7 +41,7 @@ import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLea
 import { gqlRequest } from '@app/lib/gql-request'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
+  DEFAULT_PHONE_COUNTRY_UK,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { SIGN_UP_MUTATION } from '@app/modules/registration/queries'
 import { FormInputs, getFormSchema } from '@app/modules/registration/utils'
@@ -98,7 +98,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       countryCode: 'GB-ENG',
       dob: undefined,
       phone: '',
-      phoneCountryCode: DEFAULT_PHONE_COUNTRY,
+      phoneCountryCode: DEFAULT_PHONE_COUNTRY_UK,
     },
   })
 

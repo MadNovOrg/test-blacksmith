@@ -51,7 +51,7 @@ import {
   getFormSchema,
 } from '@app/modules/organisation/utils/ANZ'
 import PhoneNumberInput, {
-  DEFAULT_AUSTRALIA_PHONE_COUNTRY,
+  DEFAULT_PHONE_COUNTRY_ANZ,
 } from '@app/modules/profile/components/PhoneNumberInput'
 
 import { RegionSelector } from '../../RegionSelector/RegionSelector'
@@ -568,7 +568,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                         sx: { height: 40 },
                         'data-testid': 'org-phone',
                       }}
-                      defaultCountry={DEFAULT_AUSTRALIA_PHONE_COUNTRY}
+                      defaultCountry={DEFAULT_PHONE_COUNTRY_ANZ}
                       error={!!errors.orgPhone}
                       helperText={errors.orgPhone?.message}
                       value={{ phoneNumber: values.orgPhone, countryCode: '' }}

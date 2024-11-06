@@ -100,7 +100,7 @@ import { InviteUserToOrganisation } from '@app/modules/profile/components/Invite
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import { ProfilePermissions } from '@app/modules/profile/components/Permissions/Permissions'
 import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
+  DEFAULT_PHONE_COUNTRY_UK,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
 import { useJobTitles } from '@app/modules/profile/hooks/useJobTitles'
@@ -317,7 +317,7 @@ export const EditProfilePage: React.FC<
       countryCode: '',
       canAccessKnowledgeHub: false,
       phone: '',
-      phoneCountryCode: DEFAULT_PHONE_COUNTRY,
+      phoneCountryCode: DEFAULT_PHONE_COUNTRY_UK,
       dob: null,
       jobTitle: '',
       disabilities: null,

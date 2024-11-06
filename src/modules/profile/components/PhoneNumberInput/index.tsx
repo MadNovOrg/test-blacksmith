@@ -9,6 +9,7 @@ import { FC, PropsWithChildren, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
 
 import { FlagComponent } from './FlagComponent'
 
@@ -18,8 +19,8 @@ export interface PhoneNumberSelection {
   countryCallingCode?: string | null
 }
 
-export const DEFAULT_PHONE_COUNTRY = 'GB'
-export const DEFAULT_AUSTRALIA_PHONE_COUNTRY = 'AU'
+export const DEFAULT_PHONE_COUNTRY_UK = 'GB'
+export const DEFAULT_PHONE_COUNTRY_ANZ = 'AU'
 
 export type PhoneNumberInputProps = {
   value: PhoneNumberSelection
@@ -45,6 +46,11 @@ const PhoneNumberInput: FC<PropsWithChildren<PhoneNumberInputProps>> = ({
 
   const { countriesISOCodes: onlyCountries } = useWorldCountries()
   const { t } = useTranslation()
+  const { acl } = useAuth()
+
+  const DEFAULT_PHONE_COUNTRY = acl.isAustralia()
+    ? DEFAULT_PHONE_COUNTRY_ANZ
+    : DEFAULT_PHONE_COUNTRY_UK
 
   const _props = {
     ...props,

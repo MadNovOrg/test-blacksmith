@@ -35,7 +35,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
+  DEFAULT_PHONE_COUNTRY_UK,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
 import { schemas, yup } from '@app/schemas'
@@ -101,7 +101,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
           : null),
         country: getCountryLabel('GB-ENG'),
         countryCode: 'GB-ENG',
-        phoneCountryCode: profile?.phoneCountryCode ?? DEFAULT_PHONE_COUNTRY,
+        phoneCountryCode: profile?.phoneCountryCode ?? DEFAULT_PHONE_COUNTRY_UK,
       },
     })
 

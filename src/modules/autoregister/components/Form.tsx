@@ -41,7 +41,8 @@ import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLea
 import { CREATE_USER_MUTATION } from '@app/modules/autoregister/queries/create-user'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY,
+  DEFAULT_PHONE_COUNTRY_ANZ,
+  DEFAULT_PHONE_COUNTRY_UK,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import {
   INPUT_DATE_FORMAT,
@@ -78,6 +79,11 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   onSuccess,
   organizationData,
 }) => {
+  const { acl } = useAuth()
+  const DEFAULT_PHONE_COUNTRY = acl.isAustralia()
+    ? DEFAULT_PHONE_COUNTRY_ANZ
+    : DEFAULT_PHONE_COUNTRY_UK
+
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration',
   )

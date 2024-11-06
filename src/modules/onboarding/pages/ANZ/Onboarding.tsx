@@ -35,7 +35,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
-  DEFAULT_AUSTRALIA_PHONE_COUNTRY,
+  DEFAULT_PHONE_COUNTRY_ANZ,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
 import { schemas, yup } from '@app/schemas'
@@ -102,7 +102,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         country: getCountryLabel('AU'),
         countryCode: 'AU',
         phoneCountryCode:
-          profile?.phoneCountryCode ?? DEFAULT_AUSTRALIA_PHONE_COUNTRY,
+          profile?.phoneCountryCode ?? DEFAULT_PHONE_COUNTRY_ANZ,
       },
     })
 
@@ -241,7 +241,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
               error={Boolean(errors.phone)}
               helperText={errors.phone?.message}
-              defaultCountry={DEFAULT_AUSTRALIA_PHONE_COUNTRY}
+              defaultCountry={DEFAULT_PHONE_COUNTRY_ANZ}
               handleManualError={isError => setIsManualFormError(isError)}
               value={{
                 phoneNumber: values.phone ?? '',
