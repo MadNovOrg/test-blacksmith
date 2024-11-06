@@ -500,7 +500,8 @@
       }
     },
     "revoked-warning": "This certificate was revoked on {{date, date_default}}.",
-    "revoked-warning-user": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
+    "revoked-warning-user-uk": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
+    "revoked-warning-user-anz": "If you wish reinstate this certificate, please contact us at info@teamteach.com.au",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
       "please-add-a-note": "Please add a note*",

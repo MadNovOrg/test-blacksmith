@@ -47,7 +47,9 @@ export const CourseGrading: React.FC<
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl } = useAuth()
-
+  const infoEmailAddress = acl.isUK()
+    ? import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+    : import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ
   const [order, setOrder] = useState<SortOrder>('asc')
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([])
@@ -214,12 +216,12 @@ export const CourseGrading: React.FC<
               <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
                 <Trans
                   i18nKey="pages.course-details.tabs.grading.description"
-                  values={{ email: import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS }}
+                  values={{
+                    email: infoEmailAddress,
+                  }}
                 >
                   <Link
-                    href={`mailto:${
-                      import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
-                    }`}
+                    href={`mailto:${infoEmailAddress}`}
                     underline="always"
                     rel="nofollow"
                   />

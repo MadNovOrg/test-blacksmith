@@ -3,6 +3,7 @@ import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
 import { CourseInfo, CourseInfoSkeleton } from '../../components/CourseInfo'
@@ -17,7 +18,10 @@ export const CourseWaitlist: React.FC<
   const [searchParams] = useSearchParams()
   const courseId = Number(searchParams.get('course_id'))
   const emailRef = useRef('')
-
+  const { acl } = useAuth()
+  const infoEmailAddress = acl.isUK()
+    ? import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+    : import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ
   const [{ data, fetching }] = useCourseWaitlist({ courseId: courseId })
 
   const [
@@ -58,7 +62,7 @@ export const CourseWaitlist: React.FC<
       footer={
         <Box mt={4}>
           <Link
-            href={`mailto:${import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}`}
+            href={`mailto:${infoEmailAddress}`}
             target="_blank"
             rel="noopener"
             fontWeight={600}

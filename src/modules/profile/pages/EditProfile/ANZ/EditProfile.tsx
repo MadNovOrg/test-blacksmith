@@ -1042,11 +1042,11 @@ export const EditProfilePage: React.FC<
                     <Link
                       underline="always"
                       href={`mailto:${
-                        import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+                        import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ
                       }`}
                       component="a"
                     >
-                      {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                      {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ}
                     </Link>
                   </Alert>
                 ) : null}

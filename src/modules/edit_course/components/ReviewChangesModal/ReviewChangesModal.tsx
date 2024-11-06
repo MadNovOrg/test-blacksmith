@@ -14,6 +14,7 @@ import { InferType } from 'yup'
 
 import { Dialog } from '@app/components/dialogs'
 import { FeesForm, schema as feesSchema } from '@app/components/FeesForm'
+import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
@@ -21,8 +22,6 @@ import { yup } from '@app/schemas'
 import type { CourseDiff } from '../../utils/shared'
 import { CourseDiffTable } from '../CourseDiffTable'
 import { ReschedulingTermsTable } from '../ReschedulingTermsTable'
-
-const INFO_EMAIL = import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
 
 function schema(t: TFunction, withFees = false) {
   const defaultSchema = yup.object({
@@ -66,6 +65,10 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
 
+  const { acl } = useAuth()
+  const infoEmailAddress = acl.isUK()
+    ? import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+    : import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ
   const methods = useForm<FormValues>({
     resolver: yupResolver(schema(t, withFees)),
     mode: 'onChange',
@@ -147,9 +150,9 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
               <Trans
                 i18nKey="protocol-not-met"
                 t={t}
-                values={{ email: INFO_EMAIL }}
+                values={{ email: infoEmailAddress }}
               >
-                <Link href={`mailto:${INFO_EMAIL}`} component="a" />
+                <Link href={`mailto:${infoEmailAddress}`} component="a" />
               </Trans>
             </Typography>
           </Alert>

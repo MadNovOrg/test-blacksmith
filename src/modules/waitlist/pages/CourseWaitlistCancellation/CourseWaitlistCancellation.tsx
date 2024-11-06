@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { CancelMyselfFromCourseWaitlistError } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
@@ -10,6 +11,10 @@ import { useCancelMyselfFromCourseWaitlist } from '../../hooks/useCancelMyselfFr
 
 const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+  const infoEmailAddress = acl.isUK()
+    ? import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+    : import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ
   return (
     <AppLayoutMinimal
       width={628}
@@ -17,7 +22,7 @@ const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
       footer={
         <Box mt={4}>
           <Link
-            href={`mailto:${import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}`}
+            href={`mailto:${infoEmailAddress}`}
             target="_blank"
             rel="noopener"
             fontWeight={600}

@@ -26,6 +26,9 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
     const { t } = useScopedTranslation('common.course-certificate')
     const { acl } = useAuth()
 
+    const infoEmailAddress = acl.isUK()
+      ? import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+      : import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ
     return (
       <Grid item mb={2}>
         <Alert
@@ -56,23 +59,15 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
                     expireDate: holdRequestEndDate,
                   },
                 )}
-                <Link
-                  href={`mailto:${import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}`}
-                  component="a"
-                >
-                  {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                <Link href={`mailto:${infoEmailAddress}`} component="a">
+                  {infoEmailAddress}
                 </Link>
               </Typography>
               {!acl.canHoldCert() && (
                 <Typography variant="body2" color="grey.900">
                   {t('on-hold-contact-us')}
-                  <Link
-                    href={`mailto:${
-                      import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
-                    }`}
-                    component="a"
-                  >
-                    {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                  <Link href={`mailto:${infoEmailAddress}`} component="a">
+                    {infoEmailAddress}
                   </Link>
                 </Typography>
               )}
