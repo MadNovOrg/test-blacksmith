@@ -92,6 +92,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
   if (
     !isUKCountry &&
     type === Indirect &&
+    !isAustraliaRegion &&
     [Level_1, Level_2, Level_1Bs].includes(courseLevel)
   ) {
     return ratio(0, 12, 12)
