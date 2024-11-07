@@ -12,10 +12,11 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
+import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 
 import useSearchCourses from '../../hooks/useSearchCourses'
-import { CLOSED_COURSE_LEVELS } from '../../utils'
+import { getAvailableCourseLevels } from '../../utils'
 import { SelectLevels } from '../SelectLevels'
 
 type Props = {
@@ -33,14 +34,17 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   where,
   disabled,
 }) => {
+  const { acl } = useAuth()
+  const isAustralia = acl.isAustralia()
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
   const [levels, setLevels] = useState<Course_Level_Enum[]>([])
 
   const levelFilter = useMemo(() => {
-    if (levels.length === 0) return { _nin: CLOSED_COURSE_LEVELS }
+    if (levels.length === 0)
+      return { _in: getAvailableCourseLevels(isAustralia) }
     return { _in: levels }
-  }, [levels])
+  }, [levels, isAustralia])
 
   const { data: searchResult } = useSearchCourses(
     { ...where, level: levelFilter },
