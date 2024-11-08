@@ -60648,6 +60648,14 @@ export type RecreateOrgInviteMutationVariables = Exact<{
 
 export type RecreateOrgInviteMutation = { __typename?: 'mutation_root', update_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null };
 
+export type GetDfeRegisteredOrganisationQueryVariables = Exact<{
+  name: Scalars['String'];
+  postcode: Scalars['String'];
+}>;
+
+
+export type GetDfeRegisteredOrganisationQuery = { __typename?: 'query_root', dfe_establishment: Array<{ __typename?: 'dfe_establishment', registered: boolean, organizations: Array<{ __typename?: 'organization', id: any }> }> };
+
 export type FindEstablishmentQueryVariables = Exact<{
   where: Dfe_Establishment_Bool_Exp;
 }>;

@@ -6,6 +6,7 @@ import { CountryCode } from 'libphonenumber-js'
 import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
+import { useClient } from 'urql'
 import { v4 as uuidv4 } from 'uuid'
 
 import CountriesSelector from '@app/components/CountriesSelector'
@@ -19,6 +20,8 @@ import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDr
 import { isDfeSuggestion } from '@app/components/OrgSelector/UK/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import {
+  GetDfeRegisteredOrganisationQuery,
+  GetDfeRegisteredOrganisationQueryVariables,
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
 } from '@app/generated/graphql'
@@ -30,6 +33,7 @@ import PhoneNumberInput, {
 import { Address, Establishment } from '@app/types'
 import { saveNewOrganizationDataInLocalState } from '@app/util'
 
+import { GET_DFE_REGISTERED_ORGANISATION } from './queries'
 import {
   getSchema,
   getDefaultValues,
@@ -54,6 +58,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     useInsertNewOrganization()
 
   const { pathname } = useLocation()
+  const client = useClient()
 
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
@@ -129,7 +134,28 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       return
     }
 
-    await insertOrganisation(vars)
+    if (isDFESuggestion) {
+      client
+        .query<
+          GetDfeRegisteredOrganisationQuery,
+          GetDfeRegisteredOrganisationQueryVariables
+        >(GET_DFE_REGISTERED_ORGANISATION, {
+          name: data.organisationName,
+          postcode: data.postCode,
+        })
+        .toPromise()
+        .then(async organization => {
+          if (!organization.data?.dfe_establishment[0].registered) {
+            await insertOrganisation(vars)
+          } else
+            onSuccess({
+              id: organization.data.dfe_establishment[0].organizations[0].id,
+              ...vars,
+            })
+        })
+    } else {
+      await insertOrganisation(vars)
+    }
   }
 
   useEffect(() => {
