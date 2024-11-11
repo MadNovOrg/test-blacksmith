@@ -80,12 +80,20 @@ insert_permissions:
     permission:
       check:
         organization:
-          members:
-            _and:
-              - profile_id:
-                  _eq: X-Hasura-User-Id
-              - is_admin:
-                  _eq: true
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
       columns:
         - is_admin
         - email
@@ -237,12 +245,20 @@ update_permissions:
         - updated_at
       filter:
         organization:
-          members:
-            _and:
-              - profile_id:
-                  _eq: X-Hasura-User-Id
-              - is_admin:
-                  _eq: true
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
   - role: sales-admin
@@ -261,12 +277,20 @@ delete_permissions:
     permission:
       filter:
         organization:
-          members:
-            _and:
-              - profile_id:
-                  _eq: X-Hasura-User-Id
-              - is_admin:
-                  _eq: true
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
 event_triggers:
   - name: org_invite_email
     definition:
