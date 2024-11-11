@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import teamsImg from '@app/assets/teams.png'
 import trainersImg from '@app/assets/trainers.png'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { useAuth } from '@app/context/auth'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 
 import { Hero } from '../../components/Hero/Hero'
@@ -14,6 +15,7 @@ import { ResourcesCarousel } from '../../components/ResourcesCarousel/ResourcesC
 import { SplitImage } from '../../components/SplitImage/SplitImage'
 
 export const Welcome = () => {
+  const { verified } = useAuth()
   const { t } = useTranslation('pages', { keyPrefix: 'welcome' })
 
   return (
@@ -38,7 +40,7 @@ export const Welcome = () => {
             <Button
               color="lime"
               variant="contained"
-              href="/courses"
+              href={verified ? '/courses' : '/verify'}
               LinkComponent={LinkBehavior}
             >
               {t('trainers-button')}

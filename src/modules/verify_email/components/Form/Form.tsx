@@ -19,6 +19,7 @@ import { EMAIL_VERIFY_LEN, schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 
 export type Props = {
+  displayVerifyLater?: boolean
   onSuccess: VoidFunction
   onVerifyLater: VoidFunction
 }
@@ -34,6 +35,7 @@ export const getVerifySchema = (t: TFunction) => {
 }
 
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
+  displayVerifyLater,
   onVerifyLater,
   onSuccess,
 }) => {
@@ -150,17 +152,18 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           </LoadingButton>
         </Box>
       )}
-
-      <Button
-        variant="text"
-        color="primary"
-        data-testid="signup-verify-later-btn"
-        size="large"
-        sx={{ mt: 2 }}
-        onClick={onVerifyLater}
-      >
-        {t('pages.signup.verify-later')}
-      </Button>
+      {displayVerifyLater ? (
+        <Button
+          variant="text"
+          color="primary"
+          data-testid="signup-verify-later-btn"
+          size="large"
+          sx={{ mt: 2 }}
+          onClick={onVerifyLater}
+        >
+          {t('pages.signup.verify-later')}
+        </Button>
+      ) : null}
 
       {verify ? (
         <Box display="flex" alignItems="center" mt={6} justifyContent="center">

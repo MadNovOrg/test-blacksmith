@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import accountCard from '@app/assets/account-card.jpg'
 import coursesCard from '@app/assets/courses-card2.jpg'
 import knowledgeHubCard from '@app/assets/knowledgehub-card.jpg'
+import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 
 const GridItem: React.FC<
@@ -58,6 +59,7 @@ const GridItem: React.FC<
 }
 
 export const MembershipGrid = () => {
+  const { verified } = useAuth()
   const { t } = useTranslation('pages', {
     keyPrefix: 'welcome.membership-grid',
   })
@@ -111,7 +113,7 @@ export const MembershipGrid = () => {
             title={t('courses-title')}
             description={t('courses-description')}
             icon={<FormatListBulletedOutlinedIcon />}
-            url="./courses"
+            url={verified ? '/courses' : '/verify'}
           >
             <Button color="lime" variant="contained" fullWidth>
               {t('courses-button')}
@@ -124,7 +126,7 @@ export const MembershipGrid = () => {
             title={t('account-title')}
             description={t('account-description')}
             icon={<SettingsOutlinedIcon />}
-            url="./profile"
+            url={verified ? '/profile' : '/verify'}
           >
             <Button variant="contained" color="lime" fullWidth>
               {t('account-button')}

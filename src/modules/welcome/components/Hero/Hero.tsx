@@ -18,7 +18,7 @@ import { RegisterCertificatePanel } from '../RegisterCertificatePanel/RegisterCe
 export const Hero = () => {
   const { t } = useTranslation('pages', { keyPrefix: 'welcome.hero' })
 
-  const { activeCertificates } = useAuth()
+  const { activeCertificates, verified } = useAuth()
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -65,7 +65,13 @@ export const Hero = () => {
           <Stack direction="row" spacing={2} mt={4}>
             <Button
               size={isMobile ? 'medium' : 'large'}
-              href={isCertified ? '/courses' : '/profile/edit'}
+              href={
+                verified
+                  ? isCertified
+                    ? '/courses'
+                    : '/profile/edit'
+                  : '/verify'
+              }
               LinkComponent={LinkBehavior}
               color="lime"
               variant="contained"
@@ -75,7 +81,7 @@ export const Hero = () => {
                 : t('register-certificate-label')}
             </Button>
             <Button
-              href="/profile"
+              href={verified ? '/profile' : '/verify'}
               variant="contained"
               size={isMobile ? 'medium' : 'large'}
               LinkComponent={LinkBehavior}
