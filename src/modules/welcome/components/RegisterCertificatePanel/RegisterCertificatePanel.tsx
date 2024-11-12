@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import bgImage from '@app/assets/register-card2.jpg'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 
 export const RegisterCertificatePanel = () => {
   const { t } = useTranslation('pages', {
     keyPrefix: 'welcome.register-certificate-panel',
   })
-
+  const { verified } = useAuth()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   return (
@@ -61,7 +62,7 @@ export const RegisterCertificatePanel = () => {
           <Typography mb={4}>{t('description-line-two')}</Typography>
 
           <Button
-            href="/profile/edit"
+            href={verified ? '/profile/edit' : '/verify'}
             LinkComponent={LinkBehavior}
             variant="contained"
             size={isMobile ? 'medium' : 'large'}
