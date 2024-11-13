@@ -449,8 +449,8 @@ importers:
         specifier: 18.2.19
         version: 18.2.19
       '@types/react-gtm-module':
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: ^2.0.4
+        version: 2.0.4
       '@types/react-helmet':
         specifier: ^6.1.9
         version: 6.1.9
@@ -5772,8 +5772,8 @@ packages:
   '@types/react-dom@18.2.19':
     resolution: {integrity: sha512-aZvQL6uUbIJpjZk4U8JZGbau9KDeAwMfmhyWorxgBkqDIEf6ROjRozcmPIicqsUwPUjbkDfHKgGee1Lq65APcA==}
 
-  '@types/react-gtm-module@2.0.3':
-    resolution: {integrity: sha512-fL2zKdDFN5LckSsVBXEhhm9M4tFTM9oHJfGcfZJzktQkzpOTGtDM8oXIP9d9UBDxO4xLNZhS22dlgRVv6wgK9w==}
+  '@types/react-gtm-module@2.0.4':
+    resolution: {integrity: sha512-5wPMWsUE5AI6O0B0K1/zbs0rFHBKu+7NWXQwDXhqvA12ooLD6W1AYiWZqR4UiOd7ixZDV1H5Ys301zEsqyIfNg==}
 
   '@types/react-helmet@6.1.9':
     resolution: {integrity: sha512-nuOeTefP4yPTWHvjGksCBKb/4hsgJxSX7aSTjTIDFXJIkZ6Wo2Y4/cmE1FO9OlYBrHjKOer/0zLwY7s4qiQBtw==}
@@ -20955,7 +20955,7 @@ snapshots:
     dependencies:
       '@types/react': 18.2.14
 
-  '@types/react-gtm-module@2.0.3': {}
+  '@types/react-gtm-module@2.0.4': {}
 
   '@types/react-helmet@6.1.9':
     dependencies:
