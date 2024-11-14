@@ -11,6 +11,15 @@ on:
         options:
           - true
           - false
+      region:
+        type: choice
+        description: 'Select the region to deploy to'
+        required: true
+        default: 'Both'
+        options:
+          - 'Both'
+          - 'Australia'
+          - 'UK'
 
 permissions:
   pull-requests: write
