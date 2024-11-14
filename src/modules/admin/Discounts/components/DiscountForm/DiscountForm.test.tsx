@@ -9,7 +9,7 @@ import {
   UpsertPromoCodeMutation,
 } from '@app/generated/graphql'
 import { buildPromo } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { profile } from '@test/providers'
@@ -281,67 +281,118 @@ describe('page: DiscountForm', () => {
     })
   })
 
-  it('shows Approval Needed if PERCENT exceeds 15', async () => {
-    _render({ role: RoleName.TT_OPS })
+  describe('UK', () => {
+    beforeAll(() => {
+      vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    })
+    it('shows Approval Needed if PERCENT exceeds 15', async () => {
+      _render({ role: RoleName.TT_OPS })
 
-    await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
-    await userEvent.click(screen.getByLabelText(/percent/i))
+      await userEvent.type(
+        screen.getByPlaceholderText(/discount code/i),
+        'code',
+      )
+      await userEvent.click(screen.getByLabelText(/percent/i))
 
-    const percentageOptions = screen.getByTestId('percent-shortcuts')
+      const percentageOptions = screen.getByTestId('percent-shortcuts')
 
-    await userEvent.click(within(percentageOptions).getByRole('button'))
-    await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(/other/i),
-    )
+      await userEvent.click(within(percentageOptions).getByRole('button'))
+      await userEvent.click(
+        within(screen.getByRole('listbox')).getByText(/other/i),
+      )
 
-    await userEvent.clear(screen.getByPlaceholderText(/amount/i))
-    await userEvent.type(screen.getByPlaceholderText(/amount/i), '20')
+      await userEvent.clear(screen.getByPlaceholderText(/amount/i))
+      await userEvent.type(screen.getByPlaceholderText(/amount/i), '20')
 
-    await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i }),
-    )
+      await userEvent.click(
+        screen.getByRole('button', { name: /create discount/i }),
+      )
 
-    await waitFor(() => {
-      const dialog = screen.getByRole('dialog')
+      await waitFor(() => {
+        const dialog = screen.getByRole('dialog')
 
-      expect(
-        within(dialog).getByText(/discount approval required/i),
-      ).toBeInTheDocument()
-      expect(
-        within(dialog).getByText(/percentage is greater or equal to 15%/i),
-      ).toBeInTheDocument()
+        expect(
+          within(dialog).getByText(/discount approval required/i),
+        ).toBeInTheDocument()
+        expect(
+          within(dialog).getByText(/percentage is greater or equal to 15%/i),
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('shows Approval Needed if PERCENT equals to 15', async () => {
+      _render({ role: RoleName.TT_OPS })
+
+      await userEvent.type(
+        screen.getByPlaceholderText(/discount code/i),
+        'code',
+      )
+      await userEvent.click(screen.getByLabelText(/percent/i))
+
+      const percentageOptions = screen.getByTestId('percent-shortcuts')
+
+      await userEvent.click(within(percentageOptions).getByRole('button'))
+      await userEvent.click(
+        within(screen.getByRole('listbox')).getByText(/other/i),
+      )
+
+      await userEvent.clear(screen.getByPlaceholderText(/amount/i))
+      await userEvent.type(screen.getByPlaceholderText(/amount/i), '15')
+
+      await userEvent.click(
+        screen.getByRole('button', { name: /create discount/i }),
+      )
+
+      await waitFor(() => {
+        const dialog = screen.getByRole('dialog')
+
+        expect(
+          within(dialog).getByText(/discount approval required/i),
+        ).toBeInTheDocument()
+        expect(
+          within(dialog).getByText(/percentage is greater or equal to 15%/i),
+        ).toBeInTheDocument()
+      })
     })
   })
 
-  it('shows Approval Needed if PERCENT equals to 15', async () => {
-    _render({ role: RoleName.TT_OPS })
+  describe('ANZ', () => {
+    beforeAll(() => {
+      vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    })
+    it('shows Approval Needed if PERCENT > 15', async () => {
+      _render({ role: RoleName.TT_OPS })
 
-    await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
-    await userEvent.click(screen.getByLabelText(/percent/i))
+      await userEvent.type(
+        screen.getByPlaceholderText(/discount code/i),
+        'code',
+      )
+      await userEvent.click(screen.getByLabelText(/percent/i))
 
-    const percentageOptions = screen.getByTestId('percent-shortcuts')
+      const percentageOptions = screen.getByTestId('percent-shortcuts')
 
-    await userEvent.click(within(percentageOptions).getByRole('button'))
-    await userEvent.click(
-      within(screen.getByRole('listbox')).getByText(/other/i),
-    )
+      await userEvent.click(within(percentageOptions).getByRole('button'))
+      await userEvent.click(
+        within(screen.getByRole('listbox')).getByText(/other/i),
+      )
 
-    await userEvent.clear(screen.getByPlaceholderText(/amount/i))
-    await userEvent.type(screen.getByPlaceholderText(/amount/i), '15')
+      await userEvent.clear(screen.getByPlaceholderText(/amount/i))
+      await userEvent.type(screen.getByPlaceholderText(/amount/i), '15.5')
 
-    await userEvent.click(
-      screen.getByRole('button', { name: /create discount/i }),
-    )
+      await userEvent.click(
+        screen.getByRole('button', { name: /create discount/i }),
+      )
 
-    await waitFor(() => {
-      const dialog = screen.getByRole('dialog')
+      await waitFor(() => {
+        const dialog = screen.getByRole('dialog')
 
-      expect(
-        within(dialog).getByText(/discount approval required/i),
-      ).toBeInTheDocument()
-      expect(
-        within(dialog).getByText(/percentage is greater or equal to 15%/i),
-      ).toBeInTheDocument()
+        expect(
+          within(dialog).getByText(/discount approval required/i),
+        ).toBeInTheDocument()
+        expect(
+          within(dialog).getByText(/percentage is greater than 15%/i),
+        ).toBeInTheDocument()
+      })
     })
   })
 

@@ -39,6 +39,7 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
     filters,
     limit,
     offset,
+    isAustralia: acl.isAustralia(),
   })
 
   const onFilterChange = useCallback((next: Partial<Filters>) => {

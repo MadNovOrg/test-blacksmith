@@ -70,6 +70,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const isEdit = !!id
   const { activeRole, acl, profile } = useAuth()
+  const isAustralia = acl.isAustralia()
   const { addSnackbarMessage } = useSnackbar()
 
   const [createdBy, setCreatedBy] = useState<
@@ -287,11 +288,13 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     setLimitBookings(checked)
     setValue('usesMax', checked ? 1 : null)
   }
-
   const sendForApproval = useMemo(() => {
     const amountModified = data?.promoCodes[0].amount !== values.amount
-    return amountModified && requiresApproval(values, activeRole)
-  }, [activeRole, data?.promoCodes, values])
+    return (
+      (amountModified || !data?.promoCodes[0].approvedBy) &&
+      requiresApproval(values, isAustralia, activeRole)
+    )
+  }, [activeRole, data?.promoCodes, isAustralia, values])
 
   const upsertPromoCode = async () => {
     const promoCode = omit(values, ['appliesTo', 'courses', 'duplicated'])
@@ -355,7 +358,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       <Helmet>
         <title>{t('pages.browser-tab-titles.admin.new-discount')}</title>
       </Helmet>
-      <Typography variant="body1" fontWeight="bold">
+      <Typography variant="body1" fontWeight="bold" mb={1}>
         {t('pages.promoCodes.new-section-general')}
       </Typography>
       <Stack gap={3} flex={1} sx={{ p: 4, backgroundColor: '#fff' }}>
@@ -643,7 +646,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
 
       {!disabled ? (
         <>
-          <Typography variant="body1" fontWeight="bold" mt={4}>
+          <Typography variant="body1" fontWeight="bold" mt={4} mb={1}>
             {t('pages.promoCodes.new-section-usage')}
           </Typography>
           <Stack gap={2} flex={1} sx={{ p: 4, backgroundColor: '#fff' }}>
@@ -746,8 +749,16 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
         <Alert variant="outlined" severity="warning">
           {t('pages.promoCodes.approvalNeeded-intro')}
           <Box component="ul" pl={2}>
-            <li data-testid={`approvalNeeded-reason-${values.type}`}>
-              {t(`pages.promoCodes.approvalNeeded-reason-${values.type}`)}
+            <li
+              data-testid={`approvalNeeded-reason-${values.type}${
+                acl.isAustralia() ? '-ANZ' : ''
+              }`}
+            >
+              {t(
+                `pages.promoCodes.approvalNeeded-reason-${values.type}${
+                  acl.isAustralia() ? '-ANZ' : ''
+                }`,
+              )}
             </li>
           </Box>
         </Alert>

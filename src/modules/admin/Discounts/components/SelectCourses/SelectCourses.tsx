@@ -39,6 +39,9 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
   const [levels, setLevels] = useState<Course_Level_Enum[]>([])
+  const [modalSelectedIds, setModalSelectedIds] = useState<Set<number>>(
+    new Set(),
+  )
 
   const levelFilter = useMemo(() => {
     if (levels.length === 0)
@@ -60,8 +63,6 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
     ],
     [searchResult],
   )
-  console.log('courses', searchResult?.courses)
-  console.log('selectedCourses', searchResult?.selectedCourses)
 
   const selected = useMemo(
     () => searchResult?.selectedCourses ?? [],
@@ -69,38 +70,40 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const courses = useMemo(() => {
-    if (levels.length) return searched
-
-    // When no filters set, ensure selected courses are shown
-    const searchedIds = new Set(searched.map(c => c.id))
-    const notInSearched = selected.filter(c => !searchedIds.has(c.id))
-    return [...notInSearched, ...searched]
-  }, [searched, selected, levels])
+    // Exclude already selected courses
+    return searched.filter(c => !selectedIds.has(c.id))
+  }, [searched, selectedIds])
 
   const openModal = () => {
+    setModalSelectedIds(new Set(selectedIds))
     setShowModal(true)
   }
 
   const closeModal = () => {
     setLevels([])
+    setModalSelectedIds(new Set())
     setShowModal(false)
   }
 
   const onCancel = () => closeModal()
-  const onAdd = () => closeModal()
+  const onAdd = () => {
+    onChange({ target: { value: Array.from(modalSelectedIds) } })
+    closeModal()
+  }
 
   const onCourseClick = (ev: React.SyntheticEvent, checked: boolean) => {
     const id = Number((ev.target as HTMLInputElement).value)
-    const updated = new Set(selectedIds)
-    checked ? updated.add(id) : updated.delete(id)
-    onChange({ target: { value: [...updated] } })
+    setModalSelectedIds(prev => {
+      const updated = new Set(prev)
+      checked ? updated.add(id) : updated.delete(id)
+      return updated
+    })
   }
 
   const unselectCourse = (courseId: number) => {
-    onCourseClick(
-      { target: { value: `${courseId}` } } as unknown as React.SyntheticEvent,
-      false,
-    )
+    const updated = new Set(selectedIds)
+    updated.delete(courseId)
+    onChange({ target: { value: [...updated] } })
   }
 
   const modalTitle = useMemo(() => {
@@ -198,13 +201,14 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
                 label={label}
                 control={<Checkbox />}
                 value={c.id}
-                checked={selectedIds.has(c.id)}
+                checked={modalSelectedIds.has(c.id)}
                 onChange={onCourseClick}
                 sx={{
                   display: 'flex',
                   ml: -1,
                   mr: 0,
                   py: 1,
+                  pl: 1,
                   borderBottom: 1,
                   borderColor: 'grey.100',
                   '&:hover': {

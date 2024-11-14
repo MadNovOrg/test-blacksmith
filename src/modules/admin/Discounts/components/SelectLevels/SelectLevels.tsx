@@ -67,7 +67,7 @@ export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
     <Autocomplete
       multiple={true}
       value={value}
-      options={sortedLevels}
+      options={isAustralia ? filteredLevels : sortedLevels}
       onChange={onSelected}
       disableClearable={true}
       renderInput={renderInput}
