@@ -19,6 +19,7 @@ import {
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
+import { Shards } from '@app/util'
 
 import { SaveCourse } from '../../../CreateCourse/useSaveCourse'
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
@@ -149,7 +150,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
       fetching: fetchingModuleSettings,
       error: moduleSettingsError,
     },
-  ] = useModuleSettings(courseData?.course)
+  ] = useModuleSettings(courseData?.course, acl.isUK() ? Shards.UK : Shards.ANZ)
 
   const estimatedDurationRef = useRef<number>()
 

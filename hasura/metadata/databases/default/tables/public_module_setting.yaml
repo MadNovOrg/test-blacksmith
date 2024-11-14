@@ -47,6 +47,7 @@ select_permissions:
         - mandatory
         - module_name
         - reaccreditation
+        - shard
         - sort
       filter: {}
       allow_aggregations: true
@@ -65,5 +66,6 @@ select_permissions:
         - module_name
         - reaccreditation
         - sort
+        - shard
       filter: {}
       allow_aggregations: true

@@ -35,6 +35,7 @@ import { SAVE_COURSE_MODULES_BILD } from '@app/modules/course/queries/save-cours
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import {
   LoadingStatus,
+  Shards,
   formatDurationShort,
   getSWRLoadingStatus,
 } from '@app/util'
@@ -183,7 +184,7 @@ export const BILDCourseBuilder: React.FC<
 
   const [
     { data: moduleSettingsData, error: modulesError, fetching: modulesLoading },
-  ] = useModuleSettings(courseData?.course)
+  ] = useModuleSettings(courseData?.course, Shards.UK)
 
   const showDuration = courseData?.course?.level
     ? ![

@@ -1,0 +1,2 @@
+alter table "public"."module_setting" drop constraint "module_setting_color_course_type_sort_duration_module_name_course_delivery_type_reaccreditation_course_level_go1_integration_mandatory_shard_key";
+alter table "public"."module_setting" add constraint "module_setting_color_course_type_sort_duration_module_name_course_delivery_type_reaccreditation_course_level_go1_integration_mandatory_key" unique ("color", "course_type", "sort", "duration", "module_name", "course_delivery_type", "reaccreditation", "course_level", "go1_integration", "mandatory");

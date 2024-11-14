@@ -34144,6 +34144,7 @@ export type Module_Setting = {
   module: Module_V2;
   moduleName: Scalars['String'];
   reaccreditation: Scalars['Boolean'];
+  shard: Scalars['String'];
   sort: Scalars['Int'];
 };
 
@@ -34278,13 +34279,14 @@ export type Module_Setting_Bool_Exp = {
   module?: InputMaybe<Module_V2_Bool_Exp>;
   moduleName?: InputMaybe<String_Comparison_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
+  shard?: InputMaybe<String_Comparison_Exp>;
   sort?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "module_setting" */
 export enum Module_Setting_Constraint {
-  /** unique or primary key constraint on columns "course_level", "course_type", "reaccreditation", "go1_integration", "color", "module_name", "duration", "mandatory", "course_delivery_type", "sort" */
-  ModuleSettingGo1IntegrationCourseLevelReaccreditationCou = 'module_setting_go1_integration_course_level_reaccreditation_cou',
+  /** unique or primary key constraint on columns "course_level", "conversion", "course_type", "reaccreditation", "go1_integration", "color", "module_name", "duration", "mandatory", "shard", "course_delivery_type", "sort" */
+  ModuleSettingColorCourseTypeSortDurationModuleNameCour = 'module_setting_color_course_type_sort_duration_module_name_cour',
   /** unique or primary key constraint on columns "id" */
   ModuleSettingPkey = 'module_setting_pkey'
 }
@@ -34502,6 +34504,7 @@ export type Module_Setting_Insert_Input = {
   module?: InputMaybe<Module_V2_Obj_Rel_Insert_Input>;
   moduleName?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  shard?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['Int']>;
 };
 
@@ -34511,6 +34514,7 @@ export type Module_Setting_Max_Fields = {
   duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   moduleName?: Maybe<Scalars['String']>;
+  shard?: Maybe<Scalars['String']>;
   sort?: Maybe<Scalars['Int']>;
 };
 
@@ -34519,6 +34523,7 @@ export type Module_Setting_Max_Order_By = {
   duration?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   moduleName?: InputMaybe<Order_By>;
+  shard?: InputMaybe<Order_By>;
   sort?: InputMaybe<Order_By>;
 };
 
@@ -34528,6 +34533,7 @@ export type Module_Setting_Min_Fields = {
   duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   moduleName?: Maybe<Scalars['String']>;
+  shard?: Maybe<Scalars['String']>;
   sort?: Maybe<Scalars['Int']>;
 };
 
@@ -34536,6 +34542,7 @@ export type Module_Setting_Min_Order_By = {
   duration?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   moduleName?: InputMaybe<Order_By>;
+  shard?: InputMaybe<Order_By>;
   sort?: InputMaybe<Order_By>;
 };
 
@@ -34577,6 +34584,7 @@ export type Module_Setting_Order_By = {
   module?: InputMaybe<Module_V2_Order_By>;
   moduleName?: InputMaybe<Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
+  shard?: InputMaybe<Order_By>;
   sort?: InputMaybe<Order_By>;
 };
 
@@ -34609,6 +34617,8 @@ export enum Module_Setting_Select_Column {
   ModuleName = 'moduleName',
   /** column name */
   Reaccreditation = 'reaccreditation',
+  /** column name */
+  Shard = 'shard',
   /** column name */
   Sort = 'sort'
 }
@@ -34650,6 +34660,7 @@ export type Module_Setting_Set_Input = {
   mandatory?: InputMaybe<Scalars['Boolean']>;
   moduleName?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  shard?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['Int']>;
 };
 
@@ -34713,6 +34724,7 @@ export type Module_Setting_Stream_Cursor_Value_Input = {
   mandatory?: InputMaybe<Scalars['Boolean']>;
   moduleName?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  shard?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['Int']>;
 };
 
@@ -34753,6 +34765,8 @@ export enum Module_Setting_Update_Column {
   ModuleName = 'moduleName',
   /** column name */
   Reaccreditation = 'reaccreditation',
+  /** column name */
+  Shard = 'shard',
   /** column name */
   Sort = 'sort'
 }
@@ -61083,6 +61097,7 @@ export type ModuleSettingsQueryVariables = Exact<{
   go1Integration: Scalars['Boolean'];
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   conversion?: InputMaybe<Scalars['Boolean']>;
+  shard: Scalars['String'];
 }>;
 
 

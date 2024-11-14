@@ -14,6 +14,7 @@ export const MODULE_SETTINGS_QUERY = gql`
     $go1Integration: Boolean!
     $reaccreditation: Boolean
     $conversion: Boolean = false
+    $shard: String!
   ) {
     moduleSettings: module_setting(
       where: {
@@ -23,6 +24,7 @@ export const MODULE_SETTINGS_QUERY = gql`
         go1Integration: { _eq: $go1Integration }
         reaccreditation: { _eq: $reaccreditation }
         conversion: { _eq: $conversion }
+        shard: { _eq: $shard }
       }
       order_by: { sort: asc }
     ) {
@@ -62,6 +64,7 @@ export function useModuleSettings(
       >
     | undefined
     | null,
+  shard: string,
 ) {
   return useQuery<ModuleSettingsQuery, ModuleSettingsQueryVariables>({
     query: MODULE_SETTINGS_QUERY,
@@ -76,6 +79,7 @@ export function useModuleSettings(
             reaccreditation: course.reaccreditation,
             go1Integration: course.go1Integration,
             conversion: course.conversion ?? false,
+            shard: shard,
           },
         }
       : null),
