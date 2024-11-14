@@ -84,6 +84,9 @@ jobs:
     if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) || (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'hotfix-release/'))}}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Check for 'Release - UK' or 'Release - Both' Label
         id: label-check
         run: |
@@ -123,7 +126,7 @@ jobs:
     if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) || (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'hotfix-release/'))}}
     runs-on: ubuntu-latest
     steps:
-      - name: Check for 'Release - UK' or 'Release - Both' Label
+      - name: Check for 'Release - Australia' or 'Release - Both' Label
         id: label-check
         run: |
           labels=$(echo '${{ toJson(github.event.pull_request.labels) }}' | jq -r '.[].name')
