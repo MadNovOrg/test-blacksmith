@@ -13,7 +13,7 @@ jobs:
     name: PROD-ANZ-RELEASE
     uses: ./.github/workflows/pipeline.yml
     with:
-      version: 4.10.0
+      version: 4.12.0
       aws_region: 'ap-southeast-2'
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD_ANZ }}
