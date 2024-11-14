@@ -1,5 +1,30 @@
 # @teamteach/hub
 
+## 4.12.0
+
+### Minor Changes
+
+- e225da4: Adjust trainer ratios for indirect ANZ courses.
+- e225da4: Remove certificate requirements for attendees on non-UK courses.
+- e225da4: Remove trainer ratios for open and closed courses on ANZ.
+- e225da4: Allow main org admin to manage affiliate org invites
+- e225da4: Redirect all unverified users to the "Verify" page, except when booking onto an open course.
+- e225da4: Use Australia default phone number prefix on ANZ
+- e225da4: Adds blended learning toggle under feature flag for ANZ
+- e225da4: Hide payment by CC on australia.
+- e225da4: Update internal emails.
+- e225da4: Restrict ANZ users to create organisations on registration / onborading / auto-register
+
+### Patch Changes
+
+- e225da4: remove welcome email trigger
+- e225da4: Fix DfE Organisations dupes
+- e225da4: Don't allow course creation without scheduled price in Australia, for ANZ
+- e225da4: adjust discount page
+- e225da4: adjust discount levels for ANZ
+- e225da4: Display correct currency for applied discounts
+- e225da4: allow setting certificate duration for foundation trainer
+
 ## 4.11.0
 
 ### Minor Changes
