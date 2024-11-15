@@ -1703,8 +1703,8 @@ event_triggers:
         columns:
           - course_status
     retry_conf:
-      interval_sec: 0
-      num_retries: 0
+      interval_sec: 60
+      num_retries: 5
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/completed'
   - name: course_created
