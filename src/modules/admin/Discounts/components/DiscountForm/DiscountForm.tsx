@@ -70,7 +70,6 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const isEdit = !!id
   const { activeRole, acl, profile } = useAuth()
-  const isAustralia = acl.isAustralia()
   const { addSnackbarMessage } = useSnackbar()
 
   const [createdBy, setCreatedBy] = useState<
@@ -292,9 +291,9 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
     const amountModified = data?.promoCodes[0].amount !== values.amount
     return (
       (amountModified || !data?.promoCodes[0].approvedBy) &&
-      requiresApproval(values, isAustralia, activeRole)
+      requiresApproval(values, activeRole)
     )
-  }, [activeRole, data?.promoCodes, isAustralia, values])
+  }, [activeRole, data?.promoCodes, values])
 
   const upsertPromoCode = async () => {
     const promoCode = omit(values, ['appliesTo', 'courses', 'duplicated'])
@@ -749,16 +748,8 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
         <Alert variant="outlined" severity="warning">
           {t('pages.promoCodes.approvalNeeded-intro')}
           <Box component="ul" pl={2}>
-            <li
-              data-testid={`approvalNeeded-reason-${values.type}${
-                acl.isAustralia() ? '-ANZ' : ''
-              }`}
-            >
-              {t(
-                `pages.promoCodes.approvalNeeded-reason-${values.type}${
-                  acl.isAustralia() ? '-ANZ' : ''
-                }`,
-              )}
+            <li data-testid={`approvalNeeded-reason-${values.type}`}>
+              {t(`pages.promoCodes.approvalNeeded-reason-${values.type}`)}
             </li>
           </Box>
         </Alert>

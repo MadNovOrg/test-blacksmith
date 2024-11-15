@@ -92,16 +92,12 @@ export const schema = ({ t }: { t: TFunction }) => {
   })
 }
 
-export const requiresApproval = (
-  data: FormInputs,
-  isAustralia: boolean,
-  role?: RoleName,
-) => {
+export const requiresApproval = (data: FormInputs, role?: RoleName) => {
   if (role && (role === RoleName.TT_ADMIN || role === RoleName.FINANCE)) {
     return false
   }
   if (data.type === Promo_Code_Type_Enum.Percent) {
-    return isAustralia ? data.amount > 15 : data.amount >= 15
+    return data.amount > 15
   }
   if (data.type === Promo_Code_Type_Enum.FreePlaces) {
     return data.amount > 3

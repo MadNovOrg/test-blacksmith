@@ -22,7 +22,6 @@ export type UsePromoCodesProps = {
   }
   limit: number
   offset: number
-  isAustralia?: boolean
 }
 
 export const usePromoCodes = ({
@@ -30,7 +29,6 @@ export const usePromoCodes = ({
   filters,
   limit,
   offset,
-  isAustralia,
 }: UsePromoCodesProps) => {
   const dateWhere = useMemo(() => {
     if (!filters.from && !filters.to) return
@@ -77,7 +75,7 @@ export const usePromoCodes = ({
             {
               _or: [
                 {
-                  amount: isAustralia ? { _lte: 15 } : { _lt: 15 },
+                  amount: { _lte: 15 },
                   type: { _eq: Promo_Code_Type_Enum.Percent },
                 },
                 {
@@ -116,7 +114,7 @@ export const usePromoCodes = ({
           q.approvedBy = { _is_null: true }
           q._or = [
             {
-              amount: isAustralia ? { _gt: 15 } : { _gte: 15 },
+              amount: { _gt: 15 },
               type: { _eq: Promo_Code_Type_Enum.Percent },
             },
             {
@@ -133,7 +131,7 @@ export const usePromoCodes = ({
               approvedBy: { _is_null: true },
               _or: [
                 {
-                  amount: isAustralia ? { _lte: 15 } : { _lt: 15 },
+                  amount: { _lte: 15 },
                   type: { _eq: Promo_Code_Type_Enum.Percent },
                 },
                 {
@@ -157,7 +155,7 @@ export const usePromoCodes = ({
               approvedBy: { _is_null: true },
               _or: [
                 {
-                  amount: isAustralia ? { _lte: 15 } : { _lt: 15 },
+                  amount: { _lte: 15 },
                   type: { _eq: Promo_Code_Type_Enum.Percent },
                 },
                 {
@@ -191,7 +189,7 @@ export const usePromoCodes = ({
     })
 
     return query
-  }, [filters.status, isAustralia])
+  }, [filters.status])
 
   const [{ data, error, fetching }, mutate] = useQuery<
     GetPromoCodesQuery,
