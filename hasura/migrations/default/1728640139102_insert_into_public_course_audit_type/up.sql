@@ -1,2 +1,3 @@
 INSERT INTO "public"."course_audit_type" ("name") 
-VALUES ('COMPLETED');
+VALUES ('COMPLETED')
+ON CONFLICT ("name") DO NOTHING;
