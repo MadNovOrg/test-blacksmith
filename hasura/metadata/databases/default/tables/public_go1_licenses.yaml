@@ -3,6 +3,8 @@ table:
   schema: public
 configuration:
   column_config:
+    course_id:
+      custom_name: courseId
     enrolled_on:
       custom_name: enrolledOn
     expire_date:
@@ -12,6 +14,7 @@ configuration:
     profile_id:
       custom_name: profileId
   custom_column_names:
+    course_id: courseId
     enrolled_on: enrolledOn
     expire_date: expireDate
     org_id: orgId
@@ -21,6 +24,14 @@ object_relationships:
   - name: organization
     using:
       foreign_key_constraint_on: org_id
+array_relationships:
+  - name: expire_go1_license_jobs
+    using:
+      foreign_key_constraint_on:
+        column: license_id
+        table:
+          name: expire_go1_license_jobs
+          schema: public
 insert_permissions:
   - role: tt-admin
     permission:
@@ -55,6 +66,16 @@ delete_permissions:
     permission:
       filter: {}
 event_triggers:
+  - name: block_go1_account
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 13
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/block'
   - name: go1_license_expire_date_changed
     definition:
       enable_manual: true

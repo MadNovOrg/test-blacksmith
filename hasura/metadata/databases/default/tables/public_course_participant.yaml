@@ -669,9 +669,12 @@ event_triggers:
       enable_manual: true
       insert:
         columns: '*'
+      update:
+        columns:
+          - attended
     retry_conf:
-      interval_sec: 10
-      num_retries: 0
+      interval_sec: 20
+      num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/issue-license'
   - name: manage_about_training_survey_email_event
@@ -697,6 +700,19 @@ event_triggers:
       num_retries: 5
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email/manage'
+  - name: participant_cancelled
+    definition:
+      delete:
+        columns: '*'
+      update:
+        columns:
+          - attended
+      enable_manual: false
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1/participant/cancelled'
   - name: participant_graded_status
     definition:
       enable_manual: false

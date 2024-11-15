@@ -30428,6 +30428,7 @@ export type Expire_Go1_License_Jobs = {
   id: Scalars['uuid'];
   jobId: Scalars['uuid'];
   licenseId: Scalars['uuid'];
+  profile_id?: Maybe<Scalars['uuid']>;
 };
 
 /** aggregated selection of "expire_go1_license_jobs" */
@@ -30435,6 +30436,17 @@ export type Expire_Go1_License_Jobs_Aggregate = {
   __typename?: 'expire_go1_license_jobs_aggregate';
   aggregate?: Maybe<Expire_Go1_License_Jobs_Aggregate_Fields>;
   nodes: Array<Expire_Go1_License_Jobs>;
+};
+
+export type Expire_Go1_License_Jobs_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Expire_Go1_License_Jobs_Aggregate_Bool_Exp_Count>;
+};
+
+export type Expire_Go1_License_Jobs_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
 };
 
 /** aggregate fields of "expire_go1_license_jobs" */
@@ -30452,6 +30464,20 @@ export type Expire_Go1_License_Jobs_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Expire_Go1_License_Jobs_Max_Order_By>;
+  min?: InputMaybe<Expire_Go1_License_Jobs_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Arr_Rel_Insert_Input = {
+  data: Array<Expire_Go1_License_Jobs_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Expire_Go1_License_Jobs_On_Conflict>;
+};
+
 /** Boolean expression to filter rows from the table "expire_go1_license_jobs". All fields are combined with a logical 'AND'. */
 export type Expire_Go1_License_Jobs_Bool_Exp = {
   _and?: InputMaybe<Array<Expire_Go1_License_Jobs_Bool_Exp>>;
@@ -30460,12 +30486,13 @@ export type Expire_Go1_License_Jobs_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   jobId?: InputMaybe<Uuid_Comparison_Exp>;
   licenseId?: InputMaybe<Uuid_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "expire_go1_license_jobs" */
 export enum Expire_Go1_License_Jobs_Constraint {
-  /** unique or primary key constraint on columns "license_id", "job_id" */
-  ExpireGo1LicenseJobsJobIdLicenseIdKey = 'expire_go1_license_jobs_job_id_license_id_key',
+  /** unique or primary key constraint on columns "license_id", "profile_id", "job_id" */
+  ExpireGo1LicenseJobsJobIdLicenseIdProfileIdKey = 'expire_go1_license_jobs_job_id_license_id_profile_id_key',
   /** unique or primary key constraint on columns "id" */
   ExpireGo1LicenseJobsPkey = 'expire_go1_license_jobs_pkey'
 }
@@ -30475,6 +30502,7 @@ export type Expire_Go1_License_Jobs_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   jobId?: InputMaybe<Scalars['uuid']>;
   licenseId?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
 };
 
 /** aggregate max on columns */
@@ -30483,6 +30511,15 @@ export type Expire_Go1_License_Jobs_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   jobId?: Maybe<Scalars['uuid']>;
   licenseId?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Max_Order_By = {
+  id?: InputMaybe<Order_By>;
+  jobId?: InputMaybe<Order_By>;
+  licenseId?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -30491,6 +30528,15 @@ export type Expire_Go1_License_Jobs_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   jobId?: Maybe<Scalars['uuid']>;
   licenseId?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Min_Order_By = {
+  id?: InputMaybe<Order_By>;
+  jobId?: InputMaybe<Order_By>;
+  licenseId?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "expire_go1_license_jobs" */
@@ -30514,6 +30560,7 @@ export type Expire_Go1_License_Jobs_Order_By = {
   id?: InputMaybe<Order_By>;
   jobId?: InputMaybe<Order_By>;
   licenseId?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: expire_go1_license_jobs */
@@ -30528,7 +30575,9 @@ export enum Expire_Go1_License_Jobs_Select_Column {
   /** column name */
   JobId = 'jobId',
   /** column name */
-  LicenseId = 'licenseId'
+  LicenseId = 'licenseId',
+  /** column name */
+  ProfileId = 'profile_id'
 }
 
 /** input type for updating data in table "expire_go1_license_jobs" */
@@ -30536,6 +30585,7 @@ export type Expire_Go1_License_Jobs_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   jobId?: InputMaybe<Scalars['uuid']>;
   licenseId?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
 };
 
 /** Streaming cursor of the table "expire_go1_license_jobs" */
@@ -30551,6 +30601,7 @@ export type Expire_Go1_License_Jobs_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   jobId?: InputMaybe<Scalars['uuid']>;
   licenseId?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
 };
 
 /** update columns of table "expire_go1_license_jobs" */
@@ -30560,7 +30611,9 @@ export enum Expire_Go1_License_Jobs_Update_Column {
   /** column name */
   JobId = 'jobId',
   /** column name */
-  LicenseId = 'licenseId'
+  LicenseId = 'licenseId',
+  /** column name */
+  ProfileId = 'profile_id'
 }
 
 export type Expire_Go1_License_Jobs_Updates = {
@@ -30733,13 +30786,38 @@ export type Go1_History_Events_Updates = {
 /** Organization's users Go1 licenses */
 export type Go1_Licenses = {
   __typename?: 'go1_licenses';
+  courseId?: Maybe<Scalars['Int']>;
   enrolledOn: Scalars['timestamptz'];
   expireDate: Scalars['timestamptz'];
+  /** An array relationship */
+  expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
+  /** An aggregate relationship */
+  expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
   id: Scalars['uuid'];
   orgId: Scalars['uuid'];
   /** An object relationship */
   organization: Organization;
   profileId: Scalars['uuid'];
+};
+
+
+/** Organization's users Go1 licenses */
+export type Go1_LicensesExpire_Go1_License_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Expire_Go1_License_Jobs_Order_By>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+
+/** Organization's users Go1 licenses */
+export type Go1_LicensesExpire_Go1_License_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Expire_Go1_License_Jobs_Order_By>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
 };
 
 /** aggregated selection of "go1_licenses" */
@@ -30763,9 +30841,17 @@ export type Go1_Licenses_Aggregate_Bool_Exp_Count = {
 /** aggregate fields of "go1_licenses" */
 export type Go1_Licenses_Aggregate_Fields = {
   __typename?: 'go1_licenses_aggregate_fields';
+  avg?: Maybe<Go1_Licenses_Avg_Fields>;
   count: Scalars['Int'];
   max?: Maybe<Go1_Licenses_Max_Fields>;
   min?: Maybe<Go1_Licenses_Min_Fields>;
+  stddev?: Maybe<Go1_Licenses_Stddev_Fields>;
+  stddev_pop?: Maybe<Go1_Licenses_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Go1_Licenses_Stddev_Samp_Fields>;
+  sum?: Maybe<Go1_Licenses_Sum_Fields>;
+  var_pop?: Maybe<Go1_Licenses_Var_Pop_Fields>;
+  var_samp?: Maybe<Go1_Licenses_Var_Samp_Fields>;
+  variance?: Maybe<Go1_Licenses_Variance_Fields>;
 };
 
 
@@ -30777,9 +30863,17 @@ export type Go1_Licenses_Aggregate_FieldsCountArgs = {
 
 /** order by aggregate values of table "go1_licenses" */
 export type Go1_Licenses_Aggregate_Order_By = {
+  avg?: InputMaybe<Go1_Licenses_Avg_Order_By>;
   count?: InputMaybe<Order_By>;
   max?: InputMaybe<Go1_Licenses_Max_Order_By>;
   min?: InputMaybe<Go1_Licenses_Min_Order_By>;
+  stddev?: InputMaybe<Go1_Licenses_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Go1_Licenses_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Go1_Licenses_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Go1_Licenses_Sum_Order_By>;
+  var_pop?: InputMaybe<Go1_Licenses_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Go1_Licenses_Var_Samp_Order_By>;
+  variance?: InputMaybe<Go1_Licenses_Variance_Order_By>;
 };
 
 /** input type for inserting array relation for remote table "go1_licenses" */
@@ -30789,13 +30883,27 @@ export type Go1_Licenses_Arr_Rel_Insert_Input = {
   on_conflict?: InputMaybe<Go1_Licenses_On_Conflict>;
 };
 
+/** aggregate avg on columns */
+export type Go1_Licenses_Avg_Fields = {
+  __typename?: 'go1_licenses_avg_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "go1_licenses" */
+export type Go1_Licenses_Avg_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** Boolean expression to filter rows from the table "go1_licenses". All fields are combined with a logical 'AND'. */
 export type Go1_Licenses_Bool_Exp = {
   _and?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
   _not?: InputMaybe<Go1_Licenses_Bool_Exp>;
   _or?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
   enrolledOn?: InputMaybe<Timestamptz_Comparison_Exp>;
   expireDate?: InputMaybe<Timestamptz_Comparison_Exp>;
+  expire_go1_license_jobs?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+  expire_go1_license_jobs_aggregate?: InputMaybe<Expire_Go1_License_Jobs_Aggregate_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
@@ -30806,8 +30914,8 @@ export type Go1_Licenses_Bool_Exp = {
 export enum Go1_Licenses_Constraint {
   /** unique or primary key constraint on columns "id" */
   Go1LicensesPkey = 'go1_licenses_pkey',
-  /** unique or primary key constraint on columns "org_id", "profile_id" */
-  Go1LicensesProfileIdOrgIdKey = 'go1_licenses_profile_id_org_id_key'
+  /** unique or primary key constraint on columns "profile_id", "course_id" */
+  Go1LicensesProfileIdCourseIdKey = 'go1_licenses_profile_id_course_id_key'
 }
 
 /** How organization's licenses number is changing in time */
@@ -31248,10 +31356,17 @@ export type Go1_Licenses_History_Variance_Order_By = {
   reservedBalance?: InputMaybe<Order_By>;
 };
 
+/** input type for incrementing numeric columns in table "go1_licenses" */
+export type Go1_Licenses_Inc_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+};
+
 /** input type for inserting data into table "go1_licenses" */
 export type Go1_Licenses_Insert_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
   enrolledOn?: InputMaybe<Scalars['timestamptz']>;
   expireDate?: InputMaybe<Scalars['timestamptz']>;
+  expire_go1_license_jobs?: InputMaybe<Expire_Go1_License_Jobs_Arr_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['uuid']>;
   orgId?: InputMaybe<Scalars['uuid']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
@@ -31261,6 +31376,7 @@ export type Go1_Licenses_Insert_Input = {
 /** aggregate max on columns */
 export type Go1_Licenses_Max_Fields = {
   __typename?: 'go1_licenses_max_fields';
+  courseId?: Maybe<Scalars['Int']>;
   enrolledOn?: Maybe<Scalars['timestamptz']>;
   expireDate?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
@@ -31270,6 +31386,7 @@ export type Go1_Licenses_Max_Fields = {
 
 /** order by max() on columns of table "go1_licenses" */
 export type Go1_Licenses_Max_Order_By = {
+  courseId?: InputMaybe<Order_By>;
   enrolledOn?: InputMaybe<Order_By>;
   expireDate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -31280,6 +31397,7 @@ export type Go1_Licenses_Max_Order_By = {
 /** aggregate min on columns */
 export type Go1_Licenses_Min_Fields = {
   __typename?: 'go1_licenses_min_fields';
+  courseId?: Maybe<Scalars['Int']>;
   enrolledOn?: Maybe<Scalars['timestamptz']>;
   expireDate?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
@@ -31289,6 +31407,7 @@ export type Go1_Licenses_Min_Fields = {
 
 /** order by min() on columns of table "go1_licenses" */
 export type Go1_Licenses_Min_Order_By = {
+  courseId?: InputMaybe<Order_By>;
   enrolledOn?: InputMaybe<Order_By>;
   expireDate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -31314,8 +31433,10 @@ export type Go1_Licenses_On_Conflict = {
 
 /** Ordering options when selecting data from "go1_licenses". */
 export type Go1_Licenses_Order_By = {
+  courseId?: InputMaybe<Order_By>;
   enrolledOn?: InputMaybe<Order_By>;
   expireDate?: InputMaybe<Order_By>;
+  expire_go1_license_jobs_aggregate?: InputMaybe<Expire_Go1_License_Jobs_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
@@ -31330,6 +31451,8 @@ export type Go1_Licenses_Pk_Columns_Input = {
 /** select columns of table "go1_licenses" */
 export enum Go1_Licenses_Select_Column {
   /** column name */
+  CourseId = 'courseId',
+  /** column name */
   EnrolledOn = 'enrolledOn',
   /** column name */
   ExpireDate = 'expireDate',
@@ -31343,11 +31466,45 @@ export enum Go1_Licenses_Select_Column {
 
 /** input type for updating data in table "go1_licenses" */
 export type Go1_Licenses_Set_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
   enrolledOn?: InputMaybe<Scalars['timestamptz']>;
   expireDate?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   orgId?: InputMaybe<Scalars['uuid']>;
   profileId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Go1_Licenses_Stddev_Fields = {
+  __typename?: 'go1_licenses_stddev_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "go1_licenses" */
+export type Go1_Licenses_Stddev_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Go1_Licenses_Stddev_Pop_Fields = {
+  __typename?: 'go1_licenses_stddev_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "go1_licenses" */
+export type Go1_Licenses_Stddev_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Go1_Licenses_Stddev_Samp_Fields = {
+  __typename?: 'go1_licenses_stddev_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "go1_licenses" */
+export type Go1_Licenses_Stddev_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "go1_licenses" */
@@ -31360,6 +31517,7 @@ export type Go1_Licenses_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Go1_Licenses_Stream_Cursor_Value_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
   enrolledOn?: InputMaybe<Scalars['timestamptz']>;
   expireDate?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -31367,8 +31525,21 @@ export type Go1_Licenses_Stream_Cursor_Value_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
 };
 
+/** aggregate sum on columns */
+export type Go1_Licenses_Sum_Fields = {
+  __typename?: 'go1_licenses_sum_fields';
+  courseId?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "go1_licenses" */
+export type Go1_Licenses_Sum_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** update columns of table "go1_licenses" */
 export enum Go1_Licenses_Update_Column {
+  /** column name */
+  CourseId = 'courseId',
   /** column name */
   EnrolledOn = 'enrolledOn',
   /** column name */
@@ -31382,10 +31553,45 @@ export enum Go1_Licenses_Update_Column {
 }
 
 export type Go1_Licenses_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Go1_Licenses_Inc_Input>;
   /** sets the columns of the filtered rows to the given values */
   _set?: InputMaybe<Go1_Licenses_Set_Input>;
   /** filter the rows which have to be updated */
   where: Go1_Licenses_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Go1_Licenses_Var_Pop_Fields = {
+  __typename?: 'go1_licenses_var_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "go1_licenses" */
+export type Go1_Licenses_Var_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Go1_Licenses_Var_Samp_Fields = {
+  __typename?: 'go1_licenses_var_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "go1_licenses" */
+export type Go1_Licenses_Var_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Go1_Licenses_Variance_Fields = {
+  __typename?: 'go1_licenses_variance_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "go1_licenses" */
+export type Go1_Licenses_Variance_Order_By = {
+  courseId?: InputMaybe<Order_By>;
 };
 
 /** Enum table for possible course grades */
@@ -35548,6 +35754,8 @@ export type Mutation_Root = {
   delete_role?: Maybe<Role_Mutation_Response>;
   /** delete single row from the table: "role" */
   delete_role_by_pk?: Maybe<Role>;
+  /** delete data from the table: "scheduled_events_view" */
+  delete_scheduled_events_view?: Maybe<Scheduled_Events_View_Mutation_Response>;
   /** delete data from the table: "submodule" */
   delete_submodule?: Maybe<Submodule_Mutation_Response>;
   /** delete single row from the table: "submodule" */
@@ -36004,6 +36212,10 @@ export type Mutation_Root = {
   insert_role?: Maybe<Role_Mutation_Response>;
   /** insert a single row into the table: "role" */
   insert_role_one?: Maybe<Role>;
+  /** insert data into the table: "scheduled_events_view" */
+  insert_scheduled_events_view?: Maybe<Scheduled_Events_View_Mutation_Response>;
+  /** insert a single row into the table: "scheduled_events_view" */
+  insert_scheduled_events_view_one?: Maybe<Scheduled_Events_View>;
   /** insert data into the table: "submodule" */
   insert_submodule?: Maybe<Submodule_Mutation_Response>;
   /** insert a single row into the table: "submodule" */
@@ -36676,6 +36888,10 @@ export type Mutation_Root = {
   update_role_by_pk?: Maybe<Role>;
   /** update multiples rows of table: "role" */
   update_role_many?: Maybe<Array<Maybe<Role_Mutation_Response>>>;
+  /** update data of the table: "scheduled_events_view" */
+  update_scheduled_events_view?: Maybe<Scheduled_Events_View_Mutation_Response>;
+  /** update multiples rows of table: "scheduled_events_view" */
+  update_scheduled_events_view_many?: Maybe<Array<Maybe<Scheduled_Events_View_Mutation_Response>>>;
   /** update data of the table: "submodule" */
   update_submodule?: Maybe<Submodule_Mutation_Response>;
   /** update single row of the table: "submodule" */
@@ -38038,6 +38254,12 @@ export type Mutation_RootDelete_RoleArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Role_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Scheduled_Events_ViewArgs = {
+  where: Scheduled_Events_View_Bool_Exp;
 };
 
 
@@ -39615,6 +39837,18 @@ export type Mutation_RootInsert_RoleArgs = {
 export type Mutation_RootInsert_Role_OneArgs = {
   object: Role_Insert_Input;
   on_conflict?: InputMaybe<Role_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Scheduled_Events_ViewArgs = {
+  objects: Array<Scheduled_Events_View_Insert_Input>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Scheduled_Events_View_OneArgs = {
+  object: Scheduled_Events_View_Insert_Input;
 };
 
 
@@ -41320,6 +41554,7 @@ export type Mutation_RootUpdate_Go1_History_Events_ManyArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Go1_LicensesArgs = {
+  _inc?: InputMaybe<Go1_Licenses_Inc_Input>;
   _set?: InputMaybe<Go1_Licenses_Set_Input>;
   where: Go1_Licenses_Bool_Exp;
 };
@@ -41327,6 +41562,7 @@ export type Mutation_RootUpdate_Go1_LicensesArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Go1_Licenses_By_PkArgs = {
+  _inc?: InputMaybe<Go1_Licenses_Inc_Input>;
   _set?: InputMaybe<Go1_Licenses_Set_Input>;
   pk_columns: Go1_Licenses_Pk_Columns_Input;
 };
@@ -42173,6 +42409,20 @@ export type Mutation_RootUpdate_Role_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Role_ManyArgs = {
   updates: Array<Role_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Scheduled_Events_ViewArgs = {
+  _inc?: InputMaybe<Scheduled_Events_View_Inc_Input>;
+  _set?: InputMaybe<Scheduled_Events_View_Set_Input>;
+  where: Scheduled_Events_View_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Scheduled_Events_View_ManyArgs = {
+  updates: Array<Scheduled_Events_View_Updates>;
 };
 
 
@@ -50279,9 +50529,9 @@ export type Query_Root = {
   email_notifications_aggregate: Email_Notifications_Aggregate;
   /** fetch data from the table: "email_notifications" using primary key columns */
   email_notifications_by_pk?: Maybe<Email_Notifications>;
-  /** fetch data from the table: "expire_go1_license_jobs" */
+  /** An array relationship */
   expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
-  /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
+  /** An aggregate relationship */
   expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
   /** fetch data from the table: "expire_go1_license_jobs" using primary key columns */
   expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
@@ -50530,6 +50780,10 @@ export type Query_Root = {
   role_aggregate: Role_Aggregate;
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
+  /** fetch data from the table: "scheduled_events_view" */
+  scheduled_events_view: Array<Scheduled_Events_View>;
+  /** fetch aggregated fields from the table: "scheduled_events_view" */
+  scheduled_events_view_aggregate: Scheduled_Events_View_Aggregate;
   searchTrainers?: Maybe<Array<Maybe<SearchTrainer>>>;
   /** fetch data from the table: "submodule" */
   submodule: Array<Submodule>;
@@ -52988,6 +53242,24 @@ export type Query_RootRole_By_PkArgs = {
 };
 
 
+export type Query_RootScheduled_Events_ViewArgs = {
+  distinct_on?: InputMaybe<Array<Scheduled_Events_View_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Scheduled_Events_View_Order_By>>;
+  where?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
+};
+
+
+export type Query_RootScheduled_Events_View_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Scheduled_Events_View_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Scheduled_Events_View_Order_By>>;
+  where?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
+};
+
+
 export type Query_RootSearchTrainersArgs = {
   input: SearchTrainersInput;
 };
@@ -53550,6 +53822,283 @@ export type Role_Variance_Fields = {
 export type ScheduleAboutTrainingSurveysOutput = {
   __typename?: 'scheduleAboutTrainingSurveysOutput';
   message?: Maybe<Scalars['String']>;
+};
+
+/** columns and relationships of "scheduled_events_view" */
+export type Scheduled_Events_View = {
+  __typename?: 'scheduled_events_view';
+  comment?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  header_conf?: Maybe<Scalars['json']>;
+  id?: Maybe<Scalars['String']>;
+  next_retry_at?: Maybe<Scalars['timestamptz']>;
+  payload?: Maybe<Scalars['json']>;
+  retry_conf?: Maybe<Scalars['json']>;
+  scheduled_time?: Maybe<Scalars['timestamptz']>;
+  status?: Maybe<Scalars['String']>;
+  tries?: Maybe<Scalars['Int']>;
+  webhook_conf?: Maybe<Scalars['json']>;
+};
+
+
+/** columns and relationships of "scheduled_events_view" */
+export type Scheduled_Events_ViewHeader_ConfArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "scheduled_events_view" */
+export type Scheduled_Events_ViewPayloadArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "scheduled_events_view" */
+export type Scheduled_Events_ViewRetry_ConfArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "scheduled_events_view" */
+export type Scheduled_Events_ViewWebhook_ConfArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "scheduled_events_view" */
+export type Scheduled_Events_View_Aggregate = {
+  __typename?: 'scheduled_events_view_aggregate';
+  aggregate?: Maybe<Scheduled_Events_View_Aggregate_Fields>;
+  nodes: Array<Scheduled_Events_View>;
+};
+
+/** aggregate fields of "scheduled_events_view" */
+export type Scheduled_Events_View_Aggregate_Fields = {
+  __typename?: 'scheduled_events_view_aggregate_fields';
+  avg?: Maybe<Scheduled_Events_View_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Scheduled_Events_View_Max_Fields>;
+  min?: Maybe<Scheduled_Events_View_Min_Fields>;
+  stddev?: Maybe<Scheduled_Events_View_Stddev_Fields>;
+  stddev_pop?: Maybe<Scheduled_Events_View_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Scheduled_Events_View_Stddev_Samp_Fields>;
+  sum?: Maybe<Scheduled_Events_View_Sum_Fields>;
+  var_pop?: Maybe<Scheduled_Events_View_Var_Pop_Fields>;
+  var_samp?: Maybe<Scheduled_Events_View_Var_Samp_Fields>;
+  variance?: Maybe<Scheduled_Events_View_Variance_Fields>;
+};
+
+
+/** aggregate fields of "scheduled_events_view" */
+export type Scheduled_Events_View_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Scheduled_Events_View_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Scheduled_Events_View_Avg_Fields = {
+  __typename?: 'scheduled_events_view_avg_fields';
+  tries?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "scheduled_events_view". All fields are combined with a logical 'AND'. */
+export type Scheduled_Events_View_Bool_Exp = {
+  _and?: InputMaybe<Array<Scheduled_Events_View_Bool_Exp>>;
+  _not?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
+  _or?: InputMaybe<Array<Scheduled_Events_View_Bool_Exp>>;
+  comment?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  header_conf?: InputMaybe<Json_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  next_retry_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  payload?: InputMaybe<Json_Comparison_Exp>;
+  retry_conf?: InputMaybe<Json_Comparison_Exp>;
+  scheduled_time?: InputMaybe<Timestamptz_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  tries?: InputMaybe<Int_Comparison_Exp>;
+  webhook_conf?: InputMaybe<Json_Comparison_Exp>;
+};
+
+/** input type for incrementing numeric columns in table "scheduled_events_view" */
+export type Scheduled_Events_View_Inc_Input = {
+  tries?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "scheduled_events_view" */
+export type Scheduled_Events_View_Insert_Input = {
+  comment?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  header_conf?: InputMaybe<Scalars['json']>;
+  id?: InputMaybe<Scalars['String']>;
+  next_retry_at?: InputMaybe<Scalars['timestamptz']>;
+  payload?: InputMaybe<Scalars['json']>;
+  retry_conf?: InputMaybe<Scalars['json']>;
+  scheduled_time?: InputMaybe<Scalars['timestamptz']>;
+  status?: InputMaybe<Scalars['String']>;
+  tries?: InputMaybe<Scalars['Int']>;
+  webhook_conf?: InputMaybe<Scalars['json']>;
+};
+
+/** aggregate max on columns */
+export type Scheduled_Events_View_Max_Fields = {
+  __typename?: 'scheduled_events_view_max_fields';
+  comment?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['String']>;
+  next_retry_at?: Maybe<Scalars['timestamptz']>;
+  scheduled_time?: Maybe<Scalars['timestamptz']>;
+  status?: Maybe<Scalars['String']>;
+  tries?: Maybe<Scalars['Int']>;
+};
+
+/** aggregate min on columns */
+export type Scheduled_Events_View_Min_Fields = {
+  __typename?: 'scheduled_events_view_min_fields';
+  comment?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['String']>;
+  next_retry_at?: Maybe<Scalars['timestamptz']>;
+  scheduled_time?: Maybe<Scalars['timestamptz']>;
+  status?: Maybe<Scalars['String']>;
+  tries?: Maybe<Scalars['Int']>;
+};
+
+/** response of any mutation on the table "scheduled_events_view" */
+export type Scheduled_Events_View_Mutation_Response = {
+  __typename?: 'scheduled_events_view_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Scheduled_Events_View>;
+};
+
+/** Ordering options when selecting data from "scheduled_events_view". */
+export type Scheduled_Events_View_Order_By = {
+  comment?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  header_conf?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  next_retry_at?: InputMaybe<Order_By>;
+  payload?: InputMaybe<Order_By>;
+  retry_conf?: InputMaybe<Order_By>;
+  scheduled_time?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  tries?: InputMaybe<Order_By>;
+  webhook_conf?: InputMaybe<Order_By>;
+};
+
+/** select columns of table "scheduled_events_view" */
+export enum Scheduled_Events_View_Select_Column {
+  /** column name */
+  Comment = 'comment',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  HeaderConf = 'header_conf',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  NextRetryAt = 'next_retry_at',
+  /** column name */
+  Payload = 'payload',
+  /** column name */
+  RetryConf = 'retry_conf',
+  /** column name */
+  ScheduledTime = 'scheduled_time',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  Tries = 'tries',
+  /** column name */
+  WebhookConf = 'webhook_conf'
+}
+
+/** input type for updating data in table "scheduled_events_view" */
+export type Scheduled_Events_View_Set_Input = {
+  comment?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  header_conf?: InputMaybe<Scalars['json']>;
+  id?: InputMaybe<Scalars['String']>;
+  next_retry_at?: InputMaybe<Scalars['timestamptz']>;
+  payload?: InputMaybe<Scalars['json']>;
+  retry_conf?: InputMaybe<Scalars['json']>;
+  scheduled_time?: InputMaybe<Scalars['timestamptz']>;
+  status?: InputMaybe<Scalars['String']>;
+  tries?: InputMaybe<Scalars['Int']>;
+  webhook_conf?: InputMaybe<Scalars['json']>;
+};
+
+/** aggregate stddev on columns */
+export type Scheduled_Events_View_Stddev_Fields = {
+  __typename?: 'scheduled_events_view_stddev_fields';
+  tries?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Scheduled_Events_View_Stddev_Pop_Fields = {
+  __typename?: 'scheduled_events_view_stddev_pop_fields';
+  tries?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Scheduled_Events_View_Stddev_Samp_Fields = {
+  __typename?: 'scheduled_events_view_stddev_samp_fields';
+  tries?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "scheduled_events_view" */
+export type Scheduled_Events_View_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Scheduled_Events_View_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Scheduled_Events_View_Stream_Cursor_Value_Input = {
+  comment?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  header_conf?: InputMaybe<Scalars['json']>;
+  id?: InputMaybe<Scalars['String']>;
+  next_retry_at?: InputMaybe<Scalars['timestamptz']>;
+  payload?: InputMaybe<Scalars['json']>;
+  retry_conf?: InputMaybe<Scalars['json']>;
+  scheduled_time?: InputMaybe<Scalars['timestamptz']>;
+  status?: InputMaybe<Scalars['String']>;
+  tries?: InputMaybe<Scalars['Int']>;
+  webhook_conf?: InputMaybe<Scalars['json']>;
+};
+
+/** aggregate sum on columns */
+export type Scheduled_Events_View_Sum_Fields = {
+  __typename?: 'scheduled_events_view_sum_fields';
+  tries?: Maybe<Scalars['Int']>;
+};
+
+export type Scheduled_Events_View_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Scheduled_Events_View_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Scheduled_Events_View_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Scheduled_Events_View_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Scheduled_Events_View_Var_Pop_Fields = {
+  __typename?: 'scheduled_events_view_var_pop_fields';
+  tries?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Scheduled_Events_View_Var_Samp_Fields = {
+  __typename?: 'scheduled_events_view_var_samp_fields';
+  tries?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Scheduled_Events_View_Variance_Fields = {
+  __typename?: 'scheduled_events_view_variance_fields';
+  tries?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "submodule" */
@@ -54306,9 +54855,9 @@ export type Subscription_Root = {
   email_notifications_by_pk?: Maybe<Email_Notifications>;
   /** fetch data from the table in a streaming manner: "email_notifications" */
   email_notifications_stream: Array<Email_Notifications>;
-  /** fetch data from the table: "expire_go1_license_jobs" */
+  /** An array relationship */
   expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
-  /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
+  /** An aggregate relationship */
   expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
   /** fetch data from the table: "expire_go1_license_jobs" using primary key columns */
   expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
@@ -54617,6 +55166,12 @@ export type Subscription_Root = {
   role_by_pk?: Maybe<Role>;
   /** fetch data from the table in a streaming manner: "role" */
   role_stream: Array<Role>;
+  /** fetch data from the table: "scheduled_events_view" */
+  scheduled_events_view: Array<Scheduled_Events_View>;
+  /** fetch aggregated fields from the table: "scheduled_events_view" */
+  scheduled_events_view_aggregate: Scheduled_Events_View_Aggregate;
+  /** fetch data from the table in a streaming manner: "scheduled_events_view" */
+  scheduled_events_view_stream: Array<Scheduled_Events_View>;
   /** fetch data from the table: "submodule" */
   submodule: Array<Submodule>;
   /** fetch aggregated fields from the table: "submodule" */
@@ -57754,6 +58309,31 @@ export type Subscription_RootRole_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Role_Stream_Cursor_Input>>;
   where?: InputMaybe<Role_Bool_Exp>;
+};
+
+
+export type Subscription_RootScheduled_Events_ViewArgs = {
+  distinct_on?: InputMaybe<Array<Scheduled_Events_View_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Scheduled_Events_View_Order_By>>;
+  where?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
+};
+
+
+export type Subscription_RootScheduled_Events_View_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Scheduled_Events_View_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Scheduled_Events_View_Order_By>>;
+  where?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
+};
+
+
+export type Subscription_RootScheduled_Events_View_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Scheduled_Events_View_Stream_Cursor_Input>>;
+  where?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
 };
 
 
