@@ -1,1 +1,0 @@
-DROP FUNCTION IF EXISTS public.course_reserved_go1_licenses(course);

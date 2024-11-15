@@ -8,3 +8,6 @@ FROM go1_licenses_history
 WHERE payload->>'courseId' = course_row.id::TEXT
   AND event = 'LICENSES_RESERVED';
 $function$;
+
+ALTER TABLE "public"."order"
+ADD COLUMN "invitees" JSONB NULL;
