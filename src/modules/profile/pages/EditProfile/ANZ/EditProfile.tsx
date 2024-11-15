@@ -70,7 +70,7 @@ import {
   UpdateTrainerRoleTypeMutation,
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
-import { positions } from '@app/modules/course_booking/utils'
+import { positions, positionsANZ } from '@app/modules/course_booking/utils'
 import {
   avatarSize,
   BILDRolesNames,
@@ -692,10 +692,8 @@ export const EditProfilePage: React.FC<
   const { getLabel: getCountryLabel } = useWorldCountries()
   const allPositions = useMemo(() => {
     return uniq([
-      ...positions.edu,
-      ...positions.hsc_child,
-      ...positions.hsc_adult,
-      ...positions.other,
+      ...Object.values(positions).flat(),
+      ...Object.values(positionsANZ).flat(),
     ])
   }, [])
 

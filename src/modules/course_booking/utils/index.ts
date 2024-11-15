@@ -134,3 +134,42 @@ export const positions = {
     'RI - Responsible individual',
   ],
 } as const
+
+export const positionsANZ = {
+  edu: [
+    ...positions.edu,
+    'Behaviour Support Practitioner',
+    'Cover/Relief Supervisor',
+    'Deputy Headteacher/Principal',
+    'Education Support',
+    'Guidance Counsellor',
+    'Learning Support',
+    'Nursery/Kindergarten/Pre-school Manager',
+    'Nursery/Kindergarten/Pre-school Worker',
+    'OSHC (Outside School Hours Club) Manager',
+    'OSHC (Outside School Hours Club) Worker',
+    'SENCO/HOSES',
+    'Student Support',
+    'TA (Teaching Assistant)/LSA (Learning Support Assistant)/Education Assistant',
+    'Vice Principal',
+  ],
+
+  hsc_child: [...positions.hsc_child, "Children's Commissioner"],
+  hsc_adult: [
+    ...positions.hsc_adult,
+    'Assistant Director of Nursing',
+    'Director of Nursing',
+    "Home's Manager",
+    'Specialist Co-ordinator (Adults)',
+  ],
+  social: [
+    'Business Support',
+    'Family Support Worker',
+    'HR Director',
+    'HR Manager',
+    'Regional Manager',
+    'Safeguarding Officer',
+  ],
+  health: ['Clinical Commissioner'],
+  other: [...positions.other, 'Other'],
+} as const
