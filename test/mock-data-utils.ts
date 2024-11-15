@@ -425,7 +425,7 @@ export const buildCourse = build<Course>({
     freeSpaces: 0,
     accreditedBy: Accreditors_Enum.Icm,
     bildStrategies: [],
-    residingCountry: chance.country(),
+    residingCountry: 'GB-ENG',
     orders: [
       {
         order: {

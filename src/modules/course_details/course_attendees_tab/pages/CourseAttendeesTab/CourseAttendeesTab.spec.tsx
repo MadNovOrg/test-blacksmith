@@ -65,6 +65,8 @@ const emptyPendingInvitesResponse = {
   cancel: vi.fn(),
   fetching: false,
   getInvites: vi.fn(),
+  pollRunning: false,
+  startPolling: vi.fn(),
 }
 
 describe(CourseAttendeesTab.name, () => {

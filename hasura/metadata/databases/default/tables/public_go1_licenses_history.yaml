@@ -40,6 +40,7 @@ insert_permissions:
         - event
         - org_id
         - payload
+        - reserved_balance
   - role: tt-ops
     permission:
       check: {}
@@ -89,6 +90,28 @@ select_permissions:
         - org_id
       filter: {}
       allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - balance
+        - captured_at
+        - change
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+      filter:
+        organization:
+          organization_courses:
+            trainers:
+              _and:
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+                - status:
+                    _eq: ACCEPTED
+      allow_aggregations: true
+    comment: ""
   - role: tt-admin
     permission:
       columns:

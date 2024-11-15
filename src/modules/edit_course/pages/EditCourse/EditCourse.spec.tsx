@@ -30,7 +30,13 @@ import {
   userEvent,
   waitFor,
 } from '@test/index'
-import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseSchedule,
+  buildOrganization,
+} from '@test/mock-data-utils'
+
+import { EditCourseWithContext } from '../../contexts/EditCourseProvider'
 
 import { EditCourse } from '.'
 
@@ -67,6 +73,354 @@ describe(EditCourse.name, () => {
     cleanup()
   })
 
+  it("redirects to the order review page when the maximum participants are increased, and there aren't enough licenses available, either in the reserved pool or the organizations total pool.", async () => {
+    vi.clearAllMocks()
+
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const indirectBlCourse = buildCourse({
+      overrides: {
+        go1Integration: true,
+        max_participants: 10,
+        organization: {
+          ...buildOrganization({
+            overrides: {
+              go1Licenses: 0,
+            },
+          }),
+          reservedCourseLicenses: {
+            aggregate: { sum: { change: 0 } },
+          },
+        },
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        type: Course_Type_Enum.Indirect,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: indirectBlCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () => () => vi.fn(() => never),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] },
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+
+    await userEvent.clear(maxParticipantsInput)
+    await userEvent.type(maxParticipantsInput, '15')
+
+    const reviewConfirmBtn = screen.getByText('Review & confirm', {
+      exact: false,
+    })
+    await userEvent.click(reviewConfirmBtn)
+
+    expect(mockNavigate).toHaveBeenCalledWith('./review-licenses-order')
+  })
+
+  it("doesn't redirects to the order review page when the maximum participants are increased, and there are enough licenses available in the reserved pool", async () => {
+    vi.clearAllMocks()
+
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const indirectBlCourse = buildCourse({
+      overrides: {
+        go1Integration: true,
+        max_participants: 10,
+        organization: {
+          ...buildOrganization({
+            overrides: {
+              go1Licenses: 0,
+            },
+          }),
+          reservedCourseLicenses: {
+            aggregate: { sum: { change: 15 } },
+          },
+        },
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        type: Course_Type_Enum.Indirect,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: indirectBlCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () => () => vi.fn(() => never),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] },
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+
+    await userEvent.clear(maxParticipantsInput)
+    await userEvent.type(maxParticipantsInput, '15')
+
+    const saveChangesBtn = screen.getByText('Save changes', {
+      exact: false,
+    })
+    await userEvent.click(saveChangesBtn)
+
+    expect(mockNavigate).not.toHaveBeenCalledWith('./review-licenses-order')
+  })
+
+  it("doesn't redirects to the order review page when the maximum participants are increased, and there are enough licenses available in the reserved pool and the organizations total pool", async () => {
+    vi.clearAllMocks()
+
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const indirectBlCourse = buildCourse({
+      overrides: {
+        go1Integration: true,
+        max_participants: 10,
+        organization: {
+          ...buildOrganization({
+            overrides: {
+              go1Licenses: 3,
+            },
+          }),
+          reservedCourseLicenses: {
+            aggregate: { sum: { change: 12 } },
+          },
+        },
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        type: Course_Type_Enum.Indirect,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: indirectBlCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () => () => vi.fn(() => never),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] },
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+
+    await userEvent.clear(maxParticipantsInput)
+    await userEvent.type(maxParticipantsInput, '15')
+
+    const saveChangesBtn = screen.getByText('Save changes', {
+      exact: false,
+    })
+    await userEvent.click(saveChangesBtn)
+
+    expect(mockNavigate).not.toHaveBeenCalledWith('./review-licenses-order')
+  })
+
+  it("doesn't redirect to the order review page when the maximum participants are increased, and there aren't enough licenses available, either in the reserved pool or the organizations total pool for a Closed type course", async () => {
+    vi.clearAllMocks()
+
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+
+    const closedBlCourse = buildCourse({
+      overrides: {
+        go1Integration: true,
+        max_participants: 10,
+        organization: {
+          ...buildOrganization({
+            overrides: {
+              go1Licenses: 0,
+            },
+          }),
+          reservedCourseLicenses: {
+            aggregate: { sum: { change: 0 } },
+          },
+        },
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        type: Course_Type_Enum.Closed,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      data: {
+        course: closedBlCourse,
+      },
+      status: LoadingStatus.IDLE,
+      mutate: vi.fn(),
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_COURSE_SOURCES_QUERY) {
+          return fromValue<{ data: GetCoursesSourcesQuery }>({
+            data: {
+              sources: [
+                {
+                  name: 'EMAIL_ENQUIRY',
+                },
+                {
+                  name: 'EVENT',
+                },
+              ],
+            },
+          })
+        }
+      },
+      executeMutation: () => () => vi.fn(() => never),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: [`/courses/edit/1`] },
+    )
+
+    const maxParticipantsInput = screen.getByLabelText('Number of attendees', {
+      exact: false,
+    })
+
+    await userEvent.clear(maxParticipantsInput)
+    await userEvent.type(maxParticipantsInput, '15')
+
+    const saveChangesBtn = screen.getByText('Save changes', {
+      exact: false,
+    })
+    await userEvent.click(saveChangesBtn)
+
+    expect(mockNavigate).not.toHaveBeenCalledWith('./review-licenses-order')
+  })
+
   it('displays spinner while loading for the course', () => {
     useCourseMocked.mockReturnValue({
       status: LoadingStatus.FETCHING,
@@ -81,7 +435,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       {},
@@ -105,7 +461,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -130,7 +488,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -165,7 +525,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TRAINER } },
@@ -197,7 +559,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
@@ -229,7 +593,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TRAINER } },
@@ -261,7 +627,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
@@ -293,7 +661,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.SALES_ADMIN } },
@@ -325,7 +695,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
@@ -364,7 +736,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -429,7 +803,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -475,7 +851,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -522,7 +900,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -566,7 +946,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -632,7 +1014,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -717,7 +1101,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -799,7 +1185,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -901,7 +1289,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -983,7 +1373,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1068,7 +1460,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1172,7 +1566,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1279,7 +1675,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1359,7 +1757,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1458,7 +1858,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1560,7 +1962,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1653,7 +2057,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1759,7 +2165,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1874,7 +2282,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1994,7 +2404,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },

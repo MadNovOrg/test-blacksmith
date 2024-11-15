@@ -15,6 +15,7 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 export default function useCourse(
   courseId: string,
   options: {
+    includeOrgLicenses?: boolean
     includePendingInvitesCount?: boolean
   } = {},
 ): {
@@ -36,15 +37,16 @@ export default function useCourse(
     query: QUERY,
     variables: {
       id: Number(courseId),
+      withArloRefId: acl.isInternalUser(),
+      withFreeCourseCourseMaterials: true,
+      withInternationalFinance:
+        acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
       withOrders:
         acl.canInviteAttendees(Course_Type_Enum.Open) ||
         acl.canViewCourseOrder(),
-      withArloRefId: acl.isInternalUser(),
+      withOrgLicenses: options.includeOrgLicenses,
       withParticipants:
         acl.isInternalUser() || acl.isOrgAdmin() || acl.isTrainer(),
-      withInternationalFinance:
-        acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
-      withFreeCourseCourseMaterials: true,
       withParticipantsPendingInvitesCount: options.includePendingInvitesCount,
     },
   })

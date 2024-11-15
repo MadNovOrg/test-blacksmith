@@ -333,6 +333,7 @@ update_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
         - status
       filter: {}
@@ -341,6 +342,7 @@ update_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
         - status
       filter: {}
@@ -349,6 +351,7 @@ update_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
         - status
       filter:
@@ -362,6 +365,7 @@ update_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
         - note
         - status
@@ -374,6 +378,7 @@ update_permissions:
   - role: tt-admin
     permission:
       columns:
+        - created_at
         - status
       filter: {}
       check: null
@@ -381,6 +386,7 @@ update_permissions:
     permission:
       columns:
         - course_id
+        - created_at
         - email
         - status
       filter: {}
@@ -474,11 +480,27 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/participant-added'
+  - name: release_go1_license_invite_declined
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 20
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/course-invite'
   - name: send_invite_email
     definition:
       enable_manual: false
       insert:
         columns: '*'
+      update:
+        columns:
+          - created_at
     retry_conf:
       interval_sec: 10
       num_retries: 0

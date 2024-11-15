@@ -33,6 +33,8 @@ import {
 } from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
+import { EditCourseWithContext } from '../../contexts/EditCourseProvider'
+
 import { EditCourse } from '.'
 
 vi.mock('@app/hooks/useCourse')
@@ -83,7 +85,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       {},
@@ -107,7 +111,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -132,7 +138,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -167,7 +175,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TRAINER } },
@@ -199,7 +209,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
@@ -231,7 +243,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TRAINER } },
@@ -263,7 +277,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
@@ -295,7 +311,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.SALES_ADMIN } },
@@ -327,7 +345,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.USER } },
@@ -366,7 +386,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -431,7 +453,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -474,7 +498,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -518,7 +544,9 @@ describe(EditCourse.name, () => {
       render(
         <Provider value={client}>
           <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+              <Route index element={<EditCourse />} />
+            </Route>
           </Routes>
         </Provider>,
         { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -584,7 +612,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -669,7 +699,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -755,7 +787,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -843,7 +877,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -948,7 +984,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1056,7 +1094,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1137,7 +1177,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1236,7 +1278,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1329,7 +1373,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1435,7 +1481,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1552,7 +1600,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -1672,7 +1722,9 @@ describe(EditCourse.name, () => {
     render(
       <Provider value={client}>
         <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
+            <Route index element={<EditCourse />} />
+          </Route>
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_ADMIN } },

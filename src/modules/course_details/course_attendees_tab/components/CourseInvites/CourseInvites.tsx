@@ -11,9 +11,9 @@ import {
   useTheme,
 } from '@mui/material'
 import { saveAs } from 'file-saver'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useUpdateEffect } from 'react-use'
 import { useQuery } from 'urql'
 import isEmail from 'validator/lib/isEmail'
@@ -46,8 +46,14 @@ export const CourseInvites = ({
   onExportError,
 }: Props) => {
   const { t } = useTranslation()
+  const location = useLocation()
   const navigate = useNavigate()
+
   const { acl, profile } = useAuth()
+
+  const state = location.state as {
+    invitees: string[]
+  } | null
 
   const emailSchema = yup
     .string()
@@ -77,7 +83,29 @@ export const CourseInvites = ({
   const invites = useCourseInvites({
     courseId: course?.id,
     courseEnd: course?.dates?.aggregate?.end?.date,
+    poll: {
+      untilInvitees: state?.invitees ?? [],
+    },
   })
+
+  useEffect(() => {
+    const startInvitesPolling =
+      true &&
+      !invites.error &&
+      !invites.fetching &&
+      !invites.pollRunning &&
+      !state?.invitees.every(invitee =>
+        (invites.data ?? []).some(
+          i =>
+            i.email?.trim().toLocaleLowerCase() ===
+            invitee.trim().toLocaleLowerCase(),
+        ),
+      )
+
+    if (startInvitesPolling) {
+      invites.startPolling()
+    }
+  }, [invites, state?.invitees, state?.invitees.length])
 
   const invitesLeft = course
     ? course.max_participants -
@@ -154,7 +182,10 @@ export const CourseInvites = ({
 
     try {
       setSaving(true)
-      await invites.send([...emails, ...leftOvers])
+      await invites.send({
+        emails: [...emails, ...leftOvers],
+        course: { go1Integration: course.go1Integration, type: course.type },
+      })
       invites.getInvites({
         requestPolicy: 'network-only',
       })
@@ -163,7 +194,16 @@ export const CourseInvites = ({
       setSaving(false)
       setError((err as Error).message)
     }
-  }, [emails, newEmail, emailSchema, invitesLeft, invites, closeModal])
+  }, [
+    closeModal,
+    course.go1Integration,
+    course.type,
+    emails,
+    emailSchema,
+    invites,
+    invitesLeft,
+    newEmail,
+  ])
 
   const errorMessage = useMemo(() => {
     if (!error) {

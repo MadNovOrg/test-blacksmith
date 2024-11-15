@@ -14,7 +14,10 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { Course_Audit_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Audit_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import {
@@ -110,7 +113,7 @@ export const CourseReschedulingTable: React.FC<
         id: 'authorizedBy.fullName',
         label: t('pages.audits.authorised-by'),
         sorting: true,
-        exportRender: (log: CourseLogType) => log.authorizedBy.fullName ?? '',
+        exportRender: (log: CourseLogType) => log.authorizedBy?.fullName ?? '',
       },
     ],
     [t],
@@ -231,14 +234,33 @@ export const CourseReschedulingTable: React.FC<
                           })}
                         </TableCell>
                         <TableCell>
-                          {invoice ? (
-                            <Link href={`/orders/${invoice.order?.id}`}>
-                              <Typography variant="body2">
-                                {log.xero_invoice_number ??
-                                  log.course.orders[0].order?.xeroInvoiceNumber}
-                              </Typography>
-                            </Link>
-                          ) : null}
+                          {invoice
+                            ? (log.course.type === Course_Type_Enum.Indirect
+                                ? log.course.orders.map(order => ({
+                                    invoiceNumber:
+                                      order.order?.xeroInvoiceNumber,
+                                    orderId: order.order?.id,
+                                  }))
+                                : [
+                                    {
+                                      invoiceNumber:
+                                        log.xero_invoice_number ??
+                                        log.course.orders[0].order
+                                          ?.xeroInvoiceNumber,
+                                      orderId: invoice.order?.id,
+                                    },
+                                  ]
+                              ).map(el => (
+                                <Link
+                                  key={el.orderId}
+                                  href={`/orders/${el.orderId}`}
+                                >
+                                  <Typography variant="body2">
+                                    {el.invoiceNumber}
+                                  </Typography>
+                                </Link>
+                              ))
+                            : null}
                         </TableCell>
                         <TableCell>
                           {log.authorizedBy ? (

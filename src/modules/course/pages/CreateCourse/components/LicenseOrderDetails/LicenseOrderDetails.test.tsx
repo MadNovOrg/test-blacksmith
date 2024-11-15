@@ -235,8 +235,7 @@ describe('component: LicenseOrderDetails', () => {
         expect(screen.getByText('Review & confirm')).toBeEnabled()
       },
       {
-        timeout: 2000,
-        interval: 300,
+        timeout: 4000,
       },
     )
 

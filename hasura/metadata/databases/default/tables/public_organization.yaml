@@ -585,11 +585,13 @@ update_permissions:
         - can_access_knowledge_hub
         - contact_details
         - geo_coordinates
+        - go1_licenses
         - main_organisation_id
         - name
         - organisation_type
         - preferences
         - region
+        - reserved_go1_licenses
         - sector
         - tags
         - xero_contact_id

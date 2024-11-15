@@ -65,14 +65,76 @@ export const UPDATE_COURSE_MUTATION = gql`
   mutation UpdateCourse(
     $courseId: Int!
     $courseInput: course_set_input!
-    $orderInput: order_set_input!
-    $scheduleId: uuid!
-    $scheduleInput: course_schedule_set_input!
-    $trainers: [course_trainer_insert_input!]!
-    $trainersToDelete: [uuid!]
+    $decrementGo1LicensesFromOrganizationPool: Int = 0
     $exceptions: [course_exception_enum!] = []
     $exceptionsInput: [course_exceptions_insert_input!] = []
+    $incrementGo1LicensesFromOrganizationPool: Int = 0
+    $orderInput: order_set_input!
+    $ordersInsertInput: [course_order_insert_input!] = []
+    $reserveGo1LicensesAudit: [go1_licenses_history_insert_input!] = []
+    $scheduleId: uuid!
+    $scheduleInput: course_schedule_set_input!
+    $temporaryOrderInsertInput: [order_temp_insert_input!] = []
+    $trainers: [course_trainer_insert_input!]!
+    $trainersToDelete: [uuid!]
   ) {
+    decrementGo1Licenses: update_organization(
+      where: { organization_courses: { id: { _eq: $courseId } } }
+      _inc: {
+        go1Licenses: $decrementGo1LicensesFromOrganizationPool
+        reservedGo1Licenses: $incrementGo1LicensesFromOrganizationPool
+      }
+    ) {
+      affectedRows: affected_rows
+      returning {
+        id
+        go1Licenses
+      }
+    }
+
+    deleteCourseTrainers: delete_course_trainer(
+      where: {
+        course_id: { _eq: $courseId }
+        profile_id: { _in: $trainersToDelete }
+      }
+    ) {
+      returning {
+        id
+      }
+    }
+
+    deletedExceptions: delete_course_exceptions(
+      where: { courseId: { _eq: $courseId }, exception: { _in: $exceptions } }
+    ) {
+      affectedRows: affected_rows
+    }
+
+    insertCourseTrainers: insert_course_trainer(objects: $trainers) {
+      returning {
+        id
+      }
+    }
+
+    insertExceptions: insert_course_exceptions(objects: $exceptionsInput) {
+      affectedRows: affected_rows
+    }
+
+    insertGo1LicensesAudit: insert_go1_licenses_history(
+      objects: $reserveGo1LicensesAudit
+    ) {
+      affected_rows
+    }
+
+    insertOrders: insert_course_order(objects: $ordersInsertInput) {
+      affectedRows: affected_rows
+    }
+
+    insertTemporaryOrders: insert_order_temp(
+      objects: $temporaryOrderInsertInput
+    ) {
+      affectedRows: affected_rows
+    }
+
     updateCourse: update_course_by_pk(
       pk_columns: { id: $courseId }
       _set: $courseInput
@@ -94,32 +156,13 @@ export const UPDATE_COURSE_MUTATION = gql`
     ) {
       id
     }
+  }
+`
 
-    deleteCourseTrainers: delete_course_trainer(
-      where: {
-        course_id: { _eq: $courseId }
-        profile_id: { _in: $trainersToDelete }
-      }
-    ) {
-      returning {
-        id
-      }
-    }
-
-    insertCourseTrainers: insert_course_trainer(objects: $trainers) {
-      returning {
-        id
-      }
-    }
-
-    deletedExceptions: delete_course_exceptions(
-      where: { courseId: { _eq: $courseId }, exception: { _in: $exceptions } }
-    ) {
-      affectedRows: affected_rows
-    }
-
-    insertExceptions: insert_course_exceptions(objects: $exceptionsInput) {
-      affectedRows: affected_rows
+export const INSERT_COURSE_ORDER = gql`
+  mutation InsertCourseOrder($orderInput: course_order_insert_input!) {
+    insertOrder: insert_course_order_one(object: $orderInput) {
+      order_id
     }
   }
 `

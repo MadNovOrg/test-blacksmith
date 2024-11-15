@@ -29,9 +29,9 @@ describe('component: TableBody', () => {
   })
   it('should render logs', () => {
     setup()
-    logsMock.map(log =>
+    logsMock.forEach(log =>
       expect(
-        screen.getByText(log.authorizedBy.fullName as string),
+        screen.getByText(log.authorizedBy?.fullName ?? ''),
       ).toBeInTheDocument(),
     )
   })

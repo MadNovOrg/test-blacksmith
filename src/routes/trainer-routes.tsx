@@ -16,7 +16,9 @@ import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_
 import { EvaluationSummary } from '@app/modules/course_details/course_evaluation_tab/pages/InternalEvaluationSummary'
 import { CourseCertificationDetails } from '@app/modules/course_details/pages/CourseCertificationDetails/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/modules/course_details/pages/CourseDetails'
+import { EditCourseWithContext } from '@app/modules/edit_course/contexts/EditCourseProvider'
 import { EditCourse } from '@app/modules/edit_course/pages/EditCourse'
+import { ReviewLicensesOrder } from '@app/modules/edit_course/pages/ReviewLicensesOrder'
 import { GradingRoutes } from '@app/modules/grading/routes'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { OrganisationRoutes } from '@app/modules/organisation/routes'
@@ -54,7 +56,13 @@ const TrainerBaseRoutes = () => {
           <Route path="review-license-order" element={<ReviewLicenseOrder />} />
         </Route>
 
-        <Route path="edit/:id" element={<EditCourse />} />
+        <Route path="edit/:id" element={<EditCourseWithContext />}>
+          <Route index element={<EditCourse />} />
+          <Route
+            path="review-licenses-order"
+            element={<ReviewLicensesOrder />}
+          />
+        </Route>
 
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />

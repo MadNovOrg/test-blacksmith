@@ -779,6 +779,7 @@
     "invite-error-EMAIL_REQUIRED": "Please enter at least one email address",
     "invite-error-INVALID_EMAILS": "Some emails are invalid",
     "invite-error-EMAILS_ALREADY_INVITED": "All emails entered have already been invited",
+    "invite-error-SOME_EMAILS_ALREADY_INVITED": "Some emails have already been invited",
     "invite-error-LIMIT_REACHED": "Invites limit reached",
     "invite-error-UNKNOWN": "Unknown error",
     "status": "Status",

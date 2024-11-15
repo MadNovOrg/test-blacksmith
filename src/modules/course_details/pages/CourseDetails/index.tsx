@@ -158,14 +158,18 @@ export const CourseDetails = () => {
     [acl, course, courseCancelled],
   )
 
-  const linkedOrderItem = useMemo(() => course?.orders?.[0]?.order, [course])
-  const [xeroInvoiceNumber, setXeroInvoiceNumber] = useState<
-    string | undefined
-  >(undefined)
+  const linkedOrderItems = useMemo(
+    () => course?.orders?.map(o => o.order),
+    [course],
+  )
   const [startPollingForXeroInvoiceNumber, pollingForXeroInvoiceNumber] =
     usePollQuery(
       () => Promise.resolve(mutate({ requestPolicy: 'network-only' })),
-      () => !!linkedOrderItem?.xeroInvoiceNumber,
+      () =>
+        !linkedOrderItems?.length ||
+        linkedOrderItems.every(
+          linkedOrderItem => !!linkedOrderItem?.xeroInvoiceNumber,
+        ),
       {
         interval: 2000,
         maxPolls: 5,
@@ -173,23 +177,27 @@ export const CourseDetails = () => {
     )
 
   useEffect(() => {
-    if (linkedOrderItem?.xeroInvoiceNumber) {
-      setXeroInvoiceNumber(linkedOrderItem.xeroInvoiceNumber)
-    }
-    if (linkedOrderItem && !pollingForXeroInvoiceNumber) {
+    if (
+      linkedOrderItems?.length &&
+      linkedOrderItems.some(
+        linkedOrderItem => !linkedOrderItem?.xeroInvoiceNumber,
+      ) &&
+      !pollingForXeroInvoiceNumber
+    ) {
       startPollingForXeroInvoiceNumber()
     }
   }, [
-    linkedOrderItem,
-    linkedOrderItem?.xeroInvoiceNumber,
+    courseLoadingStatus,
+    linkedOrderItems,
     pollingForXeroInvoiceNumber,
     startPollingForXeroInvoiceNumber,
   ])
 
   const canViewLinkedOrderItem = useMemo(
     () =>
-      linkedOrderItem && (isCourseTypeClosed || isCourseTypeIndirectBlended),
-    [linkedOrderItem, isCourseTypeClosed, isCourseTypeIndirectBlended],
+      linkedOrderItems?.length &&
+      (isCourseTypeClosed || isCourseTypeIndirectBlended),
+    [linkedOrderItems?.length, isCourseTypeClosed, isCourseTypeIndirectBlended],
   )
 
   /**
@@ -331,9 +339,11 @@ export const CourseDetails = () => {
               OrderItem: canViewLinkedOrderItem
                 ? () => (
                     <OrderItemComponent
-                      xeroInvoiceNumber={xeroInvoiceNumber}
-                      linkedOrderItemId={linkedOrderItem?.id}
                       canOnlyViewOrderItemAsText={canOnlyViewOrderItemAsText}
+                      orders={linkedOrderItems?.map(linkedOrderItem => ({
+                        xeroInvoiceNumber: linkedOrderItem?.xeroInvoiceNumber,
+                        linkedOrderItemId: linkedOrderItem?.id,
+                      }))}
                     />
                   )
                 : undefined,

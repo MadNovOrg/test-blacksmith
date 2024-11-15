@@ -92,6 +92,8 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const invoice = order?.invoice
 
+  console.log('order', order)
+
   const registrants = useMemo(
     () =>
       (Array.isArray(order?.registrants)
@@ -496,7 +498,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               </Typography>
                               <Typography>
                                 {course?.type === Course_Type_Enum.Indirect
-                                  ? course.max_participants
+                                  ? order.attendeesQuantity // order.attendeesQuantity represents the number go1 licenses redeemed per order
                                   : (quantities.get(Number(course?.id)) ?? 0) +
                                     (cancellationAudits ?? []).filter(audit => {
                                       return audit.course_id === course?.id
@@ -771,7 +773,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           {t('licenses-redeemed')}
                         </Typography>
                         <Typography color="grey.700">
-                          {mainCourse?.max_participants}
+                          {order.attendeesQuantity}
                         </Typography>
                       </ItemRow>
                     </DetailsItemBox>

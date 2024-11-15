@@ -10,12 +10,13 @@ export type ResponseType = { course: Maybe<Course> }
 // TODO: Scrap this and use GetCourseByIdQuery and GetCourseByIdQueryVariables
 export type ParamsType = {
   id: string
-  withOrders?: boolean
   withArloRefId: boolean
+  withFreeCourseCourseMaterials?: boolean
+  withInternationalFinance?: boolean
+  withOrders?: boolean
+  withOrgLicenses?: boolean
   withParticipants?: boolean
   withParticipantsPendingInvitesCount?: boolean
-  withInternationalFinance?: boolean
-  withFreeCourseCourseMaterials?: boolean
 }
 
 export const QUERY = gql`
@@ -25,12 +26,13 @@ export const QUERY = gql`
   ${ORGANIZATION}
   query GetCourseById(
     $id: Int!
-    $withOrders: Boolean = false
-    $withModules: Boolean = false
     $withArloRefId: Boolean = false
-    $withParticipants: Boolean = false
-    $withInternationalFinance: Boolean = false
     $withFreeCourseCourseMaterials: Boolean = false
+    $withInternationalFinance: Boolean = false
+    $withModules: Boolean = false
+    $withOrders: Boolean = false
+    $withOrgLicenses: Boolean = false
+    $withParticipants: Boolean = false
     $withParticipantsPendingInvitesCount: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
@@ -97,9 +99,26 @@ export const QUERY = gql`
           ...Venue
         }
       }
+
       organization {
         ...Organization
+        go1Licenses: go1Licenses @include(if: $withOrgLicenses)
+        reservedGo1Licenses: reservedGo1Licenses @include(if: $withOrgLicenses)
+
+        reservedCourseLicenses: go1LicensesHistory_aggregate(
+          where: {
+            payload: { _contains: { courseId: $id } }
+            event: { _eq: LICENSES_RESERVED }
+          }
+        ) @include(if: $withOrgLicenses) {
+          aggregate {
+            sum {
+              change
+            }
+          }
+        }
       }
+
       bookingContact {
         id
         fullName

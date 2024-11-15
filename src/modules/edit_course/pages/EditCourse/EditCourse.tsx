@@ -17,8 +17,7 @@ import { differenceInCalendarDays } from 'date-fns'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useMutation } from 'urql'
+import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
@@ -30,26 +29,14 @@ import { useSnackbar } from '@app/context/snackbar'
 import {
   Accreditors_Enum,
   BildStrategy,
-  Course_Audit_Type_Enum,
-  Course_Delivery_Type_Enum,
   Course_Exception_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
-  Course_Trainer_Insert_Input,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   CourseLevel,
-  CourseTrainerType,
   GetCourseByIdQuery,
-  InsertCourseAuditMutation,
-  InsertCourseAuditMutationVariables,
-  NotifyCourseEditMutation,
-  NotifyCourseEditMutationVariables,
-  UpdateCourseMutation,
-  UpdateCourseMutationVariables,
 } from '@app/generated/graphql'
-import useCourse from '@app/hooks/useCourse'
-import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import ChooseTrainers, {
   FormValues as TrainersFormValues,
@@ -58,67 +45,40 @@ import {
   DisabledFields,
   CourseForm,
 } from '@app/modules/course/components/CourseForm'
-import { hasRenewalCycle } from '@app/modules/course/components/CourseForm/helpers'
-import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
 import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
   getExceptionsToIgnoreOnEditForTrainer,
   isTrainersRatioNotMet,
-  shouldGoIntoExceptionApproval,
 } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseCancellationModal } from '@app/modules/edit_course/components/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/modules/edit_course/components/RegistrantsCancellationModal'
-import { INSERT_COURSE_AUDIT } from '@app/modules/edit_course/queries/insert-course-audit'
-import { NOTIFY_COURSE_EDIT } from '@app/modules/edit_course/queries/notify-course-edit'
-import { UPDATE_COURSE_MUTATION } from '@app/modules/edit_course/queries/update-course'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import {
-  BildStrategies,
   CourseInput,
-  InviteStatus,
   RoleName,
   TrainerRoleType,
   TrainerRoleTypeName,
-  ValidCourseInput,
 } from '@app/types'
 import {
   bildStrategiesToArray,
   checkIsEmployerAOL,
   checkIsETA,
-  convertScheduleDateToLocalTime,
   courseStarted,
-  courseToCourseInput,
-  generateBildCourseName,
-  generateCourseName,
   LoadingStatus,
-  profileToInput,
-  UKTimezone,
 } from '@app/util'
 
-import {
-  FormValues,
-  ReviewChangesModal,
-} from '../../components/ReviewChangesModal'
-import { type CourseDiff, getChangedTrainers } from '../../utils/shared'
-
-function assertCourseDataValid(
-  data: CourseInput,
-  isValid: boolean,
-): asserts data is ValidCourseInput {
-  if (!isValid) {
-    throw new Error()
-  }
-}
+import { FormValues as ReviewChangesFormValues } from '../../components/ReviewChangesModal'
+import { ReviewChangesModal } from '../../components/ReviewChangesModal'
+import { useEditCourse } from '../../contexts/EditCourseProvider/EditCourseProvider'
 
 const editAttendeesForbiddenStatuses = [
+  Course_Status_Enum.ConfirmModules,
   Course_Status_Enum.Declined,
   Course_Status_Enum.ExceptionsApprovalPending,
-  Course_Status_Enum.ConfirmModules,
 ]
 
 export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
-  const { id } = useParams()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -126,10 +86,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { profile, acl, activeRole } = useAuth()
   const navigate = useNavigate()
   const isAustraliaRegion = acl.isAustralia()
+  const { isUKCountry } = useWorldCountries()
+  const { addSnackbarMessage } = useSnackbar()
 
-  const [courseData, setCourseData] = useState<CourseInput>()
-  const [courseDataValid, setCourseDataValid] = useState(false)
-  const [trainersData, setTrainersData] = useState<TrainersFormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
   const [showCancellationModal, setShowCancellationModal] = useState(false)
   const [
@@ -137,34 +96,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     setShowRegistrantsCancellationModal,
   ] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
-  const [courseExceptions, setCourseExceptions] = useState<
-    Course_Exception_Enum[]
-  >([])
   const [
     allowCourseEditWithoutScheduledPrice,
     setAllowCourseEditWithoutScheduledPrice,
   ] = useState<boolean>(true)
-
-  const {
-    data: courseInfo,
-    status: courseStatus,
-    mutate: mutateCourse,
-  } = useCourse(id ?? '', {
-    includePendingInvitesCount: true,
-  })
-  const { setDateTimeTimeZone } = useTimeZones()
-  const { isUKCountry } = useWorldCountries()
-
-  const course = courseInfo?.course
-
-  const courseInput: CourseInput | undefined = useMemo(() => {
-    return course ? courseToCourseInput(course) : undefined
-  }, [course])
-
-  const canGoToCourseBuilder =
-    activeRole === RoleName.TRAINER &&
-    course?.accreditedBy === Accreditors_Enum.Icm &&
-    course?.type === Course_Type_Enum.Indirect
 
   const courseMethods = useRef<{
     trigger: UseFormTrigger<CourseInput>
@@ -176,489 +111,65 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     reset: UseFormReset<TrainersFormValues>
   }>(null)
 
-  const { addSnackbarMessage } = useSnackbar()
+  const {
+    autoapproved,
+    canGoToCourseBuilder,
+    courseData,
+    courseDataValid,
+    courseDiffs,
+    courseExceptions,
+    courseFormInput: courseInput,
+    fetching,
+    getCourseName,
+    hasError,
+    mutateCourse,
+    preEditedCourse: course,
+    requireNewOrderForGo1Licenses,
+    saveChanges,
+    setCourseData,
+    setCourseDataValid,
+    setCourseExceptions,
+    setEditCourseReviewInput,
+    setTrainersData,
+    status: progressStatus,
+    trainersData,
+  } = useEditCourse()
 
-  const [{ error: updatingError, fetching: updatingCourse }, updateCourse] =
-    useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(
-      UPDATE_COURSE_MUTATION,
-    )
-  const [{ error: auditError, fetching: insertingAudit }, insertAudit] =
-    useMutation<InsertCourseAuditMutation, InsertCourseAuditMutationVariables>(
-      INSERT_COURSE_AUDIT,
-    )
+  const submitDisabled =
+    (courseData?.type === Course_Type_Enum.Closed ||
+      courseData?.type === Course_Type_Enum.Indirect) &&
+    !trainersData?.lead.length
 
   const participantsCount =
     (course as GetCourseByIdQuery['course'])?.attendeesCount?.aggregate
       ?.count ?? 0
 
-  const handleCourseFormChange = useCallback(
-    ({ data, isValid }: { data?: CourseInput; isValid?: boolean }) => {
-      if (data) {
-        setCourseData(data)
-      }
-
-      setCourseDataValid(Boolean(isValid))
-    },
-    [],
-  )
-
-  const [{ fetching: notifyCourseEditLoading }, notifyCourseEdit] = useMutation<
-    NotifyCourseEditMutation,
-    NotifyCourseEditMutationVariables
-  >(NOTIFY_COURSE_EDIT)
-
-  const [courseDiffs, autoapproved]: [CourseDiff[], boolean] = useMemo(() => {
-    const diffs: CourseDiff[] = []
-    let approved = true
-
-    if (
-      course?.schedule[0].start &&
-      course.schedule[0].end &&
-      courseData?.startDateTime &&
-      courseData.endDateTime
-    ) {
-      const { start: oldStart, end: oldEnd } = convertScheduleDateToLocalTime(
-        course.schedule[0].start,
-        course.schedule[0].end,
-        course.schedule[0].timeZone,
-      )
-
-      const newStart = courseData.startDateTime
-      const newEnd = courseData.endDateTime
-
-      if (
-        oldStart.getTime() !== newStart.getTime() ||
-        oldEnd.getTime() !== newEnd.getTime()
-      ) {
-        diffs.push({
-          type: 'date',
-          oldValue: [oldStart, oldEnd],
-          newValue: [newStart, newEnd],
-        })
-
-        approved = false
-      }
-    }
-
-    return [diffs, approved]
-  }, [course, courseData])
-
-  const { strategies } = useBildStrategies(
-    Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild),
-  )
-
-  const handleTrainersDataChange = useCallback(
-    (data: TrainersFormValues, isValid: boolean) => {
-      setTrainersData(data)
-      setTrainersDataValid(isValid)
-    },
-    [],
-  )
-
-  const getCourseName = useCallback(() => {
-    return courseData?.accreditedBy === Accreditors_Enum.Bild
-      ? generateBildCourseName(
-          strategies,
-          {
-            level: courseData.courseLevel as Course_Level_Enum,
-            reaccreditation: courseData.reaccreditation,
-            conversion: courseData.conversion,
-            bildStrategies: courseData.bildStrategies as Record<
-              BildStrategies,
-              boolean
-            >,
-          },
-          t,
-        )
-      : generateCourseName(
-          {
-            level: courseData?.courseLevel as Course_Level_Enum,
-            reaccreditation: courseData?.reaccreditation as boolean,
-          },
-          t,
-          acl.isUK(),
-        )
-  }, [courseData, strategies, t, acl])
-
-  const saveChanges = useCallback(
-    async (reviewInput?: FormValues) => {
-      const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
-      try {
-        if (courseData && course && trainersData) {
-          assertCourseDataValid(courseData, courseDataValid)
-
-          const trainers = [
-            ...trainersData.assist.map(t => ({
-              ...profileToInput(course, Course_Trainer_Type_Enum.Assistant)(t),
-              status: trainersMap.get(t.id)?.status,
-            })),
-            ...trainersData.moderator.map(t => ({
-              ...profileToInput(course, Course_Trainer_Type_Enum.Moderator)(t),
-              status: trainersMap.get(t.id)?.status,
-            })),
-          ]
-
-          if (!acl.canAssignLeadTrainer() && profile) {
-            trainers.push({
-              course_id: course.id,
-              profile_id: profile.id,
-              type: Course_Trainer_Type_Enum.Leader,
-              status: InviteStatus.ACCEPTED,
-            })
-          } else {
-            trainers.push(
-              ...trainersData.lead.map(t => ({
-                ...profileToInput(course, Course_Trainer_Type_Enum.Leader)(t),
-                status: trainersMap.get(t.id)?.status,
-              })),
-            )
-          }
-
-          const [trainersToAdd, trainersToDelete] = getChangedTrainers(
-            course.trainers?.map(t => ({
-              profile_id: t.profile.id,
-              type: t.type,
-              status: t.status,
-            })) ?? [],
-            trainers.map(t => ({ profile_id: t.profile_id, type: t.type })),
-          )
-
-          const newVenueId =
-            [
-              Course_Delivery_Type_Enum.F2F,
-              Course_Delivery_Type_Enum.Mixed,
-            ].includes(courseData.deliveryType) && courseData.venue
-              ? courseData.venue.id
-              : null
-          const newVirtualLink =
-            courseData.deliveryType === Course_Delivery_Type_Enum.F2F
-              ? ''
-              : courseData.zoomMeetingUrl
-
-          const status =
-            courseExceptions.length > 0 &&
-            shouldGoIntoExceptionApproval(acl, course.type)
-              ? Course_Status_Enum.ExceptionsApprovalPending
-              : null
-
-          const orderToUpdate = {
-            salesRepresentativeId: courseData.salesRepresentative?.id,
-            source: courseData.source,
-          }
-
-          const isBildCourse = courseData.accreditedBy === Accreditors_Enum.Bild
-          const isOpenCourse = courseData.type === Course_Type_Enum.Open
-          const isClosedCourse = courseData.type === Course_Type_Enum.Closed
-
-          const scheduleDateTime: (Date | string)[] = [
-            courseData.startDateTime,
-            courseData.endDateTime,
-          ]
-
-          if (courseData.timeZone) {
-            const scheduleStarDateTime = setDateTimeTimeZone(
-              courseData.startDateTime,
-              courseData.timeZone.timeZoneId,
-            )
-            if (scheduleStarDateTime) scheduleDateTime[0] = scheduleStarDateTime
-
-            const scheduleEndDateTime = setDateTimeTimeZone(
-              courseData.endDateTime,
-              courseData.timeZone.timeZoneId,
-            )
-            if (scheduleEndDateTime) scheduleDateTime[1] = scheduleEndDateTime
-          }
-
-          const editResponse = await updateCourse({
-            courseId: course.id,
-            courseInput: {
-              // TODO: Delete this after arlo migration
-              ...(acl.isInternalUser()
-                ? { arloReferenceId: courseData.arloReferenceId || '' }
-                : null),
-              status,
-              ...(courseData.type === Course_Type_Enum.Open
-                ? { displayOnWebsite: courseData.displayOnWebsite }
-                : null),
-              exceptionsPending:
-                status === Course_Status_Enum.ExceptionsApprovalPending,
-              name: getCourseName(),
-              deliveryType: courseData.deliveryType,
-              reaccreditation: courseData.reaccreditation,
-              go1Integration: courseData.blendedLearning,
-              freeSpaces: courseData.freeSpaces,
-              special_instructions: courseData.specialInstructions,
-              parking_instructions: courseData.parkingInstructions,
-              ...(hasRenewalCycle({
-                courseType: courseData.type,
-                startDate: courseData.startDate,
-                courseLevel: courseData.courseLevel,
-                isAustralia: acl.isAustralia(),
-              })
-                ? { renewalCycle: courseData.renewalCycle }
-                : { renewalCycle: null }),
-              ...(courseData.minParticipants
-                ? { min_participants: courseData.minParticipants }
-                : null),
-              max_participants: courseData.maxParticipants,
-              ...(courseData.organization
-                ? { organization_id: courseData.organization.id }
-                : null),
-              ...(courseData.bookingContact?.profileId ||
-              courseData.bookingContact?.email
-                ? {
-                    bookingContactProfileId:
-                      courseData.bookingContact?.profileId ?? null,
-                  }
-                : null),
-              ...(courseData.bookingContact?.email
-                ? { bookingContactInviteData: courseData.bookingContact }
-                : null),
-              ...(courseData.organizationKeyContact?.profileId ||
-              courseData.organizationKeyContact?.email
-                ? {
-                    organizationKeyContactProfileId:
-                      courseData.organizationKeyContact?.profileId ?? null,
-                  }
-                : null),
-              ...(courseData.organizationKeyContact?.email
-                ? {
-                    organizationKeyContactInviteData:
-                      courseData.organizationKeyContact,
-                  }
-                : null),
-              ...(courseData.usesAOL
-                ? {
-                    aolCostOfCourse: courseData.courseCost,
-                    aolCountry: courseData.aolCountry,
-                    aolRegion: courseData.aolRegion,
-                  }
-                : null),
-              ...(isOpenCourse
-                ? {
-                    price: courseData.price,
-                    priceCurrency: !isUKCountry(courseData.residingCountry)
-                      ? courseData.priceCurrency
-                      : null,
-                    includeVAT: !isUKCountry(courseData.residingCountry)
-                      ? courseData.includeVAT
-                      : null,
-                  }
-                : {}),
-              ...(isClosedCourse
-                ? {
-                    price:
-                      isBildCourse || !isUKCountry(courseData.residingCountry)
-                        ? courseData.price
-                        : null,
-                    priceCurrency:
-                      isBildCourse || !isUKCountry(courseData.residingCountry)
-                        ? courseData.priceCurrency
-                        : null,
-                    includeVAT:
-                      isBildCourse || !isUKCountry(courseData.residingCountry)
-                        ? courseData.includeVAT
-                        : null,
-                  }
-                : {}),
-              ...(isClosedCourse
-                ? {
-                    free_course_materials: courseData.freeCourseMaterials ?? 0,
-                  }
-                : {}),
-              residingCountry: courseData.residingCountry,
-            },
-            orderInput: orderToUpdate,
-            trainers: trainersToAdd.map(t => ({
-              ...t,
-              course_id: course.id,
-            })) as Course_Trainer_Insert_Input,
-            trainersToDelete,
-            scheduleId: course?.schedule[0].id,
-            scheduleInput: {
-              venue_id: newVenueId,
-              virtualLink: newVirtualLink,
-              virtualAccountId: courseData.zoomProfileId,
-              start: scheduleDateTime[0],
-              end: scheduleDateTime[1],
-              timeZone: courseData.timeZone?.timeZoneId,
-            },
-            ...(status === Course_Status_Enum.ExceptionsApprovalPending
-              ? {
-                  exceptions: courseExceptions,
-                  exceptionsInput: courseExceptions.map(exception => ({
-                    courseId: course.id,
-                    exception,
-                  })),
-                }
-              : null),
-          })
-
-          if (editResponse.data?.updateCourse?.id && courseDiffs.length) {
-            const dateChanged = courseDiffs.find(d => d.type === 'date')
-
-            if (!dateChanged) {
-              return
-            }
-
-            const payload = {
-              oldStartDate: course.schedule[0].start,
-              oldEndDate: course.schedule[0].end,
-              newStartDate: setDateTimeTimeZone(
-                courseData.startDateTime,
-                course.schedule[0].timeZone ?? UKTimezone,
-              ),
-              newEndDate: setDateTimeTimeZone(
-                courseData.endDateTime,
-                course.schedule[0].timeZone ?? UKTimezone,
-              ),
-              reason: reviewInput?.reason ?? '',
-              ...(course.type === Course_Type_Enum.Closed && reviewInput
-                ? {
-                    feeType: reviewInput.feeType,
-                    customFee: reviewInput.customFee,
-                  }
-                : null),
-            }
-
-            await insertAudit({
-              object: {
-                type: Course_Audit_Type_Enum.Reschedule,
-                course_id: course.id,
-                payload,
-                authorized_by: profile?.id,
-                xero_invoice_number:
-                  course.orders && course.orders.length > 0
-                    ? course.orders[0]?.order.xeroInvoiceNumber
-                    : null,
-              },
-            })
-          }
-
-          if (editResponse.data?.updateCourse?.id) {
-            await notifyCourseEdit({
-              oldCourse: {
-                courseId: course.id,
-                level: course.level as unknown as CourseLevel,
-                venueId: course.schedule[0].venue?.id || null,
-                virtualLink: course.schedule[0].virtualLink || null,
-                startDate: course.dates.aggregate.start.date,
-                endDate: course.dates.aggregate.end.date,
-                parkingInstructions: course.parking_instructions || '',
-                specialInstructions: course.special_instructions || '',
-              },
-              oldTrainers:
-                course.trainers?.map(trainer => ({
-                  id: trainer.profile.id,
-                  type: trainer.type as CourseTrainerType,
-                })) || [],
-            })
-            mutateCourse()
-            canGoToCourseBuilder
-              ? navigate(`/courses/${courseInput?.id}/modules`, {
-                  state: { editMode: true },
-                })
-              : navigate(`/courses/${course.id}/details`)
-          } else {
-            console.error('error updating course')
-          }
-        }
-      } catch (err) {
-        console.error(err)
-      }
-    },
-    [
-      course,
-      courseData,
-      trainersData,
-      courseDataValid,
-      acl,
-      profile,
-      courseExceptions,
-      updateCourse,
-      getCourseName,
-      isUKCountry,
-      courseDiffs,
-      setDateTimeTimeZone,
-      insertAudit,
-      notifyCourseEdit,
-      mutateCourse,
-      canGoToCourseBuilder,
-      navigate,
-      courseInput?.id,
-    ],
-  )
-
-  const handleReset = useCallback(() => {
-    courseMethods.current?.reset()
-    trainerMethods.current?.reset()
-  }, [])
-
-  const editCourse = useCallback(() => {
-    if (!autoapproved) {
-      setShowReviewModal(true)
-    } else {
-      saveChanges()
-    }
-  }, [autoapproved, saveChanges])
-
   const canEditAttendees =
     course?.type === Course_Type_Enum.Indirect &&
     !editAttendeesForbiddenStatuses.includes(course?.status)
 
-  const baseDisabledFields: DisabledFields[] = useMemo(
-    () => [
-      'accreditedBy',
-      'courseLevel',
-      'bildStrategies',
-      'blendedLearning',
-      'reaccreditation',
-      'conversion',
-    ],
-    [],
-  )
-
-  const disabledFields = useMemo(() => {
-    if (!course || acl.canEditWithoutRestrictions(course.type)) {
-      return new Set<DisabledFields>(baseDisabledFields)
-    }
-
-    return new Set<DisabledFields>([
-      ...baseDisabledFields,
-      'organization',
-      'bookingContact',
-      'deliveryType',
-      'usesAOL',
-      'aolCountry',
-      'aolRegion',
-      'minParticipants',
-      ...(canEditAttendees
-        ? ([] as Array<DisabledFields>)
-        : (['maxParticipants'] as Array<DisabledFields>)),
-    ])
-  }, [acl, canEditAttendees, course, baseDisabledFields])
-
-  const seniorOrPrincipalLead = useMemo(() => {
-    return (
+  const seniorOrPrincipalLead = useMemo(
+    () =>
       profile?.trainer_role_types.some(
         ({ trainer_role_type: role }) =>
           role.name === TrainerRoleTypeName.SENIOR ||
           role.name === TrainerRoleTypeName.PRINCIPAL,
-      ) ?? false
-    )
-  }, [profile])
+      ) ?? false,
+    [profile],
+  )
 
-  const isETA = useMemo(() => {
-    return checkIsETA(
-      profile?.trainer_role_types as unknown as TrainerRoleType[],
-    )
-  }, [profile])
-
-  const isEmployerAOL = useMemo(() => {
-    return checkIsEmployerAOL(
-      profile?.trainer_role_types as unknown as TrainerRoleType[],
-    )
-  }, [profile])
+  const isETA = useMemo(
+    () =>
+      checkIsETA(profile?.trainer_role_types as unknown as TrainerRoleType[]),
+    [profile],
+  )
+  const isEmployerAOL = useMemo(
+    () =>
+      checkIsEmployerAOL(
+        profile?.trainer_role_types as unknown as TrainerRoleType[],
+      ),
+    [profile],
+  )
 
   const alignedWithProtocol =
     (courseData?.startDateTime &&
@@ -670,18 +181,17 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     course?.type === Course_Type_Enum.Indirect &&
     courseStarted(course)
 
-  const hasError = updatingError || auditError
-  const fetching = updatingCourse || insertingAudit
   const cancellableCourse =
     course &&
     [
-      Course_Status_Enum.TrainerPending,
-      Course_Status_Enum.TrainerMissing,
-      Course_Status_Enum.TrainerDeclined,
-      Course_Status_Enum.Scheduled,
       Course_Status_Enum.ConfirmModules,
       Course_Status_Enum.ExceptionsApprovalPending,
+      Course_Status_Enum.Scheduled,
+      Course_Status_Enum.TrainerDeclined,
+      Course_Status_Enum.TrainerMissing,
+      Course_Status_Enum.TrainerPending,
     ].indexOf(course.status) !== -1
+
   const canCancelCourse =
     acl.canCancelCourses() ||
     course?.trainers?.find(
@@ -691,6 +201,79 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
 
   const editCourseValid = courseDataValid && trainersDataValid
+  const baseDisabledFields: DisabledFields[] = useMemo(
+    () => [
+      'accreditedBy',
+      'bildStrategies',
+      'blendedLearning',
+      'conversion',
+      'courseLevel',
+      'reaccreditation',
+    ],
+    [],
+  )
+
+  const disabledFields = useMemo(() => {
+    if (!course || acl.canEditWithoutRestrictions(course.type)) {
+      return new Set<DisabledFields>(baseDisabledFields)
+    }
+
+    return new Set<DisabledFields>([
+      ...baseDisabledFields,
+      'aolCountry',
+      'aolRegion',
+      'bookingContact',
+      'deliveryType',
+      'minParticipants',
+      'organization',
+      'usesAOL',
+      ...(canEditAttendees
+        ? ([] as Array<DisabledFields>)
+        : (['maxParticipants'] as Array<DisabledFields>)),
+    ])
+  }, [acl, baseDisabledFields, canEditAttendees, course])
+
+  const handleCourseFormChange = useCallback(
+    ({ data, isValid }: { data?: CourseInput; isValid?: boolean }) => {
+      if (data) {
+        setCourseData(data)
+      }
+      setCourseDataValid(Boolean(isValid))
+    },
+    [setCourseData, setCourseDataValid],
+  )
+
+  const handleTrainersDataChange = useCallback(
+    (data: TrainersFormValues, isValid: boolean) => {
+      setTrainersData(data)
+      setTrainersDataValid(isValid)
+    },
+    [setTrainersData],
+  )
+
+  const handleReset = useCallback(() => {
+    courseMethods.current?.reset()
+    trainerMethods.current?.reset()
+  }, [])
+
+  const nextStep = useCallback(
+    (reviewInput?: ReviewChangesFormValues) => {
+      if (requireNewOrderForGo1Licenses) {
+        navigate('./review-licenses-order')
+      } else {
+        saveChanges(reviewInput)
+      }
+    },
+    [navigate, requireNewOrderForGo1Licenses, saveChanges],
+  )
+
+  const editCourse = useCallback(() => {
+    if (!autoapproved) {
+      setShowReviewModal(true)
+    } else {
+      nextStep()
+    }
+  }, [autoapproved, nextStep])
 
   const submitButtonHandler = useCallback(async () => {
     courseMethods?.current?.trigger()
@@ -785,6 +368,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     canRescheduleCourseEndDate,
     autoapproved,
     alignedWithProtocol,
+    setCourseExceptions,
   ])
 
   const showTrainerRatioWarning = useMemo(() => {
@@ -838,13 +422,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     trainersData?.moderator,
   ])
 
-  const submitDisabled =
-    (courseData?.type === Course_Type_Enum.Closed ||
-      courseData?.type === Course_Type_Enum.Indirect) &&
-    !trainersData?.lead.length
-
   if (
-    (courseStatus === LoadingStatus.SUCCESS && !course) ||
+    (progressStatus === LoadingStatus.SUCCESS && !course) ||
     (course && !acl.canEditCourses(course))
   ) {
     return <NotFound />
@@ -853,17 +432,17 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
-        {courseStatus === LoadingStatus.FETCHING ? (
+        {progressStatus === LoadingStatus.FETCHING ? (
           <Stack
             alignItems="center"
-            justifyContent="center"
             data-testid="edit-course-fetching"
+            justifyContent="center"
           >
             <CircularProgress />
           </Stack>
         ) : null}
 
-        {courseStatus === LoadingStatus.ERROR ? (
+        {progressStatus === LoadingStatus.ERROR ? (
           <Alert severity="error" variant="outlined">
             {t('pages.edit-course.course-not-found')}
           </Alert>
@@ -872,40 +451,43 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         {course && LoadingStatus.SUCCESS ? (
           <Box
             display="flex"
-            paddingBottom={5}
             flexDirection={isMobile ? 'column' : 'row'}
+            paddingBottom={5}
           >
-            <Box width={400} display="flex" flexDirection="column" pr={4}>
+            <Box display="flex" flexDirection="column" pr={4} width={400}>
               <Sticky top={20}>
                 <Box mb={2}>
                   <BackButton
                     label={t('pages.edit-course.back-to-course-button', {
                       courseName: getCourseName(),
                     })}
+                    to={`/${
+                      acl.isTrainer() ? 'courses' : 'manage-courses/all'
+                    }/${course.id}/details`}
                   />
                 </Box>
-                <Typography variant="h2" mb={4}>
+                <Typography mb={4} variant="h2">
                   {t('pages.edit-course.title')}
                 </Typography>
 
                 <Box mb={4}>
                   <Typography
+                    color="dimGrey.main"
+                    fontWeight={600}
                     mb={1}
                     variant="h6"
-                    fontWeight={600}
-                    color="dimGrey.main"
                   >
                     {t('status')}
                   </Typography>
-                  <CourseStatusChip status={course.status} hideIcon />
+                  <CourseStatusChip hideIcon status={course.status} />
                 </Box>
 
                 <Box>
                   <Typography
-                    variant="h6"
-                    mb={1}
-                    fontWeight={600}
                     color="dimGrey.main"
+                    fontWeight={600}
+                    mb={1}
+                    variant="h6"
                   >
                     {t('course-type')}
                   </Typography>
@@ -917,26 +499,26 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             <Box flex={1}>
               <Box mt={isMobile ? 4 : 8}>
                 {hasError ? (
-                  <Alert severity="error" variant="outlined" sx={{ mb: 2 }}>
+                  <Alert severity="error" sx={{ mb: 2 }} variant="outlined">
                     {t('pages.edit-course.updating-error')}
                   </Alert>
                 ) : null}
                 <Box mb={2}>
                   <CourseForm
-                    courseInput={courseInput}
-                    type={course?.type}
-                    onChange={handleCourseFormChange}
-                    disabledFields={disabledFields}
-                    isCreation={false}
-                    methodsRef={courseMethods}
-                    trainerRatioNotMet={showTrainerRatioWarning}
                     allowCourseEditWithoutScheduledPrice={
                       setAllowCourseEditWithoutScheduledPrice
                     }
+                    courseInput={courseData ?? courseInput}
                     currentNumberOfParticipantsAndInvitees={
                       (course?.attendeesCount?.aggregate.count ?? 0) +
                       (course?.participantsPendingInvites?.aggregate.count ?? 0)
                     }
+                    disabledFields={disabledFields}
+                    isCreation={false}
+                    methodsRef={courseMethods}
+                    onChange={handleCourseFormChange}
+                    trainerRatioNotMet={showTrainerRatioWarning}
+                    type={course?.type}
                   />
                 </Box>
 
@@ -944,7 +526,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 courseData.endDateTime &&
                 courseData.type ? (
                   <ChooseTrainers
-                    courseType={courseData.type}
+                    autoFocus={false}
+                    bildStrategies={
+                      courseData.bildStrategies
+                        ? (bildStrategiesToArray(
+                            courseData.bildStrategies,
+                          ) as unknown as BildStrategy[])
+                        : undefined
+                    }
                     courseLevel={
                       courseData.courseLevel ||
                       (Course_Level_Enum.Level_1 as unknown as CourseLevel)
@@ -953,30 +542,23 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                       start: courseData.startDateTime,
                       end: courseData.endDateTime,
                     }}
-                    trainers={course.trainers}
-                    onChange={handleTrainersDataChange}
-                    autoFocus={false}
-                    isReAccreditation={courseData.reaccreditation}
+                    courseType={courseData.type}
                     isConversion={courseData.conversion}
-                    bildStrategies={
-                      courseData.bildStrategies
-                        ? (bildStrategiesToArray(
-                            courseData.bildStrategies,
-                          ) as unknown as BildStrategy[])
-                        : undefined
-                    }
-                    showAssistHint={false}
+                    isReAccreditation={courseData.reaccreditation}
                     methodsRef={trainerMethods}
+                    onChange={handleTrainersDataChange}
+                    showAssistHint={false}
+                    trainers={course.trainers}
                     useAOL={courseData.usesAOL}
                   />
                 ) : null}
 
                 {submitDisabled ? (
-                  <Alert severity="error" variant="outlined" sx={{ mt: 2 }}>
+                  <Alert severity="error" sx={{ mt: 2 }} variant="outlined">
                     {t('pages.edit-course.cannot-save-without-trainer')}
                   </Alert>
                 ) : showTrainerRatioWarning ? (
-                  <Alert severity="warning" variant="outlined" sx={{ mt: 2 }}>
+                  <Alert severity="warning" sx={{ mt: 2 }} variant="outlined">
                     {t(
                       `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
                     )}
@@ -985,14 +567,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                 <Box
                   display="flex"
+                  flexDirection={isMobile ? 'column' : 'row'}
                   justifyContent="space-between"
                   mt={4}
-                  flexDirection={isMobile ? 'column' : 'row'}
                 >
                   {cancellableCourse && canCancelCourse ? (
                     <Button
                       data-testid="cancel-course-button"
-                      variant="outlined"
                       onClick={() => {
                         if (
                           course.type === Course_Type_Enum.Open &&
@@ -1004,6 +585,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                         }
                       }}
                       startIcon={<Cancel color="error" />}
+                      variant="outlined"
                     >
                       {t('pages.edit-course.cancel-this-course')}
                     </Button>
@@ -1013,23 +595,31 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                   <Button
                     data-testid="reset-edit-course-button"
-                    variant="outlined"
                     onClick={handleReset}
                     startIcon={<Cancel color="error" />}
+                    variant="outlined"
                   >
                     {t('pages.edit-course.reset-button-text')}
                   </Button>
 
                   <LoadingButton
-                    variant="contained"
-                    onClick={submitButtonHandler}
-                    loading={fetching || notifyCourseEditLoading}
                     data-testid="save-button"
-                    sx={{ mt: isMobile ? 2 : 0 }}
-                    endIcon={canGoToCourseBuilder ? <ArrowForwardIcon /> : null}
                     disabled={submitDisabled}
+                    endIcon={
+                      canGoToCourseBuilder || requireNewOrderForGo1Licenses ? (
+                        <ArrowForwardIcon />
+                      ) : null
+                    }
+                    loading={fetching}
+                    onClick={submitButtonHandler}
+                    sx={{ mt: isMobile ? 2 : 0 }}
+                    variant="contained"
                   >
-                    {canGoToCourseBuilder
+                    {requireNewOrderForGo1Licenses
+                      ? t(
+                          'pages.create-course.step-navigation-review-and-confirm',
+                        )
+                      : canGoToCourseBuilder
                       ? t('pages.edit-course.course-builder-button-text')
                       : t('pages.edit-course.save-button-text')}
                   </LoadingButton>
@@ -1037,10 +627,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                 {!allowCourseEditWithoutScheduledPrice && (
                   <Alert
-                    severity="error"
-                    variant="outlined"
-                    sx={{ marginTop: '1rem' }}
                     data-testid="price-error-banner"
+                    severity="error"
+                    sx={{ marginTop: '1rem' }}
+                    variant="outlined"
                   >
                     {t('pages.create-course.no-course-price')}
                   </Alert>
@@ -1054,33 +644,34 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       {course ? (
         <>
           <Dialog
-            open={showRegistrantsCancellationModal}
-            onClose={() => setShowRegistrantsCancellationModal(false)}
             maxWidth={700}
+            onClose={() => setShowRegistrantsCancellationModal(false)}
+            open={showRegistrantsCancellationModal}
           >
             <DialogTitle>
-              <Typography variant="h3" fontWeight={600}>
+              <Typography fontWeight={600} variant="h3">
                 {t('pages.edit-course.cancellation-modal.title')}
               </Typography>
             </DialogTitle>
+
             <RegistrantsCancellationModal
-              onTransfer={() => navigate(`/courses/${course.id}/details`)}
               onProceed={async () => {
                 setShowRegistrantsCancellationModal(false)
                 setShowCancellationModal(true)
               }}
+              onTransfer={() => navigate(`/courses/${course.id}/details`)}
             />
           </Dialog>
 
           <Dialog
-            open={showCancellationModal}
+            maxWidth={600}
             onClose={() => setShowCancellationModal(false)}
+            open={showCancellationModal}
             title={
-              <Typography variant="h3" fontWeight={600}>
+              <Typography fontWeight={600} variant="h3">
                 {t('pages.edit-course.cancellation-modal.title')}
               </Typography>
             }
-            maxWidth={600}
           >
             <CourseCancellationModal
               course={course}
@@ -1099,26 +690,27 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           </Dialog>
 
           <ReviewChangesModal
-            open={showReviewModal}
-            diff={courseDiffs}
-            onCancel={() => setShowReviewModal(false)}
-            onConfirm={reviewInput => {
-              saveChanges(reviewInput)
-            }}
-            withFees={course.type === Course_Type_Enum.Closed}
             alignedWithProtocol={
               canRescheduleCourseEndDate || Boolean(alignedWithProtocol)
             }
+            diff={courseDiffs}
             level={course.level as unknown as Course_Level_Enum}
+            onCancel={() => setShowReviewModal(false)}
+            onConfirm={reviewInput => {
+              setEditCourseReviewInput(reviewInput)
+              nextStep(reviewInput)
+            }}
+            open={showReviewModal}
             priceCurrency={course.priceCurrency}
+            withFees={course.type === Course_Type_Enum.Closed}
           />
 
           <CourseExceptionsConfirmation
-            open={courseExceptions.length > 0}
+            courseType={courseData?.type ?? undefined}
+            exceptions={courseExceptions}
             onCancel={() => setCourseExceptions([])}
             onSubmit={editCourse}
-            exceptions={courseExceptions}
-            courseType={courseData?.type ?? undefined}
+            open={courseExceptions.length > 0}
           />
         </>
       ) : null}

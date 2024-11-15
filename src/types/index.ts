@@ -194,6 +194,8 @@ export type Organization = {
   main_organisation?: Organization
   affiliated_organisations?: Organization[]
   affiliated_organisations_aggregate?: { aggregate: { count: number } }
+  reservedCourseLicenses?: { aggregate: { sum: { change: number } } }
+  reservedGo1Licenses?: number
 } & Base
 
 export type OrganizationMember = {
@@ -594,14 +596,12 @@ export type CourseInput = {
   arloReferenceId?: string
   bildStrategies: Record<BildStrategies, boolean> | null
   blendedLearning: boolean
-
   bookingContact: {
     email: string
     firstName: string
     lastName: string
     profileId?: string
   } | null
-
   conversion: boolean
   courseCost: number | null
   courseLevel: Course_Level_Enum | Course_Level | ''
@@ -610,6 +610,7 @@ export type CourseInput = {
   endDate: Date | null
   endDateTime: Date | null
   endTime: string
+  freeCourseMaterials?: number | null
   freeSpaces: number | null
   gradingConfirmed?: boolean | null
   id: number
@@ -617,15 +618,12 @@ export type CourseInput = {
   maxParticipants: number | null
   minParticipants: number | null
   organization: Organization | null
-  freeCourseMaterials?: number | null
-
   organizationKeyContact: {
     email: string
     firstName: string
     lastName: string
     profileId?: string
   } | null
-
   parkingInstructions: string
   price: number | null | undefined
   priceCurrency?: string
@@ -847,14 +845,14 @@ export type Go1LicensingPrices = {
 }
 
 export type InvoiceDetails = {
+  billingAddress: string
+  email: string
+  firstName: string
   orgId: string
   orgName: string
-  billingAddress: string
-  firstName: string
-  surname: string
-  email: string
   phone: string
   purchaseOrder: string
+  surname: string
 }
 
 export type Draft = {

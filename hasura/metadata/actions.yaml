@@ -381,6 +381,17 @@ actions:
       - role: user
       - role: sales-representative
     comment: Send course information to the specified course attendees
+  - name: sendIndirectBLCourseInvites
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/go1-licensing/send-invite'
+    permissions:
+      - role: organization-key-contact
+      - role: tt-ops
+      - role: sales-admin
+      - role: trainer
+      - role: tt-admin
+    comment: Send course invitations and verify Go1 license validity for Indirect blended learning courses.
   - name: signUp
     definition:
       kind: synchronous
@@ -984,6 +995,17 @@ custom_types:
         - description: null
           is_deprecated: null
           value: INVALID_DATA
+    - name: SendIndirectBLCourseInvitesError
+      values:
+        - description: null
+          is_deprecated: null
+          value: INSUFFICIENT_NUMBER_OF_LICENSES
+        - description: null
+          is_deprecated: null
+          value: INTERNAL_SERVER_ERROR
+        - description: null
+          is_deprecated: null
+          value: UNAUTHORIZED
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1024,6 +1046,8 @@ custom_types:
     - name: ImportUsersInput
     - name: ImportUsersConfig
     - name: OrganizationProfilesInput
+    - name: Invite
+    - name: SendIndirectBLCourseInvitesInput
     - name: ImportOrganisationsInput
     - name: ImportOrganisationsConfig
   objects:
@@ -1035,7 +1059,6 @@ custom_types:
     - name: DeclineInviteOutput
     - name: DeclineOrgInviteOutput
     - name: AcceptOrgInviteOutput
-    - name: Invite
     - name: CourseInvite
     - name: OrgInvite
     - name: Address
@@ -1125,6 +1148,7 @@ custom_types:
     - name: ImportArloCertificatesError
     - name: FailedImportEntries
     - name: InvalidEntries
+    - name: SendIndirectBLCourseInvitesOutput
     - name: ImportOrganisationsOutput
   scalars:
     - name: Date

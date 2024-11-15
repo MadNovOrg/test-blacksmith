@@ -122,47 +122,49 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - id
         - attendeesQuantity
-        - payment_method
         - billing_address
-        - billing_given_name
-        - billing_family_name
         - billing_email
+        - billing_family_name
+        - billing_given_name
         - billing_phone
-        - registrants
-        - created_at
-        - vat
-        - organization_id
-        - currency
-        - promo_codes
         - client_purchase_order
+        - created_at
+        - currency
+        - id
+        - invitees
+        - organization_id
+        - payment_method
+        - promo_codes
+        - registrants
         - user
+        - vat
   - role: tt-admin
     permission:
       check: {}
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - id
         - attendeesQuantity
-        - payment_method
         - billing_address
-        - billing_given_name
-        - billing_family_name
         - billing_email
+        - billing_family_name
+        - billing_given_name
         - billing_phone
-        - registrants
-        - vat
-        - created_at
-        - organization_id
-        - currency
-        - promo_codes
-        - xero_invoice_number
         - client_purchase_order
-        - user
-        - source
+        - created_at
+        - currency
+        - id
+        - invitees
+        - organization_id
+        - payment_method
+        - promo_codes
+        - registrants
         - sales_representative_id
+        - source
+        - user
+        - vat
+        - xero_invoice_number
   - role: tt-ops
     permission:
       check: {}
@@ -358,59 +360,61 @@ select_permissions:
   - role: tt-admin
     permission:
       columns:
-        - id
-        - profile_id
         - attendeesQuantity
-        - payment_method
         - billing_address
-        - billing_given_name
-        - billing_family_name
         - billing_email
+        - billing_family_name
+        - billing_given_name
         - billing_phone
-        - registrants
+        - booking_contact
+        - client_purchase_order
         - created_at
-        - price
-        - vat
+        - currency
+        - id
+        - order_due
         - order_total
         - organization_id
-        - currency
-        - stripePaymentId
+        - payment_method
+        - price
+        - profile_id
         - promo_codes
-        - order_due
-        - xero_invoice_number
-        - user
-        - source
+        - registrants
         - sales_representative_id
-        - booking_contact
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
       filter: {}
       allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
-        - id
-        - profile_id
         - attendeesQuantity
-        - payment_method
         - billing_address
-        - billing_given_name
-        - billing_family_name
         - billing_email
+        - billing_family_name
+        - billing_given_name
         - billing_phone
-        - registrants
+        - booking_contact
+        - client_purchase_order
         - created_at
-        - price
-        - vat
+        - currency
+        - id
+        - order_due
         - order_total
         - organization_id
-        - currency
-        - stripePaymentId
+        - payment_method
+        - price
+        - profile_id
         - promo_codes
-        - order_due
-        - xero_invoice_number
-        - user
-        - source
+        - registrants
         - sales_representative_id
-        - booking_contact
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
       filter: {}
       allow_aggregations: true
   - role: unverified

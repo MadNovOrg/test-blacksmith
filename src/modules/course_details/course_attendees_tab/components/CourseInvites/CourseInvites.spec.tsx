@@ -47,6 +47,8 @@ const useCourseInvitesDefaults = {
   resend: vi.fn(),
   cancel: vi.fn(),
   getInvites: vi.fn(),
+  pollRunning: false,
+  startPolling: vi.fn(),
 }
 
 vi.mock('file-saver', () => ({ saveAs: vi.fn() }))
@@ -305,7 +307,13 @@ describe(CourseInvites.name, () => {
     await userEvent.click(screen.getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
+      emails,
+      course: {
+        go1Integration: course.go1Integration,
+        type: course.type,
+      },
+    })
   })
 
   it('calls invites.send with a csv email addresses', async () => {
@@ -328,7 +336,13 @@ describe(CourseInvites.name, () => {
     await userEvent.click(screen.getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
+      emails,
+      course: {
+        go1Integration: course.go1Integration,
+        type: course.type,
+      },
+    })
   })
 
   it('calls invites.send when all emails are valid', async () => {
@@ -353,7 +367,13 @@ describe(CourseInvites.name, () => {
     await userEvent.click(screen.getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
+      emails,
+      course: {
+        go1Integration: course.go1Integration,
+        type: course.type,
+      },
+    })
   })
 
   it('calls invites.send with left overs (not tagged)', async () => {
@@ -379,10 +399,13 @@ describe(CourseInvites.name, () => {
     await userEvent.click(screen.getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith([
-      email,
-      leftOver,
-    ])
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
+      emails: [email, leftOver],
+      course: {
+        go1Integration: course.go1Integration,
+        type: course.type,
+      },
+    })
   })
 
   it('should accept emails with whitespace paddings', async () => {
@@ -405,9 +428,13 @@ describe(CourseInvites.name, () => {
     await userEvent.click(screen.getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(
-      emails.map(e => e.trim()),
-    )
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
+      emails: emails.map(e => e.trim()),
+      course: {
+        go1Integration: course.go1Integration,
+        type: course.type,
+      },
+    })
   })
 
   it("doesn't display the invite attendees button for trainers on a closed course", () => {

@@ -307,6 +307,7 @@ export function useSaveCourse(): {
             }
           : null),
       }
+
       const { data: response } = await insertCourse({
         course: {
           /// TODO: Delete this after Arlo migration

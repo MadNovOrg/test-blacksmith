@@ -7,7 +7,7 @@ import {
   SaveCourseInvitesMutation,
   SaveCourseInvitesMutationVariables,
 } from '@app/generated/graphql'
-import { SAVE_INVITE } from '@app/modules/course_details/course_attendees_tab/hooks/useCourseInvites/useCourseInvites'
+import { SAVE_COURSE_INVITES } from '@app/modules/course_details/course_attendees_tab/hooks/useCourseInvites/useCourseInvites'
 import { RoleName } from '@app/types'
 
 import * as API from '@qa/api'
@@ -61,7 +61,7 @@ allowedRoles.forEach(role => {
     const trainerId = await getProfileId(users.trainer.email)
 
     const results = await runQueryAsRole<SaveCourseInvitesMutation>(
-      SAVE_INVITE,
+      SAVE_COURSE_INVITES,
       buildMutationInput(course.id),
       role,
       {
@@ -78,7 +78,7 @@ forbiddenRoles.forEach(role => {
     course,
   }) => {
     await expect(
-      runQueryAsRole(SAVE_INVITE, buildMutationInput(course.id), role, {
+      runQueryAsRole(SAVE_COURSE_INVITES, buildMutationInput(course.id), role, {
         'x-hasura-user-id': uuidv4(),
         'x-hasura-user-email': 'whatever',
       }),

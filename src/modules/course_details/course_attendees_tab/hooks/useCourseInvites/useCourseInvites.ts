@@ -1,6 +1,7 @@
 import { differenceInSeconds } from 'date-fns'
 import { isPast } from 'date-fns'
 import { useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { gql, useMutation, useQuery } from 'urql'
 import isEmail from 'validator/lib/isEmail'
 import * as yup from 'yup'
@@ -10,13 +11,18 @@ import {
   CancelCourseInviteMutationVariables,
   Course_Invite_Status_Enum,
   Course_Invites_Order_By,
+  Course_Type_Enum,
   GetCourseInvitesQuery,
   GetCourseInvitesQueryVariables,
-  RecreateCourseInviteMutation,
-  RecreateCourseInviteMutationVariables,
   SaveCourseInvitesMutation,
   SaveCourseInvitesMutationVariables,
+  SaveIndirectBlCourseInvitesMutation,
+  SaveIndirectBlCourseInvitesMutationVariables,
+  SendCourseInvitesMutation,
+  SendCourseInvitesMutationVariables,
+  SendIndirectBlCourseInvitesError,
 } from '@app/generated/graphql'
+import usePollQuery from '@app/hooks/usePollQuery'
 import { SortOrder } from '@app/types'
 
 export const GET_COURSE_INVITES = gql`
@@ -47,25 +53,34 @@ export const GET_COURSE_INVITES = gql`
   }
 `
 
-export const RECREATE_COURSE_INVITE = gql`
-  mutation RecreateCourseInvite(
-    $inviteId: uuid!
-    $courseId: Int
-    $email: String
-    $expiresIn: timestamptz
-  ) {
-    delete_course_invites_by_pk(id: $inviteId) {
-      id
+export const SEND_COURSE_INVITES = gql`
+  mutation SendCourseInvites($invites: [course_invites_insert_input!]!) {
+    insert_course_invites(
+      objects: $invites
+      on_conflict: {
+        constraint: course_invites_email_course_id_key
+        update_columns: [createdAt, status]
+      }
+    ) {
+      returning {
+        id
+      }
     }
-    insert_course_invites_one(
-      object: { course_id: $courseId, email: $email, expiresIn: $expiresIn }
+  }
+`
+
+export const CANCEL_COURSE_INVITE = gql`
+  mutation CancelCourseInvite($inviteId: uuid!) {
+    update_course_invites_by_pk(
+      pk_columns: { id: $inviteId }
+      _set: { status: CANCELLED }
     ) {
       id
     }
   }
 `
 
-export const SAVE_INVITE = gql`
+export const SAVE_COURSE_INVITES = gql`
   mutation SaveCourseInvites($invites: [course_invites_insert_input!]!) {
     insert_course_invites(objects: $invites) {
       returning {
@@ -74,10 +89,15 @@ export const SAVE_INVITE = gql`
     }
   }
 `
-export const CANCEL_INVITE = gql`
-  mutation CancelCourseInvite($inviteId: uuid!) {
-    delete_course_invites_by_pk(id: $inviteId) {
-      id
+
+export const SAVE_INDIRECT_BL_COURSE_INVITES = gql`
+  mutation SaveIndirectBLCourseInvites(
+    $input: SendIndirectBLCourseInvitesInput!
+  ) {
+    sendIndirectBLCourseInvites(input: $input) {
+      insufficientNumberOfLicenses
+      error
+      success
     }
   }
 `
@@ -96,19 +116,25 @@ const emailsSchema = yup
 
 export default function useCourseInvites({
   courseId,
-  status,
-  order,
+  courseEnd,
   limit,
   offset,
-  courseEnd,
+  order,
+  poll,
+  status,
 }: {
   courseId: number
-  status?: Course_Invite_Status_Enum
-  order?: SortOrder
+  courseEnd?: string
   limit?: number
   offset?: number
-  courseEnd?: string
+  order?: SortOrder
+  poll?: {
+    untilInvitees: string[]
+  }
+  status?: Course_Invite_Status_Enum
 }) {
+  const navigate = useNavigate()
+
   const where = {
     _and: [
       { course_id: { _eq: courseId } },
@@ -128,71 +154,119 @@ export default function useCourseInvites({
     requestPolicy: 'cache-and-network',
   })
 
-  const [, recreateCourseInvite] = useMutation<
-    RecreateCourseInviteMutation,
-    RecreateCourseInviteMutationVariables
-  >(RECREATE_COURSE_INVITE)
+  const pollingUntil = useCallback(() => {
+    if (!poll?.untilInvitees.length) return true
+
+    return (
+      poll?.untilInvitees.every(invitee =>
+        (invitesData?.courseInvites ?? []).some(
+          i =>
+            i.email?.trim().toLocaleLowerCase() ===
+            invitee.trim().toLocaleLowerCase(),
+        ),
+      ) ?? true
+    )
+  }, [invitesData?.courseInvites, poll?.untilInvitees])
+
+  const [startPolling, pollRunning] = usePollQuery(
+    () => {
+      getInvites({ fetchPolicy: 'network-only' })
+    },
+    pollingUntil,
+    {
+      interval: 2000,
+      maxPolls: 5,
+    },
+  )
+
+  const [, sendInvites] = useMutation<
+    SendCourseInvitesMutation,
+    SendCourseInvitesMutationVariables
+  >(SEND_COURSE_INVITES)
 
   const [, saveInvites] = useMutation<
     SaveCourseInvitesMutation,
     SaveCourseInvitesMutationVariables
-  >(SAVE_INVITE)
+  >(SAVE_COURSE_INVITES)
+
+  const [, saveIndirectBLCourseInvites] = useMutation<
+    SaveIndirectBlCourseInvitesMutation,
+    SaveIndirectBlCourseInvitesMutationVariables
+  >(SAVE_INDIRECT_BL_COURSE_INVITES)
 
   const [, cancelInvite] = useMutation<
     CancelCourseInviteMutation,
     CancelCourseInviteMutationVariables
-  >(CANCEL_INVITE)
+  >(CANCEL_COURSE_INVITE)
+
+  const getExpiresInDateForInviteResend = useCallback(() => {
+    /**
+     * @description This "expires in" date serves as a placeholder (for UI updates) for the actual
+     * expiration date, which will be updated based on the invite token.
+     * @author ion.mereuta@amdaris.com
+     * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-3429
+     */
+    const ONE_WEEK_IN_SECONDS = 604800 // 604800 seconds = 1 week
+
+    const secondsUntilWeekAfterCourseEnded = courseEnd
+      ? differenceInSeconds(
+          new Date(
+            new Date(courseEnd).setDate(new Date(courseEnd).getDate() + 7),
+          ),
+          new Date(),
+        )
+      : 0
+
+    const expiresInSeconds = Math.max(
+      ONE_WEEK_IN_SECONDS,
+      secondsUntilWeekAfterCourseEnded,
+    )
+
+    const expiresInDate = new Date(
+      new Date().setSeconds(new Date().getSeconds() + expiresInSeconds),
+    )
+
+    return expiresInDate
+  }, [courseEnd])
 
   const resend = useCallback(
     async (invite: GetCourseInvitesQuery['courseInvites'][0]) => {
-      /**
-       * @description This expires in data is a placeholder (for UI update) for the actual
-       * expires in date which will be updates accordingly to invite token
-       * @author ion.mereuta@amdaris.com
-       * @see https://behaviourhub.atlassian.net/jira/software/projects/TTHP/issues/TTHP-3429
-       */
-      const ONE_WEEK_IN_SECONDS = 604800 // 604800 seconds = 1 week
-
-      const secondsUntilWeekAfterCourseEnded = courseEnd
-        ? differenceInSeconds(
-            new Date(
-              new Date(courseEnd).setDate(new Date(courseEnd).getDate() + 7),
-            ),
-            new Date(),
-          )
-        : 0
-
-      const expiresInSeconds = Math.max(
-        ONE_WEEK_IN_SECONDS,
-        secondsUntilWeekAfterCourseEnded,
-      )
-
-      const expiresInDate = new Date(
-        new Date().setSeconds(new Date().getSeconds() + expiresInSeconds),
-      )
-
-      await recreateCourseInvite({
-        inviteId: invite.id,
-        email: invite.email,
-        courseId,
-        expiresIn: expiresInDate,
+      await sendInvites({
+        invites: [
+          {
+            course_id: courseId,
+            email: invite.email,
+            expiresIn: getExpiresInDateForInviteResend(),
+            status: Course_Invite_Status_Enum.Pending,
+          },
+        ],
       })
     },
-    [courseEnd, courseId, recreateCourseInvite],
+    [courseId, getExpiresInDateForInviteResend, sendInvites],
   )
 
   // Save course invites
   const send = useCallback(
-    async (emails: string[]) => {
+    async ({
+      emails,
+      course,
+    }: {
+      emails: string[]
+      course: { go1Integration: boolean; type: Course_Type_Enum }
+    }) => {
       const declinedInvites =
         invitesData?.courseInvites.filter(
           i =>
-            i.status === Course_Invite_Status_Enum.Declined &&
+            [
+              Course_Invite_Status_Enum.Cancelled,
+              Course_Invite_Status_Enum.Declined,
+            ].includes(i.status as Course_Invite_Status_Enum) &&
             emails.includes(i.email as string),
         ) ?? []
 
-      const recentInvitesEmails =
-        invitesData?.courseInvites.map(i => i.email) ?? []
+      const recentInvitesEmails = (
+        invitesData?.courseInvites.map(i => i.email as string) ?? []
+      ).filter(invitee => !declinedInvites.some(i => i.email === invitee))
 
       const allValid = await emailsSchema.isValid(emails)
 
@@ -206,23 +280,88 @@ export default function useCourseInvites({
           !declinedInvites.some(i => i.email === email),
       )
 
+      if (
+        recentInvitesEmails.some(recentInviteeEmail =>
+          emails.includes(recentInviteeEmail),
+        ) &&
+        (newEmails.length || declinedInvites?.length)
+      ) {
+        throw Error('SOME_EMAILS_ALREADY_INVITED')
+      }
+
       if (!newEmails.length && !declinedInvites?.length) {
         throw Error('EMAILS_ALREADY_INVITED')
       }
 
-      await Promise.all(declinedInvites.map(invite => resend(invite)))
+      if (
+        !(course.go1Integration && course.type === Course_Type_Enum.Indirect)
+      ) {
+        await Promise.all(declinedInvites.map(invite => resend(invite)))
+      }
+
+      const invitedAfterCourseHasEnded = courseEnd
+        ? isPast(new Date(courseEnd))
+        : false
 
       const invites = newEmails.map(email => ({
         course_id: courseId,
         email,
-        invited_after_course_end: courseEnd
-          ? isPast(new Date(courseEnd))
-          : false,
+        invited_after_course_end: invitedAfterCourseHasEnded,
       }))
 
-      await saveInvites({ invites })
+      if (course.go1Integration && course.type === Course_Type_Enum.Indirect) {
+        const actionInvitesData = [
+          ...newEmails.map(email => ({
+            email,
+            invitedAfterCourseHasEnded,
+          })),
+          ...declinedInvites
+            .filter(invite => Boolean(invite.email))
+            .map(invite => ({
+              email: invite.email as string,
+              expiresIn: getExpiresInDateForInviteResend().toISOString(),
+              invitedAfterCourseHasEnded,
+              status: Course_Invite_Status_Enum.Pending,
+            })),
+        ]
+
+        const resp = await saveIndirectBLCourseInvites({
+          input: {
+            courseId,
+            invites: actionInvitesData,
+          },
+        })
+
+        if (
+          !resp.data?.sendIndirectBLCourseInvites?.success &&
+          resp.data?.sendIndirectBLCourseInvites?.error ===
+            SendIndirectBlCourseInvitesError.InsufficientNumberOfLicenses &&
+          (resp.data.sendIndirectBLCourseInvites.insufficientNumberOfLicenses ??
+            0)
+        ) {
+          navigate(`/courses/edit/${courseId}/review-licenses-order`, {
+            state: {
+              insufficientNumberOfLicenses: resp.data
+                .sendIndirectBLCourseInvites
+                .insufficientNumberOfLicenses as number,
+              invitees: actionInvitesData,
+            },
+          })
+        }
+      } else {
+        await saveInvites({ invites })
+      }
     },
-    [invitesData?.courseInvites, saveInvites, resend, courseId, courseEnd],
+    [
+      invitesData?.courseInvites,
+      courseEnd,
+      resend,
+      courseId,
+      getExpiresInDateForInviteResend,
+      saveIndirectBLCourseInvites,
+      navigate,
+      saveInvites,
+    ],
   )
 
   const cancel = useCallback(
@@ -234,24 +373,28 @@ export default function useCourseInvites({
 
   return useMemo(
     () => ({
-      data: invitesData?.courseInvites ?? [],
-      total: invitesData?.courseInvitesAggregate?.aggregate?.count ?? 0,
-      fetching: invitesFetching,
-      error: invitesError,
-      send,
-      resend,
       cancel,
+      data: invitesData?.courseInvites ?? [],
+      error: invitesError,
+      fetching: invitesFetching,
       getInvites,
+      pollRunning,
+      resend,
+      send,
+      startPolling,
+      total: invitesData?.courseInvitesAggregate?.aggregate?.count ?? 0,
     }),
     [
-      invitesData?.courseInvites,
-      invitesData?.courseInvitesAggregate?.aggregate?.count,
-      invitesFetching,
-      invitesError,
-      send,
-      resend,
       cancel,
       getInvites,
+      invitesData?.courseInvites,
+      invitesData?.courseInvitesAggregate?.aggregate?.count,
+      invitesError,
+      invitesFetching,
+      pollRunning,
+      resend,
+      send,
+      startPolling,
     ],
   )
 }

@@ -144,6 +144,13 @@ array_relationships:
         table:
           name: course_exceptions
           schema: public
+  - name: course_audits
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          name: course_audit
+          schema: public
   - name: course_course_participant_audits
     using:
       foreign_key_constraint_on:
@@ -238,6 +245,11 @@ computed_fields:
     definition:
       function:
         name: course_free_slots
+        schema: public
+  - name: reservedGo1Licenses
+    definition:
+      function:
+        name: course_reserved_go1_licenses
         schema: public
   - name: state
     definition:
@@ -1684,6 +1696,17 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/booking-contact'
+  - name: course_completed
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - course_status
+    retry_conf:
+      interval_sec: 0
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/completed'
   - name: course_created
     definition:
       enable_manual: false

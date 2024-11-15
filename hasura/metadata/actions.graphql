@@ -273,6 +273,12 @@ type Mutation {
 }
 
 type Mutation {
+  sendIndirectBLCourseInvites(
+    input: SendIndirectBLCourseInvitesInput!
+  ): SendIndirectBLCourseInvitesOutput
+}
+
+type Mutation {
   signUp(
     input: SignUpInput!
   ): SignUpOutput
@@ -593,6 +599,12 @@ enum ImportFailCause {
   INVALID_DATA
 }
 
+enum SendIndirectBLCourseInvitesError {
+  INSUFFICIENT_NUMBER_OF_LICENSES
+  INTERNAL_SERVER_ERROR
+  UNAUTHORIZED
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -887,6 +899,18 @@ input OrganizationProfilesInput {
   offset: Int
 }
 
+input Invite {
+  email: String!
+  expiresIn: String
+  invitedAfterCourseHasEnded: Boolean!
+  status: String
+}
+
+input SendIndirectBLCourseInvitesInput {
+  courseId: Int!
+  invites: [Invite!]!
+}
+
 input ImportOrganisationsInput {
   data: String!
   config: ImportOrganisationsConfig!
@@ -952,10 +976,6 @@ type AcceptOrgInviteOutput {
   id: uuid
   error: Boolean
   errorMessage: String
-}
-
-type Invite {
-  status: InviteStatus
 }
 
 type CourseInvite {
@@ -1523,6 +1543,12 @@ type FailedImportEntries {
 
 type InvalidEntries {
   email: String!
+}
+
+type SendIndirectBLCourseInvitesOutput {
+  insufficientNumberOfLicenses: Int
+  success: Boolean!
+  error: SendIndirectBLCourseInvitesError
 }
 
 type ImportOrganisationsOutput {

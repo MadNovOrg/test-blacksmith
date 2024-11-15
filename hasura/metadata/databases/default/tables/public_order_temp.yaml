@@ -113,6 +113,34 @@ insert_permissions:
         - id
         - organization_id
         - profile_id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - vat
+        - attendeesQuantity
+        - course_id
+        - registrants
+        - booking_contact
+        - promo_codes
+        - user
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - currency
+        - payment_method
+        - source
+        - stripePaymentId
+        - xero_invoice_number
+        - created_at
+        - id
+        - organization_id
+        - profile_id
+        - sales_representative_id
+    comment: ""
 update_permissions:
   - role: sales-admin
     permission:

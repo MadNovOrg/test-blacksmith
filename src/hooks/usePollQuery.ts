@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useInterval } from 'react-use'
 
 type PollFnType = () => Promise<unknown> | void
-type UntilFnType = () => boolean
+export type UntilFnType = () => boolean
 
 const DEFAULT_INTERVAL = 1000
 const DEFAULT_MAX_POLLS = 10

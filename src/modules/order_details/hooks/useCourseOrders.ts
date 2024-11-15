@@ -13,6 +13,7 @@ export const GET_COURSE_ORDERS = gql`
       quantity
       order {
         id
+        attendeesQuantity
         registrants
         paymentMethod
         currency

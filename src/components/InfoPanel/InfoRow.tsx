@@ -10,7 +10,13 @@ export const InfoRow: React.FC<
     value?: string | React.ReactElement
   }>
 > = ({ label, value, children }) => (
-  <Box display="flex" alignItems="center" justifyContent="space-between" mt={1}>
+  <Box
+    display="flex"
+    alignItems="center"
+    justifyContent="space-between"
+    mt={1}
+    data-testid={`${label}-info-row`}
+  >
     {children ? (
       children
     ) : (
