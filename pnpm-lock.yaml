@@ -422,8 +422,8 @@ importers:
         specifier: ^6.2.2
         version: 6.2.2
       '@types/convert-units':
-        specifier: ^2.3.6
-        version: 2.3.6
+        specifier: ^2.3.11
+        version: 2.3.11
       '@types/file-saver':
         specifier: ^2.0.7
         version: 2.0.7
@@ -5580,8 +5580,8 @@ packages:
   '@types/connect@3.4.35':
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
 
-  '@types/convert-units@2.3.6':
-    resolution: {integrity: sha512-+3mCmThR2VSvD/WfpVdU1YE9S4oHrIrlLaI+pPwS2G9g4Jg19Jd/xNau81h5639dzW6St9iLtKYqeLcKHh5sjA==}
+  '@types/convert-units@2.3.11':
+    resolution: {integrity: sha512-ld2+nLOUHMOFThcXQEcVgzoNVjjyBHp/dD5G00nS5TOfgDqIcAyX1T8xR2C162qjfEIby3AoxwwB1Vl9mLdvsQ==}
 
   '@types/cookie@0.3.3':
     resolution: {integrity: sha512-LKVP3cgXBT9RYj+t+9FDKwS5tdI+rPBXaNSkma7hvqy35lc7mAokC2zsqWJH0LaqIt3B962nuYI77hsJoT1gow==}
@@ -20785,7 +20785,7 @@ snapshots:
     dependencies:
       '@types/node': 20.14.8
 
-  '@types/convert-units@2.3.6': {}
+  '@types/convert-units@2.3.11': {}
 
   '@types/cookie@0.3.3': {}
 
