@@ -64,7 +64,7 @@ INSERT INTO module_v2("display_name", "name", "lessons") VALUES
       "name": "CALM Communication"
     }
   ]
-}');
+}') ON CONFLICT ("name") DO NOTHING;
 
 
 INSERT INTO module_setting("course_level", "reaccreditation", "go1_integration", "color", "duration", "course_delivery_type", "course_type", "module_name", "sort", "mandatory", "conversion", "shard") VALUES
@@ -108,4 +108,5 @@ INSERT INTO module_setting("course_level", "reaccreditation", "go1_integration",
             (E'LEVEL_1_NP', true, false, 'navy', 60, 'MIXED','INDIRECT', 'Communication Level One NP ANZ', 2, true, false, 'ANZ'),
 
             (E'LEVEL_1_NP', true, true, 'navy', 240, 'MIXED','INDIRECT', 'Theory Level One NP ANZ', 1, true, false, 'ANZ'),
-            (E'LEVEL_1_NP', true, true, 'navy', 60, 'MIXED','INDIRECT', 'Communication Level One NP ANZ', 2, true, false, 'ANZ');
+            (E'LEVEL_1_NP', true, true, 'navy', 60, 'MIXED','INDIRECT', 'Communication Level One NP ANZ', 2, true, false, 'ANZ')
+            ON CONFLICT DO NOTHING;
