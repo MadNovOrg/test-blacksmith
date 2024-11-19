@@ -11,7 +11,10 @@ import {
   CourseTrainerType,
   Course as GeneratedCourseType,
 } from '@app/generated/graphql'
-import { getLevels } from '@app/modules/course/components/CourseForm/helpers'
+import {
+  getANZLevels,
+  getLevels,
+} from '@app/modules/course/components/CourseForm/helpers'
 import { isCertificateOutsideGracePeriod } from '@app/modules/course_details/course_certification_tab/pages/CourseCertification/utils'
 import {
   courseCategoryUserAttends,
@@ -399,7 +402,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const allowedICMLevels =
         acl.allowedCourseLevels(
           Course_Type_Enum.Indirect,
-          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm),
+          acl.isUK()
+            ? getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm)
+            : getANZLevels(Course_Type_Enum.Indirect),
         ).length > 0
       const allowedBILDLevels =
         acl.allowedCourseLevels(
