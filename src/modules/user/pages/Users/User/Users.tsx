@@ -172,7 +172,20 @@ export const Users = () => {
 
       Object.assign(filterConditions, {
         certificates: {
-          _and: [{ courseLevel }, { status }],
+          _and: [
+            {
+              _and: [
+                { courseLevel },
+                {
+                  _or: [
+                    { participant: { completed_evaluation: { _eq: true } } },
+                    { legacyCourseCode: { _is_null: false, _neq: '' } },
+                  ],
+                },
+              ],
+            },
+            { status },
+          ],
         },
       })
     }
@@ -492,7 +505,6 @@ export const Users = () => {
                         Course_Level_Enum.BildAdvancedTrainer,
                         Course_Level_Enum.BildIntermediateTrainer,
                         Course_Level_Enum.BildRegular,
-                        Course_Level_Enum.Level_1Np,
                       ])
                     : new Set([
                         Course_Level_Enum.FoundationTrainer,

@@ -19,7 +19,7 @@ export const PricingFilters: React.FC<Props> = ({ onChange }) => {
 
   const excludedLevels = useMemo(() => {
     const levels = new Set(BILD_COURSE_LEVELS)
-    levels.add(Course_Level_Enum.Level_1Np) // will become available for ANZ when it will be implemented. for now it was added for the Certificate import tool
+    levels.add(Course_Level_Enum.Level_1Np) // TODO remove when NP is added on open and closed
 
     if (isUK()) {
       levels.add(Course_Level_Enum.FoundationTrainer)

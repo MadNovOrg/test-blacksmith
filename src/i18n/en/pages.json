@@ -1450,6 +1450,7 @@
           "advanced": "Advanced Modules ({{ count }})",
           "level_1": "Level One ({{ count }})",
           "level_1_bs": "Level One Behaviour Support ({{ count }})",
+          "level_1_np": "Level One Non-Physical ({{ count }})",
           "level_2": "Level Two ({{ count }})",
           "intermediate_trainer": "Intermediate Trainer ({{ count }})",
           "bild_regular": "BILD Certified ({{ count }})",

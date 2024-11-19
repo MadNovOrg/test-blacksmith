@@ -855,4 +855,57 @@ describe('getRequiredTrainersV2 ANZ', () => {
       max: 2,
     })
   })
+  it('test assist ratio value for Level 1 Non-Physical Indirect course', () => {
+    criteria.courseLevel = Course_Level_Enum.Level_1Np
+    criteria.type = Course_Type_Enum.Indirect
+    criteria.isUKCountry = false
+
+    // Below threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 23,
+        }),
+      ),
+    ).toEqual({
+      min: 0,
+      max: 0,
+    })
+
+    // Equal to threshold
+    expect(
+      getRequiredAssistants(
+        extend({}, criteria, {
+          maxParticipants: 24,
+        }),
+      ),
+    ).toEqual({
+      min: 0,
+      max: 1,
+    })
+
+    // Above threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 25 })),
+    ).toEqual({
+      min: 1,
+      max: 1,
+    })
+
+    // Next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 48 })),
+    ).toEqual({
+      min: 1,
+      max: 2,
+    })
+
+    // Above next increment threshold
+    expect(
+      getRequiredAssistants(extend({}, criteria, { maxParticipants: 49 })),
+    ).toEqual({
+      min: 2,
+      max: 2,
+    })
+  })
 })

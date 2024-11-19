@@ -51,6 +51,9 @@ export function getAvailableGrades(
   if (courseLevel === Course_Level_Enum.FoundationTrainer) {
     return [Grade_Enum.Pass, Grade_Enum.Fail]
   }
+  if (courseLevel === Course_Level_Enum.Level_1Np) {
+    return [Grade_Enum.Pass, Grade_Enum.Fail]
+  }
 
   return [Grade_Enum.Pass, Grade_Enum.ObserveOnly, Grade_Enum.Fail]
 }

@@ -90,6 +90,7 @@ export function getANZLevels(courseType: Course_Type_Enum) {
 
     [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Indirect}`]: () => {
       return [
+        Course_Level_Enum.Level_1Np,
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
@@ -274,6 +275,7 @@ export function canBeBlendedANZ(
         const levels = [
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_1Np,
           Course_Level_Enum.Level_2,
         ]
         return levels.includes(courseLevel as Course_Level_Enum)
@@ -304,6 +306,7 @@ export function canBeBlendedANZ(
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_1Np,
         ]
         return levels.includes(courseLevel as Course_Level_Enum)
       }
@@ -313,12 +316,13 @@ export function canBeBlendedANZ(
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_1Np,
         ]
         return levels.includes(courseLevel as Course_Level_Enum)
       }
 
       if (isVirtual) {
-        const levels = [Course_Level_Enum.Level_1]
+        const levels = [Course_Level_Enum.Level_1, Course_Level_Enum.Level_1Np]
         return levels.includes(courseLevel as Course_Level_Enum)
       }
 
@@ -549,6 +553,7 @@ export function canBeReaccANZ(
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_1Np,
         ]
         return levels.includes(courseLevel)
       }
@@ -558,7 +563,12 @@ export function canBeReaccANZ(
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_2,
           Course_Level_Enum.Level_1Bs,
+          Course_Level_Enum.Level_1Np,
         ]
+        return levels.includes(courseLevel)
+      }
+      if (isVirtual) {
+        const levels = [Course_Level_Enum.Level_1Np]
         return levels.includes(courseLevel)
       }
 
@@ -666,6 +676,56 @@ export function canBeF2F(
   return types[courseType]()
 }
 
+export function canBeF2FANZ(
+  courseType: Course_Type_Enum,
+  courseLevel: Course_Level_Enum | '',
+) {
+  const types = {
+    [Course_Type_Enum.Open]: () => {
+      if (!courseLevel) return false
+
+      const levels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
+      ]
+      return levels.includes(courseLevel)
+    },
+
+    [Course_Type_Enum.Closed]: () => {
+      if (!courseLevel) return false
+
+      const levels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+        Course_Level_Enum.IntermediateTrainer,
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.FoundationTrainerPlus,
+      ]
+      return levels.includes(courseLevel)
+    },
+
+    [Course_Type_Enum.Indirect]: () => {
+      if (!courseLevel) return false
+
+      const levels = [
+        Course_Level_Enum.Level_1,
+        Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_1Np,
+        Course_Level_Enum.Level_2,
+        Course_Level_Enum.Advanced,
+      ]
+      return levels.includes(courseLevel)
+    },
+  }
+
+  return types[courseType]()
+}
+
 export function canBeMixed(
   courseType: Course_Type_Enum,
   courseLevel: Course_Level_Enum | '',
@@ -747,6 +807,7 @@ export function canBeANZMixed(
       const levels = [
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_1Np,
         Course_Level_Enum.Level_2,
       ]
       return levels.includes(courseLevel)
@@ -811,7 +872,7 @@ export function canBeANZVirtual(
     [Course_Type_Enum.Indirect]: () => {
       if (!courseLevel) return false
 
-      const levels = [] as Course_Level_Enum[]
+      const levels = [Course_Level_Enum.Level_1Np] as Course_Level_Enum[]
       return levels.includes(courseLevel)
     },
   }

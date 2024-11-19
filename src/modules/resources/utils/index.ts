@@ -17,6 +17,7 @@ enum NonTrainerCoursesEnum {
   Level2 = 'LEVEL_2',
   BildRegular = 'BILD_REGULAR',
   Advanced = 'ADVANCED',
+  Level1NP = 'LEVEL_1_NP',
 }
 
 export type AttendedCourseData = {

@@ -58,6 +58,19 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(screen.getByLabelText('Both')).toBeEnabled()
   })
 
+  it('allows INDIRECT+LEVEL_1_NP to be F2F, VIRTUAL or MIXED', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    expect(screen.getByLabelText('Face to face')).toBeEnabled()
+    expect(screen.getByLabelText('Virtual')).toBeEnabled()
+    expect(screen.getByLabelText('Both')).toBeEnabled()
+  })
+
   // Blended
   it('allows INDIRECT+LEVEL_1+F2F to be Blended', async () => {
     await waitFor(() => renderForm({ type }))
@@ -123,6 +136,60 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).not.toBeChecked()
   })
 
+  it('allows INDIRECT+LEVEL_1_NP+F2F to be Blended', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
+
+    const blended = screen.getByLabelText('Blended learning')
+    expect(blended).toBeEnabled()
+    expect(blended).not.toBeChecked()
+
+    await userEvent.click(blended)
+    expect(blended).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+MIXED to be Blended', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
+
+    const blended = screen.getByLabelText('Blended learning')
+    expect(blended).toBeEnabled()
+    expect(blended).not.toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+VIRTUAL to be Blended', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
+
+    const blended = screen.getByLabelText('Blended learning')
+    expect(blended).toBeEnabled()
+    expect(blended).not.toBeChecked()
+
+    await userEvent.click(blended)
+    expect(blended).toBeChecked()
+  })
+
   // Reaccreditation
   it('allows INDIRECT+LEVEL_1+F2F to be Reaccreditation', async () => {
     await waitFor(() => renderForm({ type }))
@@ -171,6 +238,123 @@ describe('component: CourseForm - INDIRECT', () => {
 
     await selectLevel(Course_Level_Enum.Level_2)
     await selectDelivery(Course_Delivery_Type_Enum.Mixed)
+
+    const blended = screen.getByLabelText('Blended learning')
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(blended).toBeEnabled()
+
+    expect(reacc).toBeEnabled()
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+F2F to be Reaccreditation', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
+
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(reacc).toBeEnabled()
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+MIXED to be Reaccreditation', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
+
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(reacc).toBeEnabled()
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+VIRTUAL to be Reaccreditation', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
+
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(reacc).toBeEnabled()
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+F2F to be Reaccreditation & Blended', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.F2F)
+
+    const blended = screen.getByLabelText('Blended learning')
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(blended).toBeEnabled()
+
+    expect(reacc).toBeEnabled()
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+MIXED to be Reaccreditation & Blended', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.Mixed)
+
+    const blended = screen.getByLabelText('Blended learning')
+    const reacc = screen.getByLabelText('Reaccreditation')
+
+    expect(blended).toBeEnabled()
+
+    expect(reacc).toBeEnabled()
+    await userEvent.click(reacc)
+    expect(reacc).toBeChecked()
+  })
+
+  it('allows INDIRECT+LEVEL_1_NP+VIRTUAL to be Reaccreditation & Blended', async () => {
+    await waitFor(() =>
+      renderForm({
+        type,
+        certificateLevel: Course_Level_Enum.FoundationTrainer,
+      }),
+    )
+
+    await selectLevel(Course_Level_Enum.Level_1Np)
+    await selectDelivery(Course_Delivery_Type_Enum.Virtual)
 
     const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')

@@ -147,4 +147,34 @@ describe('component: AssignTrainers', () => {
       screen.queryByTestId('trainer-ratio-exception'),
     ).not.toBeInTheDocument()
   })
+
+  it('does show trainer ratio warning if level is Level 1 Non-Physical', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    const overrides = {
+      max_participants: 24,
+      trainers: [],
+      level: Course_Level_Enum.Level_1Np,
+    }
+    const course = buildCourse({ overrides })
+
+    render(
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          initialValue={{
+            courseData: courseToCourseInput(course) as ValidCourseInput,
+          }}
+          courseType={Course_Type_Enum.Open}
+        >
+          <AssignTrainers />
+        </CreateCourseProvider>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('AssignTrainers-form')).toBeInTheDocument()
+    })
+
+    expect(screen.queryByTestId('trainer-ratio-exception')).toBeInTheDocument()
+  })
 })

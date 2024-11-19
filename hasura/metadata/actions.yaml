@@ -569,6 +569,9 @@ custom_types:
           value: LEVEL_1_BS
         - description: null
           is_deprecated: null
+          value: LEVEL_1_NP
+        - description: null
+          is_deprecated: null
           value: LEVEL_2
         - description: null
           is_deprecated: null

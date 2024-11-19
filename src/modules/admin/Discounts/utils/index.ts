@@ -66,7 +66,6 @@ export const DISCOUNT_STATUS_COLOR: Record<
 
 export const CLOSED_COURSE_LEVELS = [
   Course_Level_Enum.Level_1Bs,
-  Course_Level_Enum.Level_1Np,
   Course_Level_Enum.Advanced,
   Course_Level_Enum.BildRegular,
 ]
@@ -75,6 +74,7 @@ export const getAvailableCourseLevels = (isAustralia: boolean) => {
   if (isAustralia) {
     return [
       Course_Level_Enum.Level_1,
+      Course_Level_Enum.Level_1Np,
       Course_Level_Enum.Level_2,
       Course_Level_Enum.IntermediateTrainer,
       Course_Level_Enum.FoundationTrainer,

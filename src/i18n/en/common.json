@@ -10,6 +10,7 @@
     "advanced": "Advanced Modules",
     "level_1": "Level One",
     "level_1_bs": "Level One Behaviour Support",
+    "level_1_np": "Level One Non-Physical",
     "level_2": "Level Two",
     "intermediate_trainer": "Intermediate Trainer",
     "advanced_trainer": "Advanced Trainer",
@@ -266,6 +267,7 @@
   "course-levels": {
     "LEVEL_1": "Level One",
     "LEVEL_1_BS": "Level One Behaviour Support",
+    "LEVEL_1_NP": "Level One Non-Physical",
     "LEVEL_2": "Level Two",
     "ADVANCED": "Advanced Modules",
     "INTERMEDIATE_TRAINER": "Intermediate Trainer",

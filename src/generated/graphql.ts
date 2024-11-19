@@ -1374,6 +1374,7 @@ export enum CourseLevel {
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   Level_1 = 'LEVEL_1',
   Level_1Bs = 'LEVEL_1_BS',
+  Level_1Np = 'LEVEL_1_NP',
   Level_2 = 'LEVEL_2'
 }
 

@@ -60,7 +60,6 @@ export const CourseExceptionsLogFilters: FC<PropsWithChildren<Props>> = ({
                 Course_Level_Enum.BildAdvancedTrainer,
                 Course_Level_Enum.BildIntermediateTrainer,
                 Course_Level_Enum.BildRegular,
-                Course_Level_Enum.Level_1Np,
               ])
             : new Set([
                 Course_Level_Enum.FoundationTrainer,

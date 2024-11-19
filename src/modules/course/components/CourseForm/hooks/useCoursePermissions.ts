@@ -17,6 +17,7 @@ import {
   canBeBlendedBild,
   canBeConversion,
   canBeF2F,
+  canBeF2FANZ,
   canBeF2FBild,
   canBeMixed,
   canBeMixedBild,
@@ -81,11 +82,13 @@ export const useCoursePermissions = (
       isBlended,
     )
   }
-
-  const canF2F = isICM
+  const canBeF2FUK = isICM
     ? canBeF2F(type, courseLevel as Course_Level_Enum)
     : canBeF2FBild()
 
+  const canF2F = acl.isAustralia()
+    ? canBeF2FANZ(type, courseLevel as Course_Level_Enum)
+    : canBeF2FUK
   const canVirtual = () => {
     if (isAustraliaRegion) {
       return canBeANZVirtual(type, courseLevel as Course_Level_Enum)

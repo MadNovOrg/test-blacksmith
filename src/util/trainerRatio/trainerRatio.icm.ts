@@ -16,6 +16,7 @@ const {
   Level_1Bs,
   Level_2,
   FoundationTrainerPlus,
+  Level_1Np,
 } = Course_Level_Enum
 
 export type TrainerRatio = {
@@ -52,6 +53,10 @@ const getANZIndirectCourseRatio = ({ courseLevel }: TrainerRatioCriteria) => {
 
   if (courseLevel === Level_2) {
     return ratio(1, 24, 12)
+  }
+
+  if (courseLevel === Level_1Np) {
+    return ratio(0, 24, 24)
   }
 
   if (courseLevel === Level_1Bs) {
