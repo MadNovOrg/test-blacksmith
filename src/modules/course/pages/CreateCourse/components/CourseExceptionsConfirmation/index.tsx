@@ -7,7 +7,8 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material'
-import React from 'react'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
@@ -36,6 +37,31 @@ export const CourseExceptionsConfirmation: React.FC<
   const approvalRequired =
     !courseType || shouldGoIntoExceptionApproval(acl, courseType)
 
+  const isProceedingWithExceptionsOnIndirectCourseCreationAsTrainerDisabled =
+    useFeatureFlagEnabled(
+      'is-proceeding-on-indirect-course-cration-as-trainer-disabled',
+    )
+
+  const shouldDisableProceedingForTrainerOnAnzIndirect = useCallback(
+    ({
+      isTrainer,
+      courseType,
+      exceptions,
+    }: {
+      isTrainer: boolean
+      courseType: Course_Type_Enum | null
+      exceptions: Course_Exception_Enum[]
+    }) => {
+      return (
+        isProceedingWithExceptionsOnIndirectCourseCreationAsTrainerDisabled &&
+        isTrainer &&
+        courseType === Course_Type_Enum.Indirect &&
+        exceptions.includes(Course_Exception_Enum.OutsideNoticePeriod)
+      )
+    },
+    [isProceedingWithExceptionsOnIndirectCourseCreationAsTrainerDisabled],
+  )
+
   return (
     <Dialog
       open={open}
@@ -56,7 +82,11 @@ export const CourseExceptionsConfirmation: React.FC<
       maxWidth={600}
     >
       <Container sx={{ padding: isMobile ? 0 : 3 }}>
-        <Alert severity="warning" variant="outlined">
+        <Alert
+          severity="warning"
+          variant="outlined"
+          sx={{ '.MuiAlert-icon': { alignItems: 'center' } }}
+        >
           <Typography variant="body1" fontWeight={600}>
             {t(
               `pages.create-course.exceptions.${
@@ -88,16 +118,22 @@ export const CourseExceptionsConfirmation: React.FC<
             {t('common.cancel')}
           </Button>
 
-          <Button
-            onClick={onSubmit}
-            type="button"
-            variant="contained"
-            color="primary"
-            sx={{ ml: 1 }}
-            data-testid="proceed-button"
-          >
-            {submitLabel ?? t('pages.create-course.exceptions.proceed')}
-          </Button>
+          {shouldDisableProceedingForTrainerOnAnzIndirect({
+            isTrainer: acl.isTrainer(),
+            courseType: courseType ?? null,
+            exceptions: exceptions,
+          }) ? null : (
+            <Button
+              onClick={onSubmit}
+              type="button"
+              variant="contained"
+              color="primary"
+              sx={{ ml: 1 }}
+              data-testid="proceed-button"
+            >
+              {submitLabel ?? t('pages.create-course.exceptions.proceed')}
+            </Button>
+          )}
         </Box>
       </Container>
     </Dialog>
