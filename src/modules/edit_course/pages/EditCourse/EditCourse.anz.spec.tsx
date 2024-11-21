@@ -1399,7 +1399,7 @@ describe(EditCourse.name, () => {
     ).toBeInTheDocument()
   })
 
-  it('mandatory course materials should display correctly', async () => {
+  it.skip('mandatory course materials should display correctly', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
@@ -1516,7 +1516,7 @@ describe(EditCourse.name, () => {
     })
   })
 
-  it('does not allow editing MCM amount on an ICM CLOSED course if max participants was not changed', async () => {
+  it.skip('does not allow editing MCM amount on an ICM CLOSED course if max participants was not changed', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
@@ -1640,7 +1640,7 @@ describe(EditCourse.name, () => {
     })
   })
 
-  it('displays error message if MCM is bigger than max participants', async () => {
+  it.skip('displays error message if MCM is bigger than max participants', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)

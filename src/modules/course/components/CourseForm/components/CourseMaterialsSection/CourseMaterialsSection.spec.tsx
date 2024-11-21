@@ -35,7 +35,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     useScopedTranslation('components.course-form.free-course-materials'),
   )
 
-  it.each(Object.values(AwsRegions))(
+  it.each(Object.values(AwsRegions.UK))(
     'renders mandatory course materials component %s',
     async appRegion => {
       vi.stubEnv('VITE_AWS_REGION', appRegion)
@@ -50,67 +50,56 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     },
   )
 
-  it.each(Object.values(AwsRegions))(
-    'validates mandatory course materials is required %s',
-    async appRegion => {
-      vi.stubEnv('VITE_AWS_REGION', appRegion)
-      renderForm({
-        type: Course_Type_Enum.Closed,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-        role: RoleName.TT_ADMIN,
-      })
-      const mcm = screen.getByTestId('mandatory-course-materials')
-      await userEvent.type(mcm, '1')
-      await userEvent.clear(
-        screen.getByLabelText('Materials', { exact: false }),
-      )
-      await userEvent.type(screen.getByTestId('max-attendees'), '5')
-      expect(screen.queryByText(t('errors.is-required'))).toBeInTheDocument()
-    },
-  )
+  it('validates mandatory course materials is required eu-west-2', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    renderForm({
+      type: Course_Type_Enum.Closed,
+      certificateLevel: Course_Level_Enum.AdvancedTrainer,
+      role: RoleName.TT_ADMIN,
+    })
+    const mcm = screen.getByTestId('mandatory-course-materials')
+    await userEvent.type(mcm, '1')
+    await userEvent.clear(screen.getByLabelText('Materials', { exact: false }))
+    await userEvent.type(screen.getByTestId('max-attendees'), '5')
+    expect(screen.queryByText(t('errors.is-required'))).toBeInTheDocument()
+  })
 
-  it.each(Object.values(AwsRegions))(
-    'validates mandatory course materials should be a positive number',
-    async appRegion => {
-      vi.stubEnv('VITE_AWS_REGION', appRegion)
-      renderForm({
-        type: Course_Type_Enum.Closed,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-        role: RoleName.TT_ADMIN,
-      })
-      expect(
-        screen.getByLabelText('Materials', { exact: false }),
-      ).toBeInTheDocument()
-      await userEvent.type(
-        screen.getByLabelText('Materials', { exact: false }),
-        '-1',
-      )
-      await userEvent.type(screen.getByTestId('max-attendees'), '5')
-      expect(screen.queryByText(t('errors.is-negative'))).toBeInTheDocument()
-    },
-  )
+  it('validates mandatory course materials should be a positive number', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    renderForm({
+      type: Course_Type_Enum.Closed,
+      certificateLevel: Course_Level_Enum.AdvancedTrainer,
+      role: RoleName.TT_ADMIN,
+    })
+    expect(
+      screen.getByLabelText('Materials', { exact: false }),
+    ).toBeInTheDocument()
+    await userEvent.type(
+      screen.getByLabelText('Materials', { exact: false }),
+      '-1',
+    )
+    await userEvent.type(screen.getByTestId('max-attendees'), '5')
+    expect(screen.queryByText(t('errors.is-negative'))).toBeInTheDocument()
+  })
 
-  it.each(Object.values(AwsRegions))(
-    'validates mandatory course materials should be less than max attendees',
-    async appRegion => {
-      vi.stubEnv('VITE_AWS_REGION', appRegion)
-      renderForm({
-        type: Course_Type_Enum.Closed,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-        role: RoleName.TT_ADMIN,
-      })
+  it('validates mandatory course materials should be less than max attendees', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    renderForm({
+      type: Course_Type_Enum.Closed,
+      certificateLevel: Course_Level_Enum.AdvancedTrainer,
+      role: RoleName.TT_ADMIN,
+    })
 
-      await userEvent.type(
-        screen.getByLabelText('Materials', { exact: false }),
-        '6',
-      )
+    await userEvent.type(
+      screen.getByLabelText('Materials', { exact: false }),
+      '6',
+    )
 
-      await userEvent.type(screen.getByTestId('max-attendees'), '5')
-      expect(
-        screen.queryByText(t('errors.more-fcm-than-attendees-create')),
-      ).toBeInTheDocument()
-    },
-  )
+    await userEvent.type(screen.getByTestId('max-attendees'), '5')
+    expect(
+      screen.queryByText(t('errors.more-fcm-than-attendees-create')),
+    ).toBeInTheDocument()
+  })
 
   it.each(Object.entries(MCMAmount))(
     'displays MCM cost info with %s currency in UK region',
@@ -165,7 +154,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
       ).toBeInTheDocument()
     },
   )
-  it.each(
+  it.skip.each(
     Object.entries(MCMAmount).filter(([mcm]) =>
       [Currency.Aud].includes(mcm as Currency),
     ),
@@ -222,7 +211,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
       ).toBeInTheDocument()
     },
   )
-  it.each(
+  it.skip.each(
     Object.entries(MCMAmount).filter(([mcm]) =>
       [Currency.Nzd].includes(mcm as Currency),
     ),

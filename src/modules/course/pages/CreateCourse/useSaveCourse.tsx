@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -163,6 +164,7 @@ export function useSaveCourse(): {
   } = useCreateCourse()
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry, isAustraliaCountry } = useWorldCountries()
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
 
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
@@ -366,7 +368,7 @@ export function useSaveCourse(): {
             ? { min_participants: courseData.minParticipants }
             : null),
           max_participants: courseData.maxParticipants,
-          ...(isClosedCourse
+          ...(isClosedCourse && (acl.isUK() || !hideMCM)
             ? {
                 free_course_materials: courseData.freeCourseMaterials,
               }
@@ -451,7 +453,7 @@ export function useSaveCourse(): {
                 expenses: {
                   data: prepareExpensesData(
                     expenses,
-                    true,
+                    acl.isUK() || !hideMCM,
                     courseData.freeCourseMaterials ?? 0,
                     courseData.maxParticipants ?? 0,
                     (courseData.priceCurrency as Currency) ??
@@ -541,6 +543,7 @@ export function useSaveCourse(): {
     exceptions,
     acl,
     isClosedCourse,
+    hideMCM,
     go1Licensing?.invoiceDetails,
     invoiceDetails,
     calculateVATrate,

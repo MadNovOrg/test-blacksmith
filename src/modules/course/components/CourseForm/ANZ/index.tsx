@@ -1,5 +1,6 @@
 import { Stack } from '@mui/material'
 import { isDate, isValid as isValidDate } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useImperativeHandle, useMemo } from 'react'
 import { Controller, FormProvider, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -48,6 +49,8 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { isAustraliaCountry, isNewZealandCountry } = useWorldCountries()
+
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
   const { methods } = useCourseCreationFormSchema({
     courseInput,
     isCreation,
@@ -328,7 +331,7 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             isCreation={isCreation}
           />
 
-          {isClosedCourse ? (
+          {isClosedCourse && !hideMCM ? (
             <CourseMaterialsSection isCreation={isCreation} />
           ) : null}
 

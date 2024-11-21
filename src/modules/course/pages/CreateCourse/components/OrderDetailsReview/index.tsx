@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material'
 import Big from 'big.js'
 import { parseISO } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -34,8 +35,10 @@ export const OrderDetailsReview: React.FC = () => {
 
   const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
   const {
-    acl: { isAustralia },
+    acl: { isAustralia, isUK },
   } = useAuth()
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
+  const mandatoryCourseMaterialsEnabled = Boolean(isUK() || !hideMCM)
 
   const currency = courseData?.priceCurrency ?? defaultCurrency
 
@@ -43,6 +46,7 @@ export const OrderDetailsReview: React.FC = () => {
 
   const courseMaterialsCost = useMemo(() => {
     if (
+      mandatoryCourseMaterialsEnabled &&
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
@@ -52,10 +56,16 @@ export const OrderDetailsReview: React.FC = () => {
       )
     }
     return 0
-  }, [courseData?.freeCourseMaterials, courseData?.maxParticipants, currency])
+  }, [
+    courseData?.freeCourseMaterials,
+    courseData?.maxParticipants,
+    currency,
+    mandatoryCourseMaterialsEnabled,
+  ])
 
   const freeCourseMaterialsCost = useMemo(() => {
     if (
+      (isUK() || !hideMCM) &&
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
@@ -65,7 +75,7 @@ export const OrderDetailsReview: React.FC = () => {
       )
     }
     return 0
-  }, [courseData?.freeCourseMaterials, currency])
+  }, [courseData?.freeCourseMaterials, currency, hideMCM, isUK])
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -329,34 +339,36 @@ export const OrderDetailsReview: React.FC = () => {
         />
       </InfoPanel>
 
-      <InfoPanel>
-        <PageRow
-          label={t(
-            'pages.create-course.review-and-confirm.mandatory-course-materials',
-            {
-              count: courseData?.maxParticipants,
-            },
-          )}
-          value={t('common.currency', {
-            amount: courseMaterialsCost,
-            currency,
-          })}
-          testId="mandatory-course-materials-row"
-        />
-        <PageRow
-          label={t(
-            'pages.create-course.review-and-confirm.free-course-materials',
-            {
-              count: courseData?.freeCourseMaterials,
-            },
-          )}
-          value={t('common.currency', {
-            amount: freeCourseMaterialsCost,
-            currency,
-          })}
-          testId="free-course-materials-row"
-        />
-      </InfoPanel>
+      {mandatoryCourseMaterialsEnabled ? (
+        <InfoPanel>
+          <PageRow
+            label={t(
+              'pages.create-course.review-and-confirm.mandatory-course-materials',
+              {
+                count: courseData?.maxParticipants,
+              },
+            )}
+            value={t('common.currency', {
+              amount: courseMaterialsCost,
+              currency,
+            })}
+            testId="mandatory-course-materials-row"
+          />
+          <PageRow
+            label={t(
+              'pages.create-course.review-and-confirm.free-course-materials',
+              {
+                count: courseData?.freeCourseMaterials,
+              },
+            )}
+            value={t('common.currency', {
+              amount: freeCourseMaterialsCost,
+              currency,
+            })}
+            testId="free-course-materials-row"
+          />
+        </InfoPanel>
+      ) : null}
 
       <InfoPanel>
         <Stack spacing={1}>

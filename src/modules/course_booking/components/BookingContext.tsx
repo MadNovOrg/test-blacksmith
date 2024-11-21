@@ -1,6 +1,7 @@
 import { Alert, CircularProgress, Stack } from '@mui/material'
 import { allPass } from 'lodash/fp'
 import { round } from 'lodash-es'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
   useCallback,
   useContext,
@@ -172,6 +173,8 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   >({
     query: GET_TEMP_PROFILE,
   })
+  const { acl } = useAuth()
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
 
   const profile = useMemo(() => data?.tempProfiles[0], [data?.tempProfiles])
 
@@ -379,10 +382,10 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     const courseCost = !ready ? 0 : booking.price * booking.quantity
     const trainerExpenses = !ready ? 0 : booking.trainerExpenses
     const subtotal = courseCost + trainerExpenses
-    const mandatoryCourseMaterialsCost = getMandatoryCourseMaterialsCost(
-      booking.quantity,
-      booking.currency,
-    )
+    const mandatoryCourseMaterialsCost =
+      acl.isUK() || !hideMCM
+        ? getMandatoryCourseMaterialsCost(booking.quantity, booking.currency)
+        : 0
 
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
     const discount = !ready
@@ -427,7 +430,20 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       trainerExpenses,
       paymentProcessingFee,
     }
-  }, [booking, ready])
+  }, [
+    acl,
+    booking.currency,
+    booking.discounts,
+    booking.freeSpaces,
+    booking.paymentMethod,
+    booking.price,
+    booking.promoCodes,
+    booking.quantity,
+    booking.trainerExpenses,
+    booking.vat,
+    hideMCM,
+    ready,
+  ])
 
   const placeOrder = useCallback(async () => {
     const promoCodes =

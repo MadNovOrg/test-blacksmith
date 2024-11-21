@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { isBefore, isPast } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -51,7 +52,7 @@ export const useCourseCreationFormSchema = ({
   const { countriesCodesWithUKs, isUKCountry, isAustraliaCountry } =
     useWorldCountries()
   const { defaultCurrency } = useCurrencies(courseInput?.residingCountry)
-
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
   const defaultResidingCountry = () => {
     if (acl.isAustralia()) {
       return Countries_Code.AUSTRALIA
@@ -341,7 +342,7 @@ export const useCourseCreationFormSchema = ({
             }),
           specialInstructions: yup.string().nullable().default(''),
           parkingInstructions: yup.string().nullable().default(''),
-          ...(isClosedCourse
+          ...(isClosedCourse && (acl.isUK() || !hideMCM)
             ? {
                 freeCourseMaterials: yup
                   .number()
@@ -450,6 +451,7 @@ export const useCourseCreationFormSchema = ({
       isOpenCourse,
       isClosedCourse,
       isIndirectCourse,
+      hideMCM,
       hasMinParticipants,
       isCreation,
       courseInput?.maxParticipants,

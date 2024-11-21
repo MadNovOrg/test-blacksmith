@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useMemo } from 'react'
 import { type OperationContext, useQuery } from 'urql'
 
@@ -30,6 +31,8 @@ export default function useCourse(
 } {
   const { acl, activeRole, profile } = useAuth()
 
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
+
   const [{ data, error }, mutate] = useQuery<
     GetCourseByIdQuery,
     GetCourseByIdQueryVariables
@@ -38,7 +41,7 @@ export default function useCourse(
     variables: {
       id: Number(courseId),
       withArloRefId: acl.isInternalUser(),
-      withFreeCourseCourseMaterials: true,
+      withFreeCourseCourseMaterials: acl.isUK() || !hideMCM,
       withInternationalFinance:
         acl.isAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
       withOrders:

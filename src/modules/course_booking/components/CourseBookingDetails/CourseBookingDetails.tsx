@@ -127,6 +127,8 @@ export const CourseBookingDetails: React.FC<
   const navigate = useNavigate()
   const defaultCurrency = acl.isAustralia() ? Currency.Aud : Currency.Gbp
 
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
+
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
     course,
@@ -590,25 +592,27 @@ export const CourseBookingDetails: React.FC<
               )}
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">
-              {t('mandatory-course-materials', {
-                quantity: booking.quantity,
-              })}
-            </Typography>
-            <Typography color="grey.700">
-              {formatCurrency(
-                {
-                  amount: getMandatoryCourseMaterialsCost(
-                    booking.quantity,
-                    booking.currency,
-                  ),
-                  currency: booking.currency,
-                },
-                t,
-              )}
-            </Typography>
-          </Box>
+          {acl.isUK() || !hideMCM ? (
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography color="grey.700">
+                {t('mandatory-course-materials', {
+                  quantity: booking.quantity,
+                })}
+              </Typography>
+              <Typography color="grey.700">
+                {formatCurrency(
+                  {
+                    amount: getMandatoryCourseMaterialsCost(
+                      booking.quantity,
+                      booking.currency,
+                    ),
+                    currency: booking.currency,
+                  },
+                  t,
+                )}
+              </Typography>
+            </Box>
+          ) : null}
 
           {booking.trainerExpenses > 0 ? (
             <Box display="flex" justifyContent="space-between" mb={1}>

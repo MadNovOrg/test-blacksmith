@@ -12,6 +12,7 @@ import {
 import Big from 'big.js'
 import { isPast } from 'date-fns'
 import { utcToZonedTime } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -53,6 +54,8 @@ export const CourseBookingReview: React.FC<
   const { course, booking, amounts, placeOrder } = useBooking()
   const { isUKCountry } = useWorldCountries()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
+
+  const hideMCM = useFeatureFlagEnabled('hide-mcm')
 
   const [accept, setAccept] = useState(false)
   const [creatingOrder, setCreatingOrder] = useState(false)
@@ -330,28 +333,31 @@ export const CourseBookingReview: React.FC<
             </Typography>
           </Box>
         ))}
-        <>
-          <Divider sx={{ my: 2 }} />
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">
-              {t('mandatory-course-materials', {
-                quantity: booking.quantity,
-              })}
-            </Typography>
-            <Typography color="grey.700">
-              {formatCurrency(
-                {
-                  amount: getMandatoryCourseMaterialsCost(
-                    booking.quantity,
-                    booking.currency,
-                  ),
-                  currency: booking.currency,
-                },
-                t,
-              )}
-            </Typography>
-          </Box>
-        </>
+        {acl.isUK() || !hideMCM ? (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography color="grey.700">
+                {t('mandatory-course-materials', {
+                  quantity: booking.quantity,
+                })}
+              </Typography>
+              <Typography color="grey.700">
+                {formatCurrency(
+                  {
+                    amount: getMandatoryCourseMaterialsCost(
+                      booking.quantity,
+                      booking.currency,
+                    ),
+                    currency: booking.currency,
+                  },
+                  t,
+                )}
+              </Typography>
+            </Box>
+          </>
+        ) : null}
+
         {booking.trainerExpenses > 0 ? (
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">
