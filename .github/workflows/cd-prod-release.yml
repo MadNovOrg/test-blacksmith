@@ -1,4 +1,4 @@
-name: RELEASE-PROD
+name: Start Production Deployment
 
 on:
   workflow_dispatch:

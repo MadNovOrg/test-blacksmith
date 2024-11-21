@@ -1,4 +1,4 @@
-name: RELEASE PROD VERSION
+name: Production Deployment
 
 on:
   pull_request:
@@ -51,6 +51,34 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  label-check:
+    name: Determine Deployment Region
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'changeset-release/') }}
+    runs-on: ubuntu-latest
+    outputs:
+      region: ${{ steps.label-check.outputs.region }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check Labels for Region
+        id: label-check
+        run: |
+          labels=$(echo '${{ toJson(github.event.pull_request.labels) }}' | jq -r '.[].name')
+          echo "Labels on this PR: $labels"
+
+          region="None"
+          if echo "$labels" | grep -q "Release - Both"; then
+            region="Both"
+          elif echo "$labels" | grep -q "Release - UK"; then
+            region="UK"
+          elif echo "$labels" | grep -q "Release - Australia"; then
+            region="ANZ"
+          fi
+
+          echo "Determined region: $region"
+          echo "::set-output name=region::$region"
+
   manage-hotfix-release-branch:
     name: Manage Hotfix Release Branch
     runs-on: ubuntu-latest
@@ -79,82 +107,47 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   prod-cd:
-    name: PROD
-    needs: fetch-version
-    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) || (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'hotfix-release/'))}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Check for 'Release - UK' or 'Release - Both' Label
-        id: label-check
-        run: |
-          labels=$(echo '${{ toJson(github.event.pull_request.labels) }}' | jq -r '.[].name')
-          echo "Labels on this PR: $labels"
-          if echo "$labels" | grep -Eq "Release - UK|Release - Both"; then
-            echo "Relevant label found."
-            echo "::set-output name=should_run::true"
-          else
-            echo "Relevant label not found."
-            echo "::set-output name=should_run::false"
-          fi
-
-      - name: Deployment
-        if: ${{ steps.label-check.outputs.should_run == 'true' }}
-        uses: ./.github/workflows/pipeline.yml
-        with:
-          version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
-          aws_region: 'eu-west-2'
-          cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD }}
-          cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD }}
-          hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD }}
-          hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD }}
-          wp_host: ${{ secrets.WP_HOST_PROD }}
-          s3_bucket: ${{ secrets.S3_BUCKET_PROD }}
-          service_role_arn: ${{ secrets.IAM_SERVICE_PROD }}
-          hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD }}
-          gmaps_key: ${{ secrets.GMAPS_KEY }}
-          recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
-          stripe_key: ${{ secrets.STRIPE_KEY }}
-          request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
-          sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    name: UK Production Deployment
+    needs: [fetch-version, label-check]
+    if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) && (needs.label-check.outputs.region == 'UK' || needs.label-check.outputs.region == 'Both') }}
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
+      aws_region: 'eu-west-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD }}
+      wp_host: ${{ secrets.WP_HOST_PROD }}
+      s3_bucket: ${{ secrets.S3_BUCKET_PROD }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_PROD }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
   prod-cd-anz:
-    name: PROD
-    needs: fetch-version
-    if: ${{ (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'changeset-release/')) || (github.event.pull_request.merged == true) && (startsWith(github.head_ref, 'hotfix-release/'))}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for 'Release - Australia' or 'Release - Both' Label
-        id: label-check
-        run: |
-          labels=$(echo '${{ toJson(github.event.pull_request.labels) }}' | jq -r '.[].name')
-          echo "Labels on this PR: $labels"
-          if echo "$labels" | grep -Eq "Release - Australia|Release - Both"; then
-            echo "Relevant label found."
-            echo "::set-output name=should_run::true"
-          else
-            echo "Relevant label not found."
-            echo "::set-output name=should_run::false"
-          fi
-
-      - name: Deployment
-        if: ${{ steps.label-check.outputs.should_run == 'true' }}
-        uses: ./.github/workflows/pipeline.yml
-        with:
-          version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
-          aws_region: 'ap-southeast-2'
-          cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD_ANZ }}
-          cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD_ANZ }}
-          hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD_ANZ }}
-          hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD_ANZ }}
-          wp_host: ${{ secrets.WP_HOST_PROD_ANZ }}
-          s3_bucket: ${{ secrets.S3_BUCKET_PROD_ANZ }}
-          service_role_arn: ${{ secrets.IAM_SERVICE_PROD_ANZ }}
-          hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD_ANZ }}
-          gmaps_key: ${{ secrets.GMAPS_KEY }}
-          recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
-          stripe_key: ${{ secrets.STRIPE_KEY_ANZ }}
-          request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
-          sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    name: ANZ Production Deployment
+    needs: [fetch-version, label-check]
+    if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) && (needs.label-check.outputs.region == 'ANZ' || needs.label-check.outputs.region == 'Both') }}
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
+      aws_region: 'ap-southeast-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD_ANZ }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD_ANZ }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD_ANZ }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD_ANZ }}
+      wp_host: ${{ secrets.WP_HOST_PROD_ANZ }}
+      s3_bucket: ${{ secrets.S3_BUCKET_PROD_ANZ }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_PROD_ANZ }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD_ANZ }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY_ANZ }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
