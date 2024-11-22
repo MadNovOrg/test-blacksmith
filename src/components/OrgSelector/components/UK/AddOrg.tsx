@@ -3,6 +3,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import { LoadingButton } from '@mui/lab'
 import { Button, TextField, Tooltip, Grid, Typography } from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
+import { delay } from 'lodash'
 import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
@@ -135,24 +136,28 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     }
 
     if (isDFESuggestion) {
-      client
-        .query<
-          GetDfeRegisteredOrganisationQuery,
-          GetDfeRegisteredOrganisationQueryVariables
-        >(GET_DFE_REGISTERED_ORGANISATION, {
-          name: data.organisationName,
-          postcode: data.postCode,
-        })
-        .toPromise()
-        .then(async organization => {
-          if (!organization.data?.dfe_establishment[0].registered) {
-            await insertOrganisation(vars)
-          } else
-            onSuccess({
-              id: organization.data.dfe_establishment[0].organizations[0].id,
-              ...vars,
-            })
-        })
+      // Delay necesarry in the scenario where two users create the same dfe org at the same time on different devices - would result in duplicated org
+      // Very rare edge case but could happen
+      delay(() => {
+        client
+          .query<
+            GetDfeRegisteredOrganisationQuery,
+            GetDfeRegisteredOrganisationQueryVariables
+          >(GET_DFE_REGISTERED_ORGANISATION, {
+            name: data.organisationName,
+            postcode: data.postCode,
+          })
+          .toPromise()
+          .then(async organization => {
+            if (!organization.data?.dfe_establishment[0].registered) {
+              await insertOrganisation(vars)
+            } else
+              onSuccess({
+                id: organization.data.dfe_establishment[0].organizations[0].id,
+                ...vars,
+              })
+          })
+      }, Math.random() * 800)
     } else {
       await insertOrganisation(vars)
     }
