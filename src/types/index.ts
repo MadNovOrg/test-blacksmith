@@ -50,6 +50,7 @@ export type Course = {
   max_participants: number
   free_course_materials?: number
   status: Course_Status_Enum
+  coursesReservedLicenses: number
   reaccreditation: boolean
   organization?: Organization
   bildModules?: Array<Course_Bild_Module>
@@ -179,23 +180,26 @@ export type ContactDetail = {
 }
 
 export type Organization = {
-  name: string
-  tags: string[]
-  contactDetails: ContactDetail[]
-  members_aggregate: { [key: string]: { [key: string]: number } }
-  attributes: { [name: string]: string }
   address: Address
-  preferences: { [name: string]: string }
-  region: string
-  sector: string
-  organizationType: string
+  affiliated_organisations_aggregate?: { aggregate: { count: number } }
+  affiliated_organisations?: Organization[]
+  attributes: { [name: string]: string }
+  contactDetails: ContactDetail[]
   go1Licenses?: number
   main_organisation_id?: string
   main_organisation?: Organization
-  affiliated_organisations?: Organization[]
-  affiliated_organisations_aggregate?: { aggregate: { count: number } }
-  reservedCourseLicenses?: { aggregate: { sum: { change: number } } }
+  mainOrganizationLicenses?: {
+    go1Licenses: number
+    reservedGo1Licenses: number
+  }
+  members_aggregate: { [key: string]: { [key: string]: number } }
+  name: string
+  organizationType: string
+  preferences: { [name: string]: string }
+  region: string
   reservedGo1Licenses?: number
+  sector: string
+  tags: string[]
 } & Base
 
 export type OrganizationMember = {

@@ -12,6 +12,7 @@ export const GET_AFFILIATED_ORGANISATIONS_QUERY = gql`
     $mainOrgId: uuid!
     $limit: Int
     $offset: Int
+    $withActiveIndirectBLCourses: Boolean = false
     $withMembers: Boolean = false
   ) {
     organizations: organization(
@@ -20,31 +21,65 @@ export const GET_AFFILIATED_ORGANISATIONS_QUERY = gql`
       offset: $offset
     ) {
       id
-      name
+      activeIndirectBLCourses: organization_courses(
+        where: {
+          _or: [
+            { status: { _neq: COMPLETED } }
+            { course_invites: { status: { _eq: PENDING } } }
+          ]
+          go1Integration: { _eq: true }
+          type: { _eq: INDIRECT }
+        }
+      ) @include(if: $withActiveIndirectBLCourses) {
+        id
+        course_code
+        status
+        pendingInvites: course_invites_aggregate(
+          where: { status: { _eq: PENDING } }
+        ) {
+          aggregate {
+            count
+          }
+        }
+      }
       address
-      sector
       createdAt
       members @include(if: $withMembers) {
         profile {
           lastActivity
         }
       }
+      name
+      sector
     }
   }
 `
 
-export default function useAffiliatedOrganisations(
-  mainOrgId: string,
-  limit: number,
-  offset: number,
-  withMembers: boolean,
-) {
+export default function useAffiliatedOrganisations({
+  limit,
+  mainOrgId,
+  offset,
+  withActiveIndirectBLCourses,
+  withMembers,
+}: {
+  limit: number
+  mainOrgId: string
+  offset: number
+  withActiveIndirectBLCourses: boolean
+  withMembers: boolean
+}) {
   const [{ data, error, fetching: loading }, reexecute] = useQuery<
     GetAffiliatedOrganisationsQuery,
     GetAffiliatedOrganisationsQueryVariables
   >({
     query: GET_AFFILIATED_ORGANISATIONS_QUERY,
-    variables: { mainOrgId, limit, offset, withMembers },
+    variables: {
+      limit,
+      mainOrgId,
+      offset,
+      withActiveIndirectBLCourses,
+      withMembers,
+    },
   })
 
   return useMemo(

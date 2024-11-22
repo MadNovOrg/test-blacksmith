@@ -2,7 +2,7 @@ import Delete from '@mui/icons-material/Delete'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Organization } from '@app/generated/graphql'
+import { GetAffiliatedOrganisationsQuery } from '@app/generated/graphql'
 import {
   Action,
   ActionsMenu,
@@ -12,8 +12,11 @@ enum AffiliatedOrgAction {
   Unlink,
 }
 type AffiliatedOrganisation = Pick<
-  Organization['affiliated_organisations'][0],
-  'id' | 'name'
+  Exclude<
+    GetAffiliatedOrganisationsQuery['organizations'][number],
+    'undefined'
+  >,
+  'id' | 'activeIndirectBLCourses' | 'name'
 >
 type ManageAffiliatedOrgsMenuProps = {
   onUnlinkClick: (item: AffiliatedOrganisation) => void

@@ -53,6 +53,7 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
       id: orgId,
       offset: perPage * (currentPage - 1),
       limit: perPage,
+      withMainOrg: true,
     },
     requestPolicy: 'cache-and-network',
   })
@@ -62,8 +63,13 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
     closeModal()
   }
 
-  const licensesHistory = data?.organization_by_pk?.go1LicensesHistory
+  const licensesHistory = [
+    ...(data?.organization_by_pk?.main_organisation?.go1LicensesHistory ?? []),
+    ...(data?.organization_by_pk?.go1LicensesHistory ?? []),
+  ]
   const totalHistory =
+    data?.organization_by_pk?.main_organisation?.go1LicensesHistory_aggregate
+      ?.aggregate?.count ??
     data?.organization_by_pk?.go1LicensesHistory_aggregate?.aggregate?.count
 
   return (
@@ -95,13 +101,16 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
                     mb={2}
                     data-testid="licenses-remaining"
                   >
-                    {data?.organization_by_pk?.go1Licenses}
+                    {data.organization_by_pk?.main_organisation?.go1Licenses ??
+                      data?.organization_by_pk?.go1Licenses}
                   </Typography>
                   <Typography variant="body2">
                     {t('remaining-licenses')}
                   </Typography>
                 </Box>
-                {acl.canManageBlendedLicenses() ? (
+                {!fetching &&
+                !data.organization_by_pk?.main_organisation &&
+                acl.canManageBlendedLicenses() ? (
                   <Button
                     variant="contained"
                     size="small"
@@ -117,7 +126,10 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
               <Tile>
                 <Box>
                   <Typography variant="h2" mb={2}>
-                    {data.organization_by_pk?.reservedGo1Licenses ?? 0}
+                    {data.organization_by_pk?.main_organisation
+                      ?.reservedGo1Licenses ??
+                      data.organization_by_pk?.reservedGo1Licenses ??
+                      0}
                   </Typography>
                   <Typography variant="body2">
                     {t('unused-licenses')}
@@ -128,7 +140,10 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
           </Grid>
 
           <Box mt={2} mb={2} textAlign="right">
-            <ExportHistoryButton disabled={!totalHistory} orgId={orgId} />
+            <ExportHistoryButton
+              disabled={!totalHistory}
+              orgId={data.organization_by_pk?.main_organisation?.id ?? orgId}
+            />
           </Box>
 
           {licensesHistory ? (
@@ -137,13 +152,15 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
             </LicensesHistoryTable>
           ) : null}
 
-          <ManageLicensesDialog
-            opened={manageModalOpened}
-            onClose={closeModal}
-            onSave={handleSave}
-            orgId={orgId}
-            currentBalance={data?.organization_by_pk?.go1Licenses ?? 0}
-          />
+          {!fetching && !data.organization_by_pk?.main_organisation ? (
+            <ManageLicensesDialog
+              opened={manageModalOpened}
+              onClose={closeModal}
+              onSave={handleSave}
+              orgId={orgId}
+              currentBalance={data?.organization_by_pk?.go1Licenses ?? 0}
+            />
+          ) : null}
         </>
       ) : null}
     </>

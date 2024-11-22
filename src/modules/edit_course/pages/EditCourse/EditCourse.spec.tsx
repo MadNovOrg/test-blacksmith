@@ -89,10 +89,8 @@ describe(EditCourse.name, () => {
               go1Licenses: 0,
             },
           }),
-          reservedCourseLicenses: {
-            aggregate: { sum: { change: 0 } },
-          },
         },
+        coursesReservedLicenses: 0,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -176,10 +174,8 @@ describe(EditCourse.name, () => {
               go1Licenses: 0,
             },
           }),
-          reservedCourseLicenses: {
-            aggregate: { sum: { change: 15 } },
-          },
         },
+        coursesReservedLicenses: 15,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -263,10 +259,8 @@ describe(EditCourse.name, () => {
               go1Licenses: 3,
             },
           }),
-          reservedCourseLicenses: {
-            aggregate: { sum: { change: 12 } },
-          },
         },
+        coursesReservedLicenses: 15,
         schedule: [
           buildCourseSchedule({
             overrides: {
@@ -350,9 +344,6 @@ describe(EditCourse.name, () => {
               go1Licenses: 0,
             },
           }),
-          reservedCourseLicenses: {
-            aggregate: { sum: { change: 0 } },
-          },
         },
         schedule: [
           buildCourseSchedule({

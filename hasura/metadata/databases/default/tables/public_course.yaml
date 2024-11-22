@@ -974,6 +974,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - reservedGo1Licenses
         - state
       filter:
         _or:
@@ -1069,6 +1070,7 @@ select_permissions:
       computed_fields:
         - course_code
         - freeSlots
+        - reservedGo1Licenses
         - state
       filter: {}
       allow_aggregations: true
@@ -1123,6 +1125,7 @@ select_permissions:
         - search_fields
       computed_fields:
         - course_code
+        - reservedGo1Licenses
         - state
       filter: {}
       allow_aggregations: true
@@ -1246,12 +1249,20 @@ select_permissions:
                             - profile_id:
                                 _eq: X-Hasura-User-Id
           - organization:
-              members:
-                _and:
-                  - is_admin:
-                      _eq: true
-                  - profile_id:
-                      _eq: X-Hasura-User-Id
+              _or:
+                - members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                - main_organisation:
+                    members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
           - _and:
               - course_type:
                   _eq: OPEN

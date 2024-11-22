@@ -315,10 +315,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
 
     const licenses = Math.max(
       (courseData?.maxParticipants ?? 0) -
-        Math.abs(
-          preEditedCourse?.organization?.reservedCourseLicenses?.aggregate.sum
-            .change ?? 0,
-        ),
+        Math.abs(preEditedCourse?.coursesReservedLicenses ?? 0),
       0,
     )
 
@@ -338,12 +335,17 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       isAdditionalBlendedLearningLicensesRequired &&
       isIndirectBlendedLearningCourse &&
       requiredLicenses > 0 &&
-      requiredLicenses - (preEditedCourse?.organization?.go1Licenses ?? 0) > 0
+      requiredLicenses -
+        (preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses ??
+          preEditedCourse?.organization?.go1Licenses ??
+          0) >
+        0
     )
   }, [
     isAdditionalBlendedLearningLicensesRequired,
     isIndirectBlendedLearningCourse,
     preEditedCourse?.organization?.go1Licenses,
+    preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
     requiredLicenses,
   ])
 

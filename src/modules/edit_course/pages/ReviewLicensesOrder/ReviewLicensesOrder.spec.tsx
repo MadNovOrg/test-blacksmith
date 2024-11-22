@@ -49,10 +49,8 @@ describe(ReviewLicensesOrder.name, () => {
               go1Licenses: 0,
             },
           }),
-          reservedCourseLicenses: {
-            aggregate: { sum: { change: 10 } },
-          },
         },
+        coursesReservedLicenses: 10,
         schedule: [
           buildCourseSchedule({
             overrides: {

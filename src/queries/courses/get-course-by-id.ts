@@ -100,22 +100,17 @@ export const QUERY = gql`
         }
       }
 
+      coursesReservedLicenses: reservedGo1Licenses
+        @include(if: $withOrgLicenses)
+
       organization {
         ...Organization
         go1Licenses: go1Licenses @include(if: $withOrgLicenses)
         reservedGo1Licenses: reservedGo1Licenses @include(if: $withOrgLicenses)
-
-        reservedCourseLicenses: go1LicensesHistory_aggregate(
-          where: {
-            payload: { _contains: { courseId: $id } }
-            event: { _eq: LICENSES_RESERVED }
-          }
-        ) @include(if: $withOrgLicenses) {
-          aggregate {
-            sum {
-              change
-            }
-          }
+        mainOrganizationLicenses: main_organisation
+          @include(if: $withOrgLicenses) {
+          go1Licenses
+          reservedGo1Licenses
         }
       }
 

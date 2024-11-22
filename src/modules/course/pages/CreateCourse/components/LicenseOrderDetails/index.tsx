@@ -75,7 +75,11 @@ export const LicenseOrderDetails = () => {
     OrgLicensesWithHistoryQueryVariables
   >({
     query: orgLicensesWithHistory,
-    variables: { id: courseData?.organization.id, withHistory: false },
+    variables: {
+      id: courseData?.organization.id,
+      withHistory: false,
+      withMainOrg: true,
+    },
     requestPolicy: 'cache-and-network',
   })
 
@@ -89,7 +93,10 @@ export const LicenseOrderDetails = () => {
 
   const prices = calculateGo1LicenseCost({
     numberOfLicenses: courseData?.maxParticipants ?? 0,
-    licenseBalance: orgData?.organization_by_pk?.go1Licenses ?? 0,
+    licenseBalance:
+      orgData?.organization_by_pk?.main_organisation?.go1Licenses ??
+      orgData?.organization_by_pk?.go1Licenses ??
+      0,
     isAustralia: isAustralia(),
     residingCountry: courseData?.residingCountry ?? '',
   })
@@ -149,7 +156,11 @@ export const LicenseOrderDetails = () => {
       <OrderDetails
         {...prices}
         numberOfLicenses={courseData.maxParticipants}
-        licensesBalance={orgData?.organization_by_pk?.go1Licenses ?? 0}
+        licensesBalance={
+          orgData?.organization_by_pk?.main_organisation?.go1Licenses ??
+          orgData?.organization_by_pk?.go1Licenses ??
+          0
+        }
         residingCountry={courseData.residingCountry}
       />
 

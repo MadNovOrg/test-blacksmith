@@ -11,7 +11,6 @@ type OrderItemComponentProps = {
 export const OrderItemComponent: React.FC<
   React.PropsWithChildren<OrderItemComponentProps>
 > = ({ canOnlyViewOrderItemAsText, orders }) => {
-  console.log('orders', orders)
   return (
     <>
       Order:{' '}

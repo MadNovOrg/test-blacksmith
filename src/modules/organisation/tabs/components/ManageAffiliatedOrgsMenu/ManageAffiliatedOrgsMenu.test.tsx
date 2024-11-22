@@ -16,6 +16,7 @@ describe(ManageAffiliatedOrgsMenu.name, () => {
       affiliated_organisations: [
         {
           id: affiliatedOrgId,
+          activeIndirectBLCourses: [],
           name: chance.name(),
         },
       ],

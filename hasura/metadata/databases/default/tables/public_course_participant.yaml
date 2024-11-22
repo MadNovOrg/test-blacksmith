@@ -714,10 +714,10 @@ event_triggers:
     definition:
       delete:
         columns: '*'
+      enable_manual: false
       update:
         columns:
           - attended
-      enable_manual: false
     retry_conf:
       interval_sec: 20
       num_retries: 3

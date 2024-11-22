@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import { Organization } from '@app/generated/graphql'
+import { GetAffiliatedOrganisationsQuery } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import useAffiliatedOrganisations from '@app/modules/organisation/hooks/ANZ/useAffiliatedOrganisations'
 import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
@@ -33,6 +33,7 @@ import { AddAffiliatedOrgModal } from '../../components/AddAffiliatedOrgModal'
 import { ManageAffiliatedOrgsButton } from '../../components/ManageAffiliatedOrgsButton/ManageAffiliatedOrgsButton'
 import { ManageAffiliatedOrgsMenu } from '../../components/ManageAffiliatedOrgsMenu'
 import { RemoveAffiliatedOrgModal } from '../../components/RemoveAffiliatedOrgModal'
+import { UnlinkAffiliatedOrgForbiddenModal } from '../../components/UnlinkAffiliatedOrgForbiddenModal'
 
 type AffiliatedOrgsTabParams = {
   orgId: string
@@ -48,6 +49,18 @@ export const AffiliatedOrgsTab: React.FC<
   const [showAddAffiliateModal, setShowAddAffiliateModal] = useState(false)
   const [showRemoveAffiliateModal, setShowRemoveAffiliateModal] =
     useState(false)
+
+  const [affiliatedOrgsForbiddenToUnlink, setAffiliatedOrgsForbiddenToUnlink] =
+    useState<
+      Pick<
+        Exclude<
+          GetAffiliatedOrganisationsQuery['organizations'][number],
+          'undefined'
+        >,
+        'id' | 'activeIndirectBLCourses' | 'name'
+      >[]
+    >([])
+
   const [affiliateToUnlinkId, setAffiliateToUnlinkId] = useState<string>('')
 
   const { selected, checkbox, isSelected, setSelected } = useTableChecks()
@@ -56,12 +69,18 @@ export const AffiliatedOrgsTab: React.FC<
     orgId,
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
-    withMainOrganisation: true,
     withAffiliatedOrganisationsCount: true,
+    withMainOrganisation: true,
   })
 
   const { data: affiliatedOrgs, reexecute: fetchAffiliatedOrgs } =
-    useAffiliatedOrganisations(orgId, perPage, currentPage * perPage, true)
+    useAffiliatedOrganisations({
+      limit: perPage,
+      mainOrgId: orgId,
+      offset: currentPage * perPage,
+      withActiveIndirectBLCourses: true,
+      withMembers: true,
+    })
 
   const org = data?.orgs.length ? data.orgs[0] : null
 
@@ -182,6 +201,25 @@ export const AffiliatedOrgsTab: React.FC<
     fetchAffiliatedOrgs({ requestPolicy: 'network-only' })
   }, [fetchAffiliatedOrgs, setSelected])
 
+  const handleUnlinkAffiliatedOrgsClick = useCallback(() => {
+    const affiliatedOrgsWithActiveIndirectBLCourses =
+      affiliatedOrgs?.organizations.filter(affiliatedOrg => {
+        return (
+          affiliatedOrgIds.includes(affiliatedOrg.id) &&
+          affiliatedOrg.activeIndirectBLCourses?.length
+        )
+      }, [])
+
+    if (affiliatedOrgsWithActiveIndirectBLCourses?.length) {
+      setAffiliatedOrgsForbiddenToUnlink(
+        affiliatedOrgsWithActiveIndirectBLCourses,
+      )
+      return
+    }
+
+    setShowRemoveAffiliateModal(true)
+  }, [affiliatedOrgIds, affiliatedOrgs?.organizations])
+
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       <Box display="flex" justifyContent="space-between">
@@ -192,7 +230,7 @@ export const AffiliatedOrgsTab: React.FC<
           <Box display={'flex'}>
             <ManageAffiliatedOrgsButton
               disabled={affiliatedOrgIds.length < 1}
-              handleClick={() => setShowRemoveAffiliateModal(true)}
+              handleClick={handleUnlinkAffiliatedOrgsClick}
             />
 
             <Button
@@ -238,6 +276,13 @@ export const AffiliatedOrgsTab: React.FC<
           affiliatedOrgsIds={affiliatedOrgIds}
           onClose={handleCloseRemoveAffiliateModal}
           onSave={handleSubmitRemoveAffiliatedOrgsModal}
+        />
+      ) : null}
+
+      {affiliatedOrgsForbiddenToUnlink.length ? (
+        <UnlinkAffiliatedOrgForbiddenModal
+          affiliatedOrgsForbiddenToUnlink={affiliatedOrgsForbiddenToUnlink}
+          onClose={() => setAffiliatedOrgsForbiddenToUnlink([])}
         />
       ) : null}
 
@@ -294,10 +339,13 @@ export const AffiliatedOrgsTab: React.FC<
                     {acl.canLinkToMainOrg() ? (
                       <TableCell>
                         <ManageAffiliatedOrgsMenu
-                          affiliatedOrg={
-                            affiliatedOrg as Organization['affiliated_organisations'][0]
-                          }
+                          affiliatedOrg={affiliatedOrg}
                           onUnlinkClick={item => {
+                            if (item.activeIndirectBLCourses?.length) {
+                              setAffiliatedOrgsForbiddenToUnlink([item])
+                              return
+                            }
+
                             setAffiliateToUnlinkId(item.id)
                             setShowRemoveAffiliateModal(true)
                           }}

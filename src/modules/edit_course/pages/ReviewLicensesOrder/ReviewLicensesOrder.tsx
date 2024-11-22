@@ -59,6 +59,7 @@ export const ReviewLicensesOrder: React.FC<
     saveChanges,
     setAdditionalLicensesOrderOnly,
     setBlendedLearningIndirectCourseInvitees,
+    setGo1LicensesData,
   } = useEditCourse()
 
   const [{ data: orderData }] = useOrderDetailsForReview(
@@ -73,12 +74,21 @@ export const ReviewLicensesOrder: React.FC<
   const numberOfLicenses =
     state?.insufficientNumberOfLicenses ?? requiredLicenses
 
-  const prices = calculateGo1LicenseCost({
-    isAustralia: acl.isAustralia(),
-    licenseBalance: preEditedCourse?.organization?.go1Licenses ?? 0,
-    numberOfLicenses,
-    residingCountry: courseData?.residingCountry ?? undefined,
-  })
+  const prices = useMemo(
+    () =>
+      calculateGo1LicenseCost({
+        isAustralia: acl.isAustralia(),
+        licenseBalance: preEditedCourse?.organization?.go1Licenses ?? 0,
+        numberOfLicenses,
+        residingCountry: courseData?.residingCountry ?? undefined,
+      }),
+    [
+      acl,
+      courseData?.residingCountry,
+      numberOfLicenses,
+      preEditedCourse?.organization?.go1Licenses,
+    ],
+  )
 
   const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
 
@@ -106,6 +116,20 @@ export const ReviewLicensesOrder: React.FC<
   const courseTimezone = courseData?.timeZone
     ? courseData?.timeZone.timeZoneId
     : undefined
+
+  useEffect(() => {
+    if (!orderData?.order_by_pk) return
+
+    setGo1LicensesData({
+      prices,
+      invoiceDetails: {
+        ...orderData.order_by_pk,
+        orgId: orderData.order_by_pk?.organization.id,
+        orgName: orderData.order_by_pk?.organization.name,
+      } as InvoiceDetailsType,
+      quantity: numberOfLicenses,
+    })
+  }, [numberOfLicenses, orderData?.order_by_pk, prices, setGo1LicensesData])
 
   useEffect(() => {
     if (

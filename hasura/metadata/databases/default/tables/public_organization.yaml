@@ -654,6 +654,17 @@ delete_permissions:
     permission:
       filter: {}
 event_triggers:
+  - name: link_to_main_organisation
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - main_organisation_id
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/organization/link-to-main-org'
   - name: organization_address_update
     definition:
       enable_manual: false

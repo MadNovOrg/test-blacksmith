@@ -1,6 +1,7 @@
 import InfoIcon from '@mui/icons-material/Info'
 import { Link, Tooltip, Typography } from '@mui/material'
 import React from 'react'
+import { Trans } from 'react-i18next'
 
 import {
   Go1_History_Events_Enum,
@@ -158,6 +159,116 @@ export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
             </Link>
           </Typography>
           <Typography variant="body2">{t('licenses-declined')}</Typography>
+        </>
+      )
+    }
+
+    case Go1_History_Events_Enum.LicensesTransferredFromAffiliateOrg: {
+      return (
+        <>
+          <Typography sx={{ mb: 1 }}>
+            {item.payload?.affiliateOrgId ? (
+              <Link href={`/organisations/${item.payload?.affiliateOrgId}`}>
+                {item.payload?.affiliateOrgName}
+              </Link>
+            ) : (
+              item.payload?.affiliateOrgName
+            )}
+          </Typography>
+
+          <Typography variant="body2">
+            <Trans
+              i18nKey="pages.org-details.tabs.licenses.table.licenses-transferred-from-affiliate-org"
+              values={{ fullName: item.payload.invokedBy }}
+            >
+              <Link href={`/profile/${item.payload?.invokedById}`}>
+                {item.payload.invokedBy}
+              </Link>
+            </Trans>
+          </Typography>
+        </>
+      )
+    }
+
+    case Go1_History_Events_Enum.LicensesTransferredToMainOrg: {
+      return (
+        <>
+          {item.payload?.mainOrgId ? (
+            <Link href={`/organisations/${item.payload?.mainOrgId}`}>
+              {item.payload?.mainOrgName}
+            </Link>
+          ) : (
+            item.payload?.mainOrgName
+          )}
+
+          <Typography variant="body2">
+            {
+              <Trans
+                i18nKey="pages.org-details.tabs.licenses.table.licenses-transferred-to-main-org"
+                values={{ fullName: item.payload.invokedBy }}
+              >
+                <Link href={`/profile/${item.payload?.invokedById}`}>
+                  {item.payload.invokedBy}
+                </Link>
+              </Trans>
+            }
+          </Typography>
+        </>
+      )
+    }
+
+    case Go1_History_Events_Enum.ReservedLicensesTransferredFromAffiliateOrg: {
+      return (
+        <>
+          <Typography sx={{ mb: 1 }}>
+            {item.payload?.affiliateOrgId ? (
+              <Link href={`/organisations/${item.payload?.affiliateOrgId}`}>
+                {item.payload?.affiliateOrgName}
+              </Link>
+            ) : (
+              item.payload?.affiliateOrgName
+            )}
+          </Typography>
+
+          <Typography variant="body2">
+            {
+              <Trans
+                i18nKey="pages.org-details.tabs.licenses.table.reserved-licenses-transferred-from-affiliate-org"
+                values={{ fullName: item.payload.invokedBy }}
+              >
+                <Link href={`/profile/${item.payload?.invokedById}`}>
+                  {item.payload.invokedBy}
+                </Link>
+              </Trans>
+            }
+          </Typography>
+        </>
+      )
+    }
+
+    case Go1_History_Events_Enum.ReservedLicensesTransferredToMainOrg: {
+      return (
+        <>
+          {item.payload?.mainOrgId ? (
+            <Link href={`/organisations/${item.payload?.mainOrgId}`}>
+              {item.payload?.mainOrgName}
+            </Link>
+          ) : (
+            item.payload?.mainOrgName
+          )}
+
+          <Typography variant="body2">
+            {
+              <Trans
+                i18nKey="pages.org-details.tabs.licenses.table.reserved-licenses-transferred-to-main-org"
+                values={{ fullName: item.payload.invokedBy }}
+              >
+                <Link href={`/profile/${item.payload?.invokedById}`}>
+                  {item.payload.invokedBy}
+                </Link>
+              </Trans>
+            }
+          </Typography>
         </>
       )
     }
