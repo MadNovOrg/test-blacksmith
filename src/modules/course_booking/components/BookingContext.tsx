@@ -51,7 +51,7 @@ import {
   max,
 } from '@app/util'
 
-import { positions, positionsANZ, sectors } from '../utils'
+import { sectors } from '../utils'
 
 export type Sector = keyof typeof sectors | ''
 
@@ -96,8 +96,6 @@ type State = {
   orgId: string
   orgName: string
   sector: Sector
-  position: string
-  otherPosition: string
   paymentMethod: PaymentMethod
   freeSpaces: number
   trainerExpenses: number
@@ -125,7 +123,6 @@ export type ContextType = {
     trainerExpenses: number
     paymentProcessingFee: number
   }
-  positions: typeof positions | typeof positionsANZ
   sectors: typeof sectors
   setBooking: (_: Partial<State>) => void
   addPromo: (_: PromoCodeOutput) => void
@@ -296,8 +293,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
           orgId: '',
           orgName: '',
           sector: '',
-          position: '',
-          otherPosition: '',
           paymentMethod: PaymentMethod.Invoice,
           freeSpaces: profile.course.freeSpaces ?? 0,
           trainerExpenses,
@@ -504,7 +499,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       booking,
       isBooked,
       availableSeats,
-      positions: isAustralia() ? positionsANZ : positions,
       sectors,
       setBooking: s => setBooking(prev => ({ ...prev, ...s })),
       addPromo,
@@ -525,7 +519,6 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       availableSeats,
       placeOrder,
       internalBooking,
-      isAustralia,
     ],
   )
 

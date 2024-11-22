@@ -17,7 +17,9 @@ import { useCurrencies } from '@app/hooks/useCurrencies'
 
 export const COURSE_PRICE_QUERY = gql`
   query CoursePrice($startDate: date, $priceCurrency: String!) {
-    coursePrice: course_pricing {
+    coursePrice: course_pricing(
+      where: { priceCurrency: { _eq: $priceCurrency } }
+    ) {
       level
       type
       blended

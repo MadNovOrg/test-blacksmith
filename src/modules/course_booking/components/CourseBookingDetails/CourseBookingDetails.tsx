@@ -98,8 +98,6 @@ type FormInputs = {
   orgId: string
   orgName: string
   sector: Sector
-  position: string
-  otherPosition: string
   source: Course_Source_Enum | ''
   salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
   bookingContact: BookingContact
@@ -273,8 +271,6 @@ export const CourseBookingDetails: React.FC<
       orgId: booking.orgId,
       orgName: booking.orgName,
       sector: booking.sector,
-      position: booking.position,
-      otherPosition: booking.otherPosition,
       source: booking.source ?? '',
       salesRepresentative: booking.salesRepresentative ?? null,
       bookingContact: booking.bookingContact ?? {

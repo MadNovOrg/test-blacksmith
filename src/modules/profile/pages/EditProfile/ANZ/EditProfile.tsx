@@ -22,7 +22,6 @@ import RadioGroup from '@mui/material/RadioGroup'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { subYears } from 'date-fns'
-import { uniq } from 'lodash-es'
 import React, {
   ChangeEvent,
   SyntheticEvent,
@@ -70,7 +69,6 @@ import {
   UpdateTrainerRoleTypeMutation,
   UpdateTrainerRoleTypeMutationVariables,
 } from '@app/generated/graphql'
-import { positions, positionsANZ } from '@app/modules/course_booking/utils'
 import {
   avatarSize,
   BILDRolesNames,
@@ -690,12 +688,6 @@ export const EditProfilePage: React.FC<
     }
   }
   const { getLabel: getCountryLabel } = useWorldCountries()
-  const allPositions = useMemo(() => {
-    return uniq([
-      ...Object.values(positions).flat(),
-      ...Object.values(positionsANZ).flat(),
-    ])
-  }, [])
 
   const updatePosition = useCallback(
     async (orgMember: OrgMemberType, position: string) => {
@@ -1278,7 +1270,7 @@ export const EditProfilePage: React.FC<
                           <Autocomplete
                             value={orgMember.position}
                             disabled={!editable}
-                            options={allPositions}
+                            options={jobTitles}
                             onChange={(_, value) =>
                               updatePosition(orgMember, value ?? '')
                             }
