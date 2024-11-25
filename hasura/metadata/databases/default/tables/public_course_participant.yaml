@@ -652,6 +652,17 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/participant/graded'
+  - name: course_participant_marked_as_attended
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - attended
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/attended'
   - name: create_certificate
     definition:
       enable_manual: true

@@ -111,6 +111,7 @@ export const CourseAttendance = () => {
     const attendedAudit: Course_Participant_Audit_Insert_Input[] = []
     const notAttended: string[] = []
     const notAttendedAudit: Course_Participant_Audit_Insert_Input[] = []
+    const evaluationsToDelete: string[] = []
 
     for (const id in attendanceRef.current) {
       const participant = participantsData?.find(
@@ -135,6 +136,7 @@ export const CourseAttendance = () => {
           payload: {},
           xero_invoice_number: participant.order?.xeroInvoiceNumber,
         })
+        evaluationsToDelete.push(participant.profile.id)
       }
     }
 
@@ -146,6 +148,8 @@ export const CourseAttendance = () => {
             attendedAudit,
             notAttended,
             notAttendedAudit,
+            courseId: Number(courseId),
+            participantProfileId: evaluationsToDelete,
           }),
           steps.length === 1
             ? saveGradingDetails({ courseId: Number(courseId) })

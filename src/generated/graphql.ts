@@ -45389,6 +45389,7 @@ export type Organization = {
   affiliated_organisations_aggregate: Organization_Aggregate;
   attributes: Scalars['jsonb'];
   canAccessKnowledgeHub?: Maybe<Scalars['Boolean']>;
+  connect_fee_paying_organization?: Maybe<Scalars['uuid']>;
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
@@ -45728,6 +45729,7 @@ export type Organization_Bool_Exp = {
   affiliated_organisations_aggregate?: InputMaybe<Organization_Aggregate_Bool_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   canAccessKnowledgeHub?: InputMaybe<Boolean_Comparison_Exp>;
+  connect_fee_paying_organization?: InputMaybe<Uuid_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dfeEstablishmentId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -45811,6 +45813,7 @@ export type Organization_Insert_Input = {
   affiliated_organisations?: InputMaybe<Organization_Arr_Rel_Insert_Input>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
+  connect_fee_paying_organization?: InputMaybe<Scalars['uuid']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -46135,6 +46138,7 @@ export type Organization_Max_Fields = {
   __typename?: 'organization_max_fields';
   /** A computed field, executes function "org_address_each_text" */
   addressEachText?: Maybe<Scalars['String']>;
+  connect_fee_paying_organization?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
   go1Licenses?: Maybe<Scalars['Int']>;
@@ -46154,6 +46158,7 @@ export type Organization_Max_Fields = {
 
 /** order by max() on columns of table "organization" */
 export type Organization_Max_Order_By = {
+  connect_fee_paying_organization?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
@@ -46479,6 +46484,7 @@ export type Organization_Min_Fields = {
   __typename?: 'organization_min_fields';
   /** A computed field, executes function "org_address_each_text" */
   addressEachText?: Maybe<Scalars['String']>;
+  connect_fee_paying_organization?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
   go1Licenses?: Maybe<Scalars['Int']>;
@@ -46498,6 +46504,7 @@ export type Organization_Min_Fields = {
 
 /** order by min() on columns of table "organization" */
 export type Organization_Min_Order_By = {
+  connect_fee_paying_organization?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
@@ -46543,6 +46550,7 @@ export type Organization_Order_By = {
   affiliated_organisations_aggregate?: InputMaybe<Organization_Aggregate_Order_By>;
   attributes?: InputMaybe<Order_By>;
   canAccessKnowledgeHub?: InputMaybe<Order_By>;
+  connect_fee_paying_organization?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
@@ -46595,6 +46603,8 @@ export enum Organization_Select_Column {
   Attributes = 'attributes',
   /** column name */
   CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
+  /** column name */
+  ConnectFeePayingOrganization = 'connect_fee_paying_organization',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -46650,6 +46660,7 @@ export type Organization_Set_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
+  connect_fee_paying_organization?: InputMaybe<Scalars['uuid']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -46722,6 +46733,7 @@ export type Organization_Stream_Cursor_Value_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
+  connect_fee_paying_organization?: InputMaybe<Scalars['uuid']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -46922,6 +46934,8 @@ export enum Organization_Update_Column {
   Attributes = 'attributes',
   /** column name */
   CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
+  /** column name */
+  ConnectFeePayingOrganization = 'connect_fee_paying_organization',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -62211,10 +62225,12 @@ export type SaveCourseAttendanceMutationVariables = Exact<{
   notAttended: Array<Scalars['uuid']> | Scalars['uuid'];
   attendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
   notAttendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
+  courseId: Scalars['Int'];
+  participantProfileId?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
 }>;
 
 
-export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null, saveNotAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveNotAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null };
+export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null, saveNotAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveNotAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null, delete_course_evaluation_answers?: { __typename?: 'course_evaluation_answers_mutation_response', affected_rows: number } | null };
 
 export type SendCourseInformationMutationVariables = Exact<{
   courseId: Scalars['Int'];

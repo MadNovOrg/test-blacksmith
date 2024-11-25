@@ -1,0 +1,10 @@
+table:
+  name: course_evaluation_scheduled_event
+  schema: public
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: course_participant
+    using:
+      foreign_key_constraint_on: profile_id

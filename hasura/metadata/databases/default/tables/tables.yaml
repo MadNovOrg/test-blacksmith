@@ -30,6 +30,7 @@
 - "!include public_course_evaluation_question_group.yaml"
 - "!include public_course_evaluation_question_type.yaml"
 - "!include public_course_evaluation_questions.yaml"
+- "!include public_course_evaluation_scheduled_event.yaml"
 - "!include public_course_exception.yaml"
 - "!include public_course_exceptions.yaml"
 - "!include public_course_expenses.yaml"
