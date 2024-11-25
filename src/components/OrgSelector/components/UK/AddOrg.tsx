@@ -1,9 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import InfoIcon from '@mui/icons-material/Info'
 import { LoadingButton } from '@mui/lab'
-import { Button, TextField, Tooltip, Grid, Typography } from '@mui/material'
+import {
+  Button,
+  TextField,
+  Tooltip,
+  Grid,
+  Typography,
+  Alert,
+} from '@mui/material'
 import { CountryCode } from 'libphonenumber-js'
-import { throttle } from 'lodash'
 import { useEffect, useMemo, FC, PropsWithChildren, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
@@ -55,8 +61,10 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   onClose,
 }) {
   const { t, _t } = useScopedTranslation('components.add-organisation')
-  const [{ data: organisationData, fetching: loading }, insertOrganisation] =
-    useInsertNewOrganization()
+  const [
+    { data: organisationData, fetching: loading, error },
+    insertOrganisation,
+  ] = useInsertNewOrganization()
 
   const { pathname } = useLocation()
   const client = useClient()
@@ -136,12 +144,6 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
     }
 
     if (isDFESuggestion) {
-      // Delay necesarry in the scenario where two users create the same dfe org at the same time on different devices - would result in duplicated org
-      // Very rare edge case but could happen
-      const throttledOrganisationInsert = throttle(
-        async () => await insertOrganisation(vars),
-        600,
-      )
       await client
         .query<
           GetDfeRegisteredOrganisationQuery,
@@ -153,7 +155,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         .toPromise()
         .then(async organization => {
           if (!organization.data?.dfe_establishment[0].registered) {
-            throttledOrganisationInsert()
+            await insertOrganisation(vars)
           } else
             onSuccess({
               id: organization.data.dfe_establishment[0].organizations[0].id,
@@ -400,6 +402,13 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
                 }}
                 fullWidth
               />
+            </Grid>
+          ) : null}
+          {error?.message ? (
+            <Grid item>
+              <Alert severity="error">
+                <Typography>{t('already-exists')}</Typography>
+              </Alert>
             </Grid>
           ) : null}
         </Grid>

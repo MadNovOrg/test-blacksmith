@@ -348,7 +348,8 @@
       "stateTerritory": "State/Territory",
       "state": "State",
       "territory": "Territory"
-    }
+    },
+    "already-exists": "Organisation already exists. Please select from the list."
   },
   "user-selector": {
     "placeholder": "User email",
