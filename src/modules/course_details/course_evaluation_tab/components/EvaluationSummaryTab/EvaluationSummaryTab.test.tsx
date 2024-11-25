@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
@@ -8,7 +9,7 @@ import {
   GetEvaluationsQuery,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent } from '@test/index'
+import { render, renderHook, screen, userEvent } from '@test/index'
 import { buildProfile, buildCourse } from '@test/mock-data-utils'
 
 import { EvaluationSummaryTab } from './EvaluationSummaryTab'
@@ -41,6 +42,11 @@ const course = buildCourse({
 })
 
 describe('component: EvaluationSummaryTab', () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
   it('displays a spinner while data is loading', () => {
     render(
       <Routes>
@@ -363,5 +369,35 @@ describe('component: EvaluationSummaryTab', () => {
     await userEvent.click(screen.getByText('Complete my evaluation'))
 
     expect(screen.queryByText('Evaluation submit')).toBeInTheDocument()
+  })
+  it('displays summary evaluation as trainer', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: GetEvaluationsQuery }>({
+          data: {
+            evaluations,
+            attendees,
+            trainers,
+          },
+        }),
+    } as unknown as Client
+    render(
+      <Routes>
+        <Route
+          path="/courses/:id/details"
+          element={
+            <Provider value={client}>
+              <EvaluationSummaryTab course={course} />
+            </Provider>
+          }
+        />
+      </Routes>,
+      { auth: { profile: { id: trainers[0].profile.id } } },
+      { initialEntries: ['/courses/1/details'] },
+    )
+
+    expect(
+      screen.queryByText(t('pages.course-details.tabs.evaluation.export-idle')),
+    ).toBeInTheDocument
   })
 })

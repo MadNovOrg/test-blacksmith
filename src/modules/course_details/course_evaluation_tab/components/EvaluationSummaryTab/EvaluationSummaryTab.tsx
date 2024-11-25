@@ -307,17 +307,17 @@ export const EvaluationSummaryTab: React.FC<
             />
           </Grid>
           <Grid item md={12}>
-            {!isOpenCourseTrainer ? (
-              <Grid
-                item
-                container
-                md={12}
-                sm={12}
-                display="flex"
-                justifyContent="flex-end"
-                flexDirection={isMobile ? 'column' : 'row'}
-                spacing={2}
-              >
+            <Grid
+              item
+              container
+              md={12}
+              sm={12}
+              display="flex"
+              justifyContent="flex-end"
+              flexDirection={isMobile ? 'column' : 'row'}
+              spacing={2}
+            >
+              {!isOpenCourseTrainer ? (
                 <Grid item>
                   <Button
                     variant="outlined"
@@ -330,21 +330,21 @@ export const EvaluationSummaryTab: React.FC<
                     {PDFExportButtonContent}
                   </Button>
                 </Grid>
-                <Grid item>
-                  <Button
-                    component={LinkBehavior}
-                    variant="contained"
-                    color="primary"
-                    href="../evaluation/summary"
-                    disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
-                    data-testid="view-summary-evaluation"
-                    fullWidth={isMobile}
-                  >
-                    {t('pages.course-details.tabs.evaluation.button')}
-                  </Button>
-                </Grid>
+              ) : null}
+              <Grid item>
+                <Button
+                  component={LinkBehavior}
+                  variant="contained"
+                  color="primary"
+                  href="../evaluation/summary"
+                  disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
+                  data-testid="view-summary-evaluation"
+                  fullWidth={isMobile}
+                >
+                  {t('pages.course-details.tabs.evaluation.button')}
+                </Button>
               </Grid>
-            ) : null}
+            </Grid>
           </Grid>
         </Grid>
 
