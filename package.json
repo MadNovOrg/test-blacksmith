@@ -177,7 +177,7 @@
     "@nx/playwright": "16.7.4",
     "@nx/react": "^16.7.4",
     "@nx/vite": "16.7.4",
-    "@playwright/test": "^1.45.0",
+    "@playwright/test": "^1.49.0",
     "@sentry/vite-plugin": "^2.22.6",
     "@storybook/addon-actions": "^7.6.4",
     "@storybook/addon-essentials": "^7.6.7",
