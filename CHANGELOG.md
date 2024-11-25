@@ -1,5 +1,23 @@
 # @teamteach/hub
 
+## 4.13.0
+
+### Minor Changes
+
+- ec12315: Hides the Proceed button on indirect course creation as trainer while there are time related exceptions
+- 92aeed6: Closed BL course license management and participants license management
+- 7a354b7: Improve management of go1 licenses for Indirect type courses
+- 5cbda89: Restrict attendance management after course completion
+- 5c861f6: Hide MCM on ANZ.
+- 8339945: ANZ Main and affiliate organisations go1 licenses management
+- 9eb7359: Level 1 Non-Physical ANZ complete setup.
+- 942f5c8: Add ANZ LEVEL 2 BL modules. Rename Seperations to Separations. Rename Preperation to Preparation.
+- 1e53ad3: ANZ course modules.
+
+### Patch Changes
+
+- 2e63b55: adjust positions list for ANZ
+
 ## 4.12.0
 
 ### Minor Changes
