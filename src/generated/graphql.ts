@@ -35929,6 +35929,10 @@ export type Mutation_Root = {
   delete_post_training_email_scheduled_events?: Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>;
   /** delete single row from the table: "post_training_email_scheduled_events" */
   delete_post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
+  /** delete data from the table: "pre_training_email_scheduled_events" */
+  delete_pre_training_email_scheduled_events?: Maybe<Pre_Training_Email_Scheduled_Events_Mutation_Response>;
+  /** delete single row from the table: "pre_training_email_scheduled_events" */
+  delete_pre_training_email_scheduled_events_by_pk?: Maybe<Pre_Training_Email_Scheduled_Events>;
   /** delete data from the table: "private_course_booking" */
   delete_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** delete single row from the table: "private_course_booking" */
@@ -36387,6 +36391,10 @@ export type Mutation_Root = {
   insert_post_training_email_scheduled_events?: Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>;
   /** insert a single row into the table: "post_training_email_scheduled_events" */
   insert_post_training_email_scheduled_events_one?: Maybe<Post_Training_Email_Scheduled_Events>;
+  /** insert data into the table: "pre_training_email_scheduled_events" */
+  insert_pre_training_email_scheduled_events?: Maybe<Pre_Training_Email_Scheduled_Events_Mutation_Response>;
+  /** insert a single row into the table: "pre_training_email_scheduled_events" */
+  insert_pre_training_email_scheduled_events_one?: Maybe<Pre_Training_Email_Scheduled_Events>;
   /** insert data into the table: "private_course_booking" */
   insert_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** insert a single row into the table: "private_course_booking" */
@@ -37049,6 +37057,12 @@ export type Mutation_Root = {
   update_post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
   /** update multiples rows of table: "post_training_email_scheduled_events" */
   update_post_training_email_scheduled_events_many?: Maybe<Array<Maybe<Post_Training_Email_Scheduled_Events_Mutation_Response>>>;
+  /** update data of the table: "pre_training_email_scheduled_events" */
+  update_pre_training_email_scheduled_events?: Maybe<Pre_Training_Email_Scheduled_Events_Mutation_Response>;
+  /** update single row of the table: "pre_training_email_scheduled_events" */
+  update_pre_training_email_scheduled_events_by_pk?: Maybe<Pre_Training_Email_Scheduled_Events>;
+  /** update multiples rows of table: "pre_training_email_scheduled_events" */
+  update_pre_training_email_scheduled_events_many?: Maybe<Array<Maybe<Pre_Training_Email_Scheduled_Events_Mutation_Response>>>;
   /** update data of the table: "private_course_booking" */
   update_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
   /** update single row of the table: "private_course_booking" */
@@ -38366,6 +38380,18 @@ export type Mutation_RootDelete_Post_Training_Email_Scheduled_EventsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Post_Training_Email_Scheduled_Events_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Pre_Training_Email_Scheduled_EventsArgs = {
+  where: Pre_Training_Email_Scheduled_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Pre_Training_Email_Scheduled_Events_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -39934,6 +39960,20 @@ export type Mutation_RootInsert_Post_Training_Email_Scheduled_EventsArgs = {
 export type Mutation_RootInsert_Post_Training_Email_Scheduled_Events_OneArgs = {
   object: Post_Training_Email_Scheduled_Events_Insert_Input;
   on_conflict?: InputMaybe<Post_Training_Email_Scheduled_Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Pre_Training_Email_Scheduled_EventsArgs = {
+  objects: Array<Pre_Training_Email_Scheduled_Events_Insert_Input>;
+  on_conflict?: InputMaybe<Pre_Training_Email_Scheduled_Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Pre_Training_Email_Scheduled_Events_OneArgs = {
+  object: Pre_Training_Email_Scheduled_Events_Insert_Input;
+  on_conflict?: InputMaybe<Pre_Training_Email_Scheduled_Events_On_Conflict>;
 };
 
 
@@ -42424,6 +42464,26 @@ export type Mutation_RootUpdate_Post_Training_Email_Scheduled_Events_By_PkArgs =
 /** mutation root */
 export type Mutation_RootUpdate_Post_Training_Email_Scheduled_Events_ManyArgs = {
   updates: Array<Post_Training_Email_Scheduled_Events_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Pre_Training_Email_Scheduled_EventsArgs = {
+  _set?: InputMaybe<Pre_Training_Email_Scheduled_Events_Set_Input>;
+  where: Pre_Training_Email_Scheduled_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Pre_Training_Email_Scheduled_Events_By_PkArgs = {
+  _set?: InputMaybe<Pre_Training_Email_Scheduled_Events_Set_Input>;
+  pk_columns: Pre_Training_Email_Scheduled_Events_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Pre_Training_Email_Scheduled_Events_ManyArgs = {
+  updates: Array<Pre_Training_Email_Scheduled_Events_Updates>;
 };
 
 
@@ -47643,6 +47703,168 @@ export type Post_Training_Email_Scheduled_Events_Updates = {
   where: Post_Training_Email_Scheduled_Events_Bool_Exp;
 };
 
+/** columns and relationships of "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events = {
+  __typename?: 'pre_training_email_scheduled_events';
+  course_participant_id: Scalars['uuid'];
+  created_at: Scalars['timestamptz'];
+  event_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+};
+
+/** aggregated selection of "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Aggregate = {
+  __typename?: 'pre_training_email_scheduled_events_aggregate';
+  aggregate?: Maybe<Pre_Training_Email_Scheduled_Events_Aggregate_Fields>;
+  nodes: Array<Pre_Training_Email_Scheduled_Events>;
+};
+
+/** aggregate fields of "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Aggregate_Fields = {
+  __typename?: 'pre_training_email_scheduled_events_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Pre_Training_Email_Scheduled_Events_Max_Fields>;
+  min?: Maybe<Pre_Training_Email_Scheduled_Events_Min_Fields>;
+};
+
+
+/** aggregate fields of "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "pre_training_email_scheduled_events". All fields are combined with a logical 'AND'. */
+export type Pre_Training_Email_Scheduled_Events_Bool_Exp = {
+  _and?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Bool_Exp>>;
+  _not?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
+  _or?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Bool_Exp>>;
+  course_participant_id?: InputMaybe<Uuid_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  event_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "pre_training_email_scheduled_events" */
+export enum Pre_Training_Email_Scheduled_Events_Constraint {
+  /** unique or primary key constraint on columns "course_participant_id" */
+  PreTrainingEmailScheduledEventsCourseParticipantIdKey = 'pre_training_email_scheduled_events_course_participant_id_key',
+  /** unique or primary key constraint on columns "event_id" */
+  PreTrainingEmailScheduledEventsEventIdKey = 'pre_training_email_scheduled_events_event_id_key',
+  /** unique or primary key constraint on columns "id" */
+  PreTrainingEmailScheduledEventsPkey = 'pre_training_email_scheduled_events_pkey'
+}
+
+/** input type for inserting data into table "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Insert_Input = {
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Pre_Training_Email_Scheduled_Events_Max_Fields = {
+  __typename?: 'pre_training_email_scheduled_events_max_fields';
+  course_participant_id?: Maybe<Scalars['uuid']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Pre_Training_Email_Scheduled_Events_Min_Fields = {
+  __typename?: 'pre_training_email_scheduled_events_min_fields';
+  course_participant_id?: Maybe<Scalars['uuid']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Mutation_Response = {
+  __typename?: 'pre_training_email_scheduled_events_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Pre_Training_Email_Scheduled_Events>;
+};
+
+/** on_conflict condition type for table "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_On_Conflict = {
+  constraint: Pre_Training_Email_Scheduled_Events_Constraint;
+  update_columns?: Array<Pre_Training_Email_Scheduled_Events_Update_Column>;
+  where?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "pre_training_email_scheduled_events". */
+export type Pre_Training_Email_Scheduled_Events_Order_By = {
+  course_participant_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  event_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: pre_training_email_scheduled_events */
+export type Pre_Training_Email_Scheduled_Events_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "pre_training_email_scheduled_events" */
+export enum Pre_Training_Email_Scheduled_Events_Select_Column {
+  /** column name */
+  CourseParticipantId = 'course_participant_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventId = 'event_id',
+  /** column name */
+  Id = 'id'
+}
+
+/** input type for updating data in table "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Set_Input = {
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** Streaming cursor of the table "pre_training_email_scheduled_events" */
+export type Pre_Training_Email_Scheduled_Events_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Pre_Training_Email_Scheduled_Events_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Pre_Training_Email_Scheduled_Events_Stream_Cursor_Value_Input = {
+  course_participant_id?: InputMaybe<Scalars['uuid']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "pre_training_email_scheduled_events" */
+export enum Pre_Training_Email_Scheduled_Events_Update_Column {
+  /** column name */
+  CourseParticipantId = 'course_participant_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventId = 'event_id',
+  /** column name */
+  Id = 'id'
+}
+
+export type Pre_Training_Email_Scheduled_Events_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Pre_Training_Email_Scheduled_Events_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Pre_Training_Email_Scheduled_Events_Bool_Exp;
+};
+
 /** Private course booking enquiry */
 export type Private_Course_Booking = {
   __typename?: 'private_course_booking';
@@ -50982,6 +51204,12 @@ export type Query_Root = {
   post_training_email_scheduled_events_aggregate: Post_Training_Email_Scheduled_Events_Aggregate;
   /** fetch data from the table: "post_training_email_scheduled_events" using primary key columns */
   post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
+  /** fetch data from the table: "pre_training_email_scheduled_events" */
+  pre_training_email_scheduled_events: Array<Pre_Training_Email_Scheduled_Events>;
+  /** fetch aggregated fields from the table: "pre_training_email_scheduled_events" */
+  pre_training_email_scheduled_events_aggregate: Pre_Training_Email_Scheduled_Events_Aggregate;
+  /** fetch data from the table: "pre_training_email_scheduled_events" using primary key columns */
+  pre_training_email_scheduled_events_by_pk?: Maybe<Pre_Training_Email_Scheduled_Events>;
   /** fetch data from the table: "private_course_booking" */
   private_course_booking: Array<Private_Course_Booking>;
   /** fetch aggregated fields from the table: "private_course_booking" */
@@ -53308,6 +53536,29 @@ export type Query_RootPost_Training_Email_Scheduled_Events_By_PkArgs = {
 };
 
 
+export type Query_RootPre_Training_Email_Scheduled_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Query_RootPre_Training_Email_Scheduled_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Query_RootPre_Training_Email_Scheduled_Events_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootPrivate_Course_BookingArgs = {
   distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -55352,6 +55603,14 @@ export type Subscription_Root = {
   post_training_email_scheduled_events_by_pk?: Maybe<Post_Training_Email_Scheduled_Events>;
   /** fetch data from the table in a streaming manner: "post_training_email_scheduled_events" */
   post_training_email_scheduled_events_stream: Array<Post_Training_Email_Scheduled_Events>;
+  /** fetch data from the table: "pre_training_email_scheduled_events" */
+  pre_training_email_scheduled_events: Array<Pre_Training_Email_Scheduled_Events>;
+  /** fetch aggregated fields from the table: "pre_training_email_scheduled_events" */
+  pre_training_email_scheduled_events_aggregate: Pre_Training_Email_Scheduled_Events_Aggregate;
+  /** fetch data from the table: "pre_training_email_scheduled_events" using primary key columns */
+  pre_training_email_scheduled_events_by_pk?: Maybe<Pre_Training_Email_Scheduled_Events>;
+  /** fetch data from the table in a streaming manner: "pre_training_email_scheduled_events" */
+  pre_training_email_scheduled_events_stream: Array<Pre_Training_Email_Scheduled_Events>;
   /** fetch data from the table: "private_course_booking" */
   private_course_booking: Array<Private_Course_Booking>;
   /** fetch aggregated fields from the table: "private_course_booking" */
@@ -58319,6 +58578,36 @@ export type Subscription_RootPost_Training_Email_Scheduled_Events_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Post_Training_Email_Scheduled_Events_Stream_Cursor_Input>>;
   where?: InputMaybe<Post_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootPre_Training_Email_Scheduled_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootPre_Training_Email_Scheduled_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Pre_Training_Email_Scheduled_Events_Order_By>>;
+  where?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootPre_Training_Email_Scheduled_Events_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootPre_Training_Email_Scheduled_Events_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Pre_Training_Email_Scheduled_Events_Stream_Cursor_Input>>;
+  where?: InputMaybe<Pre_Training_Email_Scheduled_Events_Bool_Exp>;
 };
 
 

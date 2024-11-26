@@ -1,0 +1,1 @@
+CREATE TABLE "public"."pre_training_email_scheduled_events" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "course_participant_id" uuid NOT NULL, "event_id" uuid NOT NULL, "created_at" timestamp with time zone DEFAULT now() NOT NULL, PRIMARY KEY ("id") , UNIQUE ("event_id"), UNIQUE ("course_participant_id"));

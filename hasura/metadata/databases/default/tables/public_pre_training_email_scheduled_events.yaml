@@ -1,0 +1,3 @@
+table:
+  name: pre_training_email_scheduled_events
+  schema: public

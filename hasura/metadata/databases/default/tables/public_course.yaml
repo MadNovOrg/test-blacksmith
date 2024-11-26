@@ -1673,6 +1673,17 @@ delete_permissions:
     permission:
       filter: {}
 event_triggers:
+  - name: c_manage_pre_training_survey_email
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - course_status
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-pre-training-survey-email/manage-course'
   - name: cancel_licenses
     definition:
       enable_manual: true

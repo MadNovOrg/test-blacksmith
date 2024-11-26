@@ -292,3 +292,14 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/start-date/changed'
+  - name: cs_manage_pre_training_survey_email
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - start
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-pre-training-survey-email/manage-cs'
