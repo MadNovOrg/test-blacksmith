@@ -1,0 +1,24 @@
+table:
+  name: hubspot_audit
+  schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - error
+        - page_details
+        - authentication_mode
+        - hubspot_cookie
+        - status
+        - created_at
+        - id
+        - profile_id
+    comment: ""
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""

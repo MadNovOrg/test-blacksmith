@@ -1,10 +1,13 @@
+import axios from 'axios'
 import { isPast } from 'date-fns'
+import Cookies from 'js-cookie'
 
-import { RoleName } from '@app/types'
+import { HubspotApiFormData, RoleName } from '@app/types'
 import { expiryDateWithGracePeriod } from '@app/util'
 
 import cognitoToProfile from './cognitoToProfile'
-import type { AuthState, CognitoUser } from './types'
+import { insertHubspotAudit } from './hooks/useHubspotAudit'
+import { AuthMode, AuthState, CognitoUser, Profile } from './types'
 
 // Roles allowed in switcher
 export const ActiveRoles = new Set([
@@ -114,5 +117,110 @@ export function lsActiveRoleClient({ id }: { id: string }) {
     key,
     get: () => (localStorage.getItem(key) ?? undefined) as RoleName | undefined,
     set: (role: RoleName) => localStorage.setItem(key, role),
+  }
+}
+
+export const userToHubspotContact = (
+  profile: Pick<
+    Profile,
+    'email' | 'id' | 'familyName' | 'givenName' | 'phone' | 'dob' | 'jobTitle'
+  >,
+): HubspotApiFormData => {
+  return {
+    submittedAt: new Date().getTime(),
+    fields: [
+      {
+        objectTypeId: '0-1',
+        name: 'email',
+        value: profile.email,
+      },
+      {
+        objectTypeId: '0-1',
+        name: 'hub_id',
+        value: profile.id.toString(),
+      },
+      {
+        objectTypeId: '0-1',
+        name: 'firstname',
+        value: profile.givenName,
+      },
+      {
+        objectTypeId: '0-1',
+        name: 'lastname',
+        value: profile.familyName,
+      },
+      {
+        objectTypeId: '0-1',
+        name: 'jobtitle',
+        value: profile.jobTitle,
+      },
+      {
+        objectTypeId: '0-1',
+        name: 'phone',
+        value: profile.phone,
+      },
+      {
+        objectTypeId: '0-1',
+        name: 'date_of_birth',
+        value: profile.dob,
+      },
+    ],
+    context: {
+      hutk: Cookies.get('hubspotutk') || '',
+      pageUri: location.origin,
+      pageName: document.title,
+    },
+  }
+}
+
+export const handleHubspotLogin = async ({
+  profile,
+  userJWT,
+  authMode,
+}: {
+  profile: Pick<
+    Profile,
+    'email' | 'id' | 'familyName' | 'givenName' | 'phone' | 'dob' | 'jobTitle'
+  >
+  userJWT: string
+  authMode: AuthMode
+}) => {
+  const hubspotEndpoint: Record<AuthMode, string> = {
+    [AuthMode.LOGIN]: import.meta.env.VITE_HUBSPOT_LOGIN_FORM,
+    [AuthMode.REGISTER]: import.meta.env.VITE_HUBSPOT_REGISTER_FORM,
+  }
+
+  try {
+    await axios.post<HubspotApiFormData>(hubspotEndpoint[authMode], {
+      ...userToHubspotContact(profile),
+    })
+    await insertHubspotAudit(
+      {
+        profile_id: profile.id,
+        hubspot_cookie: Cookies.get('hubspotutk'),
+        authentication_mode: authMode,
+        status: 'SUCCESS',
+        page_details: {
+          pageUri: location.origin,
+          pageName: document.title,
+        },
+      },
+      userJWT,
+    )
+  } catch (err) {
+    await insertHubspotAudit(
+      {
+        profile_id: profile.id,
+        error: JSON.stringify(err),
+        hubspot_cookie: Cookies.get('hubspotutk'),
+        authentication_mode: authMode,
+        status: 'FAILED',
+        page_details: {
+          pageUri: location.origin,
+          pageName: document.title,
+        },
+      },
+      userJWT,
+    )
   }
 }

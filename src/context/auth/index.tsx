@@ -4,12 +4,22 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
 import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/modules/profile/queries/update-profile-activity'
-import { RoleName } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { TTCookies } from './cookies'
-import { fetchUserProfile, lsActiveRoleClient } from './helpers'
+import {
+  fetchUserProfile,
+  handleHubspotLogin,
+  lsActiveRoleClient,
+} from './helpers'
 import { injectACL } from './permissions'
-import type { AuthContextType, AuthState, CognitoUser, E } from './types'
+import {
+  AuthMode,
+  type AuthContextType,
+  type AuthState,
+  type CognitoUser,
+  type E,
+} from './types'
 
 export const AuthContext = React.createContext({} as AuthContextType)
 export const useAuth = () => React.useContext(AuthContext)
@@ -20,49 +30,53 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const [loading, setLoading] = useState(true)
   const [state, setState] = useState<AuthState>({})
 
-  const loadProfile = useCallback(async (user: CognitoUser) => {
-    const data = await fetchUserProfile(user)
-    let token = ''
+  const loadProfile = useCallback(
+    async (user: CognitoUser): Promise<AuthState | void> => {
+      const data = await fetchUserProfile(user)
+      let token = ''
 
-    if (data?.profile) {
-      const idToken = (await Auth.currentSession()).getIdToken()
-      const expiryUnixSeconds = idToken.getExpiration()
-      token = idToken.getJwtToken()
+      if (data?.profile) {
+        const idToken = (await Auth.currentSession()).getIdToken()
+        const expiryUnixSeconds = idToken.getExpiration()
+        token = idToken.getJwtToken()
 
-      // write to cookie
-      TTCookies.setCookie('mo_jwt_token', token, {
-        secure: true,
-        expires: expiryUnixSeconds * 1000,
-        path: '/',
-        domain: '.teamteach.com',
-        sameSite: 'Strict',
-      })
+        // write to cookie
+        TTCookies.setCookie('mo_jwt_token', token, {
+          secure: true,
+          expires: expiryUnixSeconds * 1000,
+          path: '/',
+          domain: '.teamteach.com',
+          sameSite: 'Strict',
+        })
 
-      // delete the "signout" cookie if it exists
-      TTCookies.deleteCookie('tt_logout', {
-        secure: true,
-        path: '/',
-        domain: '.teamteach.com',
-        sameSite: 'Strict',
-      })
+        // delete the "signout" cookie if it exists
+        TTCookies.deleteCookie('tt_logout', {
+          secure: true,
+          path: '/',
+          domain: '.teamteach.com',
+          sameSite: 'Strict',
+        })
 
-      posthog.identify(data.profile.id, { email: data.profile.email })
-    }
+        posthog.identify(data.profile.id, { email: data.profile.email })
+      }
 
-    setState({ ...data })
-    setLoading(false)
+      setState({ ...data })
+      setLoading(false)
 
-    if (data?.profile && token) {
-      await gqlRequest(
-        UPDATE_PROFILE_ACTIVITY_QUERY,
-        { profileId: data.profile.id },
-        {
-          token,
-          role: data.activeRole,
-        },
-      )
-    }
-  }, [])
+      if (data?.profile && token) {
+        await gqlRequest(
+          UPDATE_PROFILE_ACTIVITY_QUERY,
+          { profileId: data.profile.id },
+          {
+            token,
+            role: data.activeRole,
+          },
+        )
+      }
+      return data
+    },
+    [],
+  )
 
   const onUserNotLoggedIn = () => {
     // delete cookie if exists
@@ -105,7 +119,19 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     async (email: string, password: string) => {
       try {
         const user = await Auth.signIn(email, password)
-        await loadProfile(user)
+        const loadedProfile = await loadProfile(user)
+
+        if (
+          loadedProfile?.profile &&
+          import.meta.env.VITE_AWS_REGION === AwsRegions.UK // no ANZ hubspot implementation
+        ) {
+          await handleHubspotLogin({
+            profile: loadedProfile.profile,
+            userJWT: user.signInUserSession.getIdToken().getJwtToken(),
+            authMode: AuthMode.LOGIN,
+          })
+        }
+
         return { user, error: undefined }
       } catch (err) {
         return { error: err as E }

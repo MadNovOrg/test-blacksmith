@@ -41,8 +41,8 @@ export interface AuthContextType extends AuthState {
   logout: () => Promise<void>
   getJWT: () => Promise<string>
   changeRole: (role: RoleName) => void
-  loadProfile: (user: CognitoUser) => Promise<void>
-  reloadCurrentProfile: () => Promise<void>
+  loadProfile: (user: CognitoUser) => Promise<AuthState | void>
+  reloadCurrentProfile: () => Promise<AuthState | void>
   acl: ReturnType<typeof getACL>
 }
 
@@ -52,4 +52,9 @@ export type Claims = {
   'x-hasura-allowed-roles': RoleName[]
   'x-hasura-default-role': RoleName
   'x-hasura-tt-organizations': string
+}
+
+export enum AuthMode {
+  LOGIN = 'login',
+  REGISTER = 'register',
 }

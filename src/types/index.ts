@@ -922,3 +922,18 @@ export enum AwsRegions {
   UK = 'eu-west-2',
   Australia = 'ap-southeast-2',
 }
+
+export type HubspotApiFormData = {
+  submittedAt: number
+  fields: Array<{
+    objectTypeId?: '0-1' //https://developers.hubspot.com/beta-docs/guides/api/crm/understanding-the-crm
+    name: string
+    value: string
+  }>
+  associations?: Array<Record<string, string>>
+  context?: {
+    hutk?: string
+    pageUri?: string
+    pageName?: string
+  }
+}

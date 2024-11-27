@@ -31937,6 +31937,284 @@ export type Grade_Updates = {
   where: Grade_Bool_Exp;
 };
 
+/** This table stores hubspot related logs */
+export type Hubspot_Audit = {
+  __typename?: 'hubspot_audit';
+  authentication_mode?: Maybe<Scalars['String']>;
+  created_at: Scalars['timestamptz'];
+  error?: Maybe<Scalars['jsonb']>;
+  hubspot_cookie: Scalars['String'];
+  hubspot_form: Scalars['uuid'];
+  hubspot_portal: Scalars['uuid'];
+  id: Scalars['uuid'];
+  page_details?: Maybe<Scalars['jsonb']>;
+  profile_id: Scalars['uuid'];
+  status: Scalars['String'];
+};
+
+
+/** This table stores hubspot related logs */
+export type Hubspot_AuditErrorArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** This table stores hubspot related logs */
+export type Hubspot_AuditPage_DetailsArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "hubspot_audit" */
+export type Hubspot_Audit_Aggregate = {
+  __typename?: 'hubspot_audit_aggregate';
+  aggregate?: Maybe<Hubspot_Audit_Aggregate_Fields>;
+  nodes: Array<Hubspot_Audit>;
+};
+
+/** aggregate fields of "hubspot_audit" */
+export type Hubspot_Audit_Aggregate_Fields = {
+  __typename?: 'hubspot_audit_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Hubspot_Audit_Max_Fields>;
+  min?: Maybe<Hubspot_Audit_Min_Fields>;
+};
+
+
+/** aggregate fields of "hubspot_audit" */
+export type Hubspot_Audit_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Hubspot_Audit_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Hubspot_Audit_Append_Input = {
+  error?: InputMaybe<Scalars['jsonb']>;
+  page_details?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** Boolean expression to filter rows from the table "hubspot_audit". All fields are combined with a logical 'AND'. */
+export type Hubspot_Audit_Bool_Exp = {
+  _and?: InputMaybe<Array<Hubspot_Audit_Bool_Exp>>;
+  _not?: InputMaybe<Hubspot_Audit_Bool_Exp>;
+  _or?: InputMaybe<Array<Hubspot_Audit_Bool_Exp>>;
+  authentication_mode?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  error?: InputMaybe<Jsonb_Comparison_Exp>;
+  hubspot_cookie?: InputMaybe<String_Comparison_Exp>;
+  hubspot_form?: InputMaybe<Uuid_Comparison_Exp>;
+  hubspot_portal?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  page_details?: InputMaybe<Jsonb_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "hubspot_audit" */
+export enum Hubspot_Audit_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  HubspotAuditPkey = 'hubspot_audit_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Hubspot_Audit_Delete_At_Path_Input = {
+  error?: InputMaybe<Array<Scalars['String']>>;
+  page_details?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Hubspot_Audit_Delete_Elem_Input = {
+  error?: InputMaybe<Scalars['Int']>;
+  page_details?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Hubspot_Audit_Delete_Key_Input = {
+  error?: InputMaybe<Scalars['String']>;
+  page_details?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for inserting data into table "hubspot_audit" */
+export type Hubspot_Audit_Insert_Input = {
+  authentication_mode?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  error?: InputMaybe<Scalars['jsonb']>;
+  hubspot_cookie?: InputMaybe<Scalars['String']>;
+  hubspot_form?: InputMaybe<Scalars['uuid']>;
+  hubspot_portal?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  page_details?: InputMaybe<Scalars['jsonb']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Hubspot_Audit_Max_Fields = {
+  __typename?: 'hubspot_audit_max_fields';
+  authentication_mode?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  hubspot_cookie?: Maybe<Scalars['String']>;
+  hubspot_form?: Maybe<Scalars['uuid']>;
+  hubspot_portal?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Hubspot_Audit_Min_Fields = {
+  __typename?: 'hubspot_audit_min_fields';
+  authentication_mode?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  hubspot_cookie?: Maybe<Scalars['String']>;
+  hubspot_form?: Maybe<Scalars['uuid']>;
+  hubspot_portal?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  status?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "hubspot_audit" */
+export type Hubspot_Audit_Mutation_Response = {
+  __typename?: 'hubspot_audit_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Hubspot_Audit>;
+};
+
+/** on_conflict condition type for table "hubspot_audit" */
+export type Hubspot_Audit_On_Conflict = {
+  constraint: Hubspot_Audit_Constraint;
+  update_columns?: Array<Hubspot_Audit_Update_Column>;
+  where?: InputMaybe<Hubspot_Audit_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "hubspot_audit". */
+export type Hubspot_Audit_Order_By = {
+  authentication_mode?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  error?: InputMaybe<Order_By>;
+  hubspot_cookie?: InputMaybe<Order_By>;
+  hubspot_form?: InputMaybe<Order_By>;
+  hubspot_portal?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  page_details?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: hubspot_audit */
+export type Hubspot_Audit_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Hubspot_Audit_Prepend_Input = {
+  error?: InputMaybe<Scalars['jsonb']>;
+  page_details?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "hubspot_audit" */
+export enum Hubspot_Audit_Select_Column {
+  /** column name */
+  AuthenticationMode = 'authentication_mode',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Error = 'error',
+  /** column name */
+  HubspotCookie = 'hubspot_cookie',
+  /** column name */
+  HubspotForm = 'hubspot_form',
+  /** column name */
+  HubspotPortal = 'hubspot_portal',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PageDetails = 'page_details',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  Status = 'status'
+}
+
+/** input type for updating data in table "hubspot_audit" */
+export type Hubspot_Audit_Set_Input = {
+  authentication_mode?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  error?: InputMaybe<Scalars['jsonb']>;
+  hubspot_cookie?: InputMaybe<Scalars['String']>;
+  hubspot_form?: InputMaybe<Scalars['uuid']>;
+  hubspot_portal?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  page_details?: InputMaybe<Scalars['jsonb']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "hubspot_audit" */
+export type Hubspot_Audit_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Hubspot_Audit_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Hubspot_Audit_Stream_Cursor_Value_Input = {
+  authentication_mode?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  error?: InputMaybe<Scalars['jsonb']>;
+  hubspot_cookie?: InputMaybe<Scalars['String']>;
+  hubspot_form?: InputMaybe<Scalars['uuid']>;
+  hubspot_portal?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  page_details?: InputMaybe<Scalars['jsonb']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "hubspot_audit" */
+export enum Hubspot_Audit_Update_Column {
+  /** column name */
+  AuthenticationMode = 'authentication_mode',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Error = 'error',
+  /** column name */
+  HubspotCookie = 'hubspot_cookie',
+  /** column name */
+  HubspotForm = 'hubspot_form',
+  /** column name */
+  HubspotPortal = 'hubspot_portal',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PageDetails = 'page_details',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  Status = 'status'
+}
+
+export type Hubspot_Audit_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Hubspot_Audit_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Hubspot_Audit_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Hubspot_Audit_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Hubspot_Audit_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Hubspot_Audit_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Hubspot_Audit_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Hubspot_Audit_Bool_Exp;
+};
+
 /** columns and relationships of "identity" */
 export type Identity = {
   __typename?: 'identity';
@@ -35829,6 +36107,10 @@ export type Mutation_Root = {
   delete_grade?: Maybe<Grade_Mutation_Response>;
   /** delete single row from the table: "grade" */
   delete_grade_by_pk?: Maybe<Grade>;
+  /** delete data from the table: "hubspot_audit" */
+  delete_hubspot_audit?: Maybe<Hubspot_Audit_Mutation_Response>;
+  /** delete single row from the table: "hubspot_audit" */
+  delete_hubspot_audit_by_pk?: Maybe<Hubspot_Audit>;
   /** delete data from the table: "identity" */
   delete_identity?: Maybe<Identity_Mutation_Response>;
   /** delete single row from the table: "identity" */
@@ -36291,6 +36573,10 @@ export type Mutation_Root = {
   insert_grade?: Maybe<Grade_Mutation_Response>;
   /** insert a single row into the table: "grade" */
   insert_grade_one?: Maybe<Grade>;
+  /** insert data into the table: "hubspot_audit" */
+  insert_hubspot_audit?: Maybe<Hubspot_Audit_Mutation_Response>;
+  /** insert a single row into the table: "hubspot_audit" */
+  insert_hubspot_audit_one?: Maybe<Hubspot_Audit>;
   /** insert data into the table: "identity" */
   insert_identity?: Maybe<Identity_Mutation_Response>;
   /** insert a single row into the table: "identity" */
@@ -36907,6 +37193,12 @@ export type Mutation_Root = {
   update_grade_by_pk?: Maybe<Grade>;
   /** update multiples rows of table: "grade" */
   update_grade_many?: Maybe<Array<Maybe<Grade_Mutation_Response>>>;
+  /** update data of the table: "hubspot_audit" */
+  update_hubspot_audit?: Maybe<Hubspot_Audit_Mutation_Response>;
+  /** update single row of the table: "hubspot_audit" */
+  update_hubspot_audit_by_pk?: Maybe<Hubspot_Audit>;
+  /** update multiples rows of table: "hubspot_audit" */
+  update_hubspot_audit_many?: Maybe<Array<Maybe<Hubspot_Audit_Mutation_Response>>>;
   /** update data of the table: "identity" */
   update_identity?: Maybe<Identity_Mutation_Response>;
   /** update single row of the table: "identity" */
@@ -38081,6 +38373,18 @@ export type Mutation_RootDelete_GradeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Grade_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Hubspot_AuditArgs = {
+  where: Hubspot_Audit_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Hubspot_Audit_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -39610,6 +39914,20 @@ export type Mutation_RootInsert_GradeArgs = {
 export type Mutation_RootInsert_Grade_OneArgs = {
   object: Grade_Insert_Input;
   on_conflict?: InputMaybe<Grade_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Hubspot_AuditArgs = {
+  objects: Array<Hubspot_Audit_Insert_Input>;
+  on_conflict?: InputMaybe<Hubspot_Audit_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Hubspot_Audit_OneArgs = {
+  object: Hubspot_Audit_Insert_Input;
+  on_conflict?: InputMaybe<Hubspot_Audit_On_Conflict>;
 };
 
 
@@ -41878,6 +42196,36 @@ export type Mutation_RootUpdate_Grade_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Grade_ManyArgs = {
   updates: Array<Grade_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Hubspot_AuditArgs = {
+  _append?: InputMaybe<Hubspot_Audit_Append_Input>;
+  _delete_at_path?: InputMaybe<Hubspot_Audit_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Hubspot_Audit_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Hubspot_Audit_Delete_Key_Input>;
+  _prepend?: InputMaybe<Hubspot_Audit_Prepend_Input>;
+  _set?: InputMaybe<Hubspot_Audit_Set_Input>;
+  where: Hubspot_Audit_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Hubspot_Audit_By_PkArgs = {
+  _append?: InputMaybe<Hubspot_Audit_Append_Input>;
+  _delete_at_path?: InputMaybe<Hubspot_Audit_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Hubspot_Audit_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Hubspot_Audit_Delete_Key_Input>;
+  _prepend?: InputMaybe<Hubspot_Audit_Prepend_Input>;
+  _set?: InputMaybe<Hubspot_Audit_Set_Input>;
+  pk_columns: Hubspot_Audit_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Hubspot_Audit_ManyArgs = {
+  updates: Array<Hubspot_Audit_Updates>;
 };
 
 
@@ -45827,6 +46175,8 @@ export type Organization_Bool_Exp = {
 
 /** unique or primary key constraints on table "organization" */
 export enum Organization_Constraint {
+  /** unique or primary key constraint on columns "dfe_establishment_id" */
+  OrganizationDfeEstablishmentIdKey = 'organization_dfe_establishment_id_key',
   /** unique or primary key constraint on columns "id" */
   OrganizationPkey = 'organization_pkey'
 }
@@ -51040,6 +51390,12 @@ export type Query_Root = {
   grade_aggregate: Grade_Aggregate;
   /** fetch data from the table: "grade" using primary key columns */
   grade_by_pk?: Maybe<Grade>;
+  /** fetch data from the table: "hubspot_audit" */
+  hubspot_audit: Array<Hubspot_Audit>;
+  /** fetch aggregated fields from the table: "hubspot_audit" */
+  hubspot_audit_aggregate: Hubspot_Audit_Aggregate;
+  /** fetch data from the table: "hubspot_audit" using primary key columns */
+  hubspot_audit_by_pk?: Maybe<Hubspot_Audit>;
   /** fetch data from the table: "identity" */
   identity: Array<Identity>;
   /** fetch aggregated fields from the table: "identity" */
@@ -52920,6 +53276,29 @@ export type Query_RootGrade_AggregateArgs = {
 
 export type Query_RootGrade_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootHubspot_AuditArgs = {
+  distinct_on?: InputMaybe<Array<Hubspot_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Hubspot_Audit_Order_By>>;
+  where?: InputMaybe<Hubspot_Audit_Bool_Exp>;
+};
+
+
+export type Query_RootHubspot_Audit_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Hubspot_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Hubspot_Audit_Order_By>>;
+  where?: InputMaybe<Hubspot_Audit_Bool_Exp>;
+};
+
+
+export type Query_RootHubspot_Audit_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -55396,6 +55775,14 @@ export type Subscription_Root = {
   grade_by_pk?: Maybe<Grade>;
   /** fetch data from the table in a streaming manner: "grade" */
   grade_stream: Array<Grade>;
+  /** fetch data from the table: "hubspot_audit" */
+  hubspot_audit: Array<Hubspot_Audit>;
+  /** fetch aggregated fields from the table: "hubspot_audit" */
+  hubspot_audit_aggregate: Hubspot_Audit_Aggregate;
+  /** fetch data from the table: "hubspot_audit" using primary key columns */
+  hubspot_audit_by_pk?: Maybe<Hubspot_Audit>;
+  /** fetch data from the table in a streaming manner: "hubspot_audit" */
+  hubspot_audit_stream: Array<Hubspot_Audit>;
   /** fetch data from the table: "identity" */
   identity: Array<Identity>;
   /** fetch aggregated fields from the table: "identity" */
@@ -57798,6 +58185,36 @@ export type Subscription_RootGrade_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Grade_Stream_Cursor_Input>>;
   where?: InputMaybe<Grade_Bool_Exp>;
+};
+
+
+export type Subscription_RootHubspot_AuditArgs = {
+  distinct_on?: InputMaybe<Array<Hubspot_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Hubspot_Audit_Order_By>>;
+  where?: InputMaybe<Hubspot_Audit_Bool_Exp>;
+};
+
+
+export type Subscription_RootHubspot_Audit_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Hubspot_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Hubspot_Audit_Order_By>>;
+  where?: InputMaybe<Hubspot_Audit_Bool_Exp>;
+};
+
+
+export type Subscription_RootHubspot_Audit_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootHubspot_Audit_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Hubspot_Audit_Stream_Cursor_Input>>;
+  where?: InputMaybe<Hubspot_Audit_Bool_Exp>;
 };
 
 
@@ -61868,6 +62285,13 @@ export type GetDistinctOrgResidingCountriesQueryVariables = Exact<{ [key: string
 
 
 export type GetDistinctOrgResidingCountriesQuery = { __typename?: 'query_root', org_distinct_country_codes: Array<{ __typename?: 'org_distinct_country_codes', countrycode?: string | null }> };
+
+export type InsertHubspotAuditMutationVariables = Exact<{
+  object: Hubspot_Audit_Insert_Input;
+}>;
+
+
+export type InsertHubspotAuditMutation = { __typename?: 'mutation_root', insert_hubspot_audit_one?: { __typename?: 'hubspot_audit', id: any } | null };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];

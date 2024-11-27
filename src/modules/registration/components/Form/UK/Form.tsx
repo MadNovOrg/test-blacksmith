@@ -36,6 +36,9 @@ import {
   useOrganizationToBeCreatedOnRegistration,
 } from '@app/components/OrgSelector/UK/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
+import { useAuth } from '@app/context/auth'
+import { handleHubspotLogin } from '@app/context/auth/helpers'
+import { AuthMode } from '@app/context/auth/types'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { gqlRequest } from '@app/lib/gql-request'
@@ -68,7 +71,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration',
   )
-
+  const {
+    acl: { isUK },
+  } = useAuth()
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [isManualFormError, setIsManualFormError] = useState(false)
@@ -145,7 +150,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         { input },
       )
 
-      await Auth.signUp({
+      const user = await Auth.signUp({
         username: data.email,
         password: data.password,
         attributes: {
@@ -156,8 +161,25 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       })
 
       onSignUp(data.email, data.password)
+
+      isUK()
+        ? await handleHubspotLogin({
+            authMode: AuthMode.REGISTER,
+            profile: {
+              email: data.email,
+              id: '',
+              familyName: data.surname,
+              givenName: data.firstName,
+              phone: data.phone,
+              dob: data.dob ? String(zonedTimeToUtc(data.dob, 'GMT')) : '',
+              jobTitle: data.jobTitle,
+            },
+            userJWT:
+              user.user.getSignInUserSession()?.getIdToken().getJwtToken() ??
+              '',
+          })
+        : null
     } catch (err) {
-      console.log(err)
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'
       setError(t(`${errors}${code}`) || t(`${errors}UnknownError`))

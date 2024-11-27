@@ -67,6 +67,7 @@
 - "!include public_go1_licenses.yaml"
 - "!include public_go1_licenses_history.yaml"
 - "!include public_grade.yaml"
+- "!include public_hubspot_audit.yaml"
 - "!include public_identity.yaml"
 - "!include public_identity_type.yaml"
 - "!include public_import_job.yaml"
