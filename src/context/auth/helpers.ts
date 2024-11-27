@@ -121,10 +121,7 @@ export function lsActiveRoleClient({ id }: { id: string }) {
 }
 
 export const userToHubspotContact = (
-  profile: Pick<
-    Profile,
-    'email' | 'id' | 'familyName' | 'givenName' | 'phone' | 'dob' | 'jobTitle'
-  >,
+  profile: Partial<Profile>,
 ): HubspotApiFormData => {
   return {
     submittedAt: new Date().getTime(),
@@ -134,37 +131,37 @@ export const userToHubspotContact = (
         name: 'email',
         value: profile.email,
       },
-      {
+      profile.id && {
         objectTypeId: '0-1',
         name: 'hub_id',
-        value: profile.id.toString(),
+        value: profile.id,
       },
-      {
+      profile.givenName && {
         objectTypeId: '0-1',
         name: 'firstname',
         value: profile.givenName,
       },
-      {
+      profile.familyName && {
         objectTypeId: '0-1',
         name: 'lastname',
         value: profile.familyName,
       },
-      {
+      profile.jobTitle && {
         objectTypeId: '0-1',
         name: 'jobtitle',
         value: profile.jobTitle,
       },
-      {
+      profile.phone && {
         objectTypeId: '0-1',
         name: 'phone',
         value: profile.phone,
       },
-      {
+      profile.dob && {
         objectTypeId: '0-1',
         name: 'date_of_birth',
         value: profile.dob,
       },
-    ],
+    ].filter(Boolean) as HubspotApiFormData['fields'],
     context: {
       hutk: Cookies.get('hubspotutk') || '',
       pageUri: location.origin,
@@ -173,15 +170,12 @@ export const userToHubspotContact = (
   }
 }
 
-export const handleHubspotLogin = async ({
+export const handleHubspotFormSubmit = async ({
   profile,
   userJWT,
   authMode,
 }: {
-  profile: Pick<
-    Profile,
-    'email' | 'id' | 'familyName' | 'givenName' | 'phone' | 'dob' | 'jobTitle'
-  >
+  profile: Partial<Profile>
   userJWT: string
   authMode: AuthMode
 }) => {
@@ -191,22 +185,22 @@ export const handleHubspotLogin = async ({
   }
 
   try {
-    await axios.post<HubspotApiFormData>(hubspotEndpoint[authMode], {
+    axios.post<HubspotApiFormData>(hubspotEndpoint[authMode], {
       ...userToHubspotContact(profile),
-    })
-    await insertHubspotAudit(
-      {
-        profile_id: profile.id,
-        hubspot_cookie: Cookies.get('hubspotutk'),
-        authentication_mode: authMode,
-        status: 'SUCCESS',
-        page_details: {
-          pageUri: location.origin,
-          pageName: document.title,
+    }),
+      await insertHubspotAudit(
+        {
+          profile_id: profile.id ?? null,
+          hubspot_cookie: Cookies.get('hubspotutk'),
+          authentication_mode: authMode,
+          status: 'SUCCESS',
+          page_details: {
+            pageUri: location.origin,
+            pageName: document.title,
+          },
         },
-      },
-      userJWT,
-    )
+        userJWT,
+      )
   } catch (err) {
     await insertHubspotAudit(
       {

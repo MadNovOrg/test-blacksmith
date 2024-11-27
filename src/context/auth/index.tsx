@@ -9,7 +9,7 @@ import { AwsRegions, RoleName } from '@app/types'
 import { TTCookies } from './cookies'
 import {
   fetchUserProfile,
-  handleHubspotLogin,
+  handleHubspotFormSubmit,
   lsActiveRoleClient,
 } from './helpers'
 import { injectACL } from './permissions'
@@ -125,7 +125,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           loadedProfile?.profile &&
           import.meta.env.VITE_AWS_REGION === AwsRegions.UK // no ANZ hubspot implementation
         ) {
-          await handleHubspotLogin({
+          await handleHubspotFormSubmit({
             profile: loadedProfile.profile,
             userJWT: user.signInUserSession.getIdToken().getJwtToken(),
             authMode: AuthMode.LOGIN,

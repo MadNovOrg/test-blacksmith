@@ -37,7 +37,7 @@ import {
 } from '@app/components/OrgSelector/UK/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { useAuth } from '@app/context/auth'
-import { handleHubspotLogin } from '@app/context/auth/helpers'
+import { handleHubspotFormSubmit } from '@app/context/auth/helpers'
 import { AuthMode } from '@app/context/auth/types'
 import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
@@ -163,11 +163,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
       onSignUp(data.email, data.password)
 
       isUK()
-        ? await handleHubspotLogin({
+        ? await handleHubspotFormSubmit({
             authMode: AuthMode.REGISTER,
             profile: {
               email: data.email,
-              id: '',
               familyName: data.surname,
               givenName: data.firstName,
               phone: data.phone,
