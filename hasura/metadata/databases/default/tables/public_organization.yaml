@@ -577,6 +577,26 @@ update_permissions:
         - tags
       filter: {}
       check: null
+  - role: trainer
+    permission:
+      columns:
+        - go1_licenses
+        - reserved_go1_licenses
+      filter:
+        organization_courses:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: true
+            - trainers:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - status:
+                      _eq: ACCEPTED
+      check: null
+    comment: ""
   - role: tt-admin
     permission:
       columns:
