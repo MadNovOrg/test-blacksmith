@@ -163,7 +163,6 @@ export const userToHubspotContact = (
       },
     ].filter(Boolean) as HubspotApiFormData['fields'],
     context: {
-      hutk: Cookies.get('hubspotutk') || '',
       pageUri: location.origin,
       pageName: document.title,
     },
