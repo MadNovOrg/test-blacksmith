@@ -30,6 +30,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   const [loading, setLoading] = useState(true)
   const [state, setState] = useState<AuthState>({})
 
+  const domain =
+    import.meta.env.VITE_AWS_REGION === AwsRegions.UK
+      ? '.teamteach.com'
+      : '.teamteach.com.au'
+
   const loadProfile = useCallback(
     async (user: CognitoUser): Promise<AuthState | void> => {
       const data = await fetchUserProfile(user)
@@ -45,7 +50,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           secure: true,
           expires: expiryUnixSeconds * 1000,
           path: '/',
-          domain: '.teamteach.com',
+          domain,
           sameSite: 'Strict',
         })
 
@@ -53,7 +58,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         TTCookies.deleteCookie('tt_logout', {
           secure: true,
           path: '/',
-          domain: '.teamteach.com',
+          domain,
           sameSite: 'Strict',
         })
 
@@ -73,17 +78,18 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           },
         )
       }
+
       return data
     },
-    [],
+    [domain],
   )
 
-  const onUserNotLoggedIn = () => {
+  const onUserNotLoggedIn = useCallback(() => {
     // delete cookie if exists
     TTCookies.deleteCookie('mo_jwt_token', {
       secure: true,
       path: '/',
-      domain: '.teamteach.com',
+      domain,
       sameSite: 'Strict',
     })
 
@@ -92,10 +98,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       secure: true,
       expires: 30 * 24 * 60 * 60 * 1000, // 30 days
       path: '/',
-      domain: '.teamteach.com',
+      domain,
       sameSite: 'Strict',
     })
-  }
+  }, [domain])
 
   // On initial load, check if user is logged in and load the profile
   useEffect(() => {
@@ -105,7 +111,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         onUserNotLoggedIn()
         setLoading(false)
       })
-  }, [loadProfile])
+  }, [loadProfile, onUserNotLoggedIn])
 
   const reloadCurrentProfile = useCallback(() => {
     return Auth.currentAuthenticatedUser()
@@ -113,7 +119,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       .catch(() => {
         onUserNotLoggedIn()
       })
-  }, [loadProfile])
+  }, [loadProfile, onUserNotLoggedIn])
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -147,7 +153,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
     posthog.identify('1')
     localStorage.removeItem('residingCountryDialogWasDisplayed')
-  }, [])
+  }, [onUserNotLoggedIn])
 
   const getJWT = useCallback(async () => {
     try {

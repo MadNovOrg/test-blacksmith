@@ -16,7 +16,7 @@ export const OrderYourWorkbookAlert: React.FC<
   React.PropsWithChildren<OrderYourWorkbookAlertProps>
 > = ({ course }) => {
   const { t } = useTranslation()
-  const { activeRole } = useAuth()
+  const { acl, activeRole } = useAuth()
 
   const isTrainer = activeRole === RoleName.TRAINER
   const isCourseScheduled = course?.status === Course_Status_Enum.Scheduled
@@ -37,7 +37,11 @@ export const OrderYourWorkbookAlert: React.FC<
       >
         <Trans t={t} i18nKey="pages.create-course.order-your-workbooks">
           <Link
-            href="https://www.teamteachpublishing.co.uk/"
+            href={
+              acl.isUK()
+                ? 'https://www.teamteachpublishing.co.uk/'
+                : 'https://teamteach.com/au/course-material-orders/ '
+            }
             target="_blank"
             component={'a'}
             underline="always"

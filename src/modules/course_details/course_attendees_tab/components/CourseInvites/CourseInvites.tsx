@@ -411,9 +411,11 @@ export const CourseInvites = ({
         title={t('pages.course-participants.invite-modal-title')}
         maxWidth={600}
       >
-        <Typography variant="body2">
-          <Trans i18nKey="pages.course-participants.invite-modal-intro" />
-        </Typography>
+        <Trans
+          i18nKey={`pages.course-participants.invite-modal-intro${
+            acl.isAustralia() ? '-ANZ' : ''
+          }`}
+        />
 
         <Typography fontWeight="bold" data-testid="modal-invites-left">
           {t('pages.course-participants.invites-left', {

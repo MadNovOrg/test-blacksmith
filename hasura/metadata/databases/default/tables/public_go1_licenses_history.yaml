@@ -56,7 +56,7 @@ insert_permissions:
         - captured_at
         - id
         - org_id
-    comment: ""
+    comment: ''
   - role: tt-admin
     permission:
       check: {}
@@ -137,7 +137,7 @@ select_permissions:
                 - status:
                     _eq: ACCEPTED
       allow_aggregations: true
-    comment: ""
+    comment: ''
   - role: tt-admin
     permission:
       columns:

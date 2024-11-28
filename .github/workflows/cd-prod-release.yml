@@ -78,7 +78,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: changesetPR.number,
-                labels: [`Release - ${context.payload.inputs.region}`] // Your custom label here
+                labels: [`Release - ${context.payload.inputs.region}`]
               });
             } else {
               throw new Error("No PR found with the specified criteria.");
@@ -131,6 +131,6 @@ jobs:
           base: hotfix_release_branch
           branch: ${{ github.ref }}
           title: 'Merge changes from ${{ github.ref }}'
-          labels: 'Hotfix release'
+          labels: 'Release - ${{ inputs.region}}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

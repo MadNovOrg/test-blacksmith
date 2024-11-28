@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.13.1
+
+### Patch Changes
+
+- c2b78dd: ANZ workbooks order link, invite attendees wording change
+
 ## 4.13.0
 
 ### Minor Changes

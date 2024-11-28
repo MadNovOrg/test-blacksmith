@@ -53,7 +53,7 @@ jobs:
 
   label-check:
     name: Determine Deployment Region
-    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'changeset-release/') }}
+    if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) }}
     runs-on: ubuntu-latest
     outputs:
       region: ${{ steps.label-check.outputs.region }}
