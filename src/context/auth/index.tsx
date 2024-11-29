@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           expires: expiryUnixSeconds * 1000,
           path: '/',
           domain,
-          sameSite: 'Strict',
+          sameSite: 'None',
         })
 
         // delete the "signout" cookie if it exists
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
           secure: true,
           path: '/',
           domain,
-          sameSite: 'Strict',
+          sameSite: 'None',
         })
 
         posthog.identify(data.profile.id, { email: data.profile.email })
@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       secure: true,
       path: '/',
       domain,
-      sameSite: 'Strict',
+      sameSite: 'None',
     })
 
     // raise a cookie to tell other team teach sites to logout
@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       expires: 30 * 24 * 60 * 60 * 1000, // 30 days
       path: '/',
       domain,
-      sameSite: 'Strict',
+      sameSite: 'None',
     })
   }, [domain])
 
