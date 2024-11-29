@@ -1,5 +1,12 @@
 # @teamteach/hub
 
+## 4.14.0
+
+### Minor Changes
+
+- 70abf36: Update ANZ course modules
+- 8b9fa12: Schedule pre training surveys to 24H before course starts and post training surveys to 7 days after the participants have passed the course.
+
 ## 4.13.1
 
 ### Patch Changes

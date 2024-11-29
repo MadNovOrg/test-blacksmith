@@ -40,7 +40,7 @@ export const OrderYourWorkbookAlert: React.FC<
             href={
               acl.isUK()
                 ? 'https://www.teamteachpublishing.co.uk/'
-                : 'https://teamteach.com/au/course-material-orders/ '
+                : 'https://www.teamteach.com/au/course-material-orders/ '
             }
             target="_blank"
             component={'a'}
