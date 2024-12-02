@@ -425,10 +425,15 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     useCallback(
       () => ({
         balance:
-          (preEditedCourse?.organization?.go1Licenses ?? 0) - requiredLicenses,
+          (preEditedCourse?.organization?.mainOrganizationLicenses
+            ?.go1Licenses ??
+            preEditedCourse?.organization?.go1Licenses ??
+            0) - requiredLicenses,
         change: -requiredLicenses,
         event: Go1_History_Events_Enum.LicensesReserved,
-        org_id: preEditedCourse?.organization?.id,
+        org_id:
+          preEditedCourse?.organization?.main_organisation?.id ??
+          preEditedCourse?.organization?.id,
         payload: {
           courseCode: preEditedCourse?.course_code,
           courseId: preEditedCourse?.id,
@@ -439,8 +444,10 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
           invokedById: profile?.id,
         },
         reservedBalance:
-          (preEditedCourse?.organization?.reservedGo1Licenses ?? 0) +
-          requiredLicenses,
+          (preEditedCourse?.organization?.mainOrganizationLicenses
+            ?.reservedGo1Licenses ??
+            preEditedCourse?.organization?.reservedGo1Licenses ??
+            0) + requiredLicenses,
       }),
       [
         courseData?.startDateTime,
@@ -449,6 +456,10 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
         preEditedCourse?.id,
         preEditedCourse?.organization?.go1Licenses,
         preEditedCourse?.organization?.id,
+        preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
+        preEditedCourse?.organization?.mainOrganizationLicenses
+          ?.reservedGo1Licenses,
+        preEditedCourse?.organization?.main_organisation?.id,
         preEditedCourse?.organization?.reservedGo1Licenses,
         profile?.fullName,
         profile?.id,
@@ -697,6 +708,9 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
           ...(isAdditionalBlendedLearningLicensesRequired &&
           !requireNewOrderForGo1Licenses
             ? {
+                go1LicensesOrgIdManage:
+                  preEditedCourse.organization?.main_organisation?.id ??
+                  preEditedCourse.organization?.id,
                 decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
                 incrementGo1LicensesFromOrganizationPool: requiredLicenses,
                 reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],

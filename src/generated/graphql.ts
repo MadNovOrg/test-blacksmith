@@ -4245,6 +4245,12 @@ export enum MimeTypeEnum {
   ImageGif = 'IMAGE_GIF',
   /** MimeType image/heic */
   ImageHeic = 'IMAGE_HEIC',
+  /** MimeType image/heic-sequence */
+  ImageHeicSequence = 'IMAGE_HEIC_SEQUENCE',
+  /** MimeType image/heif */
+  ImageHeif = 'IMAGE_HEIF',
+  /** MimeType image/heif-sequence */
+  ImageHeifSequence = 'IMAGE_HEIF_SEQUENCE',
   /** MimeType image/jpeg */
   ImageJpeg = 'IMAGE_JPEG',
   /** MimeType image/png */
@@ -20947,6 +20953,237 @@ export type Course_Evaluation_Questions_Variance_Fields = {
   displayOrder?: Maybe<Scalars['Float']>;
 };
 
+/** columns and relationships of "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event = {
+  __typename?: 'course_evaluation_scheduled_event';
+  /** An object relationship */
+  course: Course;
+  course_id: Scalars['Int'];
+  /** An object relationship */
+  course_participant: Profile;
+  event_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  profile_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Aggregate = {
+  __typename?: 'course_evaluation_scheduled_event_aggregate';
+  aggregate?: Maybe<Course_Evaluation_Scheduled_Event_Aggregate_Fields>;
+  nodes: Array<Course_Evaluation_Scheduled_Event>;
+};
+
+/** aggregate fields of "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Aggregate_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_aggregate_fields';
+  avg?: Maybe<Course_Evaluation_Scheduled_Event_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Evaluation_Scheduled_Event_Max_Fields>;
+  min?: Maybe<Course_Evaluation_Scheduled_Event_Min_Fields>;
+  stddev?: Maybe<Course_Evaluation_Scheduled_Event_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Evaluation_Scheduled_Event_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Evaluation_Scheduled_Event_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Evaluation_Scheduled_Event_Sum_Fields>;
+  var_pop?: Maybe<Course_Evaluation_Scheduled_Event_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Evaluation_Scheduled_Event_Var_Samp_Fields>;
+  variance?: Maybe<Course_Evaluation_Scheduled_Event_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Course_Evaluation_Scheduled_Event_Avg_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "course_evaluation_scheduled_event". All fields are combined with a logical 'AND'. */
+export type Course_Evaluation_Scheduled_Event_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Bool_Exp>>;
+  _not?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  course_participant?: InputMaybe<Profile_Bool_Exp>;
+  event_id?: InputMaybe<Uuid_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_evaluation_scheduled_event" */
+export enum Course_Evaluation_Scheduled_Event_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  CourseEvaluationScheduledEventPkey = 'course_evaluation_scheduled_event_pkey'
+}
+
+/** input type for incrementing numeric columns in table "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  course_participant?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Course_Evaluation_Scheduled_Event_Max_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_max_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  event_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Course_Evaluation_Scheduled_Event_Min_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_min_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  event_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Mutation_Response = {
+  __typename?: 'course_evaluation_scheduled_event_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Evaluation_Scheduled_Event>;
+};
+
+/** on_conflict condition type for table "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_On_Conflict = {
+  constraint: Course_Evaluation_Scheduled_Event_Constraint;
+  update_columns?: Array<Course_Evaluation_Scheduled_Event_Update_Column>;
+  where?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_evaluation_scheduled_event". */
+export type Course_Evaluation_Scheduled_Event_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  course_participant?: InputMaybe<Profile_Order_By>;
+  event_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_evaluation_scheduled_event */
+export type Course_Evaluation_Scheduled_Event_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_evaluation_scheduled_event" */
+export enum Course_Evaluation_Scheduled_Event_Select_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  EventId = 'event_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profile_id'
+}
+
+/** input type for updating data in table "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Set_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Evaluation_Scheduled_Event_Stddev_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Evaluation_Scheduled_Event_Stddev_Pop_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Evaluation_Scheduled_Event_Stddev_Samp_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "course_evaluation_scheduled_event" */
+export type Course_Evaluation_Scheduled_Event_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Course_Evaluation_Scheduled_Event_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Course_Evaluation_Scheduled_Event_Stream_Cursor_Value_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  event_id?: InputMaybe<Scalars['uuid']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Evaluation_Scheduled_Event_Sum_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "course_evaluation_scheduled_event" */
+export enum Course_Evaluation_Scheduled_Event_Update_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  EventId = 'event_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profile_id'
+}
+
+export type Course_Evaluation_Scheduled_Event_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Course_Evaluation_Scheduled_Event_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Course_Evaluation_Scheduled_Event_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Course_Evaluation_Scheduled_Event_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Course_Evaluation_Scheduled_Event_Var_Pop_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Evaluation_Scheduled_Event_Var_Samp_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Course_Evaluation_Scheduled_Event_Variance_Fields = {
+  __typename?: 'course_evaluation_scheduled_event_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
 /** Enum table for course exceptions */
 export type Course_Exception = {
   __typename?: 'course_exception';
@@ -31940,15 +32177,13 @@ export type Grade_Updates = {
 /** This table stores hubspot related logs */
 export type Hubspot_Audit = {
   __typename?: 'hubspot_audit';
-  authentication_mode?: Maybe<Scalars['String']>;
+  authentication_mode: Scalars['String'];
   created_at: Scalars['timestamptz'];
   error?: Maybe<Scalars['jsonb']>;
   hubspot_cookie: Scalars['String'];
-  hubspot_form: Scalars['uuid'];
-  hubspot_portal: Scalars['uuid'];
   id: Scalars['uuid'];
   page_details?: Maybe<Scalars['jsonb']>;
-  profile_id: Scalars['uuid'];
+  profile_id?: Maybe<Scalars['uuid']>;
   status: Scalars['String'];
 };
 
@@ -32001,8 +32236,6 @@ export type Hubspot_Audit_Bool_Exp = {
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   error?: InputMaybe<Jsonb_Comparison_Exp>;
   hubspot_cookie?: InputMaybe<String_Comparison_Exp>;
-  hubspot_form?: InputMaybe<Uuid_Comparison_Exp>;
-  hubspot_portal?: InputMaybe<Uuid_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   page_details?: InputMaybe<Jsonb_Comparison_Exp>;
   profile_id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -32039,8 +32272,6 @@ export type Hubspot_Audit_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   error?: InputMaybe<Scalars['jsonb']>;
   hubspot_cookie?: InputMaybe<Scalars['String']>;
-  hubspot_form?: InputMaybe<Scalars['uuid']>;
-  hubspot_portal?: InputMaybe<Scalars['uuid']>;
   id?: InputMaybe<Scalars['uuid']>;
   page_details?: InputMaybe<Scalars['jsonb']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
@@ -32053,8 +32284,6 @@ export type Hubspot_Audit_Max_Fields = {
   authentication_mode?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   hubspot_cookie?: Maybe<Scalars['String']>;
-  hubspot_form?: Maybe<Scalars['uuid']>;
-  hubspot_portal?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
   profile_id?: Maybe<Scalars['uuid']>;
   status?: Maybe<Scalars['String']>;
@@ -32066,8 +32295,6 @@ export type Hubspot_Audit_Min_Fields = {
   authentication_mode?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   hubspot_cookie?: Maybe<Scalars['String']>;
-  hubspot_form?: Maybe<Scalars['uuid']>;
-  hubspot_portal?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
   profile_id?: Maybe<Scalars['uuid']>;
   status?: Maybe<Scalars['String']>;
@@ -32095,8 +32322,6 @@ export type Hubspot_Audit_Order_By = {
   created_at?: InputMaybe<Order_By>;
   error?: InputMaybe<Order_By>;
   hubspot_cookie?: InputMaybe<Order_By>;
-  hubspot_form?: InputMaybe<Order_By>;
-  hubspot_portal?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   page_details?: InputMaybe<Order_By>;
   profile_id?: InputMaybe<Order_By>;
@@ -32125,10 +32350,6 @@ export enum Hubspot_Audit_Select_Column {
   /** column name */
   HubspotCookie = 'hubspot_cookie',
   /** column name */
-  HubspotForm = 'hubspot_form',
-  /** column name */
-  HubspotPortal = 'hubspot_portal',
-  /** column name */
   Id = 'id',
   /** column name */
   PageDetails = 'page_details',
@@ -32144,8 +32365,6 @@ export type Hubspot_Audit_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   error?: InputMaybe<Scalars['jsonb']>;
   hubspot_cookie?: InputMaybe<Scalars['String']>;
-  hubspot_form?: InputMaybe<Scalars['uuid']>;
-  hubspot_portal?: InputMaybe<Scalars['uuid']>;
   id?: InputMaybe<Scalars['uuid']>;
   page_details?: InputMaybe<Scalars['jsonb']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
@@ -32166,8 +32385,6 @@ export type Hubspot_Audit_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   error?: InputMaybe<Scalars['jsonb']>;
   hubspot_cookie?: InputMaybe<Scalars['String']>;
-  hubspot_form?: InputMaybe<Scalars['uuid']>;
-  hubspot_portal?: InputMaybe<Scalars['uuid']>;
   id?: InputMaybe<Scalars['uuid']>;
   page_details?: InputMaybe<Scalars['jsonb']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
@@ -32184,10 +32401,6 @@ export enum Hubspot_Audit_Update_Column {
   Error = 'error',
   /** column name */
   HubspotCookie = 'hubspot_cookie',
-  /** column name */
-  HubspotForm = 'hubspot_form',
-  /** column name */
-  HubspotPortal = 'hubspot_portal',
   /** column name */
   Id = 'id',
   /** column name */
@@ -35967,6 +36180,10 @@ export type Mutation_Root = {
   delete_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** delete single row from the table: "course_evaluation_questions" */
   delete_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
+  /** delete data from the table: "course_evaluation_scheduled_event" */
+  delete_course_evaluation_scheduled_event?: Maybe<Course_Evaluation_Scheduled_Event_Mutation_Response>;
+  /** delete single row from the table: "course_evaluation_scheduled_event" */
+  delete_course_evaluation_scheduled_event_by_pk?: Maybe<Course_Evaluation_Scheduled_Event>;
   /** delete data from the table: "course_exception" */
   delete_course_exception?: Maybe<Course_Exception_Mutation_Response>;
   /** delete single row from the table: "course_exception" */
@@ -36427,6 +36644,10 @@ export type Mutation_Root = {
   insert_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** insert a single row into the table: "course_evaluation_questions" */
   insert_course_evaluation_questions_one?: Maybe<Course_Evaluation_Questions>;
+  /** insert data into the table: "course_evaluation_scheduled_event" */
+  insert_course_evaluation_scheduled_event?: Maybe<Course_Evaluation_Scheduled_Event_Mutation_Response>;
+  /** insert a single row into the table: "course_evaluation_scheduled_event" */
+  insert_course_evaluation_scheduled_event_one?: Maybe<Course_Evaluation_Scheduled_Event>;
   /** insert data into the table: "course_exception" */
   insert_course_exception?: Maybe<Course_Exception_Mutation_Response>;
   /** insert a single row into the table: "course_exception" */
@@ -36979,6 +37200,12 @@ export type Mutation_Root = {
   update_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
   /** update multiples rows of table: "course_evaluation_questions" */
   update_course_evaluation_questions_many?: Maybe<Array<Maybe<Course_Evaluation_Questions_Mutation_Response>>>;
+  /** update data of the table: "course_evaluation_scheduled_event" */
+  update_course_evaluation_scheduled_event?: Maybe<Course_Evaluation_Scheduled_Event_Mutation_Response>;
+  /** update single row of the table: "course_evaluation_scheduled_event" */
+  update_course_evaluation_scheduled_event_by_pk?: Maybe<Course_Evaluation_Scheduled_Event>;
+  /** update multiples rows of table: "course_evaluation_scheduled_event" */
+  update_course_evaluation_scheduled_event_many?: Maybe<Array<Maybe<Course_Evaluation_Scheduled_Event_Mutation_Response>>>;
   /** update data of the table: "course_exception" */
   update_course_exception?: Maybe<Course_Exception_Mutation_Response>;
   /** update single row of the table: "course_exception" */
@@ -37951,6 +38178,18 @@ export type Mutation_RootDelete_Course_Evaluation_QuestionsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Course_Evaluation_Questions_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Evaluation_Scheduled_EventArgs = {
+  where: Course_Evaluation_Scheduled_Event_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Evaluation_Scheduled_Event_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -39407,6 +39646,20 @@ export type Mutation_RootInsert_Course_Evaluation_QuestionsArgs = {
 export type Mutation_RootInsert_Course_Evaluation_Questions_OneArgs = {
   object: Course_Evaluation_Questions_Insert_Input;
   on_conflict?: InputMaybe<Course_Evaluation_Questions_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Evaluation_Scheduled_EventArgs = {
+  objects: Array<Course_Evaluation_Scheduled_Event_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Evaluation_Scheduled_Event_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Evaluation_Scheduled_Event_OneArgs = {
+  object: Course_Evaluation_Scheduled_Event_Insert_Input;
+  on_conflict?: InputMaybe<Course_Evaluation_Scheduled_Event_On_Conflict>;
 };
 
 
@@ -41385,6 +41638,28 @@ export type Mutation_RootUpdate_Course_Evaluation_Questions_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Course_Evaluation_Questions_ManyArgs = {
   updates: Array<Course_Evaluation_Questions_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Scheduled_EventArgs = {
+  _inc?: InputMaybe<Course_Evaluation_Scheduled_Event_Inc_Input>;
+  _set?: InputMaybe<Course_Evaluation_Scheduled_Event_Set_Input>;
+  where: Course_Evaluation_Scheduled_Event_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Scheduled_Event_By_PkArgs = {
+  _inc?: InputMaybe<Course_Evaluation_Scheduled_Event_Inc_Input>;
+  _set?: InputMaybe<Course_Evaluation_Scheduled_Event_Set_Input>;
+  pk_columns: Course_Evaluation_Scheduled_Event_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Evaluation_Scheduled_Event_ManyArgs = {
+  updates: Array<Course_Evaluation_Scheduled_Event_Updates>;
 };
 
 
@@ -45797,7 +46072,6 @@ export type Organization = {
   affiliated_organisations_aggregate: Organization_Aggregate;
   attributes: Scalars['jsonb'];
   canAccessKnowledgeHub?: Maybe<Scalars['Boolean']>;
-  connect_fee_paying_organization?: Maybe<Scalars['uuid']>;
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
@@ -46137,7 +46411,6 @@ export type Organization_Bool_Exp = {
   affiliated_organisations_aggregate?: InputMaybe<Organization_Aggregate_Bool_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   canAccessKnowledgeHub?: InputMaybe<Boolean_Comparison_Exp>;
-  connect_fee_paying_organization?: InputMaybe<Uuid_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dfeEstablishmentId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -46223,7 +46496,6 @@ export type Organization_Insert_Input = {
   affiliated_organisations?: InputMaybe<Organization_Arr_Rel_Insert_Input>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
-  connect_fee_paying_organization?: InputMaybe<Scalars['uuid']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -46548,7 +46820,6 @@ export type Organization_Max_Fields = {
   __typename?: 'organization_max_fields';
   /** A computed field, executes function "org_address_each_text" */
   addressEachText?: Maybe<Scalars['String']>;
-  connect_fee_paying_organization?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
   go1Licenses?: Maybe<Scalars['Int']>;
@@ -46568,7 +46839,6 @@ export type Organization_Max_Fields = {
 
 /** order by max() on columns of table "organization" */
 export type Organization_Max_Order_By = {
-  connect_fee_paying_organization?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
@@ -46894,7 +47164,6 @@ export type Organization_Min_Fields = {
   __typename?: 'organization_min_fields';
   /** A computed field, executes function "org_address_each_text" */
   addressEachText?: Maybe<Scalars['String']>;
-  connect_fee_paying_organization?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
   go1Licenses?: Maybe<Scalars['Int']>;
@@ -46914,7 +47183,6 @@ export type Organization_Min_Fields = {
 
 /** order by min() on columns of table "organization" */
 export type Organization_Min_Order_By = {
-  connect_fee_paying_organization?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
@@ -46960,7 +47228,6 @@ export type Organization_Order_By = {
   affiliated_organisations_aggregate?: InputMaybe<Organization_Aggregate_Order_By>;
   attributes?: InputMaybe<Order_By>;
   canAccessKnowledgeHub?: InputMaybe<Order_By>;
-  connect_fee_paying_organization?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
@@ -47013,8 +47280,6 @@ export enum Organization_Select_Column {
   Attributes = 'attributes',
   /** column name */
   CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
-  /** column name */
-  ConnectFeePayingOrganization = 'connect_fee_paying_organization',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -47070,7 +47335,6 @@ export type Organization_Set_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
-  connect_fee_paying_organization?: InputMaybe<Scalars['uuid']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -47143,7 +47407,6 @@ export type Organization_Stream_Cursor_Value_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   canAccessKnowledgeHub?: InputMaybe<Scalars['Boolean']>;
-  connect_fee_paying_organization?: InputMaybe<Scalars['uuid']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
@@ -47344,8 +47607,6 @@ export enum Organization_Update_Column {
   Attributes = 'attributes',
   /** column name */
   CanAccessKnowledgeHub = 'canAccessKnowledgeHub',
-  /** column name */
-  ConnectFeePayingOrganization = 'connect_fee_paying_organization',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -51167,6 +51428,12 @@ export type Query_Root = {
   course_evaluation_questions_aggregate: Course_Evaluation_Questions_Aggregate;
   /** fetch data from the table: "course_evaluation_questions" using primary key columns */
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
+  /** fetch data from the table: "course_evaluation_scheduled_event" */
+  course_evaluation_scheduled_event: Array<Course_Evaluation_Scheduled_Event>;
+  /** fetch aggregated fields from the table: "course_evaluation_scheduled_event" */
+  course_evaluation_scheduled_event_aggregate: Course_Evaluation_Scheduled_Event_Aggregate;
+  /** fetch data from the table: "course_evaluation_scheduled_event" using primary key columns */
+  course_evaluation_scheduled_event_by_pk?: Maybe<Course_Evaluation_Scheduled_Event>;
   /** fetch data from the table: "course_exception" */
   course_exception: Array<Course_Exception>;
   /** fetch aggregated fields from the table: "course_exception" */
@@ -52430,6 +52697,29 @@ export type Query_RootCourse_Evaluation_Questions_AggregateArgs = {
 
 
 export type Query_RootCourse_Evaluation_Questions_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootCourse_Evaluation_Scheduled_EventArgs = {
+  distinct_on?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Order_By>>;
+  where?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Evaluation_Scheduled_Event_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Order_By>>;
+  where?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Evaluation_Scheduled_Event_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -55489,6 +55779,14 @@ export type Subscription_Root = {
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
   /** fetch data from the table in a streaming manner: "course_evaluation_questions" */
   course_evaluation_questions_stream: Array<Course_Evaluation_Questions>;
+  /** fetch data from the table: "course_evaluation_scheduled_event" */
+  course_evaluation_scheduled_event: Array<Course_Evaluation_Scheduled_Event>;
+  /** fetch aggregated fields from the table: "course_evaluation_scheduled_event" */
+  course_evaluation_scheduled_event_aggregate: Course_Evaluation_Scheduled_Event_Aggregate;
+  /** fetch data from the table: "course_evaluation_scheduled_event" using primary key columns */
+  course_evaluation_scheduled_event_by_pk?: Maybe<Course_Evaluation_Scheduled_Event>;
+  /** fetch data from the table in a streaming manner: "course_evaluation_scheduled_event" */
+  course_evaluation_scheduled_event_stream: Array<Course_Evaluation_Scheduled_Event>;
   /** fetch data from the table: "course_exception" */
   course_exception: Array<Course_Exception>;
   /** fetch aggregated fields from the table: "course_exception" */
@@ -57107,6 +57405,36 @@ export type Subscription_RootCourse_Evaluation_Questions_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Course_Evaluation_Questions_Stream_Cursor_Input>>;
   where?: InputMaybe<Course_Evaluation_Questions_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Evaluation_Scheduled_EventArgs = {
+  distinct_on?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Order_By>>;
+  where?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Evaluation_Scheduled_Event_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Evaluation_Scheduled_Event_Order_By>>;
+  where?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Evaluation_Scheduled_Event_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Evaluation_Scheduled_Event_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Course_Evaluation_Scheduled_Event_Stream_Cursor_Input>>;
+  where?: InputMaybe<Course_Evaluation_Scheduled_Event_Bool_Exp>;
 };
 
 
@@ -63212,6 +63540,7 @@ export type UpdateCourseMutationVariables = Exact<{
   decrementGo1LicensesFromOrganizationPool?: InputMaybe<Scalars['Int']>;
   exceptions?: InputMaybe<Array<Course_Exception_Enum> | Course_Exception_Enum>;
   exceptionsInput?: InputMaybe<Array<Course_Exceptions_Insert_Input> | Course_Exceptions_Insert_Input>;
+  go1LicensesOrgIdManage?: InputMaybe<Scalars['uuid']>;
   incrementGo1LicensesFromOrganizationPool?: InputMaybe<Scalars['Int']>;
   orderInput: Order_Set_Input;
   ordersInsertInput?: InputMaybe<Array<Course_Order_Insert_Input> | Course_Order_Insert_Input>;

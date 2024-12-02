@@ -68,6 +68,7 @@ export const UPDATE_COURSE_MUTATION = gql`
     $decrementGo1LicensesFromOrganizationPool: Int = 0
     $exceptions: [course_exception_enum!] = []
     $exceptionsInput: [course_exceptions_insert_input!] = []
+    $go1LicensesOrgIdManage: uuid
     $incrementGo1LicensesFromOrganizationPool: Int = 0
     $orderInput: order_set_input!
     $ordersInsertInput: [course_order_insert_input!] = []
@@ -79,7 +80,7 @@ export const UPDATE_COURSE_MUTATION = gql`
     $trainersToDelete: [uuid!]
   ) {
     decrementGo1Licenses: update_organization(
-      where: { organization_courses: { id: { _eq: $courseId } } }
+      where: { id: { _eq: $go1LicensesOrgIdManage } }
       _inc: {
         go1Licenses: $decrementGo1LicensesFromOrganizationPool
         reservedGo1Licenses: $incrementGo1LicensesFromOrganizationPool
