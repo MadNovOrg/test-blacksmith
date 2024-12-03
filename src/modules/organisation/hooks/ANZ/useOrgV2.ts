@@ -93,6 +93,50 @@ export const GET_MAIN_ORGANISATION_DETAILS_QUERY = gql`
       @include(if: $withSpecificOrganisation) {
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
+      region
+      main_organisation @include(if: $withMainOrganisation) {
+        id
+        name
+      }
+      affiliated_organisations(where: $affiliatedOrgWhere)
+        @include(if: $withAffiliatedOrganisations) {
+        id
+        name
+        address
+        sector
+        createdAt
+        members @include(if: $withMembers) {
+          profile {
+            lastActivity
+          }
+        }
+      }
+      affiliated_organisations_aggregate
+        @include(if: $withAffiliatedOrganisationsCount) {
+        aggregate {
+          count
+        }
+      }
+      members @include(if: $withMembers) {
+        profile {
+          lastActivity
+        }
+      }
+      members_aggregate @include(if: $withAggregateData) {
+        aggregate {
+          count
+        }
+      }
+      organization_courses_aggregate @include(if: $withAggregateData) {
+        aggregate {
+          count
+        }
+      }
+      organization_orders_aggregate @include(if: $withAggregateData) {
+        aggregate {
+          count
+        }
+      }
     }
     orgsCount: organization_aggregate(where: $where) {
       aggregate {

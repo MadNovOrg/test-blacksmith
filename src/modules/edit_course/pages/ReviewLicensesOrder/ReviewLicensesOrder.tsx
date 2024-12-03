@@ -72,7 +72,14 @@ export const ReviewLicensesOrder: React.FC<
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
   const numberOfLicenses =
-    state?.insufficientNumberOfLicenses ?? requiredLicenses
+    state?.insufficientNumberOfLicenses ??
+    requiredLicenses -
+      Math.max(
+        0,
+        preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses ??
+          preEditedCourse?.organization?.go1Licenses ??
+          0,
+      )
 
   const prices = useMemo(
     () =>

@@ -314,6 +314,11 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     preEditedCourse?.type === Course_Type_Enum.Indirect &&
     preEditedCourse?.go1Integration
 
+  const go1Licenses =
+    preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses ??
+    preEditedCourse?.organization?.go1Licenses ??
+    0
+
   const isAdditionalBlendedLearningLicensesRequired = useMemo(() => {
     if (
       !courseData?.maxParticipants ||
@@ -335,7 +340,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   }, [
     courseData?.maxParticipants,
     isIndirectBlendedLearningCourse,
-    preEditedCourse,
+    preEditedCourse?.coursesReservedLicenses,
+    preEditedCourse?.status,
   ])
 
   const requireNewOrderForGo1Licenses = useMemo(() => {
@@ -343,17 +349,12 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       isAdditionalBlendedLearningLicensesRequired &&
       isIndirectBlendedLearningCourse &&
       requiredLicenses > 0 &&
-      requiredLicenses -
-        (preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses ??
-          preEditedCourse?.organization?.go1Licenses ??
-          0) >
-        0
+      requiredLicenses - go1Licenses > 0
     )
   }, [
+    go1Licenses,
     isAdditionalBlendedLearningLicensesRequired,
     isIndirectBlendedLearningCourse,
-    preEditedCourse?.organization?.go1Licenses,
-    preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
     requiredLicenses,
   ])
 
@@ -432,11 +433,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   const getGo1LicensesReserveAudit: () => Go1_Licenses_History_Insert_Input =
     useCallback(
       () => ({
-        balance:
-          (preEditedCourse?.organization?.mainOrganizationLicenses
-            ?.go1Licenses ??
-            preEditedCourse?.organization?.go1Licenses ??
-            0) - requiredLicenses,
+        balance: go1Licenses - requiredLicenses,
         change: -requiredLicenses,
         event: Go1_History_Events_Enum.LicensesReserved,
         org_id:
@@ -459,12 +456,11 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       }),
       [
         courseData?.startDateTime,
+        go1Licenses,
         preEditedCourse?.course_code,
         preEditedCourse?.dates.aggregate.start.date,
         preEditedCourse?.id,
-        preEditedCourse?.organization?.go1Licenses,
         preEditedCourse?.organization?.id,
-        preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
         preEditedCourse?.organization?.mainOrganizationLicenses
           ?.reservedGo1Licenses,
         preEditedCourse?.organization?.main_organisation?.id,
