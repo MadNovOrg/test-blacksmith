@@ -35,18 +35,32 @@ insert_permissions:
     permission:
       check:
         organization:
-          organization_courses:
-            _and:
-              - course_type:
-                  _eq: INDIRECT
-              - go1_integration:
-                  _eq: true
-              - trainers:
+          _or:
+            - organization_courses:
+                _and:
+                  - course_type:
+                      _eq: INDIRECT
+                  - go1_integration:
+                      _eq: true
+                  - trainers:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - status:
+                            _eq: ACCEPTED
+            - affiliated_organisations:
+                organization_courses:
                   _and:
-                    - profile_id:
-                        _eq: X-Hasura-User-Id
-                    - status:
-                        _eq: ACCEPTED
+                    - course_type:
+                        _eq: INDIRECT
+                    - go1_integration:
+                        _eq: true
+                    - trainers:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - status:
+                              _eq: ACCEPTED
       columns:
         - balance
         - change
