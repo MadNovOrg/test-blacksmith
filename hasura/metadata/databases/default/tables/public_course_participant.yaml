@@ -700,9 +700,6 @@ event_triggers:
     enable_manual: true
     insert:
       columns: '*'
-    update:
-      columns:
-      - attended
   retry_conf:
     interval_sec: 20
     num_retries: 3
