@@ -63537,14 +63537,10 @@ export type NotifyCourseEditMutation = { __typename?: 'mutation_root', notifyCou
 export type UpdateCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
   courseInput: Course_Set_Input;
-  decrementGo1LicensesFromOrganizationPool?: InputMaybe<Scalars['Int']>;
   exceptions?: InputMaybe<Array<Course_Exception_Enum> | Course_Exception_Enum>;
   exceptionsInput?: InputMaybe<Array<Course_Exceptions_Insert_Input> | Course_Exceptions_Insert_Input>;
-  go1LicensesOrgIdManage?: InputMaybe<Scalars['uuid']>;
-  incrementGo1LicensesFromOrganizationPool?: InputMaybe<Scalars['Int']>;
   orderInput: Order_Set_Input;
   ordersInsertInput?: InputMaybe<Array<Course_Order_Insert_Input> | Course_Order_Insert_Input>;
-  reserveGo1LicensesAudit?: InputMaybe<Array<Go1_Licenses_History_Insert_Input> | Go1_Licenses_History_Insert_Input>;
   scheduleId: Scalars['uuid'];
   scheduleInput: Course_Schedule_Set_Input;
   temporaryOrderInsertInput?: InputMaybe<Array<Order_Temp_Insert_Input> | Order_Temp_Insert_Input>;
@@ -63553,7 +63549,7 @@ export type UpdateCourseMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCourseMutation = { __typename?: 'mutation_root', decrementGo1Licenses?: { __typename?: 'organization_mutation_response', affectedRows: number, returning: Array<{ __typename?: 'organization', id: any, go1Licenses?: number | null }> } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, deletedExceptions?: { __typename?: 'course_exceptions_mutation_response', affectedRows: number } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertExceptions?: { __typename?: 'course_exceptions_mutation_response', affectedRows: number } | null, insertGo1LicensesAudit?: { __typename?: 'go1_licenses_history_mutation_response', affected_rows: number } | null, insertOrders?: { __typename?: 'course_order_mutation_response', affectedRows: number } | null, insertTemporaryOrders?: { __typename?: 'order_temp_mutation_response', affectedRows: number } | null, updateCourse?: { __typename?: 'course', id: number, level: Course_Level_Enum } | null, updateOrder?: { __typename?: 'order_mutation_response', affectedRows: number } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null };
+export type UpdateCourseMutation = { __typename?: 'mutation_root', deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, deletedExceptions?: { __typename?: 'course_exceptions_mutation_response', affectedRows: number } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertExceptions?: { __typename?: 'course_exceptions_mutation_response', affectedRows: number } | null, insertOrders?: { __typename?: 'course_order_mutation_response', affectedRows: number } | null, insertTemporaryOrders?: { __typename?: 'order_temp_mutation_response', affectedRows: number } | null, updateCourse?: { __typename?: 'course', id: number, level: Course_Level_Enum } | null, updateOrder?: { __typename?: 'order_mutation_response', affectedRows: number } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null };
 
 export type InsertCourseOrderMutationVariables = Exact<{
   orderInput: Course_Order_Insert_Input;
@@ -63561,6 +63557,16 @@ export type InsertCourseOrderMutationVariables = Exact<{
 
 
 export type InsertCourseOrderMutation = { __typename?: 'mutation_root', insertOrder?: { __typename?: 'course_order', order_id?: any | null } | null };
+
+export type ReserveGo1LicensesMutationVariables = Exact<{
+  go1LicensesOrgIdManage: Scalars['uuid'];
+  decrementGo1LicensesFromOrganizationPool?: InputMaybe<Scalars['Int']>;
+  incrementGo1LicensesFromOrganizationPool?: InputMaybe<Scalars['Int']>;
+  reserveGo1LicensesAudit?: InputMaybe<Array<Go1_Licenses_History_Insert_Input> | Go1_Licenses_History_Insert_Input>;
+}>;
+
+
+export type ReserveGo1LicensesMutation = { __typename?: 'mutation_root', decrementGo1Licenses?: { __typename?: 'organization_mutation_response', affectedRows: number, returning: Array<{ __typename?: 'organization', id: any, go1Licenses?: number | null }> } | null, insertGo1LicensesAudit?: { __typename?: 'go1_licenses_history_mutation_response', affected_rows: number, returning: Array<{ __typename?: 'go1_licenses_history', id: any, org_id: any, event: Go1_History_Events_Enum }> } | null };
 
 export type ResendPasswordMutationVariables = Exact<{
   email: Scalars['String'];

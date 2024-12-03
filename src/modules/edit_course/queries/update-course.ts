@@ -65,34 +65,16 @@ export const UPDATE_COURSE_MUTATION = gql`
   mutation UpdateCourse(
     $courseId: Int!
     $courseInput: course_set_input!
-    $decrementGo1LicensesFromOrganizationPool: Int = 0
     $exceptions: [course_exception_enum!] = []
     $exceptionsInput: [course_exceptions_insert_input!] = []
-    $go1LicensesOrgIdManage: uuid
-    $incrementGo1LicensesFromOrganizationPool: Int = 0
     $orderInput: order_set_input!
     $ordersInsertInput: [course_order_insert_input!] = []
-    $reserveGo1LicensesAudit: [go1_licenses_history_insert_input!] = []
     $scheduleId: uuid!
     $scheduleInput: course_schedule_set_input!
     $temporaryOrderInsertInput: [order_temp_insert_input!] = []
     $trainers: [course_trainer_insert_input!]!
     $trainersToDelete: [uuid!]
   ) {
-    decrementGo1Licenses: update_organization(
-      where: { id: { _eq: $go1LicensesOrgIdManage } }
-      _inc: {
-        go1Licenses: $decrementGo1LicensesFromOrganizationPool
-        reservedGo1Licenses: $incrementGo1LicensesFromOrganizationPool
-      }
-    ) {
-      affectedRows: affected_rows
-      returning {
-        id
-        go1Licenses
-      }
-    }
-
     deleteCourseTrainers: delete_course_trainer(
       where: {
         course_id: { _eq: $courseId }
@@ -118,12 +100,6 @@ export const UPDATE_COURSE_MUTATION = gql`
 
     insertExceptions: insert_course_exceptions(objects: $exceptionsInput) {
       affectedRows: affected_rows
-    }
-
-    insertGo1LicensesAudit: insert_go1_licenses_history(
-      objects: $reserveGo1LicensesAudit
-    ) {
-      affected_rows
     }
 
     insertOrders: insert_course_order(objects: $ordersInsertInput) {
@@ -164,6 +140,40 @@ export const INSERT_COURSE_ORDER = gql`
   mutation InsertCourseOrder($orderInput: course_order_insert_input!) {
     insertOrder: insert_course_order_one(object: $orderInput) {
       order_id
+    }
+  }
+`
+
+export const RESERVE_GO1_LICENSES_MUTATION = gql`
+  mutation ReserveGo1Licenses(
+    $go1LicensesOrgIdManage: uuid!
+    $decrementGo1LicensesFromOrganizationPool: Int = 0
+    $incrementGo1LicensesFromOrganizationPool: Int = 0
+    $reserveGo1LicensesAudit: [go1_licenses_history_insert_input!] = []
+  ) {
+    decrementGo1Licenses: update_organization(
+      where: { id: { _eq: $go1LicensesOrgIdManage } }
+      _inc: {
+        go1Licenses: $decrementGo1LicensesFromOrganizationPool
+        reservedGo1Licenses: $incrementGo1LicensesFromOrganizationPool
+      }
+    ) {
+      affectedRows: affected_rows
+      returning {
+        id
+        go1Licenses
+      }
+    }
+
+    insertGo1LicensesAudit: insert_go1_licenses_history(
+      objects: $reserveGo1LicensesAudit
+    ) {
+      affected_rows
+      returning {
+        id
+        org_id
+        event
+      }
     }
   }
 `

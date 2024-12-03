@@ -36,6 +36,8 @@ import {
   NotifyCourseEditMutationVariables,
   Order_Insert_Input,
   Payment_Methods_Enum,
+  ReserveGo1LicensesMutation,
+  ReserveGo1LicensesMutationVariables,
   UpdateCourseMutation,
   UpdateCourseMutationVariables,
 } from '@app/generated/graphql'
@@ -71,6 +73,7 @@ import { INSERT_COURSE_AUDIT } from '../../queries/insert-course-audit'
 import { NOTIFY_COURSE_EDIT } from '../../queries/notify-course-edit'
 import {
   INSERT_COURSE_ORDER,
+  RESERVE_GO1_LICENSES_MUTATION,
   UPDATE_COURSE_MUTATION,
 } from '../../queries/update-course'
 import { CourseDiff, getChangedTrainers } from '../../utils/shared'
@@ -279,6 +282,11 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   ] = useMutation<NotifyCourseEditMutation, NotifyCourseEditMutationVariables>(
     NOTIFY_COURSE_EDIT,
   )
+
+  const [, reserveGo1Licenses] = useMutation<
+    ReserveGo1LicensesMutation,
+    ReserveGo1LicensesMutationVariables
+  >(RESERVE_GO1_LICENSES_MUTATION)
 
   const [{ fetching: updatingCourse, error: errorOnUpdate }, updateCourse] =
     useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(
@@ -705,17 +713,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
                     }),
               }
             : null),
-          ...(isAdditionalBlendedLearningLicensesRequired &&
-          !requireNewOrderForGo1Licenses
-            ? {
-                go1LicensesOrgIdManage:
-                  preEditedCourse.organization?.main_organisation?.id ??
-                  preEditedCourse.organization?.id,
-                decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
-                incrementGo1LicensesFromOrganizationPool: requiredLicenses,
-                reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],
-              }
-            : null),
         })
 
         if (resp.data?.updateCourse?.id) {
@@ -723,6 +720,27 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
             await approveCourse({
               input: { courseId: preEditedCourse.id, reason: '' },
             })
+          }
+
+          const orgToManageGo1Licenses =
+            preEditedCourse.organization?.main_organisation?.id ??
+            preEditedCourse.organization?.id
+
+          if (
+            orgToManageGo1Licenses &&
+            isAdditionalBlendedLearningLicensesRequired &&
+            !requireNewOrderForGo1Licenses
+          ) {
+            try {
+              await reserveGo1Licenses({
+                go1LicensesOrgIdManage: orgToManageGo1Licenses,
+                decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
+                incrementGo1LicensesFromOrganizationPool: requiredLicenses,
+                reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],
+              })
+            } catch (err) {
+              console.error(err)
+            }
           }
 
           if (courseDiffs.length) {
@@ -833,6 +851,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       profile,
       requireNewOrderForGo1Licenses,
       requiredLicenses,
+      reserveGo1Licenses,
       setDateTimeTimeZone,
       trainersData,
       updateCourse,

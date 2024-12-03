@@ -171,26 +171,27 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - id
         - attendeesQuantity
-        - payment_method
         - billing_address
-        - billing_given_name
-        - billing_family_name
         - billing_email
+        - billing_family_name
+        - billing_given_name
         - billing_phone
-        - registrants
-        - vat
-        - created_at
-        - vat
-        - organization_id
-        - currency
-        - promo_codes
-        - xero_invoice_number
         - client_purchase_order
-        - user
-        - source
+        - created_at
+        - currency
+        - id
+        - invitees
+        - organization_id
+        - payment_method
+        - promo_codes
+        - registrants
         - sales_representative_id
+        - source
+        - user
+        - vat
+        - vat
+        - xero_invoice_number
   - role: unverified
     permission:
       check: {}
@@ -352,11 +353,27 @@ select_permissions:
   - role: trainer
     permission:
       columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
         - id
         - payment_method
-        - xero_invoice_number
         - source
-      filter: {}
+        - xero_invoice_number
+      filter:
+        courses:
+          course:
+            trainers:
+              _and:
+                - status:
+                    _eq: ACCEPTED
+                - type:
+                    _eq: LEADER
+                - profile_id:
+                    _eq: X-Hasura-User-Id
   - role: tt-admin
     permission:
       columns:
