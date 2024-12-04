@@ -14,6 +14,7 @@ import { Pagination, Autoplay } from 'swiper/modules'
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react'
 import { useQuery } from 'urql'
 
+import { useAuth } from '@app/context/auth'
 import { KnowledgeHubResourcesQuery } from '@app/generated/graphql'
 
 import { KNOWLEDGE_HUB_RESOURCES_QUERY } from '../../queries/knowledge-hub-resources'
@@ -28,6 +29,8 @@ import 'swiper/css/pagination'
 import './swiper-styles.css'
 
 export const ResourcesCarousel = () => {
+  const { acl } = useAuth()
+
   const [{ data, fetching, error }] = useQuery<KnowledgeHubResourcesQuery>({
     query: KNOWLEDGE_HUB_RESOURCES_QUERY,
   })
@@ -56,7 +59,11 @@ export const ResourcesCarousel = () => {
         </Typography>
         <Typography color="grey.600">
           <Link
-            href={`${import.meta.env.VITE_KNOWLEDGE_HUB_URL}/collections/all`}
+            href={`${
+              acl.isAustralia()
+                ? import.meta.env.VITE_KNOWLEDGE_HUB_URL_ANZ
+                : import.meta.env.VITE_KNOWLEDGE_HUB_URL
+            }/collections/all`}
           >
             {t('view-all-button-text')}
           </Link>

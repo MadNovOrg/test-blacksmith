@@ -128,7 +128,13 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
                 data-testid="admin-link"
                 primaryTypographyProps={{ variant: 'body2' }}
               >
-                <Link href={import.meta.env.VITE_KNOWLEDGE_HUB_URL}>
+                <Link
+                  href={
+                    acl.isAustralia()
+                      ? import.meta.env.VITE_KNOWLEDGE_HUB_URL_ANZ
+                      : import.meta.env.VITE_KNOWLEDGE_HUB_URL
+                  }
+                >
                   {t('common.knowledge-hub')}
                 </Link>
               </ListItemText>
@@ -142,7 +148,13 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
                 data-testid="admin-link"
                 primaryTypographyProps={{ variant: 'body2' }}
               >
-                <Link href={import.meta.env.VITE_EVENTS_URL}>
+                <Link
+                  href={
+                    acl.isAustralia()
+                      ? import.meta.env.VITE_EVENTS_URL_ANZ
+                      : import.meta.env.VITE_EVENTS_URL
+                  }
+                >
                   {t('common.events')}
                 </Link>
               </ListItemText>
@@ -156,7 +168,13 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
                 data-testid="admin-link"
                 primaryTypographyProps={{ variant: 'body2' }}
               >
-                <Link href={import.meta.env.VITE_SUPPORT_URL}>
+                <Link
+                  href={
+                    acl.isAustralia()
+                      ? import.meta.env.VITE_SUPPORT_URL_ANZ
+                      : import.meta.env.VITE_SUPPORT_URL
+                  }
+                >
                   {t('common.support')}
                 </Link>
               </ListItemText>

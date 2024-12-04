@@ -118,7 +118,13 @@ export const ProfileMenu: React.FC<
 
           {acl.isInternalUser() ? (
             <>
-              <Link to={import.meta.env.VITE_KNOWLEDGE_HUB_URL}>
+              <Link
+                to={
+                  acl.isAustralia()
+                    ? import.meta.env.VITE_KNOWLEDGE_HUB_URL_ANZ
+                    : import.meta.env.VITE_KNOWLEDGE_HUB_URL
+                }
+              >
                 <ListItemButton>
                   <ListItemIcon>
                     <SchoolIcon fontSize="small" />
@@ -132,7 +138,13 @@ export const ProfileMenu: React.FC<
                 </ListItemButton>
               </Link>
 
-              <Link to={import.meta.env.VITE_EVENTS_URL}>
+              <Link
+                to={
+                  acl.isAustralia()
+                    ? import.meta.env.VITE_EVENTS_URL_ANZ
+                    : import.meta.env.VITE_EVENTS_URL
+                }
+              >
                 <ListItemButton>
                   <ListItemIcon>
                     <EventIcon fontSize="small" />
@@ -146,7 +158,13 @@ export const ProfileMenu: React.FC<
                 </ListItemButton>
               </Link>
 
-              <Link to={import.meta.env.VITE_SUPPORT_URL}>
+              <Link
+                to={
+                  acl.isAustralia()
+                    ? import.meta.env.VITE_SUPPORT_URL_ANZ
+                    : import.meta.env.VITE_SUPPORT_URL
+                }
+              >
                 <ListItemButton>
                   <ListItemIcon>
                     <HelpCenterIcon fontSize="small" />

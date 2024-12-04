@@ -59,7 +59,10 @@ const GridItem: React.FC<
 }
 
 export const MembershipGrid = () => {
-  const { verified } = useAuth()
+  const {
+    acl: { isAustralia },
+    verified,
+  } = useAuth()
   const { t } = useTranslation('pages', {
     keyPrefix: 'welcome.membership-grid',
   })
@@ -100,7 +103,11 @@ export const MembershipGrid = () => {
             title={t('knowledge-hub-title')}
             description={t('knowledge-hub-description')}
             icon={<AutoStoriesOutlinedIcon />}
-            url={import.meta.env.VITE_KNOWLEDGE_HUB_URL}
+            url={
+              isAustralia()
+                ? import.meta.env.VITE_KNOWLEDGE_HUB_URL_ANZ
+                : import.meta.env.VITE_KNOWLEDGE_HUB_URL
+            }
           >
             <Button color="lime" variant="contained" fullWidth>
               {t('knowledge-hub-button')}

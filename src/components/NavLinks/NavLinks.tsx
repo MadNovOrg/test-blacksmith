@@ -106,16 +106,34 @@ export const NavLinks: FC<INavLinksProps> = () => {
         <>
           <Link
             component={StyledNavLink}
-            to={import.meta.env.VITE_KNOWLEDGE_HUB_URL}
+            to={
+              acl.isAustralia()
+                ? import.meta.env.VITE_KNOWLEDGE_HUB_URL_ANZ
+                : import.meta.env.VITE_KNOWLEDGE_HUB_URL
+            }
           >
             {t('common.knowledge-hub')}
           </Link>
 
-          <Link component={StyledNavLink} to={import.meta.env.VITE_EVENTS_URL}>
+          <Link
+            component={StyledNavLink}
+            to={
+              acl.isAustralia()
+                ? import.meta.env.VITE_EVENTS_URL_ANZ
+                : import.meta.env.VITE_EVENTS_URL
+            }
+          >
             {t('common.events')}
           </Link>
 
-          <Link component={StyledNavLink} to={import.meta.env.VITE_SUPPORT_URL}>
+          <Link
+            component={StyledNavLink}
+            to={
+              acl.isAustralia()
+                ? import.meta.env.VITE_SUPPORT_URL_ANZ
+                : import.meta.env.VITE_SUPPORT_URL
+            }
+          >
             {t('common.support')}
           </Link>
         </>
