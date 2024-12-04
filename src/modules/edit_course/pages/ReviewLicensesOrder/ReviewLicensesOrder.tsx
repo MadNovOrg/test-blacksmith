@@ -72,6 +72,9 @@ export const ReviewLicensesOrder: React.FC<
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
   const numberOfLicenses =
+    state?.insufficientNumberOfLicenses ?? requiredLicenses
+
+  const licensesToPurchase =
     state?.insufficientNumberOfLicenses ??
     requiredLicenses -
       Math.max(
@@ -85,7 +88,13 @@ export const ReviewLicensesOrder: React.FC<
     () =>
       calculateGo1LicenseCost({
         isAustralia: acl.isAustralia(),
-        licenseBalance: preEditedCourse?.organization?.go1Licenses ?? 0,
+        licenseBalance: Math.max(
+          0,
+          preEditedCourse?.organization?.mainOrganizationLicenses
+            ?.go1Licenses ??
+            preEditedCourse?.organization?.go1Licenses ??
+            0,
+        ),
         numberOfLicenses,
         residingCountry: courseData?.residingCountry ?? undefined,
       }),
@@ -94,6 +103,7 @@ export const ReviewLicensesOrder: React.FC<
       courseData?.residingCountry,
       numberOfLicenses,
       preEditedCourse?.organization?.go1Licenses,
+      preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
     ],
   )
 
@@ -268,7 +278,7 @@ export const ReviewLicensesOrder: React.FC<
                       <InfoPanel>
                         <InfoRow
                           label={_t('pages.order-details.licenses-redeemed')}
-                          value={numberOfLicenses.toString()}
+                          value={licensesToPurchase.toString()}
                         />
                       </InfoPanel>
                     </>
