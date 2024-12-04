@@ -9,9 +9,14 @@ import {
   Course_Participant,
   ToggleAttendanceMutation,
   ToggleAttendanceMutationVariables,
+  ToggleEvaluationMutation,
+  ToggleEvaluationMutationVariables,
 } from '@app/generated/graphql'
 
-type Participant = Pick<Course_Participant, 'id' | 'attended'>
+type Participant = Pick<
+  Course_Participant,
+  'id' | 'attended' | 'course_id' | 'profile_id'
+>
 
 type Props = {
   participant: Participant
@@ -29,6 +34,21 @@ export const toggleAttendanceMutation = gql`
   }
 `
 
+export const toggleEvaluationStatus = gql`
+  mutation ToggleEvaluation($participantId: uuid!, $courseId: Int) {
+    delete_course_evaluation_answers(
+      where: {
+        _and: [
+          { courseId: { _eq: $courseId } }
+          { profileId: { _eq: $participantId } }
+        ]
+      }
+    ) {
+      affected_rows
+    }
+  }
+`
+
 export const AttendingToggle: React.FC<Props> = ({
   participant,
   disabled = false,
@@ -41,6 +61,11 @@ export const AttendingToggle: React.FC<Props> = ({
     ToggleAttendanceMutation,
     ToggleAttendanceMutationVariables
   >(toggleAttendanceMutation)
+
+  const [, toggleEvaluation] = useMutation<
+    ToggleEvaluationMutation,
+    ToggleEvaluationMutationVariables
+  >(toggleEvaluationStatus)
 
   const hasAttended =
     previousAttendance !== participant.attended
@@ -80,12 +105,24 @@ export const AttendingToggle: React.FC<Props> = ({
       <Chip
         {...chipConfig}
         variant="filled"
-        onClick={() =>
-          toggleAttendance({
-            participantId: participant.id,
-            attended: !hasAttended,
-          })
-        }
+        onClick={() => {
+          try {
+            toggleAttendance({
+              participantId: participant.id,
+              attended: !hasAttended,
+            })
+            if (participant.attended) {
+              toggleEvaluation({
+                participantId: participant.profile_id,
+                courseId: participant.course_id,
+              })
+            }
+          } catch (err) {
+            addSnackbarMessage('attendance-toggle-error', {
+              label: t('components.attendance-toggle.error'),
+            })
+          }
+        }}
         disabled={chipDisabled}
       />
       {fetching ? <CircularProgress size={15} sx={{ ml: 1 }} /> : null}

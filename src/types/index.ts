@@ -441,7 +441,13 @@ export type CourseParticipant = {
   registrationId?: string
   course: Course
   order?: Order | null
-  profile: Profile
+  profile: Profile & {
+    course_evaluation_answers_aggregate?: {
+      aggregate: {
+        count: number
+      }
+    }
+  }
   attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus
   go1EnrolmentProgress: number | null

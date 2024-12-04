@@ -53,6 +53,11 @@ export const GET_COURSE_PARTICIPANTS = gql`
         avatar
         archived
         email
+        course_evaluation_answers_aggregate {
+          aggregate {
+            count
+          }
+        }
         contactDetails
         organizations {
           organization {

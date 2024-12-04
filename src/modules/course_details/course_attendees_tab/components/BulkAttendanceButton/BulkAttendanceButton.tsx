@@ -7,6 +7,8 @@ import { gql, useMutation } from 'urql'
 
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  BulkToggleEvaluationMutation,
+  BulkToggleEvaluationMutationVariables,
   ToggleSelectedParticipantsAttendanceMutation,
   ToggleSelectedParticipantsAttendanceMutationVariables,
 } from '@app/generated/graphql'
@@ -35,6 +37,21 @@ export const toggleSelectedParticipantsAttendance = gql`
   }
 `
 
+export const toggleEvaluationStatus = gql`
+  mutation BulkToggleEvaluation($ids: [uuid!], $courseId: Int) {
+    delete_course_evaluation_answers(
+      where: {
+        _and: [
+          { courseId: { _eq: $courseId } }
+          { participant: { id: { _in: $ids } } }
+        ]
+      }
+    ) {
+      affected_rows
+    }
+  }
+`
+
 export const BulkAttendanceButton: React.FC<Props> = ({
   participantIds,
   disabled = false,
@@ -57,7 +74,18 @@ export const BulkAttendanceButton: React.FC<Props> = ({
     ToggleSelectedParticipantsAttendanceMutationVariables
   >(toggleSelectedParticipantsAttendance)
 
+  const [, toggleSelectedEvaluation] = useMutation<
+    BulkToggleEvaluationMutation,
+    BulkToggleEvaluationMutationVariables
+  >(toggleEvaluationStatus)
+
   const toggleAttendance = (attending: boolean) => {
+    if (attending === false) {
+      toggleSelectedEvaluation({
+        courseId,
+        ids: participantIds,
+      })
+    }
     toggleSelectedParticipants({
       courseId,
       attended: attending,

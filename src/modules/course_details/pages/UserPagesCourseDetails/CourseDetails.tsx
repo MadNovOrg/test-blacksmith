@@ -294,6 +294,9 @@ export const CourseDetails: React.FC<
   const showFeedbackRequiredAlert =
     courseParticipant && courseParticipant.grade && !didAttendeeSubmitFeedback
 
+  const hideCourseEvaluationStatusChip =
+    courseParticipant?.completed_evaluation && !didAttendeeSubmitFeedback
+
   // extend when https://behaviourhub.atlassian.net/browse/TTHP-3709 is ready
   const getFeedbackHelperText = () => {
     if (!courseParticipant?.healthSafetyConsent) {
@@ -662,20 +665,23 @@ export const CourseDetails: React.FC<
                               'pages.participant-course.course-summary-evaluation-title',
                             )}
                           </Typography>
-                          <Chip
-                            label={
-                              !didAttendeeSubmitFeedback || !courseHasEnded
-                                ? t('incomplete')
-                                : t('complete')
-                            }
-                            color={
-                              !didAttendeeSubmitFeedback || !courseHasEnded
-                                ? 'default'
-                                : 'success'
-                            }
-                            sx={{ marginRight: 2 }}
-                            data-testid="evaluate-course-complete-message"
-                          />
+
+                          {hideCourseEvaluationStatusChip ? null : (
+                            <Chip
+                              label={
+                                !didAttendeeSubmitFeedback || !courseHasEnded
+                                  ? t('incomplete')
+                                  : t('complete')
+                              }
+                              color={
+                                !didAttendeeSubmitFeedback || !courseHasEnded
+                                  ? 'default'
+                                  : 'success'
+                              }
+                              sx={{ marginRight: 2 }}
+                              data-testid="evaluate-course-complete-message"
+                            />
+                          )}
                           <Button
                             data-testid="evaluate-course-cta"
                             onClick={() =>

@@ -445,7 +445,10 @@ export const AttendingTab = ({
                         </TableCell>
                         {canViewEvaluationSubmittedColumn ? (
                           <TableCell style={{ textAlign: 'center' }}>
-                            {courseParticipant.completed_evaluation
+                            {courseParticipant.completed_evaluation &&
+                            (courseParticipant.profile
+                              .course_evaluation_answers_aggregate?.aggregate
+                              .count ?? 0) > 0
                               ? t('common.yes')
                               : t('common.no')}
                           </TableCell>
@@ -456,7 +459,11 @@ export const AttendingTab = ({
                           (acl.isOrgAdmin() || acl.isOrgKeyContact())) ? (
                           <TableCell width={180}>
                             <AttendingToggle
-                              participant={courseParticipant}
+                              participant={{
+                                ...courseParticipant,
+                                course_id: courseParticipant.course.id,
+                                profile_id: courseParticipant.profile.id,
+                              }}
                               disabled={
                                 !canToggleParticipantAttendance(
                                   courseParticipant,

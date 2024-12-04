@@ -18,7 +18,14 @@ it('displays N/A if there is no information if participant attended a course or 
 
   render(
     <Provider value={client}>
-      <AttendingToggle participant={{ id: chance.guid(), attended: null }} />
+      <AttendingToggle
+        participant={{
+          id: chance.guid(),
+          attended: null,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
+      />
     </Provider>,
   )
 
@@ -33,7 +40,12 @@ it('marks the chip as disabled', () => {
   render(
     <Provider value={client}>
       <AttendingToggle
-        participant={{ id: chance.guid(), attended: null }}
+        participant={{
+          id: chance.guid(),
+          attended: null,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
         disabled
       />
     </Provider>,
@@ -52,7 +64,14 @@ it('displays Attended chip if a participant attended a course', () => {
 
   render(
     <Provider value={client}>
-      <AttendingToggle participant={{ id: chance.guid(), attended: true }} />
+      <AttendingToggle
+        participant={{
+          id: chance.guid(),
+          attended: true,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
+      />
     </Provider>,
   )
 
@@ -66,7 +85,14 @@ it("displays Did not attend chip if a participant didn't attend a course", () =>
 
   render(
     <Provider value={client}>
-      <AttendingToggle participant={{ id: chance.guid(), attended: false }} />
+      <AttendingToggle
+        participant={{
+          id: chance.guid(),
+          attended: false,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
+      />
     </Provider>,
   )
 
@@ -102,7 +128,14 @@ it('toggles attendance when chip is clicked', async () => {
 
   render(
     <Provider value={client}>
-      <AttendingToggle participant={{ id: participantId, attended: null }} />
+      <AttendingToggle
+        participant={{
+          id: participantId,
+          attended: null,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
+      />
     </Provider>,
   )
 
@@ -142,7 +175,14 @@ it('updates attendance chip after toggling', async () => {
 
   const { rerender } = render(
     <Provider value={client}>
-      <AttendingToggle participant={{ id: participantId, attended: null }} />
+      <AttendingToggle
+        participant={{
+          id: participantId,
+          attended: null,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
+      />
     </Provider>,
   )
 
@@ -152,7 +192,14 @@ it('updates attendance chip after toggling', async () => {
 
   rerender(
     <Provider value={client}>
-      <AttendingToggle participant={{ id: participantId, attended: false }} />
+      <AttendingToggle
+        participant={{
+          id: participantId,
+          attended: false,
+          course_id: 1,
+          profile_id: chance.guid(),
+        }}
+      />
     </Provider>,
   )
 

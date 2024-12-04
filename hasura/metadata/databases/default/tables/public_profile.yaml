@@ -39,6 +39,13 @@ array_relationships:
         remote_table:
           name: course_certificate
           schema: public
+  - name: course_evaluation_answers
+    using:
+      foreign_key_constraint_on:
+        column: profile_id
+        table:
+          name: course_evaluation_answers
+          schema: public
   - name: course_trainer
     using:
       foreign_key_constraint_on:

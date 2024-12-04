@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const MUTATION = gql`
+export const SAVE_COURSE_ATTENDANCE = gql`
   mutation SaveCourseAttendance(
     $attended: [uuid!]!
     $notAttended: [uuid!]!
