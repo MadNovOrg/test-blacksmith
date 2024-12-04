@@ -51432,9 +51432,9 @@ export type Query_Root = {
   course_enquiry_aggregate: Course_Enquiry_Aggregate;
   /** fetch data from the table: "course_enquiry" using primary key columns */
   course_enquiry_by_pk?: Maybe<Course_Enquiry>;
-  /** fetch data from the table: "course_evaluation_answers" */
+  /** An array relationship */
   course_evaluation_answers: Array<Course_Evaluation_Answers>;
-  /** fetch aggregated fields from the table: "course_evaluation_answers" */
+  /** An aggregate relationship */
   course_evaluation_answers_aggregate: Course_Evaluation_Answers_Aggregate;
   /** fetch data from the table: "course_evaluation_answers" using primary key columns */
   course_evaluation_answers_by_pk?: Maybe<Course_Evaluation_Answers>;
@@ -55775,9 +55775,9 @@ export type Subscription_Root = {
   course_enquiry_by_pk?: Maybe<Course_Enquiry>;
   /** fetch data from the table in a streaming manner: "course_enquiry" */
   course_enquiry_stream: Array<Course_Enquiry>;
-  /** fetch data from the table: "course_evaluation_answers" */
+  /** An array relationship */
   course_evaluation_answers: Array<Course_Evaluation_Answers>;
-  /** fetch aggregated fields from the table: "course_evaluation_answers" */
+  /** An aggregate relationship */
   course_evaluation_answers_aggregate: Course_Evaluation_Answers_Aggregate;
   /** fetch data from the table: "course_evaluation_answers" using primary key columns */
   course_evaluation_answers_by_pk?: Maybe<Course_Evaluation_Answers>;
@@ -63450,6 +63450,7 @@ export type CourseParticipantsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Participant_Order_By> | Course_Participant_Order_By>;
   where?: InputMaybe<Course_Participant_Bool_Exp>;
   withOrder?: InputMaybe<Scalars['Boolean']>;
+  courseId?: InputMaybe<Scalars['Int']>;
 }>;
 
 

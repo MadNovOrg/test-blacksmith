@@ -84,6 +84,7 @@ export default function useCourseParticipants(
       },
       withOrder: acl.canViewOrders(),
       orderBy,
+      courseId: courseId ?? 0,
     },
     requestPolicy: 'cache-and-network',
   })

@@ -24,6 +24,7 @@ export type ParamsType = {
     | { profile: { email: SortOrder } }
     | { go1EnrolmentStatus: SortOrder }
   where?: object
+  courseId: number
   withOrder?: boolean
 }
 
@@ -38,6 +39,7 @@ export const GET_COURSE_PARTICIPANTS = gql`
     $orderBy: [course_participant_order_by!] = { profile: { fullName: asc } }
     $where: course_participant_bool_exp = {}
     $withOrder: Boolean = false
+    $courseId: Int
   ) {
     courseParticipants: course_participant(
       where: $where
@@ -53,7 +55,9 @@ export const GET_COURSE_PARTICIPANTS = gql`
         avatar
         archived
         email
-        course_evaluation_answers_aggregate {
+        course_evaluation_answers_aggregate(
+          where: { courseId: { _eq: $courseId } }
+        ) {
           aggregate {
             count
           }
