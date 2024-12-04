@@ -1,5 +1,17 @@
 # @teamteach/hub
 
+## 4.15.0
+
+### Minor Changes
+
+- 8162a81: Open course attendee evaluation starting with last day | Deletes evaluation if attendee was later set as not attended | Schedules evaluation email if attendee is marked as attended before course end date
+- 1b89ba5: Allow trainers to view summary evaluation
+- 498ef8d: Schedule pre training surveys to 24H before course starts and post training surveys to 7 days after the participants have passed the course.
+
+### Patch Changes
+
+- d2c3ef1: Knowledge Hub links for ANZ
+
 ## 4.14.0
 
 ### Minor Changes
