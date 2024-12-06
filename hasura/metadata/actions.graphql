@@ -837,6 +837,7 @@ input Invite {
   email: String!
   expiresIn: String
   invitedAfterCourseHasEnded: Boolean!
+  inviter_id: String
   status: String
 }
 
