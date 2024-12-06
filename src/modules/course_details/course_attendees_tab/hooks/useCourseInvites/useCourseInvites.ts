@@ -39,11 +39,12 @@ export const GET_COURSE_INVITES = gql`
       order_by: $orderBy
     ) {
       id
-      email
-      status
       createdAt
-      note
+      email
       expiresIn
+      inviter_id
+      note
+      status
     }
     courseInvitesAggregate: course_invites_aggregate(where: $where) {
       aggregate {
@@ -59,7 +60,7 @@ export const SEND_COURSE_INVITES = gql`
       objects: $invites
       on_conflict: {
         constraint: course_invites_email_course_id_key
-        update_columns: [createdAt, status]
+        update_columns: [createdAt, inviter_id, status]
       }
     ) {
       returning {
@@ -117,6 +118,7 @@ const emailsSchema = yup
 export default function useCourseInvites({
   courseId,
   courseEnd,
+  inviter,
   limit,
   offset,
   order,
@@ -125,6 +127,7 @@ export default function useCourseInvites({
 }: {
   courseId: number
   courseEnd?: string
+  inviter: string | null
   limit?: number
   offset?: number
   order?: SortOrder
@@ -238,11 +241,17 @@ export default function useCourseInvites({
             email: invite.email,
             expiresIn: getExpiresInDateForInviteResend(),
             status: Course_Invite_Status_Enum.Pending,
+            inviter_id: [
+              Course_Invite_Status_Enum.Cancelled,
+              Course_Invite_Status_Enum.Declined,
+            ].includes(invite.status as Course_Invite_Status_Enum)
+              ? inviter
+              : invite.inviter_id,
           },
         ],
       })
     },
-    [courseId, getExpiresInDateForInviteResend, sendInvites],
+    [courseId, getExpiresInDateForInviteResend, inviter, sendInvites],
   )
 
   // Save course invites
@@ -307,6 +316,7 @@ export default function useCourseInvites({
         course_id: courseId,
         email,
         invited_after_course_end: invitedAfterCourseHasEnded,
+        inviter_id: inviter,
       }))
 
       if (course.go1Integration && course.type === Course_Type_Enum.Indirect) {
@@ -314,6 +324,7 @@ export default function useCourseInvites({
           ...newEmails.map(email => ({
             email,
             invitedAfterCourseHasEnded,
+            inviter_id: inviter,
           })),
           ...declinedInvites
             .filter(invite => Boolean(invite.email))
@@ -321,6 +332,7 @@ export default function useCourseInvites({
               email: invite.email as string,
               expiresIn: getExpiresInDateForInviteResend().toISOString(),
               invitedAfterCourseHasEnded,
+              inviter_id: inviter,
               status: Course_Invite_Status_Enum.Pending,
             })),
         ]
@@ -357,8 +369,9 @@ export default function useCourseInvites({
       courseEnd,
       resend,
       courseId,
-      getExpiresInDateForInviteResend,
+      inviter,
       saveIndirectBLCourseInvites,
+      getExpiresInDateForInviteResend,
       navigate,
       saveInvites,
     ],

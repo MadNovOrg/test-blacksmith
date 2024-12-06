@@ -64,6 +64,7 @@ export const CourseAttendeesTab: React.FC<
   })
   const invites = useCourseInvites({
     courseId,
+    inviter: profile?.id ?? null,
   })
   const courseInvites = invites.data ?? []
 

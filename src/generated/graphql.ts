@@ -22221,6 +22221,9 @@ export type Course_Invites = {
   expiresIn?: Maybe<Scalars['timestamptz']>;
   id: Scalars['uuid'];
   invited_after_course_end?: Maybe<Scalars['Boolean']>;
+  /** An object relationship */
+  inviter?: Maybe<Profile>;
+  inviter_id?: Maybe<Scalars['uuid']>;
   note?: Maybe<Scalars['String']>;
   /** An object relationship */
   participant?: Maybe<Course_Participant>;
@@ -22330,6 +22333,8 @@ export type Course_Invites_Bool_Exp = {
   expiresIn?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   invited_after_course_end?: InputMaybe<Boolean_Comparison_Exp>;
+  inviter?: InputMaybe<Profile_Bool_Exp>;
+  inviter_id?: InputMaybe<Uuid_Comparison_Exp>;
   note?: InputMaybe<String_Comparison_Exp>;
   participant?: InputMaybe<Course_Participant_Bool_Exp>;
   status?: InputMaybe<Course_Invite_Status_Enum_Comparison_Exp>;
@@ -22358,6 +22363,8 @@ export type Course_Invites_Insert_Input = {
   expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   invited_after_course_end?: InputMaybe<Scalars['Boolean']>;
+  inviter?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  inviter_id?: InputMaybe<Scalars['uuid']>;
   note?: InputMaybe<Scalars['String']>;
   participant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
@@ -22372,6 +22379,7 @@ export type Course_Invites_Max_Fields = {
   email?: Maybe<Scalars['String']>;
   expiresIn?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  inviter_id?: Maybe<Scalars['uuid']>;
   note?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -22383,6 +22391,7 @@ export type Course_Invites_Max_Order_By = {
   email?: InputMaybe<Order_By>;
   expiresIn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  inviter_id?: InputMaybe<Order_By>;
   note?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -22395,6 +22404,7 @@ export type Course_Invites_Min_Fields = {
   email?: Maybe<Scalars['String']>;
   expiresIn?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  inviter_id?: Maybe<Scalars['uuid']>;
   note?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -22406,6 +22416,7 @@ export type Course_Invites_Min_Order_By = {
   email?: InputMaybe<Order_By>;
   expiresIn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  inviter_id?: InputMaybe<Order_By>;
   note?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -22442,6 +22453,8 @@ export type Course_Invites_Order_By = {
   expiresIn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   invited_after_course_end?: InputMaybe<Order_By>;
+  inviter?: InputMaybe<Profile_Order_By>;
+  inviter_id?: InputMaybe<Order_By>;
   note?: InputMaybe<Order_By>;
   participant?: InputMaybe<Course_Participant_Order_By>;
   status?: InputMaybe<Order_By>;
@@ -22467,6 +22480,8 @@ export enum Course_Invites_Select_Column {
   Id = 'id',
   /** column name */
   InvitedAfterCourseEnd = 'invited_after_course_end',
+  /** column name */
+  InviterId = 'inviter_id',
   /** column name */
   Note = 'note',
   /** column name */
@@ -22495,6 +22510,7 @@ export type Course_Invites_Set_Input = {
   expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   invited_after_course_end?: InputMaybe<Scalars['Boolean']>;
+  inviter_id?: InputMaybe<Scalars['uuid']>;
   note?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -22549,6 +22565,7 @@ export type Course_Invites_Stream_Cursor_Value_Input = {
   expiresIn?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   invited_after_course_end?: InputMaybe<Scalars['Boolean']>;
+  inviter_id?: InputMaybe<Scalars['uuid']>;
   note?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Invite_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -22579,6 +22596,8 @@ export enum Course_Invites_Update_Column {
   Id = 'id',
   /** column name */
   InvitedAfterCourseEnd = 'invited_after_course_end',
+  /** column name */
+  InviterId = 'inviter_id',
   /** column name */
   Note = 'note',
   /** column name */
@@ -63213,7 +63232,7 @@ export type GetCourseInvitesQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null, createdAt: any, note?: string | null, expiresIn?: any | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
+export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, createdAt: any, email?: string | null, expiresIn?: any | null, inviter_id?: any | null, note?: string | null, status?: Course_Invite_Status_Enum | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
 
 export type SendCourseInvitesMutationVariables = Exact<{
   invites: Array<Course_Invites_Insert_Input> | Course_Invites_Insert_Input;

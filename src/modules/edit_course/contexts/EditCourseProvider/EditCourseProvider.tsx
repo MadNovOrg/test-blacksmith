@@ -866,7 +866,10 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       ...order,
       attendeesQuantity: 0,
       invitees: blendedLearningIndirectCourseInvitees.length
-        ? blendedLearningIndirectCourseInvitees
+        ? blendedLearningIndirectCourseInvitees.map(invitee => ({
+            ...invitee,
+            inviter_id: profile?.id,
+          }))
         : null,
     }
 
@@ -893,6 +896,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     navigate,
     order,
     preEditedCourse?.id,
+    profile?.id,
   ])
 
   const value = useMemo(

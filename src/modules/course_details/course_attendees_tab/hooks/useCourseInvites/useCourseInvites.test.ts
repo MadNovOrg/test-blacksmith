@@ -13,9 +13,12 @@ vi.mock('useCourseInvites')
 describe('useCourseInvites', () => {
   it('should throw when send is called with no emails', async () => {
     const courseId = chance.integer()
-    const { result } = renderHook(() => useCourseInvites({ courseId }), {
-      wrapper: MemoryRouter,
-    })
+    const { result } = renderHook(
+      () => useCourseInvites({ courseId, inviter: null }),
+      {
+        wrapper: MemoryRouter,
+      },
+    )
 
     const { send } = result.current
 
@@ -30,9 +33,12 @@ describe('useCourseInvites', () => {
 
   it('should throw when send is called with invalid email', async () => {
     const courseId = chance.integer()
-    const { result } = renderHook(() => useCourseInvites({ courseId }), {
-      wrapper: MemoryRouter,
-    })
+    const { result } = renderHook(
+      () => useCourseInvites({ courseId, inviter: null }),
+      {
+        wrapper: MemoryRouter,
+      },
+    )
     const { send } = result.current
 
     const err = Error('INVALID_EMAILS')
@@ -46,9 +52,12 @@ describe('useCourseInvites', () => {
 
   it('should throw when send is called with invalid emails', async () => {
     const courseId = chance.integer()
-    const { result } = renderHook(() => useCourseInvites({ courseId }), {
-      wrapper: MemoryRouter,
-    })
+    const { result } = renderHook(
+      () => useCourseInvites({ courseId, inviter: null }),
+      {
+        wrapper: MemoryRouter,
+      },
+    )
     const { send } = result.current
 
     const err = Error('INVALID_EMAILS')

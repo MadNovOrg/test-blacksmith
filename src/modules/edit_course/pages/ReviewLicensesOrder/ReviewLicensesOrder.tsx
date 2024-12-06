@@ -88,13 +88,16 @@ export const ReviewLicensesOrder: React.FC<
     () =>
       calculateGo1LicenseCost({
         isAustralia: acl.isAustralia(),
-        licenseBalance: Math.max(
-          0,
-          preEditedCourse?.organization?.mainOrganizationLicenses
-            ?.go1Licenses ??
-            preEditedCourse?.organization?.go1Licenses ??
-            0,
-        ),
+        // state.insufficientNumberOfLicenses represents the exact number of licenses required for purchase, which is why licenseBalance needs to be set to 0
+        licenseBalance: state?.insufficientNumberOfLicenses
+          ? 0
+          : Math.max(
+              0,
+              preEditedCourse?.organization?.mainOrganizationLicenses
+                ?.go1Licenses ??
+                preEditedCourse?.organization?.go1Licenses ??
+                0,
+            ),
         numberOfLicenses,
         residingCountry: courseData?.residingCountry ?? undefined,
       }),
@@ -104,6 +107,7 @@ export const ReviewLicensesOrder: React.FC<
       numberOfLicenses,
       preEditedCourse?.organization?.go1Licenses,
       preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
+      state?.insufficientNumberOfLicenses,
     ],
   )
 

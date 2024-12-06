@@ -73,12 +73,12 @@ export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
     case Go1_History_Events_Enum.LicensesReleased: {
       return (
         <>
-          <Typography sx={{ mb: 1 }}>{t('released-licenses')}</Typography>
-          <Typography variant="body2">
+          <Typography sx={{ mb: 1 }}>
             <Link href={`/courses/${item.payload?.courseId}/details`}>
               {item.payload?.courseCode}
             </Link>
           </Typography>
+          <Typography variant="body2">{t('released-licenses')}</Typography>
         </>
       )
     }
@@ -108,11 +108,18 @@ export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
 
     case Go1_History_Events_Enum.LicenseRevoked: {
       return (
-        <Typography>
-          <Link href={`/profile/${item.payload?.invokedById}`}>
-            {t('revoked-by', { fullName: item.payload?.invokedBy })}
-          </Link>
-        </Typography>
+        <>
+          <Typography sx={{ mb: 1 }}>
+            <Link href={`/courses/${item.payload?.courseId}/details`}>
+              {item.payload?.courseCode}
+            </Link>
+          </Typography>
+          <Typography variant="body2">
+            <Link href={`/profile/${item.payload?.invokedById}`}>
+              {t('revoked-by', { fullName: item.payload?.invokedBy })}
+            </Link>
+          </Typography>
+        </>
       )
     }
 

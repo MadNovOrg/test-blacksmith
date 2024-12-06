@@ -18,6 +18,9 @@ object_relationships:
   - name: course
     using:
       foreign_key_constraint_on: course_id
+  - name: inviter
+    using:
+      foreign_key_constraint_on: inviter_id
   - name: participant
     using:
       manual_configuration:
@@ -47,6 +50,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
   - role: ld
     permission:
@@ -76,6 +80,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
   - role: sales-admin
     permission:
@@ -85,6 +90,7 @@ insert_permissions:
         - email
         - status
         - invited_after_course_end
+        - inviter_id
         - expires_in
   - role: sales-representative
     permission:
@@ -99,6 +105,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
   - role: trainer
     permission:
@@ -112,6 +119,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
   - role: tt-admin
     permission:
@@ -121,6 +129,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
   - role: tt-ops
     permission:
@@ -130,6 +139,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
   - role: user
     permission:
@@ -147,6 +157,7 @@ insert_permissions:
         - email
         - expires_in
         - invited_after_course_end
+        - inviter_id
         - status
 select_permissions:
   - role: booking-contact
@@ -158,6 +169,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -183,6 +195,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -197,6 +210,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -210,6 +224,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -230,14 +245,15 @@ select_permissions:
     permission:
       columns:
         - course_id
-        - email
-        - note
-        - status
         - created_at
-        - updated_at
+        - email
+        - expires_in
         - id
         - invited_after_course_end
-        - expires_in
+        - inviter_id
+        - note
+        - status
+        - updated_at
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -249,6 +265,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -268,6 +285,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -287,6 +305,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -301,6 +320,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -315,6 +335,7 @@ select_permissions:
         - expires_in
         - id
         - invited_after_course_end
+        - inviter_id
         - note
         - status
         - updated_at
@@ -335,6 +356,7 @@ update_permissions:
         - course_id
         - created_at
         - email
+        - inviter_id
         - status
       filter: {}
       check: null
@@ -344,6 +366,7 @@ update_permissions:
         - course_id
         - created_at
         - email
+        - inviter_id
         - status
       filter: {}
       check: {}
@@ -353,6 +376,7 @@ update_permissions:
         - course_id
         - created_at
         - email
+        - inviter_id
         - status
       filter:
         course:
@@ -367,6 +391,7 @@ update_permissions:
         - course_id
         - created_at
         - email
+        - inviter_id
         - note
         - status
       filter:
@@ -379,6 +404,7 @@ update_permissions:
     permission:
       columns:
         - created_at
+        - inviter_id
         - status
       filter: {}
       check: null
@@ -388,12 +414,14 @@ update_permissions:
         - course_id
         - created_at
         - email
+        - inviter_id
         - status
       filter: {}
       check: null
   - role: user
     permission:
       columns:
+        - inviter_id
         - status
       filter:
         _and:
@@ -490,7 +518,7 @@ event_triggers:
           - status
     retry_conf:
       interval_sec: 20
-      num_retries: 0
+      num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/course-invite'
   - name: send_invite_email

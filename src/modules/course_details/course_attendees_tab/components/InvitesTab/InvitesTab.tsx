@@ -42,7 +42,7 @@ export const InvitesTab = ({
   invitesData,
 }: TabProperties) => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -66,6 +66,7 @@ export const InvitesTab = ({
 
   const { data, fetching, total, resend, cancel } = useCourseInvites({
     courseId: course?.id,
+    inviter: profile?.id ?? null,
     status: inviteStatus,
     order,
     limit: perPage,

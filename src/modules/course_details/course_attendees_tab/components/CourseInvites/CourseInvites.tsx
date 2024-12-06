@@ -83,6 +83,7 @@ export const CourseInvites = ({
   const invites = useCourseInvites({
     courseId: course?.id,
     courseEnd: course?.dates?.aggregate?.end?.date,
+    inviter: profile?.id ?? null,
     poll: {
       untilInvitees: state?.invitees ?? [],
     },
