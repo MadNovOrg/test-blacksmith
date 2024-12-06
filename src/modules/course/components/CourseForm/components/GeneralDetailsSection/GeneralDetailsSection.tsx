@@ -283,6 +283,19 @@ export const GeneralDetailsSection = ({
               courseType={courseType}
               disabled={disableCountrySelector}
             />
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: '.75rem',
+                color: 'grey',
+                padding: '10px 0px 0px 5px',
+              }}
+              data-testid="residing-country-course-creation-hint-message"
+            >
+              {_t(
+                'common.validation-hints.residing-country-course-creation-hint-message',
+              )}
+            </Typography>
           </FormControl>
         ) : null}
         {acl.canCreateBildCourse(courseType) ? (
