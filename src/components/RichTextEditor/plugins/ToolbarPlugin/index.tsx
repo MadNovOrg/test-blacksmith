@@ -18,9 +18,14 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
 import RedoIcon from '@mui/icons-material/Redo'
 import UndoIcon from '@mui/icons-material/Undo'
-import { Box, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material'
-import { Divider } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import {
+  Box,
+  ToggleButtonGroup,
+  ToggleButton,
+  IconButton,
+  Divider,
+  styled,
+} from '@mui/material'
 import {
   $getSelection,
   $isRangeSelection,

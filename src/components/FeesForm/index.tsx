@@ -46,7 +46,7 @@ export type FormValues = InferType<typeof schema>
 type Props = {
   mode?: TransferModeEnum
   optionLabels?: Partial<Record<TransferFeeType, string>>
-  priceCurrency?: string | null | undefined
+  priceCurrency?: string | null
   defaultValues?: ContextValue['fees']
 }
 

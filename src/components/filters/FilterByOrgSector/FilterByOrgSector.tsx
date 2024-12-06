@@ -7,7 +7,6 @@ import { noop } from '@app/util'
 import { FilterAccordion, FilterOption } from '../../FilterAccordion'
 
 type Props = {
-  isUKRegion?: boolean
   onChange: (selected: string[]) => void
 }
 

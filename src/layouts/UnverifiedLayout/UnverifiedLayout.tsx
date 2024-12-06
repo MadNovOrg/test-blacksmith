@@ -1,9 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
 
-type Props = unknown
-
-export const UnverifiedLayout: React.FC<React.PropsWithChildren<Props>> = ({
+export const UnverifiedLayout: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   return (

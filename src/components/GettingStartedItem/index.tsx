@@ -4,19 +4,16 @@ import { PlayIcon } from '@app/assets'
 import theme from '@app/theme'
 
 export type GettingStartedItemProps = {
-  id: string
   image: string
-  video: string
   title: string
   description: string
-  steps?: string[]
 }
 
 function GettingStartedItem({
   image,
   title,
   description,
-}: GettingStartedItemProps) {
+}: Readonly<GettingStartedItemProps>) {
   return (
     <Box
       sx={{

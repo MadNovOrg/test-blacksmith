@@ -44,7 +44,7 @@ const ProgressBar: React.FC<React.PropsWithChildren<ProgressBarProps>> =
           }}
           data-testid="progress-bar-label"
         >
-          {label ? label : `${rounded}%`}
+          {label || `${rounded}%`}
         </Box>
       </Box>
     )

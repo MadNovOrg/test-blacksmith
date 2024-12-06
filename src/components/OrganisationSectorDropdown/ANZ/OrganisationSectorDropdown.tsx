@@ -4,8 +4,8 @@ import { UseFormRegisterReturn } from 'react-hook-form'
 
 export type Props = {
   register: UseFormRegisterReturn
-  value?: string | ''
-  error?: string | undefined
+  value?: string
+  error?: string
   label?: string
   required?: boolean
 }

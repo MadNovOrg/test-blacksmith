@@ -1,5 +1,4 @@
-import { renderHook, act } from '@test/index'
-import { TestMemoryRouter } from '@test/index'
+import { renderHook, act, TestMemoryRouter } from '@test/index'
 
 import { useTableSort } from '.'
 

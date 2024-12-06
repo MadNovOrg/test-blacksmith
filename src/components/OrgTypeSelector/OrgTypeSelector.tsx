@@ -9,7 +9,7 @@ import { useOrgType } from '@app/modules/organisation/hooks/useOrgType'
 type Props = {
   sector: string
   label?: string
-  error?: string | undefined
+  error?: string
   required?: boolean
   disabled?: boolean
   value?: Pick<Organization_Type, 'name'> | string

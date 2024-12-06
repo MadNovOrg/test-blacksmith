@@ -15,10 +15,8 @@ export const getGoogleMapsSuggestions = async (
   if (!window?.google) return null
 
   const residingCountryFormat = residingCountry?.includes('-')
-    ? residingCountry.slice(0, residingCountry.indexOf('-'))
-    : residingCountry
-    ? residingCountry
-    : 'gb'
+    ? residingCountry.split('-')[0]
+    : residingCountry || 'gb'
 
   return new google.maps.places.AutocompleteService().getPlacePredictions({
     input: query,

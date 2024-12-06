@@ -214,7 +214,7 @@ export const VenueSelector: React.FC<
         libraries={['places', 'visualization']}
       >
         <Autocomplete
-          freeSolo={query?.length > 3 ? false : true}
+          freeSolo={query.length > 3 ? false : true}
           sx={sx}
           open={open && Boolean(debouncedQuery && query)}
           openOnFocus={true}

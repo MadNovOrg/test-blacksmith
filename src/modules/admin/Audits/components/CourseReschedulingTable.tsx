@@ -31,7 +31,7 @@ import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAv
 import {
   CourseLogType,
   getExportDataRenderFunction,
-  getCourseInvoice,
+  getInvoice,
 } from '../utils/util'
 
 export const CourseReschedulingTable: React.FC<
@@ -107,7 +107,8 @@ export const CourseReschedulingTable: React.FC<
         sorting: false,
         exportRender: (log: CourseLogType) =>
           log.xero_invoice_number ??
-          (log.course.orders[0]?.order?.xeroInvoiceNumber || ''),
+          log.course.orders[0]?.order?.xeroInvoiceNumber ??
+          '',
       },
       {
         id: 'authorizedBy.fullName',
@@ -183,7 +184,7 @@ export const CourseReschedulingTable: React.FC<
                   />
 
                   {logs.map(log => {
-                    const invoice = getCourseInvoice(log)
+                    const invoice = getInvoice(log)
                     return (
                       <TableRow
                         key={log.id}

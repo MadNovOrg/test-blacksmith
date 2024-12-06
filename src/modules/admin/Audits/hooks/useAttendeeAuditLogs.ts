@@ -35,7 +35,7 @@ export default function useAttendeeAuditLogs({
   logs: GetAttendeeAuditLogsQuery['logs']
   count: number
   loading?: boolean
-  error?: CombinedError | undefined
+  error?: CombinedError
   getUnpagedLogs: () => Promise<GetAttendeeAuditLogsQuery['logs']>
 } {
   const orderBy: GetAttendeeAuditLogsQueryVariables['orderBy'] = useMemo(

@@ -41,7 +41,7 @@ export async function fetchUserProfile(
       throw Error(`No profile for ${claims?.['x-hasura-user-id'] ?? 'unknown'}`)
     }
 
-    const defaultRole = claims?.['x-hasura-default-role'] || RoleName.USER
+    const defaultRole = claims?.['x-hasura-default-role'] ?? RoleName.USER
     const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
     const claimsRolesSet = new Set(claimsRoles)
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
@@ -186,20 +186,20 @@ export const handleHubspotFormSubmit = async ({
   try {
     axios.post<HubspotApiFormData>(hubspotEndpoint[authMode], {
       ...userToHubspotContact(profile),
-    }),
-      await insertHubspotAudit(
-        {
-          profile_id: profile.id ?? null,
-          hubspot_cookie: Cookies.get('hubspotutk'),
-          authentication_mode: authMode,
-          status: 'SUCCESS',
-          page_details: {
-            pageUri: location.origin,
-            pageName: document.title,
-          },
+    })
+    await insertHubspotAudit(
+      {
+        profile_id: profile.id ?? null,
+        hubspot_cookie: Cookies.get('hubspotutk'),
+        authentication_mode: authMode,
+        status: 'SUCCESS',
+        page_details: {
+          pageUri: location.origin,
+          pageName: document.title,
         },
-        userJWT,
-      )
+      },
+      userJWT,
+    )
   } catch (err) {
     await insertHubspotAudit(
       {

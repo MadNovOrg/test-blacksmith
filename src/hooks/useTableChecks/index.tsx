@@ -8,10 +8,10 @@ type InputProps = CheckboxProps['inputProps'] & { 'data-testid': string }
  * Utility hook to encapsulate table checkboxes logic
  */
 export const useTableChecks = <Entry extends ID>() => {
-  const [selected, _setSelected] = useState<Set<Entry>>(new Set())
+  const [selected, setSelected] = useState<Set<Entry>>(new Set())
 
-  const setSelected = useCallback((entries: Entry[], checked = true) => {
-    _setSelected(prev => {
+  const _setSelected = useCallback((entries: Entry[], checked = true) => {
+    setSelected(prev => {
       if (!entries.length) return new Set()
       const next = new Set(prev)
       entries.forEach(e => (checked ? next.add(e) : next.delete(e)))
@@ -36,14 +36,14 @@ export const useTableChecks = <Entry extends ID>() => {
             indeterminate={selected.size > 0 && !allChecked}
             checked={allChecked}
             onChange={({ target }) => {
-              setSelected(target.checked ? allEntries : [], target.checked)
+              _setSelected(target.checked ? allEntries : [], target.checked)
             }}
             inputProps={{ 'data-testid': 'TableChecks-Head' } as InputProps}
           />
         ),
       }
     },
-    [setSelected, selected.size],
+    [_setSelected, selected.size],
   )
 
   const rowCell = useCallback(
@@ -52,23 +52,23 @@ export const useTableChecks = <Entry extends ID>() => {
         <TableCell padding="checkbox">
           <Checkbox
             checked={isSelected(entry)}
-            onChange={({ target }) => setSelected([entry], target.checked)}
+            onChange={({ target }) => _setSelected([entry], target.checked)}
             inputProps={{ 'data-testid': 'TableChecks-Row' } as InputProps}
             disabled={disabled}
           />
         </TableCell>
       )
     },
-    [isSelected, setSelected],
+    [isSelected, _setSelected],
   )
 
   return useMemo(
     () => ({
       selected,
-      setSelected,
+      setSelected: _setSelected,
       isSelected,
       checkbox: { headCol, rowCell },
     }),
-    [selected, setSelected, headCol, rowCell, isSelected],
+    [selected, _setSelected, headCol, rowCell, isSelected],
   )
 }

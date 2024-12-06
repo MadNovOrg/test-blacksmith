@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect } from 'react'
+import { FC, PropsWithChildren, useCallback, useEffect } from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -20,7 +20,7 @@ import {
 
 import { ARLO_CONNECT_MUTATION } from '../utils/helpers'
 
-export const ArloConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
+export const ArloConnect: FC<PropsWithChildren> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [{ error, fetching: loading }, getArloConnectionCallback] = useMutation<

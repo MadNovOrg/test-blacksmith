@@ -20,9 +20,7 @@ type Props = {
 }
 
 // Todo VenueMissing status is using on backend so this is the reason still need to keep this value.
-const statuses = Object.values(
-  omit(Course_Status_Enum, 'VenueMissing'),
-) as string[]
+const statuses = Object.values(omit(Course_Status_Enum, 'VenueMissing'))
 
 export const FilterByCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,

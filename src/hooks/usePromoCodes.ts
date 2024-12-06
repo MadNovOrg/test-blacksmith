@@ -34,17 +34,17 @@ export const usePromoCodes = ({
     if (!filters.from && !filters.to) return
 
     const from = isValid(filters.from) ? filters.from : undefined
-    from && from.setHours(0, 0, 0)
+    from?.setHours(0, 0, 0)
 
     const to = isValid(filters.to) ? filters.to : undefined
-    to && to.setHours(23, 59, 59)
+    to?.setHours(23, 59, 59)
 
     return { createdAt: { _gte: from, _lte: to } }
   }, [filters.from, filters.to])
 
   const typeWhere = useMemo(() => {
     const types = filters.type as Promo_Code_Type_Enum[]
-    return types && types.length ? { type: { _in: types } } : {}
+    return types?.length ? { type: { _in: types } } : {}
   }, [filters.type])
 
   const codeWhere = useMemo(() => {

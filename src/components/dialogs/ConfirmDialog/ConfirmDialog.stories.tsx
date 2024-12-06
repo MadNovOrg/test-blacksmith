@@ -20,9 +20,9 @@ export const Default: Story = {
     message: <Typography>Here goes the message</Typography>,
   },
   render: function Component(args) {
-    const [isOpen, toggleDialog] = useState(false)
+    const [isOpen, setToggleDialog] = useState(false)
     const toggle = () => {
-      toggleDialog(!isOpen)
+      setToggleDialog(!isOpen)
     }
 
     return (

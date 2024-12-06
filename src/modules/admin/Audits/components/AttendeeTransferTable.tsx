@@ -28,7 +28,7 @@ import useAttendeeAuditLogs from '../hooks/useAttendeeAuditLogs'
 import {
   AttendeeLogType,
   getExportDataRenderFunction,
-  getAttendeeInvoice,
+  getInvoice,
 } from '../utils/util'
 
 export const AttendeeTransferTable: React.FC<
@@ -189,7 +189,7 @@ export const AttendeeTransferTable: React.FC<
                   />
 
                   {logs.map(log => {
-                    const invoice = getAttendeeInvoice(log)
+                    const invoice = getInvoice(log)
                     return (
                       <TableRow
                         key={log.id}

@@ -84,7 +84,7 @@ function formatUnits() {
       fromUnit: convertUnits.Unit
     },
   ) => {
-    const toUnit = unitLocalesMap[lng || defaultLocale]
+    const toUnit = unitLocalesMap[lng ?? defaultLocale]
     const convertedValue = convertUnits(+value)
       .from(options?.fromUnit || 'km')
       .to(toUnit)

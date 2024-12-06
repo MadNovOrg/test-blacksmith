@@ -17,9 +17,7 @@ export const InfoRow: React.FC<
     mt={1}
     data-testid={`${label}-info-row`}
   >
-    {children ? (
-      children
-    ) : (
+    {children || (
       <>
         {label ? (
           <Typography color={theme.palette.grey[600]}>{label}</Typography>

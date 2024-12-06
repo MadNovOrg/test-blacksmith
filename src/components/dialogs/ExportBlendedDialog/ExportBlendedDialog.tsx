@@ -21,8 +21,8 @@ type Props = {
 }
 
 type DateFilters = {
-  filterStartDate?: Date | undefined
-  filterEndDate?: Date | undefined
+  filterStartDate?: Date
+  filterEndDate?: Date
 }
 
 export const ExportBlendedDialog: React.FC<React.PropsWithChildren<Props>> = ({

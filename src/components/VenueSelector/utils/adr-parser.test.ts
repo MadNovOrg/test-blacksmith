@@ -2,7 +2,7 @@ import { extractAdrStreetAddress } from './adr-parser'
 
 describe('extractAdrStreetAddress', () => {
   it('returns an empty string if the input adr string is undefined', () => {
-    expect(extractAdrStreetAddress(undefined)).toBe('')
+    expect(extractAdrStreetAddress()).toBe('')
   })
 
   it('returns an empty string if the input adr string is empty', () => {

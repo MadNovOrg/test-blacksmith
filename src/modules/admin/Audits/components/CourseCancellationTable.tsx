@@ -31,7 +31,7 @@ import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAv
 import {
   CourseLogType,
   getExportDataRenderFunction,
-  getCourseInvoice,
+  getInvoice,
 } from '../utils/util'
 
 export const CourseCancellationTable: React.FC<
@@ -81,7 +81,8 @@ export const CourseCancellationTable: React.FC<
           if (log.course.type !== Course_Type_Enum.Indirect) {
             return (
               log.xero_invoice_number ??
-              (log.course.orders[0]?.order?.xeroInvoiceNumber || '')
+              log.course.orders[0]?.order?.xeroInvoiceNumber ??
+              ''
             )
           }
 
@@ -168,7 +169,7 @@ export const CourseCancellationTable: React.FC<
                   />
 
                   {logs.map(log => {
-                    const invoice = getCourseInvoice(log)
+                    const invoice = getInvoice(log)
                     return (
                       <TableRow
                         key={log.id}

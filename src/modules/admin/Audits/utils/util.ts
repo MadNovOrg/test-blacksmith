@@ -18,19 +18,7 @@ export const getExportDataRenderFunction = <T>(
 export type CourseLogType = GetCourseAuditLogsQuery['logs'][0]
 export type AttendeeLogType = GetAttendeeAuditLogsQuery['logs'][0]
 
-export const getCourseInvoice = (log: CourseLogType) => {
-  if (!log.course.orders || log.course.orders.length === 0) {
-    return null
-  }
-  if (log.xero_invoice_number) {
-    return log.course?.orders?.find(
-      o => o.order?.xeroInvoiceNumber === log.xero_invoice_number,
-    )
-  } else {
-    return log.course?.orders[0]
-  }
-}
-export const getAttendeeInvoice = (log: AttendeeLogType) => {
+export const getInvoice = (log: CourseLogType | AttendeeLogType) => {
   if (!log.course.orders || log.course.orders.length === 0) {
     return null
   }

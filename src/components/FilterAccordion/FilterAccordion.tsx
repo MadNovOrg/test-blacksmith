@@ -26,7 +26,6 @@ type FilterAccordionProps<T = string> = {
   defaultExpanded?: boolean
   'data-testid'?: string
   sx?: SxProps
-  disabled?: boolean
   sort?: boolean
 }
 
@@ -68,7 +67,7 @@ export const FilterAccordion = <T,>({
       </AccordionSummary>
       <AccordionDetails>
         {(sort
-          ? options.sort((a, b) => a.title.localeCompare(b.title))
+          ? [...options].sort((a, b) => a.title.localeCompare(b.title))
           : options
         ).map(o => (
           <ListItemButton

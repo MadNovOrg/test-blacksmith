@@ -1,8 +1,10 @@
-import { Box } from '@mui/material'
-import Checkbox from '@mui/material/Checkbox'
+import {
+  Box,
+  FormControlLabel,
+  Checkbox,
+  formControlLabelClasses,
+} from '@mui/material'
 import { grey } from '@mui/material/colors'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import { formControlLabelClasses } from '@mui/material/FormControlLabel'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

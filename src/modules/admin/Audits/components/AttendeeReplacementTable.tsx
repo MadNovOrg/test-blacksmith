@@ -34,7 +34,7 @@ import useAttendeeAuditLogs from '../hooks/useAttendeeAuditLogs'
 import {
   AttendeeLogType,
   getExportDataRenderFunction,
-  getAttendeeInvoice,
+  getInvoice,
 } from '../utils/util'
 
 export const AttendeeReplacementTable: React.FC<
@@ -94,8 +94,7 @@ export const AttendeeReplacementTable: React.FC<
         label: t('pages.audits.new-attendee'),
         sorting: false,
         exportRender: (log: AttendeeLogType) =>
-          `${log.payload?.inviteeFirstName} ${log.payload?.inviteeLastName}` ??
-          '',
+          `${log.payload?.inviteeFirstName} ${log.payload?.inviteeLastName}`,
       },
       {
         id: 'newAttendeeEmail',
@@ -125,7 +124,8 @@ export const AttendeeReplacementTable: React.FC<
         sorting: false,
         exportRender: (log: AttendeeLogType) =>
           log.xero_invoice_number ??
-          (log.course.orders[0]?.order?.xeroInvoiceNumber || ''),
+          log.course.orders[0]?.order?.xeroInvoiceNumber ??
+          '',
       },
       {
         id: 'authorizedBy.fullName',
@@ -204,7 +204,7 @@ export const AttendeeReplacementTable: React.FC<
                     const participant = profiles?.profile.find(
                       el => el.email === log.newAttendeeEmail,
                     )
-                    const invoice = getAttendeeInvoice(log)
+                    const invoice = getInvoice(log)
                     return (
                       <TableRow
                         key={log.id}
