@@ -184,6 +184,15 @@ export const handleHubspotFormSubmit = async ({
   }
 
   try {
+    // _hsq embeded by GTM
+    const _hsq = (window._hsq = window._hsq || [])
+    _hsq.push([
+      'identify',
+      {
+        email: profile.email,
+        ...(authMode === AuthMode.LOGIN ? { hub_id: profile.id } : {}),
+      },
+    ])
     axios.post<HubspotApiFormData>(hubspotEndpoint[authMode], {
       ...userToHubspotContact(profile),
     })

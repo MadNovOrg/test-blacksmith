@@ -904,6 +904,7 @@ declare global {
         ) => number
       }
     }
+    _hsq: unknown[]
   }
 }
 
