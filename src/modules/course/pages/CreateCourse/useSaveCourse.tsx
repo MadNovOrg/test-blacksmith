@@ -256,6 +256,11 @@ export function useSaveCourse(): {
       const shouldInsertOrder =
         (isIndirectCourse && courseData.blendedLearning) || isClosedCourse
 
+      const shouldInsertTemporaryOrder =
+        exceptions?.length &&
+        ((isClosedCourse && !acl.isAdmin()) ||
+          (isIndirectCourse && !acl.isTTAdmin()))
+
       const invoiceData = isIndirectCourse
         ? go1Licensing?.invoiceDetails
         : invoiceDetails
@@ -464,12 +469,10 @@ export function useSaveCourse(): {
             : null),
           ...(shouldInsertOrder && invoiceData
             ? {
-                [exceptions?.length && !acl.isAdmin()
-                  ? 'tempOrders'
-                  : 'orders']: {
+                [shouldInsertTemporaryOrder ? 'tempOrders' : 'orders']: {
                   data: [
                     {
-                      ...(exceptions.length && !acl.isAdmin()
+                      ...(shouldInsertTemporaryOrder
                         ? {
                             ...orderToBeCreated,
                           }

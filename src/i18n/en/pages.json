@@ -1509,7 +1509,7 @@
           "purchased": "Purchased at course creation by {{fullName}}",
           "revoked-by": "Revoked by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",
-          "licenses-cancelled": "Course cancelled by {{fullName}}",
+          "licenses-cancelled": "Course cancelled",
           "licenses-declined": "Course declined",
           "licenses-transferred-from-affiliate-org": "Transferred total remaining licenses from affiliate organisation by <0>{{fullName}}</0>",
           "licenses-transferred-to-main-org": "Transferred total remaining licenses to main organisation by <0>{{fullName}}</0>",

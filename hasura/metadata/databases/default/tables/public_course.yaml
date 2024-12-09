@@ -1761,7 +1761,7 @@ event_triggers:
           - course_type
     retry_conf:
       interval_sec: 10
-      num_retries: 0
+      num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-status-changed'
   - name: course_status_recalculation
