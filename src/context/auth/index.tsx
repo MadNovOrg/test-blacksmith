@@ -1,5 +1,6 @@
 import { Auth } from 'aws-amplify'
 import posthog from 'posthog-js'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
@@ -29,6 +30,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 }) => {
   const [loading, setLoading] = useState(true)
   const [state, setState] = useState<AuthState>({})
+  const hubspotFormsSubmissionEnabled = useFeatureFlagEnabled(
+    'enable-hubspot-forms-submissions',
+  )
 
   const domain =
     import.meta.env.VITE_AWS_REGION === AwsRegions.UK
@@ -126,9 +130,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       try {
         const user = await Auth.signIn(email, password)
         const loadedProfile = await loadProfile(user)
-
         if (
           loadedProfile?.profile &&
+          hubspotFormsSubmissionEnabled &&
           import.meta.env.VITE_AWS_REGION === AwsRegions.UK // no ANZ hubspot implementation
         ) {
           await handleHubspotFormSubmit({
@@ -143,7 +147,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         return { error: err as E }
       }
     },
-    [loadProfile],
+    [loadProfile, hubspotFormsSubmissionEnabled],
   )
 
   const logout = useCallback(async () => {

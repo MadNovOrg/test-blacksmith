@@ -186,7 +186,6 @@ export const handleHubspotFormSubmit = async ({
   try {
     // _hsq embeded by GTM
     const _hsq = (window._hsq = window._hsq || [])
-    console.log(window._hsq, 'HSQ') // for logging purposes
     _hsq.push([
       'identify',
       {

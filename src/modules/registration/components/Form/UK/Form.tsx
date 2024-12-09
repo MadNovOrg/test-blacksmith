@@ -71,6 +71,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
     'search-only-by-postcode-on-registration',
   )
+  const hubspotFormsSubmissionEnabled = useFeatureFlagEnabled(
+    'enable-hubspot-forms-submissions',
+  )
   const {
     acl: { isUK },
   } = useAuth()
@@ -162,7 +165,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
       onSignUp(data.email, data.password)
 
-      isUK()
+      isUK() && hubspotFormsSubmissionEnabled
         ? await handleHubspotFormSubmit({
             authMode: AuthMode.REGISTER,
             profile: {
