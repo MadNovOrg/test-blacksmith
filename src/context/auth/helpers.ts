@@ -186,6 +186,7 @@ export const handleHubspotFormSubmit = async ({
   try {
     // _hsq embeded by GTM
     const _hsq = (window._hsq = window._hsq || [])
+    console.log(window._hsq, 'HSQ') // for logging purposes
     _hsq.push([
       'identify',
       {
@@ -193,6 +194,8 @@ export const handleHubspotFormSubmit = async ({
         ...(authMode === AuthMode.LOGIN ? { hub_id: profile.id } : {}),
       },
     ])
+    _hsq.push(['setPath', window.location.pathname])
+    _hsq.push(['trackPageView'])
     axios.post<HubspotApiFormData>(hubspotEndpoint[authMode], {
       ...userToHubspotContact(profile),
     })
