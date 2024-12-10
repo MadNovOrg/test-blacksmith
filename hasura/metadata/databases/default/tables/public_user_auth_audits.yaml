@@ -1,0 +1,13 @@
+table:
+  name: user_auth_audits
+  schema: public
+object_relationships:
+  - name: sub_identity
+    using:
+      manual_configuration:
+        column_mapping:
+          sub: provider_id
+        insertion_order: null
+        remote_table:
+          name: identity
+          schema: public

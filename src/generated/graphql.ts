@@ -3432,6 +3432,7 @@ export type Invite = {
   email: Scalars['String'];
   expiresIn?: InputMaybe<Scalars['String']>;
   invitedAfterCourseHasEnded: Scalars['Boolean'];
+  inviter_id?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
 };
 
@@ -14180,6 +14181,176 @@ export type Color_Updates = {
   _set?: InputMaybe<Color_Set_Input>;
   /** filter the rows which have to be updated */
   where: Color_Bool_Exp;
+};
+
+/** columns and relationships of "connect_login_data" */
+export type Connect_Login_Data = {
+  __typename?: 'connect_login_data';
+  created_at: Scalars['timestamptz'];
+  event_name?: Maybe<Scalars['String']>;
+  event_time?: Maybe<Scalars['timestamptz']>;
+  id: Scalars['uuid'];
+  sub?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "connect_login_data" */
+export type Connect_Login_Data_Aggregate = {
+  __typename?: 'connect_login_data_aggregate';
+  aggregate?: Maybe<Connect_Login_Data_Aggregate_Fields>;
+  nodes: Array<Connect_Login_Data>;
+};
+
+/** aggregate fields of "connect_login_data" */
+export type Connect_Login_Data_Aggregate_Fields = {
+  __typename?: 'connect_login_data_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Connect_Login_Data_Max_Fields>;
+  min?: Maybe<Connect_Login_Data_Min_Fields>;
+};
+
+
+/** aggregate fields of "connect_login_data" */
+export type Connect_Login_Data_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "connect_login_data". All fields are combined with a logical 'AND'. */
+export type Connect_Login_Data_Bool_Exp = {
+  _and?: InputMaybe<Array<Connect_Login_Data_Bool_Exp>>;
+  _not?: InputMaybe<Connect_Login_Data_Bool_Exp>;
+  _or?: InputMaybe<Array<Connect_Login_Data_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  event_name?: InputMaybe<String_Comparison_Exp>;
+  event_time?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  sub?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "connect_login_data" */
+export enum Connect_Login_Data_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  ConnectLoginDataPkey = 'connect_login_data_pkey'
+}
+
+/** input type for inserting data into table "connect_login_data" */
+export type Connect_Login_Data_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_name?: InputMaybe<Scalars['String']>;
+  event_time?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  sub?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Connect_Login_Data_Max_Fields = {
+  __typename?: 'connect_login_data_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_name?: Maybe<Scalars['String']>;
+  event_time?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  sub?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Connect_Login_Data_Min_Fields = {
+  __typename?: 'connect_login_data_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_name?: Maybe<Scalars['String']>;
+  event_time?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  sub?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "connect_login_data" */
+export type Connect_Login_Data_Mutation_Response = {
+  __typename?: 'connect_login_data_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Connect_Login_Data>;
+};
+
+/** on_conflict condition type for table "connect_login_data" */
+export type Connect_Login_Data_On_Conflict = {
+  constraint: Connect_Login_Data_Constraint;
+  update_columns?: Array<Connect_Login_Data_Update_Column>;
+  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "connect_login_data". */
+export type Connect_Login_Data_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  event_name?: InputMaybe<Order_By>;
+  event_time?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  sub?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: connect_login_data */
+export type Connect_Login_Data_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "connect_login_data" */
+export enum Connect_Login_Data_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventName = 'event_name',
+  /** column name */
+  EventTime = 'event_time',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Sub = 'sub'
+}
+
+/** input type for updating data in table "connect_login_data" */
+export type Connect_Login_Data_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_name?: InputMaybe<Scalars['String']>;
+  event_time?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  sub?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "connect_login_data" */
+export type Connect_Login_Data_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Connect_Login_Data_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Connect_Login_Data_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_name?: InputMaybe<Scalars['String']>;
+  event_time?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  sub?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "connect_login_data" */
+export enum Connect_Login_Data_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventName = 'event_name',
+  /** column name */
+  EventTime = 'event_time',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Sub = 'sub'
+}
+
+export type Connect_Login_Data_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Connect_Login_Data_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Connect_Login_Data_Bool_Exp;
 };
 
 export type ContentRootMutation = {
@@ -32577,6 +32748,13 @@ export type Identity_Mutation_Response = {
   returning: Array<Identity>;
 };
 
+/** input type for inserting object relation for remote table "identity" */
+export type Identity_Obj_Rel_Insert_Input = {
+  data: Identity_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Identity_On_Conflict>;
+};
+
 /** on_conflict condition type for table "identity" */
 export type Identity_On_Conflict = {
   constraint: Identity_Constraint;
@@ -36111,6 +36289,10 @@ export type Mutation_Root = {
   delete_color?: Maybe<Color_Mutation_Response>;
   /** delete single row from the table: "color" */
   delete_color_by_pk?: Maybe<Color>;
+  /** delete data from the table: "connect_login_data" */
+  delete_connect_login_data?: Maybe<Connect_Login_Data_Mutation_Response>;
+  /** delete single row from the table: "connect_login_data" */
+  delete_connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
   /** delete data from the table: "country" */
   delete_country?: Maybe<Country_Mutation_Response>;
   /** delete single row from the table: "country" */
@@ -36497,6 +36679,14 @@ export type Mutation_Root = {
   delete_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** delete single row from the table: "trust_type" */
   delete_trust_type_by_pk?: Maybe<Trust_Type>;
+  /** delete data from the table: "user_auth_audit_type" */
+  delete_user_auth_audit_type?: Maybe<User_Auth_Audit_Type_Mutation_Response>;
+  /** delete single row from the table: "user_auth_audit_type" */
+  delete_user_auth_audit_type_by_pk?: Maybe<User_Auth_Audit_Type>;
+  /** delete data from the table: "user_auth_audits" */
+  delete_user_auth_audits?: Maybe<User_Auth_Audits_Mutation_Response>;
+  /** delete single row from the table: "user_auth_audits" */
+  delete_user_auth_audits_by_pk?: Maybe<User_Auth_Audits>;
   /** delete data from the table: "venue" */
   delete_venue?: Maybe<Venue_Mutation_Response>;
   /** delete single row from the table: "venue" */
@@ -36577,6 +36767,10 @@ export type Mutation_Root = {
   insert_color?: Maybe<Color_Mutation_Response>;
   /** insert a single row into the table: "color" */
   insert_color_one?: Maybe<Color>;
+  /** insert data into the table: "connect_login_data" */
+  insert_connect_login_data?: Maybe<Connect_Login_Data_Mutation_Response>;
+  /** insert a single row into the table: "connect_login_data" */
+  insert_connect_login_data_one?: Maybe<Connect_Login_Data>;
   /** insert data into the table: "country" */
   insert_country?: Maybe<Country_Mutation_Response>;
   /** insert a single row into the table: "country" */
@@ -36969,6 +37163,14 @@ export type Mutation_Root = {
   insert_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** insert a single row into the table: "trust_type" */
   insert_trust_type_one?: Maybe<Trust_Type>;
+  /** insert data into the table: "user_auth_audit_type" */
+  insert_user_auth_audit_type?: Maybe<User_Auth_Audit_Type_Mutation_Response>;
+  /** insert a single row into the table: "user_auth_audit_type" */
+  insert_user_auth_audit_type_one?: Maybe<User_Auth_Audit_Type>;
+  /** insert data into the table: "user_auth_audits" */
+  insert_user_auth_audits?: Maybe<User_Auth_Audits_Mutation_Response>;
+  /** insert a single row into the table: "user_auth_audits" */
+  insert_user_auth_audits_one?: Maybe<User_Auth_Audits>;
   /** insert data into the table: "venue" */
   insert_venue?: Maybe<Venue_Mutation_Response>;
   /** insert data into the table: "venue_check_jobs" */
@@ -37089,6 +37291,12 @@ export type Mutation_Root = {
   update_color_by_pk?: Maybe<Color>;
   /** update multiples rows of table: "color" */
   update_color_many?: Maybe<Array<Maybe<Color_Mutation_Response>>>;
+  /** update data of the table: "connect_login_data" */
+  update_connect_login_data?: Maybe<Connect_Login_Data_Mutation_Response>;
+  /** update single row of the table: "connect_login_data" */
+  update_connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
+  /** update multiples rows of table: "connect_login_data" */
+  update_connect_login_data_many?: Maybe<Array<Maybe<Connect_Login_Data_Mutation_Response>>>;
   /** update data of the table: "country" */
   update_country?: Maybe<Country_Mutation_Response>;
   /** update single row of the table: "country" */
@@ -37671,6 +37879,18 @@ export type Mutation_Root = {
   update_trust_type_by_pk?: Maybe<Trust_Type>;
   /** update multiples rows of table: "trust_type" */
   update_trust_type_many?: Maybe<Array<Maybe<Trust_Type_Mutation_Response>>>;
+  /** update data of the table: "user_auth_audit_type" */
+  update_user_auth_audit_type?: Maybe<User_Auth_Audit_Type_Mutation_Response>;
+  /** update single row of the table: "user_auth_audit_type" */
+  update_user_auth_audit_type_by_pk?: Maybe<User_Auth_Audit_Type>;
+  /** update multiples rows of table: "user_auth_audit_type" */
+  update_user_auth_audit_type_many?: Maybe<Array<Maybe<User_Auth_Audit_Type_Mutation_Response>>>;
+  /** update data of the table: "user_auth_audits" */
+  update_user_auth_audits?: Maybe<User_Auth_Audits_Mutation_Response>;
+  /** update single row of the table: "user_auth_audits" */
+  update_user_auth_audits_by_pk?: Maybe<User_Auth_Audits>;
+  /** update multiples rows of table: "user_auth_audits" */
+  update_user_auth_audits_many?: Maybe<Array<Maybe<User_Auth_Audits_Mutation_Response>>>;
   /** update data of the table: "venue" */
   update_venue?: Maybe<Venue_Mutation_Response>;
   /** update single row of the table: "venue" */
@@ -37934,6 +38154,18 @@ export type Mutation_RootDelete_ColorArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Color_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Connect_Login_DataArgs = {
+  where: Connect_Login_Data_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Connect_Login_Data_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -39097,6 +39329,30 @@ export type Mutation_RootDelete_Trust_Type_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_User_Auth_Audit_TypeArgs = {
+  where: User_Auth_Audit_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_User_Auth_Audit_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_User_Auth_AuditsArgs = {
+  where: User_Auth_Audits_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_User_Auth_Audits_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_VenueArgs = {
   where: Venue_Bool_Exp;
 };
@@ -39364,6 +39620,20 @@ export type Mutation_RootInsert_ColorArgs = {
 export type Mutation_RootInsert_Color_OneArgs = {
   object: Color_Insert_Input;
   on_conflict?: InputMaybe<Color_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Connect_Login_DataArgs = {
+  objects: Array<Connect_Login_Data_Insert_Input>;
+  on_conflict?: InputMaybe<Connect_Login_Data_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Connect_Login_Data_OneArgs = {
+  object: Connect_Login_Data_Insert_Input;
+  on_conflict?: InputMaybe<Connect_Login_Data_On_Conflict>;
 };
 
 
@@ -40734,6 +41004,34 @@ export type Mutation_RootInsert_Trust_Type_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_User_Auth_Audit_TypeArgs = {
+  objects: Array<User_Auth_Audit_Type_Insert_Input>;
+  on_conflict?: InputMaybe<User_Auth_Audit_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_User_Auth_Audit_Type_OneArgs = {
+  object: User_Auth_Audit_Type_Insert_Input;
+  on_conflict?: InputMaybe<User_Auth_Audit_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_User_Auth_AuditsArgs = {
+  objects: Array<User_Auth_Audits_Insert_Input>;
+  on_conflict?: InputMaybe<User_Auth_Audits_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_User_Auth_Audits_OneArgs = {
+  object: User_Auth_Audits_Insert_Input;
+  on_conflict?: InputMaybe<User_Auth_Audits_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_VenueArgs = {
   objects: Array<Venue_Insert_Input>;
   on_conflict?: InputMaybe<Venue_On_Conflict>;
@@ -41153,6 +41451,26 @@ export type Mutation_RootUpdate_Color_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Color_ManyArgs = {
   updates: Array<Color_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Connect_Login_DataArgs = {
+  _set?: InputMaybe<Connect_Login_Data_Set_Input>;
+  where: Connect_Login_Data_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Connect_Login_Data_By_PkArgs = {
+  _set?: InputMaybe<Connect_Login_Data_Set_Input>;
+  pk_columns: Connect_Login_Data_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Connect_Login_Data_ManyArgs = {
+  updates: Array<Connect_Login_Data_Updates>;
 };
 
 
@@ -43400,6 +43718,46 @@ export type Mutation_RootUpdate_Trust_Type_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Trust_Type_ManyArgs = {
   updates: Array<Trust_Type_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Auth_Audit_TypeArgs = {
+  _set?: InputMaybe<User_Auth_Audit_Type_Set_Input>;
+  where: User_Auth_Audit_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Auth_Audit_Type_By_PkArgs = {
+  _set?: InputMaybe<User_Auth_Audit_Type_Set_Input>;
+  pk_columns: User_Auth_Audit_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Auth_Audit_Type_ManyArgs = {
+  updates: Array<User_Auth_Audit_Type_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Auth_AuditsArgs = {
+  _set?: InputMaybe<User_Auth_Audits_Set_Input>;
+  where: User_Auth_Audits_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Auth_Audits_By_PkArgs = {
+  _set?: InputMaybe<User_Auth_Audits_Set_Input>;
+  pk_columns: User_Auth_Audits_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Auth_Audits_ManyArgs = {
+  updates: Array<User_Auth_Audits_Updates>;
 };
 
 
@@ -51342,6 +51700,12 @@ export type Query_Root = {
   color_aggregate: Color_Aggregate;
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
+  /** fetch data from the table: "connect_login_data" */
+  connect_login_data: Array<Connect_Login_Data>;
+  /** fetch aggregated fields from the table: "connect_login_data" */
+  connect_login_data_aggregate: Connect_Login_Data_Aggregate;
+  /** fetch data from the table: "connect_login_data" using primary key columns */
+  connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
   content?: Maybe<ContentRootQuery>;
   /** fetch data from the table: "country" */
   country: Array<Country>;
@@ -51955,6 +52319,18 @@ export type Query_Root = {
   upcoming_enrollments: Array<Upcoming_Enrollments>;
   /** fetch aggregated fields from the table: "upcoming_enrollments" */
   upcoming_enrollments_aggregate: Upcoming_Enrollments_Aggregate;
+  /** fetch data from the table: "user_auth_audit_type" */
+  user_auth_audit_type: Array<User_Auth_Audit_Type>;
+  /** fetch aggregated fields from the table: "user_auth_audit_type" */
+  user_auth_audit_type_aggregate: User_Auth_Audit_Type_Aggregate;
+  /** fetch data from the table: "user_auth_audit_type" using primary key columns */
+  user_auth_audit_type_by_pk?: Maybe<User_Auth_Audit_Type>;
+  /** fetch data from the table: "user_auth_audits" */
+  user_auth_audits: Array<User_Auth_Audits>;
+  /** fetch aggregated fields from the table: "user_auth_audits" */
+  user_auth_audits_aggregate: User_Auth_Audits_Aggregate;
+  /** fetch data from the table: "user_auth_audits" using primary key columns */
+  user_auth_audits_by_pk?: Maybe<User_Auth_Audits>;
   /** fetch data from the table: "venue" */
   venue: Array<Venue>;
   /** fetch aggregated fields from the table: "venue" */
@@ -52239,6 +52615,29 @@ export type Query_RootColor_AggregateArgs = {
 
 export type Query_RootColor_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootConnect_Login_DataArgs = {
+  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
+  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
+};
+
+
+export type Query_RootConnect_Login_Data_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
+  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
+};
+
+
+export type Query_RootConnect_Login_Data_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -54569,6 +54968,52 @@ export type Query_RootUpcoming_Enrollments_AggregateArgs = {
 };
 
 
+export type Query_RootUser_Auth_Audit_TypeArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audit_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audit_Type_Order_By>>;
+  where?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+};
+
+
+export type Query_RootUser_Auth_Audit_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audit_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audit_Type_Order_By>>;
+  where?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+};
+
+
+export type Query_RootUser_Auth_Audit_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Query_RootUser_Auth_AuditsArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audits_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audits_Order_By>>;
+  where?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+};
+
+
+export type Query_RootUser_Auth_Audits_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audits_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audits_Order_By>>;
+  where?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+};
+
+
+export type Query_RootUser_Auth_Audits_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootVenueArgs = {
   distinct_on?: InputMaybe<Array<Venue_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -55652,6 +56097,14 @@ export type Subscription_Root = {
   color_by_pk?: Maybe<Color>;
   /** fetch data from the table in a streaming manner: "color" */
   color_stream: Array<Color>;
+  /** fetch data from the table: "connect_login_data" */
+  connect_login_data: Array<Connect_Login_Data>;
+  /** fetch aggregated fields from the table: "connect_login_data" */
+  connect_login_data_aggregate: Connect_Login_Data_Aggregate;
+  /** fetch data from the table: "connect_login_data" using primary key columns */
+  connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
+  /** fetch data from the table in a streaming manner: "connect_login_data" */
+  connect_login_data_stream: Array<Connect_Login_Data>;
   /** fetch data from the table: "country" */
   country: Array<Country>;
   /** fetch aggregated fields from the table: "country" */
@@ -56443,6 +56896,22 @@ export type Subscription_Root = {
   upcoming_enrollments_aggregate: Upcoming_Enrollments_Aggregate;
   /** fetch data from the table in a streaming manner: "upcoming_enrollments" */
   upcoming_enrollments_stream: Array<Upcoming_Enrollments>;
+  /** fetch data from the table: "user_auth_audit_type" */
+  user_auth_audit_type: Array<User_Auth_Audit_Type>;
+  /** fetch aggregated fields from the table: "user_auth_audit_type" */
+  user_auth_audit_type_aggregate: User_Auth_Audit_Type_Aggregate;
+  /** fetch data from the table: "user_auth_audit_type" using primary key columns */
+  user_auth_audit_type_by_pk?: Maybe<User_Auth_Audit_Type>;
+  /** fetch data from the table in a streaming manner: "user_auth_audit_type" */
+  user_auth_audit_type_stream: Array<User_Auth_Audit_Type>;
+  /** fetch data from the table: "user_auth_audits" */
+  user_auth_audits: Array<User_Auth_Audits>;
+  /** fetch aggregated fields from the table: "user_auth_audits" */
+  user_auth_audits_aggregate: User_Auth_Audits_Aggregate;
+  /** fetch data from the table: "user_auth_audits" using primary key columns */
+  user_auth_audits_by_pk?: Maybe<User_Auth_Audits>;
+  /** fetch data from the table in a streaming manner: "user_auth_audits" */
+  user_auth_audits_stream: Array<User_Auth_Audits>;
   /** fetch data from the table: "venue" */
   venue: Array<Venue>;
   /** fetch aggregated fields from the table: "venue" */
@@ -56799,6 +57268,36 @@ export type Subscription_RootColor_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Color_Stream_Cursor_Input>>;
   where?: InputMaybe<Color_Bool_Exp>;
+};
+
+
+export type Subscription_RootConnect_Login_DataArgs = {
+  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
+  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
+};
+
+
+export type Subscription_RootConnect_Login_Data_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
+  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
+};
+
+
+export type Subscription_RootConnect_Login_Data_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootConnect_Login_Data_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Connect_Login_Data_Stream_Cursor_Input>>;
+  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
 };
 
 
@@ -59783,6 +60282,66 @@ export type Subscription_RootUpcoming_Enrollments_StreamArgs = {
 };
 
 
+export type Subscription_RootUser_Auth_Audit_TypeArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audit_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audit_Type_Order_By>>;
+  where?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Auth_Audit_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audit_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audit_Type_Order_By>>;
+  where?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Auth_Audit_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootUser_Auth_Audit_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<User_Auth_Audit_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Auth_AuditsArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audits_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audits_Order_By>>;
+  where?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Auth_Audits_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<User_Auth_Audits_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<User_Auth_Audits_Order_By>>;
+  where?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Auth_Audits_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootUser_Auth_Audits_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<User_Auth_Audits_Stream_Cursor_Input>>;
+  where?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+};
+
+
 export type Subscription_RootVenueArgs = {
   distinct_on?: InputMaybe<Array<Venue_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -60604,6 +61163,306 @@ export type Upcoming_Enrollments_Variance_Fields = {
 /** order by variance() on columns of table "upcoming_enrollments" */
 export type Upcoming_Enrollments_Variance_Order_By = {
   courseId?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "user_auth_audit_type" */
+export type User_Auth_Audit_Type = {
+  __typename?: 'user_auth_audit_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Aggregate = {
+  __typename?: 'user_auth_audit_type_aggregate';
+  aggregate?: Maybe<User_Auth_Audit_Type_Aggregate_Fields>;
+  nodes: Array<User_Auth_Audit_Type>;
+};
+
+/** aggregate fields of "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Aggregate_Fields = {
+  __typename?: 'user_auth_audit_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<User_Auth_Audit_Type_Max_Fields>;
+  min?: Maybe<User_Auth_Audit_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<User_Auth_Audit_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "user_auth_audit_type". All fields are combined with a logical 'AND'. */
+export type User_Auth_Audit_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<User_Auth_Audit_Type_Bool_Exp>>;
+  _not?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<User_Auth_Audit_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "user_auth_audit_type" */
+export enum User_Auth_Audit_Type_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  UserAuthAuditTypePkey = 'user_auth_audit_type_pkey'
+}
+
+export enum User_Auth_Audit_Type_Enum {
+  ForgotPasswordStart = 'FORGOT_PASSWORD_START',
+  ForgotPasswordSuccess = 'FORGOT_PASSWORD_SUCCESS',
+  Login = 'LOGIN',
+  ResetPassword = 'RESET_PASSWORD',
+  SignUp = 'SIGN_UP'
+}
+
+/** Boolean expression to compare columns of type "user_auth_audit_type_enum". All fields are combined with logical 'AND'. */
+export type User_Auth_Audit_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<User_Auth_Audit_Type_Enum>;
+  _in?: InputMaybe<Array<User_Auth_Audit_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<User_Auth_Audit_Type_Enum>;
+  _nin?: InputMaybe<Array<User_Auth_Audit_Type_Enum>>;
+};
+
+/** input type for inserting data into table "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type User_Auth_Audit_Type_Max_Fields = {
+  __typename?: 'user_auth_audit_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type User_Auth_Audit_Type_Min_Fields = {
+  __typename?: 'user_auth_audit_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Mutation_Response = {
+  __typename?: 'user_auth_audit_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<User_Auth_Audit_Type>;
+};
+
+/** on_conflict condition type for table "user_auth_audit_type" */
+export type User_Auth_Audit_Type_On_Conflict = {
+  constraint: User_Auth_Audit_Type_Constraint;
+  update_columns?: Array<User_Auth_Audit_Type_Update_Column>;
+  where?: InputMaybe<User_Auth_Audit_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "user_auth_audit_type". */
+export type User_Auth_Audit_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: user_auth_audit_type */
+export type User_Auth_Audit_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "user_auth_audit_type" */
+export enum User_Auth_Audit_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "user_auth_audit_type" */
+export type User_Auth_Audit_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: User_Auth_Audit_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type User_Auth_Audit_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "user_auth_audit_type" */
+export enum User_Auth_Audit_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type User_Auth_Audit_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<User_Auth_Audit_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: User_Auth_Audit_Type_Bool_Exp;
+};
+
+/** columns and relationships of "user_auth_audits" */
+export type User_Auth_Audits = {
+  __typename?: 'user_auth_audits';
+  created_at: Scalars['timestamptz'];
+  event_type: User_Auth_Audit_Type_Enum;
+  id: Scalars['uuid'];
+  sub: Scalars['String'];
+  /** An object relationship */
+  sub_identity?: Maybe<Identity>;
+};
+
+/** aggregated selection of "user_auth_audits" */
+export type User_Auth_Audits_Aggregate = {
+  __typename?: 'user_auth_audits_aggregate';
+  aggregate?: Maybe<User_Auth_Audits_Aggregate_Fields>;
+  nodes: Array<User_Auth_Audits>;
+};
+
+/** aggregate fields of "user_auth_audits" */
+export type User_Auth_Audits_Aggregate_Fields = {
+  __typename?: 'user_auth_audits_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<User_Auth_Audits_Max_Fields>;
+  min?: Maybe<User_Auth_Audits_Min_Fields>;
+};
+
+
+/** aggregate fields of "user_auth_audits" */
+export type User_Auth_Audits_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<User_Auth_Audits_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "user_auth_audits". All fields are combined with a logical 'AND'. */
+export type User_Auth_Audits_Bool_Exp = {
+  _and?: InputMaybe<Array<User_Auth_Audits_Bool_Exp>>;
+  _not?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+  _or?: InputMaybe<Array<User_Auth_Audits_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  event_type?: InputMaybe<User_Auth_Audit_Type_Enum_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  sub?: InputMaybe<String_Comparison_Exp>;
+  sub_identity?: InputMaybe<Identity_Bool_Exp>;
+};
+
+/** unique or primary key constraints on table "user_auth_audits" */
+export enum User_Auth_Audits_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  UserAuthAuditsPkey = 'user_auth_audits_pkey'
+}
+
+/** input type for inserting data into table "user_auth_audits" */
+export type User_Auth_Audits_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_type?: InputMaybe<User_Auth_Audit_Type_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  sub?: InputMaybe<Scalars['String']>;
+  sub_identity?: InputMaybe<Identity_Obj_Rel_Insert_Input>;
+};
+
+/** aggregate max on columns */
+export type User_Auth_Audits_Max_Fields = {
+  __typename?: 'user_auth_audits_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  sub?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type User_Auth_Audits_Min_Fields = {
+  __typename?: 'user_auth_audits_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  sub?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "user_auth_audits" */
+export type User_Auth_Audits_Mutation_Response = {
+  __typename?: 'user_auth_audits_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<User_Auth_Audits>;
+};
+
+/** on_conflict condition type for table "user_auth_audits" */
+export type User_Auth_Audits_On_Conflict = {
+  constraint: User_Auth_Audits_Constraint;
+  update_columns?: Array<User_Auth_Audits_Update_Column>;
+  where?: InputMaybe<User_Auth_Audits_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "user_auth_audits". */
+export type User_Auth_Audits_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  event_type?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  sub?: InputMaybe<Order_By>;
+  sub_identity?: InputMaybe<Identity_Order_By>;
+};
+
+/** primary key columns input for table: user_auth_audits */
+export type User_Auth_Audits_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "user_auth_audits" */
+export enum User_Auth_Audits_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventType = 'event_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Sub = 'sub'
+}
+
+/** input type for updating data in table "user_auth_audits" */
+export type User_Auth_Audits_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_type?: InputMaybe<User_Auth_Audit_Type_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  sub?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "user_auth_audits" */
+export type User_Auth_Audits_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: User_Auth_Audits_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type User_Auth_Audits_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  event_type?: InputMaybe<User_Auth_Audit_Type_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  sub?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "user_auth_audits" */
+export enum User_Auth_Audits_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventType = 'event_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Sub = 'sub'
+}
+
+export type User_Auth_Audits_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<User_Auth_Audits_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: User_Auth_Audits_Bool_Exp;
 };
 
 /** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */

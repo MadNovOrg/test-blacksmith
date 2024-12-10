@@ -1,0 +1,4 @@
+table:
+  name: user_auth_audit_type
+  schema: public
+is_enum: true

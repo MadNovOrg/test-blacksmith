@@ -108,6 +108,8 @@
 - "!include public_trainer_role_type.yaml"
 - "!include public_trust_type.yaml"
 - "!include public_upcoming_enrollments.yaml"
+- "!include public_user_auth_audit_type.yaml"
+- "!include public_user_auth_audits.yaml"
 - "!include public_venue.yaml"
 - "!include public_venue_check_jobs.yaml"
 - "!include public_waitlist.yaml"
