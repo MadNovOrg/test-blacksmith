@@ -1,4 +1,4 @@
 {
-    "sonarQubeUri": "http://18.132.9.96:9000",
+    "sonarQubeUri": "http://sonarqube.connect.teamteach.com",
     "projectKey": "TT-Connect"
 }
