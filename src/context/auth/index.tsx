@@ -3,6 +3,7 @@ import posthog from 'posthog-js'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { User_Auth_Audit_Type_Enum } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
 import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/modules/profile/queries/update-profile-activity'
 import { AwsRegions, RoleName } from '@app/types'
@@ -14,6 +15,7 @@ import {
   lsActiveRoleClient,
 } from './helpers'
 import { injectACL } from './permissions'
+import { logUserAuthEvent } from './queries/auth-audit'
 import {
   AuthMode,
   type AuthContextType,
@@ -130,6 +132,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
       try {
         const user = await Auth.signIn(email, password)
         const loadedProfile = await loadProfile(user)
+
+        const token = user.signInUserSession.getIdToken().getJwtToken()
+
         if (
           loadedProfile?.profile &&
           hubspotFormsSubmissionEnabled &&
@@ -137,9 +142,22 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         ) {
           await handleHubspotFormSubmit({
             profile: loadedProfile.profile,
-            userJWT: user.signInUserSession.getIdToken().getJwtToken(),
+            userJWT: token,
             authMode: AuthMode.LOGIN,
           })
+        }
+
+        try {
+          await logUserAuthEvent(
+            {
+              event_type: User_Auth_Audit_Type_Enum.Login,
+              // user.username is the sub (cognito user id)
+              sub: user.username,
+            },
+            token,
+          )
+        } catch (err) {
+          console.error(err)
         }
 
         return { user, error: undefined }

@@ -14183,176 +14183,6 @@ export type Color_Updates = {
   where: Color_Bool_Exp;
 };
 
-/** columns and relationships of "connect_login_data" */
-export type Connect_Login_Data = {
-  __typename?: 'connect_login_data';
-  created_at: Scalars['timestamptz'];
-  event_name?: Maybe<Scalars['String']>;
-  event_time?: Maybe<Scalars['timestamptz']>;
-  id: Scalars['uuid'];
-  sub?: Maybe<Scalars['String']>;
-};
-
-/** aggregated selection of "connect_login_data" */
-export type Connect_Login_Data_Aggregate = {
-  __typename?: 'connect_login_data_aggregate';
-  aggregate?: Maybe<Connect_Login_Data_Aggregate_Fields>;
-  nodes: Array<Connect_Login_Data>;
-};
-
-/** aggregate fields of "connect_login_data" */
-export type Connect_Login_Data_Aggregate_Fields = {
-  __typename?: 'connect_login_data_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Connect_Login_Data_Max_Fields>;
-  min?: Maybe<Connect_Login_Data_Min_Fields>;
-};
-
-
-/** aggregate fields of "connect_login_data" */
-export type Connect_Login_Data_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** Boolean expression to filter rows from the table "connect_login_data". All fields are combined with a logical 'AND'. */
-export type Connect_Login_Data_Bool_Exp = {
-  _and?: InputMaybe<Array<Connect_Login_Data_Bool_Exp>>;
-  _not?: InputMaybe<Connect_Login_Data_Bool_Exp>;
-  _or?: InputMaybe<Array<Connect_Login_Data_Bool_Exp>>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  event_name?: InputMaybe<String_Comparison_Exp>;
-  event_time?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  sub?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "connect_login_data" */
-export enum Connect_Login_Data_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  ConnectLoginDataPkey = 'connect_login_data_pkey'
-}
-
-/** input type for inserting data into table "connect_login_data" */
-export type Connect_Login_Data_Insert_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  event_name?: InputMaybe<Scalars['String']>;
-  event_time?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  sub?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Connect_Login_Data_Max_Fields = {
-  __typename?: 'connect_login_data_max_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
-  event_name?: Maybe<Scalars['String']>;
-  event_time?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  sub?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Connect_Login_Data_Min_Fields = {
-  __typename?: 'connect_login_data_min_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
-  event_name?: Maybe<Scalars['String']>;
-  event_time?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  sub?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "connect_login_data" */
-export type Connect_Login_Data_Mutation_Response = {
-  __typename?: 'connect_login_data_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Connect_Login_Data>;
-};
-
-/** on_conflict condition type for table "connect_login_data" */
-export type Connect_Login_Data_On_Conflict = {
-  constraint: Connect_Login_Data_Constraint;
-  update_columns?: Array<Connect_Login_Data_Update_Column>;
-  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "connect_login_data". */
-export type Connect_Login_Data_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  event_name?: InputMaybe<Order_By>;
-  event_time?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  sub?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: connect_login_data */
-export type Connect_Login_Data_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "connect_login_data" */
-export enum Connect_Login_Data_Select_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  EventName = 'event_name',
-  /** column name */
-  EventTime = 'event_time',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Sub = 'sub'
-}
-
-/** input type for updating data in table "connect_login_data" */
-export type Connect_Login_Data_Set_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  event_name?: InputMaybe<Scalars['String']>;
-  event_time?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  sub?: InputMaybe<Scalars['String']>;
-};
-
-/** Streaming cursor of the table "connect_login_data" */
-export type Connect_Login_Data_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Connect_Login_Data_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Connect_Login_Data_Stream_Cursor_Value_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  event_name?: InputMaybe<Scalars['String']>;
-  event_time?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  sub?: InputMaybe<Scalars['String']>;
-};
-
-/** update columns of table "connect_login_data" */
-export enum Connect_Login_Data_Update_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  EventName = 'event_name',
-  /** column name */
-  EventTime = 'event_time',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Sub = 'sub'
-}
-
-export type Connect_Login_Data_Updates = {
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Connect_Login_Data_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Connect_Login_Data_Bool_Exp;
-};
-
 export type ContentRootMutation = {
   __typename?: 'contentRootMutation';
   /** The payload for the createCategory mutation */
@@ -36289,10 +36119,6 @@ export type Mutation_Root = {
   delete_color?: Maybe<Color_Mutation_Response>;
   /** delete single row from the table: "color" */
   delete_color_by_pk?: Maybe<Color>;
-  /** delete data from the table: "connect_login_data" */
-  delete_connect_login_data?: Maybe<Connect_Login_Data_Mutation_Response>;
-  /** delete single row from the table: "connect_login_data" */
-  delete_connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
   /** delete data from the table: "country" */
   delete_country?: Maybe<Country_Mutation_Response>;
   /** delete single row from the table: "country" */
@@ -36767,10 +36593,6 @@ export type Mutation_Root = {
   insert_color?: Maybe<Color_Mutation_Response>;
   /** insert a single row into the table: "color" */
   insert_color_one?: Maybe<Color>;
-  /** insert data into the table: "connect_login_data" */
-  insert_connect_login_data?: Maybe<Connect_Login_Data_Mutation_Response>;
-  /** insert a single row into the table: "connect_login_data" */
-  insert_connect_login_data_one?: Maybe<Connect_Login_Data>;
   /** insert data into the table: "country" */
   insert_country?: Maybe<Country_Mutation_Response>;
   /** insert a single row into the table: "country" */
@@ -37291,12 +37113,6 @@ export type Mutation_Root = {
   update_color_by_pk?: Maybe<Color>;
   /** update multiples rows of table: "color" */
   update_color_many?: Maybe<Array<Maybe<Color_Mutation_Response>>>;
-  /** update data of the table: "connect_login_data" */
-  update_connect_login_data?: Maybe<Connect_Login_Data_Mutation_Response>;
-  /** update single row of the table: "connect_login_data" */
-  update_connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
-  /** update multiples rows of table: "connect_login_data" */
-  update_connect_login_data_many?: Maybe<Array<Maybe<Connect_Login_Data_Mutation_Response>>>;
   /** update data of the table: "country" */
   update_country?: Maybe<Country_Mutation_Response>;
   /** update single row of the table: "country" */
@@ -38154,18 +37970,6 @@ export type Mutation_RootDelete_ColorArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Color_By_PkArgs = {
   name: Scalars['String'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Connect_Login_DataArgs = {
-  where: Connect_Login_Data_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Connect_Login_Data_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -39620,20 +39424,6 @@ export type Mutation_RootInsert_ColorArgs = {
 export type Mutation_RootInsert_Color_OneArgs = {
   object: Color_Insert_Input;
   on_conflict?: InputMaybe<Color_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Connect_Login_DataArgs = {
-  objects: Array<Connect_Login_Data_Insert_Input>;
-  on_conflict?: InputMaybe<Connect_Login_Data_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Connect_Login_Data_OneArgs = {
-  object: Connect_Login_Data_Insert_Input;
-  on_conflict?: InputMaybe<Connect_Login_Data_On_Conflict>;
 };
 
 
@@ -41451,26 +41241,6 @@ export type Mutation_RootUpdate_Color_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Color_ManyArgs = {
   updates: Array<Color_Updates>;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Connect_Login_DataArgs = {
-  _set?: InputMaybe<Connect_Login_Data_Set_Input>;
-  where: Connect_Login_Data_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Connect_Login_Data_By_PkArgs = {
-  _set?: InputMaybe<Connect_Login_Data_Set_Input>;
-  pk_columns: Connect_Login_Data_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Connect_Login_Data_ManyArgs = {
-  updates: Array<Connect_Login_Data_Updates>;
 };
 
 
@@ -51700,12 +51470,6 @@ export type Query_Root = {
   color_aggregate: Color_Aggregate;
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
-  /** fetch data from the table: "connect_login_data" */
-  connect_login_data: Array<Connect_Login_Data>;
-  /** fetch aggregated fields from the table: "connect_login_data" */
-  connect_login_data_aggregate: Connect_Login_Data_Aggregate;
-  /** fetch data from the table: "connect_login_data" using primary key columns */
-  connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
   content?: Maybe<ContentRootQuery>;
   /** fetch data from the table: "country" */
   country: Array<Country>;
@@ -52615,29 +52379,6 @@ export type Query_RootColor_AggregateArgs = {
 
 export type Query_RootColor_By_PkArgs = {
   name: Scalars['String'];
-};
-
-
-export type Query_RootConnect_Login_DataArgs = {
-  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
-  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
-};
-
-
-export type Query_RootConnect_Login_Data_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
-  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
-};
-
-
-export type Query_RootConnect_Login_Data_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -56097,14 +55838,6 @@ export type Subscription_Root = {
   color_by_pk?: Maybe<Color>;
   /** fetch data from the table in a streaming manner: "color" */
   color_stream: Array<Color>;
-  /** fetch data from the table: "connect_login_data" */
-  connect_login_data: Array<Connect_Login_Data>;
-  /** fetch aggregated fields from the table: "connect_login_data" */
-  connect_login_data_aggregate: Connect_Login_Data_Aggregate;
-  /** fetch data from the table: "connect_login_data" using primary key columns */
-  connect_login_data_by_pk?: Maybe<Connect_Login_Data>;
-  /** fetch data from the table in a streaming manner: "connect_login_data" */
-  connect_login_data_stream: Array<Connect_Login_Data>;
   /** fetch data from the table: "country" */
   country: Array<Country>;
   /** fetch aggregated fields from the table: "country" */
@@ -57268,36 +57001,6 @@ export type Subscription_RootColor_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Color_Stream_Cursor_Input>>;
   where?: InputMaybe<Color_Bool_Exp>;
-};
-
-
-export type Subscription_RootConnect_Login_DataArgs = {
-  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
-  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
-};
-
-
-export type Subscription_RootConnect_Login_Data_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Connect_Login_Data_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Connect_Login_Data_Order_By>>;
-  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
-};
-
-
-export type Subscription_RootConnect_Login_Data_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Subscription_RootConnect_Login_Data_StreamArgs = {
-  batch_size: Scalars['Int'];
-  cursor: Array<InputMaybe<Connect_Login_Data_Stream_Cursor_Input>>;
-  where?: InputMaybe<Connect_Login_Data_Bool_Exp>;
 };
 
 
@@ -63526,6 +63229,14 @@ export type InsertHubspotAuditMutationVariables = Exact<{
 
 
 export type InsertHubspotAuditMutation = { __typename?: 'mutation_root', insert_hubspot_audit_one?: { __typename?: 'hubspot_audit', id: any } | null };
+
+export type LogUserAuthEventMutationVariables = Exact<{
+  event_type: User_Auth_Audit_Type_Enum;
+  sub: Scalars['String'];
+}>;
+
+
+export type LogUserAuthEventMutation = { __typename?: 'mutation_root', insert_user_auth_audits_one?: { __typename?: 'user_auth_audits', id: any, created_at: any } | null };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];
