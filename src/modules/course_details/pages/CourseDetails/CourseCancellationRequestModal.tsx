@@ -40,7 +40,7 @@ export const CourseCancellationRequestModal: React.FC<
   React.PropsWithChildren<CourseCancellationRequestModalProps>
 > = function ({ course, onClose, onSubmit }) {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const [confirmed, setConfirmed] = useState(false)
 
   const [{ fetching: loading, error }, requestCourseCancellation] = useMutation<
@@ -96,9 +96,11 @@ export const CourseCancellationRequestModal: React.FC<
               <Link
                 target="_blank"
                 rel="noreferrer"
-                href={`${
-                  import.meta.env.VITE_BASE_WORDPRESS_URL
-                }/policies-procedures/terms-of-business/`}
+                href={`${import.meta.env.VITE_BASE_WORDPRESS_URL}${
+                  acl.isUK()
+                    ? '/policies-procedures/terms-of-business/'
+                    : '/au/terms-conditions-au-nz/'
+                }`}
               />
             ),
           }}

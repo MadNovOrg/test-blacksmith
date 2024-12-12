@@ -2,6 +2,7 @@ import { Alert, Link, Box, Checkbox, FormControlLabel } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { ACTION_TYPE } from '@app/modules/course_details/pages/UserPagesCourseDetails/ModifyAttendanceModal'
 import { CancellationTermsTable } from '@app/modules/edit_course/components/CancellationTermsTable'
 import { Course } from '@app/types'
@@ -16,6 +17,7 @@ export const CancelAttendanceForm: React.FC<
   React.PropsWithChildren<CancelAttendanceFormProps>
 > = ({ course, onAgreeTerms, cancellationError }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const startDate = course.schedule[0].start
 
   const [agreeTerms, setAgreeTerms] = useState(false)
@@ -36,9 +38,11 @@ export const CancelAttendanceForm: React.FC<
               <Link
                 target="_blank"
                 rel="noreferrer"
-                href={`${
-                  import.meta.env.VITE_BASE_WORDPRESS_URL
-                }/policies-procedures/terms-of-business/`}
+                href={`${import.meta.env.VITE_BASE_WORDPRESS_URL}${
+                  acl.isUK()
+                    ? '/policies-procedures/terms-of-business/'
+                    : '/au/terms-conditions-au-nz/'
+                }`}
               />
             ),
           }}

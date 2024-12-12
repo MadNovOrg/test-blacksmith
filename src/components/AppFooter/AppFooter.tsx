@@ -39,7 +39,11 @@ export const AppFooter = () => {
       labelKey: 'terms-of-use',
     },
     {
-      href: `${origin}/policies-procedures/terms-of-business/`,
+      href: `${origin}${
+        acl.isUK()
+          ? '/policies-procedures/terms-of-business/'
+          : '/au/terms-conditions-au-nz/'
+      }`,
       labelKey: 'terms-of-business',
     },
     {

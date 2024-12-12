@@ -495,9 +495,11 @@ export const CourseBookingReview: React.FC<
                       aria-label={`${t('terms-of-use')} (${t(
                         'opens-new-window',
                       )})`}
-                      href={`${
-                        import.meta.env.VITE_BASE_TEAMTEACH
-                      }/policies-procedures/terms-of-business/`}
+                      href={`${import.meta.env.VITE_BASE_TEAMTEACH}${
+                        acl.isUK()
+                          ? '/policies-procedures/terms-of-business/'
+                          : '/au/terms-conditions-au-nz/'
+                      }`}
                     />
                   ),
                   privacyPolicyLink: (
@@ -540,9 +542,11 @@ export const CourseBookingReview: React.FC<
                       aria-label={`${t('terms-of-use')} (${t(
                         'opens-new-window',
                       )})`}
-                      href={`${
-                        import.meta.env.VITE_BASE_TEAMTEACH
-                      }/policies-procedures/terms-of-business/`}
+                      href={`${import.meta.env.VITE_BASE_TEAMTEACH}${
+                        acl.isUK()
+                          ? '/policies-procedures/terms-of-business/'
+                          : '/au/terms-conditions-au-nz/'
+                      }`}
                     />
                   ),
                   privacyPolicyLink: (

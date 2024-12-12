@@ -6,6 +6,7 @@ import Link from '@mui/material/Link'
 import React, { useState } from 'react'
 import { Trans } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { TransferTermsTable } from '@app/modules/transfer_participant/components/TransferTermsTable'
@@ -22,6 +23,7 @@ export const ParticipantTransferInfo: React.FC<
   const { t } = useScopedTranslation(
     'pages.course-details.change-my-attendance.transfer-info',
   )
+  const { acl } = useAuth()
   const [agreeTerms, setAgreeTerms] = useState(false)
 
   const onAgreeTermsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,9 +42,11 @@ export const ParticipantTransferInfo: React.FC<
               <Link
                 target="_blank"
                 rel="noreferrer"
-                href={`${
-                  import.meta.env.VITE_BASE_WORDPRESS_URL
-                }/policies-procedures/terms-of-business/`}
+                href={`${import.meta.env.VITE_BASE_WORDPRESS_URL}${
+                  acl.isUK()
+                    ? '/policies-procedures/terms-of-business/'
+                    : '/au/terms-conditions-au-nz/'
+                }`}
               />
             ),
           }}

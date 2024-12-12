@@ -83,7 +83,7 @@ export const ReplaceParticipantDialog: React.FC<
   course,
 }) => {
   const { t, _t } = useScopedTranslation(TRANSLATION_SCOPE)
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { isUKCountry } = useWorldCountries()
@@ -369,9 +369,11 @@ export const ReplaceParticipantDialog: React.FC<
                           aria-label={`${_t('terms-of-business')} (${t(
                             'opens-new-window',
                           )})`}
-                          href={`${
-                            import.meta.env.VITE_BASE_WORDPRESS_URL
-                          }/policies-procedures/terms-of-business/`}
+                          href={`${import.meta.env.VITE_BASE_WORDPRESS_URL}${
+                            acl.isUK()
+                              ? '/policies-procedures/terms-of-business/'
+                              : '/au/terms-conditions-au-nz/'
+                          }`}
                         />
                       ),
                     }}

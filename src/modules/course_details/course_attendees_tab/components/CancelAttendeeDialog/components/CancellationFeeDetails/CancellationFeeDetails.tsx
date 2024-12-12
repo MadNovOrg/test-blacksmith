@@ -17,6 +17,7 @@ import {
 import { Trans, useTranslation } from 'react-i18next'
 
 import { NumericTextField } from '@app/components/NumericTextField'
+import { useAuth } from '@app/context/auth'
 import { CancellationFeeType } from '@app/generated/graphql'
 import {
   useCurrencies,
@@ -55,6 +56,7 @@ export const CancellationFeeDetails: React.FC<
 }) => {
   const { t } = useTranslation()
   const { defaultCurrency, activeCurrencies } = useCurrencies()
+  const { acl } = useAuth()
 
   return (
     <Box>
@@ -113,9 +115,11 @@ export const CancellationFeeDetails: React.FC<
                 <Link
                   target="_blank"
                   rel="noreferrer"
-                  href={`${
-                    import.meta.env.VITE_BASE_WORDPRESS_URL
-                  }/policies-procedures/terms-of-business/`}
+                  href={`${import.meta.env.VITE_BASE_WORDPRESS_URL}${
+                    acl.isUK()
+                      ? '/policies-procedures/terms-of-business/'
+                      : '/au/terms-conditions-au-nz/'
+                  }`}
                 />
               ),
             }}

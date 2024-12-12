@@ -472,7 +472,11 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                   <Trans i18nKey="pages.signup.tcs-label">
                     I accept the
                     <a
-                      href={`${origin}/policies-procedures/terms-of-business/`}
+                      href={`${origin}${
+                        acl.isUK()
+                          ? '/policies-procedures/terms-of-business/'
+                          : '/au/terms-conditions-au-nz/'
+                      }`}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`${t('terms-of-business')} (${t(
