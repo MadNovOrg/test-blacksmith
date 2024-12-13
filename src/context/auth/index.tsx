@@ -133,33 +133,32 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         const user = await Auth.signIn(email, password)
         const loadedProfile = await loadProfile(user)
 
-        console.log('user', user)
+        if (loadedProfile?.profile) {
+          const token = user.signInUserSession.getIdToken().getJwtToken()
 
-        const token = user.signInUserSession.getIdToken().getJwtToken()
+          try {
+            await logUserAuthEvent(
+              {
+                event_type: User_Auth_Audit_Type_Enum.Login,
+                // user.username is the sub (cognito user id)
+                sub: user.username,
+              },
+              token,
+            )
+          } catch (err) {
+            console.error(err)
+          }
 
-        if (
-          loadedProfile?.profile &&
-          hubspotFormsSubmissionEnabled &&
-          import.meta.env.VITE_AWS_REGION === AwsRegions.UK // no ANZ hubspot implementation
-        ) {
-          await handleHubspotFormSubmit({
-            profile: loadedProfile.profile,
-            userJWT: token,
-            authMode: AuthMode.LOGIN,
-          })
-        }
-
-        try {
-          await logUserAuthEvent(
-            {
-              event_type: User_Auth_Audit_Type_Enum.Login,
-              // user.username is the sub (cognito user id)
-              sub: user.username,
-            },
-            token,
-          )
-        } catch (err) {
-          console.error(err)
+          if (
+            hubspotFormsSubmissionEnabled &&
+            import.meta.env.VITE_AWS_REGION === AwsRegions.UK // no ANZ hubspot implementation
+          ) {
+            await handleHubspotFormSubmit({
+              profile: loadedProfile.profile,
+              userJWT: token,
+              authMode: AuthMode.LOGIN,
+            })
+          }
         }
 
         return { user, error: undefined }
