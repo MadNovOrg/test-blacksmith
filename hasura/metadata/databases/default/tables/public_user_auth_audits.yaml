@@ -12,6 +12,19 @@ object_relationships:
           name: identity
           schema: public
 insert_permissions:
+  - role: unverified
+    permission:
+      check:
+        _and:
+          - event_type:
+              _eq: LOGIN
+          - sub_identity:
+              profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - event_type
+        - sub
+    comment: ''
   - role: user
     permission:
       check:
@@ -30,5 +43,23 @@ select_permissions:
     permission:
       columns:
         - id
-      filter: {}
+      filter:
+        _and:
+          - event_type:
+              _eq: LOGIN
+          - sub_identity:
+              profile_id:
+                _eq: X-Hasura-User-Id
+    comment: ''
+  - role: unverified
+    permission:
+      columns:
+        - id
+      filter:
+        _and:
+          - event_type:
+              _eq: LOGIN
+          - sub_identity:
+              profile_id:
+                _eq: X-Hasura-User-Id
     comment: ''
