@@ -133,6 +133,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
         const user = await Auth.signIn(email, password)
         const loadedProfile = await loadProfile(user)
 
+        console.log('user', user)
+
         const token = user.signInUserSession.getIdToken().getJwtToken()
 
         if (
