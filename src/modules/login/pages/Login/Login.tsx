@@ -93,6 +93,8 @@ export const LoginPage = () => {
 
     const { user, error } = await auth.login(data.email, data.password)
 
+    console.log('error', error)
+
     if (!error) {
       const to = `${from.pathname || '/'}${from.search || ''}`
       // https://github.com/aws-amplify/amplify-js/issues/3733
