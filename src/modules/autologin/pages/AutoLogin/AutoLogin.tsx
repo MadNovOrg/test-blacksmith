@@ -1,10 +1,13 @@
 import { CircularProgress } from '@mui/material'
+import * as Sentry from '@sentry/react'
 import { Auth } from 'aws-amplify'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
+import { logUserAuthEvent } from '@app/context/auth/queries/auth-audit'
+import { User_Auth_Audit_Type_Enum } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   ParamsType as InitAuthParamsType,
@@ -36,7 +39,22 @@ export const AutoLogin = () => {
     await Auth.sendCustomChallengeAnswer(user, initAuth.authChallenge)
 
     const currentUser = await Auth.currentUserPoolUser()
-    await loadProfile(currentUser)
+    const loadedProfile = await loadProfile(currentUser)
+
+    if (loadedProfile?.profile) {
+      const token = user.signInUserSession.getIdToken().getJwtToken()
+      try {
+        await logUserAuthEvent(
+          {
+            event_type: User_Auth_Audit_Type_Enum.Login,
+            sub: currentUser.attributes.sub,
+          },
+          token,
+        )
+      } catch (err) {
+        Sentry.captureException(err)
+      }
+    }
   })
 
   useEffect(() => {

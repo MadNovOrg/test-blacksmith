@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react'
 import { Auth } from 'aws-amplify'
 import posthog from 'posthog-js'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
@@ -146,7 +147,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
               token,
             )
           } catch (err) {
-            console.error(err)
+            Sentry.captureException(err)
           }
 
           if (
