@@ -1,5 +1,18 @@
 # @teamteach/hub
 
+## 4.16.0
+
+### Minor Changes
+
+- a635943: Change terms and conditions link on anz.
+- 045886b: Add wording info under course residing country selector.
+- 53bd16b: Allows lead trainers to select / deslect modules for OPEN / CLOSED L1 / L1BS / L1NP / L2 / Advanced modules while on grading flows and on course builder
+
+### Patch Changes
+
+- fe8fb3e: Restrict editing unsupported delivery type in blended learning courses
+- e23318f: Log user auth events
+
 ## 4.15.0
 
 ### Minor Changes
