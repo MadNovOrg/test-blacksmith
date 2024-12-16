@@ -72,7 +72,7 @@
   "dependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.10",
-    "@emotion/react": "^11.11.4",
+    "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.11.5",
     "@fastify/autoload": "~5.8.2",
     "@fastify/sensible": "~5.6.0",
