@@ -12,9 +12,6 @@ import { bildStrategiesToArray } from '@app/util'
 import {
   canBeANZMixed,
   canBeANZVirtual,
-  canBeBlended,
-  canBeBlendedANZ,
-  canBeBlendedBild,
   canBeConversion,
   canBeF2F,
   canBeF2FANZ,
@@ -26,6 +23,7 @@ import {
   canBeReaccBild,
   canBeVirtual,
   canBeVirtualBild,
+  canCourseBeBlended,
 } from '../helpers'
 
 export const useCoursePermissions = (
@@ -55,13 +53,14 @@ export const useCoursePermissions = (
   const isBild = accreditedBy === Accreditors_Enum.Bild
 
   const isAustraliaRegion = acl.isAustralia()
-  const canBlended = isICM
-    ? (isAustraliaRegion ? canBeBlendedANZ : canBeBlended)(
-        type,
-        courseLevel as Course_Level_Enum,
-        deliveryType,
-      )
-    : canBeBlendedBild(type, courseLevel as Course_Level_Enum, bildStrategies)
+  const canBlended = canCourseBeBlended({
+    accreditedBy: accreditedBy as Accreditors_Enum,
+    deliveryType,
+    isUKCountry: acl.isUK(),
+    level: courseLevel as Course_Level_Enum,
+    strategies: bildStrategies,
+    type,
+  })
 
   const canReacc = () => {
     if (isAustraliaRegion) {

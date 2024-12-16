@@ -38,7 +38,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { type CourseInput } from '@app/types'
 
 import { DisabledFields } from '../..'
-import { Countries_Code } from '../../helpers'
+import { canCourseBeBlended, Countries_Code } from '../../helpers'
 import { useCourseFormEffects } from '../../hooks/useCourseFormEffects'
 import { useCoursePermissions } from '../../hooks/useCoursePermissions'
 import { useSpecialInstructions } from '../../hooks/useSpecialInstructions'
@@ -692,7 +692,20 @@ export const GeneralDetailsSection = ({
               value={Course_Delivery_Type_Enum.F2F}
               control={
                 <Radio
-                  disabled={!canF2F || disabledFields.has('deliveryType')}
+                  disabled={
+                    !canF2F ||
+                    disabledFields.has('deliveryType') ||
+                    (!isCreation &&
+                      blendedLearning &&
+                      !canCourseBeBlended({
+                        accreditedBy: accreditedBy as Accreditors_Enum,
+                        deliveryType: Course_Delivery_Type_Enum.F2F,
+                        isUKCountry: acl.isUK(),
+                        level: courseLevel as Course_Level_Enum,
+                        strategies: bildStrategies,
+                        type: courseType,
+                      }))
+                  }
                 />
               }
               label={t('f2f-option-label')}
@@ -702,7 +715,20 @@ export const GeneralDetailsSection = ({
               value={Course_Delivery_Type_Enum.Virtual}
               control={
                 <Radio
-                  disabled={!canVirtual() || disabledFields.has('deliveryType')}
+                  disabled={
+                    !canVirtual() ||
+                    disabledFields.has('deliveryType') ||
+                    (!isCreation &&
+                      blendedLearning &&
+                      !canCourseBeBlended({
+                        accreditedBy: accreditedBy as Accreditors_Enum,
+                        deliveryType: Course_Delivery_Type_Enum.Virtual,
+                        isUKCountry: acl.isUK(),
+                        level: courseLevel as Course_Level_Enum,
+                        strategies: bildStrategies,
+                        type: courseType,
+                      }))
+                  }
                 />
               }
               label={t('virtual-option-label')}
@@ -712,7 +738,20 @@ export const GeneralDetailsSection = ({
               value={Course_Delivery_Type_Enum.Mixed}
               control={
                 <Radio
-                  disabled={!canMixed() || disabledFields.has('deliveryType')}
+                  disabled={
+                    !canMixed() ||
+                    disabledFields.has('deliveryType') ||
+                    (!isCreation &&
+                      blendedLearning &&
+                      !canCourseBeBlended({
+                        accreditedBy: accreditedBy as Accreditors_Enum,
+                        deliveryType: Course_Delivery_Type_Enum.Mixed,
+                        isUKCountry: acl.isUK(),
+                        level: courseLevel as Course_Level_Enum,
+                        strategies: bildStrategies,
+                        type: courseType,
+                      }))
+                  }
                 />
               }
               label={t('mixed-option-label')}

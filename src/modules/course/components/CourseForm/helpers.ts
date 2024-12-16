@@ -164,6 +164,34 @@ export enum Countries_Code {
   AUSTRALIA = 'AU',
 }
 
+export const canCourseBeBlended = ({
+  accreditedBy,
+  deliveryType,
+  isUKCountry,
+  level,
+  strategies,
+  type,
+}: {
+  accreditedBy: Accreditors_Enum
+  deliveryType: Course_Delivery_Type_Enum
+  isUKCountry: boolean
+  level: Course_Level_Enum
+  strategies: Record<BildStrategies, boolean> | null
+  type: Course_Type_Enum
+}) => {
+  const isICM = accreditedBy === Accreditors_Enum.Icm
+
+  if (isICM) {
+    return (isUKCountry ? canBeBlended : canBeBlendedANZ)(
+      type,
+      level,
+      deliveryType,
+    )
+  }
+
+  return canBeBlendedBild(type, level, strategies)
+}
+
 export function canBeBlendedBild(
   courseType: Course_Type_Enum,
   courseLevel: Course_Level_Enum | CourseLevel | '',
