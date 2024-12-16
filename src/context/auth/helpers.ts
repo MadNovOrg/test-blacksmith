@@ -158,7 +158,7 @@ export const userToHubspotContact = (
       },
       profile.dob && {
         objectTypeId: '0-1',
-        name: 'date_of_birth',
+        name: 'cert_holder_date_of_birth',
         value: profile.dob,
       },
     ].filter(Boolean) as HubspotApiFormData['fields'],

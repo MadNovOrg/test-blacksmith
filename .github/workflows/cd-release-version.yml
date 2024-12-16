@@ -128,6 +128,9 @@ jobs:
       stripe_key: ${{ secrets.STRIPE_KEY }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      hubspot_register_form: ${{ secrets.HUBSPOT_REGISTER_FORM }}
+      hubspot_login_form: ${{ secrets.HUBSPOT_LOGIN_FORM }}
+      
 
   prod-cd-anz:
     name: ANZ Production Deployment

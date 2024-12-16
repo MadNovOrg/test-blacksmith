@@ -47,6 +47,10 @@ on:
         required: true
       sentry_auth_token:
         required: false
+      hubspot_register_form:
+        required: false
+      hubspot_login_form:
+        required: false
 
 jobs:
   build-deploy:
@@ -95,6 +99,8 @@ jobs:
           VITE_GMAPS_KEY: ${{ secrets.gmaps_key }}
           VITE_RECAPTCHA_KEY: ${{secrets.recaptcha_key}}
           VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
+          VITE_HUBSPOT_REGISTER_FORM: ${{ secrets.hubspot_register_form }}
+          VITE_HUBSPOT_LOGIN_FORM: ${{ secrets.hubspot_login_form }}
           VITE_APP_VERSION: ${{ inputs.version }}
           REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}
           SENTRY_AUTH_TOKEN: ${{secrets.sentry_auth_token}}
