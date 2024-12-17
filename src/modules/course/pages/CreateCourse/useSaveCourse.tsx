@@ -233,6 +233,7 @@ export function useSaveCourse(): {
         courseLevel: courseData.courseLevel,
         courseType: courseData.type,
         isReaccreditation: courseData.reaccreditation,
+        isUK: acl.isUK(),
       })
 
       const hasModerator = trainers.find(
