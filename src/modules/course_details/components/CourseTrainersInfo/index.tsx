@@ -68,7 +68,7 @@ const ListItemWrapper: React.FC<
   >(RE_INVITE_COURSE_TRAINER_MUTATION)
 
   useEffect(() => {
-    if (data && data.deleteCourseTrainer?.id && data.insertCourseTrainer?.id)
+    if (data?.deleteCourseTrainer?.id && data?.insertCourseTrainer?.id)
       setReInvited(true)
   }, [data])
 
@@ -122,14 +122,18 @@ const ListItemWrapper: React.FC<
   return (
     <Box display="flex" alignItems="center">
       {enableLinks ? (
-        <div onClick={handleNavigateToProfile} data-testid="link-to-profile">
+        <button
+          onClick={handleNavigateToProfile}
+          data-testid="link-to-profile"
+          style={{ all: 'unset' }}
+        >
           <Link>
             <ListItemTranslated
               i18nKey={i18nKey}
               fullName={courseTrainer.profile.fullName || ''}
             />
           </Link>
-        </div>
+        </button>
       ) : (
         <ListItemTranslated
           i18nKey={i18nKey}

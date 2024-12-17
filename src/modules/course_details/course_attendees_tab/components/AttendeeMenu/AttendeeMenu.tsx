@@ -10,8 +10,8 @@ type AttendeeMenuProps = {
   options: {
     id: string
     name: string | undefined | null
-    avatar?: string | undefined | null
-    archived?: boolean | undefined | null
+    avatar?: string | null
+    archived?: boolean | null
   }[]
   value?: string
   placeholder?: string
@@ -65,9 +65,11 @@ export const AttendeeMenu: React.FC<
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
-        PaperProps={{
-          sx: { width: 250, mt: 2 },
-          elevation: 1,
+        slotProps={{
+          paper: {
+            sx: { width: 250, mt: 2 },
+            elevation: 1,
+          },
         }}
       >
         {options.map(u => (

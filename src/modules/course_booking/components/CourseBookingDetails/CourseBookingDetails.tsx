@@ -45,7 +45,6 @@ import {
   Course_Source_Enum,
   Course_Type_Enum,
   Currency,
-  FindProfilesQuery,
   PaymentMethod,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
@@ -56,7 +55,7 @@ import {
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { schemas, yup } from '@app/schemas'
-import { InvoiceDetails, NonNullish, Profile } from '@app/types'
+import { NonNullish } from '@app/types'
 import {
   formatCurrency,
   getMandatoryCourseMaterialsCost,
@@ -64,51 +63,11 @@ import {
   requiredMsg,
 } from '@app/util'
 
-import {
-  BookingContact,
-  ParticipantInput,
-  Sector,
-  useBooking,
-} from '../BookingContext'
+import { ParticipantInput, useBooking } from '../BookingContext'
 import { PromoCode } from '../PromoCode'
 
 import { AttendeeValidCertificate } from './AttendeeValidCertificate'
-
-const isAttendeeValidCertificateMandatory = (
-  courseLevel?: Course_Level_Enum,
-  courseType?: Course_Type_Enum,
-  courseResidingCountry?: string | null,
-) =>
-  courseType === Course_Type_Enum.Open &&
-  courseResidingCountry?.includes('GB') &&
-  courseLevel &&
-  [
-    Course_Level_Enum.Advanced,
-    Course_Level_Enum.IntermediateTrainer,
-    Course_Level_Enum.FoundationTrainerPlus,
-    Course_Level_Enum.AdvancedTrainer,
-    Course_Level_Enum.BildIntermediateTrainer,
-    Course_Level_Enum.BildAdvancedTrainer,
-  ].includes(courseLevel)
-
-type FormInputs = {
-  isInternalUserBooking: boolean
-  quantity: number
-  participants: ParticipantInput[]
-  orgId: string
-  orgName: string
-  sector: Sector
-  source: Course_Source_Enum | ''
-  salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
-  bookingContact: BookingContact
-  paymentMethod: PaymentMethod
-
-  invoiceDetails?: InvoiceDetails
-
-  courseLevel: Course_Level_Enum
-  courseType: Course_Type_Enum
-  attendeeValidCertificate?: boolean
-}
+import { isAttendeeValidCertificateMandatory, FormInputs } from './utils'
 
 export const CourseBookingDetails: React.FC<
   React.PropsWithChildren<unknown>

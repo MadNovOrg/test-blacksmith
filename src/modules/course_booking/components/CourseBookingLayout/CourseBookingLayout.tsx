@@ -7,7 +7,7 @@ import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
 import { PaymentMethod } from '@app/generated/graphql'
 
-import { useBooking } from '../BookingContext'
+import { useBooking } from '../BookingContext/BookingContext'
 
 const completedMap = {
   details: [],
@@ -66,7 +66,7 @@ export const CourseBookingLayout: React.FC<
         </Sticky>
       </Box>
 
-      <Box flex={1}>{error ? error : <Outlet />}</Box>
+      <Box flex={1}>{error || <Outlet />}</Box>
     </Box>
   )
 }

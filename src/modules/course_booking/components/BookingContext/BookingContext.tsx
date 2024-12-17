@@ -38,20 +38,12 @@ import { stripeProcessingFeeRate } from '@app/lib/stripe'
 import { CREATE_ORDER } from '@app/modules/course_booking/queries/create-order'
 import { GET_COURSE_PRICING_QUERY } from '@app/modules/course_booking/queries/get-course-pricing'
 import { GET_TEMP_PROFILE } from '@app/modules/course_booking/queries/get-temp-profile'
-import {
-  CourseExpenseType,
-  InvoiceDetails,
-  Profile,
-  TransportMethod,
-} from '@app/types'
-import {
-  getMandatoryCourseMaterialsCost,
-  getTrainerCarCostPerMile,
-  getTrainerSubsistenceCost,
-  max,
-} from '@app/util'
+import { InvoiceDetails, Profile } from '@app/types'
+import { getMandatoryCourseMaterialsCost, max } from '@app/util'
 
-import { sectors } from '../utils'
+import { sectors } from '../../utils'
+
+import { getTrainerExpenses, setCoursePricing } from './'
 
 export type Sector = keyof typeof sectors | ''
 
@@ -142,9 +134,7 @@ const initialState = {
 
 const Context = React.createContext<ContextType>(initialContext as ContextType)
 
-type Props = unknown
-
-export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
+export const BookingProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const { t } = useTranslation()
@@ -194,72 +184,24 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
   const courseResidingCountry = profile?.course?.residingCountry
 
   useEffect(() => {
-    if (
-      typeof data !== 'undefined' &&
-      (typeof coursePricing !== 'undefined' || coursePricingError)
-    ) {
-      if (!profile || !profile.course) {
+    if (data && (coursePricing || coursePricingError)) {
+      if (!profile?.course) {
         setError(t('error-no-booking'))
         setReady(true)
         return
       }
 
-      let pricing: GetCoursePricingQuery['pricing']
+      const pricing = setCoursePricing({
+        setError,
+        profile,
+        isUKCountry,
+        coursePricing,
+      })
 
-      // course has custom pricing (e.g BILD)
-      if (
-        courseHasPrice &&
-        (!isUKCountry(courseResidingCountry) || isBILDcourse)
-      ) {
-        pricing = {
-          priceAmount: profile.course.price,
-          priceCurrency: (profile.course.priceCurrency as Currency) ?? 'GBP',
-          xeroCode: '',
-        }
-      } else {
-        const scheduledPrice = coursePricing
-        if (scheduledPrice) {
-          pricing = {
-            priceAmount: Number(scheduledPrice?.pricing?.priceAmount),
-            priceCurrency: scheduledPrice?.pricing?.priceCurrency as Currency,
-            xeroCode: scheduledPrice?.pricing?.xeroCode ?? '',
-          }
-        } else {
-          setError(t('error-no-pricing'))
-        }
-      }
-
-      const trainerExpenses =
-        profile.course.expenses?.reduce((acc, { data: e }) => {
-          switch (e.type) {
-            case CourseExpenseType.Accommodation:
-              return (
-                acc +
-                getTrainerSubsistenceCost(
-                  e.accommodationNights,
-                  isUKCountry(course?.residingCountry),
-                ) +
-                e.accommodationCost * e.accommodationNights
-              )
-
-            case CourseExpenseType.Miscellaneous:
-              return acc + e.cost
-
-            case CourseExpenseType.Transport:
-              if (e.method === TransportMethod.CAR) {
-                return acc + getTrainerCarCostPerMile(e.mileage)
-              }
-
-              if (e.method === TransportMethod.NONE) {
-                return acc
-              }
-
-              return acc + e.cost
-
-            default:
-              return acc
-          }
-        }, 0) ?? 0
+      const trainerExpenses = getTrainerExpenses({
+        course: profile.course,
+        isUKCountry,
+      })
 
       setAvailableSeats(
         profile.course.maxParticipants -
@@ -276,18 +218,19 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
       ])()
 
       // doesnt reset if booking already contains data in it
+      const getVat = () => {
+        if (isInternationalCourse && !profile?.course?.includeVAT) {
+          return 0
+        }
+        return isAustralia() ? 10 : 20
+      }
       if (pricing && !booking.participants) {
         setBooking({
           quantity: profile.quantity ?? 0,
           participants: [],
           price: pricing.priceAmount,
           currency: pricing.priceCurrency,
-          vat:
-            isInternationalCourse && !profile?.course?.includeVAT
-              ? 0
-              : isAustralia()
-              ? 10
-              : 20,
+          vat: getVat(),
           promoCodes: [],
           discounts: {},
           orgId: '',

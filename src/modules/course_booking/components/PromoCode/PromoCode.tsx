@@ -18,7 +18,7 @@ import {
 } from '@app/generated/graphql'
 import { CAN_APPLY_PROMO_CODE } from '@app/modules/course_booking/queries/can-apply-promo-code'
 
-import type { Discounts } from '../BookingContext'
+import type { Discounts } from '../BookingContext/BookingContext'
 
 type Props = {
   codes: string[]

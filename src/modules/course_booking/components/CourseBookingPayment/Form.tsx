@@ -27,9 +27,9 @@ export const PaymentForm: React.FC<React.PropsWithChildren<Props>> = ({
   const elements = useElements()
   const { t } = useTranslation()
 
-  const [state, _setState] = useState<State>(initialState)
-  const setState = useCallback(
-    (next: Partial<State>) => _setState(prev => ({ ...prev, ...next })),
+  const [state, setState] = useState<State>(initialState)
+  const _setState = useCallback(
+    (next: Partial<State>) => setState(prev => ({ ...prev, ...next })),
     [],
   )
 
@@ -37,24 +37,24 @@ export const PaymentForm: React.FC<React.PropsWithChildren<Props>> = ({
     if (!stripe || !elements) return
 
     try {
-      setState({ submitting: true, error: undefined })
+      _setState({ submitting: true, error: undefined })
 
       const confirmParams = { return_url: window.location.href }
       const { error } = await stripe.confirmPayment({ elements, confirmParams })
-      setState({ submitting: false })
+      _setState({ submitting: false })
 
       if (error && error.type !== 'validation_error') {
         throw Error(error.message)
       }
     } catch (error) {
-      setState({ submitting: false, error: error as Error })
+      _setState({ submitting: false, error: error as Error })
     }
-  }, [stripe, elements, setState])
+  }, [stripe, elements, _setState])
 
   return (
     <Box py={4} maxWidth={400}>
       <PaymentElement
-        onReady={() => setState({ formLoaded: true })}
+        onReady={() => _setState({ formLoaded: true })}
         options={{ readOnly: state.submitting }}
       />
 

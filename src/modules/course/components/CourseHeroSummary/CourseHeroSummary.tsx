@@ -30,7 +30,7 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { CourseInstructionsDialog } from '@app/modules/course_details/components/CourseInstructionsDialog'
-import { Course } from '@app/types'
+import { Course, Profile } from '@app/types'
 import {
   getCourseBeginsForMessage,
   formatCourseVenue,
@@ -81,39 +81,39 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   ].includes(course.status)
 
   const courseContactsData = useMemo(() => {
-    let bookingContact = undefined
-    if (course.bookingContact) {
-      bookingContact = pick(course.bookingContact, ['id', 'email', 'fullName'])
-    } else if (course.bookingContactInviteData) {
-      bookingContact = {
-        id: null,
-        email: course.bookingContactInviteData.email,
-        fullName: `${course.bookingContactInviteData.firstName} ${course.bookingContactInviteData.lastName} `,
+    const getContactData = ({
+      contact,
+      inviteData,
+    }: {
+      contact?: Profile
+      inviteData:
+        | typeof course.bookingContactInviteData
+        | typeof course.organizationKeyContactInviteData
+    }) => {
+      if (contact) {
+        return pick(contact, ['id', 'email', 'fullName'])
       }
+      if (inviteData) {
+        return {
+          id: null,
+          email: inviteData.email,
+          fullName: `${inviteData.firstName} ${inviteData.lastName}`,
+        }
+      }
+      return undefined
     }
 
-    let organisationKeyContact = undefined
-    if (course.organizationKeyContact) {
-      organisationKeyContact = pick(course.organizationKeyContact, [
-        'id',
-        'email',
-        'fullName',
-      ])
-    } else if (course.organizationKeyContactInviteData) {
-      organisationKeyContact = {
-        id: null,
-        email: course.organizationKeyContactInviteData.email,
-        fullName: `${course.organizationKeyContactInviteData.firstName} ${course.organizationKeyContactInviteData.lastName} `,
-      }
-    }
+    const bookingContact = getContactData({
+      contact: course.bookingContact,
+      inviteData: course.bookingContactInviteData,
+    })
+    const organisationKeyContact = getContactData({
+      contact: course.organizationKeyContact,
+      inviteData: course.organizationKeyContactInviteData,
+    })
 
     return { bookingContact, organisationKeyContact }
-  }, [
-    course.bookingContact,
-    course.bookingContactInviteData,
-    course.organizationKeyContact,
-    course.organizationKeyContactInviteData,
-  ])
+  }, [course])
 
   const canReInviteTrainers = useMemo(
     () =>
