@@ -81,7 +81,7 @@ function getAddressPart(placeDetails: PlaceResult, partName: string): string {
   const addressPart = placeDetails.address_components?.find(component =>
     component.types.includes(partName),
   )
-  return addressPart?.long_name || ''
+  return addressPart?.long_name ?? ''
 }
 
 function getCountry(placeDetails: PlaceResult): string {
@@ -172,7 +172,7 @@ export const VenueSelector: React.FC<
       if (value && 'place_id' in value) {
         const placeDetails = await getPlaceDetails(value.place_id)
         setVenue({
-          name: placeDetails.name || '',
+          name: placeDetails.name ?? '',
           addressLineOne: extractAdrStreetAddress(placeDetails.adr_address),
           city: getAddressPart(placeDetails, 'administrative_area_level_2'),
           postCode: getAddressPart(placeDetails, 'postal_code'),
@@ -214,7 +214,7 @@ export const VenueSelector: React.FC<
         libraries={['places', 'visualization']}
       >
         <Autocomplete
-          freeSolo={query.length > 3 ? false : true}
+          freeSolo={query.length < 3}
           sx={sx}
           open={open && Boolean(debouncedQuery && query)}
           openOnFocus={true}

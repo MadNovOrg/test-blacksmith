@@ -34,6 +34,8 @@ import {
   getInvoice,
 } from '../utils/util'
 
+import { Invoice } from './Invoice'
+
 export const CourseCancellationTable: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
@@ -88,7 +90,7 @@ export const CourseCancellationTable: React.FC<
 
           let invoiceNumber = ''
 
-          log.course.orders.map(
+          log.course.orders.forEach(
             order => (invoiceNumber += `${order.order?.xeroInvoiceNumber}\n`),
           )
 
@@ -193,33 +195,7 @@ export const CourseCancellationTable: React.FC<
                           </Link>
                         </TableCell>
                         <TableCell>
-                          {invoice
-                            ? (log.course.type === Course_Type_Enum.Indirect
-                                ? log.course.orders.map(order => ({
-                                    invoiceNumber:
-                                      order.order?.xeroInvoiceNumber,
-                                    orderId: order.order?.id,
-                                  }))
-                                : [
-                                    {
-                                      invoiceNumber:
-                                        log.xero_invoice_number ??
-                                        log.course.orders[0].order
-                                          ?.xeroInvoiceNumber,
-                                      orderId: invoice.order?.id,
-                                    },
-                                  ]
-                              ).map(el => (
-                                <Link
-                                  key={el.orderId}
-                                  href={`/orders/${el.orderId}`}
-                                >
-                                  <Typography variant="body2">
-                                    {el.invoiceNumber}
-                                  </Typography>
-                                </Link>
-                              ))
-                            : null}
+                          <Invoice invoice={invoice} log={log} />
                         </TableCell>
                         <TableCell>
                           {log.authorizedBy ? (

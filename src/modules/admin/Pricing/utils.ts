@@ -550,16 +550,14 @@ export const formatSchedulePriceDuration = (
       new Date(isInsertChangelog ? newEffectiveFrom : oldEffectiveFrom),
       'dd MMMM yyyy',
     )
+    const effectiveToDate = isInsertChangelog ? newEffectiveTo : oldEffectiveTo
 
     to = isOldEffectiveToInfinite
       ? t('pages.course-pricing.indefinite')
-      : format(
-          new Date(isInsertChangelog ? newEffectiveTo : oldEffectiveTo),
-          'dd MMMM yyyy',
-        )
+      : format(new Date(effectiveToDate), 'dd MMMM yyyy')
   }
 
-  return `${from ?? ''}${to ? ` - ${to}` : ''}`
+  return `${from ?? ''}${to ? ' - ' + to : ''}`
 }
 
 export const getChangelogEvents = (

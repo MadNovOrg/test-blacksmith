@@ -16,7 +16,7 @@ export const getGoogleMapsSuggestions = async (
 
   const residingCountryFormat = residingCountry?.includes('-')
     ? residingCountry.split('-')[0]
-    : residingCountry || 'gb'
+    : residingCountry ?? 'gb'
 
   return new google.maps.places.AutocompleteService().getPlacePredictions({
     input: query,
@@ -37,7 +37,7 @@ export const getPlaceDetails = async (
       if (result) {
         resolve(result)
       } else {
-        reject(status)
+        reject(new Error(status))
       }
     })
   })

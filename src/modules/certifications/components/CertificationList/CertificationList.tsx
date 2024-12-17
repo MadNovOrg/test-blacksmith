@@ -1,11 +1,8 @@
 import {
-  Box,
   Button,
   Grid,
   Table,
   TableBody,
-  TableCell,
-  TableRow,
   Typography,
   useTheme,
   useMediaQuery,
@@ -16,7 +13,6 @@ import JSZip from 'jszip'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -31,12 +27,9 @@ import type { Sorting } from '@app/hooks/useTableSort'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
 import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters'
 import { OrgAndName } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters/utils'
-import { Grade } from '@app/modules/grading/components/Grade'
-import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { CourseParticipant } from '@app/types'
 
-import { CertificateStatusChip } from '../CertificateStatusChip'
+import { ParticipantsRow } from './components/ParticipantsRow'
 
 export type CertificationListColumns = (
   | 'name'
@@ -51,7 +44,6 @@ export type CertificationListColumns = (
 )[]
 
 type CertificationListProps = {
-  courseId?: number
   participants: CourseParticipant[]
   filtered?: boolean
   sorting: Sorting
@@ -70,7 +62,6 @@ export const CertificationList: React.FC<
 }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const navigate = useNavigate()
   const { t } = useTranslation()
   const { acl } = useAuth()
   const { checkbox, selected, isSelected } = useTableChecks()
@@ -259,144 +250,13 @@ export const CertificationList: React.FC<
             />
 
             {filteredPatricipants?.map(p => {
-              if (!p.certificate) return null
-
-              const status = p.certificate?.status
-              const isRevoked =
-                p.certificate.status === CertificateStatus.Revoked
-              const isOnHold = p.certificate.status === CertificateStatus.OnHold
-              const statusTooltip =
-                isRevoked || isOnHold
-                  ? p.certificateChanges?.[0]?.payload?.note ?? '' // if revoked or on hold, the first changelog has the reason
-                  : undefined
-
               return (
-                <TableRow key={p.id} data-testid={`cert-row-${p.id}`}>
-                  {checkbox.rowCell(p.id, isRevoked)}
-
-                  {showCol('name') ? (
-                    <TableCell data-testid="name">
-                      <ProfileAvatar
-                        profile={p.profile}
-                        disableLink={
-                          !acl.canViewProfiles() ||
-                          (p.profile.archived &&
-                            !acl.canViewArchivedProfileData())
-                        }
-                      />
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('contact') ? (
-                    <TableCell data-testid="contact">
-                      <LinkToProfile
-                        profileId={p.profile.id}
-                        isProfileArchived={p.profile.archived}
-                      >
-                        {p.profile.email}
-                        {p.profile.contactDetails.map(contact => contact.value)}
-                      </LinkToProfile>
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('organisation') ? (
-                    <TableCell data-testid="organisation">
-                      <Box display={'flex'} flexDirection={'column'}>
-                        {p.profile.organizations.map(o => {
-                          return (
-                            <Typography key={o.organization.id}>
-                              {o.organization.name}
-                            </Typography>
-                          )
-                        })}
-                      </Box>
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('grade') ? (
-                    <TableCell data-testid="grade">
-                      <Box display="flex" alignItems="flex-start">
-                        {p.grade ? <Grade grade={p.grade} /> : null}
-                      </Box>
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('certificate') ? (
-                    <TableCell data-testid="certificate">
-                      {p.grade ? (
-                        <>
-                          <Grade grade={p.grade} />
-                          <Typography
-                            data-testid="certificate-number"
-                            variant="body2"
-                            color="grey.700"
-                          >
-                            {p.certificate.number}
-                          </Typography>
-                        </>
-                      ) : null}
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('course-code') ? (
-                    <TableCell data-testid="course-code">
-                      <Typography variant="body2" color="grey.700">
-                        {p.course?.course_code}
-                      </Typography>
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('status') ? (
-                    <TableCell data-testid="status">
-                      <CertificateStatusChip
-                        status={status}
-                        tooltip={statusTooltip}
-                      />
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('date-obtained') ? (
-                    <TableCell data-testid="date-obtained">
-                      <Typography variant="body2" color="grey.700">
-                        {t('dates.default', {
-                          date: p.certificate.certificationDate,
-                        })}
-                      </Typography>
-                    </TableCell>
-                  ) : null}
-
-                  {showCol('date-expired') ? (
-                    <TableCell data-testid="date-expired">
-                      <Typography variant="body2" color="grey.700">
-                        {t('dates.default', {
-                          date: p.certificate.expiryDate,
-                        })}
-                      </Typography>
-                    </TableCell>
-                  ) : null}
-
-                  <TableCell sx={{ width: 0 }}>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        sx={{ whiteSpace: 'nowrap' }}
-                        onClick={() =>
-                          navigate(`/certification/${p.certificate?.id}`)
-                        }
-                        data-testid={`view-certificate-${p.course?.id}`}
-                        disabled={isRevoked && !acl.canViewRevokedCert()}
-                      >
-                        {t('components.certification-list.view-certificate')}
-                      </Button>
-                    </Box>
-                  </TableCell>
-                </TableRow>
+                <ParticipantsRow
+                  key={p.id}
+                  participant={p}
+                  showCol={showCol}
+                  checkbox={checkbox}
+                />
               )
             })}
           </TableBody>

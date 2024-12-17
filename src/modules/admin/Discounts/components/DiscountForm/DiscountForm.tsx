@@ -145,37 +145,49 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   )
 
   useEffect(() => {
-    if (data) {
-      if (data.promoCodes.length > 0) {
-        const promoCode = data?.promoCodes[0]
-        setValue('code', promoCode.code)
-        setValue('description', promoCode.description ?? '')
-        setValue('type', promoCode.type)
-        setValue('amount', promoCode.amount)
-        if (promoCode.courses?.length > 0) {
-          setValue('appliesTo', APPLIES_TO.COURSES)
-        } else if (promoCode?.levels?.length > 0) {
-          setValue('appliesTo', APPLIES_TO.LEVELS)
-        }
-        setValue('levels', promoCode.levels)
-        setValue(
-          'courses',
-          promoCode.courses.map(c => c.course?.id ?? 0),
-        )
-        if (promoCode?.validFrom) {
-          setValue('validFrom', new Date(promoCode.validFrom))
-        }
-        if (promoCode?.validTo) {
-          setValue('validTo', new Date(promoCode.validTo))
-        }
-        setValue('usesMax', promoCode.usesMax)
-        setValue('bookerSingleUse', promoCode.bookerSingleUse)
-        if (promoCode.creator) {
-          setCreatedBy(promoCode.creator as Profile)
-        }
-        setAmountPreset(getAmountPreset(promoCode.amount))
-      }
+    if (!data || data.promoCodes.length === 0) return
+
+    const promoCode = data.promoCodes[0]
+    const {
+      code,
+      description = '',
+      type,
+      amount,
+      courses = [],
+      levels = [],
+      validFrom,
+      validTo,
+      usesMax,
+      bookerSingleUse,
+      creator,
+    } = promoCode
+
+    setValue('code', code)
+    setValue('description', description as string)
+    setValue('type', type)
+    setValue('amount', amount)
+    let appliesTo: APPLIES_TO | null = null
+    if (courses.length > 0) {
+      appliesTo = APPLIES_TO.COURSES
+    } else if (levels.length > 0) {
+      appliesTo = APPLIES_TO.LEVELS
     }
+    setValue('appliesTo', appliesTo as APPLIES_TO)
+    setValue('levels', levels)
+    setValue(
+      'courses',
+      courses.map(c => c.course?.id ?? 0),
+    )
+    setValue('validFrom', validFrom ? new Date(validFrom) : null)
+    setValue('validTo', validTo ? new Date(validTo) : null)
+    setValue('usesMax', usesMax)
+    setValue('bookerSingleUse', bookerSingleUse)
+
+    if (creator) {
+      setCreatedBy(creator as Profile)
+    }
+
+    setAmountPreset(getAmountPreset(amount))
   }, [data, setValue])
 
   const disabled = data?.promoCodes[0].disabled
@@ -740,7 +752,9 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
 
       {/* APPROVAL NEEDED */}
       <Dialog
-        title={t('pages.promoCodes.approvalNeeded-title')}
+        slots={{
+          Title: () => <>{t('pages.promoCodes.approvalNeeded-title')}</>,
+        }}
         open={showApprovalNotice}
         onClose={() => setShowApprovalNotice(false)}
         showClose={false}
@@ -777,7 +791,13 @@ export const DiscountForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Dialog>
 
       <Dialog
-        title={t('pages.promoCodes.disable-modal-title', { code: values.code })}
+        slots={{
+          Title: () => (
+            <>
+              {t('pages.promoCodes.disable-modal-title', { code: values.code })}
+            </>
+          ),
+        }}
         open={showDisableModal}
         onClose={() => setShowDisableModal(false)}
         showClose={false}

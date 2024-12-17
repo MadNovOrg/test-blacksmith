@@ -27,7 +27,9 @@ export async function gqlRequest<T, V = Variables>(
     .then((response: unknown) => response as T)
     .catch((e: ClientError) => {
       console.error(e)
-      return Promise.reject(normalizeGqlError(e))
+      return Promise.reject(
+        new Error(normalizeGqlError(e)?.message || 'Unknown GraphQL error'),
+      )
     })
 }
 

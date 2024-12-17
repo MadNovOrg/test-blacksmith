@@ -24,7 +24,12 @@ export const useTableSort = (
 
   const onSort = useCallback(
     (col: string) => {
-      setSortDir(dir => (col !== by ? 'asc' : dir === 'asc' ? 'desc' : 'asc'))
+      setSortDir(dir => {
+        if (col !== by) {
+          return 'asc'
+        }
+        return dir === 'asc' ? 'desc' : 'asc'
+      })
       setSortBy(col)
     },
     [setSortBy, setSortDir, by],

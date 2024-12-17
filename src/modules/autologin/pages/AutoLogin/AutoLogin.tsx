@@ -10,7 +10,6 @@ import { logUserAuthEvent } from '@app/context/auth/queries/auth-audit'
 import { User_Auth_Audit_Type_Enum } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
-  ParamsType as InitAuthParamsType,
   INIT_AUTH_QUERY,
   ResponseType as InitAuthResponseType,
 } from '@app/modules/autologin/queries/init-auth'
@@ -25,12 +24,13 @@ export const AutoLogin = () => {
   const continueUrl = searchParams.get('continue')
 
   useMount(async () => {
-    const { initAuth } = await gqlRequest<
-      InitAuthResponseType,
-      InitAuthParamsType
-    >(INIT_AUTH_QUERY, undefined, {
-      headers: { 'x-auth': `Bearer ${token}` },
-    })
+    const { initAuth } = await gqlRequest<InitAuthResponseType>(
+      INIT_AUTH_QUERY,
+      undefined,
+      {
+        headers: { 'x-auth': `Bearer ${token}` },
+      },
+    )
 
     await logout()
     setCalledLogout(true)

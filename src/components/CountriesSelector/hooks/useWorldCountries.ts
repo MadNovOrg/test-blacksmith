@@ -3,6 +3,8 @@ import { CountryCode as CountryISOCode } from 'libphonenumber-js'
 import { useCallback, useMemo } from 'react'
 import countryList from 'react-select-country-list'
 
+type ExtendedCountryCodes = CountryISOCode | UKsCountriesCode | string | null
+
 export enum UKsCodes {
   GB_ENG = 'GB-ENG',
   GB_NIR = 'GB-NIR',
@@ -167,7 +169,7 @@ export default function useWorldCountries() {
   }, [])
 
   const getLabel = useCallback(
-    (code: CountryISOCode | UKsCountriesCode | string | null | undefined) => {
+    (code?: ExtendedCountryCodes) => {
       if (!countries || !code) return undefined
 
       if (Object.keys(UKsCountriesCodes).includes(code)) {
@@ -426,26 +428,16 @@ export default function useWorldCountries() {
       'GB-WLS',
       ...countriesISOCodes
         .filter(code => code !== 'GB')
-        .sort((a, b) => getLabel(a)?.localeCompare(getLabel(b) ?? '') || 0),
+        .sort((a, b) => getLabel(a)?.localeCompare(getLabel(b) ?? '') ?? 0),
     ],
     [countriesISOCodes, getLabel],
   )
 
-  const isUKCountry = useCallback(
-    (
-      countryCode:
-        | CountryISOCode
-        | UKsCountriesCode
-        | string
-        | null
-        | undefined,
-    ) => {
-      if (!countryCode) return false
+  const isUKCountry = useCallback((countryCode?: ExtendedCountryCodes) => {
+    if (!countryCode) return false
 
-      return Object.keys(UKsCountriesCodes).includes(countryCode)
-    },
-    [],
-  )
+    return Object.keys(UKsCountriesCodes).includes(countryCode)
+  }, [])
   const isAustraliaCountry = useCallback(
     (
       countryCode:

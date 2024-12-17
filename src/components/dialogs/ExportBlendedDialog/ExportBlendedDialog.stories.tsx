@@ -19,9 +19,9 @@ type Story = StoryObj<typeof ExportBlendedDialog>
 export const Default: Story = {
   args: {},
   render: function Component(args) {
-    const [isOpen, setToggleDialog] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const toggle = () => {
-      setToggleDialog(!isOpen)
+      setIsOpen(!isOpen)
     }
 
     return (

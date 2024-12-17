@@ -1,7 +1,5 @@
 import { gql } from 'graphql-request'
 
-export type ParamsType = never
-
 export type ResponseType = {
   initAuth: {
     email: string

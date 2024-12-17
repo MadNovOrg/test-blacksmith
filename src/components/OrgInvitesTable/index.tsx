@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Chip,
+  ChipOwnProps,
   CircularProgress,
   Paper,
   Stack,
@@ -27,6 +28,14 @@ import {
 
 type OrgInvitesTableParams = {
   orgId: string
+}
+
+const statusColorMap: Record<
+  Course_Invite_Status_Enum.Accepted | Course_Invite_Status_Enum.Declined,
+  ChipOwnProps['color']
+> = {
+  [Course_Invite_Status_Enum.Accepted]: 'success',
+  [Course_Invite_Status_Enum.Declined]: 'error',
 }
 
 export const OrgInvitesTable: React.FC<
@@ -132,11 +141,9 @@ export const OrgInvitesTable: React.FC<
                         `pages.org-details.tabs.users.invite-status.${invite.status.toLowerCase()}`,
                       )}
                       color={
-                        invite.status === Course_Invite_Status_Enum.Accepted
-                          ? 'success'
-                          : invite.status === Course_Invite_Status_Enum.Declined
-                          ? 'error'
-                          : 'secondary'
+                        statusColorMap[
+                          invite.status as keyof typeof statusColorMap
+                        ] ?? 'secondary'
                       }
                       size="small"
                     />

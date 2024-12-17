@@ -8,11 +8,7 @@ import { useAuth } from '@app/context/auth'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import theme from '@app/theme'
 
-type AdminPageProps = unknown
-
-export const AdminPage: React.FC<
-  React.PropsWithChildren<AdminPageProps>
-> = () => {
+export const AdminPage: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 

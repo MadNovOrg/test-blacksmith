@@ -249,7 +249,7 @@ export type Profile = {
   lastActivity?: Date
   certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
   courses?: {
-    grade?: Grade_Enum | null | undefined
+    grade?: Grade_Enum | null
     course:
       | {
           start?: string

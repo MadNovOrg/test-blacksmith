@@ -14,10 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import {
-  Course_Audit_Type_Enum,
-  Course_Type_Enum,
-} from '@app/generated/graphql'
+import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import {
@@ -33,6 +30,8 @@ import {
   getExportDataRenderFunction,
   getInvoice,
 } from '../utils/util'
+
+import { Invoice } from './Invoice'
 
 export const CourseReschedulingTable: React.FC<
   React.PropsWithChildren<unknown>
@@ -235,33 +234,7 @@ export const CourseReschedulingTable: React.FC<
                           })}
                         </TableCell>
                         <TableCell>
-                          {invoice
-                            ? (log.course.type === Course_Type_Enum.Indirect
-                                ? log.course.orders.map(order => ({
-                                    invoiceNumber:
-                                      order.order?.xeroInvoiceNumber,
-                                    orderId: order.order?.id,
-                                  }))
-                                : [
-                                    {
-                                      invoiceNumber:
-                                        log.xero_invoice_number ??
-                                        log.course.orders[0].order
-                                          ?.xeroInvoiceNumber,
-                                      orderId: invoice.order?.id,
-                                    },
-                                  ]
-                              ).map(el => (
-                                <Link
-                                  key={el.orderId}
-                                  href={`/orders/${el.orderId}`}
-                                >
-                                  <Typography variant="body2">
-                                    {el.invoiceNumber}
-                                  </Typography>
-                                </Link>
-                              ))
-                            : null}
+                          <Invoice log={log} invoice={invoice} />
                         </TableCell>
                         <TableCell>
                           {log.authorizedBy ? (

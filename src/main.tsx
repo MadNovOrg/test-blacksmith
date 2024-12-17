@@ -18,9 +18,9 @@ import { ErrorPage } from './components/ErrorPage'
 import theme from './theme'
 import { AwsRegions } from './types'
 
-import.meta.env.VITE_APP_VERSION
-  ? console.info(`App version is ${import.meta.env.VITE_APP_VERSION}`)
-  : null
+if (import.meta.env.VITE_APP_VERSION) {
+  console.info(`App version is ${import.meta.env.VITE_APP_VERSION}`)
+}
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,

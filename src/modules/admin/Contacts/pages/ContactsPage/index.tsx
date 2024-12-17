@@ -35,8 +35,6 @@ import {
 
 import { GET_CONTACTS } from '../../queries/get-contacts'
 
-type ContactsProps = unknown
-
 const sorts: Record<string, object> = {
   'givenName-asc': { givenName: 'asc' },
   'givenName-desc': { givenName: 'desc' },
@@ -44,9 +42,7 @@ const sorts: Record<string, object> = {
   'familyName-desc': { familyName: 'desc' },
 }
 
-export const Contacts: React.FC<
-  React.PropsWithChildren<ContactsProps>
-> = () => {
+export const Contacts: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
   const tabs = [
