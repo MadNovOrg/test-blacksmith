@@ -97,7 +97,7 @@ export function SearchTrainers({
       loading,
       placeholder: maxReached ? maxPlaceholder : emptyPlaceholder,
       hidden: maxReached,
-      showSearchIcon: selected.length === 0,
+      showSearchIcon: isSelected.length === 0,
       autoFocus,
       disabled,
       setQuery,
@@ -152,12 +152,12 @@ export function SearchTrainers({
 
   const onSelected = useCallback(
     (_: React.SyntheticEvent, updated: SearchTrainer[]) => {
-      const newSelection = updated.length <= max ? updated : selected
+      const newSelection = updated.length <= max ? updated : isSelected
       if (!isControlled) setSelected(newSelection)
       onChange({ target: { value: newSelection } })
       setQuery('')
     },
-    [isControlled, max, onChange, selected],
+    [isControlled, max, onChange, isSelected],
   )
 
   const noOptionsText = useMemo(() => {
@@ -197,7 +197,7 @@ export function SearchTrainers({
 
   return (
     <Autocomplete
-      value={selected}
+      value={isSelected}
       multiple={true}
       open={noOptionsText.length > 0}
       loading={(query && !debouncedQuery) || loading}
