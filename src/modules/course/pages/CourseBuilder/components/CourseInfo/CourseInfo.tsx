@@ -76,10 +76,10 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
         <Typography display="inline" variant="body2">
           {`${t('dates.withTime', {
             date: timeZoneScheduleDateTime.start,
-          })}${` ${formatGMTDateTimeByTimeZone(
+          })} ${formatGMTDateTimeByTimeZone(
             timeZoneScheduleDateTime.start,
             data.schedule[0].timeZone,
-          )}`}`}
+          )}`}
         </Typography>
       </Box>
       <Box data-testid="course-end-date">
@@ -89,10 +89,10 @@ export const CourseInfo: React.FC<React.PropsWithChildren<CourseInfoProps>> = ({
         <Typography display="inline" variant="body2">
           {`${t('dates.withTime', {
             date: timeZoneScheduleDateTime.end,
-          })}${` ${formatGMTDateTimeByTimeZone(
+          })} ${formatGMTDateTimeByTimeZone(
             timeZoneScheduleDateTime.end,
             data.schedule[0].timeZone,
-          )}`}`}
+          )}`}
         </Typography>
       </Box>
       <Box data-testid="course-type">

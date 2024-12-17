@@ -68,7 +68,7 @@ const ListItemWrapper: React.FC<
   >(RE_INVITE_COURSE_TRAINER_MUTATION)
 
   useEffect(() => {
-    if (data && data.deleteCourseTrainer?.id && data.insertCourseTrainer?.id)
+    if (data?.deleteCourseTrainer?.id && data?.insertCourseTrainer?.id)
       setReInvited(true)
   }, [data])
 

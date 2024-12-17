@@ -88,11 +88,14 @@ export default function useZoomMeetingLink(): {
     }
   }, [data])
 
-  const status = fetching
-    ? LoadingStatus.FETCHING
-    : error
-    ? LoadingStatus.ERROR
-    : LoadingStatus.SUCCESS
+  let status: LoadingStatus
+  if (fetching) {
+    status = LoadingStatus.FETCHING
+  } else if (error) {
+    status = LoadingStatus.ERROR
+  } else {
+    status = LoadingStatus.SUCCESS
+  }
 
   return {
     meetingUrl: meeting?.url || '',

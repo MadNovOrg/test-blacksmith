@@ -97,14 +97,15 @@ export const StrategyAccordion: React.FC<
         data-testid={`strategy-${name}`}
       >
         <Box display="flex" alignItems="center">
-          {someSelected ? (
-            <CheckedSomeIcon color="inherit" />
-          ) : allSelected ? (
-            <CheckedAllIcon color="inherit" />
-          ) : (
-            <UncheckedIcon color="inherit" />
-          )}
-
+          {(() => {
+            if (someSelected) {
+              return <CheckedSomeIcon color="inherit" />
+            } else if (allSelected) {
+              return <CheckedAllIcon color="inherit" />
+            } else {
+              return <UncheckedIcon color="inherit" />
+            }
+          })()}
           <Box>
             <Typography sx={{ ml: 1 }}>
               <span>{t(`common.bild-strategies.${name}`)}</span>

@@ -161,11 +161,11 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
 
   const maxDuration = useMemo(() => {
     const course = courseData?.course
-    return course
-      ? MAX_COURSE_DURATION_MAP[
-          course.reaccreditation ? 'reaccreditation' : 'normal'
-        ][course.level ?? Course_Level_Enum.Level_1]
-      : 0
+    if (!course) return 0
+    const durationType = course.reaccreditation ? 'reaccreditation' : 'normal'
+    return MAX_COURSE_DURATION_MAP[durationType][
+      course.level ?? Course_Level_Enum.Level_1
+    ]
   }, [courseData])
 
   const mapCourseLevelToDescription = useMemo(() => {

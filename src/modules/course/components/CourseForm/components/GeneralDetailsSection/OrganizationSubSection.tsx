@@ -1,5 +1,5 @@
 import { Grid, Typography, TextField } from '@mui/material'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'
 import { useQuery } from 'urql'
@@ -56,16 +56,27 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
   const showTrainerOrgOnly =
     !usesAOL && isIndirectCourse && activeRole === RoleName.TRAINER
 
-  const contactField = isClosedCourse
-    ? 'bookingContact'
-    : isIndirectCourse
-    ? 'organizationKeyContact'
-    : null
-  const contact = isClosedCourse
-    ? bookingContact
-    : isIndirectCourse
-    ? organizationKeyContact
-    : null
+  const keyContactField: Record<
+    Course_Type_Enum,
+    'bookingContact' | 'organizationKeyContact' | null
+  > = useMemo(() => {
+    return {
+      [Course_Type_Enum.Closed]: 'bookingContact',
+      [Course_Type_Enum.Indirect]: 'organizationKeyContact',
+      [Course_Type_Enum.Open]: null,
+    }
+  }, [])
+
+  const currentContact: Record<
+    Course_Type_Enum,
+    typeof bookingContact | typeof organizationKeyContact | null
+  > = useMemo(() => {
+    return {
+      [Course_Type_Enum.Closed]: bookingContact,
+      [Course_Type_Enum.Indirect]: organizationKeyContact,
+      [Course_Type_Enum.Open]: null,
+    }
+  }, [bookingContact, organizationKeyContact])
 
   const contactData = useRef({
     firstName: '',
@@ -79,7 +90,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
   >({
     query: GET_NOT_DETAILED_PROFILE,
     variables: {
-      where: { email: { _eq: contact?.email } },
+      where: { email: { _eq: currentContact[courseType]?.email } },
     },
     pause: true,
   })
@@ -135,35 +146,38 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
   )
 
   const onBlurUserSelector = useCallback(async () => {
-    if (contactField) {
+    if (keyContactField[courseType]) {
       const isValidEmail =
-        !errors[contactField]?.email?.message && contact?.email
+        !errors[keyContactField[courseType]]?.email?.message &&
+        currentContact[courseType]?.email
 
       const isNotAlreadyFetched = Boolean(
         !foundProfileData?.profiles.length ||
           (foundProfileData?.profiles.length &&
-            foundProfileData?.profiles[0].email !== contact?.email),
+            foundProfileData?.profiles[0].email !==
+              currentContact[courseType]?.email),
       )
 
       if (isValidEmail && isNotAlreadyFetched) {
         reexecuteQuery({ requestPolicy: 'network-only' })
       } else if (isValidEmail && !isNotAlreadyFetched) {
-        const contactChange = handleContactChange(contactField)
+        const contactChange = handleContactChange(keyContactField[courseType])
         contactChange(foundProfileData?.profiles[0] as UserSelectorProfile)
       }
     }
   }, [
-    contact,
-    contactField,
+    currentContact,
     errors,
     foundProfileData?.profiles,
     handleContactChange,
     reexecuteQuery,
+    courseType,
+    keyContactField,
   ])
 
   useUpdateEffect(() => {
-    if (contactField && foundProfileData?.profiles.length) {
-      const contactChange = handleContactChange(contactField)
+    if (keyContactField[courseType] && foundProfileData?.profiles.length) {
+      const contactChange = handleContactChange(keyContactField[courseType])
       contactChange(foundProfileData?.profiles[0])
     }
   }, [foundProfileData])

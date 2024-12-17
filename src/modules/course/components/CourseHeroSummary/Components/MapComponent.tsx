@@ -3,11 +3,9 @@ import { Grid, Box, useMediaQuery } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 
 import theme from '@app/theme'
-import { CourseSchedule } from '@app/types'
 
 export const MapComponent: React.FC<{
   geoCoordinates: string | null | undefined
-  schedule: CourseSchedule
 }> = ({ geoCoordinates }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 

@@ -31,7 +31,7 @@ import { noop } from '@app/util'
 import { SearchTrainersSchedule } from './helpers'
 import { useQueryTrainers } from './useQueryTrainers'
 
-type Props = {
+type Props = Readonly<{
   trainerType: CourseTrainerType | Course_Trainer_Type_Enum
   courseLevel: Course_Level_Enum | CourseLevel
   courseSchedule: SearchTrainersSchedule
@@ -46,7 +46,7 @@ type Props = {
   matchesFilter?: (matches: SearchTrainer[]) => SearchTrainer[]
   disabled?: boolean
   useAOL?: boolean
-}
+}>
 
 export function SearchTrainers({
   trainerType,
@@ -66,7 +66,7 @@ export function SearchTrainers({
 }: Props) {
   const { acl } = useAuth()
   const { t } = useTranslation()
-  const [_selected, setSelected] = useState<SearchTrainer[]>([])
+  const [selected, setSelected] = useState<SearchTrainer[]>([])
   const [query, setQuery] = useState<string>('')
   const [debouncedQuery] = useDebounce(query, 300)
 
@@ -81,10 +81,10 @@ export function SearchTrainers({
   })
 
   const isControlled = value != null
-  const selected = isControlled ? value : _selected
+  const isSelected = isControlled ? value : selected
 
   const renderInput = (params: AutocompleteRenderInputParams) => {
-    const maxReached = selected.length === max
+    const maxReached = isSelected.length === max
 
     const maxPlaceholder =
       maxReachedPlaceholder ??

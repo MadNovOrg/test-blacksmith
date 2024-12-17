@@ -59,7 +59,7 @@ export const AvailableCourses: React.FC<
   const [filterDeliveryType, setFilterDeliveryType] = useState<
     Course_Delivery_Type_Enum[]
   >([])
-  const [filterByCertificateLevel, setFilteredByCertificateLevel] = useState<
+  const [filterByCertificateLevel, setFilterByCertificateLevel] = useState<
     Course_Level_Enum[]
   >([])
   const [sortMode, setSortMode] = useState(
@@ -295,7 +295,7 @@ export const AvailableCourses: React.FC<
                               ])
                         }
                         title={t('course-level')}
-                        onChange={setFilteredByCertificateLevel}
+                        onChange={setFilterByCertificateLevel}
                       />
                       <FilterByCourseDeliveryType
                         onChange={setFilterDeliveryType}
@@ -336,23 +336,27 @@ export const AvailableCourses: React.FC<
                   >
                     <CircularProgress />
                   </Stack>
-                ) : courses.length > 0 ? (
-                  <>
-                    {currentPageRecords?.map(course => (
-                      <CourseForBookingTile
-                        course={course}
-                        key={course.id}
-                        showDistance={sortingByDistance}
-                        distance={distances.get(course.id)}
-                        variant="row"
-                      />
-                    ))}
-                    <Pagination total={courses.length} />{' '}
-                  </>
                 ) : (
-                  <Typography variant="body2">
-                    {t('pages.available-courses.no-results')}
-                  </Typography>
+                  <>
+                    {courses.length > 0 ? (
+                      <>
+                        {currentPageRecords?.map(course => (
+                          <CourseForBookingTile
+                            course={course}
+                            key={course.id}
+                            showDistance={sortingByDistance}
+                            distance={distances.get(course.id)}
+                            variant="row"
+                          />
+                        ))}
+                        <Pagination total={courses.length} />{' '}
+                      </>
+                    ) : (
+                      <Typography variant="body2">
+                        {t('pages.available-courses.no-results')}
+                      </Typography>
+                    )}
+                  </>
                 )}
               </Box>
             </Box>

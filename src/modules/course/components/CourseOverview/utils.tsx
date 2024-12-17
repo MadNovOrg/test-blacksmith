@@ -9,7 +9,7 @@ export function submodulesCount(
     modules.length
       ? modules
           .map(module => module.submodules_aggregate?.aggregate?.count)
-          .reduce((acc, sum) => (acc ?? 0) + (sum ?? 0))
+          .reduce((acc, sum) => (acc ?? 0) + (sum ?? 0), 0)
       : 0,
   )
 }

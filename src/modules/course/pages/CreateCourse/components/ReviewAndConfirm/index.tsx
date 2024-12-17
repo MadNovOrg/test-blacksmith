@@ -35,9 +35,9 @@ import { PageContent } from './PageContent'
 
 type SavedCourse = {
   id: string
-  hasExceptions?: boolean | undefined
-  courseCode?: string | undefined
-  orderId?: string | undefined
+  hasExceptions?: boolean
+  courseCode?: string
+  orderId?: string
 }
 
 export const ReviewAndConfirm = () => {
@@ -60,7 +60,7 @@ export const ReviewAndConfirm = () => {
   const navigate = useNavigate()
 
   const [error, setError] = useState('')
-  const [savedCourse, setSavedCourseId] = useState<SavedCourse>({
+  const [savedCourseId, setSavedCourseId] = useState<SavedCourse>({
     id: '',
     hasExceptions: false,
     courseCode: '',
@@ -71,10 +71,10 @@ export const ReviewAndConfirm = () => {
     GetOrderReducedQuery,
     GetOrderReducedQueryVariables
   >({
-    pause: !savedCourse.orderId,
+    pause: !savedCourseId.orderId,
     query: GET_ORDER_REDUCED,
     requestPolicy: 'network-only',
-    variables: { orderId: savedCourse.orderId },
+    variables: { orderId: savedCourseId.orderId },
   })
 
   useEffect(() => {
@@ -92,25 +92,25 @@ export const ReviewAndConfirm = () => {
 
   useEffect(() => {
     if (
-      savedCourse.id &&
+      savedCourseId.id &&
       !polling &&
       !orderCompleted?.order?.xeroInvoiceNumber
     ) {
       startPolling()
     }
-  }, [startPolling, polling, savedCourse, orderCompleted])
+  }, [startPolling, polling, savedCourseId, orderCompleted])
 
   useEffect(() => {
-    if (orderCompleted?.order?.xeroInvoiceNumber && savedCourse.id) {
+    if (orderCompleted?.order?.xeroInvoiceNumber && savedCourseId.id) {
       completeStep(StepsEnum.REVIEW_AND_CONFIRM)
       addSnackbarMessage('course-created', {
         label: (
           <React.Fragment>
             {t('pages.create-course.submitted-closed', {
-              code: savedCourse?.courseCode,
+              code: savedCourseId?.courseCode,
             })}
             {acl.canViewOrders() ? (
-              <Link href={`/orders/${savedCourse?.orderId}`}>
+              <Link href={`/orders/${savedCourseId?.orderId}`}>
                 {orderCompleted?.order?.xeroInvoiceNumber ??
                   t('pages.create-course.link-to-order')}
               </Link>
@@ -118,12 +118,12 @@ export const ReviewAndConfirm = () => {
           </React.Fragment>
         ),
       })
-      navigate(`/manage-courses/all/${savedCourse.id}/details`)
+      navigate(`/manage-courses/all/${savedCourseId.id}/details`)
     }
   }, [
     startPolling,
     polling,
-    savedCourse,
+    savedCourseId,
     orderCompleted?.order?.xeroInvoiceNumber,
     addSnackbarMessage,
     t,

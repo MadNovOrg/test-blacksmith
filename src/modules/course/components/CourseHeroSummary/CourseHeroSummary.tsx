@@ -81,25 +81,31 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   ].includes(course.status)
 
   const courseContactsData = useMemo(() => {
-    const bookingContact = course.bookingContact
-      ? pick(course.bookingContact, ['id', 'email', 'fullName'])
-      : course.bookingContactInviteData
-      ? {
-          id: null,
-          email: course.bookingContactInviteData.email,
-          fullName: `${course.bookingContactInviteData.firstName} ${course.bookingContactInviteData.lastName} `,
-        }
-      : undefined
+    let bookingContact = undefined
+    if (course.bookingContact) {
+      bookingContact = pick(course.bookingContact, ['id', 'email', 'fullName'])
+    } else if (course.bookingContactInviteData) {
+      bookingContact = {
+        id: null,
+        email: course.bookingContactInviteData.email,
+        fullName: `${course.bookingContactInviteData.firstName} ${course.bookingContactInviteData.lastName} `,
+      }
+    }
 
-    const organisationKeyContact = course.organizationKeyContact
-      ? pick(course.organizationKeyContact, ['id', 'email', 'fullName'])
-      : course.organizationKeyContactInviteData
-      ? {
-          id: null,
-          email: course.organizationKeyContactInviteData.email,
-          fullName: `${course.organizationKeyContactInviteData.firstName} ${course.organizationKeyContactInviteData.lastName} `,
-        }
-      : undefined
+    let organisationKeyContact = undefined
+    if (course.organizationKeyContact) {
+      organisationKeyContact = pick(course.organizationKeyContact, [
+        'id',
+        'email',
+        'fullName',
+      ])
+    } else if (course.organizationKeyContactInviteData) {
+      organisationKeyContact = {
+        id: null,
+        email: course.organizationKeyContactInviteData.email,
+        fullName: `${course.organizationKeyContactInviteData.firstName} ${course.organizationKeyContactInviteData.lastName} `,
+      }
+    }
 
     return { bookingContact, organisationKeyContact }
   }, [
@@ -187,7 +193,6 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
             <CourseHeroStatusChip isManaged={isManaged} course={course} />
             <MapComponent
               geoCoordinates={course.schedule[0].venue?.geoCoordinates}
-              schedule={course.schedule[0]}
             />
             <Grid container spacing={1} alignItems={'center'} sx={{ mt: 3 }}>
               {slots?.EditButton ? (

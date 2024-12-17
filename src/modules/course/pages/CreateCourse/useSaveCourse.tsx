@@ -247,11 +247,13 @@ export function useSaveCourse(): {
         exceptions.length > 0 &&
         shouldGoIntoExceptionApproval(acl, courseData.type)
 
-      const status = approveExceptions
-        ? Course_Status_Enum.ExceptionsApprovalPending
-        : leadTrainerMissing || (needsModerator && !hasModerator)
-        ? Course_Status_Enum.TrainerMissing
-        : Course_Status_Enum.TrainerPending
+      const status = () => {
+        if (approveExceptions)
+          return Course_Status_Enum.ExceptionsApprovalPending
+        if (leadTrainerMissing || (needsModerator && !hasModerator))
+          return Course_Status_Enum.TrainerMissing
+        return Course_Status_Enum.TrainerPending
+      }
 
       const shouldInsertOrder =
         (isIndirectCourse && courseData.blendedLearning) || isClosedCourse
@@ -366,9 +368,9 @@ export function useSaveCourse(): {
           )
             ? { conversion: courseData.conversion }
             : null),
-          status,
+          status: status(),
           exceptionsPending:
-            status === Course_Status_Enum.ExceptionsApprovalPending,
+            status() === Course_Status_Enum.ExceptionsApprovalPending,
           ...(courseData.minParticipants
             ? { min_participants: courseData.minParticipants }
             : null),

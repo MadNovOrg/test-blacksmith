@@ -77,10 +77,8 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
       steps.push(trainerExpensesStep)
       steps.push(orderDetailsStep)
       steps.push(reviewAndConfirmStep)
-    } else {
-      if (!(type === Course_Type_Enum.Indirect && acl.isInternalUser())) {
-        steps.push(courseBuilderStep)
-      }
+    } else if (!(type === Course_Type_Enum.Indirect && acl.isInternalUser())) {
+      steps.push(courseBuilderStep)
     }
 
     return steps
