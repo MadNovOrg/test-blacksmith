@@ -31,11 +31,15 @@ vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(() => <p>Org Selector</p>),
 }))
 
+vi.mock('@app/components/OrgSelector/ANZ', () => ({
+  OrgSelector: vi.fn(() => <p>Org Selector</p>),
+}))
+
 vi.mock('@app/components/VenueSelector', () => ({
   VenueSelector: vi.fn(() => <p>Venue Selector</p>),
 }))
 
-describe('component: UkCourseForm', () => {
+describe('component: ANZCourseForm', () => {
   vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
   beforeEach(() => {
     useCoursePriceMock.mockReturnValue({

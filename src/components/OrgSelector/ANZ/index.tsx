@@ -86,7 +86,15 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
       userOrgIds ?? profile?.organizations.map(org => org.organization.id)
 
     const myOrg = useMemo(
-      () => profile?.organizations.map(org => org.organization),
+      () =>
+        Array.from(
+          new Set([
+            ...(profile?.organizations.map(org => org.organization) ?? []),
+            ...(profile?.organizations.flatMap(
+              org => org.organization.affiliated_organisations,
+            ) ?? []),
+          ]),
+        ),
       [profile?.organizations],
     )
     const showTrainerNonAOLOrgs: boolean = showTrainerOrgOnly && !!profile

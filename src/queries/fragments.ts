@@ -18,10 +18,6 @@ export const ORGANIZATION = gql`
     }
     geoCoordinates
     organisationType
-    main_organisation {
-      id
-      name
-    }
   }
 `
 
@@ -57,6 +53,11 @@ export const PROFILE = gql`
       position
       organization {
         ...Organization
+        affiliated_organisations {
+          id
+          name
+          address
+        }
       }
     }
     roles {

@@ -4,7 +4,8 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'
 import { useQuery } from 'urql'
 
-import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { OrgSelector as ANZOrgSelector } from '@app/components/OrgSelector/ANZ'
+import { OrgSelector as UKOrgSelector } from '@app/components/OrgSelector/UK'
 import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
 import {
   Profile as UserSelectorProfile,
@@ -28,7 +29,7 @@ type Props = {
 }
 
 export const OrganizationSubSection = ({ disabledFields }: Props) => {
-  const { activeRole } = useAuth()
+  const { activeRole, acl } = useAuth()
   const {
     register,
     control,
@@ -189,21 +190,39 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
           <Typography my={2} fontWeight={600}>
             {t('organization-label')}
           </Typography>
-          <OrgSelector
-            required
-            {...register('organization')}
-            autocompleteMode={showTrainerOrgOnly}
-            showTrainerOrgOnly={showTrainerOrgOnly}
-            error={errors.organization?.message}
-            allowAdding
-            value={organization ?? undefined}
-            onChange={handleOrgSelectorChange}
-            textFieldProps={{
-              variant: 'filled',
-            }}
-            sx={{ marginBottom: 2 }}
-            disabled={disabledFields.has('organization')}
-          />
+          {acl.isUK() ? (
+            <UKOrgSelector
+              required
+              {...register('organization')}
+              autocompleteMode={showTrainerOrgOnly}
+              showTrainerOrgOnly={showTrainerOrgOnly}
+              error={errors.organization?.message}
+              allowAdding
+              value={organization ?? undefined}
+              onChange={handleOrgSelectorChange}
+              textFieldProps={{
+                variant: 'filled',
+              }}
+              sx={{ marginBottom: 2 }}
+              disabled={disabledFields.has('organization')}
+            />
+          ) : (
+            <ANZOrgSelector
+              required
+              {...register('organization')}
+              autocompleteMode={showTrainerOrgOnly}
+              showTrainerOrgOnly={showTrainerOrgOnly}
+              error={errors.organization?.message}
+              allowAdding
+              value={organization ?? undefined}
+              onChange={handleOrgSelectorChange}
+              textFieldProps={{
+                variant: 'filled',
+              }}
+              sx={{ marginBottom: 2 }}
+              disabled={disabledFields.has('organization')}
+            />
+          )}
         </>
       )}
 
