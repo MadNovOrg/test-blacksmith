@@ -122,14 +122,18 @@ const ListItemWrapper: React.FC<
   return (
     <Box display="flex" alignItems="center">
       {enableLinks ? (
-        <div onClick={handleNavigateToProfile} data-testid="link-to-profile">
+        <button
+          style={{ all: 'unset' }}
+          onClick={handleNavigateToProfile}
+          data-testid="link-to-profile"
+        >
           <Link>
             <ListItemTranslated
               i18nKey={i18nKey}
               fullName={courseTrainer.profile.fullName || ''}
             />
           </Link>
-        </div>
+        </button>
       ) : (
         <ListItemTranslated
           i18nKey={i18nKey}

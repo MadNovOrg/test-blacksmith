@@ -14,7 +14,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -68,8 +68,10 @@ import {
   LoadingStatus,
 } from '@app/util'
 
-import { FormValues as ReviewChangesFormValues } from '../../components/ReviewChangesModal'
-import { ReviewChangesModal } from '../../components/ReviewChangesModal'
+import {
+  FormValues as ReviewChangesFormValues,
+  ReviewChangesModal,
+} from '../../components/ReviewChangesModal'
 import { useEditCourse } from '../../contexts/EditCourseProvider/EditCourseProvider'
 
 const editAttendeesForbiddenStatuses = [
@@ -77,7 +79,7 @@ const editAttendeesForbiddenStatuses = [
   Course_Status_Enum.Declined,
   Course_Status_Enum.ExceptionsApprovalPending,
 ]
-
+// 17.12.2024 - 47 cognitive complexity - tread with caution
 export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -429,6 +431,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     return <NotFound />
   }
 
+  const goToCurseBuilder = canGoToCourseBuilder
+    ? t('pages.edit-course.course-builder-button-text')
+    : t('pages.edit-course.save-button-text')
+
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -553,17 +559,10 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   />
                 ) : null}
 
-                {submitDisabled ? (
-                  <Alert severity="error" sx={{ mt: 2 }} variant="outlined">
-                    {t('pages.edit-course.cannot-save-without-trainer')}
-                  </Alert>
-                ) : showTrainerRatioWarning ? (
-                  <Alert severity="warning" sx={{ mt: 2 }} variant="outlined">
-                    {t(
-                      `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
-                    )}
-                  </Alert>
-                ) : null}
+                <SubmitAlert
+                  submitDisabled={submitDisabled}
+                  showTrainerRatioWarning={showTrainerRatioWarning}
+                />
 
                 <Box
                   display="flex"
@@ -619,9 +618,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                       ? t(
                           'pages.create-course.step-navigation-review-and-confirm',
                         )
-                      : canGoToCourseBuilder
-                      ? t('pages.edit-course.course-builder-button-text')
-                      : t('pages.edit-course.save-button-text')}
+                      : goToCurseBuilder}
                   </LoadingButton>
                 </Box>
 
@@ -667,11 +664,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             maxWidth={600}
             onClose={() => setShowCancellationModal(false)}
             open={showCancellationModal}
-            title={
-              <Typography fontWeight={600} variant="h3">
-                {t('pages.edit-course.cancellation-modal.title')}
-              </Typography>
-            }
+            slots={{
+              Title: () => (
+                <Typography fontWeight={600} variant="h3">
+                  {t('pages.edit-course.cancellation-modal.title')}
+                </Typography>
+              ),
+            }}
           >
             <CourseCancellationModal
               course={course}
@@ -716,4 +715,31 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       ) : null}
     </FullHeightPageLayout>
   )
+}
+
+function SubmitAlert({
+  submitDisabled,
+  showTrainerRatioWarning,
+}: Readonly<{
+  submitDisabled: boolean
+  showTrainerRatioWarning: boolean
+}>): ReactNode | null {
+  const { t } = useTranslation()
+  if (submitDisabled) {
+    return (
+      <Alert severity="error" sx={{ mt: 2 }} variant="outlined">
+        {t('pages.edit-course.cannot-save-without-trainer')}
+      </Alert>
+    )
+  }
+  if (showTrainerRatioWarning) {
+    return (
+      <Alert severity="warning" sx={{ mt: 2 }} variant="outlined">
+        {t(
+          `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
+        )}
+      </Alert>
+    )
+  }
+  return null
 }

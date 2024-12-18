@@ -177,28 +177,27 @@ export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
                         </Typography>
                       }
                     />
-                    {module.submodules &&
-                      module.submodules.map(m => (
-                        <FormControlLabel
-                          key={m.name}
-                          control={
-                            <Checkbox
-                              onChange={() => toggleModuleHold(module.id)}
-                              onClick={e => e.stopPropagation()}
-                              checked={
-                                holds[module.id] || groupIsMandatory || false
-                              }
-                              sx={{ ml: 3 }}
-                              disabled={groupIsMandatory}
-                            />
-                          }
-                          label={
-                            <Typography key={m.name} mb={1.5} ml={1} mt={1}>
-                              {m.name}
-                            </Typography>
-                          }
-                        />
-                      ))}
+                    {module.submodules?.map(m => (
+                      <FormControlLabel
+                        key={m.name}
+                        control={
+                          <Checkbox
+                            onChange={() => toggleModuleHold(module.id)}
+                            onClick={e => e.stopPropagation()}
+                            checked={
+                              holds[module.id] || groupIsMandatory || false
+                            }
+                            sx={{ ml: 3 }}
+                            disabled={groupIsMandatory}
+                          />
+                        }
+                        label={
+                          <Typography key={m.name} mb={1.5} ml={1} mt={1}>
+                            {m.name}
+                          </Typography>
+                        }
+                      />
+                    ))}
                   </FormGroup>
                 ))}
               </AccordionDetails>

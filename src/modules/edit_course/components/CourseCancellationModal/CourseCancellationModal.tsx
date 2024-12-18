@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@mui/material'
 import { isNumber } from 'lodash-es'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
@@ -37,7 +37,7 @@ import { CANCEL_COURSE_MUTATION } from '@app/modules/edit_course/queries/cancel-
 import { getCancellationTermsFee } from '@app/modules/edit_course/utils/shared'
 import { yup } from '@app/schemas'
 import { Course } from '@app/types'
-import { customFeeFormat } from '@app/util' // 🙃 TODO: replace with generated type
+import { customFeeFormat } from '@app/util'
 
 type FormInput = {
   cancellationFeePercent?: number
@@ -211,6 +211,38 @@ export const CourseCancellationModal: React.FC<
     }
   }
 
+  const feeTypeMap: Record<CourseCancelFeeTypes, ReactNode> = {
+    [CourseCancelFeeTypes.ApplyCancellationTerms]: (
+      <CancellationTermsTable
+        courseStartDate={new Date(startDate)}
+        sx={{ mt: 2 }}
+      />
+    ),
+    [CourseCancelFeeTypes.CustomFee]: (
+      <NumericTextField
+        required
+        label={t('pages.edit-course.cancellation-modal.fee')}
+        {...register('cancellationFee', { valueAsNumber: true })}
+        error={Boolean(errors.cancellationFee)}
+        helperText={
+          Boolean(errors.cancellationFee) && errors.cancellationFee?.message
+        }
+        sx={{ mt: 2 }}
+        inputProps={{ min: 0, max: 100 }}
+        InputProps={{
+          endAdornment: (
+            <Typography variant="body1" color="grey.600">
+              {course.priceCurrency
+                ? activeCurrencies[course.priceCurrency as CurrencyKey]
+                : activeCurrencies[defaultCurrency]}
+            </Typography>
+          ),
+        }}
+      />
+    ),
+    [CourseCancelFeeTypes.NoFees]: null,
+  }
+
   return (
     <Container data-testid="course-cancellation-modal">
       {isIndirectBlendedLearning ? (
@@ -283,36 +315,7 @@ export const CourseCancellationModal: React.FC<
             ) : null}
           </RadioGroup>
 
-          {feeType === CourseCancelFeeTypes.ApplyCancellationTerms ? (
-            <CancellationTermsTable
-              courseStartDate={new Date(startDate)}
-              sx={{ mt: 2 }}
-            />
-          ) : null}
-
-          {feeType === CourseCancelFeeTypes.CustomFee ? (
-            <NumericTextField
-              required
-              label={t('pages.edit-course.cancellation-modal.fee')}
-              {...register('cancellationFee', { valueAsNumber: true })}
-              error={Boolean(errors.cancellationFee)}
-              helperText={
-                Boolean(errors.cancellationFee) &&
-                errors.cancellationFee?.message
-              }
-              sx={{ mt: 2 }}
-              inputProps={{ min: 0, max: 100 }}
-              InputProps={{
-                endAdornment: (
-                  <Typography variant="body1" color="grey.600">
-                    {course.priceCurrency
-                      ? activeCurrencies[course.priceCurrency as CurrencyKey]
-                      : activeCurrencies[defaultCurrency]}
-                  </Typography>
-                ),
-              }}
-            />
-          ) : null}
+          {feeTypeMap[feeType as CourseCancelFeeTypes]}
         </>
       ) : null}
       {!isIndirect ? (

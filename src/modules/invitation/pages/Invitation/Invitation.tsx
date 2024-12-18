@@ -162,13 +162,19 @@ export const InvitationPage = () => {
     [invite],
   )
 
-  const courseHasBegun = startDate
-    ? differenceInSeconds(startDate, now()) < 0
-    : false
+  const [courseHasBegun, startsIn] = useMemo(() => {
+    if (!startDate) return [false, null]
 
-  const startsIn: TimeDifferenceAndContext | null = startDate
-    ? getTimeDifferenceAndContext(startDate, now())
-    : null
+    const courseHasBegun = differenceInSeconds(startDate, now()) < 0
+
+    const startsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
+      startDate,
+      now(),
+    )
+
+    return [courseHasBegun, startsIn]
+  }, [startDate])
+
   const endsIn: TimeDifferenceAndContext | null = endDate
     ? getTimeDifferenceAndContext(endDate, now())
     : null
@@ -286,18 +292,29 @@ export const InvitationPage = () => {
         </Typography>
 
         <Box mt={3} mb={4}>
-          {courseHasBegun && endsIn ? (
-            <Chip
-              label={t('pages.course-participants.until-course-ends', endsIn)}
-            />
-          ) : startsIn ? (
-            <Chip
-              label={t(
-                'pages.course-participants.until-course-begins',
-                startsIn,
-              )}
-            />
-          ) : null}
+          {(() => {
+            if (courseHasBegun && endsIn) {
+              return (
+                <Chip
+                  label={t(
+                    'pages.course-participants.until-course-ends',
+                    endsIn,
+                  )}
+                />
+              )
+            } else if (startsIn) {
+              return (
+                <Chip
+                  label={t(
+                    'pages.course-participants.until-course-begins',
+                    startsIn,
+                  )}
+                />
+              )
+            } else {
+              return null
+            }
+          })()}
 
           <Box display="flex" mb={2}>
             <Box mr={1} display="flex">
@@ -307,22 +324,26 @@ export const InvitationPage = () => {
               {invite && startDate ? (
                 <>
                   <Typography variant="body2" gutterBottom>
-                    {`${t('dates.withTime', {
+                    {t('dates.withTime', {
                       date: startDate,
-                    })}${` ${formatGMTDateTimeByTimeZone(
-                      startDate,
-                      invite.timeZone ?? 'Europe/London',
-                      true,
-                    )}`}`}
+                    }) +
+                      ' ' +
+                      formatGMTDateTimeByTimeZone(
+                        startDate,
+                        invite.timeZone ?? 'Europe/London',
+                        true,
+                      )}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
-                    {`${t('dates.withTime', {
+                    {t('dates.withTime', {
                       date: endDate,
-                    })}${` ${formatGMTDateTimeByTimeZone(
-                      endDate as Date,
-                      invite.timeZone ?? 'Europe/London',
-                      true,
-                    )}`}`}
+                    }) +
+                      ' ' +
+                      formatGMTDateTimeByTimeZone(
+                        endDate as Date,
+                        invite.timeZone ?? 'Europe/London',
+                        true,
+                      )}
                   </Typography>
                 </>
               ) : null}

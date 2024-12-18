@@ -15,8 +15,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { t } from 'i18next'
-import { memo } from 'react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, memo } from 'react'
 import { usePrevious, useEffectOnce } from 'react-use'
 
 import {
@@ -277,23 +276,21 @@ const GroupsSelection: React.FC<Props> = ({
                 sx={{ borderColor: getModuleCardColor(moduleGroup.color) }}
               >
                 <Stack spacing={1}>
-                  {moduleGroup.modules &&
-                    moduleGroup.modules !== undefined &&
-                    moduleGroup.modules.map((g, index) => (
-                      <Box key={index}>
-                        <Box display="flex" alignItems="center">
-                          <Typography>{g.name || t('common.group')}</Typography>
-                        </Box>
-                        <Box sx={{ ml: 4 }}>
-                          {g?.submodules?.length > 0 &&
-                            g.submodules.map(m => (
-                              <Box key={m.name}>
-                                <Typography>{m.name}</Typography>
-                              </Box>
-                            ))}
-                        </Box>
+                  {moduleGroup.modules?.map((g, index) => (
+                    <Box key={index}>
+                      <Box display="flex" alignItems="center">
+                        <Typography>{g.name || t('common.group')}</Typography>
                       </Box>
-                    ))}
+                      <Box sx={{ ml: 4 }}>
+                        {g?.submodules?.length > 0 &&
+                          g.submodules.map(m => (
+                            <Box key={m.name}>
+                              <Typography>{m.name}</Typography>
+                            </Box>
+                          ))}
+                      </Box>
+                    </Box>
+                  ))}
                 </Stack>
               </StyledAccordionDetails>
             </Accordion>

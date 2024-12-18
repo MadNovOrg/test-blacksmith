@@ -79,7 +79,7 @@ const successAlerts = {
 export type CourseDetailsProps = {
   bookingOnly?: boolean
 }
-
+// 17.12.2024 - 174 cognitive complexity, tread with caution
 export const CourseDetails: React.FC<
   React.PropsWithChildren<CourseDetailsProps>
 > = ({ bookingOnly }) => {
@@ -252,7 +252,7 @@ export const CourseDetails: React.FC<
 
     const courseEnded =
       Boolean(course?.schedule.length) &&
-      isPast(new Date(course?.schedule[0].end as string))
+      isPast(new Date(course?.schedule[0].end))
 
     const graduationFinished = !course?.courseParticipants?.some(
       participant => !participant.grade,
@@ -260,7 +260,7 @@ export const CourseDetails: React.FC<
     const cancelRequested = Boolean(course?.cancellationRequest)
 
     const mappedStatus = getIndividualCourseStatuses(
-      course?.status as Course_Status_Enum,
+      course?.status,
       courseEnded,
       graduationFinished,
       cancelRequested,

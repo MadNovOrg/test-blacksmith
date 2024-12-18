@@ -1,5 +1,4 @@
-import { differenceInSeconds } from 'date-fns'
-import { isPast } from 'date-fns'
+import { differenceInSeconds, isPast } from 'date-fns'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { gql, useMutation, useQuery } from 'urql'
@@ -144,7 +143,7 @@ export default function useCourseInvites({
       ...(status ? [{ status: { _eq: status } }] : [{}]),
     ],
   }
-  const orderBy = { email: order ? order : 'asc' } as Course_Invites_Order_By
+  const orderBy = { email: order || 'asc' } as Course_Invites_Order_By
 
   // Fetch course invites
   const [

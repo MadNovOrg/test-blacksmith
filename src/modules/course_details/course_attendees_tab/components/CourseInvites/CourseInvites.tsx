@@ -91,7 +91,6 @@ export const CourseInvites = ({
 
   useEffect(() => {
     const startInvitesPolling =
-      true &&
       !invites.error &&
       !invites.fetching &&
       !invites.pollRunning &&
@@ -219,7 +218,7 @@ export const CourseInvites = ({
     return t('pages.course-participants.invite-error-UNKNOWN')
   }, [error, t])
 
-  const courseHasEnded = course && courseEnded(course as Course)
+  const courseHasEnded = course && courseEnded(course)
   const isOpenCourse = course && course.type === Course_Type_Enum.Open
 
   const renderInput = useCallback(
@@ -409,7 +408,9 @@ export const CourseInvites = ({
       <Dialog
         open={showModal}
         onClose={closeModal}
-        title={t('pages.course-participants.invite-modal-title')}
+        slots={{
+          Title: () => <>{t('pages.course-participants.invite-modal-title')}</>,
+        }}
         maxWidth={600}
       >
         <Trans

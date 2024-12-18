@@ -224,7 +224,7 @@ export function useSaveCourse(): {
     courseData?.residingCountry,
     courseData?.includeVAT,
   ])
-
+  // 17.12.2024 - 112 cognitive complexity - tread with caution 😱
   const saveCourse = useCallback<SaveCourse>(async () => {
     if (courseData) {
       setSavingStatus(LoadingStatus.FETCHING)

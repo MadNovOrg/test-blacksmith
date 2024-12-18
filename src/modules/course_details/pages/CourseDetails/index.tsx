@@ -77,7 +77,7 @@ export const preCourseMaterialLevels = [
   Course_Level_Enum.Level_2,
   Course_Level_Enum.IntermediateTrainer,
 ]
-
+// 17.12.2024 - 95 cognivite complexity, tread with caution 😱😱
 export const CourseDetails = () => {
   const { t } = useTranslation()
   const theme = useTheme()

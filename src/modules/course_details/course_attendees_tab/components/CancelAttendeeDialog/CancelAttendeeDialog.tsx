@@ -3,7 +3,7 @@ import { Course, CourseParticipant } from '@app/types'
 
 import { VariantMinimal } from './variants'
 import { VariantComplete as ANZVariantComplete } from './variants/VariantComplete/ANZ'
-import { VariantComplete as UKVariantComplete } from './variants/VariantComplete/ANZ'
+import { VariantComplete as UKVariantComplete } from './variants/VariantComplete/UK'
 
 export type CancelAttendeeDialogVariant = 'minimal' | 'complete'
 

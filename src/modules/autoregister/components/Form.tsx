@@ -484,7 +484,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     >
                       Terms of Business{' '}
                     </a>
-                    and agree to Team Teach processing my personal data in
+                    and agree to Team Teach processing my personal data in{''}
                     accordance with our
                     <a
                       href={`${origin}/privacy-policy`}

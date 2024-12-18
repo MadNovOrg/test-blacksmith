@@ -147,7 +147,7 @@ export const InstructionAccordionField: React.FC<Props> = ({
             flexDirection: 'column',
           },
         }}
-        data-testid={testId ? testId : undefined}
+        data-testid={testId}
       >
         <Typography>{title}</Typography>
         {subtitle}

@@ -14,7 +14,7 @@ export default function useCourseModules(courseId: string): {
   const [{ data, error, fetching }] = useQuery<
     CourseModulesQuery,
     CourseModulesQueryVariables
-  >({ query: GET_COURSE_MODULES, variables: { id: Number(courseId) ?? 0 } })
+  >({ query: GET_COURSE_MODULES, variables: { id: Number(courseId) } })
 
   return {
     fetching,

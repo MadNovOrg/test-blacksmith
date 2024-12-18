@@ -712,24 +712,25 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canManageParticipantAttendance: (
       participantOrgIds: string[],
       course: Course,
-    ) =>
-      (course.type === Course_Type_Enum.Closed
-        ? [
-            acl.canCancelParticipantCLOSED(participantOrgIds, course),
-            acl.canSendCourseInformationCLOSED(participantOrgIds, course),
-          ]
-        : course.type === Course_Type_Enum.Indirect
-        ? [
-            acl.canCancelParticipantINDIRECT(participantOrgIds, course),
-            acl.canSendCourseInformationINDIRECT(participantOrgIds, course),
-          ]
-        : [
-            acl.canTransferParticipant(participantOrgIds, course),
-            acl.canReplaceParticipant(participantOrgIds, course),
-            acl.canCancelParticipant(participantOrgIds, course),
-            acl.canSendCourseInformation(participantOrgIds, course),
-          ]
-      ).some(Boolean),
+    ) => {
+      const permissionMap: Record<Course_Type_Enum, Array<boolean>> = {
+        [Course_Type_Enum.Closed]: [
+          acl.canCancelParticipantCLOSED(participantOrgIds, course),
+          acl.canSendCourseInformationCLOSED(participantOrgIds, course),
+        ],
+        [Course_Type_Enum.Indirect]: [
+          acl.canCancelParticipantINDIRECT(participantOrgIds, course),
+          acl.canSendCourseInformationINDIRECT(participantOrgIds, course),
+        ],
+        [Course_Type_Enum.Open]: [
+          acl.canTransferParticipant(participantOrgIds, course),
+          acl.canReplaceParticipant(participantOrgIds, course),
+          acl.canCancelParticipant(participantOrgIds, course),
+          acl.canSendCourseInformation(participantOrgIds, course),
+        ],
+      }
+      return permissionMap[course.type].some(Boolean)
+    },
 
     canOnlySendCourseInformation: (
       participantOrgIds: string[],

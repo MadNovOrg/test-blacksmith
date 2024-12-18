@@ -15,6 +15,8 @@ import {
 } from '@app/generated/graphql'
 import { AwsRegions, BildStrategies, CourseInput } from '@app/types'
 
+type LevelType = Course_Level_Enum | CourseLevel | ''
+
 function parseTime(time: string) {
   let hours = 0
   let minutes = 0
@@ -194,7 +196,7 @@ export const canCourseBeBlended = ({
 
 export function canBeBlendedBild(
   courseType: Course_Type_Enum,
-  courseLevel: Course_Level_Enum | CourseLevel | '',
+  courseLevel: LevelType,
   strategies: Record<BildStrategies, boolean> | null,
 ): boolean {
   if (!strategies) {

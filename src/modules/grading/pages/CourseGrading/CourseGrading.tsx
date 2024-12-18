@@ -14,7 +14,7 @@ import useCourseGradingData from './hooks/useCourseGradingData'
 export const CourseGrading = () => {
   const { id: courseId } = useParams()
 
-  const { data: course, status } = useCourseGradingData(Number(courseId) ?? '')
+  const { data: course, status } = useCourseGradingData(Number(courseId))
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>

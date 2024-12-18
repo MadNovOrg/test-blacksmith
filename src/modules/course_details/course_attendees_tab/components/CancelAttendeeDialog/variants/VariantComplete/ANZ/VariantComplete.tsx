@@ -167,6 +167,7 @@ export const VariantComplete = ({
   }
 
   const allowCustomFee = acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin()
+  const gst = useGST ? 10 : 0
 
   return (
     <Container>
@@ -247,7 +248,7 @@ export const VariantComplete = ({
                     amount: values.cancellationFee
                       ? values.cancellationFee +
                         new Big(
-                          (values.cancellationFee * (useGST ? 10 : 0)) / 100, // apply 10% tax if country is australia, otherwise 0%
+                          (values.cancellationFee * gst) / 100, // apply 10% tax if country is australia, otherwise 0%
                         )
                           .round(2)
                           .toNumber()

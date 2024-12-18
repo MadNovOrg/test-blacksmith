@@ -87,7 +87,7 @@ export const CourseEvaluation = () => {
     useQuery<GetCourseParticipantIdQuery, GetCourseParticipantIdQueryVariables>(
       {
         query: GET_PARTICIPANT,
-        variables: { profileId: profile?.id, courseId: Number(courseId) ?? 0 },
+        variables: { profileId: profile?.id, courseId: Number(courseId) },
       },
     )
 
@@ -101,7 +101,7 @@ export const CourseEvaluation = () => {
     GetEvaluationQueryVariables
   >({
     query: GET_ANSWERS_QUERY,
-    variables: { courseId: Number(courseId) ?? 0, profileId },
+    variables: { courseId: Number(courseId), profileId },
     pause: !profileId,
   })
   const [{ data: usersData, fetching: usersDataLoading }] = useQuery<

@@ -78,7 +78,7 @@ export const CourseBookingDetails: React.FC<
   const [bookingContactProfile, setBookingContactProfile] = useState<
     Partial<UserSelectorProfile>
   >({})
-  const [participantsProfiles, setParticipantProfiles] = useState<
+  const [participantsProfiles, setParticipantsProfiles] = useState<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
@@ -119,12 +119,13 @@ export const CourseBookingDetails: React.FC<
   const hidePaymentByCCOnANZ = useFeatureFlagEnabled(
     'hide-payment-by-cc-on-anz',
   )
+
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
   const isAddressInfoRequired =
     course?.type === Course_Type_Enum.Open &&
     course?.level === Course_Level_Enum.Level_1 &&
     course?.deliveryType === Course_Delivery_Type_Enum.Virtual &&
-    isUKCountry(course?.residingCountry ?? UKsCodes.GB_ENG)
+    isUKCountry(course?.residingCountry || UKsCodes.GB_ENG)
 
   const schema = useMemo(() => {
     return yup.object({
@@ -304,7 +305,7 @@ export const CourseBookingDetails: React.FC<
   )
 
   useEffect(() => {
-    setParticipantProfiles(
+    setParticipantsProfiles(
       Array.from(Array(values.participants.length)).fill({}),
     )
   }, [values.participants.length])
@@ -335,7 +336,7 @@ export const CourseBookingDetails: React.FC<
       familyName: newParticipant.lastName,
       givenName: newParticipant.firstName,
     }
-    setParticipantProfiles([...participants])
+    setParticipantsProfiles([...participants])
   }
 
   const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
@@ -363,7 +364,7 @@ export const CourseBookingDetails: React.FC<
     })
     const participants = participantsProfiles
     participants[index] = {}
-    setParticipantProfiles([...participants])
+    setParticipantsProfiles([...participants])
   }
 
   const handleOnChangeAttendeeCertificate = (state: boolean) => {

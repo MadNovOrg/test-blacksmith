@@ -16,10 +16,10 @@ import { getAvailableGrades } from '@app/rules/grading'
 import { noop } from '@app/util'
 
 interface Props {
-  onChange?: (grade: Grade_Enum) => void
   courseLevel: Course_Level_Enum
   courseDeliveryType: Course_Delivery_Type_Enum
-  initialValue?: Grade_Enum | undefined | null
+  onChange?: (grade: Grade_Enum) => void
+  initialValue?: Grade_Enum | null
 }
 
 type GradeOption = {

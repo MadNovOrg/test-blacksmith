@@ -15,8 +15,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
-import { BildStrategies } from '@app/types'
-import { Strategy } from '@app/types'
+import { BildStrategies, Strategy } from '@app/types'
 
 type Props = {
   strategyModules: Record<string, Partial<Strategy>> // all optional since it's from jsonb field

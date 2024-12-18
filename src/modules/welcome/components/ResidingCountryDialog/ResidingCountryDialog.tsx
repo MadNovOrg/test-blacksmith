@@ -51,7 +51,9 @@ export const ResidingCountryDialog = () => {
     <Dialog
       open={open}
       onClose={handleClose}
-      title={t('title')}
+      slots={{
+        Title: () => <>{t('title')}</>,
+      }}
       maxWidth={600}
       data-testid="profile-country-dialog"
     >

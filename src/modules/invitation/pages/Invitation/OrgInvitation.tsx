@@ -109,13 +109,11 @@ export const OrgInvitationPage = () => {
           continue: continueUrl,
           orgId: organizationId ?? '',
         })
+        const targetUrl = isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`
 
-        return navigate(
-          `${isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`}`,
-          {
-            replace: true,
-          },
-        )
+        return navigate(targetUrl, {
+          replace: true,
+        })
       }
 
       setSubmitError(null)

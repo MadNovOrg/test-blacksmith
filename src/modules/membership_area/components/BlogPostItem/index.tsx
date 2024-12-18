@@ -60,20 +60,20 @@ export const BlogPostItem: React.FC<React.PropsWithChildren<Props>> = ({
     </Box>
   )
 
+  const postLink = linkTo ? (
+    <Link
+      href={linkTo ?? getPostLink(id)}
+      sx={{ marginBottom: 1, display: 'block' }}
+    >
+      {thumbnail}
+    </Link>
+  ) : (
+    thumbnail
+  )
+
   return (
     <Box {...rest}>
-      {imageUrl ? (
-        linkTo ? (
-          <Link
-            href={linkTo ?? getPostLink(id)}
-            sx={{ marginBottom: 1, display: 'block' }}
-          >
-            {thumbnail}
-          </Link>
-        ) : (
-          thumbnail
-        )
-      ) : null}
+      {imageUrl ? postLink : null}
 
       {category && <PostCategory category={category} />}
 

@@ -72,21 +72,21 @@ export const AttendingToggle: React.FC<Props> = ({
       ? participant.attended
       : data?.update_course_participant_by_pk?.attended ?? participant.attended
 
-  const chipConfig: { label: string; color: 'success' | 'error' | 'gray' } =
-    typeof hasAttended === 'undefined' || hasAttended === null
-      ? {
-          label: t('indeterminate'),
-          color: 'gray',
-        }
-      : hasAttended
-      ? {
-          label: t('attended'),
-          color: 'success',
-        }
-      : {
-          label: t('not-attended'),
-          color: 'error',
-        }
+  const getChipConfig = (
+    hasAttended: boolean | undefined | null,
+  ): {
+    label: string
+    color: 'success' | 'error' | 'gray'
+  } => {
+    if (!hasAttended && hasAttended !== false) {
+      return { label: t('indeterminate'), color: 'gray' }
+    }
+    return hasAttended
+      ? { label: t('attended'), color: 'success' }
+      : { label: t('not-attended'), color: 'error' }
+  }
+
+  const chipConfig = getChipConfig(hasAttended)
 
   const chipDisabled = disabled || fetching
 
@@ -105,14 +105,14 @@ export const AttendingToggle: React.FC<Props> = ({
       <Chip
         {...chipConfig}
         variant="filled"
-        onClick={() => {
+        onClick={async () => {
           try {
-            toggleAttendance({
+            await toggleAttendance({
               participantId: participant.id,
               attended: !hasAttended,
             })
             if (participant.attended) {
-              toggleEvaluation({
+              await toggleEvaluation({
                 participantId: participant.profile_id,
                 courseId: participant.course_id,
               })

@@ -11,7 +11,7 @@ export function useGradingParticipants<T extends { id: string }>(
   }, [searchParams])
 
   const filteredCourseParticipants = useMemo(() => {
-    if (!participantIds || !participantIds.size) {
+    if (!participantIds?.size) {
       return participants
     }
 

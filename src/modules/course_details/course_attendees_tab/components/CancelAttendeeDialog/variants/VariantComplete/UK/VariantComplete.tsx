@@ -162,6 +162,7 @@ export const VariantComplete = ({
   }
 
   const allowCustomFee = acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin()
+  const vat = course.includeVAT ? 20 : 0
 
   return (
     <Container>
@@ -242,8 +243,7 @@ export const VariantComplete = ({
                     amount: values.cancellationFee
                       ? values.cancellationFee +
                         new Big(
-                          (values.cancellationFee *
-                            (course.includeVAT ? 20 : 0)) / //if includeVat apply 20% tax, else 0%
+                          (values.cancellationFee * vat) / //if includeVat apply 20% tax, else 0%
                             100,
                         )
                           .round(2)

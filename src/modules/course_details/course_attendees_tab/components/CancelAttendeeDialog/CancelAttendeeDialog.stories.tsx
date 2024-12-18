@@ -26,9 +26,9 @@ export const Default: Story = {
     participant: buildParticipant({}),
   },
   render: function Component(args) {
-    const [isOpen, toggleDialog] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const toggle = () => {
-      toggleDialog(!isOpen)
+      setIsOpen(!isOpen)
     }
 
     return (

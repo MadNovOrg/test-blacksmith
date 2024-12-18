@@ -16,7 +16,7 @@ export const AppBanner: React.FC<React.PropsWithChildren<unknown>> = () => {
     <BannerBox roundedCorners>
       {!hidden ? (
         <Box flex="1" textAlign="center">
-          <img src={phonesImage} />
+          <img alt="Mobile Phones" src={phonesImage} />
         </Box>
       ) : null}
       <Box flex={2}>
@@ -28,11 +28,12 @@ export const AppBanner: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Typography>
         <Box mt={4}>
           <img
+            alt="App Store"
             src={appStoreImage}
             height={65}
             style={{ marginRight: theme.spacing(2) }}
           />
-          <img src={googlePlayImage} height={65} />
+          <img alt="Goole Play" src={googlePlayImage} height={65} />
         </Box>
       </Box>
     </BannerBox>

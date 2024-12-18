@@ -403,8 +403,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       !shouldGoIntoExceptionApproval(acl, preEditedCourse?.type)
     : false
 
-  preEditedCourse?.status === Course_Status_Enum.ExceptionsApprovalPending
-
   const getCourseName = useCallback(() => {
     return courseData?.accreditedBy === Accreditors_Enum.Bild
       ? generateBildCourseName(
@@ -471,6 +469,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       ],
     )
 
+  // 17.12.2024 - 86 cognitive complexity - tread with caution
   const saveChanges = useCallback(
     async (reviewInput?: ReviewChangesFormValues) => {
       if (!courseData || !preEditedCourse || !trainersData) return

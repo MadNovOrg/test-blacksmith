@@ -98,14 +98,16 @@ export const ModifyAttendanceModal: React.FC<
       <Dialog
         open={true}
         onClose={onClose}
-        title={
-          <Typography
-            variant="h3"
-            data-testid="change-my-attendance-modal-title"
-          >
-            {t('pages.course-details.change-my-attendance.title')}
-          </Typography>
-        }
+        slots={{
+          Title: () => (
+            <Typography
+              variant="h3"
+              data-testid="change-my-attendance-modal-title"
+            >
+              {t('pages.course-details.change-my-attendance.title')}
+            </Typography>
+          ),
+        }}
         maxWidth={800}
       >
         <Typography variant="body1" color="grey.600" mt={1}>
