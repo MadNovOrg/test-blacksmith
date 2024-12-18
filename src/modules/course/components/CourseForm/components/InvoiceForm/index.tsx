@@ -1,13 +1,17 @@
 import { Box, Grid, TextField } from '@mui/material'
 import { t, TFunction } from 'i18next'
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import isEmail from 'validator/lib/isEmail'
 import { InferType } from 'yup'
 
 import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { isHubOrg } from '@app/components/OrgSelector/UK/utils'
-import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
+import { useAuth } from '@app/context/auth'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY_ANZ,
+  DEFAULT_PHONE_COUNTRY_UK,
+} from '@app/modules/profile/components/PhoneNumberInput'
 import { schemas, yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
 
@@ -42,6 +46,11 @@ type FieldValues = {
 }
 
 export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const { acl } = useAuth()
+
+  const DEFAULT_PHONE_COUNTRY = acl.isAustralia()
+    ? DEFAULT_PHONE_COUNTRY_ANZ
+    : DEFAULT_PHONE_COUNTRY_UK
   const {
     register,
     formState: { errors },
@@ -50,6 +59,8 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   } = useFormContext<FieldValues>()
 
   const values = getValues()
+
+  const [countryCode, setCountryCode] = useState(DEFAULT_PHONE_COUNTRY)
 
   return (
     <>
@@ -144,17 +155,19 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
               sx: { height: 40 },
               'data-testid': 'input-phone',
             }}
+            defaultCountry={DEFAULT_PHONE_COUNTRY}
             error={!!errors.invoiceDetails?.phone}
             helperText={errors.invoiceDetails?.phone?.message}
             value={{
               phoneNumber: values.invoiceDetails?.phone ?? '',
-              countryCode: '',
+              countryCode: countryCode,
             }}
-            onChange={({ phoneNumber }) =>
+            onChange={({ phoneNumber, countryCode }) => {
               setValue('invoiceDetails.phone', phoneNumber, {
                 shouldValidate: true,
               })
-            }
+              setCountryCode(countryCode)
+            }}
             fullWidth
             required
           />
