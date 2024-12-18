@@ -1,12 +1,15 @@
 import { Alert, Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { useCreateCourse } from '../CreateCourseProvider'
-import { OrderDetailsReview } from '../OrderDetailsReview'
+import { useAuth } from '@app/context/auth'
 
+import { useCreateCourse } from '../CreateCourseProvider'
+import { OrderDetailsReview as OrderDetailsReviewANZ } from '../OrderDetailsReview/ANZ'
+import { OrderDetailsReview as OrderDetailsReviewUK } from '../OrderDetailsReview/UK'
 export const PageContent = () => {
   const { t } = useTranslation()
   const { courseData, pricing } = useCreateCourse()
+  const { acl } = useAuth()
 
   if (pricing.error) {
     return (
@@ -26,7 +29,7 @@ export const PageContent = () => {
         {t('pages.create-course.review-and-confirm.title')}
       </Typography>
 
-      <OrderDetailsReview />
+      {acl.isUK() ? <OrderDetailsReviewUK /> : <OrderDetailsReviewANZ />}
     </Box>
   )
 }

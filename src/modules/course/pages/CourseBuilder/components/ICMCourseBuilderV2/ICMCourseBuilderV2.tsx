@@ -21,7 +21,7 @@ import {
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import { Shards } from '@app/util'
 
-import { SaveCourse } from '../../../CreateCourse/useSaveCourse'
+import { SaveCourse } from '../../../CreateCourse/hooks/useSaveCourse'
 import { useCourseToBuild } from '../../hooks/useCourseToBuild'
 import { getBackButtonForBuilderPage } from '../../utils'
 import { Hero } from '../Hero/Hero'

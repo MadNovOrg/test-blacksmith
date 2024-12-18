@@ -49,8 +49,8 @@ import {
 } from '@app/util'
 import { getRequiredLeads } from '@app/util/trainerRatio'
 
+import { useSaveCourse } from '../../hooks/useSaveCourse'
 import { StepsEnum } from '../../types'
-import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {

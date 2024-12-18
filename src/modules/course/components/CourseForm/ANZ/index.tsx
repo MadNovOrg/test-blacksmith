@@ -22,7 +22,7 @@ import { AwsRegions, CourseInput } from '@app/types'
 
 import { Props } from '..'
 import { AttendeesSection } from '../components/AttendeesSection'
-import { CourseMaterialsSection } from '../components/CourseMaterialsSection'
+import { CourseMaterialsSection } from '../components/CourseMaterialsSection/ANZ'
 import ClosedCourseFinanceSection from '../components/FormFinanceSection/ClosedCourseFinanceSection'
 import OpenCourseFinanceSection from '../components/FormFinanceSection/OpenCourseFinanceSection'
 import { GeneralDetailsSection } from '../components/GeneralDetailsSection'

@@ -12832,6 +12832,257 @@ export type Accreditors_Updates = {
   where: Accreditors_Bool_Exp;
 };
 
+/** This table stores the values for the resource packs in dependance to course level, type, delivery type and currency. Having a table instead of a const in code makes it easier to update, expand and read both in hub and hub-api. */
+export type Anz_Resource_Packs_Pricing = {
+  __typename?: 'anz_resource_packs_pricing';
+  course_delivery_type: Course_Delivery_Type_Enum;
+  course_level: Course_Level_Enum;
+  course_type: Course_Type_Enum;
+  currency: Scalars['String'];
+  id: Scalars['uuid'];
+  price: Scalars['numeric'];
+  reaccred: Scalars['Boolean'];
+};
+
+/** aggregated selection of "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Aggregate = {
+  __typename?: 'anz_resource_packs_pricing_aggregate';
+  aggregate?: Maybe<Anz_Resource_Packs_Pricing_Aggregate_Fields>;
+  nodes: Array<Anz_Resource_Packs_Pricing>;
+};
+
+/** aggregate fields of "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Aggregate_Fields = {
+  __typename?: 'anz_resource_packs_pricing_aggregate_fields';
+  avg?: Maybe<Anz_Resource_Packs_Pricing_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Anz_Resource_Packs_Pricing_Max_Fields>;
+  min?: Maybe<Anz_Resource_Packs_Pricing_Min_Fields>;
+  stddev?: Maybe<Anz_Resource_Packs_Pricing_Stddev_Fields>;
+  stddev_pop?: Maybe<Anz_Resource_Packs_Pricing_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Anz_Resource_Packs_Pricing_Stddev_Samp_Fields>;
+  sum?: Maybe<Anz_Resource_Packs_Pricing_Sum_Fields>;
+  var_pop?: Maybe<Anz_Resource_Packs_Pricing_Var_Pop_Fields>;
+  var_samp?: Maybe<Anz_Resource_Packs_Pricing_Var_Samp_Fields>;
+  variance?: Maybe<Anz_Resource_Packs_Pricing_Variance_Fields>;
+};
+
+
+/** aggregate fields of "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Anz_Resource_Packs_Pricing_Avg_Fields = {
+  __typename?: 'anz_resource_packs_pricing_avg_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "anz_resource_packs_pricing". All fields are combined with a logical 'AND'. */
+export type Anz_Resource_Packs_Pricing_Bool_Exp = {
+  _and?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Bool_Exp>>;
+  _not?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
+  _or?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Bool_Exp>>;
+  course_delivery_type?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
+  course_level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
+  course_type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
+  currency?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  price?: InputMaybe<Numeric_Comparison_Exp>;
+  reaccred?: InputMaybe<Boolean_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "anz_resource_packs_pricing" */
+export enum Anz_Resource_Packs_Pricing_Constraint {
+  /** unique or primary key constraint on columns "currency", "course_level", "course_type", "reaccred", "course_delivery_type" */
+  AnzResourcePacksPricingCourseTypeCourseLevelCourseKey = 'anz_resource_packs_pricing_course_type_course_level_course__key',
+  /** unique or primary key constraint on columns "id" */
+  AnzResourcePacksPricingPkey = 'anz_resource_packs_pricing_pkey'
+}
+
+/** input type for incrementing numeric columns in table "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Inc_Input = {
+  price?: InputMaybe<Scalars['numeric']>;
+};
+
+/** input type for inserting data into table "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Insert_Input = {
+  course_delivery_type?: InputMaybe<Course_Delivery_Type_Enum>;
+  course_level?: InputMaybe<Course_Level_Enum>;
+  course_type?: InputMaybe<Course_Type_Enum>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  reaccred?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate max on columns */
+export type Anz_Resource_Packs_Pricing_Max_Fields = {
+  __typename?: 'anz_resource_packs_pricing_max_fields';
+  currency?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  price?: Maybe<Scalars['numeric']>;
+};
+
+/** aggregate min on columns */
+export type Anz_Resource_Packs_Pricing_Min_Fields = {
+  __typename?: 'anz_resource_packs_pricing_min_fields';
+  currency?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  price?: Maybe<Scalars['numeric']>;
+};
+
+/** response of any mutation on the table "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Mutation_Response = {
+  __typename?: 'anz_resource_packs_pricing_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Anz_Resource_Packs_Pricing>;
+};
+
+/** on_conflict condition type for table "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_On_Conflict = {
+  constraint: Anz_Resource_Packs_Pricing_Constraint;
+  update_columns?: Array<Anz_Resource_Packs_Pricing_Update_Column>;
+  where?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "anz_resource_packs_pricing". */
+export type Anz_Resource_Packs_Pricing_Order_By = {
+  course_delivery_type?: InputMaybe<Order_By>;
+  course_level?: InputMaybe<Order_By>;
+  course_type?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  reaccred?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: anz_resource_packs_pricing */
+export type Anz_Resource_Packs_Pricing_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "anz_resource_packs_pricing" */
+export enum Anz_Resource_Packs_Pricing_Select_Column {
+  /** column name */
+  CourseDeliveryType = 'course_delivery_type',
+  /** column name */
+  CourseLevel = 'course_level',
+  /** column name */
+  CourseType = 'course_type',
+  /** column name */
+  Currency = 'currency',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Reaccred = 'reaccred'
+}
+
+/** input type for updating data in table "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Set_Input = {
+  course_delivery_type?: InputMaybe<Course_Delivery_Type_Enum>;
+  course_level?: InputMaybe<Course_Level_Enum>;
+  course_type?: InputMaybe<Course_Type_Enum>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  reaccred?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate stddev on columns */
+export type Anz_Resource_Packs_Pricing_Stddev_Fields = {
+  __typename?: 'anz_resource_packs_pricing_stddev_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Anz_Resource_Packs_Pricing_Stddev_Pop_Fields = {
+  __typename?: 'anz_resource_packs_pricing_stddev_pop_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Anz_Resource_Packs_Pricing_Stddev_Samp_Fields = {
+  __typename?: 'anz_resource_packs_pricing_stddev_samp_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
+/** Streaming cursor of the table "anz_resource_packs_pricing" */
+export type Anz_Resource_Packs_Pricing_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Anz_Resource_Packs_Pricing_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Anz_Resource_Packs_Pricing_Stream_Cursor_Value_Input = {
+  course_delivery_type?: InputMaybe<Course_Delivery_Type_Enum>;
+  course_level?: InputMaybe<Course_Level_Enum>;
+  course_type?: InputMaybe<Course_Type_Enum>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  reaccred?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate sum on columns */
+export type Anz_Resource_Packs_Pricing_Sum_Fields = {
+  __typename?: 'anz_resource_packs_pricing_sum_fields';
+  price?: Maybe<Scalars['numeric']>;
+};
+
+/** update columns of table "anz_resource_packs_pricing" */
+export enum Anz_Resource_Packs_Pricing_Update_Column {
+  /** column name */
+  CourseDeliveryType = 'course_delivery_type',
+  /** column name */
+  CourseLevel = 'course_level',
+  /** column name */
+  CourseType = 'course_type',
+  /** column name */
+  Currency = 'currency',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  Reaccred = 'reaccred'
+}
+
+export type Anz_Resource_Packs_Pricing_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Anz_Resource_Packs_Pricing_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Anz_Resource_Packs_Pricing_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Anz_Resource_Packs_Pricing_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Anz_Resource_Packs_Pricing_Var_Pop_Fields = {
+  __typename?: 'anz_resource_packs_pricing_var_pop_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Anz_Resource_Packs_Pricing_Var_Samp_Fields = {
+  __typename?: 'anz_resource_packs_pricing_var_samp_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Anz_Resource_Packs_Pricing_Variance_Fields = {
+  __typename?: 'anz_resource_packs_pricing_variance_fields';
+  price?: Maybe<Scalars['Float']>;
+};
+
 /** columns and relationships of "availability" */
 export type Availability = {
   __typename?: 'availability';
@@ -36087,6 +36338,10 @@ export type Mutation_Root = {
   delete_accreditors?: Maybe<Accreditors_Mutation_Response>;
   /** delete single row from the table: "accreditors" */
   delete_accreditors_by_pk?: Maybe<Accreditors>;
+  /** delete data from the table: "anz_resource_packs_pricing" */
+  delete_anz_resource_packs_pricing?: Maybe<Anz_Resource_Packs_Pricing_Mutation_Response>;
+  /** delete single row from the table: "anz_resource_packs_pricing" */
+  delete_anz_resource_packs_pricing_by_pk?: Maybe<Anz_Resource_Packs_Pricing>;
   /** delete data from the table: "availability" */
   delete_availability?: Maybe<Availability_Mutation_Response>;
   /** delete single row from the table: "availability" */
@@ -36561,6 +36816,10 @@ export type Mutation_Root = {
   insert_accreditors?: Maybe<Accreditors_Mutation_Response>;
   /** insert a single row into the table: "accreditors" */
   insert_accreditors_one?: Maybe<Accreditors>;
+  /** insert data into the table: "anz_resource_packs_pricing" */
+  insert_anz_resource_packs_pricing?: Maybe<Anz_Resource_Packs_Pricing_Mutation_Response>;
+  /** insert a single row into the table: "anz_resource_packs_pricing" */
+  insert_anz_resource_packs_pricing_one?: Maybe<Anz_Resource_Packs_Pricing>;
   /** insert data into the table: "availability" */
   insert_availability?: Maybe<Availability_Mutation_Response>;
   /** insert a single row into the table: "availability" */
@@ -37063,6 +37322,12 @@ export type Mutation_Root = {
   update_accreditors_many?: Maybe<Array<Maybe<Accreditors_Mutation_Response>>>;
   /** execute VOLATILE function "update_all_organizations_statistics" which returns "organizations_statistics" */
   update_all_organizations_statistics: Array<Organizations_Statistics>;
+  /** update data of the table: "anz_resource_packs_pricing" */
+  update_anz_resource_packs_pricing?: Maybe<Anz_Resource_Packs_Pricing_Mutation_Response>;
+  /** update single row of the table: "anz_resource_packs_pricing" */
+  update_anz_resource_packs_pricing_by_pk?: Maybe<Anz_Resource_Packs_Pricing>;
+  /** update multiples rows of table: "anz_resource_packs_pricing" */
+  update_anz_resource_packs_pricing_many?: Maybe<Array<Maybe<Anz_Resource_Packs_Pricing_Mutation_Response>>>;
   /** update data of the table: "availability" */
   update_availability?: Maybe<Availability_Mutation_Response>;
   /** update single row of the table: "availability" */
@@ -37874,6 +38139,18 @@ export type Mutation_RootDelete_AccreditorsArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Accreditors_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Anz_Resource_Packs_PricingArgs = {
+  where: Anz_Resource_Packs_Pricing_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Anz_Resource_Packs_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -39312,6 +39589,20 @@ export type Mutation_RootInsert_AccreditorsArgs = {
 export type Mutation_RootInsert_Accreditors_OneArgs = {
   object: Accreditors_Insert_Input;
   on_conflict?: InputMaybe<Accreditors_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Anz_Resource_Packs_PricingArgs = {
+  objects: Array<Anz_Resource_Packs_Pricing_Insert_Input>;
+  on_conflict?: InputMaybe<Anz_Resource_Packs_Pricing_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Anz_Resource_Packs_Pricing_OneArgs = {
+  object: Anz_Resource_Packs_Pricing_Insert_Input;
+  on_conflict?: InputMaybe<Anz_Resource_Packs_Pricing_On_Conflict>;
 };
 
 
@@ -41059,6 +41350,28 @@ export type Mutation_RootUpdate_All_Organizations_StatisticsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Organizations_Statistics_Order_By>>;
   where?: InputMaybe<Organizations_Statistics_Bool_Exp>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Anz_Resource_Packs_PricingArgs = {
+  _inc?: InputMaybe<Anz_Resource_Packs_Pricing_Inc_Input>;
+  _set?: InputMaybe<Anz_Resource_Packs_Pricing_Set_Input>;
+  where: Anz_Resource_Packs_Pricing_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Anz_Resource_Packs_Pricing_By_PkArgs = {
+  _inc?: InputMaybe<Anz_Resource_Packs_Pricing_Inc_Input>;
+  _set?: InputMaybe<Anz_Resource_Packs_Pricing_Set_Input>;
+  pk_columns: Anz_Resource_Packs_Pricing_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Anz_Resource_Packs_Pricing_ManyArgs = {
+  updates: Array<Anz_Resource_Packs_Pricing_Updates>;
 };
 
 
@@ -51420,6 +51733,12 @@ export type Query_Root = {
   accreditors_aggregate: Accreditors_Aggregate;
   /** fetch data from the table: "accreditors" using primary key columns */
   accreditors_by_pk?: Maybe<Accreditors>;
+  /** fetch data from the table: "anz_resource_packs_pricing" */
+  anz_resource_packs_pricing: Array<Anz_Resource_Packs_Pricing>;
+  /** fetch aggregated fields from the table: "anz_resource_packs_pricing" */
+  anz_resource_packs_pricing_aggregate: Anz_Resource_Packs_Pricing_Aggregate;
+  /** fetch data from the table: "anz_resource_packs_pricing" using primary key columns */
+  anz_resource_packs_pricing_by_pk?: Maybe<Anz_Resource_Packs_Pricing>;
   /** fetch data from the table: "availability" */
   availability: Array<Availability>;
   /** fetch aggregated fields from the table: "availability" */
@@ -52190,6 +52509,29 @@ export type Query_RootAccreditors_AggregateArgs = {
 
 export type Query_RootAccreditors_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootAnz_Resource_Packs_PricingArgs = {
+  distinct_on?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Order_By>>;
+  where?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
+};
+
+
+export type Query_RootAnz_Resource_Packs_Pricing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Order_By>>;
+  where?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
+};
+
+
+export type Query_RootAnz_Resource_Packs_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -55774,6 +56116,14 @@ export type Subscription_Root = {
   accreditors_by_pk?: Maybe<Accreditors>;
   /** fetch data from the table in a streaming manner: "accreditors" */
   accreditors_stream: Array<Accreditors>;
+  /** fetch data from the table: "anz_resource_packs_pricing" */
+  anz_resource_packs_pricing: Array<Anz_Resource_Packs_Pricing>;
+  /** fetch aggregated fields from the table: "anz_resource_packs_pricing" */
+  anz_resource_packs_pricing_aggregate: Anz_Resource_Packs_Pricing_Aggregate;
+  /** fetch data from the table: "anz_resource_packs_pricing" using primary key columns */
+  anz_resource_packs_pricing_by_pk?: Maybe<Anz_Resource_Packs_Pricing>;
+  /** fetch data from the table in a streaming manner: "anz_resource_packs_pricing" */
+  anz_resource_packs_pricing_stream: Array<Anz_Resource_Packs_Pricing>;
   /** fetch data from the table: "availability" */
   availability: Array<Availability>;
   /** fetch aggregated fields from the table: "availability" */
@@ -56761,6 +57111,36 @@ export type Subscription_RootAccreditors_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Accreditors_Stream_Cursor_Input>>;
   where?: InputMaybe<Accreditors_Bool_Exp>;
+};
+
+
+export type Subscription_RootAnz_Resource_Packs_PricingArgs = {
+  distinct_on?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Order_By>>;
+  where?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
+};
+
+
+export type Subscription_RootAnz_Resource_Packs_Pricing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Anz_Resource_Packs_Pricing_Order_By>>;
+  where?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
+};
+
+
+export type Subscription_RootAnz_Resource_Packs_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootAnz_Resource_Packs_Pricing_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Anz_Resource_Packs_Pricing_Stream_Cursor_Input>>;
+  where?: InputMaybe<Anz_Resource_Packs_Pricing_Bool_Exp>;
 };
 
 
@@ -63236,7 +63616,7 @@ export type LogUserAuthEventMutationVariables = Exact<{
 }>;
 
 
-export type LogUserAuthEventMutation = { __typename?: 'mutation_root', insert_user_auth_audits_one?: { __typename?: 'user_auth_audits', id: any, created_at: any } | null };
+export type LogUserAuthEventMutation = { __typename?: 'mutation_root', insert_user_auth_audits_one?: { __typename?: 'user_auth_audits', id: any } | null };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -64932,6 +65312,17 @@ export type SignUpMutationVariables = Exact<{
 
 
 export type SignUpMutation = { __typename?: 'mutation_root', signUp?: { __typename?: 'SignUpOutput', success: boolean } | null };
+
+export type GetResourcePackPricingsQueryVariables = Exact<{
+  course_type: Course_Type_Enum;
+  course_level: Course_Level_Enum;
+  course_delivery_type: Course_Delivery_Type_Enum;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  currency?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetResourcePackPricingsQuery = { __typename?: 'query_root', anz_resource_packs_pricing: Array<{ __typename?: 'anz_resource_packs_pricing', id: any, price: any, currency: string }> };
 
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 

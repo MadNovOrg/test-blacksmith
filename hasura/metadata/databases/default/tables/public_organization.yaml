@@ -610,7 +610,7 @@ update_permissions:
                         - status:
                             _eq: ACCEPTED
       check: null
-    comment: ''
+    comment: ""
   - role: tt-admin
     permission:
       columns:

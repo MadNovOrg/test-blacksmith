@@ -14,6 +14,7 @@ import { useEffect, useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import {
   InvoiceForm,
@@ -24,7 +25,8 @@ import { InvoiceDetails } from '@app/types'
 
 import { StepsEnum } from '../../types'
 import { useCreateCourse } from '../CreateCourseProvider'
-import { OrderDetailsReview } from '../OrderDetailsReview'
+import { OrderDetailsReview as OrderDetailsReviewANZ } from '../OrderDetailsReview/ANZ'
+import { OrderDetailsReview as OrderDetailsReviewUK } from '../OrderDetailsReview/UK'
 
 type Inputs = {
   invoiceDetails: InvoiceDetails
@@ -33,6 +35,7 @@ type Inputs = {
 export const OrderDetails: React.FC = () => {
   const { t, _t } = useScopedTranslation('pages.create-course.order-details')
   const navigate = useNavigate()
+  const { acl } = useAuth()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -87,7 +90,7 @@ export const OrderDetails: React.FC = () => {
         {t('title')}
       </Typography>
 
-      <OrderDetailsReview />
+      {acl.isUK() ? <OrderDetailsReviewUK /> : <OrderDetailsReviewANZ />}
 
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>

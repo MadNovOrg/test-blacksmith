@@ -16,8 +16,8 @@ import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
 import { LoadingStatus } from '@app/util'
 
+import { useSaveCourse } from '../../hooks/useSaveCourse'
 import { StepsEnum } from '../../types'
-import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 export const ReviewLicenseOrder: React.FC<

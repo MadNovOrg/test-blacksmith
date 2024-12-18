@@ -155,6 +155,19 @@
         "more-fcm-than-attendees-edit": "Free Mandatory Course Materials must have a value that is less than or equal to the number of attendees"
       }
     },
+    "resource-packs": {
+      "section-title": "Resource Packs",
+      "panel-title": "Number of free Resource Packs",
+      "panel-description": "All attendees will receive Resource Packs: however, additional {{mcmAmount}} will be charged per person. Please enter the amount of free Resource Packs you wish the organisation not to be charged for.",
+      "placeholder-description": "Number of free Resource Packs",
+      "amount-of-mandatory-mcm": "Chargeable Resource Packs*: {{count}}",
+      "errors": {
+        "is-required": "Number of free Resource Packs must have a value that is less than or equal to the number of attendees",
+        "is-negative": "Number of free Resource Packs value cannot be negative",
+        "more-fcm-than-attendees-create": "Number of free Resource Packs value should not be greater than the number of attendees",
+        "more-fcm-than-attendees-edit": "Number of free Resource Packs must have a value that is less than or equal to the number of attendees"
+      }
+    },
     "course-level-required": "Course level is required field",
     "end-date-before-start-date": "End date must be after the start date",
     "min-participants-positive": "Minimum number of attendees must be a positive number",

@@ -363,6 +363,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       withoutTax: _t('no-vat'),
     }
   }
+  const mandatoryDescription = `mandatory-${
+    acl.isUK() ? 'course-materials' : 'resource-packs'
+  }`
+  const freeDescription = `free-${
+    acl.isUK() ? 'course-materials' : 'resource-packs'
+  }`
 
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
@@ -672,11 +678,11 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           >
                             <Typography color="grey.700">
                               {isMandatoryCourseMaterials(expenseLineItem)
-                                ? t('mandatory-course-materials', {
+                                ? t(mandatoryDescription, {
                                     count: expenseLineItem?.quantity,
                                   })
                                 : isFreeCourseMaterials(expenseLineItem)
-                                ? t('free-course-materials', {
+                                ? t(freeDescription, {
                                     count: expenseLineItem?.quantity,
                                   })
                                 : expenseLineItem?.description}

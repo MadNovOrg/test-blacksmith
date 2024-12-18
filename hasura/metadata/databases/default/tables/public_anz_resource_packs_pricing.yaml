@@ -1,0 +1,148 @@
+table:
+  name: anz_resource_packs_pricing
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - reaccred
+        - price
+        - course_delivery_type
+        - course_level
+        - course_type
+        - currency
+        - id
+      filter: {}
+    comment: ""

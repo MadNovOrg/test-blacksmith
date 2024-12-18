@@ -13,6 +13,8 @@ type OnlyXeroDescription = Pick<XeroLineItem, 'description'>
 export enum CourseWorkbooks {
   Mandatory = 'WBK.DIR',
   Free = 'WBK.FOC',
+  ResourcePack = 'ResPack.DIR',
+  FreeResourcePack = 'ResPack.FOC',
 }
 
 export function isRegistrantLineItem(

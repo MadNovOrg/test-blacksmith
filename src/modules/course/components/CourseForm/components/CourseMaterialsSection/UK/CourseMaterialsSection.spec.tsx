@@ -7,14 +7,13 @@ import {
   Currency,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { CourseForm } from '@app/modules/course/components/CourseForm'
+import { renderForm } from '@app/modules/course/components/CourseForm/test-utils'
 import { AwsRegions, RoleName } from '@app/types'
 import { CurrencySymbol, MCMAmount, VAT, courseToCourseInput } from '@app/util'
 
 import { render, screen, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
-
-import { CourseForm } from '../..'
-import { renderForm } from '../../test-utils'
 
 import { CourseMaterialsSection } from './CourseMaterialsSection'
 
@@ -27,6 +26,9 @@ vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
 }))
 
 describe(`component: ${CourseMaterialsSection.name}`, () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
   const {
     result: {
       current: { t },
@@ -35,23 +37,16 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
     useScopedTranslation('components.course-form.free-course-materials'),
   )
 
-  it.each(Object.values(AwsRegions.UK))(
-    'renders mandatory course materials component %s',
-    async appRegion => {
-      vi.stubEnv('VITE_AWS_REGION', appRegion)
-      renderForm({
-        type: Course_Type_Enum.Closed,
-        certificateLevel: Course_Level_Enum.AdvancedTrainer,
-        role: RoleName.TT_ADMIN,
-      })
-      expect(
-        screen.getByTestId('mandatory-course-materials'),
-      ).toBeInTheDocument()
-    },
-  )
+  it('renders mandatory course materials component %s', () => {
+    renderForm({
+      type: Course_Type_Enum.Closed,
+      certificateLevel: Course_Level_Enum.AdvancedTrainer,
+      role: RoleName.TT_ADMIN,
+    })
+    expect(screen.getByTestId('mandatory-course-materials')).toBeInTheDocument()
+  })
 
   it('validates mandatory course materials is required eu-west-2', async () => {
-    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     renderForm({
       type: Course_Type_Enum.Closed,
       certificateLevel: Course_Level_Enum.AdvancedTrainer,
@@ -65,7 +60,6 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
   })
 
   it('validates mandatory course materials should be a positive number', async () => {
-    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     renderForm({
       type: Course_Type_Enum.Closed,
       certificateLevel: Course_Level_Enum.AdvancedTrainer,
@@ -83,7 +77,6 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
   })
 
   it('validates mandatory course materials should be less than max attendees', async () => {
-    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     renderForm({
       type: Course_Type_Enum.Closed,
       certificateLevel: Course_Level_Enum.AdvancedTrainer,
@@ -140,120 +133,6 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
       await userEvent.type(textField, 'Romania')
 
       const countryOutOfUKs = screen.getByTestId('country-RO')
-      expect(countryOutOfUKs).toBeInTheDocument()
-
-      await userEvent.click(countryOutOfUKs)
-
-      expect(
-        screen.getByText(
-          t('panel-description', {
-            mcmAmount: `${CurrencySymbol[currency as Currency]}${amount}`,
-            VAT: VAT,
-          }),
-        ),
-      ).toBeInTheDocument()
-    },
-  )
-  it.skip.each(
-    Object.entries(MCMAmount).filter(([mcm]) =>
-      [Currency.Aud].includes(mcm as Currency),
-    ),
-  )(
-    'displays MCM cost info with %s currency in ANZ region',
-    async (currency, amount) => {
-      vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
-      const type = Course_Type_Enum.Closed
-      const course = buildCourse({
-        overrides: {
-          accreditedBy: Accreditors_Enum.Icm,
-          type,
-          priceCurrency: currency,
-          free_course_materials: 2,
-          includeVAT: true,
-        },
-      })
-      await waitFor(() =>
-        render(
-          <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
-          {
-            auth: {
-              activeRole: RoleName.TT_ADMIN,
-            },
-          },
-        ),
-      )
-
-      const countriesSelector = screen.getByTestId(
-        'countries-selector-autocomplete',
-      )
-      expect(countriesSelector).toBeInTheDocument()
-      countriesSelector.focus()
-
-      const textField = within(countriesSelector).getByTestId(
-        'countries-selector-input',
-      )
-      expect(textField).toBeInTheDocument()
-
-      await userEvent.type(textField, 'Fiji')
-
-      const countryOutOfUKs = screen.getByTestId('country-FJ')
-      expect(countryOutOfUKs).toBeInTheDocument()
-
-      await userEvent.click(countryOutOfUKs)
-
-      expect(
-        screen.getByText(
-          t('panel-description', {
-            mcmAmount: `${CurrencySymbol[currency as Currency]}${amount}`,
-            VAT: VAT,
-          }),
-        ),
-      ).toBeInTheDocument()
-    },
-  )
-  it.skip.each(
-    Object.entries(MCMAmount).filter(([mcm]) =>
-      [Currency.Nzd].includes(mcm as Currency),
-    ),
-  )(
-    'displays MCM cost info with %s currency in ANZ region',
-    async (currency, amount) => {
-      vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
-      const type = Course_Type_Enum.Closed
-      const course = buildCourse({
-        overrides: {
-          accreditedBy: Accreditors_Enum.Icm,
-          type,
-          priceCurrency: currency,
-          free_course_materials: 2,
-          includeVAT: true,
-        },
-      })
-      await waitFor(() =>
-        render(
-          <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
-          {
-            auth: {
-              activeRole: RoleName.TT_ADMIN,
-            },
-          },
-        ),
-      )
-
-      const countriesSelector = screen.getByTestId(
-        'countries-selector-autocomplete',
-      )
-      expect(countriesSelector).toBeInTheDocument()
-      countriesSelector.focus()
-
-      const textField = within(countriesSelector).getByTestId(
-        'countries-selector-input',
-      )
-      expect(textField).toBeInTheDocument()
-
-      await userEvent.type(textField, 'New Zealand')
-
-      const countryOutOfUKs = screen.getByTestId('country-NZ')
       expect(countryOutOfUKs).toBeInTheDocument()
 
       await userEvent.click(countryOutOfUKs)

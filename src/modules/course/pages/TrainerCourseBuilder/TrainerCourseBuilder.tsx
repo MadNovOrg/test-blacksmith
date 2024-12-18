@@ -15,7 +15,7 @@ import {
   OnSubmitICMCourseBuilderArgs,
 } from '../CourseBuilder/components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 import { useCreateCourse } from '../CreateCourse/components/CreateCourseProvider'
-import { useSaveCourse } from '../CreateCourse/useSaveCourse'
+import { useSaveCourse } from '../CreateCourse/hooks/useSaveCourse'
 import {
   BuilderCourseData,
   mapCourseFormInputToBuilderCourseData,

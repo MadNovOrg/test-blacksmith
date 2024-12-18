@@ -30,7 +30,7 @@ import {
   SaveCourseModulesBildMutationVariables,
 } from '@app/generated/graphql'
 import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
-import { SaveCourse } from '@app/modules/course/pages/CreateCourse/useSaveCourse'
+import { SaveCourse } from '@app/modules/course/pages/CreateCourse/hooks/useSaveCourse'
 import { SAVE_COURSE_MODULES_BILD } from '@app/modules/course/queries/save-course-modules-bild'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import {

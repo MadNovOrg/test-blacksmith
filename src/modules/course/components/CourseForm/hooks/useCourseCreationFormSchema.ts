@@ -353,24 +353,32 @@ export const useCourseCreationFormSchema = ({
                   .number()
                   .typeError(
                     t(
-                      'components.course-form.free-course-materials.errors.is-required',
+                      `components.course-form.${
+                        acl.isUK() ? 'free-course-materials' : 'resource-packs'
+                      }.errors.is-required`,
                     ),
                   )
                   .required(
                     t(
-                      'components.course-form.free-course-materials.errors.is-required',
+                      `components.course-form.${
+                        acl.isUK() ? 'free-course-materials' : 'resource-packs'
+                      }.errors.is-required`,
                     ),
                   )
                   .min(
                     0,
                     t(
-                      'components.course-form.free-course-materials.errors.is-negative',
+                      `components.course-form.${
+                        acl.isUK() ? 'free-course-materials' : 'resource-packs'
+                      }.errors.is-negative`,
                     ),
                   )
                   .max(
                     yup.ref('maxParticipants', {}),
                     t(
-                      `components.course-form.free-course-materials.errors.more-fcm-than-attendees-${
+                      `components.course-form.${
+                        acl.isUK() ? 'free-course-materials' : 'resource-packs'
+                      }.errors.more-fcm-than-attendees-${
                         isCreation ? 'create' : 'edit'
                       }`,
                     ),

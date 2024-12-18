@@ -10,7 +10,6 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Delivery_Type_Enum,
-  Course_Expenses_Insert_Input,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
@@ -32,108 +31,15 @@ import {
 } from '@app/modules/course/pages/CreateCourse/utils'
 import { INSERT_COURSE_MUTATION } from '@app/modules/course/queries/insert-course'
 import { REMOVE_COURSE_DRAFT } from '@app/modules/course/queries/remove-course-draft'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { isModeratorNeeded } from '@app/rules/trainers'
-import {
-  BildStrategies,
-  CourseExpenseType,
-  ExpensesInput,
-  TransportMethod,
-} from '@app/types'
-import { LoadingStatus, getMandatoryCourseMaterialsCost } from '@app/util'
+import { BildStrategies } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
-import { transformBILDModules } from '../CourseBuilder/components/BILDCourseBuilder/utils'
+import { transformBILDModules } from '../../CourseBuilder/components/BILDCourseBuilder/utils'
+import { useCreateCourse } from '../components/CreateCourseProvider'
 
-import { useCreateCourse } from './components/CreateCourseProvider'
-
-const prepareExpensesData = (
-  expenses: Record<string, ExpensesInput>,
-  mandatoryCourseMaterialsCostEnabled: boolean,
-  freeCourseMaterials: number,
-  maxParticipants: number,
-  currency: Currency,
-): Array<Course_Expenses_Insert_Input> => {
-  const courseExpenses: Array<Course_Expenses_Insert_Input> = []
-
-  if (mandatoryCourseMaterialsCostEnabled) {
-    courseExpenses.push({
-      data: {
-        type: CourseExpenseType.Materials,
-        cost: getMandatoryCourseMaterialsCost(
-          maxParticipants - freeCourseMaterials,
-          currency,
-        ),
-      },
-    })
-  }
-
-  for (const trainerId of Object.keys(expenses)) {
-    const { transport, miscellaneous } = expenses[trainerId]
-
-    let accommodationNightsTotal = 0
-    let accommodationCostTotal = 0
-
-    transport
-      .filter(t => t.method !== TransportMethod.NONE)
-      .forEach(
-        ({
-          method,
-          value,
-          accommodationCost,
-          accommodationNights,
-          flightDays,
-        }) => {
-          if (accommodationNights && accommodationNights > 0) {
-            accommodationNightsTotal += accommodationNights ?? 0
-            accommodationCostTotal += accommodationCost ?? 0
-          }
-
-          const expense: Course_Expenses_Insert_Input = {
-            trainerId,
-            data: {
-              type: CourseExpenseType.Transport,
-              method,
-            },
-          }
-
-          if (method === TransportMethod.CAR) {
-            expense.data.mileage = value
-          } else {
-            expense.data.cost = value
-
-            if (method === TransportMethod.FLIGHTS) {
-              expense.data.flightDays = flightDays
-            }
-          }
-
-          courseExpenses.push(expense)
-        },
-      )
-
-    if (accommodationNightsTotal > 0) {
-      courseExpenses.push({
-        trainerId,
-        data: {
-          type: CourseExpenseType.Accommodation,
-          accommodationCost: accommodationCostTotal,
-          accommodationNights: accommodationNightsTotal,
-        },
-      })
-    }
-
-    miscellaneous?.forEach(({ name, value }) => {
-      courseExpenses.push({
-        trainerId,
-        data: {
-          type: CourseExpenseType.Miscellaneous,
-          description: name as string,
-          cost: value as number,
-        },
-      })
-    })
-  }
-
-  return courseExpenses
-}
+import { prepareExpensesDataANZ, prepareExpensesDataUK } from './utils'
 
 export type SaveCourse = () => Promise<
   | {
@@ -178,6 +84,14 @@ export function useSaveCourse(): {
     RemoveCourseDraftMutationVariables
   >(REMOVE_COURSE_DRAFT)
 
+  const { data: resourcePackCost } = useResourcePackPricing({
+    course_type: courseData?.type as Course_Type_Enum,
+    course_level: courseData?.courseLevel as Course_Level_Enum,
+    course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
+    reaccreditation: courseData?.reaccreditation ?? false,
+    currency: courseData?.priceCurrency as string,
+    pause: acl.isUK() || hideMCM,
+  })
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isOpenCourse = courseData?.type === Course_Type_Enum.Open
   const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
@@ -458,14 +372,24 @@ export function useSaveCourse(): {
           ...(isClosedCourse
             ? {
                 expenses: {
-                  data: prepareExpensesData(
-                    expenses,
-                    acl.isUK() || !hideMCM,
-                    courseData.freeCourseMaterials ?? 0,
-                    courseData.maxParticipants ?? 0,
-                    (courseData.priceCurrency as Currency) ??
-                      (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
-                  ),
+                  data: acl.isUK()
+                    ? prepareExpensesDataUK(
+                        expenses,
+                        true,
+                        courseData.freeCourseMaterials ?? 0,
+                        courseData.maxParticipants ?? 0,
+                        (courseData.priceCurrency as Currency) ??
+                          (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
+                      )
+                    : prepareExpensesDataANZ(
+                        expenses,
+                        !hideMCM,
+                        courseData.freeCourseMaterials ?? 0,
+                        courseData.maxParticipants ?? 0,
+                        (courseData.priceCurrency as Currency) ??
+                          (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
+                        resourcePackCost?.anz_resource_packs_pricing[0]?.price,
+                      ),
                 },
               }
             : null),
@@ -548,7 +472,6 @@ export function useSaveCourse(): {
     exceptions,
     acl,
     isClosedCourse,
-    hideMCM,
     go1Licensing?.invoiceDetails,
     invoiceDetails,
     calculateVATrate,
@@ -562,7 +485,9 @@ export function useSaveCourse(): {
     curriculum?.modulesDuration,
     courseName,
     isOpenCourse,
+    hideMCM,
     expenses,
+    resourcePackCost?.anz_resource_packs_pricing,
     courseHasManualPrice,
     setDateTimeTimeZone,
     draftId,

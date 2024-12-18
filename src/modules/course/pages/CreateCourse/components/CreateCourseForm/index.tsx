@@ -54,8 +54,8 @@ import {
   checkIsEmployerAOL,
 } from '@app/util'
 
+import { useSaveCourse } from '../../hooks/useSaveCourse'
 import { StepsEnum } from '../../types'
-import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 import { NoExceptionsDialog } from '../NoExceptionsDialog'
 

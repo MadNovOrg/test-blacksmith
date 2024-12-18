@@ -7,25 +7,26 @@ import { useTranslation } from 'react-i18next'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
-import { useAuth } from '@app/context/auth'
-import { Accreditors_Enum, Currency } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { TransportMethod } from '@app/types'
 import {
-  getFreeCourseMaterialsCost,
   getGSTAmount,
-  getMandatoryCourseMaterialsCost,
   getTrainerCarCostPerMile,
   getTrainerSubsistenceCost,
-  getVatAmount,
 } from '@app/util'
 
-import { useCreateCourse } from '../CreateCourseProvider'
-
-import { ExpensesDetails } from './ExpensesDetails'
-import { PageRow } from './PageRow'
+import { useCreateCourse } from '../../CreateCourseProvider'
+import { ExpensesDetails } from '../ExpensesDetails'
+import { PageRow } from '../PageRow'
 
 export const OrderDetailsReview: React.FC = () => {
   const { t } = useTranslation()
@@ -34,13 +35,19 @@ export const OrderDetailsReview: React.FC = () => {
     useCreateCourse()
 
   const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
-  const {
-    acl: { isAustralia, isUK },
-  } = useAuth()
+
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
-  const mandatoryCourseMaterialsEnabled = Boolean(isUK() || !hideMCM)
+  const mandatoryCourseMaterialsEnabled = Boolean(!hideMCM)
 
   const currency = courseData?.priceCurrency ?? defaultCurrency
+  const { data: resourcePackPricingData } = useResourcePackPricing({
+    course_type: courseData?.type as Course_Type_Enum,
+    course_level: courseData?.courseLevel as Course_Level_Enum,
+    course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
+    reaccreditation: courseData?.reaccreditation ?? false,
+    currency: currency,
+    pause: Boolean(hideMCM),
+  })
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
@@ -50,32 +57,37 @@ export const OrderDetailsReview: React.FC = () => {
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
-      return getMandatoryCourseMaterialsCost(
-        courseData?.maxParticipants,
-        currency as Currency,
+      return (
+        courseData.maxParticipants *
+        (resourcePackPricingData?.anz_resource_packs_pricing[0].price ?? 0)
       )
     }
     return 0
   }, [
     courseData?.freeCourseMaterials,
     courseData?.maxParticipants,
-    currency,
     mandatoryCourseMaterialsEnabled,
+    resourcePackPricingData?.anz_resource_packs_pricing,
   ])
 
   const freeCourseMaterialsCost = useMemo(() => {
     if (
-      (isUK() || !hideMCM) &&
+      !hideMCM &&
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
-      return getFreeCourseMaterialsCost(
-        courseData?.freeCourseMaterials,
-        currency as Currency,
+      return (
+        courseData.freeCourseMaterials *
+        (resourcePackPricingData?.anz_resource_packs_pricing[0].price ?? 0) *
+        -1
       )
     }
     return 0
-  }, [courseData?.freeCourseMaterials, currency, hideMCM, isUK])
+  }, [
+    courseData?.freeCourseMaterials,
+    hideMCM,
+    resourcePackPricingData?.anz_resource_packs_pricing,
+  ])
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -164,22 +176,14 @@ export const OrderDetailsReview: React.FC = () => {
         .add(courseMaterialsCost)
         .add(freeCourseMaterialsCost)
 
-      const totalWithTax = subtotal
-        .minus(courseMaterialsCost)
-        .minus(freeCourseMaterialsCost)
-        .toNumber()
+      const totalWithTax = subtotal.toNumber()
 
       const vat = () => {
         if (
-          isAustralia() &&
-          (courseData.includeVAT ||
-            isAustraliaCountry(courseData?.residingCountry))
+          courseData.includeVAT ||
+          isAustraliaCountry(courseData?.residingCountry)
         ) {
           return getGSTAmount(totalWithTax)
-        }
-
-        if (courseData.includeVAT || isUKCountry(courseData?.residingCountry)) {
-          return getVatAmount(totalWithTax)
         }
         return 0
       }
@@ -197,8 +201,6 @@ export const OrderDetailsReview: React.FC = () => {
       trainerExpensesTotal,
       courseMaterialsCost,
       freeCourseMaterialsCost,
-      isUKCountry,
-      isAustralia,
       isAustraliaCountry,
     ])
 
@@ -220,15 +222,9 @@ export const OrderDetailsReview: React.FC = () => {
     : undefined
 
   const taxType = () => {
-    if (isAustralia()) {
-      return {
-        withTax: 'pages.create-course.review-and-confirm.gst',
-        withoutTax: 'pages.create-course.review-and-confirm.no-gst',
-      }
-    }
     return {
-      withTax: 'pages.create-course.review-and-confirm.vat',
-      withoutTax: 'pages.create-course.review-and-confirm.no-vat',
+      withTax: 'pages.create-course.review-and-confirm.gst',
+      withoutTax: 'pages.create-course.review-and-confirm.no-gst',
     }
   }
 
@@ -343,7 +339,7 @@ export const OrderDetailsReview: React.FC = () => {
         <InfoPanel>
           <PageRow
             label={t(
-              'pages.create-course.review-and-confirm.mandatory-course-materials',
+              'pages.create-course.review-and-confirm.mandatory-resource-packs',
               {
                 count: courseData?.maxParticipants,
               },
@@ -356,7 +352,7 @@ export const OrderDetailsReview: React.FC = () => {
           />
           <PageRow
             label={t(
-              'pages.create-course.review-and-confirm.free-course-materials',
+              'pages.create-course.review-and-confirm.free-resource-packs',
               {
                 count: courseData?.freeCourseMaterials,
               },

@@ -19,6 +19,7 @@ import {
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import useTimeZones from '@app/hooks/useTimeZones'
+import { AwsRegions } from '@app/types'
 
 import {
   chance,
@@ -178,7 +179,8 @@ describe('page: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"Level One "`)
   })
 
-  it('renders order line items', () => {
+  it('renders order line items UK', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     const user1Email = chance.email()
     const user2Email = chance.email()
     const unitPrice = 130
@@ -282,6 +284,117 @@ describe('page: OrderDetails', () => {
     expect(
       within(freeCourseMaterialsRow).getByText(
         t('pages.order-details.free-course-materials', {
+          count: invoice.lineItems[3].quantity,
+        }),
+      ),
+    )
+  })
+
+  it('renders order line items ANZ', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    const user1Email = chance.email()
+    const user2Email = chance.email()
+    const unitPrice = 130
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: unitPrice,
+              description: `Level One, ${user1Email}`,
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: unitPrice,
+              description: `Level One, ${user2Email}`,
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 10,
+              itemCode: CourseWorkbooks.ResourcePack,
+              description: `Resource Pack x ${12}`,
+            },
+          }),
+          buildLineItem({
+            overrides: {
+              quantity: 12,
+              unitAmount: 0,
+              itemCode: CourseWorkbooks.FreeResourcePack,
+              description: `Free Resource Pack x ${12}`,
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...order,
+                    invoice,
+                    registrants: [user1Email, user2Email],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  course: {
+                    ...baseCourse,
+                    bookingContact: {
+                      fullName: chance.name(),
+                    },
+                  },
+                  quantity: 1,
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>,
+    )
+
+    const user1Row = screen.getByTestId(`order-registrant-0`)
+    const mandatoryCourseMaterialsRow = screen.getByTestId(
+      `line-item-${CourseWorkbooks.ResourcePack}`,
+    )
+    const freeCourseMaterialsRow = screen.getByTestId(
+      `line-item-${CourseWorkbooks.FreeResourcePack}`,
+    )
+
+    expect(
+      within(user1Row).getByText(invoice.lineItems[0].description),
+    ).toBeInTheDocument()
+    expect(
+      within(user1Row).getByText(formatCurrency(unitPrice)),
+    ).toBeInTheDocument()
+    expect(
+      within(mandatoryCourseMaterialsRow).getByText(
+        t('pages.order-details.mandatory-resource-packs', {
+          count: invoice.lineItems[2].quantity,
+        }),
+      ),
+    )
+    expect(
+      within(freeCourseMaterialsRow).getByText(
+        t('pages.order-details.free-resource-packs', {
           count: invoice.lineItems[3].quantity,
         }),
       ),

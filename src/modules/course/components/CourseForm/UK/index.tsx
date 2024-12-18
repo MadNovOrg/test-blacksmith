@@ -24,7 +24,7 @@ import { CourseInput } from '@app/types'
 
 import { Props } from '..'
 import { AttendeesSection } from '../components/AttendeesSection'
-import { CourseMaterialsSection } from '../components/CourseMaterialsSection'
+import { CourseMaterialsSection } from '../components/CourseMaterialsSection/UK'
 import BildCourseFinanceSection from '../components/FormFinanceSection/BildCourseFinanceSection'
 import ClosedCourseFinanceSection from '../components/FormFinanceSection/ClosedCourseFinanceSection'
 import OpenCourseFinanceSection from '../components/FormFinanceSection/OpenCourseFinanceSection'

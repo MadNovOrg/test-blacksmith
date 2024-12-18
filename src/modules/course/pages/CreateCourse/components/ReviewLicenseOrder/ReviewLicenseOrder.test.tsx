@@ -16,6 +16,7 @@ import {
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
 import {
+  AwsRegions,
   Draft,
   Organization,
   TrainerInput,
@@ -42,6 +43,9 @@ function createFetchingClient() {
 }
 
 describe('component: ReviewLicenseOrder', () => {
+  beforeAll(() => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  })
   const {
     result: {
       current: { t },

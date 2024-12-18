@@ -172,6 +172,7 @@ export const CurrencySymbol: Record<Currency, string> = {
 }
 
 export const VAT = '(+VAT)'
+export const GST = '(+GST)'
 
 export const courseStarted = (course: Course | GeneratedCourseType) =>
   isPast(new Date(course.schedule[0]?.start))
