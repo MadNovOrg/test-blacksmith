@@ -9,7 +9,6 @@ type ModeratorCriteria = {
   courseLevel: Course_Level_Enum | CourseLevel
   isReaccreditation: boolean
   isConversion?: boolean
-  isUK: boolean
 }
 
 export function isModeratorNeeded({
@@ -17,10 +16,8 @@ export function isModeratorNeeded({
   courseType,
   isReaccreditation,
   isConversion = false,
-  isUK,
 }: ModeratorCriteria): boolean {
   if (courseType === Course_Type_Enum.Indirect) return false
-  if (!isUK) return false
 
   if (
     [
@@ -45,6 +42,7 @@ export function isModeratorMandatory(criteria: {
   isConversion?: boolean
   isUK: boolean
 }): boolean {
+  if (!criteria.isUK) return false
   const needsModerator = isModeratorNeeded(criteria)
 
   return criteria.courseType == Course_Type_Enum.Open ? false : needsModerator

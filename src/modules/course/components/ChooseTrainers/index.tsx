@@ -114,9 +114,8 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
         courseType,
         isReaccreditation: isReAccreditation,
         isConversion,
-        isUK: acl.isUK(),
       }),
-    [courseLevel, courseType, isReAccreditation, isConversion, acl],
+    [courseLevel, courseType, isReAccreditation, isConversion],
   )
 
   const mandatoryModerator = useMemo(

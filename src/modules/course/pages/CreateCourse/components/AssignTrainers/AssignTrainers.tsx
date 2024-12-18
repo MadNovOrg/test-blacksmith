@@ -156,9 +156,8 @@ export const AssignTrainers = () => {
       courseType: courseData.type,
       isReaccreditation: courseData.reaccreditation,
       isConversion: courseData.conversion,
-      isUK: acl.isUK(),
     })
-  }, [acl, courseData])
+  }, [courseData])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)

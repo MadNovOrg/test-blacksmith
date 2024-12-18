@@ -8,7 +8,6 @@ test("reaccreditation course doesn't need a moderator", () => {
       isReaccreditation: true,
       courseLevel: Course_Level_Enum.Level_1,
       courseType: Course_Type_Enum.Open,
-      isUK: true,
     }),
   ).toBe(false)
 })
@@ -19,7 +18,6 @@ test("indirect course doesn't need a moderator", () => {
       isReaccreditation: false,
       courseLevel: Course_Level_Enum.Level_1,
       courseType: Course_Type_Enum.Indirect,
-      isUK: true,
     }),
   ).toBe(false)
 })
@@ -30,7 +28,6 @@ test('intermediate trainer, advanced trainer, Bild intermediate trainer, or Bild
       isReaccreditation: false,
       courseLevel: Course_Level_Enum.IntermediateTrainer,
       courseType: Course_Type_Enum.Closed,
-      isUK: true,
     }),
   ).toBe(true)
 
@@ -39,7 +36,6 @@ test('intermediate trainer, advanced trainer, Bild intermediate trainer, or Bild
       isReaccreditation: false,
       courseLevel: Course_Level_Enum.AdvancedTrainer,
       courseType: Course_Type_Enum.Closed,
-      isUK: true,
     }),
   ).toBe(true)
 
@@ -48,7 +44,6 @@ test('intermediate trainer, advanced trainer, Bild intermediate trainer, or Bild
       isReaccreditation: false,
       courseLevel: Course_Level_Enum.BildIntermediateTrainer,
       courseType: Course_Type_Enum.Closed,
-      isUK: true,
     }),
   ).toBe(true)
 
@@ -57,7 +52,6 @@ test('intermediate trainer, advanced trainer, Bild intermediate trainer, or Bild
       isReaccreditation: false,
       courseLevel: Course_Level_Enum.BildAdvancedTrainer,
       courseType: Course_Type_Enum.Closed,
-      isUK: true,
     }),
   ).toBe(true)
 })
