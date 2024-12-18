@@ -196,7 +196,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     mutate: mutateCourse,
     status,
   } = useCourse(id ?? '', {
-    includeOrgLicenses: true,
+    includeOrgLicenses: acl.canEditIndirectBLCourses(),
     includePendingInvitesCount: true,
   })
 

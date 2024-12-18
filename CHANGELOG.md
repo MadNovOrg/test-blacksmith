@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.17.0
+
+### Minor Changes
+
+- 074ac06: Update open course booking Terms of bussiness wording
+
 ## 4.16.0
 
 ### Minor Changes

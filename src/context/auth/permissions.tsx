@@ -937,6 +937,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canViewOrg: (orgId: string) =>
       acl.isInternalUser() || acl.isOrgAdmin(orgId),
     canImportOrganizations: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canEditIndirectBLCourses: () =>
+      acl.isTrainer() || acl.isTTAdmin() || acl.isTTOps(),
   })
 
   return acl
