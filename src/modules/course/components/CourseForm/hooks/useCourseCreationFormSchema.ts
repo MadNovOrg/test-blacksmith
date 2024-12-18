@@ -49,8 +49,15 @@ export const useCourseCreationFormSchema = ({
 }: Props) => {
   const { t } = useTranslation()
   const { acl, profile } = useAuth()
-  const { countriesCodesWithUKs, isUKCountry, isAustraliaCountry } =
-    useWorldCountries()
+  const {
+    countriesCodesWithUKs,
+    ANZCountriesCodes,
+    isUKCountry,
+    isAustraliaCountry,
+  } = useWorldCountries()
+  const countryCodes = acl.isAustralia()
+    ? ANZCountriesCodes
+    : countriesCodesWithUKs
   const { defaultCurrency } = useCurrencies(courseInput?.residingCountry)
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
   const defaultResidingCountry = () => {
@@ -161,9 +168,7 @@ export const useCourseCreationFormSchema = ({
               'is-valid-value',
               requiredMsg(t, 'components.course-form.residing-country'),
               value => {
-                return countriesCodesWithUKs.includes(
-                  value as WorldCountriesCodes,
-                )
+                return countryCodes.includes(value as WorldCountriesCodes)
               },
             ),
           deliveryType: yup
@@ -457,7 +462,7 @@ export const useCourseCreationFormSchema = ({
       courseInput?.maxParticipants,
       courseInput?.startDate,
       courseInput?.accreditedBy,
-      countriesCodesWithUKs,
+      countryCodes,
       currentNumberOfParticipantsAndInvitees,
       acl,
       trainerRatioNotMet,

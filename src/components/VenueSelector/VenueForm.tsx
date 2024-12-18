@@ -69,9 +69,13 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   const {
     getLabel: getCountryNameByCode,
     countriesCodesWithUKs,
+    ANZCountriesCodes,
     isUKCountry,
   } = useWorldCountries()
   const { acl } = useAuth()
+  const countryCodes = acl.isAustralia()
+    ? ANZCountriesCodes
+    : countriesCodesWithUKs
 
   const [{ error }, handleAddVenue] = useMutation<ResponseType, ParamsType>(
     ADD_VENUE_MUTATION,
@@ -103,10 +107,10 @@ const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
       country: yup
         .string()
         .test('is-valid-value', requiredMsg(t, 'addr.country'), value => {
-          return countriesCodesWithUKs.includes(value as WorldCountriesCodes)
+          return countryCodes.includes(value as WorldCountriesCodes)
         }),
     })
-  }, [t, acl, countriesCodesWithUKs, courseResidingCountry, isUKCountry])
+  }, [t, acl, countryCodes, courseResidingCountry, isUKCountry])
 
   const {
     control,
