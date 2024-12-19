@@ -9848,6 +9848,7 @@ export enum TransferParticipantError {
   GeneralError = 'GENERAL_ERROR',
   NotEligibleForTransfer = 'NOT_ELIGIBLE_FOR_TRANSFER',
   NotEnoughSpaces = 'NOT_ENOUGH_SPACES',
+  ParticipantGraded = 'PARTICIPANT_GRADED',
   ParticipantNotFound = 'PARTICIPANT_NOT_FOUND',
   TransferNotAllowed = 'TRANSFER_NOT_ALLOWED',
   WrongCourseType = 'WRONG_COURSE_TYPE'

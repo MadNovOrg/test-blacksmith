@@ -31,7 +31,10 @@ type ManageAttendanceMenuProps<T> = {
 }
 
 export const ManageAttendanceMenu = <
-  T extends Pick<CourseParticipant, 'attended' | 'course' | 'profile'> & {
+  T extends Pick<
+    CourseParticipant,
+    'attended' | 'course' | 'grade' | 'profile'
+  > & {
     course: Pick<Course, 'accreditedBy'>
     profile: Pick<Profile, 'organizations'>
   },
@@ -150,11 +153,20 @@ export const ManageAttendanceMenu = <
             courseType: Course_Type_Enum.Open,
             action: CourseAction.Transfer,
           }),
-          constant(acl.canTransferParticipant(participantOrgIds, course)),
+          constant(
+            !courseParticipant.grade &&
+              acl.canTransferParticipant(participantOrgIds, course),
+          ),
         ],
         [stubTrue, constant(false)],
       ]),
-    [acl, course, courseParticipant.attended, participantOrgIds],
+    [
+      acl,
+      course,
+      courseParticipant.attended,
+      courseParticipant.grade,
+      participantOrgIds,
+    ],
   )
 
   const allowedActions = useMemo(() => {
