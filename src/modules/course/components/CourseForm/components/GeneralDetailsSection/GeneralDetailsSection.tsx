@@ -370,7 +370,15 @@ export const GeneralDetailsSection = ({
                       shouldValidate: true,
                     })
                     if (!e.target.checked) {
-                      resetField('courseCost')
+                      if (isCreation) {
+                        resetField('courseCost')
+                      } else {
+                        setValue('courseCost', null)
+                      }
+                    } else {
+                      if (!isCreation) {
+                        resetField('courseCost')
+                      }
                     }
                   }}
                   checked={usesAOL && !isL1BS}

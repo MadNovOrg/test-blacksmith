@@ -613,7 +613,11 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
                 aolCountry: courseData.aolCountry,
                 aolRegion: courseData.aolRegion,
               }
-            : null),
+            : {
+                aolCostOfCourse: null,
+                aolCountry: null,
+                aolRegion: null,
+              }),
 
           ...(isClosedTypeCourse
             ? {
