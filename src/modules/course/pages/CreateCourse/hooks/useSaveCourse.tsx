@@ -378,16 +378,14 @@ export function useSaveCourse(): {
                         true,
                         courseData.freeCourseMaterials ?? 0,
                         courseData.maxParticipants ?? 0,
-                        (courseData.priceCurrency as Currency) ??
-                          (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
+                        (courseData.priceCurrency as Currency) ?? Currency.Gbp,
                       )
                     : prepareExpensesDataANZ(
                         expenses,
                         !hideMCM,
                         courseData.freeCourseMaterials ?? 0,
                         courseData.maxParticipants ?? 0,
-                        (courseData.priceCurrency as Currency) ??
-                          (acl.isAustralia() ? Currency.Aud : Currency.Gbp),
+                        (courseData.priceCurrency as Currency) ?? Currency.Aud,
                         resourcePackCost?.anz_resource_packs_pricing[0]?.price,
                       ),
                 },

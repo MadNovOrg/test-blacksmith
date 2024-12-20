@@ -41,7 +41,8 @@ export const prepareExpensesDataUK = (
         }) => {
           if (accommodationNights && accommodationNights > 0) {
             accommodationNightsTotal += accommodationNights ?? 0
-            accommodationCostTotal += accommodationCost ?? 0
+            accommodationCostTotal +=
+              accommodationNights * (accommodationCost ?? 0)
           }
 
           const expense: Course_Expenses_Insert_Input = {
@@ -129,7 +130,8 @@ export const prepareExpensesDataANZ = (
         }) => {
           if (accommodationNights && accommodationNights > 0) {
             accommodationNightsTotal += accommodationNights ?? 0
-            accommodationCostTotal += accommodationCost ?? 0
+            accommodationCostTotal +=
+              accommodationNights * (accommodationCost ?? 0)
           }
 
           const expense: Course_Expenses_Insert_Input = {
