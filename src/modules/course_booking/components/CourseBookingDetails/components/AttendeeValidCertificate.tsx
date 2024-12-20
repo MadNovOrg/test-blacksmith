@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 
-import { showAttendeeTranslationOptions } from './utils'
+import { showAttendeeTranslationOptions } from '../utils'
 
 export type AttendeeValidCertificateProps = {
   handleCheckboxValue: (state: boolean) => void

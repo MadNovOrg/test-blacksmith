@@ -33,11 +33,14 @@ import {
   CreateOrderOutput,
   CreateOrderMutation,
   CreateOrderMutationVariables,
+  Course_Level_Enum,
+  Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
 import { CREATE_ORDER } from '@app/modules/course_booking/queries/create-order'
 import { GET_COURSE_PRICING_QUERY } from '@app/modules/course_booking/queries/get-course-pricing'
 import { GET_TEMP_PROFILE } from '@app/modules/course_booking/queries/get-temp-profile'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { InvoiceDetails, Profile } from '@app/types'
 import { getMandatoryCourseMaterialsCost, max } from '@app/util'
 
@@ -174,6 +177,15 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     pause: !profile?.course?.id,
   })
 
+  const { data: resourcePackPricing } = useResourcePackPricing({
+    course_type: profile?.course?.type as Course_Type_Enum,
+    course_level: profile?.course?.level as Course_Level_Enum,
+    course_delivery_type: profile?.course
+      ?.deliveryType as Course_Delivery_Type_Enum,
+    reaccreditation: profile?.course?.reaccreditation ?? false,
+    currency: profile?.course?.priceCurrency as Currency,
+    pause: acl.isUK() || hideMCM,
+  })
   const [, createOrder] = useMutation<
     CreateOrderMutation,
     CreateOrderMutationVariables
@@ -320,10 +332,17 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     const courseCost = !ready ? 0 : booking.price * booking.quantity
     const trainerExpenses = !ready ? 0 : booking.trainerExpenses
     const subtotal = courseCost + trainerExpenses
-    const mandatoryCourseMaterialsCost =
-      acl.isUK() || !hideMCM
-        ? getMandatoryCourseMaterialsCost(booking.quantity, booking.currency)
-        : 0
+    let mandatoryCourseMaterialsCost = 0
+    if (acl.isUK()) {
+      mandatoryCourseMaterialsCost = getMandatoryCourseMaterialsCost(
+        booking.quantity,
+        booking.currency,
+      )
+    } else if (!hideMCM) {
+      mandatoryCourseMaterialsCost =
+        resourcePackPricing?.anz_resource_packs_pricing[0]?.price *
+        booking.quantity
+    }
 
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
     const discount = !ready
@@ -341,7 +360,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
       0,
     )
     const vat = Math.max(
-      ((subtotalDiscounted - mandatoryCourseMaterialsCost) * booking.vat) / 100,
+      ((subtotalDiscounted - (acl.isUK() ? mandatoryCourseMaterialsCost : 0)) *
+        booking.vat) /
+        100,
       0,
     )
     const amountDue = subtotalDiscounted + vat
@@ -381,6 +402,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     booking.vat,
     hideMCM,
     ready,
+    resourcePackPricing?.anz_resource_packs_pricing,
   ])
 
   const placeOrder = useCallback(async () => {

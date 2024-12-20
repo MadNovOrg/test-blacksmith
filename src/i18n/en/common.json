@@ -157,6 +157,7 @@
   "subtotal": "Subtotal",
   "course-cost": "Course Cost",
   "mandatory-course-materials": "Mandatory Course Materials x {{quantity}}",
+  "mandatory-resource-packs": "Resource Pack x {{quantity}}",
   "location": "Location",
   "custom-vat": "VAT ({{amount}}%)",
   "custom-gst": "GST ({{amount}}%)",

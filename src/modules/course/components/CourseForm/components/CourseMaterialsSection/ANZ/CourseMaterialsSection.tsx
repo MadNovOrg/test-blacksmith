@@ -98,7 +98,7 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
         <Typography variant="body2" mb={2}>
           {t('panel-description', {
             mcmAmount: `${CurrencySymbol[courseCurrency]}${
-              data?.anz_resource_packs_pricing[0].price
+              data?.anz_resource_packs_pricing[0]?.price
             }${acl.isAustralia() && includeVAT ? GST : ''}`,
           })}
         </Typography>

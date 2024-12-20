@@ -18,13 +18,11 @@ import {
 import Big from 'big.js'
 import { utcToZonedTime } from 'date-fns-tz'
 import { groupBy, filter } from 'lodash'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import isEmail from 'validator/lib/isEmail'
 
 import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
@@ -42,32 +40,25 @@ import {
   Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
-  Course_Source_Enum,
   Course_Type_Enum,
   Currency,
   PaymentMethod,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
-import {
-  formSchema as invoiceDetailsFormSchema,
-  InvoiceForm,
-} from '@app/modules/course/components/CourseForm/components/InvoiceForm'
+import { InvoiceForm } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
-import { schemas, yup } from '@app/schemas'
 import { NonNullish } from '@app/types'
+import { formatCurrency, getMandatoryCourseMaterialsCost } from '@app/util'
+
+import { ParticipantInput, useBooking } from '../../BookingContext'
+import { PromoCode } from '../../PromoCode'
+import { AttendeeValidCertificate } from '../components/AttendeeValidCertificate'
 import {
-  formatCurrency,
-  getMandatoryCourseMaterialsCost,
-  isValidUKPostalCode,
-  requiredMsg,
-} from '@app/util'
-
-import { ParticipantInput, useBooking } from '../BookingContext'
-import { PromoCode } from '../PromoCode'
-
-import { AttendeeValidCertificate } from './AttendeeValidCertificate'
-import { isAttendeeValidCertificateMandatory, FormInputs } from './utils'
+  isAttendeeValidCertificateMandatory,
+  FormInputs,
+  getSchema,
+} from '../utils'
 
 export const CourseBookingDetails: React.FC<
   React.PropsWithChildren<unknown>
@@ -78,13 +69,11 @@ export const CourseBookingDetails: React.FC<
   const [bookingContactProfile, setBookingContactProfile] = useState<
     Partial<UserSelectorProfile>
   >({})
-  const [participantsProfiles, setParticipantsProfiles] = useState<
+  const [participantsProfiles, setParticipantProfiles] = useState<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
-  const defaultCurrency = acl.isAustralia() ? Currency.Aud : Currency.Gbp
-
-  const hideMCM = useFeatureFlagEnabled('hide-mcm')
+  const defaultCurrency = Currency.Gbp
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
   const {
@@ -116,111 +105,17 @@ export const CourseBookingDetails: React.FC<
     () => Array.from({ length: availableSeats }, (_, i) => i + 1),
     [availableSeats],
   )
-  const hidePaymentByCCOnANZ = useFeatureFlagEnabled(
-    'hide-payment-by-cc-on-anz',
-  )
 
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
   const isAddressInfoRequired =
     course?.type === Course_Type_Enum.Open &&
     course?.level === Course_Level_Enum.Level_1 &&
     course?.deliveryType === Course_Delivery_Type_Enum.Virtual &&
-    isUKCountry(course?.residingCountry || UKsCodes.GB_ENG)
+    isUKCountry(course?.residingCountry ?? UKsCodes.GB_ENG)
 
   const schema = useMemo(() => {
-    return yup.object({
-      quantity: yup.number().required(),
-
-      participants: yup
-        .array()
-        .of(
-          yup.object({
-            firstName: yup.string().required(requiredMsg(t, 'first-name')),
-            lastName: yup.string().required(requiredMsg(t, 'last-name')),
-            email: schemas
-              .email(t)
-              .required(requiredMsg(t, 'email'))
-              .test('is-email', t('validation-errors.email-invalid'), email => {
-                return isEmail(email)
-              }),
-            ...(isAddressInfoRequired
-              ? {
-                  addressLine1: yup.string().required(requiredMsg(t, 'line1')),
-                  addressLine2: yup.string(),
-                  city: yup.string().required(requiredMsg(t, 'city')),
-                  country: yup.string().required(requiredMsg(t, 'country')),
-                  postCode: yup
-                    .string()
-                    .required(requiredMsg(t, 'post-code'))
-                    .test(
-                      'is-uk-postcode',
-                      t('validation-errors.invalid-postcode'),
-                      isValidUKPostalCode,
-                    ),
-                }
-              : {}),
-          }),
-        )
-        .length(yup.ref('quantity'), t('validation-errors.max-registrants'))
-        .required(requiredMsg(t, 'emails')),
-
-      orgId: yup
-        .string()
-        .required(requiredMsg(t, 'org-name'))
-        .typeError(requiredMsg(t, 'org-name')),
-
-      orgName: yup.string(),
-
-      source: yup.string().when('isInternalUserBooking', {
-        is: true,
-        then: s => s.oneOf(Object.values(Course_Source_Enum)).required(),
-        otherwise: s => s.nullable(),
-      }),
-
-      salesRepresentative: yup
-        .object()
-        .when(['source', 'isInternalUserBooking'], ([source, condition]) => {
-          return condition && source.startsWith('SALES_')
-            ? yup.object().required()
-            : yup.object().nullable()
-        }),
-
-      bookingContact: yup.object({
-        firstName: yup.string().required(requiredMsg(t, 'first-name')),
-        lastName: yup.string().required(requiredMsg(t, 'last-name')),
-        email: schemas
-          .email(t)
-          .required(requiredMsg(t, 'email'))
-          .test('is-email', t('validation-errors.email-invalid'), email => {
-            return isEmail(email)
-          }),
-      }),
-
-      paymentMethod: yup
-        .string()
-        .oneOf(Object.values(PaymentMethod))
-        .required(),
-
-      invoiceDetails: yup
-        .object()
-        .when('paymentMethod', ([paymentMethod], schema) => {
-          return paymentMethod === PaymentMethod.Invoice
-            ? invoiceDetailsFormSchema(t)
-            : schema
-        }),
-
-      courseLevel: yup.string(),
-      courseType: yup.string(),
-      attendeeValidCertificate: yup
-        .boolean()
-        .when(['courseLevel', 'courseType'], {
-          is: isAttendeeValidCertificateMandatory,
-          then: schema =>
-            schema.oneOf([true], t('validation-errors.this-field-is-required')),
-          otherwise: schema => schema,
-        }),
-    })
-  }, [t, isAddressInfoRequired])
+    return getSchema({ isAddressInfoRequired })
+  }, [isAddressInfoRequired])
 
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -305,7 +200,7 @@ export const CourseBookingDetails: React.FC<
   )
 
   useEffect(() => {
-    setParticipantsProfiles(
+    setParticipantProfiles(
       Array.from(Array(values.participants.length)).fill({}),
     )
   }, [values.participants.length])
@@ -336,7 +231,7 @@ export const CourseBookingDetails: React.FC<
       familyName: newParticipant.lastName,
       givenName: newParticipant.firstName,
     }
-    setParticipantsProfiles([...participants])
+    setParticipantProfiles([...participants])
   }
 
   const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
@@ -364,7 +259,7 @@ export const CourseBookingDetails: React.FC<
     })
     const participants = participantsProfiles
     participants[index] = {}
-    setParticipantsProfiles([...participants])
+    setParticipantProfiles([...participants])
   }
 
   const handleOnChangeAttendeeCertificate = (state: boolean) => {
@@ -451,12 +346,6 @@ export const CourseBookingDetails: React.FC<
     }
   }, [courseStartDate, courseEndDate, courseTimezone])
 
-  const taxType = () => {
-    if (acl.isAustralia()) {
-      return t('custom-gst', { amount: booking.vat })
-    }
-    return t('custom-vat', { amount: booking.vat })
-  }
   return (
     <FormProvider {...methods}>
       <Helmet>
@@ -479,7 +368,11 @@ export const CourseBookingDetails: React.FC<
         <Box bgcolor="common.white" p={2} mb={4}>
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Box>
-              <Typography gutterBottom fontWeight="600">
+              <Typography
+                gutterBottom
+                fontWeight="600"
+                data-testId="course-name-row"
+              >
                 {course?.name}
               </Typography>
               <Typography>
@@ -548,27 +441,31 @@ export const CourseBookingDetails: React.FC<
               )}
             </Typography>
           </Box>
-          {acl.isUK() || !hideMCM ? (
-            <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography color="grey.700">
-                {t('mandatory-course-materials', {
-                  quantity: booking.quantity,
-                })}
-              </Typography>
-              <Typography color="grey.700">
-                {formatCurrency(
-                  {
-                    amount: getMandatoryCourseMaterialsCost(
-                      booking.quantity,
-                      booking.currency,
-                    ),
-                    currency: booking.currency,
-                  },
-                  t,
-                )}
-              </Typography>
-            </Box>
-          ) : null}
+
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            mb={1}
+            data-testid="mandatory-course-materials-row"
+          >
+            <Typography color="grey.700">
+              {t('mandatory-course-materials', {
+                quantity: booking.quantity,
+              })}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(
+                {
+                  amount: getMandatoryCourseMaterialsCost(
+                    booking.quantity,
+                    booking.currency,
+                  ),
+                  currency: booking.currency,
+                },
+                t,
+              )}
+            </Typography>
+          </Box>
 
           {booking.trainerExpenses > 0 ? (
             <Box display="flex" justifyContent="space-between" mb={1}>
@@ -622,7 +519,13 @@ export const CourseBookingDetails: React.FC<
             </Box>
           ) : null}
 
-          <Box mt={2} display="flex" justifyContent="space-between" mb={1}>
+          <Box
+            mt={2}
+            display="flex"
+            justifyContent="space-between"
+            mb={1}
+            data-testid="subtotal-row"
+          >
             <Typography color="grey.700">{t('subtotal')}</Typography>
             <Typography color="grey.700">
               {formatCurrency(
@@ -637,8 +540,15 @@ export const CourseBookingDetails: React.FC<
             </Typography>
           </Box>
 
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">{taxType()}</Typography>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            mb={1}
+            data-testid="vat-row"
+          >
+            <Typography color="grey.700">
+              {t('custom-vat', { amount: booking.vat })}
+            </Typography>
             <Typography color="grey.700">
               {formatCurrency(
                 {
@@ -650,7 +560,12 @@ export const CourseBookingDetails: React.FC<
             </Typography>
           </Box>
 
-          <Box mt={2} display="flex" justifyContent="space-between">
+          <Box
+            mt={2}
+            display="flex"
+            justifyContent="space-between"
+            data-testId="amount-due-row"
+          >
             <Typography fontWeight="500" color="primary">
               {t('amount-due')} ({booking.currency})
             </Typography>
@@ -1080,9 +995,8 @@ export const CourseBookingDetails: React.FC<
               render={({ field }) => {
                 return (
                   <RadioGroup aria-labelledby="payment-method" {...field}>
-                    {(acl.canInviteAttendees(Course_Type_Enum.Open) &&
-                      internalBooking) ||
-                    (acl.isAustralia() && hidePaymentByCCOnANZ) ? null : (
+                    {acl.canInviteAttendees(Course_Type_Enum.Open) &&
+                    internalBooking ? null : (
                       <FormControlLabel
                         // Internal TT users can create booking for open courses
                         // without paying by cc

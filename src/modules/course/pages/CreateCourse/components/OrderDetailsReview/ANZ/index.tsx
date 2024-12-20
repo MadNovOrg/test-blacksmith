@@ -59,7 +59,7 @@ export const OrderDetailsReview: React.FC = () => {
     ) {
       return (
         courseData.maxParticipants *
-        (resourcePackPricingData?.anz_resource_packs_pricing[0].price ?? 0)
+        (resourcePackPricingData?.anz_resource_packs_pricing[0]?.price ?? 0)
       )
     }
     return 0
@@ -78,7 +78,7 @@ export const OrderDetailsReview: React.FC = () => {
     ) {
       return (
         courseData.freeCourseMaterials *
-        (resourcePackPricingData?.anz_resource_packs_pricing[0].price ?? 0) *
+        (resourcePackPricingData?.anz_resource_packs_pricing[0]?.price ?? 0) *
         -1
       )
     }

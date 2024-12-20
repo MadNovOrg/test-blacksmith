@@ -44,13 +44,17 @@ export function isProcessingFeeLineItem(
 export function isMandatoryCourseMaterials(
   lineItem: Pick<XeroLineItem, 'itemCode'> | null,
 ) {
-  return lineItem?.itemCode === CourseWorkbooks.Mandatory
+  return [CourseWorkbooks.Mandatory, CourseWorkbooks.ResourcePack].includes(
+    lineItem?.itemCode as CourseWorkbooks,
+  )
 }
 
 export function isFreeCourseMaterials(
   lineItem: Pick<XeroLineItem, 'itemCode'> | null,
 ) {
-  return lineItem?.itemCode === CourseWorkbooks.Free
+  return [CourseWorkbooks.Free, CourseWorkbooks.Mandatory].includes(
+    lineItem?.itemCode as CourseWorkbooks,
+  )
 }
 
 export function getTrainerExpensesLineItems(
