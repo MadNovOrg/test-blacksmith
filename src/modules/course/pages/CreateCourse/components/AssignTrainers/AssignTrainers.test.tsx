@@ -6,7 +6,7 @@ import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { AwsRegions, RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
-import { render, screen, within, waitFor } from '@test/index'
+import { render, screen, within, waitFor, chance } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
@@ -176,5 +176,38 @@ describe('component: AssignTrainers', () => {
     })
 
     expect(screen.queryByTestId('trainer-ratio-exception')).toBeInTheDocument()
+  })
+
+  it('does allow selecting a moderator trainer for Closed Foundation Trainer course', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+
+    const course = buildCourse({
+      overrides: {
+        level: Course_Level_Enum.FoundationTrainer,
+        reaccreditation: chance.bool(),
+        trainers: [],
+        type: Course_Type_Enum.Closed,
+      },
+    })
+
+    render(
+      <Provider value={createFetchingClient()}>
+        <CreateCourseProvider
+          courseType={Course_Type_Enum.Closed}
+          initialValue={{
+            courseData: courseToCourseInput(course) as ValidCourseInput,
+          }}
+        >
+          <AssignTrainers />
+        </CreateCourseProvider>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('AssignTrainers-form')).toBeInTheDocument()
+    })
+
+    expect(screen.queryByTestId('AssignTrainers-moderator')).toBeInTheDocument()
   })
 })

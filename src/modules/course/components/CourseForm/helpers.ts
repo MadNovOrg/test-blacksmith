@@ -61,31 +61,28 @@ export function isEndDateTimeBeforeStartDateTime(
 export function getANZLevels(courseType: Course_Type_Enum) {
   const types = {
     [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Open}`]: () => {
-      const baseLevels = [
-        Course_Level_Enum.Level_1,
-        Course_Level_Enum.Level_2,
-        Course_Level_Enum.IntermediateTrainer,
-        Course_Level_Enum.FoundationTrainerPlus,
-      ]
-
-      const expanedLevels = [
+      return [
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.IntermediateTrainer,
         Course_Level_Enum.FoundationTrainer,
         Course_Level_Enum.FoundationTrainerPlus,
       ]
-      return posthog.getFeatureFlag('foundation-trainer-level')
-        ? expanedLevels
-        : baseLevels
     },
 
     [`${Accreditors_Enum.Icm}-${Course_Type_Enum.Closed}`]: () => {
+      const isClosedFoundationTrainerEnabled = posthog.getFeatureFlag(
+        'closed-type-foundation-trainer-level',
+      )
+
       return [
         Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_1Bs,
         Course_Level_Enum.Level_2,
         Course_Level_Enum.IntermediateTrainer,
+        ...(isClosedFoundationTrainerEnabled
+          ? [Course_Level_Enum.FoundationTrainer]
+          : []),
         Course_Level_Enum.FoundationTrainerPlus,
       ]
     },
@@ -313,6 +310,7 @@ export function canBeBlendedANZ(
 
       if (isMixed) {
         const levels = [
+          Course_Level_Enum.FoundationTrainer,
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_1Bs,
           Course_Level_Enum.Level_2,
@@ -321,7 +319,10 @@ export function canBeBlendedANZ(
       }
 
       if (isVirtual) {
-        const levels = [Course_Level_Enum.Level_1]
+        const levels = [
+          Course_Level_Enum.FoundationTrainer,
+          Course_Level_Enum.Level_1,
+        ]
         return levels.includes(courseLevel as Course_Level_Enum)
       }
 
@@ -559,16 +560,20 @@ export function canBeReaccANZ(
 
       if (isMixed) {
         const levels = [
+          Course_Level_Enum.FoundationTrainer,
+          Course_Level_Enum.FoundationTrainerPlus,
           Course_Level_Enum.Level_1,
           Course_Level_Enum.Level_1Bs,
           Course_Level_Enum.Level_2,
-          Course_Level_Enum.FoundationTrainerPlus,
         ]
         return levels.includes(courseLevel)
       }
 
       if (isVirtual) {
-        const levels = [Course_Level_Enum.Level_1]
+        const levels = [
+          Course_Level_Enum.FoundationTrainer,
+          Course_Level_Enum.Level_1,
+        ]
         return levels.includes(courseLevel)
       }
 
@@ -822,10 +827,11 @@ export function canBeANZMixed(
       if (!courseLevel) return false
 
       const levels = [
-        Course_Level_Enum.Level_1,
-        Course_Level_Enum.Level_2,
+        Course_Level_Enum.FoundationTrainer,
         Course_Level_Enum.FoundationTrainerPlus,
+        Course_Level_Enum.Level_1,
         Course_Level_Enum.Level_1Bs,
+        Course_Level_Enum.Level_2,
         Course_Level_Enum.Level_2,
       ]
       return levels.includes(courseLevel)
@@ -885,17 +891,21 @@ export function canBeANZVirtual(
     [Course_Type_Enum.Open]: () => {
       if (!courseLevel) return false
 
-      const levels = [Course_Level_Enum.Level_1]
-      if (posthog.getFeatureFlag('foundation-trainer-level')) {
-        levels.push(Course_Level_Enum.FoundationTrainer)
-      }
+      const levels = [
+        Course_Level_Enum.FoundationTrainer,
+        Course_Level_Enum.Level_1,
+      ]
+
       return levels.includes(courseLevel)
     },
 
     [Course_Type_Enum.Closed]: () => {
       if (!courseLevel) return false
 
-      const levels = [Course_Level_Enum.Level_1]
+      const levels = [
+        Course_Level_Enum.FoundationTrainer,
+        Course_Level_Enum.Level_1,
+      ]
       return levels.includes(courseLevel)
     },
 

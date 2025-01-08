@@ -112,10 +112,11 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       isModeratorNeeded({
         courseLevel,
         courseType,
-        isReaccreditation: isReAccreditation,
+        forAustralia: acl.isAustralia(),
         isConversion,
+        isReaccreditation: isReAccreditation,
       }),
-    [courseLevel, courseType, isReAccreditation, isConversion],
+    [courseLevel, courseType, isReAccreditation, isConversion, acl],
   )
 
   const mandatoryModerator = useMemo(

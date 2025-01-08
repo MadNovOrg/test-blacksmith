@@ -154,10 +154,11 @@ export const AssignTrainers = () => {
     return isModeratorNeeded({
       courseLevel: courseData.courseLevel,
       courseType: courseData.type,
-      isReaccreditation: courseData.reaccreditation,
+      forAustralia: isAustraliaRegion,
       isConversion: courseData.conversion,
+      isReaccreditation: courseData.reaccreditation,
     })
-  }, [courseData])
+  }, [courseData, isAustraliaRegion])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)

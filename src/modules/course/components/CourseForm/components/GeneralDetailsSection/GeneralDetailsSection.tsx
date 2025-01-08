@@ -18,7 +18,6 @@ import {
   Radio,
   FormHelperText,
 } from '@mui/material'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo } from 'react'
 import { useFormContext, Controller, useWatch } from 'react-hook-form'
 
@@ -79,10 +78,6 @@ export const GeneralDetailsSection = ({
   } = useFormContext<CourseInput>()
   const { changeCountryOnCourseLevelChange } = useCourseFormEffects()
   const { t, _t } = useScopedTranslation('components.course-form')
-  const isBlendedLearningToggleEnabled = useFeatureFlagEnabled(
-    'is-blended-learning-toggle-enabled',
-  )
-  const isFTEnabled = useFeatureFlagEnabled('foundation-trainer-level')
 
   const courseType = useWatch({ control, name: 'type' }) as Course_Type_Enum
   const accreditedBy = useWatch({ control, name: 'accreditedBy' })
@@ -196,23 +191,32 @@ export const GeneralDetailsSection = ({
   }
 
   const shouldDisableBlended = useMemo(() => {
-    // NOTE: This is a temporary condition to disable blended learning for ANZ Indirect and Closed courses.
-    if (acl.isAustralia() && !isBlendedLearningToggleEnabled) return true // TODO: Remove this condition after ANZ blended learning is fully integrated.
+    if (
+      canBlended &&
+      courseType === Course_Type_Enum.Closed &&
+      courseLevel === Course_Level_Enum.FoundationTrainer
+    ) {
+      return true
+    }
+
     return (
       !canBlended || disableBlended || disabledFields.has('blendedLearning')
     )
-  }, [
-    acl,
-    canBlended,
-    disableBlended,
-    disabledFields,
-    isBlendedLearningToggleEnabled,
-  ])
+  }, [canBlended, courseLevel, courseType, disableBlended, disabledFields])
 
   useEffect(() => {
+    if (
+      canBlended &&
+      courseType === Course_Type_Enum.Closed &&
+      courseLevel === Course_Level_Enum.FoundationTrainer
+    ) {
+      setValue('blendedLearning', true)
+      return
+    }
+
     const mustChange = !canBlended && blendedLearning
     mustChange && setValue('blendedLearning', false)
-  }, [canBlended, setValue, blendedLearning])
+  }, [canBlended, setValue, blendedLearning, courseType, courseLevel])
 
   useEffect(() => {
     const mustChange = !canReacc() && reaccreditation
@@ -513,10 +517,7 @@ export const GeneralDetailsSection = ({
                   ) {
                     setValue('deliveryType', Course_Delivery_Type_Enum.F2F)
                   }
-                  if (
-                    isFTEnabled &&
-                    newCourseLevel === Course_Level_Enum.FoundationTrainer
-                  ) {
+                  if (newCourseLevel === Course_Level_Enum.FoundationTrainer) {
                     setValue('deliveryType', Course_Delivery_Type_Enum.Virtual)
                   }
                   resetSpecialInstructionsToDefault({

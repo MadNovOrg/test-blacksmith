@@ -5,19 +5,28 @@ import {
 } from '@app/generated/graphql'
 
 type ModeratorCriteria = {
-  courseType: Course_Type_Enum
   courseLevel: Course_Level_Enum | CourseLevel
-  isReaccreditation: boolean
+  courseType: Course_Type_Enum
+  forAustralia: boolean
   isConversion?: boolean
+  isReaccreditation: boolean
 }
 
 export function isModeratorNeeded({
   courseLevel,
   courseType,
-  isReaccreditation,
+  forAustralia,
   isConversion = false,
+  isReaccreditation,
 }: ModeratorCriteria): boolean {
   if (courseType === Course_Type_Enum.Indirect) return false
+
+  if (
+    forAustralia &&
+    courseType === Course_Type_Enum.Closed &&
+    courseLevel === Course_Level_Enum.FoundationTrainer
+  )
+    return true
 
   if (
     [
@@ -43,7 +52,11 @@ export function isModeratorMandatory(criteria: {
   isUK: boolean
 }): boolean {
   if (!criteria.isUK) return false
-  const needsModerator = isModeratorNeeded(criteria)
+
+  const needsModerator = isModeratorNeeded({
+    ...criteria,
+    forAustralia: !criteria.isUK,
+  })
 
   return criteria.courseType == Course_Type_Enum.Open ? false : needsModerator
 }
