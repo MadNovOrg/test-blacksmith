@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.17.1
+
+### Patch Changes
+
+- 85af17c: This is a dummy release in order to update the gmaps key in the latest production build
+
 ## 4.17.0
 
 ### Minor Changes
