@@ -1,11 +1,13 @@
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined'
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined'
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import { Box, Button, Container, Grid, Link, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import accountCard from '@app/assets/account-card.jpg'
 import coursesCard from '@app/assets/courses-card2.jpg'
+import familyEngagementCard from '@app/assets/family-engagement.jpg'
 import knowledgeHubCard from '@app/assets/knowledgehub-card.jpg'
 import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
@@ -25,13 +27,13 @@ const GridItem: React.FC<
       bgcolor="white"
       border={1}
       borderColor={theme.colors.lime[400]}
-      sx={{ overflow: 'hidden', display: 'block' }}
+      sx={{ overflow: 'hidden', display: 'block', height: '100%' }}
       component={Link}
       href={url}
       underline="none"
     >
       <Box>
-        <img src={image} style={{ maxWidth: '100%' }} />
+        <img alt={title} src={image} style={{ maxWidth: '100%' }} />
       </Box>
 
       <Box p={3}>
@@ -51,10 +53,47 @@ const GridItem: React.FC<
         </Typography>
 
         <Typography mb={2}>{description}</Typography>
-
         {children}
       </Box>
     </Box>
+  )
+}
+
+export const AccountOrFamilyEngagementCard = () => {
+  const {
+    verified,
+    acl: { isUK },
+  } = useAuth()
+  const { t } = useTranslation('pages', {
+    keyPrefix: 'welcome.membership-grid',
+  })
+  if (!isUK()) {
+    return (
+      <GridItem
+        image={accountCard}
+        title={t('account-title')}
+        description={t('account-description')}
+        icon={<SettingsOutlinedIcon />}
+        url={verified ? '/profile' : '/verify'}
+      >
+        <Button variant="contained" color="lime" fullWidth>
+          {t('account-button')}
+        </Button>
+      </GridItem>
+    )
+  }
+  return (
+    <GridItem
+      image={familyEngagementCard}
+      title={t('fet-title')}
+      description={t('fet-description')}
+      icon={<SchoolOutlinedIcon />}
+      url={import.meta.env.VITE_FAMILY_ENGAGEMENT_TRAINING}
+    >
+      <Button variant="contained" color="lime" fullWidth>
+        {t('fet-button')}
+      </Button>
+    </GridItem>
   )
 }
 
@@ -128,17 +167,7 @@ export const MembershipGrid = () => {
           </GridItem>
         </Grid>
         <Grid item md={4} className="grid-item">
-          <GridItem
-            image={accountCard}
-            title={t('account-title')}
-            description={t('account-description')}
-            icon={<SettingsOutlinedIcon />}
-            url={verified ? '/profile' : '/verify'}
-          >
-            <Button variant="contained" color="lime" fullWidth>
-              {t('account-button')}
-            </Button>
-          </GridItem>
+          <AccountOrFamilyEngagementCard />
         </Grid>
       </Grid>
     </Container>
