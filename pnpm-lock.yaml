@@ -229,8 +229,8 @@ importers:
         specifier: ^5.1.2
         version: 5.1.2(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@emotion/styled@11.11.5(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@types/react@18.2.14)(react@18.2.0))(@mui/material@5.14.11(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@emotion/styled@11.11.5(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@types/react@18.2.14)(react@18.2.0))(@types/react@18.2.14)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@types/react@18.2.14)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       posthog-js:
-        specifier: ^1.194.3
-        version: 1.194.3
+        specifier: ^1.205.0
+        version: 1.205.0
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -10697,8 +10697,8 @@ packages:
     resolution: {integrity: sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.194.3:
-    resolution: {integrity: sha512-/YFpBMqZzRpywa07QeoaIojdrUDijFajT4gZBSCFUBuZA5BN5xr5S1spsvtpT7E4RjkQSVgRvUngI4W19csgQw==}
+  posthog-js@1.205.0:
+    resolution: {integrity: sha512-zP4SQ9Dg9JwqkEteoAOviAAAMdT/nJ4vk1jqfE6fVudziEa3szkQWd7czk5ehlEdrKFUE85MonCKW4L/uwtybA==}
 
   preact@10.19.6:
     resolution: {integrity: sha512-gympg+T2Z1fG1unB8NH29yHJwnEaCH37Z32diPDku316OTnRPeMbiRV9kTrfZpocXjdfnWuFUl/Mj4BHaf6gnw==}
@@ -27168,7 +27168,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  posthog-js@1.194.3:
+  posthog-js@1.205.0:
     dependencies:
       core-js: 3.38.1
       fflate: 0.4.8
