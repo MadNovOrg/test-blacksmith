@@ -229,18 +229,18 @@ export default function useOrgV2({
   >({
     query: GET_ORGANISATION_DETAILS_QUERY,
     variables: {
-      where: where ?? conditions,
-      shallow,
       detailed: !shallow,
       limit,
       offset,
-      specificOrgId,
-      withSpecificOrganisation,
+      shallow,
       sort: orderBy,
-      withMembers,
+      specificOrgId,
+      where: where ?? conditions,
       withAggregateData,
       withDfEEstablishment,
       withMainOrganisation,
+      withMembers,
+      withSpecificOrganisation,
     },
   })
 

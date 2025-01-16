@@ -360,7 +360,19 @@ export const useCourses = (
       const onlyUserOrgs: Course_Bool_Exp = {
         _or: [
           {
-            organization: { id: { _in: organizationIds } },
+            organization: {
+              _or: [
+                { id: { _in: organizationIds } },
+                {
+                  main_organisation: {
+                    members: {
+                      isAdmin: { _eq: true },
+                      profile_id: { _eq: profile?.id },
+                    },
+                  },
+                },
+              ],
+            },
             type: { _in: [Course_Type_Enum.Closed, Course_Type_Enum.Indirect] },
           },
           {
@@ -369,11 +381,23 @@ export const useCourses = (
               profile: {
                 organizations: {
                   organization: {
-                    id: { _in: organizationIds },
-                    members: {
-                      isAdmin: { _eq: true },
-                      profile_id: { _eq: profile?.id },
-                    },
+                    _or: [
+                      {
+                        id: { _in: organizationIds },
+                        members: {
+                          isAdmin: { _eq: true },
+                          profile_id: { _eq: profile?.id },
+                        },
+                      },
+                      {
+                        main_organisation: {
+                          members: {
+                            isAdmin: { _eq: true },
+                            profile_id: { _eq: profile?.id },
+                          },
+                        },
+                      },
+                    ],
                   },
                 },
               },

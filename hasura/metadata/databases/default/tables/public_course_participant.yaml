@@ -447,19 +447,38 @@ select_permissions:
           - profile:
               organizations:
                 organization:
-                  members:
-                    profile_id:
-                      _eq: X-Hasura-User-Id
+                  _or:
+                    - members:
+                        _and:
+                          - is_admin:
+                              _eq: true
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                    - main_organisation:
+                        members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
           - profile_id:
               _eq: X-Hasura-User-Id
           - course:
               organization:
-                members:
-                  _and:
-                    - profile_id:
-                        _eq: X-Hasura-User-Id
-                    - is_admin:
-                        _eq: true
+                _or:
+                  - members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                  - main_organisation:
+                      members:
+                        _and:
+                          - is_admin:
+                              _eq: true
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
           - _and:
               - course:
                   course_type:

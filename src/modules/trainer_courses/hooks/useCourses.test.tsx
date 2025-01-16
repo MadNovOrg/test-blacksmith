@@ -62,9 +62,25 @@ describe('hook: useCourses', () => {
         "_or": [
           {
             "organization": {
-              "id": {
-                "_in": [],
-              },
+              "_or": [
+                {
+                  "id": {
+                    "_in": [],
+                  },
+                },
+                {
+                  "main_organisation": {
+                    "members": {
+                      "isAdmin": {
+                        "_eq": true,
+                      },
+                      "profile_id": {
+                        "_eq": "cacb559d-b85d-5e64-b623-37252520ebda",
+                      },
+                    },
+                  },
+                },
+              ],
             },
             "type": {
               "_in": [
@@ -78,17 +94,33 @@ describe('hook: useCourses', () => {
               "profile": {
                 "organizations": {
                   "organization": {
-                    "id": {
-                      "_in": [],
-                    },
-                    "members": {
-                      "isAdmin": {
-                        "_eq": true,
+                    "_or": [
+                      {
+                        "id": {
+                          "_in": [],
+                        },
+                        "members": {
+                          "isAdmin": {
+                            "_eq": true,
+                          },
+                          "profile_id": {
+                            "_eq": "cacb559d-b85d-5e64-b623-37252520ebda",
+                          },
+                        },
                       },
-                      "profile_id": {
-                        "_eq": "cacb559d-b85d-5e64-b623-37252520ebda",
+                      {
+                        "main_organisation": {
+                          "members": {
+                            "isAdmin": {
+                              "_eq": true,
+                            },
+                            "profile_id": {
+                              "_eq": "cacb559d-b85d-5e64-b623-37252520ebda",
+                            },
+                          },
+                        },
                       },
-                    },
+                    ],
                   },
                 },
               },

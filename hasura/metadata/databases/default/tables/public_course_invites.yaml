@@ -146,14 +146,23 @@ insert_permissions:
       check:
         course:
           organization:
-            members:
-              _and:
-                - profile_id:
-                    _eq: X-Hasura-User-Id
-                - is_admin:
-                    _eq: true
+            _or:
+              - members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+              - main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
       columns:
         - course_id
+        - created_at
         - email
         - expires_in
         - invited_after_course_end
@@ -342,12 +351,20 @@ select_permissions:
       filter:
         course:
           organization:
-            members:
-              _and:
-                - profile_id:
-                    _eq: X-Hasura-User-Id
-                - is_admin:
-                    _eq: true
+            _or:
+              - members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+              - main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
   - role: ld
@@ -421,6 +438,7 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - created_at
         - inviter_id
         - status
       filter:
@@ -491,12 +509,20 @@ delete_permissions:
       filter:
         course:
           organization:
-            members:
-              _and:
-                - profile_id:
-                    _eq: X-Hasura-User-Id
-                - is_admin:
-                    _eq: true
+            _or:
+              - members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+              - main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
 event_triggers:
   - name: course_participant_added
     definition:

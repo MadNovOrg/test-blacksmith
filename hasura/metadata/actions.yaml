@@ -386,6 +386,7 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/go1-licensing/send-invite'
     permissions:
+      - role: user
       - role: organization-key-contact
       - role: tt-ops
       - role: sales-admin

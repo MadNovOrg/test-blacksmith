@@ -1242,12 +1242,20 @@ select_permissions:
                   profile:
                     organizations:
                       organization:
-                        members:
-                          _and:
-                            - is_admin:
-                                _eq: true
-                            - profile_id:
-                                _eq: X-Hasura-User-Id
+                        _or:
+                          - members:
+                              _and:
+                                - is_admin:
+                                    _eq: true
+                                - profile_id:
+                                    _eq: X-Hasura-User-Id
+                          - main_organisation:
+                              members:
+                                _and:
+                                  - is_admin:
+                                      _eq: true
+                                  - profile_id:
+                                      _eq: X-Hasura-User-Id
           - organization:
               _or:
                 - members:

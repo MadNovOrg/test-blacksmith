@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { OperationContext, useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
@@ -17,11 +18,11 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 export default function useCourseParticipants(
   courseId?: number,
   options?: {
-    sortBy?: string
+    alwaysShowArchived?: boolean
     order?: SortOrder
     pagination?: { limit: number; offset: number }
+    sortBy?: string
     where?: Course_Participant_Bool_Exp
-    alwaysShowArchived?: boolean
   },
 ): {
   data?: ResponseType['courseParticipants']
@@ -57,6 +58,14 @@ export default function useCourseParticipants(
     queryConditions.push(options.where)
   }
 
+  const orgsAsAdmin = useMemo(
+    () =>
+      profile?.organizations
+        .filter(org => org.isAdmin)
+        .map(org => org.organization.id),
+    [profile?.organizations],
+  )
+
   const [{ data, error }, mutate] = useQuery<ResponseType, ParamsType>({
     query: GET_COURSE_PARTICIPANTS,
     variables: {
@@ -70,11 +79,20 @@ export default function useCourseParticipants(
                 {
                   profile: {
                     organizations: {
-                      organization_id: {
-                        _in: profile?.organizations.map(
-                          org => org.organization.id,
-                        ),
-                      },
+                      _or: [
+                        {
+                          organization_id: {
+                            _in: orgsAsAdmin,
+                          },
+                        },
+                        {
+                          organization: {
+                            main_organisation_id: {
+                              _in: orgsAsAdmin,
+                            },
+                          },
+                        },
+                      ],
                     },
                   },
                 },
