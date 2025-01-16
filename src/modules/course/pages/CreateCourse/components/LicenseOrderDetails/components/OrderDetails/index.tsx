@@ -35,7 +35,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   const { t, _t } = useScopedTranslation(
     'pages.create-course.license-order-details',
   )
-  const { defaultCurrency, currencyAbbreviations } =
+  const { anzAvailableCurrencies, defaultCurrency, currencyAbbreviations } =
     useCurrencies(residingCountry)
 
   const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
@@ -134,7 +134,13 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
       <DetailsItemBox>
         <ItemRow>
           <Typography variant="h6">
-            {t('amound-due', { currency: 'GBP' })}
+            {t('amount-due', {
+              currency: isAustralia()
+                ? anzAvailableCurrencies[
+                    defaultCurrency as keyof typeof anzAvailableCurrencies
+                  ]
+                : 'GBP',
+            })}
           </Typography>
           <Typography variant="h6" data-testid="amount-due">
             {_t('common.amount-with-currency', {

@@ -73,8 +73,9 @@ export const useCurrencies = (residingCountry?: string) => {
 
   return {
     activeCurrencies,
-    defaultCurrency,
-    currencyBySymbol,
+    anzAvailableCurrencies,
     currencyAbbreviations,
+    currencyBySymbol,
+    defaultCurrency,
   }
 }

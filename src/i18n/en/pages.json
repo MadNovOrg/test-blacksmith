@@ -393,7 +393,7 @@
       "price-per-attendee": "{{price}} per attendee",
       "license-allowance": "licence allowance ({{balance}} left)",
       "subtotal": "Sub total",
-      "amound-due": "Amount due ({{currency}})",
+      "amount-due": "Amount due ({{currency}})",
       "vat": "VAT (20%)",
       "invoice-title": "Invoice contact details",
       "invoice-contact": "Invoice to:"
