@@ -1,5 +1,27 @@
 # @teamteach/hub
 
+## 4.18.0
+
+### Minor Changes
+
+- b3e6d49: Open course resource packs for ANZ.
+- c6ad6d0: Closed type course, Foundation Trainer level
+- 70983df: Add Arm waltz in L1BS Separations module on UK.
+- be4e372: Remove the need to have moderator on the Intermediate Trainer ANZ.
+- 0433341: Allow trainers to deliver courses within affiliated orgs
+- b64de15: Closed Course ANZ Resource Packs.
+- 7fbcafb: Updates the Homepage to show relevant data related to FET for UK region
+
+### Patch Changes
+
+- 686235e: Fix phone number input country flag on invoice details
+- e1d2fea: fix (TTHP-4752): selected trainers not displayed
+- f87dbcb: Fix issue on save changes after uncheck AOL with 0 course cost on edit page
+- 889971b: Fixes and issue which would block merging users due to evaluations being scheduled
+- 05e5a09: Fixes an issue where TOS would not be displayed on the auto register pages
+- 5a49c9e: Limit attendee transfer post grading
+- f12eb46: Validate country codes depending on the environment
+
 ## 4.17.1
 
 ### Patch Changes
