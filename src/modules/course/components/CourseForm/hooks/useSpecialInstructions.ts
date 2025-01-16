@@ -12,12 +12,13 @@ import { CourseInput } from '@app/types'
 import { getDefaultSpecialInstructions } from '../helpers'
 
 interface UseResetSpecialInstructionsParams {
-  courseType: Course_Type_Enum
-  courseLevel: Course_Level_Enum
-  deliveryType: Course_Delivery_Type_Enum
-  reaccreditation: boolean
   conversion: boolean
+  courseLevel: Course_Level_Enum
+  courseType: Course_Type_Enum
+  deliveryType: Course_Delivery_Type_Enum
+  isAustralia: boolean
   isCreation?: boolean
+  reaccreditation: boolean
   setValue: UseFormSetValue<CourseInput>
 }
 
@@ -30,28 +31,36 @@ interface ResetSpecialInstructionsOverrides {
 }
 
 export const useSpecialInstructions = ({
-  courseType,
-  courseLevel,
-  deliveryType,
-  reaccreditation,
   conversion,
+  courseLevel,
+  courseType,
+  deliveryType,
+  isAustralia,
   isCreation = false,
+  reaccreditation,
   setValue,
 }: UseResetSpecialInstructionsParams) => {
   const { t } = useTranslation()
 
-  const defaultSpecialInstructions = useMemo(
-    () =>
-      getDefaultSpecialInstructions(
-        courseType,
-        courseLevel,
-        deliveryType,
-        reaccreditation,
-        conversion,
-        t,
-      ),
-    [courseLevel, courseType, deliveryType, t, reaccreditation, conversion],
-  )
+  const defaultSpecialInstructions = useMemo(() => {
+    return getDefaultSpecialInstructions(
+      courseType,
+      courseLevel,
+      deliveryType,
+      reaccreditation,
+      conversion,
+      t,
+      isAustralia,
+    )
+  }, [
+    courseType,
+    courseLevel,
+    deliveryType,
+    reaccreditation,
+    conversion,
+    t,
+    isAustralia,
+  ])
 
   const resetSpecialInstructionsToDefault = useCallback(
     (overrides: ResetSpecialInstructionsOverrides = {}) => {
@@ -72,19 +81,21 @@ export const useSpecialInstructions = ({
         newCourseReacc,
         newCourseConversion,
         t,
+        isAustralia,
       )
 
       setValue('specialInstructions', newSpecialInstructions)
     },
     [
+      isCreation,
       courseType,
       courseLevel,
       deliveryType,
       reaccreditation,
       conversion,
-      isCreation,
-      setValue,
       t,
+      isAustralia,
+      setValue,
     ],
   )
 

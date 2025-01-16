@@ -132,14 +132,16 @@ export const GeneralDetailsSection = ({
 
   const { defaultSpecialInstructions, resetSpecialInstructionsToDefault } =
     useSpecialInstructions({
-      courseType,
-      courseLevel: courseLevel as Course_Level_Enum,
-      deliveryType,
       conversion,
+      courseLevel: courseLevel as Course_Level_Enum,
+      courseType,
+      deliveryType,
+      isAustralia: acl.isAustralia(),
       isCreation,
       reaccreditation,
       setValue,
     })
+
   const hasSpecialInstructions = [
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
@@ -219,15 +221,10 @@ export const GeneralDetailsSection = ({
   }, [canBlended, setValue, blendedLearning, courseType, courseLevel])
 
   useEffect(() => {
-    const mustChange = !canReacc() && reaccreditation
-    if (mustChange) {
-      const newReaccreditationValue = false
-      setValue('reaccreditation', newReaccreditationValue)
-      resetSpecialInstructionsToDefault({
-        newCourseReacc: newReaccreditationValue,
-      })
-    }
-  }, [canReacc, reaccreditation, resetSpecialInstructionsToDefault, setValue])
+    resetSpecialInstructionsToDefault({
+      newCourseReacc: reaccreditation,
+    })
+  }, [reaccreditation, resetSpecialInstructionsToDefault])
 
   useEffect(() => {
     if (disableBlended)

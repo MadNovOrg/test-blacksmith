@@ -948,9 +948,11 @@ export function getDefaultSpecialInstructions(
   reaccreditation: boolean,
   conversion: boolean,
   t: TFunction,
+  isAustralia: boolean,
 ) {
-  const keyPrefixPath =
-    'components.course-form.special-instructions.instructions'
+  const keyPrefixPath = `components.course-form.special-instructions.instructions${
+    isAustralia ? '-anz' : ''
+  }`
   let key = `${keyPrefixPath}.${type}.${level}`
 
   if (
@@ -969,6 +971,7 @@ export function getDefaultSpecialInstructions(
   }
 
   const translation = t(key)
+
   return translation
 }
 
