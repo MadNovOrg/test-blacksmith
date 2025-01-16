@@ -507,7 +507,7 @@ export const CourseBookingReview: React.FC<
         label={
           <Typography variant="body2">
             <Trans
-              i18nKey="pages.book-course.review-tnc-international"
+              i18nKey="pages.book-course.review-tnc-international-anz"
               components={{
                 termsOfUseLink: (
                   <Link
