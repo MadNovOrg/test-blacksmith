@@ -26,10 +26,7 @@ import {
   GetOrgInviteQueryVariables,
 } from '@app/generated/graphql'
 import { DECLINE_ORG_INVITE_MUTATION } from '@app/modules/invitation/queries/decline-org-invite'
-import {
-  GET_ORG_INVITE_QUERY,
-  ResponseType as GetOrgInviteResponseType,
-} from '@app/modules/invitation/queries/get-org-invite'
+import { GET_ORG_INVITE_QUERY } from '@app/modules/invitation/queries/get-org-invite'
 import { userExistsInCognito } from '@app/util'
 
 export const OrgInvitationPage = () => {
@@ -88,7 +85,7 @@ export const OrgInvitationPage = () => {
     DeclineOrgInviteMutationVariables
   >(DECLINE_ORG_INVITE_MUTATION)
 
-  const invite = (data?.invite || {}) as GetOrgInviteResponseType['invite']
+  const invite = (data?.invite || {}) as GetOrgInviteQuery['invite']
   const isFetching = !data && !error
 
   const organizationId = data?.invite?.orgId
@@ -182,7 +179,7 @@ export const OrgInvitationPage = () => {
         width={isMobile ? undefined : 500}
       >
         <Typography variant="h3" fontWeight="600" mb={3}>
-          {`${t('pages.org-invite.title')} ${invite.orgName}`}
+          {`${t('pages.org-invite.title')} ${invite?.orgName}`}
         </Typography>
 
         <Box mt={3} mb={2}>

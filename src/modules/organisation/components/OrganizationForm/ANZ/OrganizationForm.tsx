@@ -61,7 +61,7 @@ type Props = {
   onSubmit: (data: FormInputs) => void
   setXeroId?: (id: string | undefined) => void
   setOtherOrgType?: (otherOrgType: boolean) => void
-  error?: CombinedError | undefined
+  error?: CombinedError
   loading?: boolean
   editOrgData?: Partial<Organization> & {
     country?: string
@@ -100,7 +100,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   )
 
   defaultValues.country =
-    getCountryLabel(defaultValues.countryCode as CountryCode) ?? ''
+    getCountryLabel(defaultValues.countryCode as CountryCode) || ''
 
   const schema = useMemo(
     () => getFormSchema(t, _t, linkToMainOrg),

@@ -65,7 +65,7 @@ type Props = {
   onSubmit: (data: FormInputs) => void
   setXeroId?: (id: string | undefined) => void
   setOtherOrgType?: (otherOrgType: boolean) => void
-  error?: CombinedError | undefined
+  error?: CombinedError
   loading?: boolean
   editOrgData?: Partial<Organization> & {
     country?: string
@@ -179,7 +179,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
       setValue('name', org?.name ?? '', { shouldValidate: true })
 
       if (isDfeSuggestion(org)) {
-        Object.keys(values).map(async key => {
+        Object.keys(values).forEach(async key => {
           if (key === 'ofstedLastInspection') {
             orgDataMap.set(
               key,
@@ -224,7 +224,6 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
             case 'name':
               return orgDataMap.set(key, org.name)
             default:
-              null
           }
           orgDataMap.set(key, org[key as keyof CallbackOption] ?? '')
 
@@ -785,10 +784,11 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                                 fullWidth
                                 inputProps={{ 'data-testid': 'ofsted-rating' }}
                               >
-                                {Object.keys(OfstedRating).map((val, i) => {
-                                  const option = OfstedRatingOrder[
-                                    i as OfstedRatingOrderKey
-                                  ] as OfstedRating
+                                {Object.keys(OfstedRating).map((_, rating) => {
+                                  const option =
+                                    OfstedRatingOrder[
+                                      rating as OfstedRatingOrderKey
+                                    ]
 
                                   return (
                                     <MenuItem

@@ -37,7 +37,7 @@ import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/profile/queries
 
 export type InviteUserToOrganisationProps = {
   userProfile: {
-    email?: string | null | undefined
+    email?: string | null
     organizations: Array<{
       organization: {
         id: string
@@ -246,17 +246,16 @@ export const InviteUserToOrganisation: React.FC<
             </>
           ) : undefined}
 
-          {error || errorOnInviteSave ? (
+          {(error || errorOnInviteSave) && (
             <Alert severity="error">
-              {error
-                ? error
-                : errorOnInviteSave?.message.includes(
-                    SaveOrgInviteError.OrgMemberAlreadyExists,
-                  )
-                ? t('pages.invite-to-org.duplicate-email')
-                : t('internal-error')}
+              {error ||
+                (errorOnInviteSave?.message.includes(
+                  SaveOrgInviteError.OrgMemberAlreadyExists,
+                )
+                  ? t('pages.invite-to-org.duplicate-email')
+                  : t('internal-error'))}
             </Alert>
-          ) : null}
+          )}
 
           <Grid
             container

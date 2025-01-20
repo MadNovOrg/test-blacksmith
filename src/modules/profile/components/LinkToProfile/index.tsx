@@ -27,9 +27,13 @@ export const LinkToProfile: React.FC<React.PropsWithChildren<Props>> = ({
   }
 
   const link = (
-    <div onClick={handleNavigateToProfile} data-testid="link-to-user-profile">
+    <button
+      style={{ all: 'unset' }}
+      onClick={handleNavigateToProfile}
+      data-testid="link-to-user-profile"
+    >
       <Link>{children}</Link>
-    </div>
+    </button>
   )
   const noLink = <div data-testid="no-link-generated">{children}</div>
 

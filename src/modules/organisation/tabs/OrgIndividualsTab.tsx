@@ -82,7 +82,7 @@ export const OrgIndividualsTab: React.FC<
     (status: CertificateStatus | null) => {
       if (status) {
         setCertificateStatus(currentStatuses => {
-          if (currentStatuses && currentStatuses.includes(status)) {
+          if (currentStatuses?.includes(status)) {
             return currentStatuses.filter(s => s !== status)
           } else {
             return [...(currentStatuses ?? []), status]

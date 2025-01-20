@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { TFunction } from 'i18next'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { InferType } from 'yup'
 
@@ -118,13 +118,16 @@ export const ManageLicensesForm: React.FC<React.PropsWithChildren<Props>> = ({
     resetField('licensePrice')
   }, [values.type, resetField])
 
-  const newBalance =
-    currentBalance +
-    (!errors.amount?.message && Number(values.amount)
-      ? values.type === Type.ADD
+  const amountChange = useMemo(() => {
+    if (!errors.amount?.message && Number(values.amount)) {
+      return values.type === Type.ADD
         ? Number(values.amount)
         : -Number(values.amount)
-      : 0)
+    }
+    return 0
+  }, [errors.amount?.message, values.amount, values.type])
+
+  const newBalance = currentBalance + amountChange
 
   return (
     <form onSubmit={handleSubmit(submit)}>

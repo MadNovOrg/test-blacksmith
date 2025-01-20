@@ -23,7 +23,7 @@ export const NotFound: React.FC<React.PropsWithChildren<Props>> = ({
     <Stack flex={1} alignItems="center" px={2}>
       {showTitle ? (
         <Typography variant="h2" mt={10}>
-          {title ? title : t('components.not-found.title')}
+          {title || t('components.not-found.title')}
         </Typography>
       ) : null}
       <Typography variant="body1" mt={4} textAlign={'center'}>

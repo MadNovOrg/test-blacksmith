@@ -32,7 +32,7 @@ import { BackButton } from '@app/components/BackButton'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
-import { GetProfileDetailsQuery, Grade_Enum } from '@app/generated/graphql'
+import { Grade_Enum } from '@app/generated/graphql'
 import { CoursePrerequisitesAlert } from '@app/modules/course_details/components/CoursePrerequisitesAlert'
 import { Avatar } from '@app/modules/profile/components/Avatar'
 import { CertificationsTable } from '@app/modules/profile/components/CertificationsTable'
@@ -52,11 +52,7 @@ import { getRoleColor } from '@app/modules/profile/utils/ANZ/helpers'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-type ViewProfilePageProps = unknown
-
-export const ViewProfilePage: React.FC<
-  React.PropsWithChildren<ViewProfilePageProps>
-> = () => {
+export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { profile: currentUserProfile, activeRole, verified, acl } = useAuth()
   const [selectedTab, setSelectedTab] = useState(0)
@@ -118,9 +114,18 @@ export const ViewProfilePage: React.FC<
     acl.isInternalUser() ||
     !profileIsTrainerOnRecentlyVisitedCourse()
 
-  if (status === LoadingStatus.FETCHING) {
-    return <CircularProgress />
-  }
+  const trainerViewProfile = useMemo(() => {
+    if (isMyProfile) {
+      return false
+    } else if (activeRole) {
+      return [
+        RoleName.BOOKING_CONTACT,
+        RoleName.ORGANIZATION_KEY_CONTACT,
+        RoleName.TRAINER,
+      ].includes(activeRole)
+    }
+    return true
+  }, [activeRole, isMyProfile])
 
   if (!profile) {
     return (
@@ -131,25 +136,6 @@ export const ViewProfilePage: React.FC<
       >
         {t('common.errors.generic.loading-error')}
       </Alert>
-    )
-  }
-
-  if (!acl.canViewProfiles() && !isMyProfile) {
-    return (
-      <Box pb={6} pt={3} flex={1}>
-        <Container>
-          <Grid container>
-            <Grid item sm={12}>
-              <BackButton label={t('common.back')} />
-            </Grid>
-            <Grid item sm={12}>
-              <Alert severity="error" variant="outlined">
-                {t('common.errors.user-permission')}
-              </Alert>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
     )
   }
 
@@ -170,17 +156,30 @@ export const ViewProfilePage: React.FC<
     c => !c.participant || c.participant.grade !== Grade_Enum.Fail,
   )
 
-  const trainerViewProfile = isMyProfile
-    ? false
-    : activeRole
-    ? [
-        RoleName.BOOKING_CONTACT,
-        RoleName.ORGANIZATION_KEY_CONTACT,
-        RoleName.TRAINER,
-      ].includes(activeRole)
-    : true
-
   const isOrgAdmin = isMyProfile ? false : acl.isOrgAdmin()
+
+  if (status === LoadingStatus.FETCHING) {
+    return <CircularProgress />
+  }
+
+  if (!acl.canViewProfiles() && !isMyProfile) {
+    return (
+      <Box pb={6} pt={3} flex={1}>
+        <Container>
+          <Grid container>
+            <Grid item sm={12}>
+              <BackButton label={t('common.back')} />
+            </Grid>
+            <Grid item sm={12}>
+              <Alert severity="error" variant="outlined">
+                {t('common.errors.user-permission')}
+              </Alert>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    )
+  }
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
@@ -534,9 +533,7 @@ export const ViewProfilePage: React.FC<
             {!isMobile || selectedTab === TableMenuSelections.CERTIFICATIONS ? (
               <CertificationsTable
                 verified={Boolean(verified)}
-                certifications={
-                  certificatesToShow as GetProfileDetailsQuery['certificates']
-                }
+                certifications={certificatesToShow}
               />
             ) : null}
 

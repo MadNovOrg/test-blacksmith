@@ -31,7 +31,8 @@ export const useOrgType = (sector: string, international = false) => {
       sectorMap.set(sector, Organisation_Sector_Enum.AnzHealth)
       break
     default:
-      'other'
+      sectorMap.set(sector, 'other')
+      break
   }
 
   const where: Organization_Type_Bool_Exp = {

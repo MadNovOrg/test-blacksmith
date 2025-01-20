@@ -80,7 +80,7 @@ export const CourseForBookingTile: React.FC<
     return `${weekDayPart} • ${format(
       start,
       'p',
-    )}${` ${formatGMTDateTimeByTimeZone(start, timeZone)}`}`
+    )} ${formatGMTDateTimeByTimeZone(start, timeZone)}`
   }, [course.schedules, formatGMTDateTimeByTimeZone])
 
   const distanceLabel = useMemo(() => {
@@ -130,12 +130,11 @@ export const CourseForBookingTile: React.FC<
       return
     }
 
+    const internalParam = acl.isInternalUser() ? '&internal=true' : ''
     return navigate(
       spacesLeft === 0
         ? `/waitlist?course_id=${course.id}`
-        : `/registration?course_id=${course.id}&quantity=1${
-            acl.isInternalUser() ? '&internal=true' : ''
-          }`,
+        : `/registration?course_id=${course.id}&quantity=1${internalParam}`,
     )
   }
 

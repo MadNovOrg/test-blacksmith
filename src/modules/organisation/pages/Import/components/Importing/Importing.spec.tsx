@@ -12,7 +12,9 @@ import { CHUNK_RESULT_ERROR } from '../../utils'
 import { Importing } from './Importing'
 
 vi.mock('@app/components/ImportSteps/context/useImportContext', () => ({
-  ...vi.importActual('@app/components/ImportSteps/context/useImportContext'),
+  ...(vi.importActual(
+    '@app/components/ImportSteps/context/useImportContext',
+  ) as object),
   useImportContext: () => ({
     jobId: '123',
     currentStepKey: 'IMPORTING',

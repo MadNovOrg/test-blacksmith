@@ -32,7 +32,7 @@ import { BackButton } from '@app/components/BackButton'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
-import { GetProfileDetailsQuery, Grade_Enum } from '@app/generated/graphql'
+import { Grade_Enum } from '@app/generated/graphql'
 import { CoursePrerequisitesAlert } from '@app/modules/course_details/components/CoursePrerequisitesAlert'
 import { Avatar } from '@app/modules/profile/components/Avatar'
 import { CertificationsTable } from '@app/modules/profile/components/CertificationsTable'
@@ -51,11 +51,8 @@ import useProfile from '@app/modules/profile/hooks/useProfile'
 import { getRoleColor } from '@app/modules/profile/utils/UK/helpers'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
-type ViewProfilePageProps = unknown
 
-export const ViewProfilePage: React.FC<
-  React.PropsWithChildren<ViewProfilePageProps>
-> = () => {
+export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { profile: currentUserProfile, activeRole, verified, acl } = useAuth()
   const [selectedTab, setSelectedTab] = useState(0)
@@ -111,6 +108,19 @@ export const ViewProfilePage: React.FC<
 
     return isTrainerOnVisitedCourse
   }
+
+  const trainerViewProfile = useMemo(() => {
+    if (isMyProfile) {
+      return false
+    } else if (activeRole) {
+      return [
+        RoleName.BOOKING_CONTACT,
+        RoleName.ORGANIZATION_KEY_CONTACT,
+        RoleName.TRAINER,
+      ].includes(activeRole)
+    }
+    return true
+  }, [activeRole, isMyProfile])
 
   const canViewDietaryAndDisabilities =
     isMyProfile ||
@@ -168,16 +178,6 @@ export const ViewProfilePage: React.FC<
   const certificatesToShow = (certifications ?? []).filter(
     c => !c.participant || c.participant.grade !== Grade_Enum.Fail,
   )
-
-  const trainerViewProfile = isMyProfile
-    ? false
-    : activeRole
-    ? [
-        RoleName.BOOKING_CONTACT,
-        RoleName.ORGANIZATION_KEY_CONTACT,
-        RoleName.TRAINER,
-      ].includes(activeRole)
-    : true
 
   const isOrgAdmin = isMyProfile ? false : acl.isOrgAdmin()
 
@@ -533,9 +533,7 @@ export const ViewProfilePage: React.FC<
             {!isMobile || selectedTab === TableMenuSelections.CERTIFICATIONS ? (
               <CertificationsTable
                 verified={Boolean(verified)}
-                certifications={
-                  certificatesToShow as GetProfileDetailsQuery['certificates']
-                }
+                certifications={certificatesToShow}
               />
             ) : null}
 

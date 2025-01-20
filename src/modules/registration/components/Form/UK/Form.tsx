@@ -81,7 +81,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [isManualFormError, setIsManualFormError] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [signUpError, setError] = useState('')
+  const [signUpError, setSignupErrorError] = useState('')
   const organizationData = useOrganizationToBeCreatedOnRegistration()
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
@@ -117,7 +117,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     if (isManualFormError) return
 
     setLoading(true)
-    setError('')
+    setSignupErrorError('')
 
     try {
       let input: SignUpMutationVariables['input'] = {
@@ -184,7 +184,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     } catch (err) {
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'
-      setError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
+      setSignupErrorError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
       setLoading(false)
     }
   }
@@ -201,7 +201,6 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         setValue('organization', org as Organization, {
           shouldValidate: true,
         })
-        return
       }
     },
     [setValue],
@@ -442,7 +441,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               <>
                 <Typography variant="body2">
                   <Trans i18nKey="pages.signup.tcs-label">
-                    I accept the
+                    I accept the{''}
                     <a
                       href={`${origin}/policies-procedures/terms-of-use/`}
                       target="_blank"
@@ -453,7 +452,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     >
                       Terms of Use
                     </a>
-                    and agree to Team Teach processing my personal data in
+                    and agree to Team Teach processing my personal data in{''}
                     accordance with our
                     <a
                       href={`${origin}/policies-procedures/privacy-policy/`}

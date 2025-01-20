@@ -147,7 +147,6 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         setValue('organization', org as Organization, {
           shouldValidate: true,
         })
-        return
       }
     },
     [setValue],
@@ -343,7 +342,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <>
                   <Typography variant="body2">
                     <Trans i18nKey="pages.onboarding.tcs-label">
-                      I accept the
+                      I accept the{' '}
                       <a
                         href={`${origin}/policies-procedures/terms-of-use/`}
                         target="_blank"
@@ -354,7 +353,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                       >
                         Terms of Use
                       </a>
-                      and agree to Team Teach processing my personal data in
+                      and agree to Team Teach processing my personal data in{' '}
                       accordance with our
                       <a
                         href={`${origin}/policies-procedures/privacy-policy/`}

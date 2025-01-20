@@ -15,6 +15,34 @@ export const CertificationsAlerts: FC<
   const { t } = useTranslation()
   const theme = useTheme()
 
+  const CertificateExpiryAlert = () => {
+    if (isPast(new Date(certificate.expiryDate))) {
+      return (
+        <Alert
+          data-testid="expired-certificate-alert"
+          severity={index === 0 ? 'error' : 'info'}
+          sx={{ mt: 1 }}
+        >
+          {t('course-certificate.expired-on', {
+            date: certificate.expiryDate,
+          })}
+        </Alert>
+      )
+    }
+    return (
+      <Alert
+        data-testid="valid-certificate-alert"
+        variant="outlined"
+        severity="success"
+        sx={{ mt: 1 }}
+      >
+        {t('course-certificate.active-until', {
+          date: certificate.expiryDate,
+        })}
+      </Alert>
+    )
+  }
+
   return (
     <Box
       mt={2}
@@ -31,30 +59,7 @@ export const CertificationsAlerts: FC<
         {certificate.number}
       </Typography>
 
-      {certificate.expiryDate ? (
-        isPast(new Date(certificate.expiryDate)) ? (
-          <Alert
-            data-testid="expired-certificate-alert"
-            severity={index === 0 ? 'error' : 'info'}
-            sx={{ mt: 1 }}
-          >
-            {t('course-certificate.expired-on', {
-              date: certificate.expiryDate,
-            })}
-          </Alert>
-        ) : (
-          <Alert
-            data-testid="valid-certificate-alert"
-            variant="outlined"
-            severity="success"
-            sx={{ mt: 1 }}
-          >
-            {t('course-certificate.active-until', {
-              date: certificate.expiryDate,
-            })}
-          </Alert>
-        )
-      ) : null}
+      {certificate.expiryDate ? <CertificateExpiryAlert /> : null}
     </Box>
   )
 }

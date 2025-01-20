@@ -28,7 +28,7 @@ export const Upload: React.FC = () => {
   const [processing, setProcessing] = useState(false)
 
   const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !e.target.files[0]) {
+    if (!e.target.files?.[0]) {
       return
     }
 

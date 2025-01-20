@@ -278,16 +278,26 @@ export const OrgUsersTable: React.FC<
           maxWidth={800}
           open={showEditUserModal}
           onClose={() => setShowEditUserModal(false)}
-          title={t('pages.org-details.tabs.users.edit-user-modal.title', {
-            name: editedUser.profile?.fullName,
-          })}
-          subtitle={
-            <Typography color={theme.palette.grey[700]}>
-              {t(
-                'pages.org-details.tabs.users.edit-user-modal.modification-info',
-              )}
-            </Typography>
-          }
+          slots={{
+            Title: () => (
+              <>
+                {t('pages.org-details.tabs.users.edit-user-modal.title', {
+                  name: editedUser.profile?.fullName,
+                })}
+              </>
+            ),
+            Subtitle: () => (
+              <>
+                {
+                  <Typography color={theme.palette.grey[700]}>
+                    {t(
+                      'pages.org-details.tabs.users.edit-user-modal.modification-info',
+                    )}
+                  </Typography>
+                }
+              </>
+            ),
+          }}
         >
           <EditOrgUserModal
             orgMember={editedUser}

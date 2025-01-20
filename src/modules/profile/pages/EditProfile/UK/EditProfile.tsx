@@ -348,7 +348,6 @@ export const EditProfilePage: React.FC<
         setValue('organization', organization as Organization, {
           shouldValidate: true,
         })
-        return
       }
     },
     [setValue],
@@ -430,7 +429,7 @@ export const EditProfilePage: React.FC<
 
         const formattedRoles = [] as RolesFields
 
-        profile.roles.map(obj => {
+        profile.roles.forEach(obj => {
           const existingEmployeeRole = formattedRoles.find(
             obj => obj.userRole === employeeRole.name,
           )
@@ -602,7 +601,7 @@ export const EditProfilePage: React.FC<
       if (canEditRoles) {
         const updatedRoles: string[] = []
         const updatedTrainerRoles: unknown[] = []
-        data.roles.map(obj => {
+        data.roles.forEach(obj => {
           if (obj.userRole === RoleName.TRAINER) {
             updatedTrainerRoles.push(
               obj.trainerRoles.trainerRole,
@@ -724,7 +723,7 @@ export const EditProfilePage: React.FC<
 
   const handleAvatarUpload = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files || !e.target.files[0]) {
+      if (!e.target.files?.[0]) {
         return
       }
 
@@ -1197,13 +1196,10 @@ export const EditProfilePage: React.FC<
                     lg={5}
                     mx={2}
                     display={displayOrgSelector ? '' : 'flex'}
-                    justifyContent={
-                      displayOrgSelector
-                        ? ''
-                        : isMobile
-                        ? 'flex-start'
-                        : 'flex-end'
-                    }
+                    justifyContent={(() => {
+                      if (displayOrgSelector) return ''
+                      return isMobile ? 'flex-start' : 'flex-end'
+                    })()}
                   >
                     {displayOrgSelector ? (
                       <OrgSelector

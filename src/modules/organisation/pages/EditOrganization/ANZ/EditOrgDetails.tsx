@@ -18,7 +18,7 @@ export const EditOrgDetails: React.FC<
 > = () => {
   const { profile, acl } = useAuth()
 
-  const [{}, updateOrganisation] = useMutation<
+  const [, updateOrganisation] = useMutation<
     UpdateOrgMutation,
     UpdateOrgMutationVariables
   >(UPDATE_ORG_MUTATION)

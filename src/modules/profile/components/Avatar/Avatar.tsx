@@ -40,7 +40,7 @@ export const Avatar: React.FC<React.PropsWithChildren<AvatarProps>> =
           style={{ fontSize: size / 2 }}
         >
           {name ? getInitialsFromName(name) : null}
-          {children ? children : name ? null : <PersonIcon />}
+          {children || (name ? null : <PersonIcon />)}
         </MuiAvatar>
       )
     },

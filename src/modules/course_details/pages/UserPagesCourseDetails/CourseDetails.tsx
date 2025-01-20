@@ -186,11 +186,7 @@ export const CourseDetails: React.FC<
   const isOrgKeyContact = Boolean(
     course && acl.isOrganizationKeyContactOfCourse(course) && bookingOnly,
   )
-  const isOrgAdmin = Boolean(
-    course &&
-      course.organization?.id &&
-      acl.isOrgAdmin(course.organization?.id),
-  )
+  const isOrgAdmin = Boolean(acl.isOrgAdmin(course?.organization?.id))
 
   const isOrgAdminIsPartOfParticipantOrganization = useMemo(() => {
     const adminOrganizations = profile?.organizations.filter(org => org.isAdmin)

@@ -22,7 +22,7 @@ export const EditOrgDetails: React.FC<
   const { isUKCountry } = useWorldCountries()
   const isUKRegion = acl.isUK()
 
-  const [{}, updateOrganisation] = useMutation<
+  const [, updateOrganisation] = useMutation<
     UpdateOrgMutation,
     UpdateOrgMutationVariables
   >(UPDATE_ORG_MUTATION)

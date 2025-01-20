@@ -139,6 +139,7 @@ export function useSaveCourse(): {
     courseData?.includeVAT,
   ])
   // 17.12.2024 - 112 cognitive complexity - tread with caution 😱
+  const expensesCurrency = acl.isAustralia() ? Currency.Aud : Currency.Gbp
   const saveCourse = useCallback<SaveCourse>(async () => {
     if (courseData) {
       setSavingStatus(LoadingStatus.FETCHING)
@@ -379,14 +380,16 @@ export function useSaveCourse(): {
                         true,
                         courseData.freeCourseMaterials ?? 0,
                         courseData.maxParticipants ?? 0,
-                        (courseData.priceCurrency as Currency) ?? Currency.Gbp,
+                        (courseData.priceCurrency as Currency) ??
+                          expensesCurrency,
                       )
                     : prepareExpensesDataANZ(
                         expenses,
                         !hideMCM,
                         courseData.freeCourseMaterials ?? 0,
                         courseData.maxParticipants ?? 0,
-                        (courseData.priceCurrency as Currency) ?? Currency.Aud,
+                        (courseData.priceCurrency as Currency) ??
+                          expensesCurrency,
                         resourcePackCost?.anz_resource_packs_pricing[0]?.price,
                       ),
                 },
@@ -462,6 +465,7 @@ export function useSaveCourse(): {
       setSavingStatus(LoadingStatus.ERROR)
     }
   }, [
+    expensesCurrency,
     courseData,
     draftError,
     insertError,

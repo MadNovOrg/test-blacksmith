@@ -59,13 +59,7 @@ export const UnlinkAffiliatedOrgForbiddenModal = ({
                         (
                         {`${
                           course.status === Course_Status_Enum.Completed
-                            ? `${
-                                course.pendingInvites.aggregate?.count
-                              } pending invite${
-                                course.pendingInvites.aggregate?.count === 1
-                                  ? ''
-                                  : 's'
-                              }`
+                            ? `${course.pendingInvites.aggregate?.count} pending invite(s)`
                             : 'ongoing course'
                         }`}
                         )
@@ -90,13 +84,7 @@ export const UnlinkAffiliatedOrgForbiddenModal = ({
                             (
                             {`${
                               course.status === Course_Status_Enum.Completed
-                                ? `${
-                                    course.pendingInvites.aggregate?.count
-                                  } pending invite${
-                                    course.pendingInvites.aggregate?.count === 1
-                                      ? ''
-                                      : 's'
-                                  }`
+                                ? `${course.pendingInvites.aggregate?.count} pending invite(s)`
                                 : 'ongoing course'
                             }`}
                             )

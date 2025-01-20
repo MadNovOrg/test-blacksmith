@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
 import { uniqueId } from 'lodash/fp'
-import React, { useCallback, useMemo } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 
@@ -91,8 +91,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   )
 
   const invoice = order?.invoice
-
-  console.log('order', order)
 
   const registrants = useMemo(
     () =>
@@ -370,6 +368,41 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     acl.isUK() ? 'course-materials' : 'resource-packs'
   }`
 
+  const ClosedCourseRow = () => {
+    if (!discountAmount && mainCourse?.type !== Course_Type_Enum.Closed)
+      return null
+    return (
+      <ItemRow data-testid="free-spaces-row">
+        <Typography color="grey.700">
+          {t('free-spaces', {
+            amount: mainCourse?.freeSpaces,
+          })}
+        </Typography>
+        <Typography color="grey.700" data-testid="free-spaces-discount">
+          {_t('common.currency', {
+            amount: discountAmount,
+            currency: invoice?.currencyCode,
+          })}
+        </Typography>
+      </ItemRow>
+    )
+  }
+
+  const McmDescription: FC<{
+    expenseLineItem: (typeof expensesLineItems)[0]
+  }> = ({ expenseLineItem }) => {
+    if (isMandatoryCourseMaterials(expenseLineItem))
+      return t(mandatoryDescription, {
+        count: expenseLineItem?.quantity,
+      })
+    if (isFreeCourseMaterials(expenseLineItem)) {
+      return t(freeDescription, {
+        count: expenseLineItem?.quantity,
+      })
+    }
+    return expenseLineItem?.description
+  }
+
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]}>
       <Helmet>
@@ -464,7 +497,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                 showCourseLink
                                 showCourseDuration={false}
                                 course={{
-                                  id: Number(course?.id) ?? '',
+                                  id: Number(course?.id),
                                   course_code: course?.course_code,
 
                                   level:
@@ -677,15 +710,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             data-testid={`line-item-${expenseLineItem?.itemCode}`}
                           >
                             <Typography color="grey.700">
-                              {isMandatoryCourseMaterials(expenseLineItem)
-                                ? t(mandatoryDescription, {
-                                    count: expenseLineItem?.quantity,
-                                  })
-                                : isFreeCourseMaterials(expenseLineItem)
-                                ? t(freeDescription, {
-                                    count: expenseLineItem?.quantity,
-                                  })
-                                : expenseLineItem?.description}
+                              <McmDescription
+                                expenseLineItem={expenseLineItem}
+                              />
                             </Typography>
                             <Typography color="grey.700">
                               {_t('common.currency', {
@@ -713,25 +740,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                             })}
                           </Typography>
                         </ItemRow>
-                      ) : discountAmount &&
-                        mainCourse?.type === Course_Type_Enum.Closed ? (
-                        <ItemRow data-testid="free-spaces-row">
-                          <Typography color="grey.700">
-                            {t('free-spaces', {
-                              amount: mainCourse.freeSpaces,
-                            })}
-                          </Typography>
-                          <Typography
-                            color="grey.700"
-                            data-testid="free-spaces-discount"
-                          >
-                            {_t('common.currency', {
-                              amount: discountAmount,
-                              currency: invoice?.currencyCode,
-                            })}
-                          </Typography>
-                        </ItemRow>
-                      ) : null}
+                      ) : (
+                        <ClosedCourseRow />
+                      )}
                       {processingFee > 0 ? (
                         <ItemRow data-testid="order-processing-fee">
                           <Typography color="grey.700">

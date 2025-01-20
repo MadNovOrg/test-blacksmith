@@ -142,11 +142,26 @@ export const InviteUserToOrganization = () => {
     SaveOrganisationInvitesMutationVariables
   >(SAVE_ORGANISATION_INVITES_MUTATION)
 
-  const errorMessage = savingError
-    ? savingError?.message.includes(SaveOrgInviteError.OrgMemberAlreadyExists)
-      ? t('pages.invite-to-org.duplicate-email')
-      : t('pages.invite-to-org.error-message')
-    : null
+  const errorMessage = () => {
+    if (!savingError) return null
+
+    let error = t('pages.invite-to-org.error-message')
+    if (
+      savingError?.message.includes(SaveOrgInviteError.OrgMemberAlreadyExists)
+    )
+      error = t('pages.invite-to-org.duplicate-email')
+
+    return (
+      <Alert
+        variant="outlined"
+        severity="error"
+        data-testid="error-alert"
+        sx={{ mb: 4 }}
+      >
+        {error}
+      </Alert>
+    )
+  }
 
   const onSubmit: SubmitHandler<
     yup.InferType<typeof schema>
@@ -260,16 +275,7 @@ export const InviteUserToOrganization = () => {
                   title={t('pages.invite-to-org.user-details')}
                 >
                   <FormPanel>
-                    {errorMessage ? (
-                      <Alert
-                        variant="outlined"
-                        severity="error"
-                        data-testid="error-alert"
-                        sx={{ mb: 4 }}
-                      >
-                        {errorMessage}
-                      </Alert>
-                    ) : null}
+                    {errorMessage()}
 
                     <Autocomplete
                       multiple

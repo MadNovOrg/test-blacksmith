@@ -84,9 +84,7 @@ export function formatContactAddress(address: XeroAddress) {
 }
 
 export function extractEmails(text: string) {
-  const matches = text.match(
-    /([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi,
-  )
+  const matches = text.match(/([a-z0-9._+-]+@[a-z0-9._-]+\.[a-z0-9_-]+)/gi)
 
   return matches
 }

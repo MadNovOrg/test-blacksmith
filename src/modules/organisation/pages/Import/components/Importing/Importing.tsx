@@ -145,29 +145,24 @@ export const Importing: React.FC = () => {
                             />
                             {notImported.reason ===
                             CHUNK_RESULT_ERROR.MissingMandatoryFields ? (
-                              <>
-                                <Typography variant="body2">
-                                  {t(
-                                    'steps.importing.missing-mandatory-fields',
-                                  )}{' '}
-                                  {notImported.missingFields?.map(field => (
-                                    <span key={field}>{`${
-                                      necessaryColumns[
-                                        field as keyof typeof necessaryColumns
-                                      ]
-                                    }${
-                                      (notImported.missingFields || []).indexOf(
-                                        field,
-                                      ) <
-                                      (notImported.missingFields || [])
-                                        ?.length -
-                                        1
-                                        ? ', '
-                                        : ''
-                                    }`}</span>
-                                  ))}
-                                </Typography>
-                              </>
+                              <Typography variant="body2">
+                                {t('steps.importing.missing-mandatory-fields')}{' '}
+                                {notImported.missingFields?.map(field => (
+                                  <span key={field}>{`${
+                                    necessaryColumns[
+                                      field as keyof typeof necessaryColumns
+                                    ]
+                                  }${
+                                    (notImported.missingFields || []).indexOf(
+                                      field,
+                                    ) <
+                                    (notImported.missingFields || [])?.length -
+                                      1
+                                      ? ', '
+                                      : ''
+                                  }`}</span>
+                                ))}
+                              </Typography>
                             ) : null}
                           </Typography>
                         )
@@ -176,7 +171,7 @@ export const Importing: React.FC = () => {
                   </Stack>
                 </AccordionDetails>
               </Accordion>
-              {result?.notes && result?.notes.length ? (
+              {(result?.notes || []).length ? (
                 <Accordion
                   disableGutters
                   TransitionProps={{
