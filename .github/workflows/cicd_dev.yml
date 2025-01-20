@@ -115,9 +115,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  #       ###### Will keep this as Disabld
-  #       ###### If this is enabled CI will either fail or pass based on Sonar's analysis result
       - uses: sonarsource/sonarqube-quality-gate-action@master
+        if: ${{ github.actor != 'dependabot[bot]' }}
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
