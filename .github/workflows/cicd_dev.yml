@@ -169,4 +169,4 @@ jobs:
     with:
       full: true
       target_url: ${{ matrix.target }}
-      environment: 'DEV'
+      artifact_name: ${{ matrix.target }}

@@ -71,7 +71,7 @@ jobs:
     with:
       full: false
       target_url: 'https://stg.connect.teamteach.com.au'
-      environment: 'DEV'
+      artifact_name: 'stg.connect.teamteach.com.au'
 
   zap-full-scan-uk:
     name: OWASP ZAP Baseline Scan
@@ -81,4 +81,4 @@ jobs:
     with:
       full: false
       target_url: 'https://stg.connect.teamteach.com'
-      environment: 'DEV'
+      artifact_name: 'stg.connect.teamteach.com.au'

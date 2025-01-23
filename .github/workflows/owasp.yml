@@ -9,7 +9,7 @@ on:
       target_url:
         type: string
         required: true
-      environment:
+      artifact_name:
         type: string
         required: true
 
@@ -20,13 +20,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Sanitize Artifact Name
+        id: sanitize
+        run: |
+          echo "SANITIZED_ARTIFACT=${{ inputs.artifact_name }}" | sed 's|https://||g; s|/|_|g' >> $GITHUB_ENV
+
       - name: Run ZAP Baseline Scan
-        if: ${{ inputs.full == false}}
+        if: ${{ inputs.full == false }}
         uses: zaproxy/action-baseline@v0.14.0
         with:
           target: ${{ inputs.target_url }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          issue_title: ${{ env.SANITIZED_ARTIFACT }}
           cmd_options: -j
+          artifact_name: zap-scan-${{ env.SANITIZED_ARTIFACT }}
 
       - name: Run ZAP Full Scan
         if: ${{ inputs.full }}
@@ -34,4 +41,6 @@ jobs:
         with:
           target: ${{ inputs.target_url }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          issue_title: ${{ env.SANITIZED_ARTIFACT }}
           cmd_options: -j
+          artifact_name: zap-scan-${{ env.SANITIZED_ARTIFACT }}

@@ -162,7 +162,7 @@ jobs:
     with:
       full: false
       target_url: 'https://connect.teamteach.com'
-      environment: 'PROD'
+      artifact_name: 'connect.teamteach.com.au'
 
   zap-baseline-scan-anz:
     name: ZAP Baseline Scan
@@ -171,4 +171,4 @@ jobs:
     with:
       full: false
       target_url: 'https://connect.teamteach.com.au'
-      environment: 'PROD'
+      artifact_name: 'connect.teamteach.com.au'
