@@ -81,4 +81,4 @@ jobs:
     with:
       full: false
       target_url: 'https://stg.connect.teamteach.com'
-      artifact_name: 'stg.connect.teamteach.com.au'
+      artifact_name: 'stg.connect.teamteach.com'

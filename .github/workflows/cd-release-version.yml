@@ -162,7 +162,7 @@ jobs:
     with:
       full: false
       target_url: 'https://connect.teamteach.com'
-      artifact_name: 'connect.teamteach.com.au'
+      artifact_name: 'connect.teamteach.com'
 
   zap-baseline-scan-anz:
     name: ZAP Baseline Scan
