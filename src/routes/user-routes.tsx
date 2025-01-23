@@ -9,7 +9,6 @@ import {
 } from '@app/generated/graphql'
 import { AcceptInvite } from '@app/modules/accept_invite/pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/modules/accept_org_invite/pages/AcceptOrgInvite'
-import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/modules/certifications/hooks/get-user-can-access-resources'
 import { ManageCourses } from '@app/modules/course/pages/ManageCourses/ManageCourses'
 import { CourseEvaluation } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/modules/course_details/course_evaluation_tab/pages/ExternalEvaluationSummary/components/CourseHealthAndSafetyForm'
@@ -25,6 +24,7 @@ import { TransferReview as ANZTransferReview } from '@app/modules/transfer_parti
 import { TransferReview as UKTransferReview } from '@app/modules/transfer_participant/components/TransferReview/UK'
 import { UserTransferParticipant } from '@app/modules/transfer_participant/pages/UserTransferParticipant/UserTransferParticipant'
 import { AttendeeCourses } from '@app/modules/user_courses/pages/AttendeeCourses'
+import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/queries/getUserResourceAcces'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 

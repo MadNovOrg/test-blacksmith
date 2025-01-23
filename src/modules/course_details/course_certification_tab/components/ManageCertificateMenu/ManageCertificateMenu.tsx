@@ -14,6 +14,7 @@ type Props = {
   onShowUndoRevokeModal: VoidFunction
   onShowPutOnHoldModal: VoidFunction
   onShowChangelogModal: VoidFunction
+  onUpdateCertificate: VoidFunction
 }
 
 export const ManageCertificateMenu: React.FC<Props> = ({
@@ -24,6 +25,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
   onShowUndoRevokeModal,
   onShowPutOnHoldModal,
   onShowChangelogModal,
+  onUpdateCertificate,
 }) => {
   const ref = useRef<(EventTarget & HTMLButtonElement) | undefined>(undefined)
   const [open, setOpen] = useState(false)
@@ -71,12 +73,14 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         elevation={5}
         sx={{ mt: 2 }}
-        PaperProps={{
-          sx: {
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme => theme.colors.navy[100],
-            width: `${ref.current?.getBoundingClientRect()?.width}px`,
+        slotProps={{
+          paper: {
+            sx: {
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: theme => theme.colors.navy[100],
+              width: `${ref.current?.getBoundingClientRect()?.width}px`,
+            },
           },
         }}
       >
@@ -114,6 +118,16 @@ export const ManageCertificateMenu: React.FC<Props> = ({
             }}
           >
             {t('change-log')}
+          </MenuItem>
+        ) : null}
+
+        {acl.isTTAdmin() || acl.isTTOps() ? (
+          <MenuItem
+            data-testid="manage-certificate-update"
+            onClick={onUpdateCertificate}
+            disabled={isRevoked}
+          >
+            {t('update-certificate')}
           </MenuItem>
         ) : null}
 

@@ -653,6 +653,7 @@ export type CourseInput = {
   venue: Venue | null
   zoomMeetingUrl: string | null
   zoomProfileId: string | null
+  gradingStarted?: boolean
 }
 
 export type ValidCourseInput = DeepNonNullable<

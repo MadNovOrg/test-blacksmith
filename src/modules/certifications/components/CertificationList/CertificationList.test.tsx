@@ -30,6 +30,12 @@ import {
   CertificationListColumns,
 } from './CertificationList'
 
+const mockNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useNavigate: () => mockNavigate,
+}))
+
 describe('component: CertificationList', () => {
   const {
     result: {
@@ -311,5 +317,84 @@ describe('component: CertificationList', () => {
         ).toBeInTheDocument()
       })
     })
+  })
+  it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
+    'allows updating certifications for %s',
+    async role => {
+      const participant = buildParticipant()
+      participant.certificate = buildCertificate()
+      participant.grade = Grade_Enum.Pass
+      const participants = [participant]
+
+      render(
+        <CertificationList
+          participants={participants}
+          sorting={sorting}
+          columns={columns}
+        />,
+        {
+          auth: {
+            activeRole: role,
+          },
+        },
+      )
+
+      expect(
+        screen.getByTestId('manage-selected-certifications'),
+      ).toBeInTheDocument()
+
+      expect(screen.getAllByTestId('TableChecks-Row')).toHaveLength(
+        participants.length,
+      )
+
+      await userEvent.click(screen.getByTestId('TableChecks-Row'))
+
+      await userEvent.click(
+        screen.getByTestId('manage-selected-certifications'),
+      )
+
+      expect(
+        screen.getByText(
+          t('components.certification-list.update-certifications'),
+        ),
+      ).toBeInTheDocument()
+
+      await userEvent.click(
+        screen.getByText(
+          t('components.certification-list.update-certifications'),
+        ),
+      )
+
+      expect(mockNavigate).toHaveBeenCalledTimes(1)
+      expect(mockNavigate).toHaveBeenCalledWith('/certifications/edit', {
+        state: {
+          courseId: participant.course.id,
+          participants: new Set([participant.id]),
+        },
+      })
+    },
+  )
+  it('doesnt allow trainers to update certifications', async () => {
+    const participant = buildParticipant()
+    participant.certificate = buildCertificate()
+    participant.grade = Grade_Enum.Pass
+    const participants = [participant]
+
+    render(
+      <CertificationList
+        participants={participants}
+        sorting={sorting}
+        columns={columns}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+        },
+      },
+    )
+
+    expect(
+      screen.queryByTestId('manage-selected-certifications'),
+    ).not.toBeInTheDocument()
   })
 })

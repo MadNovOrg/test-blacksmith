@@ -12,6 +12,7 @@ describe('ManageCertificateMenu', () => {
   const onShowUndoRevokeModalMock = vi.fn()
   const onShowPutOnHoldModalMock = vi.fn()
   const onShowChangelogModalMock = vi.fn()
+  const onUpdateCertificateMock = vi.fn()
 
   it('when role is admin', async () => {
     render(
@@ -23,6 +24,7 @@ describe('ManageCertificateMenu', () => {
         onShowUndoRevokeModal={onShowUndoRevokeModalMock}
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
+        onUpdateCertificate={onUpdateCertificateMock}
       />,
       { auth: { activeRole: RoleName.TT_ADMIN } },
     )
@@ -37,6 +39,7 @@ describe('ManageCertificateMenu', () => {
     expect(screen.queryByText('Put on hold')).toBeInTheDocument()
     expect(screen.queryByText('Change log')).toBeInTheDocument()
     expect(screen.queryByText('Revoke certificate')).toBeInTheDocument()
+    expect(screen.queryByText('Update certificate')).toBeInTheDocument()
 
     expect(screen.queryByText('Reinstate certificate')).not.toBeInTheDocument()
   })
@@ -51,6 +54,7 @@ describe('ManageCertificateMenu', () => {
         onShowUndoRevokeModal={onShowUndoRevokeModalMock}
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
+        onUpdateCertificate={onUpdateCertificateMock}
       />,
       { auth: { activeRole: RoleName.USER } },
     )
@@ -63,6 +67,7 @@ describe('ManageCertificateMenu', () => {
     expect(screen.queryByText('Put on hold')).not.toBeInTheDocument()
     expect(screen.queryByText('Change log')).not.toBeInTheDocument()
     expect(screen.queryByText('Revoke certificate')).not.toBeInTheDocument()
+    expect(screen.queryByText('Update certificate')).not.toBeInTheDocument()
 
     expect(screen.queryByText('Reinstate certificate')).not.toBeInTheDocument()
   })
@@ -76,6 +81,7 @@ describe('ManageCertificateMenu', () => {
         onShowRevokeModal={onShowRevokeModalMock}
         onShowUndoRevokeModal={onShowUndoRevokeModalMock}
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
+        onUpdateCertificate={onUpdateCertificateMock}
         onShowChangelogModal={onShowChangelogModalMock}
       />,
       { auth: { activeRole: RoleName.TT_ADMIN } },
@@ -88,6 +94,9 @@ describe('ManageCertificateMenu', () => {
     expect(screen.queryByText('Reinstate')).toBeInTheDocument()
     expect(screen.queryByText('Modify grade')).toHaveAttribute('aria-disabled')
     expect(screen.queryByText('Put on hold')).toHaveAttribute('aria-disabled')
+    expect(screen.queryByText('Update certificate')).toHaveAttribute(
+      'aria-disabled',
+    )
   })
 
   it('does not render change log menu when not applicable', async () => {
@@ -100,6 +109,7 @@ describe('ManageCertificateMenu', () => {
         onShowUndoRevokeModal={onShowUndoRevokeModalMock}
         onShowPutOnHoldModal={onShowPutOnHoldModalMock}
         onShowChangelogModal={onShowChangelogModalMock}
+        onUpdateCertificate={onUpdateCertificateMock}
       />,
       { auth: { activeRole: RoleName.TT_ADMIN } },
     )

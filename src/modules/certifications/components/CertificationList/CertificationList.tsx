@@ -6,13 +6,17 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  MenuItem,
+  ButtonProps,
 } from '@mui/material'
+import { ArrowDropDownIcon } from '@mui/x-date-pickers'
 import { pdf } from '@react-pdf/renderer'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -27,6 +31,7 @@ import type { Sorting } from '@app/hooks/useTableSort'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
 import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters'
 import { OrgAndName } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters/utils'
+import { ButtonMenu } from '@app/modules/course_details/course_attendees_tab/components/ButtonMenu/ButtonMenu'
 import { CourseParticipant } from '@app/types'
 
 import { ParticipantsRow } from './components/ParticipantsRow'
@@ -61,6 +66,7 @@ export const CertificationList: React.FC<
   columns = ['name', 'contact', 'organisation', 'grade', 'status'],
 }) => {
   const theme = useTheme()
+  const navigate = useNavigate()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -166,6 +172,13 @@ export const CertificationList: React.FC<
     [acl],
   )
 
+  const someParticipantsNotGraded = useMemo(() => {
+    const notGradedParticipants = filteredPatricipants
+      .map(p => (!p.grade || p.grade === Grade_Enum.Fail ? p.id : undefined))
+      .filter(Boolean)
+    return notGradedParticipants.some(p => selected.has(p))
+  }, [filteredPatricipants, selected])
+
   return (
     <>
       <Helmet>
@@ -200,18 +213,52 @@ export const CertificationList: React.FC<
             />
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              data-testid="download-selected-certifications"
-              disabled={selected.size === 0}
-              fullWidth={isMobile}
-              onClick={() => downloadCertificates(selectedParticipants)}
-            >
-              {t('components.certification-list.download-selected', {
-                number: selected.size,
-              })}
-            </Button>
+            {acl.isTTAdmin() || acl.isTTOps() ? (
+              <ButtonMenu
+                label={t('components.certification-list.manage-selected', {
+                  number: selected.size,
+                })}
+                buttonProps={
+                  {
+                    disabled: !selected.size,
+                    endIcon: <ArrowDropDownIcon />,
+                    'data-testid': 'manage-selected-certifications',
+                  } as ButtonProps
+                }
+              >
+                <MenuItem
+                  onClick={() => downloadCertificates(selectedParticipants)}
+                >
+                  {t('components.certification-list.download-certifications')}
+                </MenuItem>
+                <MenuItem
+                  disabled={someParticipantsNotGraded}
+                  onClick={() =>
+                    navigate('/certifications/edit', {
+                      state: {
+                        participants: selected,
+                        courseId: participants[0]?.course?.id,
+                      },
+                    })
+                  }
+                >
+                  {t('components.certification-list.update-certifications')}
+                </MenuItem>
+              </ButtonMenu>
+            ) : (
+              <Button
+                variant="outlined"
+                color="primary"
+                data-testid="download-selected-certifications"
+                disabled={selected.size === 0}
+                fullWidth={isMobile}
+                onClick={() => downloadCertificates(selectedParticipants)}
+              >
+                {t('components.certification-list.download-selected', {
+                  number: selected.size,
+                })}
+              </Button>
+            )}
           </Grid>
           <Grid item>
             <Button

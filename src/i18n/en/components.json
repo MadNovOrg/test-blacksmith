@@ -437,7 +437,10 @@
   "certification-list": {
     "title": "Certifications",
     "organisation": "Organisation",
+    "manage-selected": "Manage selected ({{ number }})",
+    "download-certifications": "Download certification(s)",
     "download-selected": "Download selected ({{ number }})",
+    "update-certifications": "Update certification(s)",
     "download-all-certifications": "Download all certifications",
     "date-obtained": "Date obtained",
     "date-expired": "Date Expired",

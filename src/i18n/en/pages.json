@@ -817,6 +817,11 @@
     "grading-clearance-step": "Grading clearance",
     "modules-step": "Modules and Techniques"
   },
+  "edit-certifications": {
+    "title": "Modules and techniques",
+    "subtitle": "Please confirm the modules and physical techniques covered or not covered in the course by the selected participants.",
+    "update-certifications-button": "Update certification"
+  },
   "course-grading": {
     "title": "Grading",
     "attendees-list-title": "{{count}} attendee(s)",

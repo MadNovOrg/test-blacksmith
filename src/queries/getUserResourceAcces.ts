@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const GET_USER_CAN_ACCESS_RESOURCES = gql`
   query GetUserCanAccessResources($profileId: uuid) {

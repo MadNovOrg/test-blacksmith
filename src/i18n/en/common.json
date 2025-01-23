@@ -479,6 +479,7 @@
     "completed-message": "has successfully completed the following Team Teach course:",
     "modify-grade": "Modify grade",
     "manage-certificate": "Manage certificate",
+    "update-certificate": "Update certificate",
     "revoke-certificate": "Revoke certificate",
     "hold-certificate": "Put on hold",
     "this-certificate-hold": "This certificate is on hold",

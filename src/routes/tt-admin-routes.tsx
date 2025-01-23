@@ -155,7 +155,7 @@ const TTAdminRoutes = () => {
         <Route path="organisations/*" element={<OrganisationRoutes />} />
       ) : null}
 
-      <Route path="certifications" element={<CertificationsRoutes />} />
+      <Route path="certifications/*" element={<CertificationsRoutes />} />
 
       <Route path="orders">
         <Route index element={<Orders />} />

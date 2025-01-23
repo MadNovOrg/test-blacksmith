@@ -842,7 +842,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
     canViewCourseBuilderOnEditPage: (
       course:
-        | Pick<CourseInput, 'accreditedBy' | 'gradingConfirmed' | 'type'>
+        | Pick<
+            CourseInput,
+            'accreditedBy' | 'gradingConfirmed' | 'type' | 'gradingStarted'
+          >
         | undefined
         | null,
       trainers: {
@@ -850,6 +853,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         type: Course_Trainer_Type_Enum | CourseTrainerType
       }[],
     ) => {
+      if (
+        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD])() &&
+        !course?.gradingStarted &&
+        !course?.gradingConfirmed
+      )
+        return true
       if (
         !(
           course?.accreditedBy === Accreditors_Enum.Icm &&
@@ -872,7 +881,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         return true
       }
 
-      return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD])()
+      return false
     },
     canViewDietaryAndDisabilitiesDetails: (course: Course) => {
       const isCourseTrainer = course?.trainers?.some(

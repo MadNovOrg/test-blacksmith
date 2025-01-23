@@ -13,6 +13,7 @@ import {
 import pdf from '@react-pdf/renderer'
 import { allPass } from 'lodash/fp'
 import React, { useCallback, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import {
@@ -78,6 +79,7 @@ export const CourseCertification: React.FC<
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const navigate = useNavigate()
 
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
   const [showChangelogModal, setShowChangelogModal] = useState(false)
@@ -182,6 +184,15 @@ export const CourseCertification: React.FC<
     return null
   }
 
+  const handleCertificateUpate = () => {
+    navigate('/certifications/edit', {
+      state: {
+        participants: [courseParticipant?.id],
+        courseId: courseParticipant?.course.id,
+      },
+    })
+  }
+
   return (
     <Box mb={6}>
       <Container disableGutters={isMobile}>
@@ -252,6 +263,7 @@ export const CourseCertification: React.FC<
                   onShowRevokeModal={() => setShowRevokeCertModal(true)}
                   onShowUndoRevokeModal={() => setShowUndoRevokeModal(true)}
                   onShowChangelogModal={() => setShowChangelogModal(true)}
+                  onUpdateCertificate={handleCertificateUpate}
                 />
               )}
             </Grid>

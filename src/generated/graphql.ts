@@ -63896,13 +63896,6 @@ export type GetOrgByIdQueryVariables = Exact<{
 
 export type GetOrgByIdQuery = { __typename?: 'query_root', organization: Array<{ __typename?: 'organization', address: any, name: string, id: any }> };
 
-export type GetUserCanAccessResourcesQueryVariables = Exact<{
-  profileId?: InputMaybe<Scalars['uuid']>;
-}>;
-
-
-export type GetUserCanAccessResourcesQuery = { __typename?: 'query_root', certificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, participant: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
-
 export type GetCertificationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -63911,6 +63904,22 @@ export type GetCertificationsQueryVariables = Exact<{
 
 
 export type GetCertificationsQuery = { __typename?: 'query_root', certifications: Array<{ __typename?: 'course_certificate', status?: string | null, id: any, number: string, expiryDate: any, legacyCourseCode?: string | null, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null, course?: { __typename?: 'course', level: Course_Level_Enum, accreditedBy: Accreditors_Enum, go1Integration: boolean, reaccreditation?: boolean | null, course_code?: string | null } | null }>, certificationsAggregation: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null } };
+
+export type GetParticipantGradingDetailsQueryVariables = Exact<{
+  ids?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+  courseId: Scalars['Int'];
+}>;
+
+
+export type GetParticipantGradingDetailsQuery = { __typename?: 'query_root', participants: Array<{ __typename?: 'course_participant', id: any, gradedOn?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } }>, course?: { __typename?: 'course', deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, go1Integration: boolean } | null };
+
+export type UpsertCertificationMutationVariables = Exact<{
+  participantIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+  gradedOn: Scalars['jsonb'];
+}>;
+
+
+export type UpsertCertificationMutation = { __typename?: 'mutation_root', update_course_participant?: { __typename?: 'course_participant_mutation_response', affected_rows: number } | null };
 
 export type DeleteMeetingMutationVariables = Exact<{
   meetingId: Scalars['String'];
@@ -65543,6 +65552,13 @@ export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', descrip
 export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null, phoneType: XeroPhoneType } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: XeroAddressType | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, taxType: string, taxAmount: number, lineAmount: number, item?: { __typename?: 'XeroItem', itemID: string, code: string } | null, tracking?: Array<{ __typename?: 'XeroTrackingCategory', name: string, option: string }> | null } | null> };
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
+
+export type GetUserCanAccessResourcesQueryVariables = Exact<{
+  profileId?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type GetUserCanAccessResourcesQuery = { __typename?: 'query_root', certificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, participant: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
 export type OrgLicensesWithHistoryQueryVariables = Exact<{
   id: Scalars['uuid'];
