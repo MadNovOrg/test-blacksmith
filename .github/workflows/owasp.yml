@@ -27,7 +27,6 @@ jobs:
           target: ${{ inputs.target_url }}
           token: ${{ secrets.GITHUB_TOKEN }}
           cmd_options: -j
-          issue_title: 'ZAP baseline report - ${{ inputs.target_url }}'
 
       - name: Run ZAP Full Scan
         if: ${{ inputs.full }}
@@ -36,4 +35,3 @@ jobs:
           target: ${{ inputs.target_url }}
           token: ${{ secrets.GITHUB_TOKEN }}
           cmd_options: -j
-          issue_title: 'Zap full scan report - ${{ inputs.target_url }}'
