@@ -70,7 +70,7 @@ jobs:
         run: pnpm nx e2e:${{ matrix.browsers }} @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
