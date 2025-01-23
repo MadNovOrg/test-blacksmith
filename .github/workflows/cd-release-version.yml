@@ -8,6 +8,7 @@ on:
 permissions:
   id-token: write
   contents: write
+  issues: write
 
 jobs:
   fetch-version:
@@ -130,7 +131,6 @@ jobs:
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
       hubspot_register_form: ${{ secrets.HUBSPOT_REGISTER_FORM }}
       hubspot_login_form: ${{ secrets.HUBSPOT_LOGIN_FORM }}
-      
 
   prod-cd-anz:
     name: ANZ Production Deployment
@@ -154,3 +154,21 @@ jobs:
       stripe_key: ${{ secrets.STRIPE_KEY_ANZ }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  zap-baseline-scan-uk:
+    name: ZAP Baseline Scan
+    needs: [prod-cd]
+    uses: ./.github/workflows/owasp.yml
+    with:
+      full: false
+      target_url: 'https://connect.teamteach.com'
+      environment: 'PROD'
+
+  zap-baseline-scan-anz:
+    name: ZAP Baseline Scan
+    needs: [prod-cd-anz]
+    uses: ./.github/workflows/owasp.yml
+    with:
+      full: false
+      target_url: 'https://connect.teamteach.com.au'
+      environment: 'PROD'

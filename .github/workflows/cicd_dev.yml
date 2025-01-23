@@ -12,6 +12,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  issues: write
 
 jobs:
   lint-and-typecheck:
@@ -149,3 +150,23 @@ jobs:
       stripe_key: ${{ matrix.aws_region == 'eu-west-2' && secrets.STRIPE_KEY_DEV || secrets.STRIPE_KEY_DEV_ANZ }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  zap-full-scan:
+    name: OWASP ZAP Baseline Scan
+    needs: [dev-cd]
+    strategy:
+      matrix:
+        target:
+          [
+            'https://dev.connect.teamteach.com',
+            'https://dev.connect.teamteach.com.au',
+          ]
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'push' &&
+      ! startsWith(github.head_ref, 'changeset-release/')
+    uses: ./.github/workflows/owasp.yml
+    with:
+      full: true
+      target_url: ${{ matrix.target }}
+      environment: 'DEV'

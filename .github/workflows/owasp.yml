@@ -1,0 +1,39 @@
+name: OWASP ZAP Scan
+
+on:
+  workflow_call:
+    inputs:
+      full:
+        type: boolean
+        required: true
+      target_url:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+
+jobs:
+  zap-scan-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run ZAP Baseline Scan
+        if: ${{ inputs.full == false}}
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: ${{ inputs.target_url }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          cmd_options: -j
+          issue_title: 'Zap baseline scan report - ${{ inputs.environment }}'
+
+      - name: Run ZAP Full Scan
+        if: ${{ inputs.full }}
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: ${{ inputs.target_url }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          cmd_options: -j
+          issue_title: 'Zap full scan report - ${{ inputs.environment }}'

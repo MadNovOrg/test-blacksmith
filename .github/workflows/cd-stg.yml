@@ -16,6 +16,7 @@ on:
 permissions:
   id-token: write
   contents: write
+  issues: write
 
 jobs:
   stg-cd:
@@ -61,3 +62,23 @@ jobs:
       stripe_key: ${{ secrets.STRIPE_KEY_STG_ANZ }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  zap-full-scan-anz:
+    name: OWASP ZAP Baseline Scan
+    needs: [stg-cd-anz]
+    uses: ./.github/workflows/owasp.yml
+    if: ${{ github.event.inputs.region == 'Australia' || github.event.inputs.region == 'Both' }}
+    with:
+      full: false
+      target_url: 'https://stg.connect.teamteach.com.au'
+      environment: 'DEV'
+
+  zap-full-scan-uk:
+    name: OWASP ZAP Baseline Scan
+    needs: [stg-cd]
+    uses: ./.github/workflows/owasp.yml
+    if: ${{ github.event.inputs.region == 'UK' || github.event.inputs.region == 'Both' }}
+    with:
+      full: false
+      target_url: 'https://stg.connect.teamteach.com'
+      environment: 'DEV'
