@@ -116,11 +116,30 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      - uses: sonarsource/sonarqube-quality-gate-action@master
+      - name: Check SonarQube Quality Gate with Retry
         if: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'pull_request' }}
-        timeout-minutes: 5
+        run: |
+          RETRIES=5
+          DELAY=60 # seconds
+          for ((i=1;i<=RETRIES;i++)); do
+            echo "Checking SonarQube quality gate (attempt $i)..."
+            STATUS=$(curl -s -u $SONAR_TOKEN: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ github.repository }}" | jq -r '.projectStatus.status')
+            if [[ "$STATUS" == "OK" ]]; then
+              echo "Quality Gate passed!"
+              exit 0
+            elif [[ "$i" -lt "$RETRIES" ]]; then
+              echo "Quality Gate failed. Retrying in $DELAY seconds..."
+              sleep $DELAY
+            else
+              echo "Quality Gate failed after $RETRIES attempts. Exiting with failure."
+              exit 1
+            fi
+          done
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - uses: sonarsource/sonarqube-quality-gate-action@master
+        if: false
+
 
   dev-cd:
     name: DEV
