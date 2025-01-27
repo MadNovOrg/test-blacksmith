@@ -33,6 +33,7 @@
     "loading-order": "Unable to find the order",
     "user-permission": "You don't have permission to see this user",
     "course-not-found": "Course not found",
+    "course-already-graded": "The course module cannot be modified since the grading has already been confirmed.",
     "generic": {
       "record-not-found": "Record not found.",
       "loading-error": "There was an error loading data.",

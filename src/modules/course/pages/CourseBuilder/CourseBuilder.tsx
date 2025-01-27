@@ -48,6 +48,14 @@ export const CourseBuilder: React.FC<React.PropsWithChildren> = () => {
     )
   }
 
+  if (courseData?.course?.gradingConfirmed) {
+    return (
+      <Alert severity="error" variant="filled">
+        {t('common.errors.course-already-graded')}
+      </Alert>
+    )
+  }
+
   if (fetching) {
     return (
       <Box display="flex" margin="auto">
