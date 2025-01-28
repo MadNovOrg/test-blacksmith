@@ -7,7 +7,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
-import { IRELAND_TIMEZONE } from '@qa/constants'
+import { isUK } from '@qa/constants'
 import { openCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -74,9 +74,10 @@ allowedUsers.forEach(allowedUser => {
               start: addMonths(new Date(new Date().setHours(8, 0)), 2),
               end: addMonths(new Date(new Date().setHours(17, 0)), 2),
               venue: buildVenue({
-                overrides: { name: 'Ireland Vinayaka Temple' },
+                overrides: {
+                  name: isUK() ? 'Ireland Vinayaka Temple' : 'Sydney Town Hall',
+                },
               }),
-              timeZone: IRELAND_TIMEZONE,
             },
           ],
         })

@@ -2,7 +2,7 @@ import * as fs from 'fs'
 
 import { addDays, addMonths, format } from 'date-fns'
 
-import { TARGET_ENV, TEMP_DIR } from './constants'
+import { AWS_REGION, TARGET_ENV, TEMP_DIR } from './constants'
 import {
   CourseTableRow,
   ModuleGroup,
@@ -25,7 +25,7 @@ export type StoredCredentialKey =
   | 'ttOrgAdmin'
 
 export const stateFilePath = (userKey: StoredCredentialKey) =>
-  `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}.json`
+  `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}-${AWS_REGION}.json`
 
 export const delay = (ms: number) =>
   new Promise(resolve => setTimeout(resolve, ms))

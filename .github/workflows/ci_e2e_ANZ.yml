@@ -1,4 +1,4 @@
-name: E2E smoke tests
+name: ANZ E2E smoke tests
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   e2e-smoke-tests:
-    name: E2E smoke tests
+    name: ANZ E2E smoke tests
     runs-on: ubuntu-8core
     strategy:
       fail-fast: false
@@ -47,12 +47,12 @@ jobs:
       graphql-engine:
         image: hasura/graphql-engine:v2.28.2-ce.cli-migrations-v3
         ports:
-          - 8080:8080
+          - 8081:8080
         env:
           HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@pgbouncer:5432/tth-db
           HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
           HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
-          HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}'
+          HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_nd889mx4J/.well-known/jwks.json","claims_format":"stringified_json"}'
     steps:
       - name: Set Environment Variables
         run: |
@@ -78,24 +78,25 @@ jobs:
       - name: Hasura Migration
         run: |
           cp hasura/.env.sample hasura/.env
-          pnpm hasura metadata apply
-          pnpm hasura migrate apply --database-name default
-          pnpm hasura migrate status --database-name default
-          pnpm hasura metadata reload
-          pnpm hasura migrate apply --goto 101 --database-name default
-          pnpm hasura migrate status --database-name default
-          pnpm hasura migrate apply --database-name default
-          pnpm hasura migrate status --database-name default
-          pnpm hasura metadata reload
-
+          pnpm hasura metadata apply --endpoint 'http://localhost:8081'
+          pnpm hasura migrate apply --database-name default --endpoint 'http://localhost:8081'
+          pnpm hasura migrate status --database-name default --endpoint 'http://localhost:8081'
+          pnpm hasura metadata reload --endpoint 'http://localhost:8081'
+          pnpm hasura migrate apply --goto 101 --database-name default --endpoint 'http://localhost:8081'
+          pnpm hasura migrate status --database-name default --endpoint 'http://localhost:8081'
+          pnpm hasura migrate apply --database-name default --endpoint 'http://localhost:8081'
+          pnpm hasura migrate status --database-name default --endpoint 'http://localhost:8081'
+          pnpm hasura metadata reload --endpoint 'http://localhost:8081'
       - name: Hasura Seed Data
-        run: pnpm hasura seed apply --database-name default
+        run: pnpm hasura seed apply --database-name default  --endpoint 'http://localhost:8081'
 
       - name: Playwright setup
         run: pnpm playwright install --with-deps
 
       - name: Playwright tests
         id: playwright
+        env:
+          AWS_REGION: 'ap-southeast-2'
         run: pnpm nx e2e:smoke @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report

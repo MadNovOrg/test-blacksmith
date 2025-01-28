@@ -6,6 +6,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { isUK } from '@qa/constants'
 import { openCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -16,34 +17,12 @@ const allowedUsers = ['admin', 'ops', 'salesAdmin']
 allowedUsers.forEach(allowedUser => {
   const dataSet = [
     {
-      name: `open L2 F2F reaccred as ${allowedUser}`,
-      user: `${allowedUser}`,
-      smoke: allowedUser === 'ops' ? '@smoke' : '',
-      course: (() => {
-        const course = UNIQUE_COURSE()
-        course.reaccreditation = true
-        course.deliveryType = Course_Delivery_Type_Enum.F2F
-        return course
-      })(),
-    },
-    {
       name: `open L2 F2F non-reaccred as ${allowedUser}`,
       user: `${allowedUser}`,
       smoke: allowedUser === 'salesAdmin' ? '@smoke' : '',
       course: (() => {
         const course = UNIQUE_COURSE()
         course.deliveryType = Course_Delivery_Type_Enum.F2F
-        return course
-      })(),
-    },
-    {
-      name: `open L2 mixed reaccred as ${allowedUser}`,
-      user: `${allowedUser}`,
-      smoke: allowedUser === 'admin' ? '@smoke' : '',
-      course: (() => {
-        const course = UNIQUE_COURSE()
-        course.reaccreditation = true
-        course.deliveryType = Course_Delivery_Type_Enum.Mixed
         return course
       })(),
     },
@@ -58,6 +37,31 @@ allowedUsers.forEach(allowedUser => {
       })(),
     },
   ]
+
+  if (isUK()) {
+    dataSet.push({
+      name: `open L2 F2F reaccred as ${allowedUser}`,
+      user: `${allowedUser}`,
+      smoke: allowedUser === 'ops' ? '@smoke' : '',
+      course: (() => {
+        const course = UNIQUE_COURSE()
+        course.reaccreditation = true
+        course.deliveryType = Course_Delivery_Type_Enum.F2F
+        return course
+      })(),
+    })
+    dataSet.push({
+      name: `open L2 mixed reaccred as ${allowedUser}`,
+      user: `${allowedUser}`,
+      smoke: allowedUser === 'admin' ? '@smoke' : '',
+      course: (() => {
+        const course = UNIQUE_COURSE()
+        course.reaccreditation = true
+        course.deliveryType = Course_Delivery_Type_Enum.Mixed
+        return course
+      })(),
+    })
+  }
 
   for (const data of dataSet) {
     const test = base.extend<{ course: Course }>({

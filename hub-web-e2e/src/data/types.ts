@@ -59,6 +59,7 @@ export type Course = {
   organization?: Organization
   participants_aggregate?: { aggregate?: { count: number } }
   price?: number
+  priceCurrency?: string
   reaccreditation: boolean
   salesRepresentative?: User
   schedule: CourseSchedule[]

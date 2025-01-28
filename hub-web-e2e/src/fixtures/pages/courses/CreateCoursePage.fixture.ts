@@ -12,6 +12,7 @@ import {
 import { BildStrategies } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
+import { isUK } from '@qa/constants'
 import { Course, User } from '@qa/data/types'
 import { toUiTime } from '@qa/util'
 
@@ -45,6 +46,7 @@ export class CreateCoursePage extends BasePage {
   readonly startTimeInput: Locator
   readonly endDateInput: Locator
   readonly endTimeInput: Locator
+  readonly timezoneInput: Locator
   readonly minAttendeesInput: Locator
   readonly maxAttendeesInput: Locator
   readonly mandatoryCourseMaterialsLabel: Locator
@@ -127,6 +129,9 @@ export class CreateCoursePage extends BasePage {
       '[data-testid="End date-datePicker-textField"] input',
     )
     this.endTimeInput = this.page.locator('[data-testid="end-time"] input')
+    this.timezoneInput = this.page.locator(
+      '[data-testid="timezone-selector-autocomplete"]',
+    )
     this.minAttendeesInput = this.page.locator(
       '[data-testid="min-attendees"] input',
     )
@@ -291,6 +296,12 @@ export class CreateCoursePage extends BasePage {
     time !== '17:00' && (await this.endTimeInput.fill(time))
   }
 
+  async selectTimezone() {
+    await this.timezoneInput.click()
+    await this.page.keyboard.press('ArrowDown')
+    await this.page.keyboard.press('Enter')
+  }
+
   async setMinAttendees(value: number) {
     await this.minAttendeesInput.fill(value.toString())
   }
@@ -377,7 +388,7 @@ export class CreateCoursePage extends BasePage {
   }
 
   async fillCourseDetails(course: Course, ignoreOrganisationSelect = false) {
-    if (course.type !== Course_Type_Enum.Indirect) {
+    if (isUK() && course.type !== Course_Type_Enum.Indirect) {
       await this.selectCategory(course.accreditedBy)
     }
     if (
@@ -435,6 +446,10 @@ export class CreateCoursePage extends BasePage {
       await this.setMinAttendees(course.min_participants)
     }
 
+    if (!isUK() && course.deliveryType === Course_Delivery_Type_Enum.Virtual) {
+      await this.selectTimezone()
+    }
+
     await this.setMaxAttendees(course.max_participants)
     if (course.type === Course_Type_Enum.Closed && course.freeCourseMaterials) {
       await this.setFreeCourseMaterials(course.freeCourseMaterials)
@@ -444,9 +459,10 @@ export class CreateCoursePage extends BasePage {
     }
 
     if (
-      course.level === Course_Level_Enum.FoundationTrainerPlus ||
-      (course.type === Course_Type_Enum.Closed &&
-        course.level === Course_Level_Enum.Level_1Bs)
+      isUK() &&
+      (course.level === Course_Level_Enum.FoundationTrainerPlus ||
+        (course.type === Course_Type_Enum.Closed &&
+          course.level === Course_Level_Enum.Level_1Bs))
     ) {
       await this.setPricePerAttendee()
     }

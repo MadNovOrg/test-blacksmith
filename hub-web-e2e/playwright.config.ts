@@ -2,8 +2,13 @@ import { workspaceRoot } from '@nx/devkit'
 import { nxE2EPreset } from '@nx/playwright/preset'
 import { defineConfig, devices } from '@playwright/test'
 
+import { isUK } from './src/constants'
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env['BASE_URL'] || 'http://localhost:3000'
+const baseURL =
+  process.env['BASE_URL'] ||
+  `http://localhost:${
+    process.env['AWS_REGION'] === 'ap-southeast-2' ? '4000' : '3000'
+  }`
 
 const PROJECTS_BY_DEVICE = [
   {
@@ -75,7 +80,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'pnpm dev', // TODO change to `pnpm nx dev hub-web`
+      command: isUK() ? 'pnpm dev' : 'pnpm dev:au', // TODO change to `pnpm nx dev hub-web`
       url: baseURL,
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,

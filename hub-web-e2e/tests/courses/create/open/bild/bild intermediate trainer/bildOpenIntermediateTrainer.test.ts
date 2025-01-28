@@ -6,6 +6,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { isUK } from '@qa/constants'
 import { openCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -85,13 +86,23 @@ allowedUsers.forEach(allowedUser => {
         await API.course.deleteCourse(data.course.id)
       },
     })
-
-    // eslint-disable-next-line playwright/expect-expect
-    test(`create course: ${data.name} ${data.smoke}`, async ({
-      browser,
-      course,
-    }) => {
-      await openCourseSteps(browser, course, data.user as StoredCredentialKey)
+    test.describe('We only have Bild courses on uk', () => {
+      if (!isUK()) {
+        // eslint-disable-next-line playwright/no-skipped-test
+        test.skip()
+      } else {
+        // eslint-disable-next-line playwright/expect-expect
+        test(`create course: ${data.name} ${data.smoke}`, async ({
+          browser,
+          course,
+        }) => {
+          await openCourseSteps(
+            browser,
+            course,
+            data.user as StoredCredentialKey,
+          )
+        })
+      }
     })
   }
 })

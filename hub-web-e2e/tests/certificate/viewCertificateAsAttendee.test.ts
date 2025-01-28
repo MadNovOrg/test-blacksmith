@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 
 import { Course_Type_Enum, Grade_Enum } from '@app/generated/graphql'

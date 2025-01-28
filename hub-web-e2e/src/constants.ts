@@ -4,10 +4,16 @@ let BASE_URL: string
 let HASURA_BASE_URL: string
 const HASURA_SECRET = process.env.HASURA_SECRET ?? 'tth-hasura-key'
 
+const AWS_REGION = process.env.AWS_REGION ?? 'eu-west-2'
+
+export const isUK = () => {
+  return AWS_REGION === 'eu-west-2'
+}
+
 switch (TARGET_ENV) {
   case 'local':
-    BASE_URL = 'http://localhost:3000'
-    HASURA_BASE_URL = 'http://localhost:8080'
+    BASE_URL = isUK() ? 'http://localhost:3000' : 'http://localhost:4000'
+    HASURA_BASE_URL = isUK() ? 'http://localhost:8080' : 'http://localhost:8081'
     break
   case 'dev':
     BASE_URL = 'https://dev.connect.teamteach.com'
@@ -32,6 +38,7 @@ const TEST_SETTINGS: { role: undefined | 'tt-admin' | 'admin' } = {
 }
 
 const UK_TIMEZONE = 'Europe/London'
+const ANZ_TIMEZONE = 'Australia/Sydney'
 
 export {
   TARGET_ENV,
@@ -42,4 +49,6 @@ export {
   PER_PAGE,
   TEST_SETTINGS,
   UK_TIMEZONE,
+  ANZ_TIMEZONE,
+  AWS_REGION,
 }

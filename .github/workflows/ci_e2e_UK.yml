@@ -1,0 +1,108 @@
+name: UK E2E smoke tests
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  e2e-smoke-tests:
+    name: UK E2E smoke tests
+    runs-on: ubuntu-8core
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [ 1, 2, 3, 4 ]
+        shardTotal: [ 4 ]
+    env:
+      CI: true
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+        - 6432:6432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: tth-db
+          POSTGRES_MAX_CONNECTIONS: 200
+          POSTGRES_HOST_AUTH_METHOD: md5
+          POSTGRES_INITDB_ARGS: --auth=md5
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      pgbouncer:
+        image: edoburu/pgbouncer:latest
+        ports:
+        - 5432:5432
+        env:
+          DB_USER: postgres
+          DB_PASSWORD: root
+          DB_NAME: tth-db
+          DB_PORT: 5432
+          DB_HOST: postgres
+          POOL_MODE: session
+          MAX_CLIENT_CONN: 200
+          DEFAULT_POOL_SIZE: 50
+
+      graphql-engine:
+        image: hasura/graphql-engine:v2.28.2-ce.cli-migrations-v3
+        ports:
+        - 8080:8080
+        env:
+          HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@pgbouncer:5432/tth-db
+          HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+          HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+          HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}' 
+    steps:
+    - name: Set Environment Variables
+      run: |
+        echo "CI=${{ env.CI }}" >> $GITHUB_ENV
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: latest
+
+    - name: Build
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.14.2'
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
+
+    - name: Hasura Migration
+      run: |
+        cp hasura/.env.sample hasura/.env
+        pnpm hasura metadata apply --endpoint 'http://localhost:8080'
+        pnpm hasura migrate apply --database-name default --endpoint 'http://localhost:8080'
+        pnpm hasura migrate status --database-name default --endpoint 'http://localhost:8080'
+        pnpm hasura metadata reload --endpoint 'http://localhost:8080'
+        pnpm hasura migrate apply --goto 101 --database-name default --endpoint 'http://localhost:8080'
+        pnpm hasura migrate status --database-name default --endpoint 'http://localhost:8080'
+        pnpm hasura migrate apply --database-name default --endpoint 'http://localhost:8080'
+        pnpm hasura migrate status --database-name default --endpoint 'http://localhost:8080'
+        pnpm hasura metadata reload --endpoint 'http://localhost:8080'
+
+    - name: Hasura Seed Data
+      run: pnpm hasura seed apply --database-name default  --endpoint 'http://localhost:8080'
+
+    - name: Playwright setup
+      run: pnpm playwright install --with-deps
+
+    - name: Playwright tests
+      id: playwright
+      env:
+        AWS_REGION: 'eu-west-2'
+      run: pnpm nx e2e:smoke @teamteach/hub.web-e2e --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+
+    - name: Playwright report
+      uses: actions/upload-artifact@v4
+      if: failure() && steps.playwright.outcome == 'failure'
+      with:
+        name: test-artifacts
+        path: test-results

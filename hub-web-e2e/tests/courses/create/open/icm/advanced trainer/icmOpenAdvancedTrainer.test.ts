@@ -3,6 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Level_Enum } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { isUK } from '@qa/constants'
 import { openCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -44,12 +45,23 @@ allowedUsers.forEach(allowedUser => {
     test.use({
       storageState: stateFilePath(data.user as StoredCredentialKey),
     })
-    //eslint-disable-next-line playwright/expect-expect
-    test(`create course: ${data.name} ${data.smoke}`, async ({
-      browser,
-      course,
-    }) => {
-      await openCourseSteps(browser, course, data.user as StoredCredentialKey)
+
+    test.describe('Skip this test on anz as the level does not exist', () => {
+      if (!isUK()) {
+        test.skip()
+      } else {
+        //eslint-disable-next-line playwright/expect-expect
+        test(`create course: ${data.name} ${data.smoke}`, async ({
+          browser,
+          course,
+        }) => {
+          await openCourseSteps(
+            browser,
+            course,
+            data.user as StoredCredentialKey,
+          )
+        })
+      }
     })
   }
 })

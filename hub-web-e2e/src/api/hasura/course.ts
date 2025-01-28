@@ -134,6 +134,7 @@ export const insertCourse = async (
     name: course.name,
     orders: course.orders,
     price: course.price,
+    priceCurrency: course.priceCurrency,
     reaccreditation: course.reaccreditation,
     renewalCycle: course.renewalCycle,
     source: course.source,

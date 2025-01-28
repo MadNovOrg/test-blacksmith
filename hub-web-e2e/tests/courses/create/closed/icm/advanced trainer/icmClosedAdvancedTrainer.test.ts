@@ -4,6 +4,7 @@ import { test as base } from '@playwright/test'
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
+import { isUK } from '@qa/constants'
 import { closedCourseSteps } from '@qa/course-test-steps'
 import { UNIQUE_COURSE } from '@qa/data/courses'
 import { Course } from '@qa/data/types'
@@ -53,12 +54,22 @@ allowdUsers.forEach(allowedUser => {
       },
     })
 
-    // eslint-disable-next-line playwright/expect-expect, playwright/no-focused-test
-    test(`create course: ${data.name} ${data.smoke}`, async ({
-      browser,
-      course,
-    }) => {
-      await closedCourseSteps(browser, course, data.user as StoredCredentialKey)
+    test.describe('Skip this test on ANZ because we do not have Advanced Trainer level there', () => {
+      if (!isUK()) {
+        test.skip()
+      } else {
+        // eslint-disable-next-line playwright/expect-expect, playwright/no-focused-test
+        test(`create course: ${data.name} ${data.smoke}`, async ({
+          browser,
+          course,
+        }) => {
+          await closedCourseSteps(
+            browser,
+            course,
+            data.user as StoredCredentialKey,
+          )
+        })
+      }
     })
   }
 })

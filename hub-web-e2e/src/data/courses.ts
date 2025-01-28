@@ -12,6 +12,8 @@ import { Accreditors_Enum } from '@qa/generated/graphql'
 
 import { buildVenue } from '@test/mock-data-utils'
 
+import { ANZ_TIMEZONE, isUK, UK_TIMEZONE } from '../constants'
+
 import { Course } from './types' // best to replace this with generated course type
 
 export const COURSES_TO_VIEW: Course[] = [
@@ -29,7 +31,9 @@ export const COURSES_TO_VIEW: Course[] = [
         start: addMonths(new Date(), 2),
         end: addMonths(new Date(), 2),
         venue: buildVenue({
-          overrides: { name: 'Queen Elizabeth II Centre' },
+          overrides: {
+            name: isUK() ? 'Queen Elizabeth II Centre' : 'Sydney Town Hall',
+          },
         }),
       },
     ],
@@ -54,7 +58,9 @@ export const COURSES_TO_VIEW: Course[] = [
         start: addMonths(new Date(), 2),
         end: addMonths(new Date(), 2),
         venue: buildVenue({
-          overrides: { name: 'Queen Elizabeth II Centre' },
+          overrides: {
+            name: isUK() ? 'Queen Elizabeth II Centre' : 'Sydney Town Hall',
+          },
         }),
         virtualLink: 'https://zoom.us/dummy.link',
       },
@@ -163,17 +169,21 @@ export const UNIQUE_COURSE: () => Course = () => ({
   level: Course_Level_Enum.Level_1,
   min_participants: 1,
   max_participants: 11,
-  name: 'Positive Behaviour Training: Level One',
+  priceCurrency: isUK() ? 'GBP' : 'AUD',
+  name: isUK()
+    ? 'Positive Behaviour Training: Level One'
+    : 'Behaviour Training Support: Level One',
   reaccreditation: false,
   schedule: [
     {
       start: addMonths(new Date(new Date().setHours(8, 0)), 2),
       end: addMonths(new Date(new Date().setHours(17, 0)), 2),
+      timeZone: isUK() ? UK_TIMEZONE : ANZ_TIMEZONE,
       venue: buildVenue({
         overrides: {
-          name: 'Queen Elizabeth II Centre',
-          country: 'England',
-          countryCode: 'GB-ENG',
+          name: isUK() ? 'Queen Elizabeth II Centre' : 'Sydney Town Hall',
+          country: isUK() ? 'England' : 'Australia',
+          countryCode: isUK() ? 'GB-ENG' : 'AU',
         },
       }),
     },

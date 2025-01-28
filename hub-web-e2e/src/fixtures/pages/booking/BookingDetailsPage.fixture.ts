@@ -9,7 +9,6 @@ import {
 import { BasePage } from '../BasePage.fixture'
 
 import { BookingReviewPage } from './BookingReview.fixture'
-
 export class BookingDetailsPage extends BasePage {
   readonly quantityInput: Locator
   readonly orgSelector: Locator
@@ -147,7 +146,6 @@ export class BookingDetailsPage extends BasePage {
         route.continue()
       }
     })
-
     await super.goto(`registration${id ? `?course_id=${id}&quantity=1` : ''}`)
   }
   async setQuantity(quantity: number) {
