@@ -29,7 +29,7 @@ type Mutation {
     reason: String!
     fee: Float!
     feeType: CancellationFeeType!
-  ): Boolean
+  ): CancelIndividualFromCourseOutput
 }
 
 type Mutation {
@@ -605,6 +605,11 @@ enum SendIndirectBLCourseInvitesError {
   INSUFFICIENT_NUMBER_OF_LICENSES
   INTERNAL_SERVER_ERROR
   UNAUTHORIZED
+}
+
+enum CancelIndividualFromCourseError {
+  GO1_ENROLLMENT_NOT_FOUND
+  GO1_ENROLLMENT_STARTED
 }
 
 input PlansCreateInput {
@@ -1557,6 +1562,11 @@ type SendIndirectBLCourseInvitesOutput {
 type ImportOrganisationsOutput {
   jobId: String
   error: String
+}
+
+type CancelIndividualFromCourseOutput {
+  success: Boolean!
+  error: CancelIndividualFromCourseError
 }
 
 scalar Date

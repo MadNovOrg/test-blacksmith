@@ -11,6 +11,8 @@ configuration:
       custom_name: go1EnrolmentId
     go1_enrolment_progress:
       custom_name: go1EnrolmentProgress
+    go1_enrolment_started:
+      custom_name: go1EnrolmentStarted
     go1_enrolment_status:
       custom_name: go1EnrolmentStatus
     graded_on:
@@ -26,6 +28,7 @@ configuration:
     date_graded: dateGraded
     go1_enrolment_id: go1EnrolmentId
     go1_enrolment_progress: go1EnrolmentProgress
+    go1_enrolment_started: go1EnrolmentStarted
     go1_enrolment_status: go1EnrolmentStatus
     graded_on: gradedOn
     hs_consent: healthSafetyConsent
@@ -152,27 +155,28 @@ select_permissions:
     permission:
       columns:
         - attended
+        - booking_date
+        - certificate_id
         - completed
         - completed_evaluation
-        - hs_consent
         - course_id
-        - go1_enrolment_id
-        - graded_on
-        - go1_enrolment_progress
-        - go1_enrolment_status
-        - grade
-        - grading_feedback
-        - booking_date
         - created_at
         - date_graded
-        - updated_at
-        - certificate_id
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
         - id
         - invite_id
         - invoice_id
         - order_id
         - profile_id
         - registration_id
+        - updated_at
       filter:
         _or:
           - course:
@@ -197,6 +201,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on
@@ -223,6 +228,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on
@@ -257,6 +263,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on
@@ -311,6 +318,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on
@@ -353,6 +361,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on
@@ -380,6 +389,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on
@@ -432,6 +442,7 @@ select_permissions:
         - course_id
         - date_graded
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on

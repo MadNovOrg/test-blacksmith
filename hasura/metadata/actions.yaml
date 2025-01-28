@@ -817,6 +817,9 @@ custom_types:
           value: PARTICIPANT_NOT_FOUND
         - description: null
           is_deprecated: null
+          value: PARTICIPANT_GRADED
+        - description: null
+          is_deprecated: null
           value: COURSE_NOT_FOUND
         - description: null
           is_deprecated: null
@@ -827,9 +830,6 @@ custom_types:
         - description: null
           is_deprecated: null
           value: NOT_ENOUGH_SPACES
-        - description: null
-          is_deprecated: null
-          value: PARTICIPANT_GRADED
     - name: CourseDeliveryType
       values:
         - description: null
@@ -1013,6 +1013,14 @@ custom_types:
         - description: null
           is_deprecated: null
           value: UNAUTHORIZED
+    - name: CancelIndividualFromCourseError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GO1_ENROLLMENT_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: GO1_ENROLLMENT_STARTED
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1157,5 +1165,6 @@ custom_types:
     - name: InvalidEntries
     - name: SendIndirectBLCourseInvitesOutput
     - name: ImportOrganisationsOutput
+    - name: CancelIndividualFromCourseOutput
   scalars:
     - name: Date

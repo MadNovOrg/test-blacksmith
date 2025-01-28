@@ -72,8 +72,9 @@ export const GET_COURSE_PARTICIPANTS = gql`
       }
       invoiceID
       bookingDate
-      go1EnrolmentStatus
       go1EnrolmentProgress
+      go1EnrolmentStarted
+      go1EnrolmentStatus
       grade
       healthSafetyConsent
       certificate {

@@ -436,10 +436,22 @@ export type CourseParticipantModule = {
 }
 
 export type CourseParticipant = {
+  attended?: boolean
   bookingDate?: Date
-  invoiceID?: string
-  registrationId?: string
+  certificate?: CourseCertificate
+  certificateChanges?: CourseCertificateChangelog[]
+  completed_evaluation: boolean
+  completed: boolean
   course: Course
+  dateGraded?: string
+  go1EnrolmentProgress: number | null
+  go1EnrolmentStatus: BlendedLearningStatus
+  go1EnrolmentStarted?: boolean
+  grade?: Grade_Enum
+  gradingFeedback?: string
+  gradingModules: CourseParticipantModule[]
+  healthSafetyConsent?: boolean
+  invoiceID?: string
   order?: Order | null
   profile: Profile & {
     course_evaluation_answers_aggregate?: {
@@ -448,18 +460,7 @@ export type CourseParticipant = {
       }
     }
   }
-  attended?: boolean
-  go1EnrolmentStatus: BlendedLearningStatus
-  go1EnrolmentProgress: number | null
-  grade?: Grade_Enum
-  gradingFeedback?: string
-  dateGraded?: string
-  gradingModules: CourseParticipantModule[]
-  certificate?: CourseCertificate
-  certificateChanges?: CourseCertificateChangelog[]
-  healthSafetyConsent?: boolean
-  completed: boolean
-  completed_evaluation: boolean
+  registrationId?: string
 } & Base
 
 export enum BlendedLearningStatus {

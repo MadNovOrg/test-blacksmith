@@ -176,6 +176,17 @@ export type CanApplyPromoCodeOutput = {
   result?: Maybe<PromoCodeOutput>;
 };
 
+export enum CancelIndividualFromCourseError {
+  Go1EnrollmentNotFound = 'GO1_ENROLLMENT_NOT_FOUND',
+  Go1EnrollmentStarted = 'GO1_ENROLLMENT_STARTED'
+}
+
+export type CancelIndividualFromCourseOutput = {
+  __typename?: 'CancelIndividualFromCourseOutput';
+  error?: Maybe<CancelIndividualFromCourseError>;
+  success: Scalars['Boolean'];
+};
+
 export enum CancelIndividualFromCourseWaitlistError {
   CourseNotFound = 'COURSE_NOT_FOUND',
   WaitlistNotFound = 'WAITLIST_NOT_FOUND'
@@ -24130,6 +24141,7 @@ export type Course_Participant = {
   dateGraded?: Maybe<Scalars['timestamptz']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
   go1EnrolmentProgress?: Maybe<Scalars['numeric']>;
+  go1EnrolmentStarted: Scalars['Boolean'];
   go1EnrolmentStatus?: Maybe<Blended_Learning_Status_Enum>;
   grade?: Maybe<Grade_Enum>;
   gradedOn?: Maybe<Scalars['jsonb']>;
@@ -25155,6 +25167,7 @@ export type Course_Participant_Bool_Exp = {
   dateGraded?: InputMaybe<Timestamptz_Comparison_Exp>;
   go1EnrolmentId?: InputMaybe<Int_Comparison_Exp>;
   go1EnrolmentProgress?: InputMaybe<Numeric_Comparison_Exp>;
+  go1EnrolmentStarted?: InputMaybe<Boolean_Comparison_Exp>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum_Comparison_Exp>;
   grade?: InputMaybe<Grade_Enum_Comparison_Exp>;
   gradedOn?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -25490,6 +25503,7 @@ export type Course_Participant_Insert_Input = {
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
   go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
+  go1EnrolmentStarted?: InputMaybe<Scalars['Boolean']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradedOn?: InputMaybe<Scalars['jsonb']>;
@@ -26101,6 +26115,7 @@ export type Course_Participant_Order_By = {
   dateGraded?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
   go1EnrolmentProgress?: InputMaybe<Order_By>;
+  go1EnrolmentStarted?: InputMaybe<Order_By>;
   go1EnrolmentStatus?: InputMaybe<Order_By>;
   grade?: InputMaybe<Order_By>;
   gradedOn?: InputMaybe<Order_By>;
@@ -26155,6 +26170,8 @@ export enum Course_Participant_Select_Column {
   /** column name */
   Go1EnrolmentProgress = 'go1EnrolmentProgress',
   /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
+  /** column name */
   Go1EnrolmentStatus = 'go1EnrolmentStatus',
   /** column name */
   Grade = 'grade',
@@ -26189,6 +26206,8 @@ export enum Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_E
   /** column name */
   CompletedEvaluation = 'completed_evaluation',
   /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
+  /** column name */
   HealthSafetyConsent = 'healthSafetyConsent'
 }
 
@@ -26200,6 +26219,8 @@ export enum Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_E
   Completed = 'completed',
   /** column name */
   CompletedEvaluation = 'completed_evaluation',
+  /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
   /** column name */
   HealthSafetyConsent = 'healthSafetyConsent'
 }
@@ -26217,6 +26238,7 @@ export type Course_Participant_Set_Input = {
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
   go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
+  go1EnrolmentStarted?: InputMaybe<Scalars['Boolean']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradedOn?: InputMaybe<Scalars['jsonb']>;
@@ -26297,6 +26319,7 @@ export type Course_Participant_Stream_Cursor_Value_Input = {
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
   go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
+  go1EnrolmentStarted?: InputMaybe<Scalars['Boolean']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradedOn?: InputMaybe<Scalars['jsonb']>;
@@ -26350,6 +26373,8 @@ export enum Course_Participant_Update_Column {
   Go1EnrolmentId = 'go1EnrolmentId',
   /** column name */
   Go1EnrolmentProgress = 'go1EnrolmentProgress',
+  /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
   /** column name */
   Go1EnrolmentStatus = 'go1EnrolmentStatus',
   /** column name */
@@ -36313,7 +36338,7 @@ export type Mutation_Root = {
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   approveCourse: ApproveCourseOutput;
   arloCallback?: Maybe<ArloCallbackOutput>;
-  cancelIndividualFromCourse: Scalars['Boolean'];
+  cancelIndividualFromCourse?: Maybe<CancelIndividualFromCourseOutput>;
   /** Removes another user from course waitlist */
   cancelIndividualFromCourseWaitlist?: Maybe<CancelIndividualFromCourseWaitlistOutput>;
   cancelMyselfFromCourse: Scalars['Boolean'];
@@ -64258,7 +64283,7 @@ export type CancelIndividualFromCourseMutationVariables = Exact<{
 }>;
 
 
-export type CancelIndividualFromCourseMutation = { __typename?: 'mutation_root', cancelIndividualFromCourse: boolean };
+export type CancelIndividualFromCourseMutation = { __typename?: 'mutation_root', cancelIndividualFromCourse?: { __typename?: 'CancelIndividualFromCourseOutput', error?: CancelIndividualFromCourseError | null, success: boolean } | null };
 
 export type GetCourseParticipantOrderQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -64433,7 +64458,7 @@ export type CourseParticipantsQueryVariables = Exact<{
 }>;
 
 
-export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, go1EnrolmentProgress?: any | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, completed: boolean, completed_evaluation?: boolean | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, course_evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null } | null, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentProgress?: any | null, go1EnrolmentStarted: boolean, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, completed: boolean, completed_evaluation?: boolean | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, course_evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null } | null, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
 export type GetCourseParticipantDietOrDisabilitiesDataQueryVariables = Exact<{
   courseId: Scalars['Int'];

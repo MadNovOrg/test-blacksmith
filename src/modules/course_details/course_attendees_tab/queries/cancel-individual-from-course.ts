@@ -14,6 +14,9 @@ export const CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION = gql`
       reason: $reason
       fee: $fee
       feeType: $feeType
-    )
+    ) {
+      error
+      success
+    }
   }
 `
