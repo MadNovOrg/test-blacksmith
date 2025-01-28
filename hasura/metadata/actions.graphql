@@ -144,6 +144,10 @@ type Query {
 }
 
 type Mutation {
+  go1EnrollmentsStatusSync: Go1EnrollmentsSyncOutput
+}
+
+type Mutation {
   go1LicensesChange(
     input: Go1LicensesChangeInput!
   ): Go1LicensesChangeOutput
@@ -1562,6 +1566,10 @@ type SendIndirectBLCourseInvitesOutput {
 type ImportOrganisationsOutput {
   jobId: String
   error: String
+}
+
+type Go1EnrollmentsSyncOutput {
+  message: String
 }
 
 type CancelIndividualFromCourseOutput {

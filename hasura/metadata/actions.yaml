@@ -199,6 +199,14 @@ actions:
       - role: sales-admin
       - role: tt-admin
       - role: tt-ops
+  - name: go1EnrollmentsStatusSync
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/go1/sync-enrollments-status'
+      timeout: 243
+    permissions:
+      - role: tt-admin
+    comment: Sync participants' go1 enrollment status
   - name: go1LicensesChange
     definition:
       kind: synchronous
@@ -1165,6 +1173,7 @@ custom_types:
     - name: InvalidEntries
     - name: SendIndirectBLCourseInvitesOutput
     - name: ImportOrganisationsOutput
+    - name: Go1EnrollmentsSyncOutput
     - name: CancelIndividualFromCourseOutput
   scalars:
     - name: Date
