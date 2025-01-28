@@ -477,6 +477,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     displayOnWebsite: course.displayOnWebsite,
     renewalCycle: course.renewalCycle,
     residingCountry: course.residingCountry,
+    tenderCourse: Boolean(course.is_tender),
   }
 }
 

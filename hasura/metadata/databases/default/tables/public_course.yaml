@@ -286,6 +286,7 @@ insert_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -293,8 +294,8 @@ insert_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -376,15 +377,16 @@ insert_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
         - grading_started
         - id
-        - is_draft
         - include_VAT
+        - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -423,14 +425,15 @@ insert_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
         - id
-        - is_draft
         - include_VAT
+        - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -510,6 +513,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -517,8 +521,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -531,10 +535,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -618,6 +622,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -625,8 +630,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -639,10 +644,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -683,6 +688,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -690,8 +696,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -704,10 +710,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - state
@@ -734,6 +740,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -741,8 +748,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -755,10 +762,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -828,6 +835,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -835,8 +843,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -849,10 +857,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -893,6 +901,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -900,8 +909,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -914,10 +923,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -946,6 +955,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -953,8 +963,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -967,10 +977,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -1042,6 +1052,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1049,8 +1060,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1063,10 +1074,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots
@@ -1098,6 +1109,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1105,8 +1117,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1119,10 +1131,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - reservedGo1Licenses
@@ -1201,6 +1213,7 @@ select_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1208,8 +1221,8 @@ select_permissions:
         - id
         - include_VAT
         - is_draft
+        - is_tender
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1222,10 +1235,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - search_fields
         - source
         - special_instructions
         - updated_at
-        - search_fields
       computed_fields:
         - course_code
         - freeSlots

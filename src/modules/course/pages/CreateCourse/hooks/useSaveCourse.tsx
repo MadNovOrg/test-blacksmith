@@ -278,6 +278,7 @@ export function useSaveCourse(): {
             : undefined,
           level: courseData.courseLevel,
           reaccreditation: courseData.reaccreditation,
+          is_tender: courseData.tenderCourse,
           go1Integration: courseData.blendedLearning,
           ...([Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
             courseData.type,

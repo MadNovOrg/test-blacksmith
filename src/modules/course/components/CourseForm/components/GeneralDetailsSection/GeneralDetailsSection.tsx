@@ -88,6 +88,7 @@ export const GeneralDetailsSection = ({
   const conversion = useWatch({ control, name: 'conversion' })
   const bildStrategies = useWatch({ control, name: 'bildStrategies' })
   const blendedLearning = useWatch({ control, name: 'blendedLearning' })
+  const tenderCourse = useWatch({ control, name: 'tenderCourse' })
   const displayOnWebsite = useWatch({ control, name: 'displayOnWebsite' })
   const venue = useWatch({ control, name: 'venue' })
   const [aolCountry, aolRegion] = useWatch({
@@ -96,6 +97,7 @@ export const GeneralDetailsSection = ({
   })
 
   const isIndirectCourse = courseType === Course_Type_Enum.Indirect
+  const isClosedCourse = courseType === Course_Type_Enum.Closed
   const isBild = accreditedBy === Accreditors_Enum.Bild
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isVirtualCourse = deliveryType === Course_Delivery_Type_Enum.Virtual
@@ -205,6 +207,8 @@ export const GeneralDetailsSection = ({
       !canBlended || disableBlended || disabledFields.has('blendedLearning')
     )
   }, [canBlended, courseLevel, courseType, disableBlended, disabledFields])
+
+  const shouldDisableTender = !isCreation
 
   useEffect(() => {
     if (
@@ -535,6 +539,29 @@ export const GeneralDetailsSection = ({
           {errors.courseLevel?.message ? (
             <FormHelperText error>{errors.courseLevel.message}</FormHelperText>
           ) : null}
+
+          {acl.isAustralia() && isClosedCourse ? (
+            <Box sx={{ mt: 2 }}>
+              <Controller
+                name="tenderCourse"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    disabled={shouldDisableTender}
+                    control={
+                      <Switch
+                        {...field}
+                        checked={tenderCourse ?? false}
+                        data-testid="tenderCourse-switch"
+                      />
+                    }
+                    label={t('tender-course-label')}
+                  />
+                )}
+              />
+            </Box>
+          ) : null}
+
           {/* TODO: Delete this after Arlo migration to the hub - HAVENT USED THE translations file to have this easier to find by text search */}
           {acl.isInternalUser() && !isIndirectCourse ? (
             <>

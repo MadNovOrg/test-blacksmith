@@ -542,6 +542,7 @@ export const useCourseCreationFormSchema = ({
       price: courseInput?.price,
       priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
       timeZone: courseInput?.timeZone,
+      tenderCourse: courseInput?.tenderCourse,
       includeVAT:
         courseInput?.includeVAT ??
         (isCreation &&
@@ -585,15 +586,16 @@ export const useCourseCreationFormSchema = ({
       courseInput?.price,
       courseInput?.priceCurrency,
       courseInput?.timeZone,
+      courseInput?.tenderCourse,
       courseInput?.includeVAT,
       courseInput?.renewalCycle,
       residingCountry,
       courseType,
-      isCreation,
-      isCourseInUK,
       defaultCurrency,
+      isCreation,
       acl,
       isAustraliaCountry,
+      isCourseInUK,
     ],
   )
   const methods = useForm<CourseInput>({

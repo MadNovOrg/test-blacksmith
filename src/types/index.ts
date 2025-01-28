@@ -55,6 +55,7 @@ export type Course = {
   organization?: Organization
   bildModules?: Array<Course_Bild_Module>
   bookingContact?: Profile
+  is_tender?: boolean
   bookingContactInviteData?: {
     firstName: string
     lastName: string
@@ -648,6 +649,7 @@ export type CourseInput = {
   startDate: Date | null
   startDateTime: Date | null
   startTime: string
+  tenderCourse?: boolean | null
   timeZone?: TimeZoneDataType
   type: Course_Type_Enum | null
   usesAOL: boolean

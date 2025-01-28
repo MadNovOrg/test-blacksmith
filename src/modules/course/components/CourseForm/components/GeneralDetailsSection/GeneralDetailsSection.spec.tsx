@@ -189,4 +189,32 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
       ).not.toBeInTheDocument()
     },
   )
+  it('renders Tender course component for closed course type on ANZ region', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    renderForm({ type: Course_Type_Enum.Closed })
+
+    expect(screen.getByTestId('tenderCourse-switch')).toBeInTheDocument()
+    expect(screen.getByLabelText('Tender course')).toBeInTheDocument()
+  })
+
+  it('does not render Tender course component for closed course type on UK region', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    renderForm({ type: Course_Type_Enum.Closed })
+
+    expect(screen.queryByTestId('tenderCourse-switch')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Tender course')).not.toBeInTheDocument()
+  })
+
+  it('allows interacting with Tender course switch for closed course type on ANZ region', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    renderForm({ type: Course_Type_Enum.Closed })
+    const tenderCourseSwitch = screen.getByRole('checkbox', {
+      name: 'Tender course',
+    })
+    expect(tenderCourseSwitch).not.toBeChecked()
+
+    await userEvent.click(tenderCourseSwitch)
+
+    expect(tenderCourseSwitch).toBeChecked()
+  })
 })

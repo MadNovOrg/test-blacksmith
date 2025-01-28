@@ -134,6 +134,7 @@ export const COURSE = gql`
     max_participants
     gradingConfirmed
     gradingStarted
+    is_tender
     go1Integration
     aolCostOfCourse
     aolCountry
