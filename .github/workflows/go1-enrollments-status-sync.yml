@@ -16,7 +16,7 @@ on:
 env:
   DEFAULT_ENV: 'DEV'
 jobs:
-  invoice-sync:
+  go1-enrollments-status-sync:
     runs-on: ubuntu-latest
     steps:
       - name: Log selected Environment
