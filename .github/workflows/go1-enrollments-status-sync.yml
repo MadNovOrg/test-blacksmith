@@ -9,8 +9,11 @@ on:
         type: choice
         options:
           - DEV
-          - PROD
+          - DEV_ANZ
           - STG
+          - STG_ANZ
+          - PROD
+          - PROD_ANZ
 env:
   DEFAULT_ENV: 'DEV'
 jobs:
