@@ -8,9 +8,12 @@ on:
         required: false
         type: choice
         options:
-          - STG
-          - PROD
           - DEV
+          - DEV_ANZ
+          - STG
+          - STG_ANZ
+          - PROD
+          - PROD_ANZ
   # schedule:
   ## Not decided if we want it periodically yet
   #   - cron: '0 0 * * *' ## run daily at 00:00
