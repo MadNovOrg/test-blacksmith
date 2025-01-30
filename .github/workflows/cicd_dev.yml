@@ -112,10 +112,11 @@ jobs:
           name: coverage
           path: coverage
       - uses: sonarsource/sonarqube-scan-action@master
-        if: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'pull_request' }}
+        if: ${{ github.actor != 'dependabot[bot]' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
       - uses: sonarsource/sonarqube-quality-gate-action@master
         if: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'pull_request' }}
         timeout-minutes: 5
