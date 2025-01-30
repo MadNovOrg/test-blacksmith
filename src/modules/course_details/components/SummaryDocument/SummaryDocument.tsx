@@ -32,7 +32,7 @@ type Props = {
     | 'accreditedBy'
     | 'bildModules'
     | 'deliveryType'
-    | 'modules'
+    | 'curriculum'
     | 'name'
     | 'schedule'
     | 'trainers'
@@ -52,6 +52,19 @@ type Props = {
     'answer' | 'id' | 'question'
   >[]
 }
+
+type Curriculum = {
+  id: string
+  displayName: string
+  name: string
+  mandatory: boolean
+  lessons: {
+    items: {
+      name: string
+      covered: boolean
+    }[]
+  }
+}[]
 
 type PDFRatingSummaryProps = {
   questionKey: string
@@ -321,30 +334,10 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
 
-  const courseModules = course.modules ?? []
+  const courseModules = (course.curriculum as Curriculum) ?? []
   const bildModules = course.bildModules.length
     ? course.bildModules[0].modules
     : null
-
-  const groupedCourseModules = groupBy(
-    courseModules,
-    a => a.module.moduleGroup?.name,
-  )
-  const moduleGroups = Object.keys(groupedCourseModules)
-
-  participants.sort((p1, p2) => {
-    if (!p1.attended && p2.attended) return 1
-    if (p1.attended && !p2.attended) return -1
-    return 0
-  })
-
-  for (const g of moduleGroups) {
-    groupedCourseModules[g].sort((m1, m2) => {
-      if (!m1.covered && m2.covered) return 1
-      if (m1.covered && !m2.covered) return -1
-      return 0
-    })
-  }
 
   const leadTrainer = course?.trainers?.find(t => t.type === 'LEADER') ?? {
     id: null,
@@ -477,23 +470,21 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
               </Text>
 
               {course.accreditedBy === Accreditors_Enum.Icm ? (
-                moduleGroups.map(
-                  groupName =>
-                    groupedCourseModules[groupName].some(
-                      ({ covered }) => !!covered,
-                    ) && (
-                      <View key={groupName} wrap={false}>
+                courseModules.map(
+                  module =>
+                    module.lessons?.items?.some(item => !!item.covered) && (
+                      <View key={module.displayName} wrap={false}>
                         <Text style={[styles.largerText, styles.bold]}>
-                          {groupName}
+                          {module.displayName}
                         </Text>
 
                         <FlexGroup
                           type="column"
-                          data={groupedCourseModules[groupName]
+                          data={module.lessons?.items
                             .filter(({ covered }) => !!covered)
-                            .map(({ module }) => (
-                              <Text key={module.id} style={[styles.text]}>
-                                {module.name}
+                            .map(item => (
+                              <Text key={item.name} style={[styles.text]}>
+                                {item.name}
                               </Text>
                             ))}
                         />

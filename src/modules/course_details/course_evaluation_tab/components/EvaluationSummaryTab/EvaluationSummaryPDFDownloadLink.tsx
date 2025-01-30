@@ -102,6 +102,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<Props> = ({
           ? {}
           : { archived: { _eq: false } },
       },
+      courseId: courseId,
     },
   })
 

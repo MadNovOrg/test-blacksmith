@@ -13,7 +13,7 @@ import {
 } from '@app/generated/graphql'
 import { CourseEvaluationGroupedQuestion } from '@app/types'
 
-import { chance, render, screen, waitFor } from '@test/index'
+import { chance, Matcher, render, screen, waitFor } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { SummaryDocument } from './SummaryDocument'
@@ -24,7 +24,7 @@ const buildCourseForSummaryDocument = build<
     | 'accreditedBy'
     | 'bildModules'
     | 'deliveryType'
-    | 'modules'
+    | 'curriculum'
     | 'name'
     | 'schedule'
     | 'trainers'
@@ -35,7 +35,7 @@ const buildCourseForSummaryDocument = build<
     accreditedBy: Accreditors_Enum.Icm,
     bildModules: [],
     deliveryType: Course_Delivery_Type_Enum.F2F,
-    modules: [],
+    curriculum: [],
     name: 'Test Course',
     schedule: [
       {
@@ -481,6 +481,98 @@ describe('SummaryDocument', () => {
         fontWeight: 500,
         fontFamily: ForeignScript.THAI,
       })
+    })
+  })
+
+  it('renders curriculum in document', async () => {
+    const props = {
+      course: buildCourseForSummaryDocument({
+        overrides: {
+          trainers: [],
+          curriculum: [
+            {
+              id: chance.string(),
+              name: 'Theory Level One ANZ',
+              displayName: 'Theory Module',
+              mandatory: true,
+              lessons: {
+                items: [
+                  {
+                    name: 'Theory Lesson 1',
+                    covered: true,
+                  },
+                  {
+                    name: 'Theory Lesson 2',
+                    covered: true,
+                  },
+                  {
+                    name: 'Theory Lesson 3',
+                    covered: true,
+                  },
+                ],
+              },
+            },
+            {
+              id: chance.guid(),
+              name: 'Communication Level One ANZ',
+              displayName: 'Communication Module',
+              mandatory: false,
+              lessons: {
+                items: [
+                  {
+                    name: 'Communication Lesson 1',
+                    covered: true,
+                  },
+                  {
+                    name: 'Communication Lesson 2',
+                    covered: false,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      }),
+
+      grouped: buildGroupedPropForSummaryDocument(),
+      injuryQuestion: { no: 0, yes: 0 },
+      isRestricted: false,
+      participants: [],
+      trainerAnswers: [],
+      ungrouped: {},
+    }
+
+    render(<SummaryDocument {...props} />)
+
+    // Theory should be in the document
+    await waitFor(() => {
+      expect(screen.getByText('Theory Module')).toBeInTheDocument()
+    })
+
+    // All theory lessons should be in the document because the module is mandatory and all lessons are covered
+    await waitFor(() => {
+      props.course.curriculum[0].lessons.items.forEach(
+        (item: { name: Matcher }) => {
+          expect(screen.getByText(item.name)).toBeInTheDocument()
+        },
+      )
+    })
+
+    // Communitcation should be in the document
+    await waitFor(() => {
+      expect(screen.getByText('Communication Module')).toBeInTheDocument()
+    })
+
+    // Comunication lesson 1 should be in the document because it is covered
+    await waitFor(() => {
+      expect(screen.getByText('Communication Lesson 1')).toBeInTheDocument()
+    })
+
+    // Comunication lesson 2 should not be in the document because it is not covered
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Communication Lesson 2'),
+      ).not.toBeInTheDocument()
     })
   })
 })
