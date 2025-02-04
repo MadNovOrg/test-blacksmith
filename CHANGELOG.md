@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.18.1
+
+### Patch Changes
+
+- d53acb9: Fix export summary evaluation
+
 ## 4.18.0
 
 ### Minor Changes
