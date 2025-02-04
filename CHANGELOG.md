@@ -1,5 +1,25 @@
 # @teamteach/hub
 
+## 4.19.0
+
+### Minor Changes
+
+- 8303816: Update certificates functionality to help with Backend changes
+- a0cc621: Restrict participants from canceling their enrollment in blended learning courses once they have begun the go1 course.
+- 2118633: Introduce ability to flag tender courses
+- e8a9b2f: Updates sameSite policy of mo_jwt_token and tt_logout cookies to Lax in order to unblock knowledgehub
+- 257fc59: Update Xero Contact organisation details when updating org in TT Connect
+- 8fb0077: Main org admin access to affiliate org courses
+
+### Patch Changes
+
+- fcb5476: Intermediate Trainer Reaccreditation course. Special Instructions
+- 86af129: Restrict access to course builder of the course's grading was confirmed
+- 493d6d2: Adds zap scan to dev and staging. baseline to dev and full to staging
+- 265c34a: Correct currency on bl order details
+- d5f733f: Fix export summary evaluation
+- 82f7a69: Remove irrelevant wording on booking Open course
+
 ## 4.18.1
 
 ### Patch Changes
