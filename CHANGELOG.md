@@ -19,6 +19,11 @@
 - 265c34a: Correct currency on bl order details
 - d5f733f: Fix export summary evaluation
 - 82f7a69: Remove irrelevant wording on booking Open course
+## 4.18.2
+
+### Patch Changes
+
+- 68c4ead: Update packages for ANZ issues
 
 ## 4.18.1
 
