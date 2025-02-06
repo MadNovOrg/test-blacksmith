@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.19.1
+
+### Patch Changes
+
+- 160ace5: ANZ release changesets https://github.com/TeamTeach/hub/releases/tag/RC-4.19.0
+
 ## 4.19.0
 
 ### Minor Changes
@@ -19,6 +25,7 @@
 - 265c34a: Correct currency on bl order details
 - d5f733f: Fix export summary evaluation
 - 82f7a69: Remove irrelevant wording on booking Open course
+
 ## 4.18.2
 
 ### Patch Changes
