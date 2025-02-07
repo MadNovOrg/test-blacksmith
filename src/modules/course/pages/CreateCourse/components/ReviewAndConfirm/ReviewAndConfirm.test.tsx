@@ -42,6 +42,7 @@ vi.mock('react-router-dom', async () => ({
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
+  useFeatureFlagPayload: vi.fn(),
 }))
 
 const trainers = [buildTrainerInput(), buildTrainerInputAssistant()]

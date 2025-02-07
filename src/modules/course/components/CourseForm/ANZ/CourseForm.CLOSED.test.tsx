@@ -14,6 +14,10 @@ import { renderForm, selectDelivery, selectLevel } from '../test-utils'
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn(() => ({
     'is-blended-learning-toggle-enabled': true,
+    'wa-specific-renewal-cycles': false,
+  })),
+  useFeatureFlagPayload: vi.fn(() => ({
+    'wa-specific-renewal-cycles': null,
   })),
 }))
 

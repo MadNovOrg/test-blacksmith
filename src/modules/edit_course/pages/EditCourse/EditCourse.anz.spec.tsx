@@ -43,6 +43,7 @@ vi.mock('@app/components/VenueSelector', () => ({
 }))
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn(),
+  useFeatureFlagPayload: vi.fn(),
 }))
 
 const mockNavigate = vi.fn()

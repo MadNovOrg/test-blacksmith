@@ -17,6 +17,7 @@ import { CourseMaterialsSection } from './CourseMaterialsSection'
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn().mockReturnValue(false),
+  useFeatureFlagPayload: vi.fn(),
 }))
 
 vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({

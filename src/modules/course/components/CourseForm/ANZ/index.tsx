@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material'
 import { isDate, isValid as isValidDate } from 'date-fns'
-import { useFeatureFlagEnabled } from 'posthog-js/react'
+import { useFeatureFlagEnabled, useFeatureFlagPayload } from 'posthog-js/react'
 import React, { useEffect, useImperativeHandle, useMemo } from 'react'
 import { Controller, FormProvider, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +13,7 @@ import useWorldCountries, {
 import {
   Accreditors_Enum,
   Course_Level_Enum,
+  Course_Renewal_Cycle_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies'
@@ -36,6 +37,20 @@ import {
 } from '../helpers'
 import { useCourseCreationFormSchema } from '../hooks/useCourseCreationFormSchema'
 
+type WaRenewalCycleLevels =
+  | Course_Level_Enum.Level_1
+  | Course_Level_Enum.Level_1Np
+  | Course_Level_Enum.Level_1Bs
+  | Course_Level_Enum.Level_2
+
+const WARenewalCycles: Record<WaRenewalCycleLevels, Course_Renewal_Cycle_Enum> =
+  {
+    [Course_Level_Enum.Level_1]: Course_Renewal_Cycle_Enum.Three,
+    [Course_Level_Enum.Level_1Np]: Course_Renewal_Cycle_Enum.Three,
+    [Course_Level_Enum.Level_1Bs]: Course_Renewal_Cycle_Enum.Three,
+    [Course_Level_Enum.Level_2]: Course_Renewal_Cycle_Enum.Two,
+  }
+
 export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   type: courseType = Course_Type_Enum.Open,
@@ -51,6 +66,19 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { isAustraliaCountry, isNewZealandCountry } = useWorldCountries()
 
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
+
+  // WA - Western Australia Department of Education - One of the biggest clients of TT
+  // WA has specific renewal cycles set up untill 30/04/2025
+  // this functionality can be deleted after 30/04/2025
+
+  const waRenewalCyclesEnabled = useFeatureFlagEnabled(
+    'wa-specific-renewal-cycles',
+  )
+
+  const waId = useFeatureFlagPayload('wa-specific-renewal-cycles') as {
+    wa_id: string
+  }
+
   const { methods } = useCourseCreationFormSchema({
     courseInput,
     isCreation,
@@ -317,6 +345,29 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     }
   }, [isCreation, values.residingCountry, isNewZealandCountry, setValue])
 
+  // ----------- To Be deleted after 30/04/2025 ----------------
+  useEffect(() => {
+    if (!isCreation || !waRenewalCyclesEnabled || !waId.wa_id) return
+    if (
+      values.type === Course_Type_Enum.Indirect &&
+      (values.organization?.id === waId.wa_id ||
+        values.organization?.main_organisation?.id)
+    ) {
+      setValue(
+        'renewalCycle',
+        WARenewalCycles[values.courseLevel as WaRenewalCycleLevels],
+      )
+    }
+  }, [
+    values.courseLevel,
+    values.organization,
+    values.type,
+    waRenewalCyclesEnabled,
+    waId,
+    isCreation,
+    setValue,
+  ])
+  // -----------------------------------------------------------
   return (
     <form>
       <FormProvider {...methods}>

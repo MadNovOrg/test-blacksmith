@@ -1,4 +1,4 @@
-import { useFeatureFlagEnabled } from 'posthog-js/react'
+import { useFeatureFlagEnabled, useFeatureFlagPayload } from 'posthog-js/react'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useMutation } from 'urql'
@@ -72,6 +72,16 @@ export function useSaveCourse(): {
   const { isUKCountry, isAustraliaCountry } = useWorldCountries()
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
 
+  // ------------ Can Be Removed after 30/04/2025 ------------
+  const waRenewalCyclesEnabled = useFeatureFlagEnabled(
+    'wa-specific-renewal-cycles',
+  )
+
+  const waFlagPayload = useFeatureFlagPayload('wa-specific-renewal-cycles') as {
+    wa_id: string
+  }
+  // ---------------------------------------------------------
+
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const { profile, acl } = useAuth()
   const { id: draftId } = useParams()
@@ -138,6 +148,27 @@ export function useSaveCourse(): {
     courseData?.residingCountry,
     courseData?.includeVAT,
   ])
+
+  // ------------ Can Be Removed after 30/04/2025 ------------
+  const shouldSetWARenewalCycles = useMemo(() => {
+    if (
+      courseData?.type !== Course_Type_Enum.Indirect ||
+      !waRenewalCyclesEnabled ||
+      !courseData.organization
+    )
+      return false
+
+    return (
+      courseData?.organization.id === waFlagPayload?.wa_id ||
+      courseData?.organization.main_organisation?.id === waFlagPayload?.wa_id
+    )
+  }, [
+    courseData?.organization,
+    courseData?.type,
+    waFlagPayload?.wa_id,
+    waRenewalCyclesEnabled,
+  ])
+  // ---------------------------------------------------------
   // 17.12.2024 - 112 cognitive complexity - tread with caution 😱
   const expensesCurrency = acl.isAustralia() ? Currency.Aud : Currency.Gbp
   const saveCourse = useCallback<SaveCourse>(async () => {
@@ -330,8 +361,11 @@ export function useSaveCourse(): {
             startDate: courseData.startDate,
             courseLevel: courseData.courseLevel,
             isAustralia: acl.isAustralia(),
-          })
-            ? {
+          }) ||
+          // ------------ shouldSetWARenewalCycles Can Be Removed after 30/04/2025 ------------
+          shouldSetWARenewalCycles
+            ? // ---------------------------------------------------------
+              {
                 renewalCycle: courseData.renewalCycle,
               }
             : null),
@@ -496,6 +530,7 @@ export function useSaveCourse(): {
     setDateTimeTimeZone,
     draftId,
     removeCourseDraft,
+    shouldSetWARenewalCycles,
   ])
 
   return {

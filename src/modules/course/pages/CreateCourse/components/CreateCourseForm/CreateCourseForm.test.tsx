@@ -56,6 +56,7 @@ vi.mock('@app/modules/profile/hooks/useProfile')
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),
+  useFeatureFlagPayload: vi.fn(),
 }))
 
 const mockNavigate = vi.fn()
