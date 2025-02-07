@@ -1,0 +1,82 @@
+DROP INDEX IF EXISTS idx_module_name_fulltext;
+
+DELETE FROM module_setting
+WHERE module_name IN (
+    'Theory Foundation Trainer Plus UK',
+    'Personal Space & Body Language Foundation Trainer Plus UK',
+    'Elevated Risks Foundation Trainer Plus UK',
+    'Physical Warm Up Foundation Trainer Plus UK',
+    'Arm responses Foundation Trainer Plus UK',
+    'Bite responses Foundation Trainer Plus UK',
+    'Clothing responses Foundation Trainer Plus UK',
+    'Hair responses Foundation Trainer Plus UK',
+    'Prompts and Guides Foundation Trainer Plus UK',
+    'Small children support Foundation Trainer Plus UK',
+    'Separations Foundation Trainer Plus UK'
+    );
+
+DELETE FROM module_v2
+WHERE "name" IN (
+    'Theory Foundation Trainer Plus UK',
+    'Personal Space & Body Language Foundation Trainer Plus UK',
+    'Elevated Risks Foundation Trainer Plus UK',
+    'Physical Warm Up Foundation Trainer Plus UK',
+    'Arm responses Foundation Trainer Plus UK',
+    'Bite responses Foundation Trainer Plus UK',
+    'Clothing responses Foundation Trainer Plus UK',
+    'Hair responses Foundation Trainer Plus UK',
+    'Prompts and Guides Foundation Trainer Plus UK',
+    'Small children support Foundation Trainer Plus UK',
+    'Separations Foundation Trainer Plus UK'
+    );
+
+INSERT INTO module_setting (course_level, reaccreditation, go1_integration, color, duration, course_delivery_type, course_type, module_name, sort, mandatory, conversion, shard)
+VALUES
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'OPEN', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'OPEN', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'OPEN', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'OPEN', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'OPEN', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'OPEN', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'OPEN', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'OPEN', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'OPEN', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'OPEN', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'CLOSED', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'CLOSED', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'OPEN', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'CLOSED', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'CLOSED', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'CLOSED', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'CLOSED', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Prompts, Guides & Separations', 5, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'CLOSED', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Personal Safety - Assess Risk, Reduce Risk, Gates', 6, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'CLOSED', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'OPEN', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'CLOSED', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'CLOSED', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'F2F', 'CLOSED', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'CLOSED', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'CLOSED', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'OPEN', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'OPEN', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'OPEN', 'Elevated Risks 3 Day SRT', 3, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'OPEN', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'OPEN', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'F2F', 'OPEN', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'OPEN', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'OPEN', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', false, false, 'navy', NULL, 'MIXED', 'OPEN', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'OPEN', 'Three Day Safety Response Trainer Theory', 1, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'OPEN', 'Three Day Safety Response Personal Space & Body Language', 2, true, false, 'UK'),
+    ('FOUNDATION_TRAINER_PLUS', true, false, 'navy', NULL, 'MIXED', 'OPEN', 'Three Day Safety Response Physical Warm Up', 4, true, false, 'UK');
