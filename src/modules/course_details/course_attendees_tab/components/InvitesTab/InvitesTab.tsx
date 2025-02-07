@@ -60,10 +60,9 @@ export const InvitesTab = ({
     course.type === Course_Type_Enum.Indirect
 
   const courseEndDate = useMemo(
-    () => (course?.schedule.length ? course?.schedule[0].end : undefined),
+    () => (course?.schedule?.length ? course?.schedule[0].end : undefined),
     [course?.schedule],
   )
-
   const { data, fetching, total, resend, cancel } = useCourseInvites({
     courseId: course?.id,
     inviter: profile?.id ?? null,
