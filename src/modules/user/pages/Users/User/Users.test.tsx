@@ -6,7 +6,7 @@ import {
   GetProfilesQueryVariables,
 } from '@app/generated/graphql'
 import useProfiles from '@app/modules/profile/hooks/useProfiles'
-import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { AwsRegions, RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
   render,
@@ -219,6 +219,62 @@ describe('page: Users', () => {
         screen.getByText(`${filteredProfile.fullName}`),
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
+  it('Has only Principal, Senior and Moderator trainer types on ANZ', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+    const expectedTrainerTypes = [
+      TrainerRoleTypeName.PRINCIPAL,
+      TrainerRoleTypeName.SENIOR,
+      TrainerRoleTypeName.MODERATOR,
+    ]
+
+    const unexpectedTrainerTypes = Object.values(TrainerRoleTypeName).filter(
+      type => !expectedTrainerTypes.includes(type),
+    )
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const profiles =
+          where?.roles?.role?.name?._in?.includes(RoleName.TRAINER) &&
+          where?.trainer_role_types?.trainer_role_type?.name?._in?.includes(
+            TrainerRoleTypeName.PRINCIPAL,
+          )
+            ? [filteredProfile]
+            : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+          mutate: vi.fn(),
+        }
+      },
+    )
+
+    render(<Users />)
+
+    await userEvent.click(
+      within(screen.getByTestId('FilterUserRole')).getByText('Trainer'),
+    )
+
+    expectedTrainerTypes.forEach(type => {
+      expect(
+        within(screen.getByTestId('FilterTrainerType')).getByText(type, {
+          exact: false,
+        }),
+      ).toBeInTheDocument()
+    })
+
+    unexpectedTrainerTypes.forEach(type => {
+      expect(
+        within(screen.getByTestId('FilterTrainerType')).queryByText(type, {
+          exact: false,
+        }),
+      ).not.toBeInTheDocument()
     })
   })
 

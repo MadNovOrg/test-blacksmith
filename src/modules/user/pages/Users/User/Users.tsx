@@ -78,12 +78,23 @@ export const Users = () => {
   }, [t])
 
   const trainerTypeOptions = useMemo<FilterOption[]>(() => {
+    if (acl.isAustralia()) {
+      return Object.values([
+        TrainerRoleTypeName.PRINCIPAL,
+        TrainerRoleTypeName.SENIOR,
+        TrainerRoleTypeName.MODERATOR,
+      ]).map<FilterOption>(type => ({
+        id: type,
+        title: t(`trainer-role-types.${type}`),
+        selected: false,
+      }))
+    }
     return Object.values(TrainerRoleTypeName).map<FilterOption>(type => ({
       id: type,
       title: t(`trainer-role-types.${type}`),
       selected: false,
     }))
-  }, [t])
+  }, [acl, t])
 
   const [selected, setSelected] = useState<string[]>([])
   const [keyword, setKeyword] = useState('')
