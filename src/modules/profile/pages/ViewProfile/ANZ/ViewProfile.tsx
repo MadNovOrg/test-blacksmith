@@ -127,6 +127,10 @@ export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
     return true
   }, [activeRole, isMyProfile])
 
+  if (status === LoadingStatus.FETCHING) {
+    return <CircularProgress />
+  }
+
   if (!profile) {
     return (
       <Alert
@@ -157,10 +161,6 @@ export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
   )
 
   const isOrgAdmin = isMyProfile ? false : acl.isOrgAdmin()
-
-  if (status === LoadingStatus.FETCHING) {
-    return <CircularProgress />
-  }
 
   if (!acl.canViewProfiles() && !isMyProfile) {
     return (
