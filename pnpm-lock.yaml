@@ -214,8 +214,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0
       libphonenumber-js:
-        specifier: ^1.11.14
-        version: 1.11.14
+        specifier: ^1.11.19
+        version: 1.11.19
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -9714,8 +9714,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  libphonenumber-js@1.11.14:
-    resolution: {integrity: sha512-sexvAfwcW1Lqws4zFp8heAtAEXbEDnvkYCEGzvOoMgZR7JhXo/IkE9MkkGACgBed5fWqh3ShBGnJBdDnU9N8EQ==}
+  libphonenumber-js@1.11.19:
+    resolution: {integrity: sha512-bW/Yp/9dod6fmyR+XqSUL1N5JE7QRxQ3KrBIbYS1FTv32e5i3SEtQVX+71CYNv8maWNSOgnlCoNp9X78f/cKiA==}
 
   lie@3.1.1:
     resolution: {integrity: sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==}
@@ -26229,7 +26229,7 @@ snapshots:
     dependencies:
       isomorphic.js: 0.2.5
 
-  libphonenumber-js@1.11.14: {}
+  libphonenumber-js@1.11.19: {}
 
   lie@3.1.1:
     dependencies:
@@ -27177,7 +27177,7 @@ snapshots:
       '@emotion/styled': 11.14.0(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@types/react@18.2.14)(react@18.2.0)
       '@mui/material': 5.14.11(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.2.14)(react@18.2.0))(@types/react@18.2.14)(react@18.2.0))(@types/react@18.2.14)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/node': 20.14.8
-      libphonenumber-js: 1.11.14
+      libphonenumber-js: 1.11.19
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     optionalDependencies:
