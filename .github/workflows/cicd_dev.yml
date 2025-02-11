@@ -98,13 +98,16 @@ jobs:
           path: coverage
       - name: Merge Coverage
         run: |
+          mkdir -p merged-coverage
           for shard in 1 2 3 4; do
-            mv coverage/coverage-shard$shard/* coverage/ || true
+            npx nyc report -t coverage/coverage-shard$shard --reporter=lcov --report-dir coverage/coverage-shard$shard || true
+            mv coverage/coverage-shard$shard/lcov.info merged-coverage/lcov-shard$shard.info || true
             rm -rf coverage/coverage-shard$shard
           done
 
-          npx nyc merge ./coverage ./coverage/coverage.json
-          npx nyc report -t coverage --report-dir coverage --reporter=lcov
+      - name: Merge Coverage using lcov-result-merger
+        run: |
+          npx lcov-result-merger "merged-coverage/*.info" coverage/lcov.info
 
       - name: Upload lcov artifacts
         uses: actions/upload-artifact@v4
