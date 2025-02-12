@@ -1,5 +1,19 @@
 # @teamteach/hub
 
+## 4.20.0
+
+### Minor Changes
+
+- d04ebd6: Level One Open Face to Face courses course builder update on UK
+- 3e4910d: Update FTP course builder for UK
+- 5b12310: Allows trainers to resend or cancel invites of of member from course hosted by their organisation or an organisation affiliated to theirs ( main organisation admin )
+- fed17d2: Have only Principal, Senior and Moderator trainer type filter options on Users page on ANZ.
+- 654f87f: Add specific renewal cycles for indirect course for Western Australia organisation and affiliates up until 30/04/2025
+
+### Patch Changes
+
+- 970d7cc: Fix loading data error on view profile page
+
 ## 4.19.1
 
 ### Patch Changes
