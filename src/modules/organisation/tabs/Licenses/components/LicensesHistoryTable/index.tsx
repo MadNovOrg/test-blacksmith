@@ -44,7 +44,7 @@ export const LicensesHistoryTable: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <Box>
-      <Table>
+      <Table data-testid="licenses-history-table">
         <TableHead darker cols={cols} />
         <TableBody>
           {items.map((historyItem, index) => (

@@ -16,6 +16,7 @@ export const users = {
     job_title: 'CEO',
   },
   ops: {
+    id: '48c9c19b-e7bf-4309-9679-52d5619d27dd',
     givenName: 'Lucas',
     familyName: 'Ops',
     email: 'ops@teamteach.testinator.com',
@@ -138,6 +139,7 @@ export const users = {
     job_title: 'CEO',
   },
   user1: {
+    id: '6b72504a-6447-4b30-9909-e8e6fc1d300f',
     givenName: 'Oliver',
     familyName: 'Participant',
     email: 'user1@teamteach.testinator.com',
@@ -147,6 +149,7 @@ export const users = {
     job_title: 'CEO',
   },
   user2: {
+    id: 'd394a9ff-7517-4e35-91aa-466f9d4c1b77',
     givenName: 'Elijah',
     familyName: 'Participant',
     email: 'user2@teamteach.testinator.com',
@@ -156,6 +159,7 @@ export const users = {
     job_title: 'CEO',
   },
   user1WithOrg: {
+    id: 'fb523ef0-7fd1-42b2-b078-dce29a1713fe',
     givenName: 'William',
     familyName: 'Participant',
     email: 'user1.with.org@teamteach.testinator.com',
@@ -166,6 +170,7 @@ export const users = {
     job_title: 'CEO',
   },
   user2WithOrg: {
+    id: 'a39bb4b3-a07a-4610-8da1-b0ce885cc263',
     givenName: 'James',
     familyName: 'Participant',
     email: 'user2.with.org@teamteach.testinator.com',
@@ -185,6 +190,7 @@ export const users = {
     job_title: 'CEO',
   },
   salesAdmin: {
+    id: '7a35d3ce-cc02-4a66-9446-16b6740bfb23',
     givenName: 'Sales',
     familyName: 'Admin',
     email: 'sales.adm@teamteach.testinator.com',

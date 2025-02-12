@@ -115,6 +115,7 @@ export const OrgStatsTiles: React.FC<
           fetching={
             isAllOrgs ? fetchingAllOrgStats : fetchingIndividualOrgStats
           }
+          testid="total-individuals"
           count={orgStatistics.get('individuals') ?? 0}
           label={t('pages.org-details.tabs.overview.total-individuals')}
           tooltip={t(
@@ -138,11 +139,13 @@ export const OrgStatsTiles: React.FC<
           )}
           onClick={() => onTileSelect(CertificateStatus.Active)}
           selected={selected.includes(CertificateStatus.Active)}
+          testid="active-certifications"
         />
       </Grid>
 
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
+          testid="on-hold-certifications"
           count={orgStatistics.get('onHold') ?? 0}
           chip={{
             label: t('pages.org-details.tabs.overview.on-hold'),
@@ -157,6 +160,7 @@ export const OrgStatsTiles: React.FC<
       </Grid>
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
+          testid="expiring-soon-certifications"
           count={orgStatistics.get('expiringSoon') ?? 0}
           chip={{
             label: t('pages.org-details.tabs.overview.expiring-soon'),
@@ -174,6 +178,7 @@ export const OrgStatsTiles: React.FC<
       </Grid>
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
         <SelectableCountPanel
+          testid="expired-recently-certifications"
           count={orgStatistics.get('expiredRecently') ?? 0}
           chip={{
             label: t('pages.org-details.tabs.overview.expired-recently'),

@@ -60,7 +60,11 @@ export const OrgPermissionsTab = ({ orgId }: OrgPermissionsTabProps) => {
   return data && !error ? (
     <Box sx={{ pt: 2, pb: 4 }}>
       <Box>
-        <Typography variant="subtitle1" mb={2}>
+        <Typography
+          variant="subtitle1"
+          mb={2}
+          data-testid="org-permissions-title"
+        >
           Knowledge Hub
         </Typography>
       </Box>

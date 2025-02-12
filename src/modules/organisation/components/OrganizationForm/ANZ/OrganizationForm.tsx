@@ -321,6 +321,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     <Alert
                       severity="warning"
                       sx={{ backgroundColor: '#fdedb5' }}
+                      data-testid="edit-main-with-affiliate-warning"
                     >
                       {t('edit-main-with-affiliate-warning')}
                     </Alert>
@@ -549,6 +550,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     <Grid item>
                       <TextField
                         id="orgTypeSpecifyOther"
+                        data-testid="other-org-type"
                         label={t('fields.organisation-specify-other')}
                         variant="filled"
                         error={!!errors.orgTypeSpecifyOther}
@@ -672,7 +674,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                         shrink: Boolean(values.headEmailAddress),
                       }}
                       {...register('headEmailAddress')}
-                      inputProps={{ 'data-testid': 'head-title' }}
+                      inputProps={{ 'data-testid': 'main-email' }}
                       fullWidth
                     />
                   </Grid>
@@ -741,6 +743,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                 color="secondary"
                 size="large"
                 onClick={() => navigate(-1)}
+                data-testid="create-org-form-cancel-btn"
               >
                 {_t('common.cancel')}
               </Button>

@@ -22,13 +22,14 @@ export type CountPanelParams = {
   }
   tooltip?: string
   fetching?: boolean
+  testid?: string
 }
 
 export const CountPanel: React.FC<
   React.PropsWithChildren<CountPanelParams>
-> = ({ count, label, chip, tooltip, fetching }) => {
+> = ({ count, label, chip, tooltip, fetching, testid }) => {
   return (
-    <Tile flexDirection="row" gap={2}>
+    <Tile flexDirection="row" gap={2} data-testid={testid}>
       <Typography variant="h2" mx={2}>
         {fetching ? <CircularProgress /> : count}
       </Typography>

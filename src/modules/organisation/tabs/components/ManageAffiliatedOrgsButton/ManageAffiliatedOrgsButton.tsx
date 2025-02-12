@@ -37,6 +37,7 @@ export const ManageAffiliatedOrgsButton: React.FC<
     <Box display="flex" alignItems="center">
       <Button
         variant="contained"
+        data-testid="manage-affiliated-orgs-button"
         {...{
           disabled: disabled,
           endIcon: <ArrowDropDownIcon />,
@@ -58,7 +59,9 @@ export const ManageAffiliatedOrgsButton: React.FC<
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleMenuItemClick}>{t('action-unlink')}</MenuItem>
+        <MenuItem data-testid="unlink-orgs" onClick={handleMenuItemClick}>
+          {t('action-unlink')}
+        </MenuItem>
       </Menu>
     </Box>
   )

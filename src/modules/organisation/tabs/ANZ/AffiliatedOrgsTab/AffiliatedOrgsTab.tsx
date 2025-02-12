@@ -223,7 +223,11 @@ export const AffiliatedOrgsTab: React.FC<
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       <Box display="flex" justifyContent="space-between">
-        <Typography variant="subtitle1" mb={2}>
+        <Typography
+          variant="subtitle1"
+          mb={2}
+          data-testid="affiliated-orgs-title"
+        >
           {t('pages.org-details.tabs.affiliated-orgs.title')}
         </Typography>
         {acl.canLinkToMainOrg() ? (

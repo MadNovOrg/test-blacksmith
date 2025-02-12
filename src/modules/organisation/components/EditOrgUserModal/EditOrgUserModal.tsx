@@ -75,7 +75,7 @@ export const EditOrgUserModal: React.FC<
   ])
 
   return (
-    <Container>
+    <Container data-testid="edit-org-member-modal">
       {acl.canSetOrgAdminRole(orgId) && profile?.id !== orgMember.profile.id ? (
         <FormControlLabel
           sx={{ py: 2 }}
@@ -86,6 +86,7 @@ export const EditOrgUserModal: React.FC<
                 setIsAdmin(e.target.checked)
               }}
               sx={{ px: 2 }}
+              data-testid="toggle-admin-role"
             />
           }
           label={
@@ -134,6 +135,7 @@ export const EditOrgUserModal: React.FC<
             size="large"
             onClick={onClose}
             sx={{ mr: 2 }}
+            data-testid="cancel-edit-org-user"
           >
             {t('common.cancel')}
           </Button>
@@ -143,6 +145,7 @@ export const EditOrgUserModal: React.FC<
             color="primary"
             size="large"
             onClick={onSave}
+            data-testid="confirm-edit-org-user"
           >
             {t('common.save-changes')}
           </Button>

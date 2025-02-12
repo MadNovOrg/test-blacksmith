@@ -96,7 +96,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: coverage
-      - name: Merge Coverage
+
+      - name: Generate lcov reports for each shard
         run: |
           mkdir -p merged-coverage
           for shard in 1 2 3 4; do

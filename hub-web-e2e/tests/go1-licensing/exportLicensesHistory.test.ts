@@ -1,3 +1,4 @@
+/* eslint-disable playwright/expect-expect */
 import { test as base } from '@playwright/test'
 
 import {
@@ -6,7 +7,7 @@ import {
 } from '@app/generated/graphql'
 
 import * as API from '@qa/api'
-import { UNIQUE_ORGANIZATION } from '@qa/data/organization'
+import { ORGANIZATION_INSERT } from '@qa/data/organization'
 import { AllOrganisations } from '@qa/fixtures/pages/org/AllOrganisations.fixture'
 import { stateFilePath } from '@qa/util'
 
@@ -22,7 +23,7 @@ const invoiceData: Go1_Licenses_History_Set_Input = {
 
 const test = base.extend<{ orgId: string }>({
   orgId: async ({}, use) => {
-    const id = await API.organization.insertOrganization(UNIQUE_ORGANIZATION())
+    const id = await API.organization.insertOrganization(ORGANIZATION_INSERT())
     invoiceData.org_id = id
     await API.go1_licensing.insertGo1HistoryEvent(invoiceData)
     await use(id)

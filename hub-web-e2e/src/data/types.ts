@@ -78,6 +78,32 @@ export type CourseSchedule = {
   virtualLink?: string
 }
 
+export type OrganisationAddress = {
+  line1: string
+  line2?: string
+  city: string
+  postCode: string
+  region?: string
+  country: string
+  countryCode: string
+}
+
+export type OrganisationDetails = {
+  name: string
+  sector: string
+  type: string
+  phone: string
+  email: string
+  website?: string
+}
+
+export type OrganisationAdditionalDetails = {
+  headFirstName?: string
+  headSurname?: string
+  headEmail?: string
+  settingName?: string
+}
+
 export type Organization = {
   name: string
   address?: {

@@ -176,6 +176,17 @@ export type CanApplyPromoCodeOutput = {
   result?: Maybe<PromoCodeOutput>;
 };
 
+export enum CancelIndividualFromCourseError {
+  Go1EnrollmentNotFound = 'GO1_ENROLLMENT_NOT_FOUND',
+  Go1EnrollmentStarted = 'GO1_ENROLLMENT_STARTED'
+}
+
+export type CancelIndividualFromCourseOutput = {
+  __typename?: 'CancelIndividualFromCourseOutput';
+  error?: Maybe<CancelIndividualFromCourseError>;
+  success: Scalars['Boolean'];
+};
+
 export enum CancelIndividualFromCourseWaitlistError {
   CourseNotFound = 'COURSE_NOT_FOUND',
   WaitlistNotFound = 'WAITLIST_NOT_FOUND'
@@ -3133,6 +3144,11 @@ export enum Go1ChangeType {
   LicenseIssued = 'LICENSE_ISSUED',
   LicenseRevoked = 'LICENSE_REVOKED'
 }
+
+export type Go1EnrollmentsSyncOutput = {
+  __typename?: 'Go1EnrollmentsSyncOutput';
+  message?: Maybe<Scalars['String']>;
+};
 
 export type Go1LicensesChangeInput = {
   amount: Scalars['Int'];
@@ -15886,6 +15902,7 @@ export type Course = {
   id: Scalars['Int'];
   includeVAT?: Maybe<Scalars['Boolean']>;
   isDraft?: Maybe<Scalars['Boolean']>;
+  is_tender: Scalars['Boolean'];
   level: Course_Level_Enum;
   max_participants: Scalars['Int'];
   min_participants: Scalars['Int'];
@@ -17663,6 +17680,7 @@ export type Course_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   includeVAT?: InputMaybe<Boolean_Comparison_Exp>;
   isDraft?: InputMaybe<Boolean_Comparison_Exp>;
+  is_tender?: InputMaybe<Boolean_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   max_participants?: InputMaybe<Int_Comparison_Exp>;
   min_participants?: InputMaybe<Int_Comparison_Exp>;
@@ -22293,6 +22311,7 @@ export type Course_Insert_Input = {
   id?: InputMaybe<Scalars['Int']>;
   includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
+  is_tender?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
@@ -23875,6 +23894,7 @@ export type Course_Order_By = {
   id?: InputMaybe<Order_By>;
   includeVAT?: InputMaybe<Order_By>;
   isDraft?: InputMaybe<Order_By>;
+  is_tender?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
@@ -24130,6 +24150,7 @@ export type Course_Participant = {
   dateGraded?: Maybe<Scalars['timestamptz']>;
   go1EnrolmentId?: Maybe<Scalars['Int']>;
   go1EnrolmentProgress?: Maybe<Scalars['numeric']>;
+  go1EnrolmentStarted: Scalars['Boolean'];
   go1EnrolmentStatus?: Maybe<Blended_Learning_Status_Enum>;
   grade?: Maybe<Grade_Enum>;
   gradedOn?: Maybe<Scalars['jsonb']>;
@@ -25155,6 +25176,7 @@ export type Course_Participant_Bool_Exp = {
   dateGraded?: InputMaybe<Timestamptz_Comparison_Exp>;
   go1EnrolmentId?: InputMaybe<Int_Comparison_Exp>;
   go1EnrolmentProgress?: InputMaybe<Numeric_Comparison_Exp>;
+  go1EnrolmentStarted?: InputMaybe<Boolean_Comparison_Exp>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum_Comparison_Exp>;
   grade?: InputMaybe<Grade_Enum_Comparison_Exp>;
   gradedOn?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -25490,6 +25512,7 @@ export type Course_Participant_Insert_Input = {
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
   go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
+  go1EnrolmentStarted?: InputMaybe<Scalars['Boolean']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradedOn?: InputMaybe<Scalars['jsonb']>;
@@ -26101,6 +26124,7 @@ export type Course_Participant_Order_By = {
   dateGraded?: InputMaybe<Order_By>;
   go1EnrolmentId?: InputMaybe<Order_By>;
   go1EnrolmentProgress?: InputMaybe<Order_By>;
+  go1EnrolmentStarted?: InputMaybe<Order_By>;
   go1EnrolmentStatus?: InputMaybe<Order_By>;
   grade?: InputMaybe<Order_By>;
   gradedOn?: InputMaybe<Order_By>;
@@ -26155,6 +26179,8 @@ export enum Course_Participant_Select_Column {
   /** column name */
   Go1EnrolmentProgress = 'go1EnrolmentProgress',
   /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
+  /** column name */
   Go1EnrolmentStatus = 'go1EnrolmentStatus',
   /** column name */
   Grade = 'grade',
@@ -26189,6 +26215,8 @@ export enum Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_E
   /** column name */
   CompletedEvaluation = 'completed_evaluation',
   /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
+  /** column name */
   HealthSafetyConsent = 'healthSafetyConsent'
 }
 
@@ -26200,6 +26228,8 @@ export enum Course_Participant_Select_Column_Course_Participant_Aggregate_Bool_E
   Completed = 'completed',
   /** column name */
   CompletedEvaluation = 'completed_evaluation',
+  /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
   /** column name */
   HealthSafetyConsent = 'healthSafetyConsent'
 }
@@ -26217,6 +26247,7 @@ export type Course_Participant_Set_Input = {
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
   go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
+  go1EnrolmentStarted?: InputMaybe<Scalars['Boolean']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradedOn?: InputMaybe<Scalars['jsonb']>;
@@ -26297,6 +26328,7 @@ export type Course_Participant_Stream_Cursor_Value_Input = {
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
   go1EnrolmentId?: InputMaybe<Scalars['Int']>;
   go1EnrolmentProgress?: InputMaybe<Scalars['numeric']>;
+  go1EnrolmentStarted?: InputMaybe<Scalars['Boolean']>;
   go1EnrolmentStatus?: InputMaybe<Blended_Learning_Status_Enum>;
   grade?: InputMaybe<Grade_Enum>;
   gradedOn?: InputMaybe<Scalars['jsonb']>;
@@ -26350,6 +26382,8 @@ export enum Course_Participant_Update_Column {
   Go1EnrolmentId = 'go1EnrolmentId',
   /** column name */
   Go1EnrolmentProgress = 'go1EnrolmentProgress',
+  /** column name */
+  Go1EnrolmentStarted = 'go1EnrolmentStarted',
   /** column name */
   Go1EnrolmentStatus = 'go1EnrolmentStatus',
   /** column name */
@@ -28442,6 +28476,8 @@ export enum Course_Select_Column {
   /** column name */
   IsDraft = 'isDraft',
   /** column name */
+  IsTender = 'is_tender',
+  /** column name */
   Level = 'level',
   /** column name */
   MaxParticipants = 'max_participants',
@@ -28502,6 +28538,8 @@ export enum Course_Select_Column_Course_Aggregate_Bool_Exp_Bool_And_Arguments_Co
   /** column name */
   IsDraft = 'isDraft',
   /** column name */
+  IsTender = 'is_tender',
+  /** column name */
   Reaccreditation = 'reaccreditation'
 }
 
@@ -28523,6 +28561,8 @@ export enum Course_Select_Column_Course_Aggregate_Bool_Exp_Bool_Or_Arguments_Col
   IncludeVat = 'includeVAT',
   /** column name */
   IsDraft = 'isDraft',
+  /** column name */
+  IsTender = 'is_tender',
   /** column name */
   Reaccreditation = 'reaccreditation'
 }
@@ -28556,6 +28596,7 @@ export type Course_Set_Input = {
   id?: InputMaybe<Scalars['Int']>;
   includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
+  is_tender?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
@@ -29009,6 +29050,7 @@ export type Course_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']>;
   includeVAT?: InputMaybe<Scalars['Boolean']>;
   isDraft?: InputMaybe<Scalars['Boolean']>;
+  is_tender?: InputMaybe<Scalars['Boolean']>;
   level?: InputMaybe<Course_Level_Enum>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
@@ -29872,6 +29914,8 @@ export enum Course_Update_Column {
   IncludeVat = 'includeVAT',
   /** column name */
   IsDraft = 'isDraft',
+  /** column name */
+  IsTender = 'is_tender',
   /** column name */
   Level = 'level',
   /** column name */
@@ -36313,7 +36357,7 @@ export type Mutation_Root = {
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   approveCourse: ApproveCourseOutput;
   arloCallback?: Maybe<ArloCallbackOutput>;
-  cancelIndividualFromCourse: Scalars['Boolean'];
+  cancelIndividualFromCourse?: Maybe<CancelIndividualFromCourseOutput>;
   /** Removes another user from course waitlist */
   cancelIndividualFromCourseWaitlist?: Maybe<CancelIndividualFromCourseWaitlistOutput>;
   cancelMyselfFromCourse: Scalars['Boolean'];
@@ -52128,6 +52172,8 @@ export type Query_Root = {
   getOrgInvite?: Maybe<OrgInvite>;
   getOrganizationProfiles?: Maybe<OrganizationProfilesOutput>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
+  /** Sync participants' go1 enrollment status */
+  go1EnrollmentsStatusSync?: Maybe<Go1EnrollmentsSyncOutput>;
   /** fetch data from the table: "go1_history_events" */
   go1_history_events: Array<Go1_History_Events>;
   /** fetch aggregated fields from the table: "go1_history_events" */
@@ -63755,6 +63801,13 @@ export type InsertOrganizationMemberMutationVariables = Exact<{
 
 export type InsertOrganizationMemberMutation = { __typename?: 'mutation_root', insert_organization_member_one?: { __typename?: 'organization_member', id: any } | null };
 
+export type InsertOrganizationInviteMutationVariables = Exact<{
+  input: Organization_Invites_Insert_Input;
+}>;
+
+
+export type InsertOrganizationInviteMutation = { __typename?: 'mutation_root', insert_organization_invites_one?: { __typename?: 'organization_invites', id: any } | null };
+
 export type DeleteOrganizationMutationVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -63775,6 +63828,35 @@ export type DeleteOrganizationMemberMutationVariables = Exact<{
 
 
 export type DeleteOrganizationMemberMutation = { __typename?: 'mutation_root', delete_organization_member_by_pk?: { __typename?: 'organization_member', id: any } | null };
+
+export type DeleteOrganizationInviteMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteOrganizationInviteMutation = { __typename?: 'mutation_root', delete_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null };
+
+export type GetOrgInviteIdQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+  email: Scalars['String'];
+}>;
+
+
+export type GetOrgInviteIdQuery = { __typename?: 'query_root', organization_invites: Array<{ __typename?: 'organization_invites', id: any }> };
+
+export type InsertBlLicenseHistoryMutationVariables = Exact<{
+  input: Go1_Licenses_History_Insert_Input;
+}>;
+
+
+export type InsertBlLicenseHistoryMutation = { __typename?: 'mutation_root', insert_go1_licenses_history?: { __typename?: 'go1_licenses_history_mutation_response', returning: Array<{ __typename?: 'go1_licenses_history', id: any }> } | null };
+
+export type DeleteBlLicenseHistoryMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteBlLicenseHistoryMutation = { __typename?: 'mutation_root', delete_go1_licenses_history_by_pk?: { __typename?: 'go1_licenses_history', id: any } | null };
 
 export type DeletePrigingScheduleMutationVariables = Exact<{
   id?: InputMaybe<Scalars['uuid']>;

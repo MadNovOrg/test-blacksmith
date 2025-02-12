@@ -175,6 +175,19 @@ export type Address = {
   region?: string
 } & Base
 
+export type Attributes = {
+  email: string
+  phone: string
+  website: string
+  headSurname: string
+  settingName: string
+  ofstedRating: string
+  headFirstName: string
+  localAuthority: string
+  headEmailAddress: string
+  ofstedLastInspection: string
+}
+
 export type ContactDetail = {
   type: string
   value: string
@@ -195,7 +208,7 @@ export type Organization = {
   }
   members_aggregate: { [key: string]: { [key: string]: number } }
   name: string
-  organizationType: string
+  organisationType: string
   preferences: { [name: string]: string }
   region: string
   reservedGo1Licenses?: number

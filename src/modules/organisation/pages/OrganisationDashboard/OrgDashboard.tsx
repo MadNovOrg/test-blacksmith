@@ -20,10 +20,9 @@ import { Organization } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
-import { OrgDetailsTab as ANZOrgDetailsTab } from '@app/modules/organisation/tabs/ANZ/OrgDetailsTab/OrgDetailsTab'
+import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrganisationDetails'
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
-import { OrgDetailsTab as UKOrgDetailsTab } from '@app/modules/organisation/tabs/UK/OrgDetailsTab'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
@@ -53,7 +52,6 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const isAustraliaRegion = acl.isAustralia()
-  const isUKRegion = acl.isUK()
   const {
     data: allOrgs,
     fetching,
@@ -104,9 +102,11 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
     mainOrg: Pick<Organization, 'id' | 'name'>,
   ) => {
     return acl.canViewOrg(mainOrg.id) ? (
-      <Typography>
+      <Typography data-testid="affiliated-with">
         {t('pages.org-details.main-organisation')}
-        <Link href={`/organisations/${mainOrg.id}`}>{mainOrg.name}</Link>
+        <Link data-testid="main-org-link" href={`/organisations/${mainOrg.id}`}>
+          {mainOrg.name}
+        </Link>
       </Typography>
     ) : (
       affiliatedOrgAsPlainText(mainOrg.name)
@@ -224,11 +224,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </TabPanel>
 
                     <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.DETAILS}>
-                      {isUKRegion ? (
-                        <UKOrgDetailsTab orgId={id} />
-                      ) : (
-                        <ANZOrgDetailsTab orgId={id} />
-                      )}
+                      <OrgDetailsTab orgId={id} />
                     </TabPanel>
 
                     {isAustraliaRegion && !org?.main_organisation ? (

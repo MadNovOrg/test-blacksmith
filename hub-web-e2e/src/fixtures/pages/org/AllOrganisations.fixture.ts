@@ -1,18 +1,26 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { Chance } from 'chance'
 import { concat } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { readFile } from 'xlsx'
 
 import { Go1_Licenses_History_Set_Input } from '@app/generated/graphql'
 
-import { User } from '@qa/data/types'
+import { getOrganisationProifiles } from '@qa/util'
 
 import { BasePage } from '../BasePage.fixture'
 
-import { EditUserModal } from './EditUserModal.fixture'
+import { OrganisationListPage } from './OrganisationsList.fixture'
 
 export class AllOrganisations extends BasePage {
+  readonly activeCertificationsChip: Locator
+  readonly onHoldCertificationsChip: Locator
+  readonly expiringSoonCertificationsChip: Locator
+  readonly expiredRecentlyCertificationsChip: Locator
+  readonly individualsByLevelTabList: Locator
+  readonly advancedCertifications: Locator
+  readonly advancedTrainerTab: Locator
+  readonly advancedTrainerCertifications: Locator
+  readonly orgSummaryTable: Locator
   readonly addNewOrganisation: Locator
   readonly autocompleteOption: Locator
   readonly blendedLicences: Locator
@@ -29,16 +37,17 @@ export class AllOrganisations extends BasePage {
   readonly numberOfLicences: Locator
   readonly organisationName: Locator
   readonly organisationSummaryTable: Locator
+  readonly phone: Locator
   readonly postCode: Locator
   readonly removeCheckbox: Locator
   readonly saveDetails: Locator
   readonly saveOrganisation: Locator
+  readonly sector: Locator
   readonly seeAllOrgs: Locator
   readonly seeAllCourses: Locator
   readonly searchAvailableCourses: Locator
   readonly bookNow: Locator
   readonly joinWaitingList: Locator
-  readonly sector: Locator
   readonly trustName: Locator
   readonly workEmail: Locator
   readonly individualsTab: Locator
@@ -49,7 +58,6 @@ export class AllOrganisations extends BasePage {
   readonly editUserButton: Locator
   readonly organisationMembersTable: Locator
   readonly organisationTitle: Locator
-  readonly phone: Locator
   readonly type: Locator
   readonly permissionsTab: Locator
   readonly knowledgeHubAccessSwitch: Locator
@@ -122,9 +130,51 @@ export class AllOrganisations extends BasePage {
     this.knowledgeHubAccessSwitch = this.page.locator(
       '[data-testid="org-knowledge-hub-access-switch"]',
     )
+    this.activeCertificationsChip = this.page.locator(
+      '[data-testid="active-certifications"]',
+    )
+    this.onHoldCertificationsChip = this.page.locator(
+      '[data-testid="on-hold-certifications"]',
+    )
+    this.expiringSoonCertificationsChip = this.page.locator(
+      '[data-testid="expiring-soon-certifications"]',
+    )
+    this.expiredRecentlyCertificationsChip = this.page.locator(
+      '[data-testid="expired-recently-certifications"]',
+    )
+    this.individualsByLevelTabList = this.page.locator(
+      '[data-testid="individuals-by-level-tab-list"]',
+    )
+    this.advancedCertifications = this.page.locator(
+      '[data-testid="tab-panel-ADVANCED"]',
+    )
+    this.advancedTrainerTab = this.page.locator(
+      '[data-testid="tab-ADVANCED_TRAINER"]',
+    )
+    this.advancedTrainerCertifications = this.page.locator(
+      '[data-testid="tab-panel-ADVANCED_TRAINER"]',
+    )
+    this.orgSummaryTable = this.page.locator(
+      '[data-testid="organisation-summary-table"]',
+    )
   }
 
   async goto(orgId?: string) {
+    await this.page.route(`**/v1/graphql`, async route => {
+      const request = route.request()
+      if (
+        !orgId &&
+        JSON.stringify(request.postDataJSON()).includes(
+          'GetOrganizationProfiles',
+        )
+      ) {
+        await route.fulfill({
+          json: getOrganisationProifiles(),
+        })
+      } else {
+        await route.continue()
+      }
+    })
     await super.goto(`organisations/${orgId ?? 'all'}`)
   }
 
@@ -153,80 +203,6 @@ export class AllOrganisations extends BasePage {
     const bookNowLocators = await this.bookNow.all()
     const joinWaitingListLocators = await this.joinWaitingList.all()
     return concat(bookNowLocators, joinWaitingListLocators).length
-  }
-
-  async clickSeeAllOrganisations() {
-    await this.seeAllOrgs.click()
-  }
-  async clickNewOrganisation() {
-    await this.addNewOrganisation.click()
-  }
-
-  async addNewOrganisationName(): Promise<string> {
-    await this.organisationName.fill(this.inputtedOrgName)
-    return this.inputtedOrgName
-  }
-
-  async selectSector() {
-    await this.sector.click()
-    await this.page.locator('text=Education').click()
-  }
-
-  async selectType() {
-    await this.type.click()
-    await this.page.locator('text=UTC').click()
-  }
-
-  async addPhoneNumber() {
-    await this.phone.clear()
-    await this.phone.fill('+445555555555')
-  }
-
-  chance = new Chance()
-
-  async addEmail() {
-    await this.email.type(this.chance.email())
-  }
-
-  async addTrustName() {
-    const trustName = this.chance.word()
-    await this.trustName.type(trustName)
-  }
-  async addLine1() {
-    const line1 = this.chance.address()
-    await this.line1.type(line1)
-  }
-  async addCity() {
-    const city = this.chance.city()
-    await this.city.type(city)
-  }
-  async addCountry(name: string) {
-    await this.country.clear()
-    await this.country.fill(name)
-    await this.autocompleteOption.locator(`text=${name}`).first().click()
-  }
-  async addPostCode() {
-    await this.postCode.type('E1 7BT')
-  }
-  async addWorkEmail() {
-    const workEmail = this.chance.email()
-    await this.workEmail.type(workEmail)
-  }
-  async clickSaveOrganisation() {
-    await this.saveOrganisation.click()
-  }
-  async findNewOrg() {
-    await expect(this.organisationSummaryTable).toContainText(
-      this.inputtedOrgName,
-    )
-    await this.page
-      .getByRole('link', { name: this.inputtedOrgName })
-      .first()
-      .click()
-  }
-
-  async checkNewOrgPage() {
-    await expect(this.organisationTitle).toHaveText(this.inputtedOrgName)
   }
 
   async clickBlendedLearningLicences() {
@@ -305,40 +281,33 @@ export class AllOrganisations extends BasePage {
     }
   }
 
-  async clickIndividualsTab() {
-    await this.individualsTab.click()
+  async checkAllOrganisationsPage(orgTitle: string) {
+    // Check title
+    await expect(this.organisationTitle).toHaveText(orgTitle)
+
+    // Check certifications chips
+    await expect(this.activeCertificationsChip).toContainText('Active')
+    await expect(this.onHoldCertificationsChip).toContainText('On hold')
+    await expect(this.expiringSoonCertificationsChip).toContainText(
+      'Expiring soon',
+    )
+    await expect(this.expiredRecentlyCertificationsChip).toContainText(
+      'Expired recently',
+    )
+
+    //Check individuals by level
+    await expect(this.individualsByLevelTabList).toBeVisible()
+    await expect(this.advancedCertifications).toBeVisible()
+
+    await this.advancedTrainerTab.click()
+    await expect(this.advancedTrainerCertifications).toBeVisible()
+
+    //Check org summary
+    await expect(this.orgSummaryTable).toBeVisible()
   }
 
-  async clickInviteUserToOrg() {
-    await this.inviteUserButton.click()
-  }
-
-  async enterWorkEmail(email: string) {
-    await this.inviteOrgWorkEmail.type(email)
-  }
-
-  async clickButtonToInviteUser() {
-    await this.confirmInviteUsers.click()
-  }
-
-  async checkUserHasJoinedOrg(name: string) {
-    await expect(this.orgTable).toContainText(name)
-  }
-
-  async clickEditUserButton() {
-    await this.editUserButton.click()
-    return new EditUserModal(this.page)
-  }
-
-  async checkOrganisationUserExists(user: User, exists: boolean) {
-    if (exists) {
-      await expect(this.organisationMembersTable).toContainText(
-        `${user.givenName} ${user.familyName}`,
-      )
-    } else {
-      await expect(this.organisationMembersTable).not.toContainText(
-        `${user.givenName} ${user.familyName}`,
-      )
-    }
+  async clickSeeAllOrganisationsButton(): Promise<OrganisationListPage> {
+    await this.seeAllOrgs.click()
+    return new OrganisationListPage(this.page)
   }
 }

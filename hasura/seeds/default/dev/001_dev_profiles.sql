@@ -144,9 +144,17 @@ INSERT INTO profile_trainer_role_type (profile_id, trainer_role_type_id) VALUES
 ('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from trainer_role_type WHERE name = 'moderator')), -- assistant.with.org@teamteach.testinator.com
 ('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', (SELECT id from trainer_role_type WHERE name = 'moderator')); -- trainer05@teamteach.testinator.com
 
-INSERT INTO organization (id, name, original_record, address) VALUES
-('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}', '{"line1": "Tankfield, Convent Hill", "line2": "Tramore", "city": "Waterford", "postCode": "X91 PV08"}'),
-('c43b2ba0-8630-43e5-9558-f59ee9a224f0', 'London First School', '{}', '{"line1": "107 Queen Victoria Street", "city": "London", "postCode": "EC4V 3AL"}');
+INSERT INTO organization (id, name, original_record, address, sector, organisation_type) VALUES
+('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}', '{"line1": "Tankfield, Convent Hill", "line2": "Tramore", "city": "Waterford", "postCode": "X91 PV08", "country": "Ireland", "countryCode": "IE"}', 'edu', 'Academy'),
+('c43b2ba0-8630-43e5-9558-f59ee9a224f0', 'London First School', '{}', '{"line1": "107 Queen Victoria Street", "city": "London", "postCode": "EC4V 3AL", "country": "England", "countryCode": "GB-ENG"}', 'hsc_child', 'Hostel');
+
+-- FOR ANZ E2E TESTS
+INSERT INTO organization (id, name, address, sector, organisation_type, attributes, main_organisation_id) VALUES
+('022aa49b-1ba9-40e4-aab2-58c3e1afef54', 'Australia Main Organisation', '{"city":"1","line1":"1","line2":"1","region":"Australian Capital Territory","country":"Australia","postCode":"WC2N 4JL","countryCode":"AU"}', 'anz_edu', 'State hospital', '{"email":"australiaorg@teamteach.testinator.com","phone":"+61 0491 555 555","website":"","headSurname":"","settingName":"","headFirstName":"","headEmailAddress":""}', NULL),
+('6d08b3de-d08a-4a4a-8c63-5a4b638ffcd7', 'Australia First Affiliated Organisation', '{"city":"South Wales","line1":"test","line2":"test","region":"New South Wales","country":"Australia","postCode":"","countryCode":"AU"}', 'anz_edu', 'Independent Education' , '{"email":"australia1affiliated@teamteach.testinator.com","phone":"+61 486 515 956","website":"","headSurname":"","settingName":"","headFirstName":"","headEmailAddress":""}', '022aa49b-1ba9-40e4-aab2-58c3e1afef54'),
+('769a07e7-5f97-473c-bfed-6e4214cc67bf', 'Australia Second Affiliated Organisation', '{"city":"1","line1":"1","line2":"1","region":"Queensland","country":"Australia","postCode":"","countryCode":"AU"}', 'anz_ss', 'Disability', '{"email":"australia2affiliated@teamteach.testinator.com","phone":"+61 0491 555 555","website":"","headSurname":"","settingName":"","headFirstName":"","headEmailAddress":""}', '022aa49b-1ba9-40e4-aab2-58c3e1afef54'),
+('562446fd-60c5-4f3d-93ab-a9768ed5ff0e', 'New Zealand Main Organisation', '{"city":"1","line1":"1","line2":"1","region":"Gisborne","country":"New Zealand","postCode":"WC2N 4JL","countryCode":"NZ"}', 'anz_ss', 'Child & Family Services', '{"email":"newzeealandmainorg@teamteach.testinator.com","phone":"+64 4 519 8865","website":"","headSurname":"","settingName":"","headFirstName":"","headEmailAddress":""}', NULL),
+('c370432a-6aa4-4990-9e64-5a02f80588c7', 'New Zealand First Affiliated Organisation', '{"city":"1","line1":"1","line2":"1","region":"Wellington","country":"New Zealand","postCode":"WC2N 4JL","countryCode":"NZ"}', 'anz_ss', 'Other', '{"email":"newzealandfirstaffiliatedorg@teamteach.testinator.com","phone":"+64 81 3626593","website":"","headSurname":"","settingName":"","headFirstName":"","headEmailAddress":""}', '562446fd-60c5-4f3d-93ab-a9768ed5ff0e');
 
 INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- trainer.with.org@teamteach.testinator.com
@@ -164,6 +172,22 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('2a451ef2-99fe-4350-9f0e-2081b6f3f87f', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer07@teamteach.testinator.com
 ('14184530-d2a8-4cc2-ad42-2b7312aa5b3d', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer08@teamteach.testinator.com
 ('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer09@teamteach.testinator.com
-('b414536d-29dd-4902-81f9-e808503428ee', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'); -- trainer10@teamteach.testinator.com
+('b414536d-29dd-4902-81f9-e808503428ee', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer10@teamteach.testinator.com
+('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', '022aa49b-1ba9-40e4-aab2-58c3e1afef54'), -- trainer.with.org@teamteach.testinator.com
+('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', '6d08b3de-d08a-4a4a-8c63-5a4b638ffcd7'), -- assistant.with.org@teamteach.testinator.com
+('fb523ef0-7fd1-42b2-b078-dce29a1713fe', '022aa49b-1ba9-40e4-aab2-58c3e1afef54'), -- user1.with.org@teamteach.testinator.com
+('a39bb4b3-a07a-4610-8da1-b0ce885cc263', '562446fd-60c5-4f3d-93ab-a9768ed5ff0e'), -- user2.with.org@teamteach.testinator.com
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', '022aa49b-1ba9-40e4-aab2-58c3e1afef54'), -- org.adm@teamteach.testinator.com
+('13a223a8-2184-42f1-ba37-b49e115e59a2', '022aa49b-1ba9-40e4-aab2-58c3e1afef54'), -- trainer@teamteach.testinator.com
+('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', '6d08b3de-d08a-4a4a-8c63-5a4b638ffcd7'), -- trainer01@teamteach.testinator.com
+('30ebb1e1-0491-44f8-b0a2-3087bd454b19', '6d08b3de-d08a-4a4a-8c63-5a4b638ffcd7'), -- trainer02@teamteach.testinator.com
+('e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', '562446fd-60c5-4f3d-93ab-a9768ed5ff0e'), -- trainer03@teamteach.testinator.com
+('d54f86ca-0181-4264-8c73-7b73ff395405', '562446fd-60c5-4f3d-93ab-a9768ed5ff0e'), -- trainer04@teamteach.testinator.com
+('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', '562446fd-60c5-4f3d-93ab-a9768ed5ff0e'), -- trainer05@teamteach.testinator.com
+('8ba2c43e-a7e5-47c5-8d03-0383719d77df', '562446fd-60c5-4f3d-93ab-a9768ed5ff0e'), -- trainer06@teamteach.testinator.com
+('2a451ef2-99fe-4350-9f0e-2081b6f3f87f', 'c370432a-6aa4-4990-9e64-5a02f80588c7'), -- trainer07@teamteach.testinator.com
+('14184530-d2a8-4cc2-ad42-2b7312aa5b3d', 'c370432a-6aa4-4990-9e64-5a02f80588c7'), -- trainer08@teamteach.testinator.com
+('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', 'c370432a-6aa4-4990-9e64-5a02f80588c7'), -- trainer09@teamteach.testinator.com
+('b414536d-29dd-4902-81f9-e808503428ee', 'c370432a-6aa4-4990-9e64-5a02f80588c7'); -- trainer10@teamteach.testinator.com
 
 UPDATE organization_member SET is_admin = true WHERE profile_id = 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa';

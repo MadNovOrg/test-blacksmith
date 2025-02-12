@@ -93,6 +93,7 @@ export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
       onClose={onClose}
       title={t('manage-modal-title')}
       maxWidth={600}
+      data-testid="manage-licenses-dialog"
     >
       <Typography variant="body2" mb={2}>
         {t('manage-modal-description')}

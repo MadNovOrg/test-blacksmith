@@ -595,6 +595,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                     <Grid item>
                       <TextField
                         id="orgTypeSpecifyOther"
+                        data-testid="other-org-type"
                         label={t('fields.organisation-specify-other')}
                         variant="filled"
                         error={!!errors.orgTypeSpecifyOther}
@@ -719,7 +720,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                         shrink: Boolean(values.headEmailAddress),
                       }}
                       {...register('headEmailAddress')}
-                      inputProps={{ 'data-testid': 'head-title' }}
+                      inputProps={{ 'data-testid': 'main-email' }}
                       fullWidth
                     />
                   </Grid>
@@ -751,6 +752,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                           onChange={value =>
                             setValue('localAuthority', value as string)
                           }
+                          data-testid="local-authority-select"
                           value={values.localAuthority ?? null}
                           label={t('fields.local-authority')}
                           disabled={
@@ -891,6 +893,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                 color="secondary"
                 size="large"
                 onClick={() => navigate(-1)}
+                data-testid="create-org-form-cancel-btn"
               >
                 {_t('common.cancel')}
               </Button>

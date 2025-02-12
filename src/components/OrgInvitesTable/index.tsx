@@ -74,7 +74,7 @@ export const OrgInvitesTable: React.FC<
   return (
     <>
       <TableContainer component={Paper} elevation={0}>
-        <Table>
+        <Table data-testid="org-invites-table">
           <MuiTableHead>
             <TableRow>
               <TableCell>{t('common.email')}</TableCell>
@@ -119,7 +119,10 @@ export const OrgInvitesTable: React.FC<
 
             {invitesByStatus.map(invite => {
               return (
-                <TableRow key={invite.id}>
+                <TableRow
+                  key={invite.id}
+                  data-testid={`org-invite-row-${invite.id}`}
+                >
                   <TableCell>{invite.email}</TableCell>
                   <TableCell>
                     {t('dates.default', { date: invite.createdAt })}

@@ -28,6 +28,7 @@ export const DetailsRow = ({
       container
       {...(containerProps ?? {})}
       maxWidth={window.innerWidth / 2}
+      data-testid={dataTestId}
     >
       <Grid item xs={12} md={5}>
         <Box>
@@ -46,7 +47,6 @@ export const DetailsRow = ({
           <Box>
             <Tooltip title={value}>
               <Typography
-                data-testid={dataTestId}
                 color="grey.600"
                 flex={2}
                 {...(valueProps ?? {})}

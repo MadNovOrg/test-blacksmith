@@ -41,8 +41,8 @@ export class LoginPage extends BasePage {
   }
 
   async logIn(email: string, password: string): Promise<MyCoursesPage> {
-    await this.emailInput.type(email)
-    await this.passwordInput.type(password)
+    await this.emailInput.fill(email)
+    await this.passwordInput.fill(password)
     await this.signInButton.click()
     return new MyCoursesPage(this.page)
   }

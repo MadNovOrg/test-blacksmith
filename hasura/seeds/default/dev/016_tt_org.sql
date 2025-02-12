@@ -1,6 +1,6 @@
-INSERT INTO organization (id, name, address)
+INSERT INTO organization (id, name, address, sector)
 VALUES ('a24397aa-b059-46b9-a728-955580823ce4', 'Team Teach',
-        '{"city": "London", "line1": "Second Floor, Longbow House", "line2": "20 Chiswell Street", "country": "United Kingdom", "postCode": "EC1Y 4TW"}');
+        '{"city": "London", "line1": "Second Floor, Longbow House", "line2": "20 Chiswell Street", "country": "England", "countryCode": "GB-ENG", "postCode": "EC1Y 4TW"}', 'edu');
 
 INSERT INTO profile (id, dob, _given_name, _family_name, _email, _phone, country, "countryCode", job_title) VALUES
 ('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', '1981-08-01', 'TeamTeach', 'Org-Admin', 'tt.org.adm@teamteach.testinator.com', '+44 55 5555 5555', 'England', 'GB-ENG', 'CEO'),

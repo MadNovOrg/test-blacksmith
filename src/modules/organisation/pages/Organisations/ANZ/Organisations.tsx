@@ -444,6 +444,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                           })}
                           size="small"
                           color="success"
+                          data-testid="affiliates-count-chip"
                         />
                       </TableCell>
                     </TableRow>

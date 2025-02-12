@@ -161,6 +161,7 @@ export const ManageLicensesForm: React.FC<React.PropsWithChildren<Props>> = ({
             variant="filled"
             helperText={errors.amount?.message}
             error={Boolean(errors.amount?.message)}
+            data-testid="license-amount-input"
           />
         </Grid>
         {values.type === Type.ADD ? (
@@ -172,6 +173,7 @@ export const ManageLicensesForm: React.FC<React.PropsWithChildren<Props>> = ({
               variant="filled"
               helperText={errors.invoiceId?.message}
               error={Boolean(errors.invoiceId?.message)}
+              data-testid="license-invoice-input"
             />
           </Grid>
         ) : null}

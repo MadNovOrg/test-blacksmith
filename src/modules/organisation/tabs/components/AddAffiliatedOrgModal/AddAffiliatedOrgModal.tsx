@@ -92,7 +92,10 @@ export const AddAffiliatedOrgModal = ({
       }}
     >
       <Box>
-        <Typography sx={{ padding: '10px 0px' }}>
+        <Typography
+          sx={{ padding: '10px 0px' }}
+          data-testid="add-affiliated-org-modal-content"
+        >
           {t('description')}
           <strong>{mainOrgName}</strong>
         </Typography>

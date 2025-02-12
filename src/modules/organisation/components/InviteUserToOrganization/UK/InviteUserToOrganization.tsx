@@ -353,6 +353,7 @@ export const InviteUserToOrganization = () => {
                                 {...field}
                                 checked={field.value === true}
                                 sx={{ px: 2 }}
+                                data-testid="toggle-admin-role"
                               />
                             }
                             label={

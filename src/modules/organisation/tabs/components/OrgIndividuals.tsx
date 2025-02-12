@@ -75,6 +75,7 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
             onChange={(_, value) => setUserByLevelSelectedTab(value)}
             sx={{ mt: 2 }}
             variant="scrollable"
+            data-testid="individuals-by-level-tab-list"
           >
             {levelsToShow.map(courseLevel => (
               <Tab
@@ -88,6 +89,7 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
                   },
                 )}
                 value={courseLevel ?? 'none'}
+                data-testid={`tab-${courseLevel}`}
               />
             ))}
           </TabList>
@@ -97,6 +99,7 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
               value={courseLevel ?? 'none'}
               key={courseLevel}
               sx={{ p: 0, overflowX: 'auto' }}
+              data-testid={`tab-panel-${courseLevel}`}
             >
               <IndividualsByLevelList
                 profilesByLevel={profilesByLevel}
