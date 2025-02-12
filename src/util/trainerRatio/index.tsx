@@ -78,7 +78,7 @@ export function getRequiredModerators(courseData: {
     ].includes(courseData.level) &&
     !courseData.reaccreditation
   ) {
-    return { min: 1, max: 1 }
+    return { min: 0, max: 1 }
   }
 
   return { min: 0, max: 0 }

@@ -178,8 +178,6 @@ export function useSaveCourse(): {
       const needsModerator = isModeratorNeeded({
         courseLevel: courseData.courseLevel,
         courseType: courseData.type,
-        forAustralia: acl.isAustralia(),
-        isReaccreditation: courseData.reaccreditation,
       })
 
       const hasModerator = trainers.find(

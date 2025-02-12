@@ -30,7 +30,7 @@ import {
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import { SearchTrainers } from '@app/modules/course/components/SearchTrainers'
-import { isModeratorMandatory, isModeratorNeeded } from '@app/rules/trainers'
+import { isModeratorNeeded } from '@app/rules/trainers'
 import { yup } from '@app/schemas'
 import { CourseTrainer } from '@app/types'
 import { RequiredTrainers } from '@app/util/trainerRatio/types'
@@ -97,7 +97,6 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   autoFocus = true,
   disabled = false,
-  isReAccreditation = false,
   isConversion = false,
   showAssistHint = true,
   requiredLeaders = { min: 0, max: 1 },
@@ -112,23 +111,9 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       isModeratorNeeded({
         courseLevel,
         courseType,
-        forAustralia: acl.isAustralia(),
         isConversion,
-        isReaccreditation: isReAccreditation,
       }),
-    [courseLevel, courseType, isReAccreditation, isConversion, acl],
-  )
-
-  const mandatoryModerator = useMemo(
-    () =>
-      isModeratorMandatory({
-        courseType,
-        courseLevel,
-        isReaccreditation: isReAccreditation,
-        isConversion,
-        isUK: acl.isUK(),
-      }),
-    [courseType, courseLevel, isReAccreditation, isConversion, acl],
+    [courseLevel, courseType, isConversion],
   )
 
   const schema = useMemo(() => {
@@ -146,22 +131,12 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
       assist: yup.array().min(0),
       moderator: yup
         .array()
-        .min(
-          mandatoryModerator ? 1 : 0,
-          t('pages.create-course.assign-trainers.moderator-error-min'),
-        )
         .max(
           needsModerator ? 1 : 0,
           t('pages.create-course.assign-trainers.moderator-error-max'),
         ),
     })
-  }, [
-    requiredLeaders.min,
-    requiredLeaders.max,
-    t,
-    mandatoryModerator,
-    needsModerator,
-  ])
+  }, [requiredLeaders.min, requiredLeaders.max, t, needsModerator])
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),

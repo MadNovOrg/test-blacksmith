@@ -4,59 +4,30 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 
+export const courseLevelsWithModeratorField = [
+  Course_Level_Enum.IntermediateTrainer,
+  Course_Level_Enum.AdvancedTrainer,
+  Course_Level_Enum.BildIntermediateTrainer,
+  Course_Level_Enum.BildAdvancedTrainer,
+  Course_Level_Enum.FoundationTrainer,
+  Course_Level_Enum.FoundationTrainerPlus,
+]
+
 type ModeratorCriteria = {
   courseLevel: Course_Level_Enum | CourseLevel
   courseType: Course_Type_Enum
-  forAustralia: boolean
   isConversion?: boolean
-  isReaccreditation: boolean
 }
 
 export function isModeratorNeeded({
   courseLevel,
   courseType,
-  forAustralia,
   isConversion = false,
-  isReaccreditation,
 }: ModeratorCriteria): boolean {
   if (courseType === Course_Type_Enum.Indirect) return false
 
-  if (
-    forAustralia &&
-    courseType === Course_Type_Enum.Closed &&
-    courseLevel === Course_Level_Enum.FoundationTrainer
-  )
-    return true
-
-  if (
-    [
-      Course_Level_Enum.AdvancedTrainer,
-      Course_Level_Enum.IntermediateTrainer,
-      Course_Level_Enum.BildIntermediateTrainer,
-      Course_Level_Enum.BildAdvancedTrainer,
-    ].includes(courseLevel as Course_Level_Enum) &&
-    !isReaccreditation &&
+  return (
+    courseLevelsWithModeratorField.includes(courseLevel as Course_Level_Enum) &&
     !isConversion
-  ) {
-    return true
-  }
-
-  return false
-}
-
-export function isModeratorMandatory(criteria: {
-  courseType: Course_Type_Enum
-  courseLevel: Course_Level_Enum | CourseLevel
-  isReaccreditation: boolean
-  isConversion?: boolean
-  isUK: boolean
-}): boolean {
-  if (!criteria.isUK) return false
-
-  const needsModerator = isModeratorNeeded({
-    ...criteria,
-    forAustralia: !criteria.isUK,
-  })
-
-  return criteria.courseType == Course_Type_Enum.Open ? false : needsModerator
+  )
 }
