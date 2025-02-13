@@ -100,12 +100,12 @@ jobs:
       - name: Generate lcov reports for each shard
         run: |
           for shard in 1 2 3 4; do
-            mv coverage/coverage-shard$shard/* coverage/ || true
+            mv coverage/coverage-shard$shard/coverage-shard.json coverage/coverage-$shard.json || true
             rm -rf coverage/coverage-shard$shard
           done
 
           npx nyc merge ./coverage ./coverage/coverage.json
-          npx nyc report -t coverage --report-dir coverage --reporter=lcov
+          npx nyc report -t ./coverage --report-dir coverage --reporter=lcov
 
       - name: Upload lcov artifacts
         uses: actions/upload-artifact@v4
