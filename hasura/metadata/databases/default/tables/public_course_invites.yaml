@@ -377,6 +377,72 @@ update_permissions:
         - status
       filter: {}
       check: null
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        _or:
+          - _and:
+              - email:
+                  _ilike: X-Hasura-User-Email
+              - status:
+                  _eq: PENDING
+          - course:
+              _or:
+                - organization:
+                    members:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - is_admin:
+                            _eq: true
+                - organization_key_contact_profile_id:
+                    _eq: X-Hasura-User-Id
+      check: null
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        _or:
+          - _and:
+              - email:
+                  _ilike: X-Hasura-User-Email
+              - status:
+                  _eq: PENDING
+          - course:
+              _or:
+                - organization:
+                    members:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - is_admin:
+                            _eq: true
+                - booking_contact_profile_id:
+                    _eq: X-Hasura-User-Id
+      check: null
+    comment: ""
   - role: sales-admin
     permission:
       columns:

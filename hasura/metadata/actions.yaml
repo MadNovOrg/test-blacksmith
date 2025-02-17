@@ -201,7 +201,7 @@ actions:
       - role: tt-ops
   - name: go1EnrollmentsStatusSync
     definition:
-      kind: synchronous
+      kind: ""
       handler: '{{ACTIONS_HOST}}/go1/sync-enrollments-status'
       timeout: 243
     permissions:
