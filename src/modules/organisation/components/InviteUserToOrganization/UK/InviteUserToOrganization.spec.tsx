@@ -10,7 +10,7 @@ import {
   SaveOrgInviteError,
 } from '@app/generated/graphql'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
-import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/OrgDashboard'
+import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/components/Tabs'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/organisation/queries/save-org-invites'
 import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { RoleName } from '@app/types'

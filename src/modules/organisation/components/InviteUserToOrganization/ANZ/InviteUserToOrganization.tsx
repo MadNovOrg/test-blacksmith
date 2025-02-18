@@ -41,7 +41,7 @@ import {
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 import useOrganisationByName from '@app/modules/organisation/hooks/useOrganisationByName'
-import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/OrgDashboard'
+import { OrgDashboardTabs } from '@app/modules/organisation/pages/OrganisationDashboard/components/Tabs'
 import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/organisation/queries/save-org-invites'
 import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { yup } from '@app/schemas'

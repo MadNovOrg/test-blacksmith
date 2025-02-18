@@ -1,43 +1,30 @@
-import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
   Alert,
   Box,
   CircularProgress,
   Container,
   Stack,
-  Tab,
   Typography,
   Link,
 } from '@mui/material'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import { Organization } from '@app/generated/graphql'
+import {
+  GetOrganisationDetailsQuery,
+  Organization,
+} from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
-import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrganisationDetails'
-import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
-import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
-import { AffiliatedOrgsTab } from '../../tabs/ANZ/AffiliatedOrgsTab/AffiliatedOrgsTab'
-import { LicensesTab } from '../../tabs/Licenses/LicensesTab'
-import { OrgPermissionsTab } from '../../tabs/OrgPermissionsTab/OrgPermissionsTab'
-
-export enum OrgDashboardTabs {
-  OVERVIEW = 'OVERVIEW',
-  DETAILS = 'DETAILS',
-  AFFILIATED = 'AFFILIATED',
-  INDIVIDUALS = 'INDIVIDUALS',
-  LICENSES = 'LICENSES',
-  PERMISSIONS = 'PERMISSIONS',
-}
+import { Tabs } from './components/Tabs'
 
 export enum CertificationStatus {
   ACTIVE,
@@ -48,7 +35,6 @@ export enum CertificationStatus {
 export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { profile, acl } = useAuth()
-  const [searchParams] = useSearchParams()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const isAustraliaRegion = acl.isAustralia()
@@ -73,20 +59,15 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
         o => o.id === id,
       ),
     [allOrgs, id],
-  )
+  ) as
+    | GetOrganisationDetailsQuery['specificOrg'][0]
+    | GetOrganisationDetailsQuery['orgs'][0]
 
   useEffect(() => {
     if (allOrgs && allOrgs.orgs.length === 1) {
       return navigate('/organisations/' + allOrgs.orgs[0].id)
     }
   }, [allOrgs, navigate, org, id])
-
-  const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
-  const [selectedTab, setSelectedTab] = useState(
-    initialTab ?? OrgDashboardTabs.OVERVIEW,
-  )
-
-  const showAffiliatedOrgsTab = isAustraliaRegion && !org?.main_organisation
 
   const affiliatedOrgAsPlainText = (orgName: string) => {
     return (
@@ -168,95 +149,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                   </Box>
                 ) : null}
 
-                {id && id !== ALL_ORGS ? (
-                  <TabContext
-                    value={
-                      selectedTab === OrgDashboardTabs.AFFILIATED &&
-                      !showAffiliatedOrgsTab
-                        ? OrgDashboardTabs.OVERVIEW
-                        : selectedTab
-                    }
-                  >
-                    <TabList
-                      onChange={(_, value) => setSelectedTab(value)}
-                      variant="scrollable"
-                    >
-                      <Tab
-                        label={t('pages.org-details.tabs.overview.title')}
-                        value={OrgDashboardTabs.OVERVIEW}
-                        data-testid="org-overview"
-                      />
-                      <Tab
-                        label={t('pages.org-details.tabs.details.title')}
-                        value={OrgDashboardTabs.DETAILS}
-                        data-testid="org-details"
-                      />
-                      {isAustraliaRegion && !org?.main_organisation ? (
-                        <Tab
-                          label={t(
-                            'pages.org-details.tabs.affiliated-orgs.title',
-                          )}
-                          value={OrgDashboardTabs.AFFILIATED}
-                          data-testid="affiliated-orgs"
-                        />
-                      ) : null}
-                      <Tab
-                        label={t('pages.org-details.tabs.users.title')}
-                        value={OrgDashboardTabs.INDIVIDUALS}
-                        data-testid="org-individuals"
-                      />
-                      <Tab
-                        label={t('pages.org-details.tabs.licenses.title')}
-                        value={OrgDashboardTabs.LICENSES}
-                        data-testid="org-blended-licences"
-                      />
-                      {acl.canManageKnowledgeHubAccess() ? (
-                        <Tab
-                          label={t('pages.org-details.tabs.permissions.title')}
-                          value={OrgDashboardTabs.PERMISSIONS}
-                          data-testid="org-permissions"
-                        />
-                      ) : null}
-                    </TabList>
-
-                    <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.OVERVIEW}>
-                      {id ? <OrgOverviewTab orgId={id} /> : null}
-                    </TabPanel>
-
-                    <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.DETAILS}>
-                      <OrgDetailsTab orgId={id} />
-                    </TabPanel>
-
-                    {isAustraliaRegion && !org?.main_organisation ? (
-                      <TabPanel
-                        sx={{ p: 0 }}
-                        value={OrgDashboardTabs.AFFILIATED}
-                      >
-                        <AffiliatedOrgsTab orgId={id} />
-                      </TabPanel>
-                    ) : null}
-
-                    <TabPanel
-                      sx={{ p: 0 }}
-                      value={OrgDashboardTabs.INDIVIDUALS}
-                    >
-                      <OrgIndividualsTab orgId={id} />
-                    </TabPanel>
-                    <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.LICENSES}>
-                      <LicensesTab orgId={id} />
-                    </TabPanel>
-                    {acl.canManageKnowledgeHubAccess() ? (
-                      <TabPanel
-                        sx={{ p: 0 }}
-                        value={OrgDashboardTabs.PERMISSIONS}
-                      >
-                        <OrgPermissionsTab orgId={id} />
-                      </TabPanel>
-                    ) : null}
-                  </TabContext>
-                ) : (
-                  <OrgOverviewTab orgId={ALL_ORGS} />
-                )}
+                <Tabs organization={org} />
               </>
             ) : null}
           </Container>
