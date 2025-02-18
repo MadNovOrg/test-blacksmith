@@ -108,6 +108,10 @@ jobs:
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
 
+      - name: Get application version
+        id: package_version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
       - name: Sentry Release
         uses: getsentry/action-release@v2.0.0
         continue-on-error: true
@@ -117,6 +121,7 @@ jobs:
           SENTRY_PROJECT: 'team-teach-hub'
         with:
           environment: ${{ inputs.mode }}
+          version: ${{steps.package_version.outputs.version}}
 
   hasura_migrations:
     name: Hasura migrations
