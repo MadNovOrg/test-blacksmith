@@ -24,6 +24,8 @@ import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
+import { OrgOverviewTab } from '../../tabs/OrgOverviewTab'
+
 import { Tabs } from './components/Tabs'
 
 export enum CertificationStatus {
@@ -149,7 +151,11 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                   </Box>
                 ) : null}
 
-                <Tabs organization={org} />
+                {id && id === ALL_ORGS ? (
+                  <OrgOverviewTab orgId={ALL_ORGS} />
+                ) : (
+                  <Tabs organization={org} />
+                )}
               </>
             ) : null}
           </Container>

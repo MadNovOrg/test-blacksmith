@@ -1,7 +1,7 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { t } from 'i18next'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
@@ -12,7 +12,6 @@ import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrganisationDetail
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { OrgOverviewTab } from '@app/modules/organisation/tabs/OrgOverviewTab'
 import { OrgPermissionsTab } from '@app/modules/organisation/tabs/OrgPermissionsTab/OrgPermissionsTab'
-import { ALL_ORGS } from '@app/util'
 
 export enum OrgDashboardTabs {
   OVERVIEW = 'OVERVIEW',
@@ -82,7 +81,6 @@ export const Tabs: FC<Props> = ({ organization }) => {
 
   const showAffiliatedOrgsTab =
     isAustralia() && !organization?.main_organisation
-
   const OrgTabs = Object.values(TabsWithProps).filter(({ tab }) => {
     if (!isAustralia() && !organization?.main_organisation)
       return tab !== OrgDashboardTabs.AFFILIATED
@@ -91,9 +89,9 @@ export const Tabs: FC<Props> = ({ organization }) => {
     return true
   })
 
-  if (id && id === ALL_ORGS) {
-    return <OrgOverviewTab orgId={ALL_ORGS} />
-  }
+  useEffect(() => {
+    setSearchParams({ tab: selectedTab })
+  }, [selectedTab, setSearchParams])
 
   return (
     <TabContext
@@ -106,7 +104,6 @@ export const Tabs: FC<Props> = ({ organization }) => {
       <TabList
         onChange={(_, value) => {
           setSelectedTab(value)
-          setSearchParams({ tab: value })
         }}
         variant="scrollable"
       >

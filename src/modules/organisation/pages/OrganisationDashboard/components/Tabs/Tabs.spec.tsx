@@ -1,5 +1,3 @@
-import { Routes, Route } from 'react-router-dom'
-
 import { AwsRegions, RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
@@ -24,19 +22,6 @@ describe(Tabs.name, () => {
   it('should render the component', () => {
     render(<Tabs organization={buildOrganization()} />)
     expect(screen.getByTestId('org-overview')).toBeInTheDocument()
-  })
-  it('should not render any tab if organisation id is ALL', () => {
-    render(
-      <Routes>
-        <Route
-          path={`/organisations/:id`}
-          element={<Tabs organization={null} />}
-        />
-      </Routes>,
-      {},
-      { initialEntries: ['/organisations/all'] },
-    )
-    expect(screen.queryByTestId('org-overview')).not.toBeInTheDocument()
   })
   it.each(commonTabsTestIds)('should render coomon tabs on anz %s', tab => {
     commonTest(tab, AwsRegions.Australia)
