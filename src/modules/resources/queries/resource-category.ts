@@ -16,10 +16,7 @@ export const RESOURCE_CATEGORY_SUMMARY = gql`
       seniorTrainer
       etaTrainer
     }
-    resources(
-      first: 100
-      where: { search: $term, orderby: { field: SLUG, order: ASC } }
-    ) {
+    resources(first: 100, where: { orderby: { field: SLUG, order: ASC } }) {
       nodes {
         ...ResourceSummary
       }

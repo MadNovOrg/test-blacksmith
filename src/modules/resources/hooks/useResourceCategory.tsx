@@ -26,7 +26,6 @@ export function useResourceCategory(
     query: RESOURCE_DETAILS_QUERY,
     variables: {
       id: String(id),
-      term: searchTerm,
     },
   })
 
@@ -42,9 +41,15 @@ export function useResourceCategory(
         ? filterCategoryResources(
             data.content.resourceCategory,
             canAccessResource,
+            searchTerm ?? '',
           )
         : null,
-    [canAccessCategory, canAccessResource, data?.content?.resourceCategory],
+    [
+      canAccessCategory,
+      canAccessResource,
+      data?.content?.resourceCategory,
+      searchTerm,
+    ],
   )
 
   return [
@@ -66,6 +71,7 @@ export function useResourceCategory(
 function filterCategoryResources(
   resourceCategory: ResourceCategory,
   canAccessResource: ReturnType<typeof useResourcePermission>,
+  searchTerm: string,
 ): ResourceCategory {
   if (!resourceCategory?.id) {
     return undefined
@@ -78,17 +84,26 @@ function filterCategoryResources(
     resourcePermissions: resourceCategory?.resourcePermissions,
     resources: resourceCategory?.resources?.nodes?.length
       ? {
-          nodes: resourceCategory.resources.nodes.filter(
-            resource =>
-              resource?.resourcePermissions &&
-              canAccessResource(resource.resourcePermissions),
-          ),
+          nodes: resourceCategory.children?.nodes?.length
+            ? resourceCategory.resources.nodes.filter(
+                resource =>
+                  resource?.resourcePermissions &&
+                  canAccessResource(resource.resourcePermissions),
+              )
+            : resourceCategory.resources.nodes.filter(
+                resource =>
+                  resource?.resourcePermissions &&
+                  canAccessResource(resource.resourcePermissions) &&
+                  (resource?.title ?? '')
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()),
+              ),
         }
       : undefined,
     children: {
       nodes: resourceCategory.children?.nodes
         ?.map(childCategory =>
-          filterCategoryResources(childCategory, canAccessResource),
+          filterCategoryResources(childCategory, canAccessResource, searchTerm),
         )
         .filter(isNotNullish),
     },
