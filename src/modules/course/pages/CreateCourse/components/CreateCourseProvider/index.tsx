@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React, {
   useCallback,
   useContext,
@@ -76,6 +77,19 @@ export const CreateCourseProvider: React.FC<
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData,
   )
+
+  const [startGetTime, endGetTime] = useMemo(() => {
+    return [
+      courseData?.startDate
+        ? format(courseData.startDate, 'yyyy-MM-dd')
+        : undefined,
+
+      courseData?.endDate
+        ? format(courseData.endDate, 'yyyy-MM-dd')
+        : undefined,
+    ]
+  }, [courseData?.startDate, courseData?.endDate])
+
   const [trainers, setTrainers] = useState<TrainerInput[]>(
     initialValue?.trainers ?? [],
   )
@@ -142,6 +156,24 @@ export const CreateCourseProvider: React.FC<
     SetCourseDraftMutation,
     SetCourseDraftMutationVariables
   >(SET_COURSE_DRAFT)
+
+  useEffect(() => {
+    setTrainers(trainers =>
+      trainers.length ? initialValue?.trainers ?? [] : trainers,
+    )
+  }, [
+    courseData?.accreditedBy,
+    courseData?.bildStrategies?.NON_RESTRICTIVE_TERTIARY,
+    courseData?.bildStrategies?.PRIMARY,
+    courseData?.bildStrategies?.RESTRICTIVE_TERTIARY_ADVANCED,
+    courseData?.bildStrategies?.RESTRICTIVE_TERTIARY_INTERMEDIATE,
+    courseData?.bildStrategies?.SECONDARY,
+    courseData?.courseLevel,
+    courseData?.type,
+    endGetTime,
+    initialValue?.trainers,
+    startGetTime,
+  ])
 
   useEffect(() => {
     setCourseType(
