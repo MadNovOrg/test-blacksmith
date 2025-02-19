@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import React, {
   useCallback,
   useContext,
@@ -80,11 +80,11 @@ export const CreateCourseProvider: React.FC<
 
   const [startGetTime, endGetTime] = useMemo(() => {
     return [
-      courseData?.startDate
+      courseData?.startDate && isValid(courseData?.startDate)
         ? format(courseData.startDate, 'yyyy-MM-dd')
         : undefined,
 
-      courseData?.endDate
+      courseData?.endDate && isValid(courseData?.endDate)
         ? format(courseData.endDate, 'yyyy-MM-dd')
         : undefined,
     ]
