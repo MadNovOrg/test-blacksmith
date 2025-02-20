@@ -269,7 +269,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canInviteAttendees: (
       courseType: Course_Type_Enum,
       courseStatus?: CourseStatus,
-      course?: Pick<Course, 'trainers'>,
+      course?: Pick<Course, 'trainers' | 'organization'>,
     ) => {
       switch (courseType) {
         case Course_Type_Enum.Open:
@@ -286,7 +286,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isTTOps,
             acl.isSalesAdmin,
             acl.isSalesRepresentative,
-            acl.isOrgAdmin,
+            () =>
+              course?.organization
+                ? acl.isOrgAdminOf([course?.organization.id ?? ''])
+                : false,
             () => (course ? acl.isCourseLeader(course) : false),
             () => (course ? acl.isCourseAssistantTrainer(course) : false),
             () =>
@@ -303,8 +306,11 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             acl.isTTOps,
             acl.isSalesAdmin,
             acl.isTrainer,
-            acl.isOrgAdmin,
             acl.isOrgKeyContact,
+            () =>
+              course?.organization
+                ? acl.isOrgAdminOf([course?.organization.id ?? ''])
+                : false,
           ])()
       }
     },

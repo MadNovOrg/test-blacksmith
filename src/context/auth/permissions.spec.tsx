@@ -3,6 +3,7 @@
 import {
   Accreditors_Enum,
   Course_Level_Enum,
+  Course_Status_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Grade_Enum,
@@ -10,9 +11,11 @@ import {
 import { RoleName } from '@app/types'
 import { REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL } from '@app/util'
 
+import { chance } from '@test/index'
 import {
   buildCourse,
   buildCourseTrainer,
+  buildOrganization,
   buildProfile,
 } from '@test/mock-data-utils'
 
@@ -910,15 +913,58 @@ describe(getACL.name, () => {
         expect(acl.canInviteAttendees(Course_Type_Enum.Closed)).toBeTruthy()
       })
 
-      it(`should return true when the the user is an org admin`, () => {
+      it(`should return true when the user is an org admin of hosting organisation`, () => {
         // Arrange
+        const managedOrgId = chance.guid()
         const acl = getACLStub({
           activeRole: RoleName.USER,
           isOrgAdmin: true,
+          managedOrgIds: [managedOrgId],
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(Course_Type_Enum.Closed)).toBeTruthy()
+        expect(
+          acl.canInviteAttendees(
+            Course_Type_Enum.Indirect,
+            Course_Status_Enum.Scheduled,
+            buildCourse({
+              overrides: {
+                organization: buildOrganization({
+                  overrides: {
+                    id: managedOrgId,
+                  },
+                }),
+              },
+            }),
+          ),
+        ).toBeTruthy()
+      })
+
+      it(`should return false when the  user is an org admin but not of the hosting organisation`, () => {
+        // Arrange
+        const managedOrgId = chance.guid()
+        const acl = getACLStub({
+          activeRole: RoleName.USER,
+          isOrgAdmin: true,
+          managedOrgIds: [managedOrgId],
+        })
+
+        // Act & Assert
+        expect(
+          acl.canInviteAttendees(
+            Course_Type_Enum.Closed,
+            Course_Status_Enum.Scheduled,
+            buildCourse({
+              overrides: {
+                organization: buildOrganization({
+                  overrides: {
+                    id: chance.guid(),
+                  },
+                }),
+              },
+            }),
+          ),
+        ).toBeFalsy()
       })
 
       it(`should return false when the activeRole is just a user and not an org admin`, () => {
@@ -948,15 +994,58 @@ describe(getACL.name, () => {
         expect(acl.canInviteAttendees(Course_Type_Enum.Indirect)).toBeTruthy()
       })
 
-      it(`should return true when the the user is an org admin`, () => {
+      it(`should return true when the the user is an org admin of the hosting organisation`, () => {
         // Arrange
+        const managedOrgId = chance.guid()
         const acl = getACLStub({
           activeRole: RoleName.USER,
           isOrgAdmin: true,
+          managedOrgIds: [managedOrgId],
         })
 
         // Act & Assert
-        expect(acl.canInviteAttendees(Course_Type_Enum.Indirect)).toBeTruthy()
+        expect(
+          acl.canInviteAttendees(
+            Course_Type_Enum.Indirect,
+            Course_Status_Enum.Scheduled,
+            buildCourse({
+              overrides: {
+                organization: buildOrganization({
+                  overrides: {
+                    id: managedOrgId,
+                  },
+                }),
+              },
+            }),
+          ),
+        ).toBeTruthy()
+      })
+
+      it(`should return false when the  user is an org admin but not of the hosting organisation`, () => {
+        // Arrange
+        const managedOrgId = chance.guid()
+        const acl = getACLStub({
+          activeRole: RoleName.USER,
+          isOrgAdmin: true,
+          managedOrgIds: [managedOrgId],
+        })
+
+        // Act & Assert
+        expect(
+          acl.canInviteAttendees(
+            Course_Type_Enum.Closed,
+            Course_Status_Enum.Scheduled,
+            buildCourse({
+              overrides: {
+                organization: buildOrganization({
+                  overrides: {
+                    id: chance.guid(),
+                  },
+                }),
+              },
+            }),
+          ),
+        ).toBeFalsy()
       })
 
       it(`should return false when the activeRole is just a user and not an org admin`, () => {
