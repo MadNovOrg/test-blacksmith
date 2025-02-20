@@ -41,6 +41,7 @@ export default defineConfig(({ mode }) => {
             https://places.googleapis.com 
             https://ajax.googleapis.com 
             https://eu-assets.i.posthog.com 
+            https://eu.i.posthog.com 
             http://js-eu1.hs-scripts.com 
             https://js-eu1.hs-banner.com 
             https://js-eu1.hs-analytics.net 
@@ -75,6 +76,7 @@ export default defineConfig(({ mode }) => {
             https://maps.gstatic.com 
             https://places.googleapis.com 
             https://api.google.com 
+            https://eu.i.posthog.com 
             https://cdn-kh.teamteach.com 
             https://api-eu1.hubspot.com;"`.replace(/\s{2,}/g, ' '),
         // https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html
