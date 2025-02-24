@@ -69,6 +69,10 @@ type Mutation {
   ): CreateUserOutput!
 }
 
+type Query {
+  dbClean: DbCleanOutput
+}
+
 type Mutation {
   declineInvite(
     note: String
@@ -1575,6 +1579,10 @@ type Go1EnrollmentsSyncOutput {
 type CancelIndividualFromCourseOutput {
   success: Boolean!
   error: CancelIndividualFromCourseError
+}
+
+type DbCleanOutput {
+  message: String!
 }
 
 scalar Date

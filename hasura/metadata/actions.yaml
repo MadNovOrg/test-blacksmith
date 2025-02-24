@@ -96,6 +96,11 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: dbClean
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/db/clean'
+    comment: Thorough cleanup to remove all irrelevant data for both app versions (UK and Australia)
   - name: declineInvite
     definition:
       kind: synchronous
@@ -1175,5 +1180,6 @@ custom_types:
     - name: ImportOrganisationsOutput
     - name: Go1EnrollmentsSyncOutput
     - name: CancelIndividualFromCourseOutput
+    - name: DbCleanOutput
   scalars:
     - name: Date

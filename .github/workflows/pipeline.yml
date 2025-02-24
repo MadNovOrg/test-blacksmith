@@ -151,3 +151,24 @@ jobs:
           hasura migrate apply --all-databases --admin-secret $SECRET --endpoint $ENDPOINT
           echo Hasura Metadata Reload
           hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT
+  hasura_clean_up:
+    name: Clean up Hasura
+    needs: hasura_migrations
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET: ${{ secrets.hasura_admin_pass }}
+      ENDPOINT: ${{ secrets.hasura_endpoint }}
+
+    steps:
+      - name: Clean Up request
+        id: dbClean
+        run: |
+          response=$(curl -s --location --request POST "$ENDPOINT/v1/graphql" \
+          -H "Content-Type: application/json" \
+          -H "x-hasura-admin-secret: $SECRET" \
+          -d '{
+            "query": "query { dbClean { message } }"
+          }' \
+          )
+          echo "$response"
