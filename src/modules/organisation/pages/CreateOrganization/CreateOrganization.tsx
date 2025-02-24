@@ -95,7 +95,7 @@ export const CreateOrganization = () => {
       const organisationDataObject = {
         name: data.name.trim(),
         sector: data.sector,
-        mainOrgId: data.main_organisation_id ?? null,
+        mainOrgId: data.main_organisation_id ? data.main_organisation_id : null,
         organisationType: (!otherOrgType
           ? data.organisationType
           : data.orgTypeSpecifyOther) as string,

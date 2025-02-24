@@ -153,8 +153,8 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   const handleCheckboxChange = useCallback(() => {
     setLinkToMainOrg(!linkToMainOrg)
     if (!linkToMainOrg) {
-      setValue('main_organisation_id', '')
-      setValue('mainOrgName', '')
+      setValue('main_organisation_id', undefined)
+      setValue('mainOrgName', undefined)
     }
   }, [linkToMainOrg, setValue])
 
@@ -172,8 +172,8 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   )
   const onMainOrgSelected = useCallback(
     async (org: CallbackOption) => {
-      setValue('main_organisation_id', org?.id ?? '')
-      setValue('mainOrgName', org?.name ?? '', { shouldValidate: true })
+      setValue('main_organisation_id', org?.id)
+      setValue('mainOrgName', org?.name, { shouldValidate: true })
     },
     [setValue],
   )
