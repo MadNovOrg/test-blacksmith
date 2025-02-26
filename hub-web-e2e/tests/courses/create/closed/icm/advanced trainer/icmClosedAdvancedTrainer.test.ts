@@ -13,6 +13,7 @@ import { StoredCredentialKey } from '@qa/util'
 
 const allowdUsers = ['admin', 'ops', 'salesAdmin']
 
+let courseIDToDelete: number
 allowdUsers.forEach(allowedUser => {
   const dataSet = [
     {
@@ -54,8 +55,12 @@ allowdUsers.forEach(allowedUser => {
       },
     })
 
+    test.afterEach(async () => {
+      await API.course.deleteCourse(courseIDToDelete)
+    })
     test.describe('Skip this test on ANZ because we do not have Advanced Trainer level there', () => {
       if (!isUK()) {
+        // skiped on anz
         test.skip()
       } else {
         // eslint-disable-next-line playwright/expect-expect, playwright/no-focused-test
@@ -63,7 +68,7 @@ allowdUsers.forEach(allowedUser => {
           browser,
           course,
         }) => {
-          await closedCourseSteps(
+          courseIDToDelete = await closedCourseSteps(
             browser,
             course,
             data.user as StoredCredentialKey,

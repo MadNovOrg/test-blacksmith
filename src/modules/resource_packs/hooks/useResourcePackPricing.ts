@@ -39,6 +39,7 @@ export const useResourcePackPricing = ({
       reaccreditation,
       currency,
     },
+    requestPolicy: 'network-only',
     pause: pause,
   })
   return {

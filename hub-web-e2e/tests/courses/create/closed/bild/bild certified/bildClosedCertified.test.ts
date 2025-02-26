@@ -17,6 +17,7 @@ import { StoredCredentialKey } from '@qa/util'
 
 const allowedUsers = ['admin', 'ops', 'salesAdmin']
 
+let courseIDToDelete: number
 allowedUsers.forEach(allowedUser => {
   const dataSet = [
     {
@@ -106,6 +107,11 @@ allowedUsers.forEach(allowedUser => {
         await API.course.deleteCourse(data.course.id)
       },
     })
+
+    test.afterEach(async () => {
+      await API.course.deleteCourse(courseIDToDelete)
+    })
+
     test.describe('We only have Bild courses on uk', () => {
       if (!isUK()) {
         // eslint-disable-next-line playwright/no-skipped-test
@@ -116,7 +122,7 @@ allowedUsers.forEach(allowedUser => {
           browser,
           course,
         }) => {
-          await closedCourseSteps(
+          courseIDToDelete = await closedCourseSteps(
             browser,
             course,
             data.user as StoredCredentialKey,

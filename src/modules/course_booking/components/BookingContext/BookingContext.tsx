@@ -340,7 +340,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
       )
     } else if (!hideMCM) {
       mandatoryCourseMaterialsCost =
-        resourcePackPricing?.anz_resource_packs_pricing[0]?.price *
+        (resourcePackPricing?.anz_resource_packs_pricing[0]?.price ?? 0) *
         booking.quantity
     }
 

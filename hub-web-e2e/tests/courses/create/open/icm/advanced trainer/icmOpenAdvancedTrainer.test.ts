@@ -11,6 +11,7 @@ import { StoredCredentialKey, stateFilePath } from '@qa/util'
 
 const allowedUsers = ['admin', 'ops', 'salesAdmin']
 
+let courseIDToDelete: number
 allowedUsers.forEach(allowedUser => {
   const dataSet = [
     {
@@ -46,6 +47,10 @@ allowedUsers.forEach(allowedUser => {
       storageState: stateFilePath(data.user as StoredCredentialKey),
     })
 
+    test.afterEach(async () => {
+      await API.course.deleteCourse(courseIDToDelete)
+    })
+
     test.describe('Skip this test on anz as the level does not exist', () => {
       if (!isUK()) {
         test.skip()
@@ -55,7 +60,7 @@ allowedUsers.forEach(allowedUser => {
           browser,
           course,
         }) => {
-          await openCourseSteps(
+          courseIDToDelete = await openCourseSteps(
             browser,
             course,
             data.user as StoredCredentialKey,

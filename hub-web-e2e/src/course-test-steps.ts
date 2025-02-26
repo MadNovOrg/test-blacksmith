@@ -14,7 +14,7 @@ export async function closedCourseSteps(
   browser: Browser,
   course: Course,
   user: StoredCredentialKey,
-) {
+): Promise<number> {
   const context = await browser.newContext({
     storageState: stateFilePath(user),
   })
@@ -52,13 +52,14 @@ export async function closedCourseSteps(
   const courseDetailsPage = new CourseDetailsPage(page)
   await courseDetailsPage.goto(course.id.toString())
   await courseDetailsPage.checkClosedCourseCreatedSuccessfully(course)
+  return course.id
 }
 
 export async function openCourseSteps(
   browser: Browser,
   course: Course,
   user: StoredCredentialKey,
-) {
+): Promise<number> {
   const context = await browser.newContext({
     storageState: stateFilePath(user),
   })
@@ -79,4 +80,5 @@ export async function openCourseSteps(
   const courseDetailsPage = new CourseDetailsPage(page)
   await courseDetailsPage.goto(course.id.toString())
   await courseDetailsPage.checkOpenCourseCreatedSuccessfully(course)
+  return course.id
 }

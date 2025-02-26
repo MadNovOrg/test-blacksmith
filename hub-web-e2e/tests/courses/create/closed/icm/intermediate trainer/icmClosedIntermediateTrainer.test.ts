@@ -12,6 +12,7 @@ import { StoredCredentialKey } from '@qa/util'
 
 const allowdUsers = ['admin', 'ops', 'salesAdmin']
 
+let courseIDToDelete: number
 allowdUsers.forEach(allowedUser => {
   const dataSet = [
     {
@@ -53,12 +54,20 @@ allowdUsers.forEach(allowedUser => {
       },
     })
 
+    test.afterEach(async () => {
+      await API.course.deleteCourse(courseIDToDelete)
+    })
+
     // eslint-disable-next-line playwright/expect-expect, playwright/no-focused-test
     test(`create course: ${data.name} ${data.smoke}`, async ({
       browser,
       course,
     }) => {
-      await closedCourseSteps(browser, course, data.user as StoredCredentialKey)
+      courseIDToDelete = await closedCourseSteps(
+        browser,
+        course,
+        data.user as StoredCredentialKey,
+      )
     })
   }
 })
