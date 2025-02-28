@@ -136,7 +136,7 @@ export default function useProfile(
         withKnowledgeHubAccess: withKnowledgeHubAccess,
       },
     })
-  const [{ data: avatarData }, updateAvatarMutation] = useMutation<
+  const [, updateAvatarMutation] = useMutation<
     UpdateAvatarMutation,
     UpdateAvatarMutationVariables
   >(UPDATE_AVATAR_MUTATION)
@@ -190,10 +190,9 @@ export default function useProfile(
         return
       }
 
-      updateAvatarMutation({ avatar: JSON.stringify(avatar) })
-      return avatarData?.updateAvatar
+      return updateAvatarMutation({ avatar: JSON.stringify(avatar) })
     },
-    [avatarData?.updateAvatar, profileId, updateAvatarMutation],
+    [profileId, updateAvatarMutation],
   )
 
   const archive = useCallback(async () => {

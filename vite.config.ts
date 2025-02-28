@@ -60,7 +60,9 @@ export default defineConfig(({ mode }) => {
             https://places.googleapis.com 
             https://flagcdn.com 
             https://www.google.com/recaptcha 
-            https://cdn.jsdelivr.net 
+            https://cdn.jsdelivr.net
+            https://assets.teamteachhub.co.uk
+            https://assets.connect.teamteach.com.au
             data: image/svg+xml;
           font-src 'self'
             https://fonts.gstatic.com 

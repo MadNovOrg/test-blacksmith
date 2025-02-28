@@ -730,7 +730,7 @@ export const EditProfilePage: React.FC<
         const data = Array.from(new Uint8Array(buffer))
 
         const response = await updateAvatar(data)
-        setValue('avatar', response?.avatar as string)
+        setValue('avatar', response?.data?.updateAvatar?.avatar)
       } catch (err) {
         console.error(err)
         setAvatarError(t('unknown-error'))
