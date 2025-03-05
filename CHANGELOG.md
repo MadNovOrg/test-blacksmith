@@ -1,5 +1,27 @@
 # @teamteach/hub
 
+## 4.21.0
+
+### Minor Changes
+
+- 6ea37b1: Update security headers
+- 8b00847: TTHP-4845 - Adjus Tabs navigation on /organisations page for the Details, Indiviuals etc tabs
+- 3ae26d3: TTHP-4750 | TTHP-4751 - moderator field on all trainer courses no matter if reaccreditation. Moderator always optional
+- 2bc7ac6: TTHP-4886: migrate emails to sqs and lambda
+- 9d48513: Fix update organisations statistics trigger, when profile is archived
+- 934188c: Allow booking/ org key contact to resend and cancel invites
+
+### Patch Changes
+
+- 6154dcd: Allow org admins to invite users only in organisations where they are admin.
+- f9a9bd3: Fix graphql error on org create ANZ
+- 00bc40f: Fix search on Resources
+- b3b9b3c: Update stripe-js and react-stripe-js versions to latest
+- 455cb51: Reset selected trainers when change trainer search dependencies
+- ec61192: Ensure course deletion after E2E course creation tests
+- 61bcb6e: Fix UK FTP modules
+- b52d955: Fix lead trainer allocation on trainer creating course
+
 ## 4.20.0
 
 ### Minor Changes
