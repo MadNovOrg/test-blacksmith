@@ -14,6 +14,7 @@ import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldC
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   ModuleSettingsQuery,
   SetCourseDraftMutation,
@@ -158,10 +159,28 @@ export const CreateCourseProvider: React.FC<
   >(SET_COURSE_DRAFT)
 
   useEffect(() => {
-    setTrainers(trainers =>
-      trainers.length ? initialValue?.trainers ?? [] : trainers,
-    )
+    setTrainers(trainers => {
+      const isCourseCreatedByTrainer =
+        acl.isTrainer() && courseType === Course_Type_Enum.Indirect
+
+      const leaderTrainer = isCourseCreatedByTrainer
+        ? trainers.find(t => t.type === Course_Trainer_Type_Enum.Leader)
+        : undefined
+
+      if (trainers.length) {
+        if (initialValue?.trainers) {
+          return initialValue.trainers
+        }
+        if (leaderTrainer) {
+          return [leaderTrainer]
+        }
+        return []
+      }
+
+      return trainers
+    })
   }, [
+    acl,
     courseData?.accreditedBy,
     courseData?.bildStrategies?.NON_RESTRICTIVE_TERTIARY,
     courseData?.bildStrategies?.PRIMARY,
@@ -170,6 +189,7 @@ export const CreateCourseProvider: React.FC<
     courseData?.bildStrategies?.SECONDARY,
     courseData?.courseLevel,
     courseData?.type,
+    courseType,
     endGetTime,
     initialValue?.trainers,
     startGetTime,

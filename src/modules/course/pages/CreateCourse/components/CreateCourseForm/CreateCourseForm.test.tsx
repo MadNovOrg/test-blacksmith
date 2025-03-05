@@ -1,9 +1,9 @@
-import { fireEvent, renderHook } from '@testing-library/react'
+import { fireEvent, renderHook, within } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
-import { DocumentNode } from 'graphql'
+import { print, DocumentNode } from 'graphql'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
-import { Client, Provider } from 'urql'
+import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
@@ -12,6 +12,7 @@ import {
   CoursePriceQuery,
   Course_Type_Enum,
   GetCoursesSourcesQuery,
+  SearchTrainersQuery,
 } from '@app/generated/graphql'
 import { Course_Level_Enum, Currency } from '@app/generated/graphql'
 import useZoomMeetingLink from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
@@ -25,6 +26,7 @@ import {
   ValidCourseInput,
   RoleName,
   AwsRegions,
+  TrainerRoleTypeName,
 } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
@@ -36,6 +38,7 @@ import {
   waitFor,
   waitForCalls,
 } from '@test/index'
+import { buildCertificate, buildProfile } from '@test/mock-data-utils'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -370,6 +373,124 @@ describe('component: CreateCourseForm', () => {
 
       // ensure it succesfully navigates away to the next step
       expect(mockNavigate).toHaveBeenCalledWith('./assign-trainers')
+    })
+  })
+
+  it('resets assist trainers when modifying assist trainer allocation dependencies for an Indirect course created by a trainer', async () => {
+    const overrides = {
+      max_participants: 80,
+      type: Course_Type_Enum.Indirect,
+    }
+    const course = buildCourse({ overrides })
+
+    const trainers = [
+      {
+        email: chance.email(),
+        fullName: `Trainer ${chance.name()}`,
+        id: chance.guid(),
+      },
+      {
+        email: chance.email(),
+        fullName: `Trainer ${chance.name()}`,
+        id: chance.guid(),
+      },
+      {
+        email: chance.email(),
+        fullName: `Trainer ${chance.name()}`,
+        id: chance.guid(),
+      },
+    ] as SearchTrainersQuery['trainers']
+
+    const urqlMockClient = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (print(query).includes('SearchTrainers')) {
+          return fromValue<{ data: SearchTrainersQuery }>({
+            data: {
+              trainers,
+            },
+          })
+        }
+      },
+    }
+
+    useProfileMocked.mockReturnValueOnce({
+      profile: {
+        ...buildProfile(),
+        courses: [],
+        archived: false,
+      },
+      certifications: [
+        buildCertificate({
+          overrides: { courseLevel: Course_Level_Enum.AdvancedTrainer },
+        }),
+      ],
+      status: LoadingStatus.SUCCESS,
+    } as unknown as ReturnType<typeof useProfile>)
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Provider value={urqlMockClient as unknown as Client}>
+              <CreateCourseProvider
+                initialValue={{
+                  courseData: courseToCourseInput(course) as ValidCourseInput,
+                }}
+                courseType={Course_Type_Enum.Indirect}
+              >
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            </Provider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+
+          profile: {
+            id: chance.guid(),
+            trainer_role_types: [
+              { trainer_role_type: { name: TrainerRoleTypeName.SENIOR } },
+            ],
+          },
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] },
+    )
+
+    const searchTrainersInput = screen.getByTestId('SearchTrainers-input')
+    expect(searchTrainersInput).toBeInTheDocument()
+    expect(searchTrainersInput).toHaveAttribute(
+      'placeholder',
+      'Search eligible trainers...',
+    )
+
+    await userEvent.type(searchTrainersInput, 'Trainer')
+
+    await waitFor(async () => {
+      const options = screen.getAllByTestId('SearchTrainers-option')
+      expect(options).toHaveLength(3)
+      await userEvent.click(options[0])
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('SearchTrainers-selected')).toBeInTheDocument()
+    })
+
+    await waitFor(async () => {
+      const select = screen.getByTestId('course-level-select')
+      await userEvent.click(within(select).getByRole('button'))
+      const option = screen.getByTestId('course-level-option-LEVEL_2')
+      await userEvent.click(option)
+    })
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('SearchTrainers-selected'),
+      ).not.toBeInTheDocument()
     })
   })
 

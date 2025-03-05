@@ -75,8 +75,9 @@ export const CreateCourseForm = () => {
     courseType,
     setCourseData,
     setCurrentStepKey,
-    setTrainers,
     setShowDraftConfirmationDialog,
+    setTrainers,
+    trainers,
   } = useCreateCourse()
 
   const theme = useTheme()
@@ -90,7 +91,7 @@ export const CreateCourseForm = () => {
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
-  const isINDIRECTcourse = courseData?.type === Course_Type_Enum.Indirect
+  const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
 
   const [courseExceptions, setCourseExceptions] = useState<
     Course_Exception_Enum[]
@@ -100,7 +101,7 @@ export const CreateCourseForm = () => {
 
   const { certifications } = useProfile(profile?.id)
   const displayConnectFeeCondition =
-    isINDIRECTcourse && isUKCountry(courseData?.residingCountry)
+    isIndirectCourse && isUKCountry(courseData?.residingCountry)
 
   const [consentFlags, setConsentFlags] = useState({
     healthLeaflet: false,
@@ -118,7 +119,21 @@ export const CreateCourseForm = () => {
 
   useEffect(() => {
     if (
-      isINDIRECTcourse &&
+      isIndirectCourse &&
+      !acl.isInternalUser() &&
+      trainers.length === 1 &&
+      trainers[0].type === Course_Trainer_Type_Enum.Leader
+    ) {
+      setAssistants(assistants => {
+        if (!assistants.length) return assistants
+        return []
+      })
+    }
+  }, [acl, isIndirectCourse, trainers])
+
+  useEffect(() => {
+    if (
+      isIndirectCourse &&
       profile &&
       certifications &&
       !acl.isInternalUser()
@@ -140,7 +155,7 @@ export const CreateCourseForm = () => {
         })),
       ])
     }
-  }, [assistants, isINDIRECTcourse, setTrainers, profile, certifications, acl])
+  }, [assistants, isIndirectCourse, setTrainers, profile, certifications, acl])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
@@ -169,7 +184,7 @@ export const CreateCourseForm = () => {
   }, [profile])
 
   const nextStepEnabled = useMemo(() => {
-    if (!isINDIRECTcourse) {
+    if (!isIndirectCourse) {
       return courseDataValid
     }
 
@@ -182,7 +197,7 @@ export const CreateCourseForm = () => {
     )
 
     return hasCheckedAllFlags && courseDataValid
-  }, [consentFlags, courseDataValid, isINDIRECTcourse, isBILDcourse])
+  }, [consentFlags, courseDataValid, isIndirectCourse, isBILDcourse])
 
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
@@ -246,7 +261,7 @@ export const CreateCourseForm = () => {
           ]
         : []
 
-    if (isINDIRECTcourse && !acl.isTTAdmin()) {
+    if (isIndirectCourse && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
           ...courseData,
@@ -565,7 +580,7 @@ export const CreateCourseForm = () => {
         </LoadingButton>
       </Box>
 
-      {isBILDcourse && isINDIRECTcourse ? (
+      {isBILDcourse && isIndirectCourse ? (
         <NoExceptionsDialog
           open={courseExceptions.length > 0}
           onClose={() => setCourseExceptions([])}
