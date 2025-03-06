@@ -66,6 +66,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     showOnlyPossibleAffiliatedOrgs = false,
     mainOrgId,
     label,
+    createdFrom,
     ...props
   }) {
     const { t } = useTranslation()
@@ -458,6 +459,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             countryCode={(countryCode as CountryCode) ?? 'AU'}
             onClose={handleClose}
             onSuccess={handleSuccess}
+            createdFrom={createdFrom}
           />
         ) : null}
       </>

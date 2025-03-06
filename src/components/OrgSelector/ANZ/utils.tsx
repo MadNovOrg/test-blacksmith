@@ -1,6 +1,7 @@
 import { SxProps, TextFieldProps } from '@mui/material'
 import { useMemo } from 'react'
 
+import { Org_Created_From_Enum } from '@app/generated/graphql'
 import { Organization } from '@app/types'
 import { organizationData as localSavedOrgToBeCreated } from '@app/util'
 
@@ -41,6 +42,7 @@ export type OrgSelectorProps = {
   showOnlyPossibleAffiliatedOrgs?: boolean
   allowedOrgCountryCode?: string
   mainOrgId?: string
+  createdFrom?: Org_Created_From_Enum // used for organisation logs
 }
 
 export type SuggestionOption = {

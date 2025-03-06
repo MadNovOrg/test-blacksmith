@@ -35,10 +35,13 @@ import { useAuth } from '@app/context/auth'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
+  Cud_Operation_Enum,
+  Org_Created_From_Enum,
   Organization,
 } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { CREATE_USER_MUTATION } from '@app/modules/autoregister/queries/create-user'
+import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY_ANZ,
@@ -91,6 +94,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   const [isManualFormError, setIsManualFormError] = useState(false)
   const {
     acl: { isAustralia },
+    profile,
   } = useAuth()
 
   const { t } = useTranslation()
@@ -98,6 +102,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [, insertOrganisation] = useInsertNewOrganization()
 
+  const [, insertLog] = useInsertOrganisationLog()
   const [{ data: userData, error, fetching: loading }, createUser] =
     useMutation<CreateUserMutation, CreateUserMutationVariables>(
       CREATE_USER_MUTATION,
@@ -161,6 +166,16 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         const { data: addedOrg } = await insertOrganisation(
           localStateOrganizationToBeCreated,
         )
+        await insertLog({
+          orgId: addedOrg?.org?.id,
+          userId: profile?.id,
+          createfrom: Org_Created_From_Enum.OrganisationPage,
+          op: Cud_Operation_Enum.Create,
+          updated_columns: {
+            old: null,
+            new: addedOrg?.org,
+          },
+        })
         Object.assign(input, {
           orgId: addedOrg?.org?.id,
         })
@@ -403,6 +418,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                   : t('components.org-selector.residing-org')
               }
               showDfeResults={false}
+              createdFrom={Org_Created_From_Enum.AutoregisterPage}
             />
           ) : (
             <OrgSelectorUK
@@ -438,6 +454,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               showDfeResults={
                 Boolean(values.countryCode) && isUKCountry(values.countryCode)
               }
+              createdFrom={Org_Created_From_Enum.AutoregisterPage}
             />
           )}
         </Grid>

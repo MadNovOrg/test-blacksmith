@@ -8,8 +8,10 @@ import { useMutation } from 'urql'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
+  Cud_Operation_Enum,
   InsertOrgMutation,
   InsertOrgMutationVariables,
+  Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { INSERT_ORGANISATION_MUTATION } from '@app/modules/organisation/queries/insert-org'
@@ -17,6 +19,7 @@ import { Address } from '@app/types'
 
 import { OrganizationForm as ANZOrganisationForm } from '../../components/OrganizationForm/ANZ'
 import { OrganizationForm as UKOrganisationForm } from '../../components/OrganizationForm/UK'
+import { useInsertOrganisationLog } from '../../queries/insert-org-log'
 import { FormInputs as ANZFormInputs } from '../../utils/ANZ'
 import { FormInputs as UKFormInputs } from '../../utils/UK'
 
@@ -25,7 +28,7 @@ export const CreateOrganization = () => {
   const navigate = useNavigate()
 
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
   const isUKRegion = acl.isUK()
   const { isUKCountry } = useWorldCountries()
 
@@ -33,9 +36,10 @@ export const CreateOrganization = () => {
     InsertOrgMutation,
     InsertOrgMutationVariables
   >(INSERT_ORGANISATION_MUTATION)
+
+  const [{ fetching: insertingLog }, insertLog] = useInsertOrganisationLog()
   const [xeroId, setXeroId] = useState<string>()
   const [otherOrgType, setOtherOrgType] = useState<boolean>(false)
-
   const handleSubmitUKRegion = useCallback(
     async (data: UKFormInputs) => {
       const organisationDataObject = {
@@ -82,12 +86,29 @@ export const CreateOrganization = () => {
         dfeEstablishmentId: data.dfeId ?? undefined,
       }
       const response = await executeMutation(organisationDataObject)
-
+      await insertLog({
+        orgId: response.data?.org?.id,
+        userId: profile?.id,
+        createfrom: Org_Created_From_Enum.OrganisationPage,
+        op: Cud_Operation_Enum.Create,
+        updated_columns: {
+          old: null,
+          new: response.data?.org,
+        },
+      })
       if (response.data) {
         navigate(`../${response.data.org?.id}`)
       }
     },
-    [executeMutation, isUKCountry, navigate, otherOrgType, xeroId],
+    [
+      executeMutation,
+      insertLog,
+      isUKCountry,
+      navigate,
+      otherOrgType,
+      profile?.id,
+      xeroId,
+    ],
   )
 
   const handleSubmitANZRegion = useCallback(
@@ -149,7 +170,7 @@ export const CreateOrganization = () => {
           setXeroId={setXeroId}
           setOtherOrgType={setOtherOrgType}
           error={error}
-          loading={loading}
+          loading={loading || insertingLog}
         />
       ) : (
         <ANZOrganisationForm
@@ -157,7 +178,7 @@ export const CreateOrganization = () => {
           setXeroId={setXeroId}
           setOtherOrgType={setOtherOrgType}
           error={error}
-          loading={loading}
+          loading={loading || insertingLog}
         />
       )}
     </FullHeightPageLayout>

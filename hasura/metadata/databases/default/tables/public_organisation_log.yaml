@@ -1,0 +1,378 @@
+table:
+  name: organisation_log
+  schema: public
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: booking-contact
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: ld
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: sales-representative
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: unverified
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+    comment: ""
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+update_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - actioned_at
+        - actioned_by
+        - actioned_from
+        - id
+        - operation
+        - organisation_id
+        - updated_columns
+      filter: {}
+      check: null
+    comment: ""

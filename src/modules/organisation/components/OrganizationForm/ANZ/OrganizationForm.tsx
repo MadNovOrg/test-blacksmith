@@ -257,7 +257,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   ])
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2 }}>
+    <Container maxWidth="lg" sx={{ py: 2 }} data-testid="anz-organization-form">
       <Box
         display="flex"
         component="form"

@@ -56,6 +56,7 @@ import { useAuth } from '@app/context/auth'
 import {
   GetProfileDetailsQuery,
   ImportLegacyCertificateMutation,
+  Org_Created_From_Enum,
   Organization,
   Profile_Role_Insert_Input,
   Profile_Trainer_Role_Type_Insert_Input,
@@ -1228,6 +1229,7 @@ export const EditProfilePage: React.FC<
                           variant: 'filled',
                         }}
                         isShallowRetrieval
+                        createdFrom={Org_Created_From_Enum.EditProfilePage}
                       />
                     ) : (
                       <Button

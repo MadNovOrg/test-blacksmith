@@ -17,6 +17,7 @@ import {
   Course_Type_Enum,
   GetNotDetailedProfileQuery,
   GetNotDetailedProfileQueryVariables,
+  Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY as GET_NOT_DETAILED_PROFILE } from '@app/modules/profile/queries/get-not-detailed-profile'
@@ -205,6 +206,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
               }}
               sx={{ marginBottom: 2 }}
               disabled={disabledFields.has('organization')}
+              createdFrom={Org_Created_From_Enum.CreateCoursePage}
             />
           ) : (
             <ANZOrgSelector
@@ -221,6 +223,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
               }}
               sx={{ marginBottom: 2 }}
               disabled={disabledFields.has('organization')}
+              createdFrom={Org_Created_From_Enum.CreateCoursePage}
             />
           )}
         </>

@@ -26,14 +26,18 @@ import { Dialog } from '@app/components/dialogs'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
 import { isDfeSuggestion } from '@app/components/OrgSelector/UK/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
+import { useAuth } from '@app/context/auth'
 import {
+  Cud_Operation_Enum,
   GetDfeRegisteredOrganisationQuery,
   GetDfeRegisteredOrganisationQueryVariables,
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
+  Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
 import PhoneNumberInput, {
   PhoneNumberSelection,
 } from '@app/modules/profile/components/PhoneNumberInput'
@@ -52,6 +56,7 @@ type Props = {
   onClose: VoidFunction
   option: Establishment | { name: string }
   countryCode: CountryCode | UKsCountriesCode | ExceptionsCountriesCode
+  createdFrom?: Org_Created_From_Enum // used for organisation logs
 }
 
 export const AddOrg: FC<PropsWithChildren<Props>> = function ({
@@ -59,13 +64,16 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   countryCode,
   onSuccess,
   onClose,
+  createdFrom,
 }) {
   const { t, _t } = useScopedTranslation('components.add-organisation')
   const [
     { data: organisationData, fetching: loading, error },
     insertOrganisation,
   ] = useInsertNewOrganization()
+  const { profile } = useAuth()
 
+  const [, insertLog] = useInsertOrganisationLog()
   const { pathname } = useLocation()
   const client = useClient()
 
@@ -155,7 +163,17 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         .toPromise()
         .then(async organization => {
           if (!organization.data?.dfe_establishment[0].registered) {
-            await insertOrganisation(vars)
+            const response = await insertOrganisation(vars)
+            await insertLog({
+              orgId: response.data?.org?.id,
+              userId: profile?.id,
+              createfrom: createdFrom ?? Org_Created_From_Enum.OrganisationPage,
+              op: Cud_Operation_Enum.Create,
+              updated_columns: {
+                old: null,
+                new: response.data?.org,
+              },
+            })
           } else
             onSuccess({
               id: organization.data.dfe_establishment[0].organizations[0].id,
@@ -163,7 +181,17 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
             })
         })
     } else {
-      await insertOrganisation(vars)
+      const response = await insertOrganisation(vars)
+      await insertLog({
+        orgId: response.data?.org?.id,
+        userId: profile?.id,
+        createfrom: createdFrom ?? Org_Created_From_Enum.OrganisationPage,
+        op: Cud_Operation_Enum.Create,
+        updated_columns: {
+          old: null,
+          new: response.data?.org,
+        },
+      })
     }
   }
 
@@ -187,7 +215,6 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         values.organisationType?.toLocaleLowerCase() === 'other',
     )
   }, [setSpecifyOther, specifyOther, values.organisationType, values.sector])
-
   return (
     <Dialog
       open
@@ -196,6 +223,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         Title: () => <>{t('component-title')}</>,
       }}
       maxWidth={800}
+      data-testid="add-org-dialog"
     >
       <form noValidate autoComplete="off">
         <Typography mb={2}>{_t('org-address')}</Typography>
@@ -225,7 +253,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               disabled={Boolean(isDFESuggestion && defaultValues.addressLine1)}
               helperText={errors.addressLine1?.message}
               {...register('addressLine1')}
-              inputProps={{ 'data-testid': 'addr-line2' }}
+              inputProps={{ 'data-testid': 'addr-line1' }}
               fullWidth
               required
             />

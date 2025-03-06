@@ -1,7 +1,10 @@
 import { SxProps, TextFieldProps } from '@mui/material'
 import { useMemo } from 'react'
 
-import { Dfe_Establishment } from '@app/generated/graphql'
+import {
+  Dfe_Establishment,
+  Org_Created_From_Enum,
+} from '@app/generated/graphql'
 import { Establishment, OfstedRating, Organization } from '@app/types'
 import { organizationData as localSavedOrgToBeCreated } from '@app/util'
 
@@ -63,6 +66,7 @@ export type OrgSelectorProps = {
   userOrgIds?: string[]
   value?: Pick<Organization, 'name' | 'id'> | null
   canSearchByAddress?: boolean
+  createdFrom?: Org_Created_From_Enum
 }
 
 export type SuggestionOption = {

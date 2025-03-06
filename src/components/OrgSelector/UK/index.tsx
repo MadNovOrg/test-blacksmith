@@ -68,6 +68,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     searchOnlyByPostCode = false,
     canSearchByAddress = true,
     label,
+    createdFrom,
     ...props
   }) {
     const { t } = useTranslation()
@@ -485,6 +486,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             countryCode={(countryCode as CountryCode) ?? 'GB-ENG'}
             onClose={handleClose}
             onSuccess={handleSuccess}
+            createdFrom={createdFrom}
           />
         ) : null}
       </>

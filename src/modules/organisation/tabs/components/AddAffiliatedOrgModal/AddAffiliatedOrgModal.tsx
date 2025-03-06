@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Dialog } from '@app/components/dialogs'
 import { OrgSelector } from '@app/components/OrgSelector/ANZ'
 import { CallbackOption } from '@app/components/OrgSelector/ANZ/utils'
+import { Org_Created_From_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useLinkAffiliatedOrganisation } from '@app/modules/organisation/hooks/useLinkAffiliatedOrganisation'
 import { yup } from '@app/schemas'
@@ -119,6 +120,7 @@ export const AddAffiliatedOrgModal = ({
           allowedOrgCountryCode={mainOrgCountryCode}
           showOnlyPossibleAffiliatedOrgs={true}
           mainOrgId={mainOrgId}
+          createdFrom={Org_Created_From_Enum.OrganisationPage}
         />
         <Box
           sx={{

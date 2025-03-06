@@ -46,7 +46,11 @@ import {
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import { Sticky } from '@app/components/Sticky'
-import { Dfe_Establishment, Organization } from '@app/generated/graphql'
+import {
+  Dfe_Establishment,
+  Org_Created_From_Enum,
+  Organization,
+} from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useOrgType } from '@app/modules/organisation/hooks/useOrgType'
 import {
@@ -348,7 +352,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
   ])
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2 }}>
+    <Container maxWidth="lg" sx={{ py: 2 }} data-testid="uk-organization-form">
       <Box
         display="flex"
         component="form"
@@ -532,6 +536,7 @@ export const OrganizationForm: FC<PropsWithChildren<Props>> = ({
                           variant: 'filled',
                         }}
                         showDfeResults={isInUK}
+                        createdFrom={Org_Created_From_Enum.OrganisationPage}
                       />
                     ) : (
                       <TextField

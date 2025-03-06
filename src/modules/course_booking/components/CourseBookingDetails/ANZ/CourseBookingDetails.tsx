@@ -41,6 +41,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   Currency,
+  Org_Created_From_Enum,
   PaymentMethod,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
@@ -622,6 +623,7 @@ export const CourseBookingDetails: React.FC<
               textFieldProps={{ variant: 'standard' }}
               sx={{ marginBottom: 2 }}
               error={errors.orgId?.message}
+              createdFrom={Org_Created_From_Enum.BookingPage}
             />
           </Box>
         </Box>

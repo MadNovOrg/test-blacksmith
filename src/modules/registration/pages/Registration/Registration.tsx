@@ -14,8 +14,7 @@ import {
 } from '@app/generated/graphql'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { MUTATION as INSERT_PROFILE_TEMP } from '@app/modules/profile/queries/insert-profile-temp'
-import { Form as ANZForm } from '@app/modules/registration/components/Form/ANZ/Form'
-import { Form as UKForm } from '@app/modules/registration/components/Form/UK/Form'
+import { Form } from '@app/modules/registration/components/Form/Form'
 
 type LocationState = { from: { pathname: string; search: string } }
 
@@ -29,7 +28,6 @@ export const RegistrationPage: React.FC<
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const location = useLocation()
-  const isUKRegion = acl.isUK()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -127,19 +125,11 @@ export const RegistrationPage: React.FC<
           </Button>
         </Typography>
       </Box>
-      {isUKRegion ? (
-        <UKForm
-          onSignUp={onSignUp}
-          courseId={courseId ? +courseId : null}
-          quantity={quantity ? +quantity : null}
-        />
-      ) : (
-        <ANZForm
-          onSignUp={onSignUp}
-          courseId={courseId ? +courseId : null}
-          quantity={quantity ? +quantity : null}
-        />
-      )}
+      <Form
+        onSignUp={onSignUp}
+        courseId={courseId ? +courseId : null}
+        quantity={quantity ? +quantity : null}
+      />
     </AppLayoutMinimal>
   )
 }

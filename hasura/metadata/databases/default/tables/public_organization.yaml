@@ -85,6 +85,13 @@ array_relationships:
         table:
           name: organization_member
           schema: public
+  - name: organisation_logs
+    using:
+      foreign_key_constraint_on:
+        column: organisation_id
+        table:
+          name: organisation_log
+          schema: public
   - name: organization_courses
     using:
       foreign_key_constraint_on:
@@ -720,17 +727,21 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/organization/address/update'
+  - name: organization_deleted
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{ACTIONS_HOST}}/organization/delete'
   - name: organization_details_changed
     definition:
       enable_manual: false
       update:
-        columns:
-          - contact_details
-          - attributes
-          - address
-          - updated_at
-          - name
-          - region
+        columns: '*'
     retry_conf:
       interval_sec: 10
       num_retries: 5

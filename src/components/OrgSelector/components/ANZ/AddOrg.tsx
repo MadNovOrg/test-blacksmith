@@ -18,12 +18,15 @@ import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDr
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
 import { useAuth } from '@app/context/auth'
 import {
+  Cud_Operation_Enum,
   InsertOrgLeadMutation,
   InsertOrgLeadMutationVariables,
+  Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { RegionSelector } from '@app/modules/organisation/components/RegionSelector'
+import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
 import { Address } from '@app/types'
 import { saveNewOrganizationDataInLocalState } from '@app/util'
 
@@ -34,6 +37,7 @@ type Props = {
   onClose: VoidFunction
   orgName: string
   countryCode: CountryCode | UKsCountriesCode | ExceptionsCountriesCode
+  createdFrom?: Org_Created_From_Enum // used for organisation logs
 }
 
 export const AddOrg: FC<PropsWithChildren<Props>> = function ({
@@ -41,11 +45,14 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   countryCode,
   onSuccess,
   onClose,
+  createdFrom,
 }) {
   const { t, _t } = useScopedTranslation('components.add-organisation')
   const [{ data: organisationData, fetching: loading }, insertOrganisation] =
     useInsertNewOrganization()
-  const { acl } = useAuth()
+
+  const [, insertLog] = useInsertOrganisationLog()
+  const { acl, profile } = useAuth()
   const isAustraliaRegion = acl.isAustralia()
 
   const { pathname } = useLocation()
@@ -74,7 +81,6 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
   })
 
   const values = watch()
-
   const onSubmit = async (data: FormInputs) => {
     const vars: InsertOrgLeadMutationVariables = {
       name: data.organisationName,
@@ -104,7 +110,17 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
       return
     }
 
-    await insertOrganisation(vars)
+    const response = await insertOrganisation(vars)
+    await insertLog({
+      orgId: response.data?.org?.id,
+      userId: profile?.id,
+      createfrom: createdFrom ?? Org_Created_From_Enum.OrganisationPage,
+      op: Cud_Operation_Enum.Create,
+      updated_columns: {
+        old: null,
+        new: response.data?.org,
+      },
+    })
   }
 
   useEffect(() => {
@@ -133,6 +149,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
         Title: () => <>{t('component-title')}</>,
       }}
       maxWidth={800}
+      data-testid="add-org-dialog"
     >
       <form noValidate autoComplete="off">
         <Typography mb={2}>{_t('org-address')}</Typography>
@@ -170,7 +187,7 @@ export const AddOrg: FC<PropsWithChildren<Props>> = function ({
               disabled={false}
               helperText={errors.addressLine1?.message}
               {...register('addressLine1')}
-              inputProps={{ 'data-testid': 'addr-line2' }}
+              inputProps={{ 'data-testid': 'addr-line1' }}
               fullWidth
               required
             />

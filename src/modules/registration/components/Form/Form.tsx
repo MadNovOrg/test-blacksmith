@@ -21,7 +21,12 @@ import { subYears } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo, useState, useCallback } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import {
+  Controller,
+  FieldErrors,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
@@ -29,26 +34,38 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { OrgSelector } from '@app/components/OrgSelector/UK'
+import { OrgSelector as ANZOrgSelector } from '@app/components/OrgSelector/ANZ'
 import {
-  CallbackOption,
-  isHubOrg,
-  useOrganizationToBeCreatedOnRegistration,
+  CallbackOption as ANZCallbackOption,
+  isHubOrg as ANZIsHubOrg,
+  useOrganizationToBeCreatedOnRegistration as ANZUseOrganizationToBeCreatedOnRegistration,
+} from '@app/components/OrgSelector/ANZ/utils'
+import { OrgSelector as UKOrgSelector } from '@app/components/OrgSelector/UK'
+import {
+  CallbackOption as UKCallbackOption,
+  isHubOrg as UKIsHubOrg,
+  useOrganizationToBeCreatedOnRegistration as UKUseOrganizationToBeCreatedOnRegistration,
 } from '@app/components/OrgSelector/UK/utils'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { useAuth } from '@app/context/auth'
 import { handleHubspotFormSubmit } from '@app/context/auth/helpers'
 import { AuthMode } from '@app/context/auth/types'
-import { SignUpMutation, SignUpMutationVariables } from '@app/generated/graphql'
+import {
+  Cud_Operation_Enum,
+  Org_Created_From_Enum,
+  SignUpMutation,
+  SignUpMutationVariables,
+} from '@app/generated/graphql'
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { gqlRequest } from '@app/lib/gql-request'
+import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY_UK,
+  DEFAULT_PHONE_COUNTRY_ANZ,
 } from '@app/modules/profile/components/PhoneNumberInput'
 import { SIGN_UP_MUTATION } from '@app/modules/registration/queries'
 import { FormInputs, getFormSchema } from '@app/modules/registration/utils'
-import { Organization } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 const TextField = styled(MuiTextField)(() => ({
@@ -61,6 +78,91 @@ type Props = {
   onSignUp: (email: string, password: string) => void
   courseId: number | null
   quantity: number | null
+}
+
+const ukOrgSelector = (
+  register: UseFormRegister<FormInputs>,
+  values: FormInputs,
+  errors: FieldErrors<FormInputs>,
+  isSearchOnlyByPostCodeEnabled: boolean,
+  t: (key: string) => string,
+  orgSelectorOnChangeUK: (org: UKCallbackOption) => void,
+  isUKCountry: (code: string) => boolean,
+) => {
+  return (
+    <UKOrgSelector
+      required
+      {...register('organization')}
+      allowAdding={!isUKCountry(values.countryCode)}
+      autocompleteMode={false}
+      showTrainerOrgOnly={false}
+      error={errors.organization?.message}
+      value={values.organization ?? undefined}
+      countryCode={values.countryCode}
+      onChange={orgSelectorOnChangeUK}
+      textFieldProps={{
+        variant: 'filled',
+      }}
+      sx={{ mb: 3 }}
+      isShallowRetrieval
+      canSearchByAddress={false}
+      searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+      placeholder={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.post-code-and-name-placeholder')
+      }
+      label={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.residing-org')
+      }
+      showDfeResults={isUKCountry(values.countryCode)}
+      createdFrom={Org_Created_From_Enum.RegisterPage}
+    />
+  )
+}
+
+const anzOrgSelector = (
+  register: UseFormRegister<FormInputs>,
+  values: FormInputs,
+  errors: FieldErrors<FormInputs>,
+  isSearchOnlyByPostCodeEnabled: boolean,
+  t: (key: string) => string,
+  orgSelectorOnChangeANZ: (org: ANZCallbackOption) => void,
+) => {
+  return (
+    <ANZOrgSelector
+      required
+      {...register('organization')}
+      allowAdding={false}
+      autocompleteMode={false}
+      showTrainerOrgOnly={false}
+      error={errors.organization?.message}
+      value={values.organization ?? undefined}
+      countryCode={values.countryCode}
+      onChange={orgSelectorOnChangeANZ}
+      textFieldProps={{
+        variant: 'filled',
+      }}
+      sx={{ mb: 3 }}
+      isShallowRetrieval
+      canSearchByAddress={false}
+      searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+      placeholder={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.post-code-and-name-placeholder-anz')
+      }
+      label={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.residing-org')
+      }
+      showDfeResults={false}
+      createdFrom={Org_Created_From_Enum.RegisterPage}
+    />
+  )
 }
 
 export const Form: React.FC<React.PropsWithChildren<Props>> = ({
@@ -76,13 +178,16 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   )
   const {
     acl: { isUK },
+    profile,
   } = useAuth()
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [isManualFormError, setIsManualFormError] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [signUpError, setSignupErrorError] = useState('')
-  const organizationData = useOrganizationToBeCreatedOnRegistration()
+  const [signUpError, setSignUpError] = useState('')
+  const organizationData = isUK()
+    ? UKUseOrganizationToBeCreatedOnRegistration()
+    : ANZUseOrganizationToBeCreatedOnRegistration()
   const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
 
   const schema = useMemo(() => getFormSchema(t), [t])
@@ -92,6 +197,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
 
   const [, insertOrganisation] = useInsertNewOrganization()
 
+  const [, insertLog] = useInsertOrganisationLog()
   const {
     register,
     handleSubmit,
@@ -102,11 +208,13 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      country: getCountryLabel('GB-ENG'),
-      countryCode: 'GB-ENG',
+      country: getCountryLabel(isUK() ? 'GB-ENG' : 'AU'),
+      countryCode: isUK() ? 'GB-ENG' : 'AU',
       dob: undefined,
       phone: '',
-      phoneCountryCode: DEFAULT_PHONE_COUNTRY_UK,
+      phoneCountryCode: isUK()
+        ? DEFAULT_PHONE_COUNTRY_UK
+        : DEFAULT_PHONE_COUNTRY_ANZ,
     },
   })
 
@@ -117,7 +225,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     if (isManualFormError) return
 
     setLoading(true)
-    setSignupErrorError('')
+    setSignUpError('')
 
     try {
       let input: SignUpMutationVariables['input'] = {
@@ -144,6 +252,16 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           ...input,
           orgId: newOrganizationData?.org?.id,
         }
+        await insertLog({
+          orgId: newOrganizationData?.org?.id,
+          userId: profile?.id,
+          createfrom: Org_Created_From_Enum.RegisterPage,
+          op: Cud_Operation_Enum.Create,
+          updated_columns: {
+            old: null,
+            new: newOrganizationData?.org,
+          },
+        })
       } else {
         input = { ...input, orgId: data.organization?.id }
       }
@@ -184,21 +302,38 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
     } catch (err) {
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'
-      setSignupErrorError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
+      setSignUpError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
       setLoading(false)
     }
   }
 
-  const orgSelectorOnChange = useCallback(
-    (org: CallbackOption) => {
+  const orgSelectorOnChangeUK = useCallback(
+    (org: UKCallbackOption) => {
       if (!org) {
         setValue('organization', undefined, {
           shouldValidate: true,
         })
         return
       }
-      if (isHubOrg(org)) {
-        setValue('organization', org as Organization, {
+      if (UKIsHubOrg(org)) {
+        setValue('organization', org, {
+          shouldValidate: true,
+        })
+      }
+    },
+    [setValue],
+  )
+
+  const orgSelectorOnChangeANZ = useCallback(
+    (org: ANZCallbackOption) => {
+      if (!org) {
+        setValue('organization', undefined, {
+          shouldValidate: true,
+        })
+        return
+      }
+      if (ANZIsHubOrg(org)) {
+        setValue('organization', org, {
           shouldValidate: true,
         })
       }
@@ -277,7 +412,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           label={t('pages.signup.pass-label')}
           placeholder={t('pages.signup.pass-placeholder')}
           error={!!errors.password}
-          helperText={errors.password?.message || ''}
+          helperText={errors.password?.message ?? ''}
           {...register('password')}
           fullWidth
           required
@@ -319,6 +454,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
             }
           }}
           value={values.countryCode}
+          showAllCountries={isUK() ? undefined : true}
         />
         <Typography
           variant="body1"
@@ -335,6 +471,9 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
           variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
+          defaultCountry={
+            isUK() ? DEFAULT_PHONE_COUNTRY_UK : DEFAULT_PHONE_COUNTRY_ANZ
+          }
           error={!!errors.phone}
           helperText={errors.phone?.message}
           handleManualError={isError => setIsManualFormError(isError)}
@@ -381,35 +520,24 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         </LocalizationProvider>
       </Box>
 
-      <OrgSelector
-        required
-        {...register('organization')}
-        allowAdding={!isUKCountry(values.countryCode)}
-        autocompleteMode={false}
-        showTrainerOrgOnly={false}
-        error={errors.organization?.message}
-        value={values.organization ?? undefined}
-        countryCode={values.countryCode}
-        onChange={orgSelectorOnChange}
-        textFieldProps={{
-          variant: 'filled',
-        }}
-        sx={{ mb: 3 }}
-        isShallowRetrieval
-        canSearchByAddress={false}
-        searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
-        placeholder={
-          isSearchOnlyByPostCodeEnabled
-            ? undefined
-            : t('components.org-selector.post-code-and-name-placeholder')
-        }
-        label={
-          isSearchOnlyByPostCodeEnabled
-            ? undefined
-            : t('components.org-selector.residing-org')
-        }
-        showDfeResults={isUKCountry(values.countryCode)}
-      />
+      {isUK()
+        ? ukOrgSelector(
+            register,
+            values,
+            errors,
+            Boolean(isSearchOnlyByPostCodeEnabled),
+            t,
+            orgSelectorOnChangeUK,
+            isUKCountry,
+          )
+        : anzOrgSelector(
+            register,
+            values,
+            errors,
+            Boolean(isSearchOnlyByPostCodeEnabled),
+            t,
+            orgSelectorOnChangeANZ,
+          )}
 
       <Box>
         <JobTitleSelector

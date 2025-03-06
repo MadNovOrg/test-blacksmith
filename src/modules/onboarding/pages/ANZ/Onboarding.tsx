@@ -31,6 +31,7 @@ import {
   UpdateProfileMutationVariables,
   UpdateUserProfileInput,
   Organization,
+  Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
@@ -316,6 +317,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                   : _t('components.org-selector.residing-org')
               }
               showDfeResults={false}
+              createdFrom={Org_Created_From_Enum.OnboardingPage}
             />
           </Grid>
           <Grid item>
