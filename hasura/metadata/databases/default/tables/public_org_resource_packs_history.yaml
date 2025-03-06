@@ -1,0 +1,19 @@
+table:
+  name: org_resource_packs_history
+  schema: public
+configuration:
+  column_config:
+    org_id:
+      custom_name: orgId
+    reserved_balance:
+      custom_name: reservedBalance
+    resource_packs_type:
+      custom_name: resourcePacksType
+    total_balance:
+      custom_name: totalBalance
+  custom_column_names:
+    org_id: orgId
+    reserved_balance: reservedBalance
+    resource_packs_type: resourcePacksType
+    total_balance: totalBalance
+  custom_root_fields: {}

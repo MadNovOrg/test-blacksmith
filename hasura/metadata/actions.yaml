@@ -16,6 +16,11 @@ actions:
       - role: anonymous
       - role: tt-admin
       - role: sales-admin
+  - name: addResourcePacks
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/resource-packs/add'
+    comment: Manually add resource packs to organisation
   - name: approveCourse
     definition:
       kind: synchronous
@@ -1034,6 +1039,22 @@ custom_types:
         - description: null
           is_deprecated: null
           value: GO1_ENROLLMENT_STARTED
+    - name: ResourcePacksTypeEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: RESOURCE_PACKS_ADDED
+        - description: null
+          is_deprecated: null
+          value: RESOURCE_PACKS_REMOVED
+    - name: ResourcePacksAddErrorEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: ORGANIZATION_NOT_FOUND
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1078,6 +1099,7 @@ custom_types:
     - name: SendIndirectBLCourseInvitesInput
     - name: ImportOrganisationsInput
     - name: ImportOrganisationsConfig
+    - name: ResourcePacksAddInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1181,5 +1203,6 @@ custom_types:
     - name: Go1EnrollmentsSyncOutput
     - name: CancelIndividualFromCourseOutput
     - name: DbCleanOutput
+    - name: ResourcePacksAddOutput
   scalars:
     - name: Date

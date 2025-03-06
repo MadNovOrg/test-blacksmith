@@ -5,6 +5,12 @@ type Mutation {
 }
 
 type Mutation {
+  addResourcePacks(
+    input: ResourcePacksAddInput!
+  ): ResourcePacksAddOutput
+}
+
+type Mutation {
   approveCourse(
     input: ApproveCourseInput!
   ): ApproveCourseOutput!
@@ -620,6 +626,16 @@ enum CancelIndividualFromCourseError {
   GO1_ENROLLMENT_STARTED
 }
 
+enum ResourcePacksTypeEnum {
+  RESOURCE_PACKS_ADDED
+  RESOURCE_PACKS_REMOVED
+}
+
+enum ResourcePacksAddErrorEnum {
+  GENERIC_ERROR
+  ORGANIZATION_NOT_FOUND
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -951,6 +967,14 @@ input ImportOrganisationsConfig {
   mainContactEmail: String
   mainContactSetting: String
   organisationAdminEmail: String
+}
+
+input ResourcePacksAddInput {
+  amount: Int!
+  invoiceNumber: String!
+  note: String
+  orgId: uuid!
+  resourcePackType: ResourcePacksTypeEnum!
 }
 
 type LinkProfileResult {
@@ -1583,6 +1607,12 @@ type CancelIndividualFromCourseOutput {
 
 type DbCleanOutput {
   message: String!
+}
+
+type ResourcePacksAddOutput {
+  success: Boolean!
+  totalResourcePacks: Int
+  error: ResourcePacksAddErrorEnum
 }
 
 scalar Date
