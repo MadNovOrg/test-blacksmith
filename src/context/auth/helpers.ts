@@ -92,6 +92,7 @@ export async function fetchUserProfile(
       activeRole,
       queryRole: activeRole,
       verified: emailVerified ?? false,
+      autoLoggedOut: false,
       loggedOut: false,
       trainerRoles: profile.trainerRoles?.map(
         role => role.trainer_role_type.name,

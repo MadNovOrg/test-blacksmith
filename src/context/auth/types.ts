@@ -23,6 +23,7 @@ export type AuthState = {
   activeRole?: RoleName
   queryRole?: RoleName
   verified?: boolean
+  autoLoggedOut?: boolean
   loggedOut?: boolean
   trainerRoles?: string[]
   certificates?: {
@@ -38,7 +39,7 @@ export type AuthState = {
 export interface AuthContextType extends AuthState {
   loading: boolean
   login: (email: string, password: string) => Promise<LoginResult>
-  logout: () => Promise<void>
+  logout: (auto?: boolean) => Promise<void>
   getJWT: () => Promise<string>
   changeRole: (role: RoleName) => void
   loadProfile: (user: CognitoUser) => Promise<AuthState | void>

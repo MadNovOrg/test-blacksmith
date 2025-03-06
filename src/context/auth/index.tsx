@@ -170,14 +170,17 @@ export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
     [loadProfile, hubspotFormsSubmissionEnabled],
   )
 
-  const logout = useCallback(async () => {
-    await Auth.signOut()
-    onUserNotLoggedIn()
-    setState({ loggedOut: true })
+  const logout = useCallback(
+    async (auto = false) => {
+      await Auth.signOut()
+      onUserNotLoggedIn()
+      setState({ loggedOut: true, autoLoggedOut: auto })
 
-    posthog.identify('1')
-    localStorage.removeItem('residingCountryDialogWasDisplayed')
-  }, [onUserNotLoggedIn])
+      posthog.identify('1')
+      localStorage.removeItem('residingCountryDialogWasDisplayed')
+    },
+    [onUserNotLoggedIn],
+  )
 
   const getJWT = useCallback(async () => {
     try {

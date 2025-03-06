@@ -186,7 +186,7 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
 
         <Divider />
 
-        <MenuItem onClick={logout}>
+        <MenuItem onClick={() => logout()}>
           <ListItemIcon>
             <ExitToAppIcon fontSize="small" />
           </ListItemIcon>

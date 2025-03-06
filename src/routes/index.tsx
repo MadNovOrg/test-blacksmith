@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { ReactNode, Suspense, useEffect } from 'react'
+import React, { ReactNode, Suspense, useEffect, useMemo } from 'react'
 import {
   Navigate,
   Route,
@@ -229,18 +229,40 @@ function LoggedInRoutes() {
   )
 }
 
-function RedirectToLogin() {
-  const { pathname, search } = useLocation()
+export function RedirectToLogin() {
+  const { pathname, search, state } = useLocation()
   const auth = useAuth()
+
+  const locationState = state as { email?: string } | null
+
+  const params = new URLSearchParams(window.location.search)
+  const requestedRole = params.get('role') as RoleName | null
+
+  const useRole = useMemo(() => {
+    if (!requestedRole) return undefined
+
+    return Object.values(RoleName).includes(requestedRole)
+      ? requestedRole
+      : undefined
+  }, [requestedRole])
 
   return (
     <Navigate
       replace
-      to="login"
+      to={`login${
+        useRole ? '?' + new URLSearchParams('role=' + useRole).toString() : ''
+      }`}
       state={
-        auth.loggedOut
+        auth.loggedOut && !auth.autoLoggedOut
           ? undefined
-          : { from: { pathname, search, fromLogin: true } }
+          : {
+              ...(locationState?.email ? { email: locationState.email } : {}),
+              from: {
+                fromLogin: true,
+                pathname,
+                search,
+              },
+            }
       }
     />
   )

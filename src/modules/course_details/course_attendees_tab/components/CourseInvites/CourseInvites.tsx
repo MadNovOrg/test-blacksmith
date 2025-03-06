@@ -94,7 +94,7 @@ export const CourseInvites = ({
       !invites.error &&
       !invites.fetching &&
       !invites.pollRunning &&
-      !state?.invitees.every(invitee =>
+      !state?.invitees?.every(invitee =>
         (invites.data ?? []).some(
           i =>
             i.email?.trim().toLocaleLowerCase() ===
@@ -105,7 +105,7 @@ export const CourseInvites = ({
     if (startInvitesPolling) {
       invites.startPolling()
     }
-  }, [invites, state?.invitees, state?.invitees.length])
+  }, [invites, state?.invitees, state?.invitees?.length])
 
   const invitesLeft = course
     ? course.max_participants -

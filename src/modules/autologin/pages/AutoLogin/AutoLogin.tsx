@@ -1,13 +1,8 @@
 import { CircularProgress } from '@mui/material'
-import * as Sentry from '@sentry/react'
-import { Auth } from 'aws-amplify'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useMount } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
-import { logUserAuthEvent } from '@app/context/auth/queries/auth-audit'
-import { User_Auth_Audit_Type_Enum } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   INIT_AUTH_QUERY,
@@ -15,56 +10,66 @@ import {
 } from '@app/modules/autologin/queries/init-auth'
 
 export const AutoLogin = () => {
-  const [calledLogout, setCalledLogout] = useState<boolean>(false)
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { profile, loadProfile, logout } = useAuth()
+
+  const { loading: loadingProfile, profile, logout } = useAuth()
 
   const token = searchParams.get('token')
   const continueUrl = searchParams.get('continue')
+  const role = searchParams.get('role')
 
-  useMount(async () => {
-    const { initAuth } = await gqlRequest<InitAuthResponseType>(
-      INIT_AUTH_QUERY,
-      undefined,
-      {
-        headers: { 'x-auth': `Bearer ${token}` },
-      },
-    )
+  const autologinHasRun = useRef<boolean>(false)
 
-    await logout()
-    setCalledLogout(true)
+  const autologin = useCallback(async () => {
+    if (!loadingProfile) {
+      const { initAuth } = await gqlRequest<InitAuthResponseType>(
+        INIT_AUTH_QUERY,
+        undefined,
+        {
+          headers: { 'x-auth': `Bearer ${token}` },
+        },
+      )
 
-    const user = await Auth.signIn(initAuth.email)
-    await Auth.sendCustomChallengeAnswer(user, initAuth.authChallenge)
+      if (
+        !profile?.email ||
+        profile.email.trim().toLowerCase() !==
+          initAuth.email.trim().toLowerCase()
+      ) {
+        await logout(true)
+      }
 
-    const currentUser = await Auth.currentUserPoolUser()
-    const loadedProfile = await loadProfile(currentUser)
+      if (continueUrl) {
+        const url = new URL(continueUrl, window.location.origin)
 
-    if (loadedProfile?.profile) {
-      const token = user.signInUserSession.getIdToken().getJwtToken()
-      try {
-        await logUserAuthEvent(
-          {
-            event_type: User_Auth_Audit_Type_Enum.Login,
-            sub: currentUser.attributes.sub,
-          },
-          token,
-        )
-      } catch (err) {
-        Sentry.captureException(err)
+        if (role) {
+          url.searchParams.set('role', role)
+        }
+
+        const params = url.searchParams.toString()
+
+        navigate(`${url.pathname}${params ? '?' + params : ''}`, {
+          replace: true,
+          state: { email: initAuth.email },
+        })
       }
     }
-  })
+  }, [
+    continueUrl,
+    loadingProfile,
+    logout,
+    navigate,
+    profile?.email,
+    role,
+    token,
+  ])
 
   useEffect(() => {
-    if (!profile || !continueUrl) return
-
-    if (calledLogout) {
-      setCalledLogout(false)
-      navigate(continueUrl, { replace: true })
+    if (!loadingProfile && !autologinHasRun.current) {
+      autologin()
+      autologinHasRun.current = true
     }
-  }, [profile, navigate, continueUrl, calledLogout])
+  }, [autologin, loadingProfile])
 
   return <CircularProgress size={50} />
 }

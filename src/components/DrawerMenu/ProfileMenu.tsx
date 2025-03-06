@@ -180,7 +180,7 @@ export const ProfileMenu: React.FC<
             </>
           ) : null}
 
-          <ListItemButton onClick={logout}>
+          <ListItemButton onClick={() => logout()}>
             <ListItemIcon>
               <ExitToAppIcon fontSize="small" />
             </ListItemIcon>

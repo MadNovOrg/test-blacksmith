@@ -26,7 +26,10 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 
-type LocationState = { from: { pathname: string; search: string } }
+type LocationState = {
+  email?: string
+  from: { pathname: string; search: string }
+}
 
 export type LoginInput = {
   email: string
@@ -82,7 +85,7 @@ export const LoginPage = () => {
   } = useForm<LoginInput>({
     resolver: yupResolver(schema),
     defaultValues: {
-      email: searchParams.get('email') ?? '',
+      email: (location.state as LocationState)?.email ?? '',
       password: '',
     },
   })
@@ -98,6 +101,7 @@ export const LoginPage = () => {
       // https://github.com/aws-amplify/amplify-js/issues/3733
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
+
       if (user?.challengeName === 'NEW_PASSWORD_REQUIRED') {
         return navigate({
           pathname: '/change-password',
