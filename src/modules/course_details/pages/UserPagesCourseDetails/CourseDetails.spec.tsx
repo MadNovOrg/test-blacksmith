@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns'
 import { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider, TypedDocumentNode } from 'urql'
@@ -78,15 +79,16 @@ describe(CourseDetails.name, () => {
   })
 
   it('correctly displays *Change my attendance* modal title', async () => {
+    const date = new Date()
     const course = buildCourse({
       overrides: {
         type: Course_Type_Enum.Open,
         schedule: [
           {
             id: chance.guid(),
-            createdAt: new Date(chance.date({ year: 2025 })).toISOString(),
-            start: new Date(chance.date({ year: 2025 })).toISOString(),
-            end: new Date(chance.date({ year: 2025 })).toISOString(),
+            createdAt: date.toISOString(),
+            start: new Date(addDays(date, 10)).toISOString(),
+            end: new Date(addDays(date, 12)).toISOString(),
             virtualLink: chance.url(),
           },
         ],
