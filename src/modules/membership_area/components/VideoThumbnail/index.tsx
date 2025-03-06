@@ -13,7 +13,7 @@ type Props = {
   imageSrcSet?: string
   alt: string
   durationPosition?: 'center' | 'bottom-left'
-  image?: React.ReactElement
+  image?: React.ReactElement<unknown>
 }
 
 export const VideoThumbnail: React.FC<React.PropsWithChildren<Props>> = ({

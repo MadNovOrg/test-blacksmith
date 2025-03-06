@@ -6,7 +6,7 @@ import { AppLogo } from '@app/components/AppLogo'
 type Props = {
   width?: number
   contentBoxStyles?: SxProps
-  footer?: React.ReactElement
+  footer?: React.ReactElement<unknown>
 }
 
 export const AppLayoutMinimal: React.FC<React.PropsWithChildren<Props>> = ({

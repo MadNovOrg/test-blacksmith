@@ -20,7 +20,7 @@ export interface Props {
     trigger: UseFormTrigger<CourseInput>
     formState: FormState<CourseInput>
     reset: UseFormReset<CourseInput>
-  }>
+  } | null>
   trainerRatioNotMet?: boolean
   allowCourseEditWithoutScheduledPrice?: Dispatch<SetStateAction<boolean>>
   currentNumberOfParticipantsAndInvitees?: number

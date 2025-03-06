@@ -21,7 +21,7 @@ export const Recaptcha: React.FC<Props> = ({
   onError,
 }) => {
   const id = useRef(uniqueId())
-  const widgetId = useRef<number>()
+  const widgetId = useRef<number | undefined>(undefined)
 
   useMount(() => {
     if (window.grecaptcha !== null && window.grecaptcha !== undefined) {

@@ -7,7 +7,7 @@ import theme from '@app/theme'
 export const InfoRow: React.FC<
   React.PropsWithChildren<{
     label?: string
-    value?: string | React.ReactElement
+    value?: string | React.ReactElement<unknown>
   }>
 > = ({ label, value, children }) => (
   <Box

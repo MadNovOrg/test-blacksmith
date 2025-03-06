@@ -57,7 +57,9 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={Boolean(anchorElUser)}
         onClose={() => setAnchorElUser(null)}
-        PaperProps={{ sx: { width: 220 } }}
+        slotProps={{
+          paper: { sx: { width: 220 } },
+        }}
       >
         <MenuItem
           onClick={() =>

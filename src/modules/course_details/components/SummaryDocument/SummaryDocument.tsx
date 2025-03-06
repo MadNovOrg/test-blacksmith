@@ -78,7 +78,7 @@ type PDFRatingAnswerProps = {
 }
 
 type FlexGroupProps = {
-  data: React.ReactElement[]
+  data: React.ReactElement<unknown>[]
   type?: 'column' | 'row'
   groupSize?: number
 }

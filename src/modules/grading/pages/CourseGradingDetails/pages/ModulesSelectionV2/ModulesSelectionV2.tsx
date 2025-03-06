@@ -73,7 +73,7 @@ export const ModulesSelectionV2: React.FC = () => {
     [courseData?.course?.curriculum, savedCurriculum],
   )
 
-  const curriculumRef = useRef<unknown>()
+  const curriculumRef = useRef<unknown>(undefined)
 
   const [
     {

@@ -34,7 +34,7 @@ export function buildOrder(
 }
 
 export const renderWithOrders = (
-  ui: React.ReactElement,
+  ui: React.ReactElement<unknown>,
   { orders, total }: { orders: OrdersQuery['order']; total: number },
 ) => {
   const client = {

@@ -12,7 +12,7 @@ import {
 import Link from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
 import { sortBy } from 'lodash-es'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { RefObject, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useIntersection } from 'react-use'
 import { useDebounce } from 'use-debounce'
@@ -28,15 +28,15 @@ const OrgNavLink: React.FC<React.PropsWithChildren<{ to: string }>> = ({
   to,
   children,
 }) => {
-  const intersectionRef = useRef(null)
-  const observer = useIntersection(intersectionRef, {
+  const intersectionRef = useRef<HTMLElement>(null)
+  const observer = useIntersection(intersectionRef as RefObject<HTMLElement>, {
     threshold: 1,
   })
   const hidden = !observer?.isIntersecting
 
   return (
     <Link
-      ref={intersectionRef}
+      ref={intersectionRef as RefObject<HTMLAnchorElement>}
       flex={1}
       component={StyledSubNavLink}
       to={to}
@@ -84,9 +84,9 @@ export const OrgSelectionToolbar: React.FC<
   })
   const sorted = sortBy(data?.orgs || [], org => org.name.toLowerCase())
 
-  const intersectionRef = useRef(null)
+  const intersectionRef = useRef<HTMLElement>(null)
 
-  const observer = useIntersection(intersectionRef, {
+  const observer = useIntersection(intersectionRef as RefObject<HTMLElement>, {
     threshold: 1,
   })
 

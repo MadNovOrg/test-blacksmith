@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import React from 'react'
+import { PropsWithChildren, FC, ReactNode } from 'react'
 
 type Props = {
   id?: string
@@ -24,10 +24,10 @@ type Props = {
    */
   subtitle?: string | React.ReactNode
   slots?: Partial<{
-    Title: React.Factory<unknown>
-    Subtitle: React.Factory<unknown>
-    Content: React.Factory<unknown>
-    Actions: React.Factory<unknown>
+    Title: () => ReactNode
+    Subtitle: () => ReactNode
+    Content: () => ReactNode
+    Actions: () => ReactNode
   }>
   showClose?: boolean
   onClose: () => void
@@ -37,7 +37,7 @@ type Props = {
   noPaddings?: boolean
 }
 
-export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
+export const Dialog: FC<PropsWithChildren<Props>> = ({
   id,
   open,
   title,

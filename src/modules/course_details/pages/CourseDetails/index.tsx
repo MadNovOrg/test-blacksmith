@@ -20,6 +20,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
+import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
@@ -32,7 +33,6 @@ import {
 import useCourse from '@app/hooks/useCourse'
 import usePollQuery from '@app/hooks/usePollQuery'
 import { CourseOverview } from '@app/modules/course/components/CourseOverview'
-import { CourseHeroSummary } from '@app/modules/course_details/components/CourseHeroSummary'
 import {
   PillTab,
   PillTabList,

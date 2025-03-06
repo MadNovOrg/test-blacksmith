@@ -50,7 +50,7 @@ export const GridHeader: React.FC<React.PropsWithChildren<GridProps>> = ({
 
 export const GridTitle: React.FC<
   React.PropsWithChildren<
-    { icon: React.ReactElement; linkTo: string } & TypographyProps
+    { icon: React.ReactElement<unknown>; linkTo: string } & TypographyProps
   >
 > = ({ children, icon, linkTo, ...rest }) => {
   return (

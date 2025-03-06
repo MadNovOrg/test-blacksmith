@@ -53,8 +53,9 @@ export const BILDGrading: FC<Props> = ({ course }) => {
   const navigate = useNavigate()
   const notesRef = useRef<Map<string, string>>(new Map())
 
-  const strategyModulesRef =
-    useRef<Record<string, Strategy & { note?: string }>>()
+  const strategyModulesRef = useRef<
+    Record<string, Strategy & { note?: string }> | undefined
+  >(undefined)
 
   const bildStrategyModules = course.bildModules.length
     ? course.bildModules[0].modules

@@ -1,13 +1,16 @@
-import { styled, Typography } from '@mui/material'
+import { styled, Typography, TypographyProps } from '@mui/material'
 
 import theme from '@app/theme'
 
-export const PageTitle = styled(Typography)(() => ({}))
+const StyledTypography = styled(Typography)(() => ({}))
 
-PageTitle.defaultProps = {
-  variant: 'h1',
-  color: 'primary',
-  textAlign: 'center',
-  paddingTop: theme.spacing(6),
-  paddingBottom: theme.spacing(10),
-}
+export const PageTitle: React.FC<TypographyProps> = props => (
+  <StyledTypography
+    variant="h1"
+    color="primary"
+    textAlign="center"
+    paddingTop={theme.spacing(6)}
+    paddingBottom={theme.spacing(10)}
+    {...props}
+  />
+)

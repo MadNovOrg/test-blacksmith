@@ -23,6 +23,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
+import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import {
@@ -35,7 +36,6 @@ import {
   Organization,
 } from '@app/generated/graphql'
 import { CourseOverview } from '@app/modules/course/components/CourseOverview'
-import { CourseHeroSummary } from '@app/modules/course_details/components/CourseHeroSummary'
 import { CoursePrerequisitesAlert } from '@app/modules/course_details/components/CoursePrerequisitesAlert'
 import {
   PillTab,

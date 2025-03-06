@@ -1,5 +1,5 @@
 import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, type JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export type DropdownMenuItem<T extends string> = {

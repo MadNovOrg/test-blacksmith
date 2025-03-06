@@ -75,7 +75,7 @@ export const DiscountForm: React.FC<React.PropsWithChildren> = () => {
     Profile | FindProfilesQuery['profiles'][0]
   >()
 
-  const amountInputRef = useRef<HTMLInputElement>()
+  const amountInputRef = useRef<HTMLInputElement | undefined>(undefined)
   const [amountPreset, setAmountPreset] = useState(AMOUNT_PRESETS.FIVE)
 
   const [limitBookings, setLimitBookings] = useState(false)

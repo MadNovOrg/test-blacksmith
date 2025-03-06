@@ -41,7 +41,7 @@ type Props = {
   priceCurrency: string | null | undefined
   onChange: (values: FormValues, isValid: boolean) => void
   mode?: TransferModeEnum
-  termsTable?: React.ReactElement
+  termsTable?: React.ReactElement<unknown>
   optionLabels?: Record<TransferFeeType, string>
   courseToTransferTo: TransferCourse
   defaultValues?: ContextValue['fees']

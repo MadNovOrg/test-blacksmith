@@ -13,7 +13,7 @@ import {
 import { pdf } from '@react-pdf/renderer'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, type JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 

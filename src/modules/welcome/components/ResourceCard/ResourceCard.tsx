@@ -25,7 +25,7 @@ const chipOptions: Record<
   {
     color: string | undefined
     textColor: string | undefined
-    icon: React.ReactElement
+    icon: React.ReactElement<unknown>
   }
 > = {
   [KnowledgeHubResourceType.Video]: {

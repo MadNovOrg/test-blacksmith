@@ -39,7 +39,7 @@ export const ResourcesCarousel = () => {
     keyPrefix: 'welcome.resources-carousel',
   })
 
-  const swiperRef = useRef<SwiperClass>()
+  const swiperRef = useRef<SwiperClass | undefined>(undefined)
 
   if (error) {
     return null

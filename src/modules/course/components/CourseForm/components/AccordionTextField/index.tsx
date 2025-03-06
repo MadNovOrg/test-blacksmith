@@ -21,7 +21,7 @@ type Props = {
   title: string
   confirmResetTitle: string
   confirmResetMessage: string
-  subtitle?: ReactElement | string
+  subtitle?: ReactElement<unknown> | string
   value?: string
   defaultValue?: string
   maxLength?: number

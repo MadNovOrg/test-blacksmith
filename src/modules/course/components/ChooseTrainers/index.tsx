@@ -56,7 +56,7 @@ type Props = {
   requiredLeaders?: RequiredTrainers
   methodsRef?: RefObject<{
     reset: UseFormReset<FormValues>
-  }>
+  } | null>
   useAOL?: boolean
 }
 

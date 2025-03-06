@@ -27,7 +27,10 @@ type Props = {
   isFiltered?: boolean
   loading?: boolean
   hiddenColumns?: Set<Cols>
-  renderRow?: (course: TableCourse, index?: number) => React.ReactElement
+  renderRow?: (
+    course: TableCourse,
+    index?: number,
+  ) => React.ReactElement<unknown>
 }
 
 export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({

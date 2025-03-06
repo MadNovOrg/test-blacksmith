@@ -31,7 +31,7 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   labelId,
 }) => {
   const { t } = useTranslation()
-  const onChangeRef = useRef<Props['onChange'] | undefined>()
+  const onChangeRef = useRef<Props['onChange'] | undefined>(undefined)
 
   const { acl } = useAuth()
   const isUKRegion = acl.isUK()

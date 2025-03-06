@@ -127,8 +127,9 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
   const courseCreatedMessage = Boolean(getSnackbarMessage('course-created'))
 
-  const modulesSelectionRef =
-    useRef<ModuleSettingsQuery['moduleSettings'][0]['module'][]>()
+  const modulesSelectionRef = useRef<
+    ModuleSettingsQuery['moduleSettings'][0]['module'][] | undefined
+  >(undefined)
 
   const [
     { data: existingCourseData, fetching: fetchingCourse, error: courseError },
@@ -152,7 +153,7 @@ export const ICMCourseBuilderV2: React.FC<React.PropsWithChildren<Props>> = ({
     },
   ] = useModuleSettings(courseData?.course, acl.isUK() ? Shards.UK : Shards.ANZ)
 
-  const estimatedDurationRef = useRef<number>()
+  const estimatedDurationRef = useRef<number | undefined>(undefined)
 
   const minimumTimeCommitment = useMemo(() => {
     if (courseData?.course) return getMinimumTimeCommitment(courseData?.course)

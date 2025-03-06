@@ -52,7 +52,7 @@ export const PodcastPlayer: React.FC<React.PropsWithChildren<Props>> = ({
 
     const onLoadedMetadata = () => {
       if (audioNode) {
-        setSecondsLeft(audio.current.duration)
+        setSecondsLeft(audio.current?.duration)
       }
     }
 

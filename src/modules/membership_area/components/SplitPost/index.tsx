@@ -61,7 +61,7 @@ export type Props = {
   linkTo?: string
   isVideo?: boolean
   duration?: number
-  afterDescription?: React.ReactElement
+  afterDescription?: React.ReactElement<unknown>
   fluidImageWidth?: boolean
 } & BoxProps
 

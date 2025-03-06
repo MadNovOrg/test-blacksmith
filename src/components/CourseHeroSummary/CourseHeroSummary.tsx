@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
 import { pick } from 'lodash'
-import React, { useMemo, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
@@ -55,9 +55,9 @@ const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
 interface Props {
   course: Course
   slots?: Partial<{
-    BackButton: React.Factory<unknown>
-    EditButton: React.Factory<unknown>
-    OrderItem: React.Factory<unknown>
+    BackButton: () => ReactNode
+    EditButton: () => ReactNode
+    OrderItem: () => ReactNode
   }>
   isManaged?: boolean
 }

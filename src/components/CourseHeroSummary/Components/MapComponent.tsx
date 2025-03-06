@@ -1,6 +1,6 @@
 import { Wrapper } from '@googlemaps/react-wrapper'
 import { Grid, Box, useMediaQuery } from '@mui/material'
-import React, { useCallback, useMemo } from 'react'
+import React, { Ref, useCallback, useMemo } from 'react'
 
 import theme from '@app/theme'
 
@@ -55,7 +55,11 @@ export const MapComponent: React.FC<{
         apiKey={`${import.meta.env.VITE_GMAPS_KEY}`}
         libraries={['places', 'visualization']}
       >
-        <Box ref={ref} id="map" sx={{ height: '20vh', width: '100%', mt: 2 }} />
+        <Box
+          ref={ref as Ref<unknown>}
+          id="map"
+          sx={{ height: '20vh', width: '100%', mt: 2 }}
+        />
       </Wrapper>
     </Grid>
   )

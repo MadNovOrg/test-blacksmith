@@ -4,7 +4,7 @@ import { render, screen, chance, within } from '@test/index'
 
 import { TableNoRows } from './TableNoRows'
 
-const _render = (tr: React.ReactElement) => {
+const _render = (tr: React.ReactElement<unknown>) => {
   render(
     <table>
       <tbody>{tr}</tbody>

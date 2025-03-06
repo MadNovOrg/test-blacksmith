@@ -161,7 +161,7 @@ export const ICMCourseBuilder: React.FC<
   }, [modulesData, courseData?.course])
 
   const selectedIdsRef = useRef<string[]>([])
-  const estimatedDurationRef = useRef<number>()
+  const estimatedDurationRef = useRef<number | undefined>(undefined)
 
   const minimumTimeCommitment = useMemo(() => {
     if (courseData?.course) return getMinimumTimeCommitment(courseData?.course)

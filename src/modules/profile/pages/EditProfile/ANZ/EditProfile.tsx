@@ -134,7 +134,7 @@ export const EditProfilePage: React.FC<
   const minimalAge = subYears(new Date(), 16)
   const importCertificateModalRef = useRef<
     ImportLegacyCertificateMutation | undefined
-  >()
+  >(undefined)
 
   const [{ fetching: updateProfileFetching }, updateProfile] = useMutation<
     UpdateProfileMutation,

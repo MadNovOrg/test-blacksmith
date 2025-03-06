@@ -22,7 +22,7 @@ export type Props = {
   isVideo?: boolean
   duration?: number
   linkTo?: string
-  afterDescription?: React.ReactElement
+  afterDescription?: React.ReactElement<unknown>
 } & BoxProps
 
 export const BlogPostItem: React.FC<React.PropsWithChildren<Props>> = ({
