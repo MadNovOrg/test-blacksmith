@@ -42,7 +42,11 @@ const ListItemTranslated: React.FC<React.PropsWithChildren<ItemProps>> = ({
 }) => {
   return (
     <Typography>
-      <Trans i18nKey={i18nKey} values={{ trainer: fullName }} />
+      <Trans
+        i18nKey={i18nKey}
+        values={{ trainer: fullName }}
+        tOptions={{ interpolation: { escapeValue: false } }}
+      />
     </Typography>
   )
 }

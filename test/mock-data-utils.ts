@@ -400,6 +400,12 @@ export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
   })
 }
 
+export const buildCourseModerator = (overrides?: Partial<CourseTrainer>) => {
+  return buildCourseTrainer({
+    overrides: { ...overrides, type: Course_Trainer_Type_Enum.Moderator },
+  })
+}
+
 export const buildCourse = build<Course>({
   fields: {
     id: perBuild(() => chance.integer({ min: 10000 })),

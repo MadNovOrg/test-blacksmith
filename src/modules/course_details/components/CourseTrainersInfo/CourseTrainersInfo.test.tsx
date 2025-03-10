@@ -11,6 +11,7 @@ import { providers, render, renderHook, screen } from '@test/index'
 import {
   buildCourseAssistant,
   buildCourseLeader,
+  buildCourseModerator,
   buildProfile,
 } from '@test/mock-data-utils'
 
@@ -128,6 +129,31 @@ describe('component: CourseTrainersInfo', () => {
 
     render(<CourseTrainersInfo trainers={trainers} />)
     expect(screen.getByText(t('trainer'))).toBeInTheDocument()
+  })
+
+  it('displays trainer name with apostrophe', () => {
+    const profile = buildProfile()
+    const leaderName = "Leader's"
+    const assistantName = "Assistant's"
+    const moderatorName = "Moderator's"
+
+    const trainers = [
+      buildCourseLeader({
+        profile: { ...profile, fullName: leaderName, id: '1' },
+      }),
+      buildCourseAssistant({
+        profile: { ...profile, fullName: assistantName, id: '2' },
+      }),
+      buildCourseModerator({
+        profile: { ...profile, fullName: moderatorName, id: '3' },
+      }),
+    ]
+
+    render(<CourseTrainersInfo trainers={trainers} />)
+
+    expect(screen.getByText(leaderName)).toBeInTheDocument()
+    expect(screen.getByText(assistantName)).toBeInTheDocument()
+    expect(screen.getByText(moderatorName)).toBeInTheDocument()
   })
 
   it('display you are assist trainer text if id match', () => {
