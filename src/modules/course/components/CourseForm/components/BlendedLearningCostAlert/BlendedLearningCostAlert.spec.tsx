@@ -66,7 +66,7 @@ describe(BlendedLearningCostAlert.name, () => {
       (_content: string, element: Element | null) =>
         matchAlertMessage({
           element,
-          textToMatch: `If not already pre-purchased by the chosen organisation, each additional license will result in a NZ$${blendedLearningLicensePrice.NZD} (plus GST) fee per person attending this course. If you would like to bulk purchase licenses, please get in contact with ${mockInfoEmailAddress}`,
+          textToMatch: `If not already pre-purchased by the chosen organisation, each additional license will result in a NZ$${blendedLearningLicensePrice.NZD} fee per person attending this course. If you would like to bulk purchase licenses, please get in contact with ${mockInfoEmailAddress}`,
         }),
     )
 

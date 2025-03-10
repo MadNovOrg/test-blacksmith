@@ -17,6 +17,7 @@ type Props = {
   amountDue: number
   allowancePrice: number
   residingCountry?: string
+  includeGST?: boolean
 }
 
 export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
@@ -28,6 +29,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   amountDue,
   allowancePrice,
   residingCountry,
+  includeGST = true,
 }) => {
   const {
     acl: { isAustralia },
@@ -48,6 +50,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   const taxType = isAustralia() ? _t('common.gst') : _t('common.vat')
   const taxAmount = isAustralia() ? gst : vat
 
+  const displayTaxRow = isAustralia() ? includeGST : vat
   return (
     <Stack spacing="2px">
       <DetailsItemBox
@@ -111,7 +114,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
               </Typography>
             </ItemRow>
           ) : null}
-          {vat ? (
+          {displayTaxRow ? (
             <ItemRow>
               <Typography color={theme.palette.grey[600]} mt={1}>
                 {taxType}

@@ -6,6 +6,7 @@ import { parseISO } from 'date-fns'
 import React, { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
@@ -31,6 +32,7 @@ export const ReviewLicenseOrder: React.FC<
   const { defaultCurrency, currencyAbbreviations } = useCurrencies(
     courseData?.residingCountry,
   )
+  const { isAustraliaCountry } = useWorldCountries()
 
   const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
 
@@ -62,6 +64,10 @@ export const ReviewLicenseOrder: React.FC<
   useEffect(() => {
     setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
   }, [setCurrentStepKey])
+
+  const displayTaxRow = acl.isAustralia()
+    ? isAustraliaCountry(courseData?.residingCountry)
+    : go1Licensing?.prices.vat
 
   const handleSubmitButtonClick = async () => {
     if (acl.isTrainer() && courseData?.type === Course_Type_Enum.Indirect) {
@@ -188,7 +194,7 @@ export const ReviewLicenseOrder: React.FC<
               currency: currencyAbbreviation,
             })}
           />
-          {go1Licensing?.prices.vat ? (
+          {displayTaxRow ? (
             <InfoRow
               label={taxType}
               value={_t('common.amount-with-currency', {

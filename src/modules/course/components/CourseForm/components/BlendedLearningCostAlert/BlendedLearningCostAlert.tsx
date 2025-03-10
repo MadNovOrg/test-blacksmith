@@ -2,6 +2,7 @@ import { Alert, Link } from '@mui/material'
 import { FC, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import { useCurrencies } from '@app/hooks/useCurrencies'
 import { blendedLearningLicensePrice } from '@app/util'
@@ -10,6 +11,8 @@ export const BlendedLearningCostAlert: FC<{
   residingCountry: string
 }> = ({ residingCountry }) => {
   const { t } = useTranslation()
+  const { isAustraliaCountry } = useWorldCountries()
+  const gstWording = isAustraliaCountry(residingCountry) ? ' (plus GST)' : ''
 
   const {
     acl: { isAustralia },
@@ -35,6 +38,7 @@ export const BlendedLearningCostAlert: FC<{
               blendedLearningLicensePrice[
                 defaultCurrency as keyof typeof blendedLearningLicensePrice
               ],
+            gstWording,
             email: import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS_ANZ,
           }}
         />
@@ -47,7 +51,7 @@ export const BlendedLearningCostAlert: FC<{
           defaultCurrency as keyof typeof blendedLearningLicensePrice
         ],
     })
-  }, [isAustralia, t, defaultCurrency, currencyAbbreviations])
+  }, [isAustralia, t, currencyAbbreviations, defaultCurrency, gstWording])
 
   return (
     <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>

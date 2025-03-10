@@ -14,6 +14,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'urql'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
   OrgLicensesWithHistoryQuery,
@@ -45,6 +46,7 @@ export const LicenseOrderDetails = () => {
   const {
     acl: { isAustralia },
   } = useAuth()
+  const { isAustraliaCountry } = useWorldCountries()
 
   const {
     setCurrentStepKey,
@@ -90,7 +92,7 @@ export const LicenseOrderDetails = () => {
       invoiceDetails: go1Licensing?.invoiceDetails,
     },
   })
-
+  const includeGST = isAustraliaCountry(courseData?.residingCountry)
   const prices = calculateGo1LicenseCost({
     numberOfLicenses: courseData?.maxParticipants ?? 0,
     licenseBalance:
@@ -99,6 +101,7 @@ export const LicenseOrderDetails = () => {
       0,
     isAustralia: isAustralia(),
     residingCountry: courseData?.residingCountry ?? '',
+    isAustraliaCountry: includeGST,
   })
 
   const onSubmit: SubmitHandler<Inputs> = data => {
@@ -162,6 +165,7 @@ export const LicenseOrderDetails = () => {
           0
         }
         residingCountry={courseData.residingCountry}
+        includeGST={includeGST}
       />
 
       <Typography variant="h4" mb={2} mt={4}>

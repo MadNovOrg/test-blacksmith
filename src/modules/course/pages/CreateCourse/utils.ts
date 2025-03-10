@@ -119,11 +119,13 @@ export function calculateGo1LicenseCost({
   licenseBalance,
   residingCountry,
   isAustralia,
+  isAustraliaCountry,
 }: {
   numberOfLicenses: number
   licenseBalance: number
   residingCountry?: string
   isAustralia?: boolean
+  isAustraliaCountry?: boolean
 }): Go1LicensingPrices {
   const pricePerLicence = getPricePerLicence({ isAustralia, residingCountry })
   const fullPrice = new Big(numberOfLicenses).times(pricePerLicence)
@@ -133,7 +135,9 @@ export function calculateGo1LicenseCost({
       : new Big(numberOfLicenses).times(pricePerLicence)
 
   const vat = fullPrice.minus(allowancePrice).times(0.2)
-  const gst = fullPrice.minus(allowancePrice).times(0.1)
+  const gst = isAustraliaCountry
+    ? fullPrice.minus(allowancePrice).times(0.1)
+    : new Big(0)
   const amountDue = isAustralia
     ? fullPrice.minus(allowancePrice).add(gst)
     : fullPrice.minus(allowancePrice).add(vat)
