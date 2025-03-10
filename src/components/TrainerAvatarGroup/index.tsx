@@ -73,16 +73,13 @@ const ProfileAvatar: React.FC<React.PropsWithChildren<ProfileAvatarProp>> = ({
   )
 }
 
-function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): 1 | -1 | 0 {
-  if (a.type === Course_Trainer_Type_Enum.Leader) {
-    return -1
+function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): number {
+  const order = {
+    [Course_Trainer_Type_Enum.Leader]: 1,
+    [Course_Trainer_Type_Enum.Assistant]: 2,
+    [Course_Trainer_Type_Enum.Moderator]: 3,
   }
-
-  if (b.type === Course_Trainer_Type_Enum.Leader) {
-    return 1
-  }
-
-  return 0
+  return order[a.type] - order[b.type]
 }
 
 export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({

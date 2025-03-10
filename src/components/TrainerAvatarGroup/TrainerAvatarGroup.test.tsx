@@ -23,8 +23,8 @@ const buildTrainerAvatar = build<TrainerAvatar>({
 })
 
 describe('component: TrainerAvatarGroup', () => {
-  it('displays lead trainers first', () => {
-    const leadTrainer = buildTrainerAvatar({
+  it('displays lead trainers first, assist second and moderator third', () => {
+    const leadTrainer1 = buildTrainerAvatar({
       overrides: {
         type: Course_Trainer_Type_Enum.Leader,
         profile: {
@@ -34,7 +34,7 @@ describe('component: TrainerAvatarGroup', () => {
       },
     })
 
-    const assistTrainer = buildTrainerAvatar({
+    const assistTrainer1 = buildTrainerAvatar({
       overrides: {
         type: Course_Trainer_Type_Enum.Assistant,
         profile: {
@@ -44,21 +44,57 @@ describe('component: TrainerAvatarGroup', () => {
       },
     })
 
-    const trainers: TrainerAvatar[] = [assistTrainer, leadTrainer]
+    const assistTrainer2 = buildTrainerAvatar({
+      overrides: {
+        type: Course_Trainer_Type_Enum.Assistant,
+        profile: {
+          fullName: 'Kevin DeBruyne',
+          id: chance.guid(),
+        },
+      },
+    })
+
+    const moderatorTrainer1 = buildTrainerAvatar({
+      overrides: {
+        type: Course_Trainer_Type_Enum.Moderator,
+        profile: {
+          fullName: 'Anakin Skywalker',
+          id: chance.guid(),
+        },
+      },
+    })
+
+    const trainers: TrainerAvatar[] = [
+      assistTrainer1,
+      moderatorTrainer1,
+      assistTrainer2,
+      leadTrainer1,
+    ]
 
     render(<TrainerAvatarGroup trainers={trainers} />)
 
-    const leadTrainerNode = screen.getByTestId(
-      `trainer-avatar-${leadTrainer.id}`,
-    )
-    const assistTrainerNode = screen.getByTestId(
-      `trainer-avatar-${assistTrainer.id}`,
+    const leadTrainer1Node = screen.getByTestId(
+      `trainer-avatar-${leadTrainer1.id}`,
     )
 
-    expect(leadTrainerNode).toHaveTextContent('JD')
-    expect(assistTrainerNode).toHaveTextContent('KS')
+    const assistTrainer2Node = screen.getByTestId(
+      `trainer-avatar-${assistTrainer2.id}`,
+    )
+    const assistTrainer1Node = screen.getByTestId(
+      `trainer-avatar-${assistTrainer1.id}`,
+    )
+    const moderatorTrainer1Node = screen.getByTestId(
+      `trainer-avatar-${moderatorTrainer1.id}`,
+    )
 
-    expect(leadTrainerNode).toHaveAttribute('data-index', '0')
-    expect(assistTrainerNode).toHaveAttribute('data-index', '1')
+    expect(leadTrainer1Node).toHaveTextContent('JD')
+    expect(assistTrainer1Node).toHaveTextContent('KS')
+    expect(assistTrainer2Node).toHaveTextContent('KD')
+    expect(moderatorTrainer1Node).toHaveTextContent('AS')
+
+    expect(leadTrainer1Node).toHaveAttribute('data-index', '0')
+    expect(assistTrainer1Node).toHaveAttribute('data-index', '1')
+    expect(assistTrainer2Node).toHaveAttribute('data-index', '2')
+    expect(moderatorTrainer1Node).toHaveAttribute('data-index', '3')
   })
 })
