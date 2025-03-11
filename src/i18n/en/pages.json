@@ -1544,6 +1544,23 @@
           "col-invoked-by": "Invoked by"
         }
       },
+      "resource-packs": {
+        "title": "Resource Packs",
+        "total-remaining-resource-packs": {
+          "title": "Total remaining resource packs",
+          "digital-resource-packs": " Digital Workbook & Connect",
+          "print-resource-packs": " Print Workbook & Connect"
+        },
+        "unused-resource-packs": {
+          "title": "Unused resource packs that are reserved for upcoming course(s).",
+          "digital-resource-packs": "Digital Workbook & Connect",
+          "print-resource-packs": "Print Workbook & Connect"
+        },
+        "manage-button-label": "Manage",
+        "export": {
+          "button-label": "Export"
+        }
+      },
       "permissions": {
         "title": "Permissions",
         "knowledge-hub-access": "By switching this toggle off, all members within this organization will cut off access to the Knowledge Hub, while access to Connect will still remain."

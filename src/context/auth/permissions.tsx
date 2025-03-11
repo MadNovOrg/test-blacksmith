@@ -775,6 +775,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canManageBlendedLicenses: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isFinance])(),
 
+    canManageResourcePacks: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance, acl.isSalesAdmin])(),
+
     canSeeProfileRoles: () => {
       const hubVisibilityDeniedRoles = [RoleName.TRAINER, RoleName.USER]
       return activeRole && !hubVisibilityDeniedRoles.includes(activeRole)

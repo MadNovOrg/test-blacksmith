@@ -1,3 +1,5 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+
 import { AwsRegions, RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
@@ -12,7 +14,11 @@ const commonTabsTestIds = [
   'org-blended-licences',
 ]
 
+vi.mock('posthog-js/react')
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
+
 describe(Tabs.name, () => {
+  useFeatureFlagEnabledMock.mockReturnValue(true)
   const commonTest = (tab: string, region: AwsRegions) => {
     vi.stubEnv('VITE_AWS_REGION', region)
     render(<Tabs organization={buildOrganization()} />)
@@ -37,6 +43,14 @@ describe(Tabs.name, () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
     render(<Tabs organization={buildOrganization()} />)
     expect(screen.getByTestId('affiliated-orgs')).toBeInTheDocument()
+  })
+  it('should render the resource packs tab on AU', () => {
+    commonTest('org-resource-packs', AwsRegions.Australia)
+  })
+  it('should not render the resource packs tab on UK', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+    render(<Tabs organization={buildOrganization()} />)
+    expect(screen.queryByTestId('org-resource-packs')).not.toBeInTheDocument()
   })
   it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
     'should render the permissions tab for allowed roles -- %s role',

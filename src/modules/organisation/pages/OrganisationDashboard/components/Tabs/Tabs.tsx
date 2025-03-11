@@ -1,12 +1,14 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { t } from 'i18next'
-import { FC, useEffect, useState } from 'react'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { AffiliatedOrgsTab } from '@app/modules/organisation/tabs/ANZ/AffiliatedOrgsTab/AffiliatedOrgsTab'
+import { ResourcePacksTab } from '@app/modules/organisation/tabs/ANZ/ResourcePacksTab/ResourcePacksTab'
 import { LicensesTab } from '@app/modules/organisation/tabs/Licenses/LicensesTab'
 import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrganisationDetails'
 import { OrgIndividualsTab } from '@app/modules/organisation/tabs/OrgIndividualsTab'
@@ -19,6 +21,7 @@ export enum OrgDashboardTabs {
   AFFILIATED = 'AFFILIATED',
   INDIVIDUALS = 'INDIVIDUALS',
   LICENSES = 'LICENSES',
+  RESOURCE_PACKS = 'RESOURCE_PACKS',
   PERMISSIONS = 'PERMISSIONS',
 }
 
@@ -61,6 +64,12 @@ const TabsWithProps = [
     component: (id: string) => <LicensesTab orgId={id} />,
   },
   {
+    tab: OrgDashboardTabs.RESOURCE_PACKS,
+    dataTestId: 'org-resource-packs',
+    label: t('pages.org-details.tabs.resource-packs.title'),
+    component: (id: string) => <ResourcePacksTab orgId={id} />,
+  },
+  {
     tab: OrgDashboardTabs.PERMISSIONS,
     dataTestId: 'org-permissions',
     label: t('pages.org-details.tabs.permissions.title'),
@@ -76,16 +85,27 @@ export const Tabs: FC<Props> = ({ organization }) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
   const [selectedTab, setSelectedTab] = useState<OrgDashboardTabs>(
-    initialTab || OrgDashboardTabs.OVERVIEW,
+    initialTab ?? OrgDashboardTabs.OVERVIEW,
   )
 
+  const orgResourcePacksEnabled = useFeatureFlagEnabled('org-resource-packs')
+  const hideResourcePacks = useMemo(
+    () => !orgResourcePacksEnabled || !isAustralia(),
+    [isAustralia, orgResourcePacksEnabled],
+  )
   const showAffiliatedOrgsTab =
     isAustralia() && !organization?.main_organisation
   const OrgTabs = Object.values(TabsWithProps).filter(({ tab }) => {
-    if (!isAustralia() && !organization?.main_organisation)
-      return tab !== OrgDashboardTabs.AFFILIATED
-    if (!canManageKnowledgeHubAccess())
-      return tab !== OrgDashboardTabs.PERMISSIONS
+    if (
+      !isAustralia() &&
+      !organization?.main_organisation &&
+      tab === OrgDashboardTabs.AFFILIATED
+    )
+      return false
+    if (!canManageKnowledgeHubAccess() && tab === OrgDashboardTabs.PERMISSIONS)
+      return false
+    if (hideResourcePacks && tab === OrgDashboardTabs.RESOURCE_PACKS)
+      return false
     return true
   })
 
@@ -93,14 +113,18 @@ export const Tabs: FC<Props> = ({ organization }) => {
     setSearchParams({ tab: selectedTab })
   }, [selectedTab, setSearchParams])
 
+  const tabToDisplay = () => {
+    if (selectedTab === OrgDashboardTabs.AFFILIATED && !showAffiliatedOrgsTab) {
+      return OrgDashboardTabs.OVERVIEW
+    }
+    if (selectedTab === OrgDashboardTabs.RESOURCE_PACKS && hideResourcePacks) {
+      return OrgDashboardTabs.OVERVIEW
+    }
+    return selectedTab
+  }
+
   return (
-    <TabContext
-      value={
-        selectedTab === OrgDashboardTabs.AFFILIATED && !showAffiliatedOrgsTab
-          ? OrgDashboardTabs.OVERVIEW
-          : selectedTab
-      }
-    >
+    <TabContext value={tabToDisplay()}>
       <TabList
         onChange={(_, value) => {
           setSelectedTab(value)
