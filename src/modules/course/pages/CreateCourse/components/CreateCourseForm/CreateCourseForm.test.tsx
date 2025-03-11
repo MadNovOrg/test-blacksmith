@@ -13,8 +13,9 @@ import {
   Course_Type_Enum,
   GetCoursesSourcesQuery,
   SearchTrainersQuery,
+  Course_Level_Enum,
+  Currency,
 } from '@app/generated/graphql'
-import { Course_Level_Enum, Currency } from '@app/generated/graphql'
 import useZoomMeetingLink from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
 import { useCourseDraft } from '@app/modules/course/hooks/useCourseDraft'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
@@ -38,8 +39,9 @@ import {
   waitFor,
   waitForCalls,
 } from '@test/index'
-import { buildCertificate, buildProfile } from '@test/mock-data-utils'
 import {
+  buildCertificate,
+  buildProfile,
   buildCourse,
   buildCourseSchedule,
   buildVenue,
@@ -64,7 +66,7 @@ vi.mock('posthog-js/react', () => ({
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
-  ...((await vi.importActual('react-router-dom')) as object),
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }))
 
@@ -1860,5 +1862,71 @@ describe('component: CreateCourseForm', () => {
       // ensure it did not navigate away to the next step
       expect(mockNavigate).not.toHaveBeenCalledWith('./assign-trainers')
     })
+  })
+
+  it('does not allow indirect course to be created with exceptions on ANZ', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+
+    const startDate = addDays(new Date(), 2)
+    const endDate = addHours(startDate, 8)
+    const course = buildCourse({
+      overrides: {
+        type: Course_Type_Enum.Indirect,
+        accreditedBy: Accreditors_Enum.Icm,
+        level: Course_Level_Enum.Level_1,
+        free_course_materials: 2,
+        max_participants: 10,
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: startDate.toISOString(),
+              end: endDate.toISOString(),
+            },
+          }),
+        ],
+        residingCountry: 'AU',
+      },
+    })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={Course_Type_Enum.Indirect}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {
+        auth: {
+          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+        },
+      },
+      { initialEntries: ['/?type=INDIRECT'] },
+    )
+
+    expect(screen.getByTestId('resourcePacks')).toBeInTheDocument()
+    const confirmations = [
+      t('pages.create-course.form.health-leaflet-copy'),
+      t('pages.create-course.form.practice-protocol-copy'),
+      t('pages.create-course.form.valid-id-copy'),
+    ]
+
+    for (const label of confirmations) {
+      await userEvent.click(screen.getByLabelText(label, { exact: false }))
+    }
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /course builder/i }),
+    )
+
+    expect(screen.getByTestId('checkbox-error')).toBeVisible()
   })
 })

@@ -347,7 +347,7 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   // ----------- To Be deleted after 30/04/2025 ----------------
   useEffect(() => {
-    if (!isCreation || !waRenewalCyclesEnabled || !waId.wa_id) return
+    if (!isCreation || !waRenewalCyclesEnabled || !waId?.wa_id) return
     if (
       values.type === Course_Type_Enum.Indirect &&
       (values.organization?.id === waId.wa_id ||

@@ -4,16 +4,12 @@ import {
   Alert,
   Box,
   Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
 import omit from 'lodash-es/omit'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormState, UseFormReset, UseFormTrigger } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -59,6 +55,8 @@ import { StepsEnum } from '../../types'
 import { useCreateCourse } from '../CreateCourseProvider'
 import { NoExceptionsDialog } from '../NoExceptionsDialog'
 
+import { ConsentFlags, CourseFormCheckboxes } from './components/Checkboxes'
+
 function assertCourseDataValid(
   data: CourseInput,
   isValid: boolean,
@@ -92,7 +90,7 @@ export const CreateCourseForm = () => {
   const { profile, acl } = useAuth()
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isIndirectCourse = courseData?.type === Course_Type_Enum.Indirect
-
+  const orgResourcePacksEnabled = useFeatureFlagEnabled('org-resource-packs')
   const [courseExceptions, setCourseExceptions] = useState<
     Course_Exception_Enum[]
   >([])
@@ -103,12 +101,17 @@ export const CreateCourseForm = () => {
   const displayConnectFeeCondition =
     isIndirectCourse && isUKCountry(courseData?.residingCountry)
 
-  const [consentFlags, setConsentFlags] = useState({
+  const displayResourcePacksCondition = useMemo(
+    () =>
+      Boolean(orgResourcePacksEnabled) && acl.isAustralia() && isIndirectCourse,
+    [acl, isIndirectCourse, orgResourcePacksEnabled],
+  )
+
+  const [consentFlags, setConsentFlags] = useState<ConsentFlags>({
     healthLeaflet: false,
     practiceProtocols: false,
     validID: false,
     needsAnalysis: false,
-    ...(displayConnectFeeCondition ? { connectFee: false } : {}),
   })
 
   const methods = useRef<{
@@ -195,7 +198,6 @@ export const CreateCourseForm = () => {
     const hasCheckedAllFlags = Object.values(evaluatedFlag).every(
       flag => flag === true,
     )
-
     return hasCheckedAllFlags && courseDataValid
   }, [consentFlags, courseDataValid, isIndirectCourse, isBILDcourse])
 
@@ -221,24 +223,6 @@ export const CreateCourseForm = () => {
   }, [acl, completeStep, courseData, courseType, navigate, profile])
 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
-
-  const checkboxError = useMemo(
-    () =>
-      formSubmitted &&
-      (!consentFlags.practiceProtocols ||
-        !consentFlags.validID ||
-        (displayConnectFeeCondition && !consentFlags.connectFee) ||
-        (isBILDcourse && !consentFlags.needsAnalysis)),
-    [
-      formSubmitted,
-      consentFlags.practiceProtocols,
-      consentFlags.validID,
-      consentFlags.connectFee,
-      consentFlags.needsAnalysis,
-      displayConnectFeeCondition,
-      isBILDcourse,
-    ],
-  )
 
   const handleNextStepButtonClick = async () => {
     methods?.current?.trigger()
@@ -294,16 +278,6 @@ export const CreateCourseForm = () => {
     await submit()
   }
 
-  const handleConsentFlagChange = (
-    flag: keyof typeof consentFlags,
-    checked: boolean,
-  ) => {
-    setConsentFlags({
-      ...consentFlags,
-      [flag]: checked,
-    })
-  }
-
   const handleCourseFormChange = useCallback(
     ({ data, isValid }: { data?: CourseInput; isValid?: boolean }) => {
       // Type casting to save the data in context
@@ -325,15 +299,9 @@ export const CreateCourseForm = () => {
     [setCourseData],
   )
 
-  useEffect(() => {
-    setConsentFlags({
-      healthLeaflet: false,
-      practiceProtocols: false,
-      validID: false,
-      needsAnalysis: false,
-      ...(displayConnectFeeCondition ? { connectFee: false } : {}),
-    })
-  }, [courseData?.residingCountry, displayConnectFeeCondition])
+  const handleConsentFlagChange = (value: ConsentFlags) => {
+    setConsentFlags(value)
+  }
 
   const nextStepButtonLabel = useMemo(() => {
     if (
@@ -414,8 +382,8 @@ export const CreateCourseForm = () => {
                   courseData?.courseLevel ?? Course_Level_Enum.Level_1
                 }
                 courseSchedule={{
-                  start: courseData?.startDateTime ?? undefined,
-                  end: courseData?.endDateTime ?? undefined,
+                  start: courseData?.startDateTime,
+                  end: courseData?.endDateTime,
                 }}
                 matchesFilter={matches =>
                   matches.filter(t => t.id !== profile?.id)
@@ -453,103 +421,14 @@ export const CreateCourseForm = () => {
             </>
           ) : null}
 
-          <FormControl required error={checkboxError}>
-            <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={consentFlags.healthLeaflet}
-                    onChange={e =>
-                      handleConsentFlagChange('healthLeaflet', e.target.checked)
-                    }
-                  />
-                }
-                label={
-                  t('pages.create-course.form.health-leaflet-copy') as string
-                }
-                sx={{ mb: 1 }}
-                data-testid="healthLeaflet"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={consentFlags.practiceProtocols}
-                    onChange={e =>
-                      handleConsentFlagChange(
-                        'practiceProtocols',
-                        e.target.checked,
-                      )
-                    }
-                  />
-                }
-                label={
-                  t('pages.create-course.form.practice-protocol-copy') as string
-                }
-                sx={{ mb: 2 }}
-                data-testid="practiceProtocols"
-              />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={consentFlags.validID}
-                    onChange={e =>
-                      handleConsentFlagChange('validID', e.target.checked)
-                    }
-                  />
-                }
-                label={t('pages.create-course.form.valid-id-copy') as string}
-                sx={{ mb: 2 }}
-                data-testid="validID"
-              />
-
-              {displayConnectFeeCondition ? (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={consentFlags.connectFee}
-                      onChange={e =>
-                        handleConsentFlagChange('connectFee', e.target.checked)
-                      }
-                    />
-                  }
-                  label={
-                    t(
-                      'pages.create-course.form.connect-fee-notification',
-                    ) as string
-                  }
-                  data-testid="connectFee"
-                />
-              ) : null}
-
-              {isBILDcourse && (
-                <FormControlLabel
-                  required
-                  control={
-                    <Checkbox
-                      checked={consentFlags.needsAnalysis}
-                      onChange={e =>
-                        handleConsentFlagChange(
-                          'needsAnalysis',
-                          e.target.checked,
-                        )
-                      }
-                    />
-                  }
-                  label={
-                    t('pages.create-course.form.needs-analysis-copy') as string
-                  }
-                  data-testid="needsAnalysis"
-                />
-              )}
-
-              {checkboxError && (
-                <FormHelperText>
-                  {t('pages.create-course.form.checkboxes-missing')}
-                </FormHelperText>
-              )}
-            </FormGroup>
-          </FormControl>
+          <CourseFormCheckboxes
+            formSubmitted={formSubmitted}
+            courseResidingCountry={courseData?.residingCountry ?? ''}
+            displayConnectFeeCondition={displayConnectFeeCondition}
+            displayResourcePacksCondition={displayResourcePacksCondition}
+            isBILDCourse={isBILDcourse}
+            handleConsentFlagChanged={handleConsentFlagChange}
+          />
         </>
       ) : null}
 
