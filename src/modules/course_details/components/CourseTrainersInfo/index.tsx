@@ -134,14 +134,14 @@ const ListItemWrapper: React.FC<
           <Link>
             <ListItemTranslated
               i18nKey={i18nKey}
-              fullName={courseTrainer.profile.fullName || ''}
+              fullName={courseTrainer?.profile?.fullName ?? ''}
             />
           </Link>
         </button>
       ) : (
         <ListItemTranslated
           i18nKey={i18nKey}
-          fullName={courseTrainer.profile.fullName || ''}
+          fullName={courseTrainer?.profile?.fullName ?? ''}
         />
       )}
       <Tooltip

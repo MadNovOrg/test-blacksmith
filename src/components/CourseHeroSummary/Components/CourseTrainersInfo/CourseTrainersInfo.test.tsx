@@ -11,6 +11,7 @@ import { providers, render, renderHook, screen } from '@test/index'
 import {
   buildCourseAssistant,
   buildCourseLeader,
+  buildCourseModerator,
   buildProfile,
 } from '@test/mock-data-utils'
 
@@ -109,10 +110,34 @@ describe('component: CourseTrainersInfo', () => {
     })
   })
 
+  it('display trainers name correctly if name contains special characters', () => {
+    const profile = buildProfile()
+    const leadTrainerName = "Leader O'Trainer"
+    const assistTrainerName = "Assist O'Trainer"
+    const moderatorTrainerName = "Moderator O'Trainer"
+
+    const trainers = [
+      buildCourseLeader({
+        profile: { ...profile, fullName: leadTrainerName, id: '1' },
+      }),
+      buildCourseAssistant({
+        profile: { ...profile, fullName: assistTrainerName, id: '2' },
+      }),
+      buildCourseModerator({
+        profile: { ...profile, fullName: moderatorTrainerName, id: '3' },
+      }),
+    ]
+
+    render(<CourseTrainersInfo trainers={trainers} />)
+    trainers.forEach(trainer => {
+      expect(screen.getByText(trainer.profile.fullName)).toBeInTheDocument()
+    })
+  })
+
   it('display you are trainer text if id match', () => {
     const profile = buildProfile()
 
-    const logInId = providers.auth.profile?.id || 'logInId'
+    const logInId = providers.auth.profile?.id ?? 'logInId'
 
     const trainers = [
       buildCourseLeader({
@@ -133,7 +158,7 @@ describe('component: CourseTrainersInfo', () => {
   it('display you are assist trainer text if id match', () => {
     const profile = buildProfile()
 
-    const logInId = providers.auth.profile?.id || 'logInId'
+    const logInId = providers.auth.profile?.id ?? 'logInId'
 
     const trainers = [
       buildCourseLeader({
