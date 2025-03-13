@@ -170,6 +170,11 @@ export const CurrencySymbol: Record<Currency, string> = {
   [Currency.Aud]: 'AUD$',
   [Currency.Nzd]: 'NZD$',
 }
+export const ANZMillageRate: Record<string, number[]> = {
+  //Values defined in ticket https://behaviourhub.atlassian.net/browse/TTHP-4533
+  [Currency.Aud]: [0.5, 0.25],
+  [Currency.Nzd]: [0.55, 0.27],
+}
 
 export const VAT = '(+VAT)'
 export const GST = '(+GST)'
@@ -790,6 +795,13 @@ export const getCourseBeginsForMessage = (
 }
 
 export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
+
+export const getANZCarCost = (km: number, currency: Currency) => {
+  const milageRate = ANZMillageRate[currency]
+  const extraKm = km - 200 // First 200 km are taxed more than additional km
+  if (extraKm > 0) return 200 * milageRate[0] + extraKm * milageRate[1]
+  return km * milageRate[0]
+}
 
 export const getMandatoryCourseMaterialsCost = (
   mandatoryCourseMaterials: number,

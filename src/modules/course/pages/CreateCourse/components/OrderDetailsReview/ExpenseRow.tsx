@@ -2,9 +2,15 @@ import Big from 'big.js'
 import { type FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
+import { Currency } from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { ExpensesInput, TransportMethod } from '@app/types'
-import { formatCurrency, getTrainerCarCostPerMile } from '@app/util'
+import {
+  formatCurrency,
+  getANZCarCost,
+  getTrainerCarCostPerMile,
+} from '@app/util'
 
 import { useCreateCourse } from '../CreateCourseProvider'
 
@@ -29,10 +35,12 @@ const TransportExpenseRow: FC<TransportExpenseRowProps> = ({
   const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
   const currency = courseData?.priceCurrency ?? defaultCurrency
   const { t } = useTranslation()
-  const amount =
-    (method === TransportMethod.CAR
-      ? getTrainerCarCostPerMile(value)
-      : value) ?? 0
+  const { acl } = useAuth()
+
+  const carCost = acl.isAustralia()
+    ? getANZCarCost(value ?? 0, currency as Currency)
+    : getTrainerCarCostPerMile(value)
+  const amount = (method === TransportMethod.CAR ? carCost : value) ?? 0
 
   let caption: string | null = null
   switch (method) {

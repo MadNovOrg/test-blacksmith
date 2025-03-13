@@ -6,6 +6,7 @@ import { useForm, Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
+import { useAuth } from '@app/context/auth'
 import { yup } from '@app/schemas'
 import { TrainerInput, TransportMethod } from '@app/types'
 
@@ -29,15 +30,16 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
   initialValues = undefined,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const schema = useMemo(
     () =>
       yup.object({
         expenses: yup.lazy(obj =>
-          yup.object(mapValues(obj, () => makeSchema(t))),
+          yup.object(mapValues(obj, () => makeSchema(t, acl.isAustralia()))),
         ),
       }),
-    [t],
+    [acl, t],
   )
 
   const form = useForm<FormValues>({

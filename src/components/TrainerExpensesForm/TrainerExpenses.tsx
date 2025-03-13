@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 
 import { DropdownMenu } from '@app/components/DropdownMenu'
 import { NumericTextField } from '@app/components/NumericTextField'
+import { useAuth } from '@app/context/auth'
 import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import {
   useCurrencies,
@@ -43,7 +44,11 @@ type Props = {
   onChange?: (data: FormValues, isValid: boolean) => void
 }
 
-export const makeSchema = (t: TFunction) =>
+export const makeSchema = (
+  t: TFunction,
+  isAustralia: boolean,
+  currency?: string,
+) =>
   yup.object({
     transport: yup
       .array()
@@ -109,6 +114,19 @@ export const makeSchema = (t: TFunction) =>
             ),
           accommodationCost: yup
             .number()
+            .test(
+              'max-value-on-ANZ',
+              t(
+                'pages.create-course.trainer-expenses.accomodation-cost-max-value',
+                { currency: currency ?? 'AUD $' },
+              ),
+              value => {
+                if (isAustralia && value) {
+                  return value <= 200
+                }
+                return true
+              },
+            )
             .typeError(t('pages.create-course.trainer-expenses.negative-error'))
             .when(
               ['accommodationNights', 'method'],
@@ -155,6 +173,16 @@ export const makeSchema = (t: TFunction) =>
     ),
   })
 
+const accomodationCaption = (isUK: boolean, t: TFunction) => {
+  if (isUK)
+    return (
+      <Typography variant="caption" data-testid="accommodation-caption">
+        {t('pages.create-course.trainer-expenses.accommodation-caption')}
+      </Typography>
+    )
+  return null
+}
+
 export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   trainer,
   value = {
@@ -163,6 +191,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const { courseData } = useCreateCourse()
   const { defaultCurrency, activeCurrencies } = useCurrencies()
   const priceCurrencySymbol =
@@ -187,8 +216,10 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
     [shouldShowCurrency, priceCurrencySymbol],
   )
 
-  const schema = useMemo(() => makeSchema(t), [t])
-
+  const schema = useMemo(
+    () => makeSchema(t, acl.isAustralia(), priceCurrencySymbol),
+    [t, priceCurrencySymbol, acl],
+  )
   const [displayAccommodation, setDisplayAccommodation] = useState<
     Record<number, boolean>
   >({})
@@ -380,6 +411,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                             setValue(
                               `transport.${idx}.accommodationCost`,
                               DEFAULT_ACCOMMODATION_COST_PER_NIGHT,
+                              { shouldValidate: true },
                             )
                           } else {
                             setValue(`transport.${idx}.accommodationNights`, 0)
@@ -453,11 +485,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     InputProps={currencyAdornmentProps}
                     error={Boolean(getError(errors, idx, 'accommodationCost'))}
                   />
-                  <Typography variant="caption">
-                    {t(
-                      'pages.create-course.trainer-expenses.accommodation-caption',
-                    )}
-                  </Typography>
+                  {accomodationCaption(acl.isUK(), t)}
                   <FormHelperText error>
                     {getError(errors, idx, 'accommodationCost')}
                   </FormHelperText>

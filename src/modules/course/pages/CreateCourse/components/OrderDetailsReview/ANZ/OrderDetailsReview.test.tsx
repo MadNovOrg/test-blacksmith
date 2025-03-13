@@ -1,4 +1,4 @@
-import { addHours } from 'date-fns'
+import { addHours, addYears } from 'date-fns'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -7,11 +7,19 @@ import {
   CoursePriceQuery,
   Course_Type_Enum,
   Currency,
+  Course_Trainer_Type_Enum,
+  CourseLevel,
 } from '@app/generated/graphql'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
-import { AwsRegions, ValidCourseInput } from '@app/types'
+import {
+  AwsRegions,
+  ExpensesInput,
+  TrainerRoleTypeName,
+  TransportMethod,
+  ValidCourseInput,
+} from '@app/types'
 
-import { chance, render, screen } from '@test/index'
+import { chance, render, screen, waitFor } from '@test/index'
 
 import { CreateCourseProvider } from '../../CreateCourseProvider'
 
@@ -399,5 +407,227 @@ describe('component: OrderDetailsReview', () => {
     expect(
       screen.getByTestId('total-costs-row').textContent,
     ).toMatchInlineSnapshot(`"Amount due NZDNZ$2,070.00"`)
+  })
+
+  it('displays correct transportation cost for car on ANZ for AUD$ currency', async () => {
+    const trainerFullName = 'Five Trainer'
+    const trainerProfileId = chance.guid()
+    useResourcePackPricingMocked.mockReturnValue({
+      data: {
+        anz_resource_packs_pricing: [
+          {
+            id: chance.guid(),
+            currency: Currency.Aud,
+            price: 52,
+          },
+        ],
+      },
+      fetching: false,
+      error: undefined,
+    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                level: Course_Level_Enum.Level_1,
+                type: Course_Type_Enum.Closed,
+                blended: false,
+                reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 100,
+                    priceCurrency: Currency.Aud,
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CreateCourseProvider
+          courseType={Course_Type_Enum.Closed}
+          initialValue={{
+            courseData: {
+              residingCountry: 'NZ',
+              maxParticipants: 20,
+              freeCourseMaterials: 10,
+              organization: { id: 'org-id' },
+              minParticipants: 0,
+              courseLevel: Course_Level_Enum.Level_1,
+              reaccreditation: false,
+              priceCurrency: Currency.Aud,
+              blendedLearning: false,
+              startDateTime: courseDate,
+              endDateTime: addHours(courseDate, 8),
+              freeSpaces: 5,
+              price: 100,
+              includeVAT: false,
+              type: Course_Type_Enum.Closed,
+            } as unknown as ValidCourseInput,
+            expenses: {
+              [trainerProfileId]: {
+                transport: [
+                  {
+                    method: TransportMethod.CAR,
+                    value: 300, // milage
+                  },
+                ],
+              },
+            } as Record<string, ExpensesInput>,
+            trainers: [
+              {
+                profile_id: trainerProfileId,
+                fullName: trainerFullName,
+                levels: [
+                  {
+                    courseLevel: CourseLevel.AdvancedTrainer,
+                    expiryDate: addYears(new Date(), 2).toISOString(),
+                  },
+                ],
+                type: Course_Trainer_Type_Enum.Leader,
+                trainer_role_types: [
+                  {
+                    trainer_role_type: {
+                      name: TrainerRoleTypeName.PRINCIPAL,
+                    },
+                  },
+                ],
+              },
+            ],
+          }}
+        >
+          <OrderDetailsReview />
+        </CreateCourseProvider>
+      </Provider>,
+    )
+
+    const trainerExpensesSection = screen.getByTestId(
+      `trainer-${trainerProfileId}-row`,
+    )
+    expect(trainerExpensesSection).toBeInTheDocument()
+
+    await waitFor(() => {
+      const carCostRow = screen.getByTestId(`${trainerFullName}-trip-${0}`) // first expense row for trainer
+      expect(carCostRow).toBeInTheDocument()
+      expect(carCostRow.textContent).toMatchInlineSnapshot(
+        `"CarA$125.00300 miles"`,
+      )
+    })
+  })
+
+  it('displays correct transportation cost for car on ANZ for NZD$ currency', async () => {
+    const trainerFullName = 'Five Trainer'
+    const trainerProfileId = chance.guid()
+    useResourcePackPricingMocked.mockReturnValue({
+      data: {
+        anz_resource_packs_pricing: [
+          {
+            id: chance.guid(),
+            currency: Currency.Nzd,
+            price: 56,
+          },
+        ],
+      },
+      fetching: false,
+      error: undefined,
+    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CoursePriceQuery }>({
+          data: {
+            coursePrice: [
+              {
+                level: Course_Level_Enum.Level_1,
+                type: Course_Type_Enum.Closed,
+                blended: false,
+                reaccreditation: false,
+                pricingSchedules: [
+                  {
+                    priceAmount: 100,
+                    priceCurrency: Currency.Nzd,
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <CreateCourseProvider
+          courseType={Course_Type_Enum.Closed}
+          initialValue={{
+            courseData: {
+              residingCountry: 'NZ',
+              maxParticipants: 20,
+              freeCourseMaterials: 10,
+              organization: { id: 'org-id' },
+              minParticipants: 0,
+              courseLevel: Course_Level_Enum.Level_1,
+              reaccreditation: false,
+              priceCurrency: Currency.Nzd,
+              blendedLearning: false,
+              startDateTime: courseDate,
+              endDateTime: addHours(courseDate, 8),
+              freeSpaces: 5,
+              price: 100,
+              includeVAT: false,
+              type: Course_Type_Enum.Closed,
+            } as unknown as ValidCourseInput,
+            expenses: {
+              [trainerProfileId]: {
+                transport: [
+                  {
+                    method: TransportMethod.CAR,
+                    value: 300, // milage
+                  },
+                ],
+              },
+            } as Record<string, ExpensesInput>,
+            trainers: [
+              {
+                profile_id: trainerProfileId,
+                fullName: trainerFullName,
+                levels: [
+                  {
+                    courseLevel: CourseLevel.AdvancedTrainer,
+                    expiryDate: addYears(new Date(), 2).toISOString(),
+                  },
+                ],
+                type: Course_Trainer_Type_Enum.Leader,
+                trainer_role_types: [
+                  {
+                    trainer_role_type: {
+                      name: TrainerRoleTypeName.PRINCIPAL,
+                    },
+                  },
+                ],
+              },
+            ],
+          }}
+        >
+          <OrderDetailsReview />
+        </CreateCourseProvider>
+      </Provider>,
+    )
+
+    const trainerExpensesSection = screen.getByTestId(
+      `trainer-${trainerProfileId}-row`,
+    )
+    expect(trainerExpensesSection).toBeInTheDocument()
+
+    await waitFor(() => {
+      const carCostRow = screen.getByTestId(`${trainerFullName}-trip-${0}`) // first expense row for trainer
+      expect(carCostRow).toBeInTheDocument()
+      expect(carCostRow.textContent).toMatchInlineSnapshot(
+        `"CarNZ$137.00300 miles"`,
+      )
+    })
   })
 })

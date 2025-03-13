@@ -413,6 +413,7 @@
       "days-error": "Flight days is required",
       "nights-error": "Accommodation nights is required",
       "accommodation-cost-error": "Accommodation cost is required",
+      "accomodation-cost-max-value": "Accommodation cost must be less than {{currency}}200",
       "num-error": "Please enter a number greater than or equal to {{min}}",
       "negative-error": "Please enter a number greater than 0",
       "method-of-transport": "Method of transport",

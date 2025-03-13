@@ -12,28 +12,25 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
+  Currency,
 } from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
-import { TransportMethod } from '@app/types'
-import {
-  getGSTAmount,
-  getTrainerCarCostPerMile,
-  getTrainerSubsistenceCost,
-} from '@app/util'
+import { getGSTAmount } from '@app/util'
 
 import { useCreateCourse } from '../../CreateCourseProvider'
 import { ExpensesDetails } from '../ExpensesDetails'
 import { PageRow } from '../PageRow'
 
+import { getTrainerExpensesTotal } from './utils'
+
 export const OrderDetailsReview: React.FC = () => {
   const { t } = useTranslation()
-  const { isUKCountry, isAustraliaCountry } = useWorldCountries()
+  const { isAustraliaCountry } = useWorldCountries()
   const { courseData, courseName, trainers, expenses, invoiceDetails } =
     useCreateCourse()
-
   const { defaultCurrency } = useCurrencies(courseData?.residingCountry)
 
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
@@ -105,56 +102,10 @@ export const OrderDetailsReview: React.FC = () => {
         : {},
     [courseData],
   )
-  const trainerExpensesTotal = useMemo(() => {
-    if (!expenses) {
-      return 0
-    }
-
-    let result = 0
-
-    for (const expense of Object.values(expenses)) {
-      const transportCost = expense.transport.reduce(
-        (acc, { method, value, accommodationCost, accommodationNights }) => {
-          const cost =
-            (method === TransportMethod.CAR
-              ? getTrainerCarCostPerMile(value)
-              : value) ?? 0
-          const subsistenceCost =
-            Number((accommodationNights ?? 0) > 0) &&
-            getTrainerSubsistenceCost(
-              accommodationNights,
-              isUKCountry(courseData?.residingCountry),
-            )
-
-          return new Big(acc)
-            .add(cost)
-            .add(
-              accommodationCost && accommodationNights
-                ? accommodationCost * accommodationNights
-                : 0,
-            )
-            .add(subsistenceCost)
-            .round()
-            .toNumber()
-        },
-        0,
-      )
-
-      const miscellaneousCost =
-        expense.miscellaneous?.reduce(
-          (acc, { value }) =>
-            new Big(acc)
-              .add(value ?? 0)
-              .round()
-              .toNumber(),
-          0,
-        ) ?? 0
-
-      result += transportCost + miscellaneousCost
-    }
-
-    return result
-  }, [expenses, courseData?.residingCountry, isUKCountry])
+  const trainerExpensesTotal = getTrainerExpensesTotal(
+    expenses,
+    currency as Currency,
+  )
 
   const [courseBasePrice, subtotal, freeSpacesDiscount, vat, amountDue] =
     useMemo(() => {

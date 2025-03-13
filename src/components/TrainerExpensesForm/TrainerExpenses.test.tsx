@@ -5,7 +5,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
-import { TrainerInput, TransportMethod } from '@app/types'
+import { AwsRegions, TrainerInput, TransportMethod } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within, act } from '@test/index'
 
@@ -248,5 +248,26 @@ describe('component: TrainerExpensesForm', () => {
       expect(screen.getAllByTestId('trip-0-dropdown')).toHaveLength(3)
     })
   }, 60000)
+
+  it('does not show accomodation caption on ANZ', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+
+    const trainers = makeTrainers({ lead: true, assistant: 1, moderator: true })
+    const profileId = trainers[0].profile_id
+
+    await setup(trainers)
+    await selectTransportMethod(profileId, 0, TransportMethod.CAR)
+    await act(async () => {
+      await fillValueForTrip(profileId, 0, '777')
+    })
+    expect(
+      within(screen.getByTestId(`trainer-${profileId}`)).getByTestId(
+        'trip-0-input',
+      ),
+    ).toHaveValue(777)
+
+    await toggleAccommodation(profileId, 0)
+    expect(screen.queryByTestId('accomodation-caption')).not.toBeInTheDocument()
+  })
   // Was timing out on CI ^
 })
