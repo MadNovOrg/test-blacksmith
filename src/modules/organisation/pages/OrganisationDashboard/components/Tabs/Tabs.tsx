@@ -104,14 +104,18 @@ export const Tabs: FC<Props> = ({ organization }) => {
       return false
     if (!canManageKnowledgeHubAccess() && tab === OrgDashboardTabs.PERMISSIONS)
       return false
-    if (hideResourcePacks && tab === OrgDashboardTabs.RESOURCE_PACKS)
-      return false
-    return true
+    return !(hideResourcePacks && tab === OrgDashboardTabs.RESOURCE_PACKS)
   })
 
   useEffect(() => {
-    setSearchParams({ tab: selectedTab })
-  }, [selectedTab, setSearchParams])
+    if (selectedTab === OrgDashboardTabs.INDIVIDUALS) {
+      const currentSearchParams = new URLSearchParams(searchParams)
+      currentSearchParams.set('tab', selectedTab)
+      setSearchParams(currentSearchParams)
+    } else {
+      setSearchParams({ tab: selectedTab })
+    }
+  }, [selectedTab, setSearchParams, searchParams])
 
   const tabToDisplay = () => {
     if (selectedTab === OrgDashboardTabs.AFFILIATED && !showAffiliatedOrgsTab) {

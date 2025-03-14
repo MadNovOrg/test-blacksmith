@@ -159,9 +159,7 @@ export const OrgOverviewTab: React.FC<
     [setCertificateStatus],
   )
 
-  const shouldShowLoader = coursesLoading
-
-  if (shouldShowLoader) {
+  if (coursesLoading) {
     return (
       <Stack
         alignItems="center"
