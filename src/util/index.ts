@@ -505,7 +505,7 @@ export const findCourseTrainer = <T extends { profile: Profile['id'] }>(
   return (trainers ?? []).find(t => t.profile.id === profileId)
 }
 
-export function userExistsInCognito(email: string) {
+export async function userExistsInCognito(email: string) {
   return Auth.signIn(email, '123')
     .then(() => true)
     .catch(err => err.code === 'NotAuthorizedException')
