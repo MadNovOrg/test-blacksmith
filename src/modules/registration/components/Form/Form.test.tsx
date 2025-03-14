@@ -2,6 +2,7 @@ import { CognitoUser } from 'amazon-cognito-identity-js'
 import { Auth } from 'aws-amplify'
 import { vi, MockedFunction } from 'vitest'
 
+import { useJobTitles } from '@app/components/JobTitleSelector/useJobTitles'
 import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
 import {
@@ -9,7 +10,6 @@ import {
   Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
-import { useJobTitles } from '@app/modules/profile/hooks/useJobTitles'
 import { AwsRegions } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
@@ -20,7 +20,7 @@ import { Form } from './Form'
 vi.mock('@app/hooks/use-fetcher')
 vi.mock('@app/lib/gql-request')
 vi.mock('aws-amplify')
-vi.mock('@app/modules/profile/hooks/useJobTitles')
+vi.mock('@app/components/JobTitleSelector/useJobTitles')
 vi.mock('@app/components/OrgSelector/UK', () => ({
   OrgSelector: vi.fn(({ onChange }) => {
     return (

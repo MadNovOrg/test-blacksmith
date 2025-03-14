@@ -12,8 +12,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
-
-import { PROFILE_TABLE_ROW_SX, PROFILE_TABLE_SX } from '../../utils/common'
+import { PROFILE_TABLE_SX, PROFILE_TABLE_ROW_SX } from '@app/util'
 
 type OrganisationsTableProps = {
   profile: GetProfileDetailsQuery['profile']

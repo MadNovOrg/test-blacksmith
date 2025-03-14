@@ -12,12 +12,12 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import {
   Course_Certificate_Changelog_Type_Enum,
   GetCertificateQuery,
 } from '@app/generated/graphql'
 import { Grade } from '@app/modules/grading/components/Grade'
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { NonNullish } from '@app/types'
 
 type Participant = Pick<

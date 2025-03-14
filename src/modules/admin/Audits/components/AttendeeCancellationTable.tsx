@@ -12,6 +12,7 @@ import {
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import {
@@ -25,7 +26,6 @@ import {
   FilterChangeEvent,
 } from '@app/modules/admin/Audits/components/AuditFilteringSidebar'
 import { ExportAuditsButton } from '@app/modules/admin/Audits/components/ExportAuditsButton'
-import { ProfileWithAvatar } from '@app/modules/profile/components/ProfileWithAvatar'
 
 import useAttendeeAuditLogs from '../hooks/useAttendeeAuditLogs'
 import {

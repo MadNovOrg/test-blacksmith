@@ -9,6 +9,7 @@ import {
 import { FC, PropsWithChildren, useMemo } from 'react'
 import { useQuery } from 'urql'
 
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
@@ -17,7 +18,6 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { GET_DIETARY_OR_DISABILITIES_DATA } from '@app/modules/course_details/hooks/course-participant/get-participant-dietary-restrictions-by-course-id'
-import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 
 export const DietaryRequirementsTab: FC<
   PropsWithChildren<{ courseId: number }>

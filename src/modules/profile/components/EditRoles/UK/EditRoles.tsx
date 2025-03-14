@@ -31,7 +31,7 @@ import {
   salesRole,
   BILDRolesNames,
 } from '@app/modules/profile'
-import { trainerRolesNames } from '@app/modules/profile/utils/UK/helpers'
+import { ukTrainerRolesNames as trainerRolesNames } from '@app/modules/profile/utils'
 import { yup } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { capitalize } from '@app/util'

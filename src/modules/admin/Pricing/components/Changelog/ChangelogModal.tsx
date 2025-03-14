@@ -17,9 +17,9 @@ import { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { Course_Pricing } from '@app/generated/graphql'
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 
 import { usePricingChangelog } from '../../hooks'
 import {

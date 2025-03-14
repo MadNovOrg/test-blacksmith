@@ -28,16 +28,16 @@ import {
   useLocation,
 } from 'react-router-dom'
 
+import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
+import { CertificationsTable } from '@app/components/CertificationsTable'
+import { CoursesTable } from '@app/components/CoursesTable'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { Grade_Enum } from '@app/generated/graphql'
 import { CoursePrerequisitesAlert } from '@app/modules/course_details/components/CoursePrerequisitesAlert'
-import { Avatar } from '@app/modules/profile/components/Avatar'
-import { CertificationsTable } from '@app/modules/profile/components/CertificationsTable'
 import { CourseAsTrainer } from '@app/modules/profile/components/CourseAsTrainer'
-import { CoursesTable } from '@app/modules/profile/components/CoursesTable'
 import { InviteUserToOrganisation } from '@app/modules/profile/components/InviteUserToOrganisation/UK'
 import { OrganisationsTable } from '@app/modules/profile/components/OrganisationsTable'
 import { ProfileArchiveDialog } from '@app/modules/profile/components/ProfileArchiveDialog'
@@ -48,7 +48,7 @@ import {
 } from '@app/modules/profile/components/TableMenu'
 import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
 import useProfile from '@app/modules/profile/hooks/useProfile'
-import { getRoleColor } from '@app/modules/profile/utils/UK/helpers'
+import { getRoleColor } from '@app/modules/profile/utils'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 
+import { Avatar } from '@app/components/Avatar'
 import { Dialog } from '@app/components/dialogs/Dialog'
 import {
   GetProfileDetailsQuery,
@@ -20,7 +21,6 @@ import {
   MergeUserMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { Avatar } from '@app/modules/profile/components/Avatar'
 import useProfile from '@app/modules/profile/hooks/useProfile'
 import { MERGE_USERS_MUTATION } from '@app/modules/user/queries/merge-users'
 import { LoadingStatus } from '@app/util'

@@ -2,10 +2,10 @@ import { TableRow, TableCell, Typography, Link } from '@mui/material'
 import { t } from 'i18next'
 import { FC } from 'react'
 
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { useAuth } from '@app/context/auth'
 import { Scalars } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
-import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { Course, CourseParticipant } from '@app/types'
 import { courseStarted } from '@app/util'
 

@@ -19,7 +19,7 @@ import {
 } from '@app/generated/graphql'
 import { CourseTrainerType } from '@app/types'
 
-import { Avatar } from '../../modules/profile/components/Avatar'
+import { Avatar } from '../Avatar'
 
 export type TrainerAvatar = Pick<Course_Trainer, 'id' | 'status' | 'type'> & {
   profile: Pick<Profile, 'fullName' | 'avatar' | 'archived' | 'id'>

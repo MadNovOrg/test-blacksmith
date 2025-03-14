@@ -40,6 +40,9 @@ import {
   CallbackOption,
 } from '@app/components/OrgSelector/ANZ/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY_ANZ,
+} from '@app/components/PhoneNumberInput'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { Organization } from '@app/generated/graphql'
@@ -50,9 +53,6 @@ import {
   defaultValues,
   getFormSchema,
 } from '@app/modules/organisation/utils/ANZ'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY_ANZ,
-} from '@app/modules/profile/components/PhoneNumberInput'
 
 import { RegionSelector } from '../../RegionSelector/RegionSelector'
 

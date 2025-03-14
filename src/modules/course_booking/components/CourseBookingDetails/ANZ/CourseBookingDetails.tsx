@@ -30,6 +30,7 @@ import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldC
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { OrgSelector } from '@app/components/OrgSelector/ANZ'
 import { isHubOrg } from '@app/components/OrgSelector/ANZ/utils'
+import { ProfileSelector } from '@app/components/ProfileSelector'
 import {
   Profile as UserSelectorProfile,
   UserSelector,
@@ -47,7 +48,6 @@ import {
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceForm } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
-import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { NonNullish } from '@app/types'
 import { formatCurrency } from '@app/util'

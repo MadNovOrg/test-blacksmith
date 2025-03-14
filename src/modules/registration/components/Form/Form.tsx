@@ -34,6 +34,7 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { OrgSelector as ANZOrgSelector } from '@app/components/OrgSelector/ANZ'
 import {
   CallbackOption as ANZCallbackOption,
@@ -46,6 +47,10 @@ import {
   isHubOrg as UKIsHubOrg,
   useOrganizationToBeCreatedOnRegistration as UKUseOrganizationToBeCreatedOnRegistration,
 } from '@app/components/OrgSelector/UK/utils'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY_ANZ,
+  DEFAULT_PHONE_COUNTRY_UK,
+} from '@app/components/PhoneNumberInput'
 import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
 import { useAuth } from '@app/context/auth'
 import { handleHubspotFormSubmit } from '@app/context/auth/helpers'
@@ -59,11 +64,6 @@ import {
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { gqlRequest } from '@app/lib/gql-request'
 import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
-import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY_UK,
-  DEFAULT_PHONE_COUNTRY_ANZ,
-} from '@app/modules/profile/components/PhoneNumberInput'
 import { SIGN_UP_MUTATION } from '@app/modules/registration/queries'
 import { FormInputs, getFormSchema } from '@app/modules/registration/utils'
 import { INPUT_DATE_FORMAT } from '@app/util'

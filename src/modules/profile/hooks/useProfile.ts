@@ -16,7 +16,7 @@ import {
 import { isValidCertificate } from '@app/modules/course_details/course_certification_tab/pages/CourseCertification/utils'
 import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/modules/profile/queries/archive-profile'
 import { QUERY } from '@app/modules/profile/queries/get-profile-details'
-import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/modules/profile/queries/update-profile-avatar'
+import { UPDATE_AVATAR_MUTATION } from '@app/modules/profile/queries/update-profile-avatar'
 import { getSWRLoadingStatus } from '@app/util'
 type RequiredCertificateCondition = {
   level: Course_Level_Enum
@@ -185,14 +185,20 @@ export default function useProfile(
   }, [getProfileResponse, courseId, isUKCountry])
 
   const updateAvatar = useCallback(
-    async (avatar: Array<number>) => {
+    async ({
+      avatar,
+      profileId,
+    }: {
+      avatar: Array<number>
+      profileId: string
+    }) => {
       if (!profileId) {
         return
       }
 
-      return updateAvatarMutation({ avatar: JSON.stringify(avatar) })
+      return updateAvatarMutation({ avatar: JSON.stringify(avatar), profileId })
     },
-    [profileId, updateAvatarMutation],
+    [updateAvatarMutation],
   )
 
   const archive = useCallback(async () => {

@@ -7,8 +7,7 @@ import {
   Course_Status_Enum,
 } from '@app/generated/graphql'
 import { CourseTrainerType } from '@app/types'
-
-import { PROFILE_TABLE_ROW_SX } from '../../utils/common'
+import { PROFILE_TABLE_ROW_SX } from '@app/util'
 
 export const trainerTypeLabelMap: Record<CourseTrainerType, string> = {
   [Course_Trainer_Type_Enum.Assistant]: 'assist-trainer',

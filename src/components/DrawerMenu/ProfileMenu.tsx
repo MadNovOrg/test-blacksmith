@@ -25,7 +25,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import type { Profile } from '@app/types'
 
-import { Avatar } from '../../modules/profile/components/Avatar'
+import { Avatar } from '../Avatar'
 
 type ProfileMenuProps = {
   profile: Profile

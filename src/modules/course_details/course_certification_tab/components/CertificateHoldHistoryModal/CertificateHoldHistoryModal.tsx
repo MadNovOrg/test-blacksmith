@@ -9,7 +9,7 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { NonNullish } from '@app/types'
 
 import { CertificateChangelog } from '../../pages/CourseCertification/types'

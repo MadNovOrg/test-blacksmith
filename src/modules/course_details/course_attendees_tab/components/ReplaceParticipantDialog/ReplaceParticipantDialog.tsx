@@ -21,6 +21,7 @@ import { useMutation, useQuery } from 'urql'
 import isEmail from 'validator/lib/isEmail'
 import { InferType } from 'yup'
 
+import { Avatar } from '@app/components/Avatar'
 import useWorldCountries, {
   UKsCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
@@ -45,7 +46,6 @@ import {
   ParticipantPostalAddressForm,
   schema as participantPostalAddressSchema,
 } from '@app/modules/course_details/course_attendees_tab/components/ParticipantPostalAddressForm'
-import { Avatar } from '@app/modules/profile/components/Avatar'
 import { schemas, yup } from '@app/schemas'
 import { Course } from '@app/types'
 import { requiredMsg } from '@app/util'

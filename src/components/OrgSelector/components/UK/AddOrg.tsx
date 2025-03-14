@@ -26,6 +26,9 @@ import { Dialog } from '@app/components/dialogs'
 import { OrganisationSectorDropdown } from '@app/components/OrganisationSectorDropdown/UK'
 import { isDfeSuggestion } from '@app/components/OrgSelector/UK/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
+import PhoneNumberInput, {
+  PhoneNumberSelection,
+} from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   Cud_Operation_Enum,
@@ -38,9 +41,6 @@ import {
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
-import PhoneNumberInput, {
-  PhoneNumberSelection,
-} from '@app/modules/profile/components/PhoneNumberInput'
 import { Address, Establishment } from '@app/types'
 import { saveNewOrganizationDataInLocalState } from '@app/util'
 

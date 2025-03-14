@@ -7,12 +7,12 @@ import { InferType } from 'yup'
 
 import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { isHubOrg } from '@app/components/OrgSelector/UK/utils'
-import { useAuth } from '@app/context/auth'
-import { Org_Created_From_Enum } from '@app/generated/graphql'
 import PhoneNumberInput, {
   DEFAULT_PHONE_COUNTRY_ANZ,
   DEFAULT_PHONE_COUNTRY_UK,
-} from '@app/modules/profile/components/PhoneNumberInput'
+} from '@app/components/PhoneNumberInput'
+import { useAuth } from '@app/context/auth'
+import { Org_Created_From_Enum } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
 

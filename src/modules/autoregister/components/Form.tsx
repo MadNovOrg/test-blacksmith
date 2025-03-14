@@ -28,9 +28,14 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { OrgSelector as OrgSelectorANZ } from '@app/components/OrgSelector/ANZ'
 import { OrgSelector as OrgSelectorUK } from '@app/components/OrgSelector/UK'
 import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY_ANZ,
+  DEFAULT_PHONE_COUNTRY_UK,
+} from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   CreateUserMutation,
@@ -42,11 +47,6 @@ import {
 import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
 import { CREATE_USER_MUTATION } from '@app/modules/autoregister/queries/create-user'
 import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
-import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY_ANZ,
-  DEFAULT_PHONE_COUNTRY_UK,
-} from '@app/modules/profile/components/PhoneNumberInput'
 import {
   INPUT_DATE_FORMAT,
   organizationData as localStateOrganizationToBeCreated,

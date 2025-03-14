@@ -11,13 +11,13 @@ import {
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Avatar } from '@app/components/Avatar'
 import { Ellipsize } from '@app/components/Ellipsize'
 import {
   GetPromoCodesQuery,
   Promo_Code_Type_Enum,
   Course_Level_Enum,
 } from '@app/generated/graphql'
-import { Avatar } from '@app/modules/profile/components/Avatar'
 
 import { DISCOUNT_STATUS_COLOR, getPromoCodeStatus } from '../../utils'
 

@@ -29,8 +29,8 @@ import {
   EmployeeRoleName,
   employeeRole,
   salesRole,
+  anzTrainerRolesNames as trainerRolesNames,
 } from '@app/modules/profile'
-import { trainerRolesNames } from '@app/modules/profile/utils/ANZ/helpers'
 import { yup } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { capitalize } from '@app/util'

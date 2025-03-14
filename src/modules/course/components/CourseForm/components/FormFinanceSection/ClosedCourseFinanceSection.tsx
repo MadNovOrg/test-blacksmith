@@ -9,8 +9,8 @@ import {
 } from 'react-hook-form'
 
 import { InfoPanel } from '@app/components/InfoPanel'
+import { ProfileSelector } from '@app/components/ProfileSelector'
 import { Course_Level_Enum, FindProfilesQuery } from '@app/generated/graphql'
-import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { CourseInput, Profile, RoleName } from '@app/types'
 
 import { DisabledFields } from '../..'

@@ -31,6 +31,7 @@ import useWorldCountries, {
 import { CountryDropdown } from '@app/components/CountryDropdown'
 import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { isHubOrg } from '@app/components/OrgSelector/UK/utils'
+import { ProfileSelector } from '@app/components/ProfileSelector'
 import {
   Profile as UserSelectorProfile,
   UserSelector,
@@ -48,7 +49,6 @@ import {
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceForm } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
-import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { NonNullish } from '@app/types'
 import { formatCurrency, getMandatoryCourseMaterialsCost } from '@app/util'
 

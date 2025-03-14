@@ -41806,6 +41806,7 @@ export type Mutation_RootTransferParticipantArgs = {
 /** mutation root */
 export type Mutation_RootUpdateAvatarArgs = {
   avatar: Scalars['bytea'];
+  profileId: Scalars['uuid'];
 };
 
 
@@ -67865,6 +67866,7 @@ export type UpdateProfileActivityMutation = { __typename?: 'mutation_root', upda
 
 export type UpdateAvatarMutationVariables = Exact<{
   avatar: Scalars['bytea'];
+  profileId: Scalars['uuid'];
 }>;
 
 

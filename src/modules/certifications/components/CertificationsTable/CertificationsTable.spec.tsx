@@ -1,5 +1,5 @@
 // TODO: Write tests for the CertifiationsTableComponent
-import { CertificationsTable } from '@app/modules/profile/components/CertificationsTable'
+import { CertificationsTable } from '@app/components/CertificationsTable'
 
 describe(CertificationsTable.name, () =>
   it('should pass', () => {

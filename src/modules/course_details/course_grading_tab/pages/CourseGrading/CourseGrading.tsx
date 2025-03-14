@@ -22,12 +22,12 @@ import { useEffectOnce } from 'react-use'
 import { noop } from 'ts-essentials'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import { CourseDetailsFilters } from '@app/modules/course/components/CourseForm/components/CourseDetailsFilters'
 import useCourseParticipants from '@app/modules/course_details/hooks/course-participant/useCourseParticipants'
 import { Grade } from '@app/modules/grading/components/Grade'
-import { LinkToProfile } from '@app/modules/profile/components/LinkToProfile'
 import { Course, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

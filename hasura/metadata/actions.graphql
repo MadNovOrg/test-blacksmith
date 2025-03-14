@@ -313,6 +313,7 @@ type Mutation {
 type Mutation {
   updateAvatar(
     avatar: bytea!
+    profileId: uuid!
   ): UpdateAvatarResponse
 }
 

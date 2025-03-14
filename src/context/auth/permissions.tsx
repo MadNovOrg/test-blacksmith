@@ -958,6 +958,9 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canEditIndirectBLCourses: () =>
       acl.isTrainer() || acl.isTTAdmin() || acl.isTTOps(),
+    canEditNamesAndDOB: () =>
+      acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
+    canEditRoles: () => acl.isTTAdmin() || acl.isTTOps(),
   })
 
   return acl

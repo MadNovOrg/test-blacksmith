@@ -44,6 +44,7 @@ import {
   CallbackOption,
 } from '@app/components/OrgSelector/UK/utils'
 import { OrgTypeSelector } from '@app/components/OrgTypeSelector'
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { RegionDropdown } from '@app/components/RegionDropdown'
 import { Sticky } from '@app/components/Sticky'
 import {
@@ -60,7 +61,6 @@ import {
   getFormSchema,
   mapDfePropsToSchema,
 } from '@app/modules/organisation/utils/UK'
-import PhoneNumberInput from '@app/modules/profile/components/PhoneNumberInput'
 import { OfstedRating } from '@app/types'
 import { getTruthyObjectProps, INPUT_DATE_FORMAT } from '@app/util'
 

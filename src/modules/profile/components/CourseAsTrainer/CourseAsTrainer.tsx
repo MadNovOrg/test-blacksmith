@@ -11,9 +11,9 @@ import { useTranslation } from 'react-i18next'
 
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 import { NonNullish } from '@app/types'
+import { PROFILE_TABLE_SX } from '@app/util'
 
 import { useSortedCourseAsTrainerData } from '../../hooks/useSortedCourseAsTrainerData'
-import { PROFILE_TABLE_SX } from '../../utils/common'
 import { CourseTrainerRow } from '../CourseTrainerRow'
 
 type Props = {

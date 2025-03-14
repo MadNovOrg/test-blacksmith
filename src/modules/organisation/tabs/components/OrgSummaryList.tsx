@@ -14,10 +14,10 @@ import Link from '@mui/material/Link'
 import React, { ChangeEvent, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
-import { Avatar } from '@app/modules/profile/components/Avatar'
 import theme from '@app/theme'
 
 import { useIndividualOrganizationStatistics } from '../../hooks/useIndividualOrganizationStatistics'

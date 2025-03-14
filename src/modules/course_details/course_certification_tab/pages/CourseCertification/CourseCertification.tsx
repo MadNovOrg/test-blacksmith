@@ -22,6 +22,7 @@ import {
   CertificatePassIcon,
 } from '@app/assets'
 import { Dialog } from '@app/components/dialogs'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -37,7 +38,6 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
 import { ManageCertificateMenu } from '@app/modules/course_details/course_certification_tab/components/ManageCertificateMenu'
 import { GET_CERTIFICATE_QUERY } from '@app/modules/course_details/course_certification_tab/hooks/get-certificate'
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import { NonNullish } from '@app/types'
 
 import CertificateHoldHistoryModal from '../../components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'

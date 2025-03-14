@@ -27,6 +27,7 @@ import { useMutation, useQuery } from 'urql'
 import { useDebounce, useDebouncedCallback } from 'use-debounce'
 
 import { Dialog } from '@app/components/dialogs'
+import { ProfileSelector } from '@app/components/ProfileSelector'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
@@ -45,7 +46,6 @@ import { SelectLevels } from '@app/modules/admin/Discounts/components/SelectLeve
 import { DISABLE_PROMO_CODE } from '@app/modules/admin/Discounts/queries/disable-promo-code'
 import { UPSERT_PROMO_CODE } from '@app/modules/admin/Discounts/queries/upsert-promo-code'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
-import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { GET_PROMO_CODES } from '@app/queries/promo-codes/get-promo-codes'
 import { Profile } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'

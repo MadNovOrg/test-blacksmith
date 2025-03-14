@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQuery } from 'urql'
 
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Certificate_Changelog_Type_Enum,
@@ -15,7 +16,6 @@ import {
 import { GET_CERTIFICATE_QUERY } from '@app/modules/course_details/course_certification_tab/hooks/get-certificate'
 import { CourseGradingMenu } from '@app/modules/course_details/course_grading_tab/components/CourseGradingMenu/CourseGradingMenu'
 import { UPDATE_GRADE } from '@app/modules/grading/queries/update-grade'
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import theme from '@app/theme'
 import { NonNullish } from '@app/types'
 

@@ -10,9 +10,9 @@ import {
 } from 'react-hook-form'
 
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
+import { ProfileSelector } from '@app/components/ProfileSelector'
 import { FindProfilesQuery } from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
-import { ProfileSelector } from '@app/modules/profile/components/ProfileSelector'
 import { CourseInput, Profile, RoleName } from '@app/types'
 
 import { DisabledFields } from '../..'

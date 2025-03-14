@@ -13,6 +13,7 @@ import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import {
   CertificateStatus,
@@ -21,7 +22,6 @@ import {
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
-import { ProfileAvatar } from '@app/modules/profile/components/ProfileAvatar'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 

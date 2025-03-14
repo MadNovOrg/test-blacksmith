@@ -1,8 +1,8 @@
 import { gql } from 'graphql-request'
 
-export const MUTATION = gql`
-  mutation UpdateAvatar($avatar: bytea!) {
-    updateAvatar(avatar: $avatar) {
+export const UPDATE_AVATAR_MUTATION = gql`
+  mutation UpdateAvatar($avatar: bytea!, $profileId: uuid!) {
+    updateAvatar(avatar: $avatar, profileId: $profileId) {
       avatar
     }
   }

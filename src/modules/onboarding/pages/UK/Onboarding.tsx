@@ -23,8 +23,12 @@ import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   WorldCountriesCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { JobTitleSelector } from '@app/components/JobTitleSelector'
 import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { CallbackOption } from '@app/components/OrgSelector/UK/utils'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY_UK,
+} from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileMutation,
@@ -34,10 +38,6 @@ import {
   Org_Created_From_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { JobTitleSelector } from '@app/modules/profile/components/JobTitleSelector'
-import PhoneNumberInput, {
-  DEFAULT_PHONE_COUNTRY_UK,
-} from '@app/modules/profile/components/PhoneNumberInput'
 import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
 import { schemas, yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
