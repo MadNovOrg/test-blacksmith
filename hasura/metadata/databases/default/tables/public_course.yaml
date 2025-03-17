@@ -61,6 +61,10 @@ configuration:
       custom_name: priceCurrency
     renewal_cycle:
       custom_name: renewalCycle
+    resource_packs_delivery_type:
+      custom_name: resourcePacksDeliveryType
+    resource_packs_type:
+      custom_name: resourcePacksType
     updated_at:
       custom_name: updatedAt
   custom_column_names:
@@ -93,6 +97,8 @@ configuration:
     organization_key_contact_profile_id: organizationKeyContactProfileId
     price_currency: priceCurrency
     renewal_cycle: renewalCycle
+    resource_packs_delivery_type: resourcePacksDeliveryType
+    resource_packs_type: resourcePacksType
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -308,6 +314,8 @@ insert_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - source
         - special_instructions
         - updated_at
@@ -349,6 +357,8 @@ insert_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - special_instructions
         - updated_at
   - role: tt-admin
@@ -399,6 +409,8 @@ insert_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - source
         - special_instructions
         - updated_at
@@ -644,6 +656,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -710,6 +724,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -762,6 +778,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -857,6 +875,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -923,6 +943,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -977,6 +999,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -1074,6 +1098,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -1159,6 +1185,7 @@ select_permissions:
         - curriculum
         - description
         - display_on_website
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1166,7 +1193,6 @@ select_permissions:
         - id
         - include_VAT
         - max_participants
-        - free_course_materials
         - min_participants
         - name
         - organization_id
@@ -1176,8 +1202,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - updated_at
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
+        - updated_at
       computed_fields:
         - course_code
         - state
@@ -1235,6 +1263,8 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_type
+        - resource_packs_delivery_type
         - search_fields
         - source
         - special_instructions
@@ -1335,6 +1365,7 @@ update_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1342,7 +1373,6 @@ update_permissions:
         - id
         - is_draft
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1395,6 +1425,7 @@ update_permissions:
         - description
         - display_on_website
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1403,7 +1434,6 @@ update_permissions:
         - include_VAT
         - is_draft
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name
@@ -1445,6 +1475,7 @@ update_permissions:
         - curriculum
         - description
         - exceptions_pending
+        - free_course_materials
         - free_spaces
         - go1_integration
         - grading_confirmed
@@ -1452,7 +1483,6 @@ update_permissions:
         - id
         - is_draft
         - max_participants
-        - free_course_materials
         - min_participants
         - modules_duration
         - name

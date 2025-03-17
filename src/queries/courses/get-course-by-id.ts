@@ -34,6 +34,7 @@ export const QUERY = gql`
     $withOrgLicenses: Boolean = false
     $withParticipants: Boolean = false
     $withParticipantsPendingInvitesCount: Boolean = false
+    $withResourcePacks: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
@@ -67,6 +68,7 @@ export const QUERY = gql`
       priceCurrency @include(if: $withInternationalFinance)
       includeVAT @include(if: $withInternationalFinance)
       free_course_materials @include(if: $withFreeCourseCourseMaterials)
+      resourcePacksType @include(if: $withResourcePacks)
       trainers {
         id
         type

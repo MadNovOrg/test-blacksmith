@@ -25,6 +25,7 @@ import { SET_COURSE_DRAFT } from '@app/modules/course/queries/set-course-draft'
 import {
   Draft,
   ExpensesInput,
+  ResourcePacksCost,
   TrainerInput,
   TrainerRoleType,
   TrainerRoleTypeName,
@@ -137,6 +138,10 @@ export const CreateCourseProvider: React.FC<
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined,
   )
+  const [resourcePacksCost, setResourcePacksCost] = useState<
+    ResourcePacksCost | undefined
+  >(undefined)
+
   const [draftName, setDraftName] = useState<string | undefined>(undefined)
 
   const [courseType, setCourseType] =
@@ -194,6 +199,12 @@ export const CreateCourseProvider: React.FC<
     initialValue?.trainers,
     startGetTime,
   ])
+
+  useEffect(() => {
+    if (!courseData?.blendedLearning && go1Licensing) {
+      setGo1Licensing(undefined)
+    }
+  }, [courseData?.blendedLearning, go1Licensing])
 
   useEffect(() => {
     setCourseType(
@@ -406,6 +417,7 @@ export const CreateCourseProvider: React.FC<
       initializeData,
       invoiceDetails,
       pricing: { amount: 0, error: false },
+      resourcePacksCost,
       saveDraft,
       setBildModules,
       setBildStrategyModules,
@@ -415,6 +427,7 @@ export const CreateCourseProvider: React.FC<
       setExpenses,
       setGo1Licensing,
       setInvoiceDetails,
+      setResourcePacksCost,
       setShowDraftConfirmationDialog,
       setTrainers,
       showDraftConfirmationDialog,
@@ -436,6 +449,7 @@ export const CreateCourseProvider: React.FC<
     go1Licensing,
     initializeData,
     invoiceDetails,
+    resourcePacksCost,
     saveDraft,
     showDraftConfirmationDialog,
     trainers,

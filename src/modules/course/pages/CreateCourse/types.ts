@@ -7,6 +7,7 @@ import {
   Draft,
   ExpensesInput,
   InvoiceDetails,
+  ResourcePacksCost,
   TrainerInput,
   ValidCourseInput,
 } from '@app/types'
@@ -46,6 +47,7 @@ export type ContextValue = {
   initializeData: (data: Draft, draftName?: string | undefined) => void
   invoiceDetails?: InvoiceDetails
   pricing: { amount?: number; error?: boolean }
+  resourcePacksCost: ResourcePacksCost | undefined
   saveDraft: (name?: string) => Promise<SaveDraftResult>
   setBildModules: (
     bildModules: ModuleSettingsQuery['moduleSettings'] | null,
@@ -67,6 +69,7 @@ export type ContextValue = {
   setExpenses: (expenses: Record<string, ExpensesInput>) => void
   setGo1Licensing: (go1Licensing: Draft['go1Licensing']) => void
   setInvoiceDetails: (invoiceDetails: InvoiceDetails) => void
+  setResourcePacksCost: (cost: ResourcePacksCost | undefined) => void
   setShowDraftConfirmationDialog: (value: boolean) => void
   setTrainers: (trainers: TrainerInput[]) => void
   showDraftConfirmationDialog: boolean

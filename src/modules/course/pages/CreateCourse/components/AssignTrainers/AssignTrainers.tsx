@@ -210,16 +210,25 @@ export const AssignTrainers = () => {
     [setTrainers],
   )
 
+  const requireOrderDetails = useMemo(
+    () =>
+      acl.isInternalUser() &&
+      courseData?.type === Course_Type_Enum.Indirect &&
+      Boolean(courseData?.blendedLearning || courseData?.resourcePacksType),
+    [
+      acl,
+      courseData?.blendedLearning,
+      courseData?.resourcePacksType,
+      courseData?.type,
+    ],
+  )
+
   const submit = useCallback(async () => {
     if (courseData && trainers) {
       let nextPage: string
       if (courseData.type === Course_Type_Enum.Closed) {
         nextPage = '../trainer-expenses'
-      } else if (
-        courseData.type === Course_Type_Enum.Indirect &&
-        courseData.blendedLearning &&
-        acl.isInternalUser()
-      ) {
+      } else if (requireOrderDetails) {
         nextPage = '../license-order-details'
       } else {
         const savedCourse = await saveCourse()
@@ -256,6 +265,7 @@ export const AssignTrainers = () => {
   }, [
     courseData,
     trainers,
+    requireOrderDetails,
     completeStep,
     navigate,
     saveCourse,
@@ -413,9 +423,16 @@ export const AssignTrainers = () => {
               data-testid="AssignTrainers-submit"
               onClick={handleSubmitButtonClick}
             >
-              {courseData.type === Course_Type_Enum.Closed
-                ? t('pages.create-course.step-navigation-trainer-expenses')
-                : t('pages.create-course.assign-trainers.submit-btn')}
+              {(() => {
+                if (courseData.type === Course_Type_Enum.Closed)
+                  return t(
+                    'pages.create-course.step-navigation-trainer-expenses',
+                  )
+
+                return requireOrderDetails
+                  ? t('pages.create-course.step-navigation-order-details')
+                  : t('pages.create-course.assign-trainers.submit-btn')
+              })()}
             </LoadingButton>
           </Box>
         </Box>

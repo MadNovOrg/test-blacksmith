@@ -25,6 +25,10 @@ export default gql`
         reservedBalance
         change
       }
+      resourcePacks: organization_resource_packs {
+        resourcePacksType
+        totalResourcePacks
+      }
       go1LicensesHistory_aggregate @include(if: $withHistory) {
         aggregate {
           count

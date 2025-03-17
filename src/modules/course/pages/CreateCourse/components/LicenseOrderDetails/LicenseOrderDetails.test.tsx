@@ -199,6 +199,7 @@ describe('component: LicenseOrderDetails', () => {
           courseType={Course_Type_Enum.Indirect}
           initialValue={{
             courseData: {
+              blendedLearning: true,
               maxParticipants: 10,
               organization: { id: 'org-id' },
             } as unknown as ValidCourseInput,

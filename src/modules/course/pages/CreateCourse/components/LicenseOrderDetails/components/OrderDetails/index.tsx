@@ -1,85 +1,157 @@
 import { Box, Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { useAuth } from '@app/context/auth'
 import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import { getResourcePacksTypeOptionLabels } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
 import theme from '@app/theme'
-import { getPricePerLicence } from '@app/util'
+import { ValidCourseInput } from '@app/types'
+import {
+  getPricePerLicence,
+  getPricePerResourcePackForIndirectCourse,
+} from '@app/util'
+
+import {
+  calculateGo1LicenseCost,
+  calculateResourcePackCost,
+} from '../../../../utils'
 
 type Props = {
-  numberOfLicenses: number
-  licensesBalance: number
-  vat: number
-  gst: number
-  subtotal: number
-  amountDue: number
-  allowancePrice: number
-  residingCountry?: string
+  courseData: Pick<
+    ValidCourseInput,
+    'blendedLearning' | 'courseLevel' | 'resourcePacksType'
+  >
+  go1LicensesCost?: ReturnType<typeof calculateGo1LicenseCost>
   includeGST?: boolean
+  numberOfLicenses: number
+  numberOfResourcePacks?: number
+  residingCountry?: string
+  resourcePacksCost?: ReturnType<typeof calculateResourcePackCost>
 }
 
 export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
+  courseData,
+  go1LicensesCost,
   numberOfLicenses,
-  licensesBalance,
-  vat,
-  gst,
-  subtotal,
-  amountDue,
-  allowancePrice,
+  numberOfResourcePacks,
   residingCountry,
-  includeGST = true,
+  resourcePacksCost,
 }) => {
   const {
-    acl: { isAustralia },
+    acl: { isAustralia, isUK },
   } = useAuth()
   const { t, _t } = useScopedTranslation(
     'pages.create-course.license-order-details',
   )
+
+  const resourcePacksTypeOptions = useMemo(
+    () => getResourcePacksTypeOptionLabels(_t),
+    [_t],
+  )
+
   const { anzAvailableCurrencies, defaultCurrency, currencyAbbreviations } =
     useCurrencies(residingCountry)
 
   const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
 
-  const licensesLeft =
-    licensesBalance - numberOfLicenses >= 0
-      ? licensesBalance - numberOfLicenses
-      : 0
-
   const taxType = isAustralia() ? _t('common.gst') : _t('common.vat')
-  const taxAmount = isAustralia() ? gst : vat
 
-  const displayTaxRow = isAustralia() ? includeGST : vat
+  const subtotal = useMemo(() => {
+    return (go1LicensesCost?.subtotal ?? 0) + (resourcePacksCost?.subtotal ?? 0)
+  }, [go1LicensesCost?.subtotal, resourcePacksCost?.subtotal])
+
+  const allowance = useMemo(() => {
+    return (
+      (go1LicensesCost?.allowancePrice ?? 0) +
+      (resourcePacksCost?.allowancePrice ?? 0)
+    )
+  }, [go1LicensesCost?.allowancePrice, resourcePacksCost?.allowancePrice])
+
+  const taxAmount = useMemo(() => {
+    if (isUK()) return go1LicensesCost?.vat ?? 0
+
+    return (go1LicensesCost?.gst ?? 0) + (resourcePacksCost?.gst ?? 0)
+  }, [go1LicensesCost?.gst, go1LicensesCost?.vat, isUK, resourcePacksCost?.gst])
+
+  const amountDue = useMemo(
+    () =>
+      (go1LicensesCost?.amountDue ?? 0) + (resourcePacksCost?.amountDue ?? 0),
+    [go1LicensesCost?.amountDue, resourcePacksCost?.amountDue],
+  )
+
   return (
     <Stack spacing="2px">
-      <DetailsItemBox
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Box>
-          <Typography variant="h6">{t('order-title')}</Typography>
-          {amountDue > 0 ? (
-            <Typography color={theme.palette.grey[600]} mt={1}>
-              {t('price-per-attendee', {
-                price: _t('common.amount-with-currency', {
-                  amount: getPricePerLicence({
-                    isAustralia: isAustralia(),
-                    residingCountry,
+      {courseData?.blendedLearning ? (
+        <DetailsItemBox
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box>
+            <Typography variant="h6">{t('order-title')}</Typography>
+            {amountDue > 0 ? (
+              <Typography color={theme.palette.grey[600]} mt={1}>
+                {t('price-per-attendee', {
+                  price: _t('common.amount-with-currency', {
+                    amount: getPricePerLicence({
+                      isAustralia: isAustralia(),
+                      residingCountry,
+                    }),
+                    currency: currencyAbbreviation,
                   }),
-                  currency: currencyAbbreviation,
-                }),
-              })}
+                })}
+              </Typography>
+            ) : null}
+          </Box>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography variant="body2">{t('quantity')}</Typography>
+            <Typography>{numberOfLicenses}</Typography>
+          </Box>
+        </DetailsItemBox>
+      ) : null}
+
+      {resourcePacksCost ? (
+        <DetailsItemBox
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box>
+            <Typography variant="h6">
+              Resource packs -{' '}
+              {
+                resourcePacksTypeOptions[
+                  courseData?.resourcePacksType as ResourcePacksOptions
+                ]
+              }
             </Typography>
-          ) : null}
-        </Box>
-        <Box sx={{ textAlign: 'right' }}>
-          <Typography variant="body2">{t('quantity')}</Typography>
-          <Typography>{numberOfLicenses}</Typography>
-        </Box>
-      </DetailsItemBox>
-      {amountDue > 0 ? (
+            {resourcePacksCost.amountDue > 0 ? (
+              <Typography color={theme.palette.grey[600]} mt={1}>
+                {t('price-per-attendee', {
+                  price: _t('common.amount-with-currency', {
+                    amount: getPricePerResourcePackForIndirectCourse({
+                      residingCountry,
+                      courseLevel: courseData.courseLevel,
+                      resourcePacksTypeOption:
+                        courseData?.resourcePacksType as ResourcePacksOptions,
+                    }),
+                    currency: currencyAbbreviation,
+                  }),
+                })}
+              </Typography>
+            ) : null}
+          </Box>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography variant="body2">{t('quantity')}</Typography>
+            <Typography>{numberOfResourcePacks}</Typography>
+          </Box>
+        </DetailsItemBox>
+      ) : null}
+
+      {subtotal - allowance > 0 ? (
         <DetailsItemBox>
           <ItemRow>
             <Typography color={theme.palette.grey[600]} mb={1}>
@@ -96,10 +168,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
               })}
             </Typography>
           </ItemRow>
-          {licensesBalance ? (
+          {(go1LicensesCost?.allowancePrice ?? 0) > 0 &&
+          (go1LicensesCost?.allowancePrice ?? 0) !==
+            (go1LicensesCost?.subtotal ?? 0) ? (
             <ItemRow>
               <Typography color={theme.palette.grey[600]}>
-                {t('license-allowance', { balance: licensesLeft })}
+                {t('license-allowance', { balance: 0 })}
               </Typography>
               <Typography
                 color={theme.palette.grey[600]}
@@ -108,13 +182,31 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
               >
                 -
                 {_t('common.amount-with-currency', {
-                  amount: allowancePrice.toFixed(2),
+                  amount: go1LicensesCost?.allowancePrice.toFixed(2),
                   currency: currencyAbbreviation,
                 })}
               </Typography>
             </ItemRow>
           ) : null}
-          {displayTaxRow ? (
+          {resourcePacksCost && resourcePacksCost.allowancePrice > 0 ? (
+            <ItemRow>
+              <Typography color={theme.palette.grey[600]}>
+                {t('resource-pack-allowance', { balance: 0 })}
+              </Typography>
+              <Typography
+                color={theme.palette.grey[600]}
+                mb={1}
+                data-testid="amount-allowance"
+              >
+                -
+                {_t('common.amount-with-currency', {
+                  amount: resourcePacksCost.allowancePrice.toFixed(2),
+                  currency: currencyAbbreviation,
+                })}
+              </Typography>
+            </ItemRow>
+          ) : null}
+          {taxAmount ? (
             <ItemRow>
               <Typography color={theme.palette.grey[600]} mt={1}>
                 {taxType}

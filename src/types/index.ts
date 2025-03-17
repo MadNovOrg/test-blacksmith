@@ -20,8 +20,11 @@ import {
   CourseTrainerType as GeneratedCourseTrainerType,
   FindProfilesQuery,
   Currency,
+  Resource_Packs_Type_Enum,
+  Resource_Packs_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
 import { AttendedCourseData } from '@app/modules/resources/utils'
 
@@ -138,6 +141,8 @@ export type Course = {
   courseExceptions: {
     exception: Course_Exception_Enum
   }[]
+  resourcePacksDeliveryType?: Resource_Packs_Delivery_Type_Enum | null
+  resourcePacksType?: Resource_Packs_Type_Enum | null
 } & Omit<Base, 'id'>
 
 export type CourseModule = {
@@ -656,6 +661,7 @@ export type CourseInput = {
   reaccreditation: boolean
   renewalCycle?: Course_Renewal_Cycle_Enum
   residingCountry?: string
+  resourcePacksType?: ResourcePacksOptions
   salesRepresentative: Profile | null | FindProfilesQuery['profiles'][0]
   source: Course_Source_Enum | ''
   specialInstructions: string
@@ -870,6 +876,13 @@ export type Go1LicensingPrices = {
   gst: number
   amountDue: number
   allowancePrice: number
+}
+
+export type ResourcePacksCost = {
+  allowancePrice: number
+  amountDue: number
+  gst: number
+  subtotal: number
 }
 
 export type InvoiceDetails = {

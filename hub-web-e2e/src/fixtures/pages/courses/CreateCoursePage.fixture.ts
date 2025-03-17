@@ -13,7 +13,7 @@ import { BildStrategies } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { isUK } from '@qa/constants'
-import { Course, User } from '@qa/data/types'
+import { Course, ResourcePacksOptions, User } from '@qa/data/types'
 import { toUiTime } from '@qa/util'
 
 import { BasePage } from '../BasePage.fixture'
@@ -47,6 +47,10 @@ export class CreateCoursePage extends BasePage {
   readonly endDateInput: Locator
   readonly endTimeInput: Locator
   readonly timezoneInput: Locator
+  readonly resourcePacksType: Locator
+  readonly resourcePacksTypeOption: (
+    resourcePackTypeOption: ResourcePacksOptions,
+  ) => Locator
   readonly minAttendeesInput: Locator
   readonly maxAttendeesInput: Locator
   readonly mandatoryCourseMaterialsLabel: Locator
@@ -132,6 +136,16 @@ export class CreateCoursePage extends BasePage {
     this.timezoneInput = this.page.locator(
       '[data-testid="timezone-selector-autocomplete"]',
     )
+    this.resourcePacksType = this.page.locator(
+      '[data-testid="course-resource-packs-type-select"]',
+    )
+    this.resourcePacksTypeOption = (
+      resourcePackTypeOption: ResourcePacksOptions,
+    ) =>
+      this.page.locator(
+        `[data-testid="course-resource-packs-type-select-${resourcePackTypeOption}"]`,
+      )
+
     this.minAttendeesInput = this.page.locator(
       '[data-testid="min-attendees"] input',
     )
@@ -264,6 +278,11 @@ export class CreateCoursePage extends BasePage {
       await this.orgKeyContactFirstName.fill(user.givenName)
       await this.orgKeyContactLastName.fill(user.familyName)
     }
+  }
+
+  async selectResourcePacksType(option: ResourcePacksOptions) {
+    await this.resourcePacksType.click()
+    await this.resourcePacksTypeOption(option).click()
   }
 
   async selectSalesPerson(name: string) {
@@ -448,6 +467,10 @@ export class CreateCoursePage extends BasePage {
 
     if (!isUK() && course.deliveryType === Course_Delivery_Type_Enum.Virtual) {
       await this.selectTimezone()
+    }
+
+    if (!isUK() && course.type === Course_Type_Enum.Indirect) {
+      await this.selectResourcePacksType(ResourcePacksOptions.DigitalWorkbook)
     }
 
     await this.setMaxAttendees(course.max_participants)

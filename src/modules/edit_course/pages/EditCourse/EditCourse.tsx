@@ -211,6 +211,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       'conversion',
       'courseLevel',
       'reaccreditation',
+      'resourcePacksType',
     ],
     [],
   )

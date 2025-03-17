@@ -200,3 +200,9 @@ export type TransferEligibleCourses = {
   venueCity: string | null
   venueCountry: string | null
 }
+
+export enum ResourcePacksOptions {
+  DigitalWorkbook = 'DigitalWorkbook',
+  PrintWorkbookExpress = 'PrintWorkbookExpress',
+  PrintWorkbookStandard = 'PrintWorkbookStandard',
+}

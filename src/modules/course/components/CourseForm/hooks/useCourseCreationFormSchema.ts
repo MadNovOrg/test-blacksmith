@@ -24,6 +24,7 @@ import { CourseInput } from '@app/types'
 import { extractTime, requiredMsg } from '@app/util'
 
 import { schema as renewalCycleSchema } from '../components/RenewalCycleRadios/RenewalCycleRadios'
+import { ResourcePacksOptions } from '../components/ResourcePacksTypeSection/types'
 import {
   defaultStrategies,
   schema as strategiesSchema,
@@ -55,11 +56,17 @@ export const useCourseCreationFormSchema = ({
     isUKCountry,
     isAustraliaCountry,
   } = useWorldCountries()
+
   const countryCodes = acl.isAustralia()
     ? ANZCountriesCodes
     : countriesCodesWithUKs
   const { defaultCurrency } = useCurrencies(courseInput?.residingCountry)
+
+  const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
+
   const defaultResidingCountry = () => {
     if (acl.isAustralia()) {
       return Countries_Code.AUSTRALIA
@@ -83,6 +90,8 @@ export const useCourseCreationFormSchema = ({
   const hasOrg = [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
     courseType,
   )
+  const requireResourcePacks =
+    enableIndirectCourseResourcePacks && acl.isAustralia() && isIndirectCourse
 
   const formSchema = useMemo(
     () =>
@@ -247,6 +256,16 @@ export const useCourseCreationFormSchema = ({
           timeZone: yup
             .object()
             .required(t('components.course-form.timezone-required')),
+          ...(requireResourcePacks
+            ? {
+                resourcePacksType: yup
+                  .mixed()
+                  .oneOf(Object.values(ResourcePacksOptions))
+                  .required(
+                    t('components.course-form.resource-packs-type-required'),
+                  ),
+              }
+            : {}),
           maxParticipants: yup
             .number()
             .typeError(t('components.course-form.max-participants-required'))
@@ -464,138 +483,141 @@ export const useCourseCreationFormSchema = ({
       isOpenCourse,
       isClosedCourse,
       isIndirectCourse,
-      hideMCM,
       hasMinParticipants,
+      requireResourcePacks,
       isCreation,
       courseInput?.maxParticipants,
       courseInput?.startDate,
       courseInput?.accreditedBy,
-      countryCodes,
-      currentNumberOfParticipantsAndInvitees,
       acl,
+      hideMCM,
+      countryCodes,
       trainerRatioNotMet,
+      currentNumberOfParticipantsAndInvitees,
       courseType,
-      isUKCountry,
       isAustraliaCountry,
+      isUKCountry,
     ],
   )
   const defaultValues = useMemo<Omit<CourseInput, 'id'>>(
     () => ({
       accreditedBy: courseInput?.accreditedBy ?? Accreditors_Enum.Icm,
-      arloReferenceId: courseInput?.arloReferenceId ?? undefined,
-      displayOnWebsite: courseInput?.displayOnWebsite ?? true,
-      organization: courseInput?.organization ?? null,
-      salesRepresentative: courseInput?.salesRepresentative ?? null,
-      bookingContact: courseInput?.bookingContact ?? {
-        firstName: '',
-        lastName: '',
-        email: '',
-      },
-      organizationKeyContact: courseInput?.organizationKeyContact ?? {
-        firstName: '',
-        lastName: '',
-        email: '',
-      },
-      courseLevel: courseInput?.courseLevel ?? '',
-      blendedLearning: courseInput?.blendedLearning ?? false,
-      reaccreditation: courseInput?.reaccreditation ?? false,
-      deliveryType: courseInput?.deliveryType ?? Course_Delivery_Type_Enum.F2F,
-      venue: courseInput?.venue ?? null,
-      zoomMeetingUrl: courseInput?.zoomMeetingUrl ?? null,
-      zoomProfileId: courseInput?.zoomProfileId ?? null, // need to be schedule [0]
-      startDateTime: courseInput?.startDateTime
-        ? new Date(courseInput.startDateTime)
-        : null,
-      startDate: courseInput?.startDateTime
-        ? new Date(courseInput.startDateTime)
-        : null,
-      startTime: courseInput?.startDateTime
-        ? extractTime(courseInput.startDateTime)
-        : '09:00',
-      endDateTime: courseInput?.endDateTime
-        ? new Date(courseInput.endDateTime)
-        : null,
-      endDate: courseInput?.endDateTime
-        ? new Date(courseInput.endDateTime)
-        : null,
-      endTime: courseInput?.endDateTime
-        ? extractTime(courseInput?.endDateTime)
-        : '17:00',
-      minParticipants: courseInput?.minParticipants ?? null,
-      maxParticipants: courseInput?.maxParticipants ?? null,
-      freeCourseMaterials: courseInput?.freeCourseMaterials ?? null,
-      freeSpaces: courseInput?.freeSpaces ?? null,
-      usesAOL: courseInput?.usesAOL ?? false,
+      accountCode: courseInput?.accountCode ?? accountCodeValue,
       aolCountry:
         courseInput?.aolCountry ??
         courseInput?.residingCountry ??
         residingCountry,
       aolRegion: courseInput?.aolRegion ?? null,
-      courseCost: courseInput?.courseCost ?? null,
-      accountCode: courseInput?.accountCode ?? accountCodeValue,
-      type: courseType,
-      specialInstructions: courseInput?.specialInstructions ?? '',
-      parkingInstructions: courseInput?.parkingInstructions ?? '',
-      source: courseInput?.source ?? '',
+      arloReferenceId: courseInput?.arloReferenceId ?? undefined,
       bildStrategies: courseInput?.bildStrategies ?? defaultStrategies,
+      blendedLearning: courseInput?.blendedLearning ?? false,
+      bookingContact: courseInput?.bookingContact ?? {
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
       conversion: courseInput?.conversion ?? false,
-      price: courseInput?.price,
-      priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
-      timeZone: courseInput?.timeZone,
-      tenderCourse: courseInput?.tenderCourse,
+      courseCost: courseInput?.courseCost ?? null,
+      courseLevel: courseInput?.courseLevel ?? '',
+      deliveryType: courseInput?.deliveryType ?? Course_Delivery_Type_Enum.F2F,
+      displayOnWebsite: courseInput?.displayOnWebsite ?? true,
+      endDate: courseInput?.endDateTime
+        ? new Date(courseInput.endDateTime)
+        : null,
+      endDateTime: courseInput?.endDateTime
+        ? new Date(courseInput.endDateTime)
+        : null,
+      endTime: courseInput?.endDateTime
+        ? extractTime(courseInput?.endDateTime)
+        : '17:00',
+      freeCourseMaterials: courseInput?.freeCourseMaterials ?? null,
+      freeSpaces: courseInput?.freeSpaces ?? null,
       includeVAT:
         courseInput?.includeVAT ??
         (isCreation &&
           ((acl.isAustralia() && isAustraliaCountry(residingCountry)) ||
             isCourseInUK)),
+      maxParticipants: courseInput?.maxParticipants ?? null,
+      minParticipants: courseInput?.minParticipants ?? null,
+      organization: courseInput?.organization ?? null,
+      organizationKeyContact: courseInput?.organizationKeyContact ?? {
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
+      parkingInstructions: courseInput?.parkingInstructions ?? '',
+      price: courseInput?.price,
+      priceCurrency: courseInput?.priceCurrency ?? defaultCurrency,
+      reaccreditation: courseInput?.reaccreditation ?? false,
       renewalCycle: courseInput?.renewalCycle,
       residingCountry: courseInput?.residingCountry ?? residingCountry,
+      resourcePacksType: courseInput?.resourcePacksType ?? undefined,
+      salesRepresentative: courseInput?.salesRepresentative ?? null,
+      source: courseInput?.source ?? '',
+      specialInstructions: courseInput?.specialInstructions ?? '',
+      startDate: courseInput?.startDateTime
+        ? new Date(courseInput.startDateTime)
+        : null,
+      startDateTime: courseInput?.startDateTime
+        ? new Date(courseInput.startDateTime)
+        : null,
+      startTime: courseInput?.startDateTime
+        ? extractTime(courseInput.startDateTime)
+        : '09:00',
+      tenderCourse: courseInput?.tenderCourse,
+      timeZone: courseInput?.timeZone,
+      type: courseType,
+      usesAOL: courseInput?.usesAOL ?? false,
+      venue: courseInput?.venue ?? null,
+      zoomMeetingUrl: courseInput?.zoomMeetingUrl ?? null,
+      zoomProfileId: courseInput?.zoomProfileId ?? null, // need to be schedule [0]
     }),
     [
       courseInput?.accreditedBy,
-      courseInput?.arloReferenceId,
-      courseInput?.displayOnWebsite,
-      courseInput?.organization,
-      courseInput?.salesRepresentative,
-      courseInput?.bookingContact,
-      courseInput?.organizationKeyContact,
-      courseInput?.courseLevel,
-      courseInput?.blendedLearning,
-      courseInput?.reaccreditation,
-      courseInput?.deliveryType,
-      courseInput?.venue,
-      courseInput?.zoomMeetingUrl,
-      courseInput?.zoomProfileId,
-      courseInput?.startDateTime,
-      courseInput?.endDateTime,
-      courseInput?.minParticipants,
-      courseInput?.maxParticipants,
-      courseInput?.freeCourseMaterials,
-      courseInput?.freeSpaces,
-      courseInput?.usesAOL,
+      courseInput?.accountCode,
       courseInput?.aolCountry,
       courseInput?.residingCountry,
       courseInput?.aolRegion,
-      courseInput?.courseCost,
-      courseInput?.accountCode,
-      courseInput?.specialInstructions,
-      courseInput?.parkingInstructions,
-      courseInput?.source,
+      courseInput?.arloReferenceId,
       courseInput?.bildStrategies,
+      courseInput?.blendedLearning,
+      courseInput?.bookingContact,
       courseInput?.conversion,
+      courseInput?.courseCost,
+      courseInput?.courseLevel,
+      courseInput?.deliveryType,
+      courseInput?.displayOnWebsite,
+      courseInput?.endDateTime,
+      courseInput?.freeCourseMaterials,
+      courseInput?.freeSpaces,
+      courseInput?.includeVAT,
+      courseInput?.maxParticipants,
+      courseInput?.minParticipants,
+      courseInput?.organization,
+      courseInput?.organizationKeyContact,
+      courseInput?.parkingInstructions,
       courseInput?.price,
       courseInput?.priceCurrency,
-      courseInput?.timeZone,
-      courseInput?.tenderCourse,
-      courseInput?.includeVAT,
+      courseInput?.reaccreditation,
       courseInput?.renewalCycle,
+      courseInput?.resourcePacksType,
+      courseInput?.salesRepresentative,
+      courseInput?.source,
+      courseInput?.specialInstructions,
+      courseInput?.startDateTime,
+      courseInput?.tenderCourse,
+      courseInput?.timeZone,
+      courseInput?.usesAOL,
+      courseInput?.venue,
+      courseInput?.zoomMeetingUrl,
+      courseInput?.zoomProfileId,
       residingCountry,
-      courseType,
-      defaultCurrency,
       isCreation,
       acl,
       isAustraliaCountry,
       isCourseInUK,
+      defaultCurrency,
+      courseType,
     ],
   )
   const methods = useForm<CourseInput>({

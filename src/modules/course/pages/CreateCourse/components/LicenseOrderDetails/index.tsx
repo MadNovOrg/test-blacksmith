@@ -17,6 +17,7 @@ import { useQuery } from 'urql'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Level_Enum,
   OrgLicensesWithHistoryQuery,
   OrgLicensesWithHistoryQueryVariables,
 } from '@app/generated/graphql'
@@ -25,12 +26,13 @@ import {
   formSchema,
   InvoiceForm,
 } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
+import { COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
 import orgLicensesWithHistory from '@app/queries/go1-licensing/org-licenses-with-history'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'
 
 import { StepsEnum } from '../../types'
-import { calculateGo1LicenseCost } from '../../utils'
+import { calculateGo1LicenseCost, calculateResourcePackCost } from '../../utils'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 import { OrderDetails } from './components/OrderDetails'
@@ -49,11 +51,13 @@ export const LicenseOrderDetails = () => {
   const { isAustraliaCountry } = useWorldCountries()
 
   const {
-    setCurrentStepKey,
-    courseData,
-    go1Licensing,
-    setGo1Licensing,
     completeStep,
+    courseData,
+    invoiceDetails,
+    setCurrentStepKey,
+    setGo1Licensing,
+    setInvoiceDetails,
+    setResourcePacksCost,
     setShowDraftConfirmationDialog,
   } = useCreateCourse()
   const { t, _t } = useScopedTranslation(
@@ -89,23 +93,57 @@ export const LicenseOrderDetails = () => {
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
-      invoiceDetails: go1Licensing?.invoiceDetails,
+      invoiceDetails,
     },
   })
+
   const includeGST = isAustraliaCountry(courseData?.residingCountry)
-  const prices = calculateGo1LicenseCost({
-    numberOfLicenses: courseData?.maxParticipants ?? 0,
-    licenseBalance:
-      orgData?.organization_by_pk?.main_organisation?.go1Licenses ??
-      orgData?.organization_by_pk?.go1Licenses ??
-      0,
-    isAustralia: isAustralia(),
-    residingCountry: courseData?.residingCountry ?? '',
-    isAustraliaCountry: includeGST,
+
+  const go1LicensesCost = courseData?.blendedLearning
+    ? calculateGo1LicenseCost({
+        numberOfLicenses: courseData?.maxParticipants ?? 0,
+        licenseBalance:
+          orgData?.organization_by_pk?.main_organisation?.go1Licenses ??
+          orgData?.organization_by_pk?.go1Licenses ??
+          0,
+        isAustralia: isAustralia(),
+        residingCountry: courseData?.residingCountry ?? '',
+        isAustraliaCountry: includeGST,
+      })
+    : undefined
+
+  const resourcePacksCost = calculateResourcePackCost({
+    courseLevel: courseData?.courseLevel as Course_Level_Enum,
+    numberOfResourcePacks: courseData?.maxParticipants ?? 0,
+    residingCountry: courseData?.residingCountry,
+    resourcePacksBalance:
+      orgData?.organization_by_pk?.resourcePacks?.find(rp => {
+        if (!courseData?.resourcePacksType) return false
+
+        return (
+          rp.resourcePacksType ===
+          COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS[
+            courseData.resourcePacksType
+          ].resourcePacksType
+        )
+      })?.totalResourcePacks ?? 0,
+    resourcePacksTypeOption: courseData?.resourcePacksType,
   })
 
   const onSubmit: SubmitHandler<Inputs> = data => {
-    setGo1Licensing({ prices, invoiceDetails: data.invoiceDetails })
+    setInvoiceDetails(data.invoiceDetails)
+
+    if (go1LicensesCost) {
+      setGo1Licensing({
+        prices: go1LicensesCost,
+        invoiceDetails: data.invoiceDetails,
+      })
+    }
+
+    if (resourcePacksCost) {
+      setResourcePacksCost(resourcePacksCost)
+    }
+
     completeStep(StepsEnum.LICENSE_ORDER_DETAILS)
 
     navigate('../review-license-order')
@@ -114,7 +152,19 @@ export const LicenseOrderDetails = () => {
   const handleDraftClick = () => {
     const values = methods.getValues()
 
-    setGo1Licensing({ prices, invoiceDetails: values.invoiceDetails })
+    setInvoiceDetails(values.invoiceDetails)
+
+    if (go1LicensesCost) {
+      setGo1Licensing({
+        prices: go1LicensesCost,
+        invoiceDetails: values.invoiceDetails,
+      })
+    }
+
+    if (resourcePacksCost) {
+      setResourcePacksCost(resourcePacksCost)
+    }
+
     setShowDraftConfirmationDialog(true)
   }
 
@@ -157,15 +207,15 @@ export const LicenseOrderDetails = () => {
       </Typography>
 
       <OrderDetails
-        {...prices}
+        courseData={courseData}
+        go1LicensesCost={go1LicensesCost}
+        includeGST={includeGST}
         numberOfLicenses={courseData.maxParticipants}
-        licensesBalance={
-          orgData?.organization_by_pk?.main_organisation?.go1Licenses ??
-          orgData?.organization_by_pk?.go1Licenses ??
-          0
+        numberOfResourcePacks={
+          courseData.resourcePacksType ? courseData.maxParticipants : undefined
         }
         residingCountry={courseData.residingCountry}
-        includeGST={includeGST}
+        resourcePacksCost={resourcePacksCost}
       />
 
       <Typography variant="h4" mb={2} mt={4}>

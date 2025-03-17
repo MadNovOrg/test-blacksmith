@@ -15,6 +15,8 @@ import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import { getResourcePacksTypeOptionLabels } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
 import { LoadingStatus } from '@app/util'
 
 import { useSaveCourse } from '../../hooks/useSaveCourse'
@@ -25,8 +27,16 @@ export const ReviewLicenseOrder: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
   const { acl } = useAuth()
-  const { go1Licensing, courseData, setCurrentStepKey, completeStep } =
-    useCreateCourse()
+
+  const {
+    completeStep,
+    courseData,
+    go1Licensing,
+    invoiceDetails,
+    resourcePacksCost,
+    setCurrentStepKey,
+  } = useCreateCourse()
+
   const { saveCourse, savingStatus } = useSaveCourse()
   const { addSnackbarMessage } = useSnackbar()
   const { defaultCurrency, currencyAbbreviations } = useCurrencies(
@@ -43,6 +53,11 @@ export const ReviewLicenseOrder: React.FC<
     'pages.create-course.license-order-review',
   )
   const navigate = useNavigate()
+
+  const resourcePacksTypeOptions = useMemo(
+    () => getResourcePacksTypeOptionLabels(_t),
+    [_t],
+  )
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -106,9 +121,24 @@ export const ReviewLicenseOrder: React.FC<
     : undefined
 
   const taxType = acl.isAustralia() ? _t('common.gst') : _t('common.vat')
-  const taxAmount = acl.isAustralia()
-    ? go1Licensing?.prices.gst
-    : go1Licensing?.prices.vat
+
+  const taxAmount = useMemo(() => {
+    if (acl.isUK()) return go1Licensing?.prices?.vat ?? 0
+
+    return (go1Licensing?.prices?.gst ?? 0) + (resourcePacksCost?.gst ?? 0)
+  }, [
+    acl,
+    go1Licensing?.prices?.gst,
+    go1Licensing?.prices?.vat,
+    resourcePacksCost?.gst,
+  ])
+
+  const amountDue = useMemo(() => {
+    return (
+      (go1Licensing?.prices.amountDue ?? 0) +
+      (resourcePacksCost?.amountDue ?? 0)
+    )
+  }, [go1Licensing?.prices.amountDue, resourcePacksCost?.amountDue])
 
   return (
     <Box>
@@ -122,7 +152,7 @@ export const ReviewLicenseOrder: React.FC<
         </Alert>
       ) : null}
 
-      {!courseData || !go1Licensing ? (
+      {!courseData || (!go1Licensing && !resourcePacksCost) ? (
         <Alert
           severity="error"
           variant="outlined"
@@ -135,9 +165,13 @@ export const ReviewLicenseOrder: React.FC<
       <Stack spacing="2px">
         {courseData ? (
           <InfoPanel
-            title={`${_t('common.blended-learning')} - ${_t(
-              `common.course-levels.${courseData.courseLevel}`,
-            )}`}
+            title={
+              go1Licensing
+                ? `${_t('common.blended-learning')} - ${_t(
+                    `common.course-levels.${courseData.courseLevel}`,
+                  )}`
+                : _t(`common.course-levels.${courseData.courseLevel}`)
+            }
           >
             <InfoRow
               label={`${_t('dates.long', {
@@ -164,20 +198,38 @@ export const ReviewLicenseOrder: React.FC<
           </InfoPanel>
         ) : null}
 
-        {go1Licensing ? (
+        {(go1Licensing || resourcePacksCost) && invoiceDetails ? (
           <>
             <InfoPanel title={_t('common.payment-method')}>
               <InfoRow label={_t('common.pay-by-inv')}></InfoRow>
             </InfoPanel>
+
             <InfoPanel>
-              <InvoiceDetails details={go1Licensing.invoiceDetails} />
+              <InvoiceDetails details={invoiceDetails} />
             </InfoPanel>
-            <InfoPanel>
-              <InfoRow
-                label={_t('pages.order-details.licenses-redeemed')}
-                value={courseData?.maxParticipants.toString()}
-              />
-            </InfoPanel>
+
+            {go1Licensing ? (
+              <InfoPanel>
+                <InfoRow
+                  label={_t('pages.order-details.licenses-redeemed')}
+                  value={courseData?.maxParticipants.toString()}
+                />
+              </InfoPanel>
+            ) : null}
+
+            {resourcePacksCost ? (
+              <InfoPanel>
+                <InfoRow
+                  label={_t('pages.order-details.resource-packs-redeemed', {
+                    resourcePacksType:
+                      resourcePacksTypeOptions[
+                        courseData?.resourcePacksType as ResourcePacksOptions
+                      ],
+                  }).replace(/&amp;/g, '&')}
+                  value={courseData?.maxParticipants.toString()}
+                />
+              </InfoPanel>
+            ) : null}
           </>
         ) : null}
 
@@ -185,12 +237,7 @@ export const ReviewLicenseOrder: React.FC<
           <InfoRow
             label={_t('common.subtotal')}
             value={_t('common.amount-with-currency', {
-              amount: go1Licensing
-                ? (
-                    go1Licensing?.prices.subtotal -
-                    (go1Licensing?.prices.allowancePrice ?? 0)
-                  ).toFixed(2)
-                : undefined,
+              amount: (amountDue - taxAmount).toFixed(2),
               currency: currencyAbbreviation,
             })}
           />
@@ -209,7 +256,7 @@ export const ReviewLicenseOrder: React.FC<
             <Typography fontWeight="600">{_t('common.amount-due')}</Typography>
             <Typography fontWeight="600">
               {_t('common.amount-with-currency', {
-                amount: go1Licensing?.prices.amountDue.toFixed(2),
+                amount: amountDue.toFixed(2),
                 currency: currencyAbbreviation,
               })}
             </Typography>
@@ -232,10 +279,11 @@ export const ReviewLicenseOrder: React.FC<
             endIcon={<ArrowForwardIcon />}
             loading={savingStatus === LoadingStatus.FETCHING}
             onClick={() => {
-              if (!(!courseData || !go1Licensing)) handleSubmitButtonClick()
+              if (!(!courseData || (!go1Licensing && !resourcePacksCost)))
+                handleSubmitButtonClick()
             }}
             data-testid="courseBuilder-button"
-            disabled={!courseData || !go1Licensing}
+            disabled={!courseData || (!go1Licensing && !resourcePacksCost)}
           >
             {courseData?.type === Course_Type_Enum.Indirect &&
             acl.isInternalUser()

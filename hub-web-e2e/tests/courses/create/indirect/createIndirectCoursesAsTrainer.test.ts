@@ -104,8 +104,23 @@ indirectLevels.forEach(level => {
       deliveryType: Course_Delivery_Type_Enum.F2F,
     })
 
-    await createCoursePage.clickCreateCourseButton()
-    const courseBuilderPage = new CourseBuilderPage(page)
+    let courseBuilderPage: CourseBuilderPage
+
+    if (!isUK()) {
+      await createCoursePage.clickOrderDetailsButton()
+      const orderDetailsPage = new CourseOrderDetailsPage(page)
+      await orderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
+      await orderDetailsPage.clickReviewAndConfirmButton()
+      const reviewAndConfirmPage = new ReviewAndConfirmPage(page)
+
+      const courseBuilder =
+        await reviewAndConfirmPage.getCourseIdAfterProceedingToCourseBuilder()
+      courseBuilderPage = courseBuilder.courseBuilderPage
+    } else {
+      await createCoursePage.clickCreateCourseButton()
+      courseBuilderPage = new CourseBuilderPage(page)
+    }
+
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
         MODULES_SETUP.filter(
@@ -138,9 +153,23 @@ indirectLevels.forEach(level => {
       deliveryType: Course_Delivery_Type_Enum.F2F,
       reaccreditation: true,
     })
-    await createCoursePage.clickCreateCourseButton()
+    let courseBuilderPage: CourseBuilderPage
 
-    const courseBuilderPage = new CourseBuilderPage(page)
+    if (!isUK()) {
+      await createCoursePage.clickOrderDetailsButton()
+      const orderDetailsPage = new CourseOrderDetailsPage(page)
+      await orderDetailsPage.fillInvoiceDetails(course.invoiceDetails)
+      await orderDetailsPage.clickReviewAndConfirmButton()
+      const reviewAndConfirmPage = new ReviewAndConfirmPage(page)
+
+      const courseBuilder =
+        await reviewAndConfirmPage.getCourseIdAfterProceedingToCourseBuilder()
+      courseBuilderPage = courseBuilder.courseBuilderPage
+    } else {
+      await createCoursePage.clickCreateCourseButton()
+      courseBuilderPage = new CourseBuilderPage(page)
+    }
+
     if (level === Course_Level_Enum.Level_2) {
       await courseBuilderPage.selectModule(
         MODULES_SETUP.filter(

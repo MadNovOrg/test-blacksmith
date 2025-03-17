@@ -23,8 +23,7 @@ const Template: ComponentStory<typeof OrderDetails> = args => (
 export const FullLicenseAllowance = Template.bind({})
 FullLicenseAllowance.args = {
   numberOfLicenses: 2,
-  licensesBalance: 4,
-  ...calculateGo1LicenseCost({
+  go1LicensesCost: calculateGo1LicenseCost({
     numberOfLicenses: 2,
     licenseBalance: 4,
   }),
@@ -33,8 +32,7 @@ FullLicenseAllowance.args = {
 export const PartialLicenseAllowance = Template.bind({})
 PartialLicenseAllowance.args = {
   numberOfLicenses: 2,
-  licensesBalance: 1,
-  ...calculateGo1LicenseCost({
+  go1LicensesCost: calculateGo1LicenseCost({
     numberOfLicenses: 2,
     licenseBalance: 1,
   }),
@@ -43,8 +41,7 @@ PartialLicenseAllowance.args = {
 export const NoLicenseAllowance = Template.bind({})
 NoLicenseAllowance.args = {
   numberOfLicenses: 5,
-  licensesBalance: 0,
-  ...calculateGo1LicenseCost({
+  go1LicensesCost: calculateGo1LicenseCost({
     numberOfLicenses: 5,
     licenseBalance: 0,
   }),

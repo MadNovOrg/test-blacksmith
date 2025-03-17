@@ -292,6 +292,10 @@
     "CLOSED": "Closed",
     "INDIRECT": "Indirect"
   },
+  "resource-packs-types": {
+    "DIGITAL_WORKBOOK": "Digital Workbook",
+    "PRINT_WORKBOOK": "Print Workbook"
+  },
   "certificate-types": {
     "LEGACY": "Legacy",
     "CONNECT": "Connect"
@@ -758,6 +762,7 @@
   },
   "save-details": "Save details",
   "course-category": "Course category",
+  "resource-packs-type": "Resource Pack Option",
   "terms-of-business": "Terms of Business",
   "terms-of-use": "Terms of Use",
   "privacy-policy": "Privacy Policy",

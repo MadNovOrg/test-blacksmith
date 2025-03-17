@@ -198,6 +198,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   } = useCourse(id ?? '', {
     includeOrgLicenses: acl.canEditIndirectBLCourses(),
     includePendingInvitesCount: true,
+    includeResourcePacks: true,
   })
 
   const preEditedCourse = courseInfo?.course

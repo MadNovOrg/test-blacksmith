@@ -23,6 +23,8 @@ import {
   Currency,
 } from '@app/generated/graphql'
 import useTimeZones from '@app/hooks/useTimeZones'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import { COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
 import { hasRenewalCycle } from '@app/modules/course/components/CourseForm/helpers'
 import { shouldGoIntoExceptionApproval } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
@@ -64,7 +66,6 @@ export function useSaveCourse(): {
     curriculum,
     exceptions,
     expenses,
-    go1Licensing,
     invoiceDetails,
     trainers,
   } = useCreateCourse()
@@ -201,16 +202,14 @@ export function useSaveCourse(): {
       }
 
       const shouldInsertOrder =
-        (isIndirectCourse && courseData.blendedLearning) || isClosedCourse
+        (isIndirectCourse &&
+          (courseData.blendedLearning || courseData.resourcePacksType)) ||
+        isClosedCourse
 
       const shouldInsertTemporaryOrder =
         exceptions?.length &&
         ((isClosedCourse && !acl.isAdmin()) ||
           (isIndirectCourse && !acl.isTTAdmin()))
-
-      const invoiceData = isIndirectCourse
-        ? go1Licensing?.invoiceDetails
-        : invoiceDetails
 
       const scheduleDateTime: (Date | string)[] = [
         courseData.startDateTime,
@@ -232,13 +231,13 @@ export function useSaveCourse(): {
       }
       const orderToBeCreated = {
         registrants: [],
-        billingEmail: invoiceData?.email,
-        billingGivenName: invoiceData?.firstName,
-        billingFamilyName: invoiceData?.surname,
-        billingPhone: invoiceData?.phone,
-        organizationId: invoiceData?.orgId,
-        billingAddress: invoiceData?.billingAddress,
-        clientPurchaseOrder: invoiceData?.purchaseOrder,
+        billingEmail: invoiceDetails?.email,
+        billingGivenName: invoiceDetails?.firstName,
+        billingFamilyName: invoiceDetails?.surname,
+        billingPhone: invoiceDetails?.phone,
+        organizationId: invoiceDetails?.orgId,
+        billingAddress: invoiceDetails?.billingAddress,
+        clientPurchaseOrder: invoiceDetails?.purchaseOrder,
         paymentMethod: Payment_Methods_Enum.Invoice,
 
         attendeesQuantity:
@@ -261,6 +260,9 @@ export function useSaveCourse(): {
             }
           : null),
       }
+
+      const requireResourcePacks =
+        acl.isAustralia() && isIndirectCourse && courseData.resourcePacksType
 
       const { data: response } = await insertCourse({
         course: {
@@ -314,6 +316,11 @@ export function useSaveCourse(): {
           )
             ? { conversion: courseData.conversion }
             : null),
+          ...(requireResourcePacks
+            ? COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS[
+                courseData.resourcePacksType as ResourcePacksOptions
+              ]
+            : {}),
           status: status(),
           exceptionsPending:
             status() === Course_Status_Enum.ExceptionsApprovalPending,
@@ -428,7 +435,7 @@ export function useSaveCourse(): {
                 },
               }
             : null),
-          ...(shouldInsertOrder && invoiceData
+          ...(shouldInsertOrder && invoiceDetails
             ? {
                 [shouldInsertTemporaryOrder ? 'tempOrders' : 'orders']: {
                   data: [
@@ -508,7 +515,6 @@ export function useSaveCourse(): {
     exceptions,
     acl,
     isClosedCourse,
-    go1Licensing?.invoiceDetails,
     invoiceDetails,
     calculateVATrate,
     profile?.fullName,

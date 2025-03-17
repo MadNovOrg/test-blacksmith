@@ -144,6 +144,7 @@ export const CreateCoursePage = () => {
                   type={courseType}
                   currentStepKey={currentStepKey ?? undefined}
                   blendedLearning={courseData?.blendedLearning ?? false}
+                  requireResourcePacks={Boolean(courseData?.resourcePacksType)}
                 />
               </Sticky>
             </Box>

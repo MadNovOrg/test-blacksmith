@@ -108,6 +108,7 @@
 - "!include public_profile_trainer_role_type.yaml"
 - "!include public_promo_code.yaml"
 - "!include public_promo_code_type.yaml"
+- "!include public_resource_packs_delivery_type.yaml"
 - "!include public_resource_packs_events.yaml"
 - "!include public_resource_packs_type.yaml"
 - "!include public_role.yaml"

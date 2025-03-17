@@ -10,9 +10,17 @@ import {
   Course_Type_Enum,
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
-import { Go1LicensingPrices, ValidCourseInput } from '@app/types'
-import { getPricePerLicence } from '@app/util'
+import {
+  Go1LicensingPrices,
+  ResourcePacksCost,
+  ValidCourseInput,
+} from '@app/types'
+import {
+  getPricePerLicence,
+  getPricePerResourcePackForIndirectCourse,
+} from '@app/util'
 
+import { ResourcePacksOptions } from '../../components/CourseForm/components/ResourcePacksTypeSection/types'
 import { BILDBuilderCourseData } from '../CourseBuilder/components/BILDCourseBuilder/BILDCourseBuilder'
 import { ICMBuilderCourseData } from '../CourseBuilder/components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 
@@ -148,6 +156,47 @@ export function calculateGo1LicenseCost({
     amountDue: amountDue.toNumber(),
     subtotal: fullPrice.toNumber(),
     allowancePrice: allowancePrice.toNumber(),
+  }
+}
+
+export function calculateResourcePackCost({
+  courseLevel,
+  numberOfResourcePacks,
+  residingCountry,
+  resourcePacksBalance,
+  resourcePacksTypeOption,
+}: {
+  courseLevel: Course_Level_Enum
+  numberOfResourcePacks: number
+  residingCountry?: string
+  resourcePacksBalance: number
+  resourcePacksTypeOption?: ResourcePacksOptions
+}): ResourcePacksCost | undefined {
+  if (!resourcePacksTypeOption) return undefined
+
+  const pricePerResourcePack = getPricePerResourcePackForIndirectCourse({
+    courseLevel,
+    residingCountry,
+    resourcePacksTypeOption,
+  })
+
+  const fullPrice = new Big(numberOfResourcePacks).times(pricePerResourcePack)
+  const allowancePrice =
+    numberOfResourcePacks > resourcePacksBalance
+      ? new Big(resourcePacksBalance).times(pricePerResourcePack)
+      : new Big(numberOfResourcePacks).times(pricePerResourcePack)
+
+  const gst = fullPrice
+    .minus(allowancePrice)
+    .times((residingCountry ?? 'AU') === 'AU' ? 0.1 : 0.0)
+
+  const amountDue = fullPrice.minus(allowancePrice).add(gst)
+
+  return {
+    allowancePrice: allowancePrice.toNumber(),
+    amountDue: amountDue.toNumber(),
+    gst: gst.toNumber(),
+    subtotal: fullPrice.toNumber(),
   }
 }
 

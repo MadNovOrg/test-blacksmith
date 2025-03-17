@@ -18,6 +18,7 @@ export default function useCourse(
   options: {
     includeOrgLicenses?: boolean
     includePendingInvitesCount?: boolean
+    includeResourcePacks?: boolean
   } = {},
 ): {
   data?: {
@@ -51,6 +52,7 @@ export default function useCourse(
       withParticipants:
         acl.isInternalUser() || acl.isOrgAdmin() || acl.isTrainer(),
       withParticipantsPendingInvitesCount: options.includePendingInvitesCount,
+      withResourcePacks: options.includeResourcePacks,
     },
   })
 

@@ -28,6 +28,7 @@ import ClosedCourseFinanceSection from '../components/FormFinanceSection/ClosedC
 import OpenCourseFinanceSection from '../components/FormFinanceSection/OpenCourseFinanceSection'
 import { GeneralDetailsSection } from '../components/GeneralDetailsSection'
 import { RenewalCycleRadios } from '../components/RenewalCycleRadios/RenewalCycleRadios'
+import { ResourcePacksTypeSection } from '../components/ResourcePacksTypeSection/ResourcePacksTypeSection'
 import {
   Countries_Code,
   displayClosedCourseSalesRepr,
@@ -64,6 +65,10 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const { t } = useTranslation()
   const { isAustraliaCountry, isNewZealandCountry } = useWorldCountries()
+
+  const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
 
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
 
@@ -377,6 +382,12 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             isCreation={isCreation}
             withBILD={false}
           />
+
+          {enableIndirectCourseResourcePacks &&
+          courseType === Course_Type_Enum.Indirect ? (
+            <ResourcePacksTypeSection disabledFields={disabledFields} />
+          ) : null}
+
           <AttendeesSection
             disabledFields={disabledFields}
             isCreation={isCreation}

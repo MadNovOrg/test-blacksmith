@@ -164,6 +164,11 @@ export const CreateCourseForm = () => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
   }, [setCurrentStepKey])
 
+  const isTrainerAndCourseRequireOrderDetails =
+    !acl.isInternalUser() &&
+    courseData?.type === Course_Type_Enum.Indirect &&
+    Boolean(courseData?.blendedLearning || courseData?.resourcePacksType)
+
   const seniorOrPrincipalLead = useMemo(() => {
     return (
       profile?.trainer_role_types.some(
@@ -204,11 +209,7 @@ export const CreateCourseForm = () => {
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
 
-    if (
-      courseData.blendedLearning &&
-      courseData.type === Course_Type_Enum.Indirect &&
-      !acl.isInternalUser()
-    ) {
+    if (isTrainerAndCourseRequireOrderDetails) {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./license-order-details')
     } else if (
@@ -220,7 +221,15 @@ export const CreateCourseForm = () => {
       completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./assign-trainers')
     }
-  }, [acl, completeStep, courseData, courseType, navigate, profile])
+  }, [
+    acl,
+    completeStep,
+    courseData,
+    courseType,
+    isTrainerAndCourseRequireOrderDetails,
+    navigate,
+    profile,
+  ])
 
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
 
@@ -304,11 +313,7 @@ export const CreateCourseForm = () => {
   }
 
   const nextStepButtonLabel = useMemo(() => {
-    if (
-      courseData?.blendedLearning &&
-      courseData.type === Course_Type_Enum.Indirect &&
-      !acl.isInternalUser()
-    ) {
+    if (isTrainerAndCourseRequireOrderDetails) {
       return 'order-details-button-text'
     }
 
@@ -317,7 +322,7 @@ export const CreateCourseForm = () => {
     }
 
     return 'select-trainers-button-text'
-  }, [acl, courseData?.blendedLearning, courseData?.type, courseType])
+  }, [acl, courseType, isTrainerAndCourseRequireOrderDetails])
 
   const showTrainerRatioWarning = useMemo(() => {
     return (

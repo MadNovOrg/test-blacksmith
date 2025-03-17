@@ -77,10 +77,11 @@ describe('component: ReviewLicenseOrder', () => {
     const endDate = addHours(startDate, 8)
 
     const courseData: Partial<Draft['courseData']> = {
+      blendedLearning: true,
       courseLevel: Course_Level_Enum.Level_1,
-      startDateTime: startDate,
       endDateTime: endDate,
       maxParticipants: 2,
+      startDateTime: startDate,
     }
 
     const go1Licensing: Draft['go1Licensing'] = {
@@ -103,11 +104,13 @@ describe('component: ReviewLicenseOrder', () => {
       },
     }
 
+    const invoiceDetails = go1Licensing.invoiceDetails
+
     render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
-          initialValue={{ courseData, go1Licensing } as Draft}
+          initialValue={{ courseData, go1Licensing, invoiceDetails } as Draft}
         >
           <ReviewLicenseOrder />
         </CreateCourseProvider>

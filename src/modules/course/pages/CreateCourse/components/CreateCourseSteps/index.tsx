@@ -1,3 +1,4 @@
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useMemo } from 'react'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
@@ -7,20 +8,26 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
 
 interface Props {
-  completedSteps: string[]
-  type: Course_Type_Enum
-  currentStepKey?: string
   blendedLearning?: boolean
+  completedSteps: string[]
+  currentStepKey?: string
+  requireResourcePacks?: boolean
+  type: Course_Type_Enum
 }
 
 export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
-  completedSteps,
-  type,
-  currentStepKey,
   blendedLearning = false,
+  completedSteps,
+  currentStepKey,
+  requireResourcePacks = false,
+  type,
 }) => {
   const { t } = useScopedTranslation('pages.create-course')
   const { acl } = useAuth()
+
+  const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
 
   const steps = useMemo(() => {
     const courseDetailsStep = {
@@ -68,7 +75,12 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
       steps.push(assignTrainerStep)
     }
 
-    if (blendedLearning && type === Course_Type_Enum.Indirect) {
+    if (
+      (blendedLearning ||
+        requireResourcePacks ||
+        enableIndirectCourseResourcePacks) &&
+      type === Course_Type_Enum.Indirect
+    ) {
       steps.push(licenseOrderDetailsStep)
       steps.push(reviewAndConfirmStep)
     }
@@ -82,7 +94,14 @@ export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     return steps
-  }, [t, type, blendedLearning, acl])
+  }, [
+    t,
+    type,
+    acl,
+    blendedLearning,
+    requireResourcePacks,
+    enableIndirectCourseResourcePacks,
+  ])
 
   return (
     <StepsNavigation

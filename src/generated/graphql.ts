@@ -15969,6 +15969,8 @@ export type Course = {
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
   residingCountry?: Maybe<Scalars['String']>;
+  resourcePacksDeliveryType?: Maybe<Resource_Packs_Delivery_Type_Enum>;
+  resourcePacksType?: Maybe<Resource_Packs_Type_Enum>;
   /** An array relationship */
   schedule: Array<Course_Schedule>;
   /** An aggregate relationship */
@@ -17736,6 +17738,8 @@ export type Course_Bool_Exp = {
   renewalCycle?: InputMaybe<Course_Renewal_Cycle_Enum_Comparison_Exp>;
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
   residingCountry?: InputMaybe<String_Comparison_Exp>;
+  resourcePacksDeliveryType?: InputMaybe<Resource_Packs_Delivery_Type_Enum_Comparison_Exp>;
+  resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum_Comparison_Exp>;
   schedule?: InputMaybe<Course_Schedule_Bool_Exp>;
   schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Bool_Exp>;
   search_fields?: InputMaybe<String_Comparison_Exp>;
@@ -22362,6 +22366,8 @@ export type Course_Insert_Input = {
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   renewalCycle?: InputMaybe<Course_Renewal_Cycle_Enum>;
   residingCountry?: InputMaybe<Scalars['String']>;
+  resourcePacksDeliveryType?: InputMaybe<Resource_Packs_Delivery_Type_Enum>;
+  resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum>;
   schedule?: InputMaybe<Course_Schedule_Arr_Rel_Insert_Input>;
   search_fields?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
@@ -23946,6 +23952,8 @@ export type Course_Order_By = {
   renewalCycle?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
   residingCountry?: InputMaybe<Order_By>;
+  resourcePacksDeliveryType?: InputMaybe<Order_By>;
+  resourcePacksType?: InputMaybe<Order_By>;
   schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Order_By>;
   search_fields?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
@@ -28536,6 +28544,10 @@ export enum Course_Select_Column {
   /** column name */
   ResidingCountry = 'residingCountry',
   /** column name */
+  ResourcePacksDeliveryType = 'resourcePacksDeliveryType',
+  /** column name */
+  ResourcePacksType = 'resourcePacksType',
+  /** column name */
   SearchFields = 'search_fields',
   /** column name */
   Source = 'source',
@@ -28641,6 +28653,8 @@ export type Course_Set_Input = {
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   renewalCycle?: InputMaybe<Course_Renewal_Cycle_Enum>;
   residingCountry?: InputMaybe<Scalars['String']>;
+  resourcePacksDeliveryType?: InputMaybe<Resource_Packs_Delivery_Type_Enum>;
+  resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum>;
   search_fields?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
@@ -29095,6 +29109,8 @@ export type Course_Stream_Cursor_Value_Input = {
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   renewalCycle?: InputMaybe<Course_Renewal_Cycle_Enum>;
   residingCountry?: InputMaybe<Scalars['String']>;
+  resourcePacksDeliveryType?: InputMaybe<Resource_Packs_Delivery_Type_Enum>;
+  resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum>;
   search_fields?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
@@ -29974,6 +29990,10 @@ export enum Course_Update_Column {
   RenewalCycle = 'renewalCycle',
   /** column name */
   ResidingCountry = 'residingCountry',
+  /** column name */
+  ResourcePacksDeliveryType = 'resourcePacksDeliveryType',
+  /** column name */
+  ResourcePacksType = 'resourcePacksType',
   /** column name */
   SearchFields = 'search_fields',
   /** column name */
@@ -36988,6 +37008,10 @@ export type Mutation_Root = {
   delete_promo_code_type?: Maybe<Promo_Code_Type_Mutation_Response>;
   /** delete single row from the table: "promo_code_type" */
   delete_promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
+  /** delete data from the table: "resource_packs_delivery_type" */
+  delete_resource_packs_delivery_type?: Maybe<Resource_Packs_Delivery_Type_Mutation_Response>;
+  /** delete single row from the table: "resource_packs_delivery_type" */
+  delete_resource_packs_delivery_type_by_pk?: Maybe<Resource_Packs_Delivery_Type>;
   /** delete data from the table: "resource_packs_events" */
   delete_resource_packs_events?: Maybe<Resource_Packs_Events_Mutation_Response>;
   /** delete single row from the table: "resource_packs_events" */
@@ -37498,6 +37522,10 @@ export type Mutation_Root = {
   insert_promo_code_type?: Maybe<Promo_Code_Type_Mutation_Response>;
   /** insert a single row into the table: "promo_code_type" */
   insert_promo_code_type_one?: Maybe<Promo_Code_Type>;
+  /** insert data into the table: "resource_packs_delivery_type" */
+  insert_resource_packs_delivery_type?: Maybe<Resource_Packs_Delivery_Type_Mutation_Response>;
+  /** insert a single row into the table: "resource_packs_delivery_type" */
+  insert_resource_packs_delivery_type_one?: Maybe<Resource_Packs_Delivery_Type>;
   /** insert data into the table: "resource_packs_events" */
   insert_resource_packs_events?: Maybe<Resource_Packs_Events_Mutation_Response>;
   /** insert a single row into the table: "resource_packs_events" */
@@ -38244,6 +38272,12 @@ export type Mutation_Root = {
   update_promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
   /** update multiples rows of table: "promo_code_type" */
   update_promo_code_type_many?: Maybe<Array<Maybe<Promo_Code_Type_Mutation_Response>>>;
+  /** update data of the table: "resource_packs_delivery_type" */
+  update_resource_packs_delivery_type?: Maybe<Resource_Packs_Delivery_Type_Mutation_Response>;
+  /** update single row of the table: "resource_packs_delivery_type" */
+  update_resource_packs_delivery_type_by_pk?: Maybe<Resource_Packs_Delivery_Type>;
+  /** update multiples rows of table: "resource_packs_delivery_type" */
+  update_resource_packs_delivery_type_many?: Maybe<Array<Maybe<Resource_Packs_Delivery_Type_Mutation_Response>>>;
   /** update data of the table: "resource_packs_events" */
   update_resource_packs_events?: Maybe<Resource_Packs_Events_Mutation_Response>;
   /** update single row of the table: "resource_packs_events" */
@@ -39741,6 +39775,18 @@ export type Mutation_RootDelete_Promo_Code_TypeArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Promo_Code_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Resource_Packs_Delivery_TypeArgs = {
+  where: Resource_Packs_Delivery_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Resource_Packs_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
 };
 
@@ -41497,6 +41543,20 @@ export type Mutation_RootInsert_Promo_Code_TypeArgs = {
 export type Mutation_RootInsert_Promo_Code_Type_OneArgs = {
   object: Promo_Code_Type_Insert_Input;
   on_conflict?: InputMaybe<Promo_Code_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Resource_Packs_Delivery_TypeArgs = {
+  objects: Array<Resource_Packs_Delivery_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Resource_Packs_Delivery_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Resource_Packs_Delivery_Type_OneArgs = {
+  object: Resource_Packs_Delivery_Type_Insert_Input;
+  on_conflict?: InputMaybe<Resource_Packs_Delivery_Type_On_Conflict>;
 };
 
 
@@ -44332,6 +44392,26 @@ export type Mutation_RootUpdate_Promo_Code_Type_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Promo_Code_Type_ManyArgs = {
   updates: Array<Promo_Code_Type_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Resource_Packs_Delivery_TypeArgs = {
+  _set?: InputMaybe<Resource_Packs_Delivery_Type_Set_Input>;
+  where: Resource_Packs_Delivery_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Resource_Packs_Delivery_Type_By_PkArgs = {
+  _set?: InputMaybe<Resource_Packs_Delivery_Type_Set_Input>;
+  pk_columns: Resource_Packs_Delivery_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Resource_Packs_Delivery_Type_ManyArgs = {
+  updates: Array<Resource_Packs_Delivery_Type_Updates>;
 };
 
 
@@ -54240,6 +54320,12 @@ export type Query_Root = {
   promo_code_type_aggregate: Promo_Code_Type_Aggregate;
   /** fetch data from the table: "promo_code_type" using primary key columns */
   promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
+  /** fetch data from the table: "resource_packs_delivery_type" */
+  resource_packs_delivery_type: Array<Resource_Packs_Delivery_Type>;
+  /** fetch aggregated fields from the table: "resource_packs_delivery_type" */
+  resource_packs_delivery_type_aggregate: Resource_Packs_Delivery_Type_Aggregate;
+  /** fetch data from the table: "resource_packs_delivery_type" using primary key columns */
+  resource_packs_delivery_type_by_pk?: Maybe<Resource_Packs_Delivery_Type>;
   /** fetch data from the table: "resource_packs_events" */
   resource_packs_events: Array<Resource_Packs_Events>;
   /** fetch aggregated fields from the table: "resource_packs_events" */
@@ -56916,6 +57002,29 @@ export type Query_RootPromo_Code_Type_By_PkArgs = {
 };
 
 
+export type Query_RootResource_Packs_Delivery_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Resource_Packs_Delivery_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Resource_Packs_Delivery_Type_Order_By>>;
+  where?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
+};
+
+
+export type Query_RootResource_Packs_Delivery_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Resource_Packs_Delivery_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Resource_Packs_Delivery_Type_Order_By>>;
+  where?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
+};
+
+
+export type Query_RootResource_Packs_Delivery_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
 export type Query_RootResource_Packs_EventsArgs = {
   distinct_on?: InputMaybe<Array<Resource_Packs_Events_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -57309,6 +57418,142 @@ export type Query_RootXero_Invoice_Status_AggregateArgs = {
 
 export type Query_RootXero_Invoice_Status_By_PkArgs = {
   name: Scalars['String'];
+};
+
+/** columns and relationships of "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type = {
+  __typename?: 'resource_packs_delivery_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Aggregate = {
+  __typename?: 'resource_packs_delivery_type_aggregate';
+  aggregate?: Maybe<Resource_Packs_Delivery_Type_Aggregate_Fields>;
+  nodes: Array<Resource_Packs_Delivery_Type>;
+};
+
+/** aggregate fields of "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Aggregate_Fields = {
+  __typename?: 'resource_packs_delivery_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Resource_Packs_Delivery_Type_Max_Fields>;
+  min?: Maybe<Resource_Packs_Delivery_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Resource_Packs_Delivery_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "resource_packs_delivery_type". All fields are combined with a logical 'AND'. */
+export type Resource_Packs_Delivery_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Resource_Packs_Delivery_Type_Bool_Exp>>;
+  _not?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Resource_Packs_Delivery_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "resource_packs_delivery_type" */
+export enum Resource_Packs_Delivery_Type_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  ResourcePacksDeliveryTypePkey = 'resource_packs_delivery_type_pkey'
+}
+
+export enum Resource_Packs_Delivery_Type_Enum {
+  Express = 'EXPRESS',
+  Standard = 'STANDARD'
+}
+
+/** Boolean expression to compare columns of type "resource_packs_delivery_type_enum". All fields are combined with logical 'AND'. */
+export type Resource_Packs_Delivery_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Resource_Packs_Delivery_Type_Enum>;
+  _in?: InputMaybe<Array<Resource_Packs_Delivery_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Resource_Packs_Delivery_Type_Enum>;
+  _nin?: InputMaybe<Array<Resource_Packs_Delivery_Type_Enum>>;
+};
+
+/** input type for inserting data into table "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Resource_Packs_Delivery_Type_Max_Fields = {
+  __typename?: 'resource_packs_delivery_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Resource_Packs_Delivery_Type_Min_Fields = {
+  __typename?: 'resource_packs_delivery_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Mutation_Response = {
+  __typename?: 'resource_packs_delivery_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Resource_Packs_Delivery_Type>;
+};
+
+/** on_conflict condition type for table "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_On_Conflict = {
+  constraint: Resource_Packs_Delivery_Type_Constraint;
+  update_columns?: Array<Resource_Packs_Delivery_Type_Update_Column>;
+  where?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "resource_packs_delivery_type". */
+export type Resource_Packs_Delivery_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: resource_packs_delivery_type */
+export type Resource_Packs_Delivery_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "resource_packs_delivery_type" */
+export enum Resource_Packs_Delivery_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "resource_packs_delivery_type" */
+export type Resource_Packs_Delivery_Type_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Resource_Packs_Delivery_Type_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Resource_Packs_Delivery_Type_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "resource_packs_delivery_type" */
+export enum Resource_Packs_Delivery_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Resource_Packs_Delivery_Type_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Resource_Packs_Delivery_Type_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Resource_Packs_Delivery_Type_Bool_Exp;
 };
 
 /** columns and relationships of "resource_packs_events" */
@@ -59291,6 +59536,14 @@ export type Subscription_Root = {
   promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
   /** fetch data from the table in a streaming manner: "promo_code_type" */
   promo_code_type_stream: Array<Promo_Code_Type>;
+  /** fetch data from the table: "resource_packs_delivery_type" */
+  resource_packs_delivery_type: Array<Resource_Packs_Delivery_Type>;
+  /** fetch aggregated fields from the table: "resource_packs_delivery_type" */
+  resource_packs_delivery_type_aggregate: Resource_Packs_Delivery_Type_Aggregate;
+  /** fetch data from the table: "resource_packs_delivery_type" using primary key columns */
+  resource_packs_delivery_type_by_pk?: Maybe<Resource_Packs_Delivery_Type>;
+  /** fetch data from the table in a streaming manner: "resource_packs_delivery_type" */
+  resource_packs_delivery_type_stream: Array<Resource_Packs_Delivery_Type>;
   /** fetch data from the table: "resource_packs_events" */
   resource_packs_events: Array<Resource_Packs_Events>;
   /** fetch aggregated fields from the table: "resource_packs_events" */
@@ -62714,6 +62967,36 @@ export type Subscription_RootPromo_Code_Type_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Promo_Code_Type_Stream_Cursor_Input>>;
   where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootResource_Packs_Delivery_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Resource_Packs_Delivery_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Resource_Packs_Delivery_Type_Order_By>>;
+  where?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootResource_Packs_Delivery_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Resource_Packs_Delivery_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Resource_Packs_Delivery_Type_Order_By>>;
+  where?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootResource_Packs_Delivery_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootResource_Packs_Delivery_Type_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Resource_Packs_Delivery_Type_Stream_Cursor_Input>>;
+  where?: InputMaybe<Resource_Packs_Delivery_Type_Bool_Exp>;
 };
 
 
@@ -66538,6 +66821,13 @@ export type CoursePriceQueryVariables = Exact<{
 
 export type CoursePriceQuery = { __typename?: 'query_root', coursePrice: Array<{ __typename?: 'course_pricing', level: Course_Level_Enum, type: Course_Type_Enum, blended: boolean, reaccreditation: boolean, pricingSchedules: Array<{ __typename?: 'course_pricing_schedule', priceAmount: any, priceCurrency: string }> }> };
 
+export type OrgResourcePacksQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type OrgResourcePacksQuery = { __typename?: 'query_root', resourcePacks: Array<{ __typename?: 'organization_resource_packs', id: any, orgId: any, reservedResourcePacks: number, resourcePacksType: Resource_Packs_Type_Enum, totalResourcePacks: number }> };
+
 export type CourseInfoFragment = { __typename?: 'course', name: string, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', timeZone: string, start: any, end: any, venue?: { __typename?: 'venue', name: string, city: string } | null }> };
 
 export type CourseHeroFragment = { __typename?: 'course', id: number, isDraft?: boolean | null, updatedAt: any, course_code?: string | null, level: Course_Level_Enum, type: Course_Type_Enum, reaccreditation?: boolean | null, conversion?: boolean | null, name: string, go1Integration: boolean, deliveryType: Course_Delivery_Type_Enum, organization?: { __typename?: 'organization', name: string } | null, schedule: Array<{ __typename?: 'course_schedule', timeZone: string, start: any, end: any, venue?: { __typename?: 'venue', name: string, city: string } | null }> };
@@ -68074,10 +68364,11 @@ export type GetCourseByIdQueryVariables = Exact<{
   withOrgLicenses?: InputMaybe<Scalars['Boolean']>;
   withParticipants?: InputMaybe<Scalars['Boolean']>;
   withParticipantsPendingInvitesCount?: InputMaybe<Scalars['Boolean']>;
+  withResourcePacks?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, free_course_materials?: number | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, is_tender: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, coursesReservedLicenses?: number | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, levels: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, go1Licenses?: number | null, reservedGo1Licenses?: number | null, mainOrganizationLicenses?: { __typename?: 'organization', go1Licenses?: number | null, reservedGo1Licenses?: number | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }>, participantsPendingInvites: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, free_course_materials?: number | null, resourcePacksType?: Resource_Packs_Type_Enum | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, is_tender: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, coursesReservedLicenses?: number | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, levels: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, go1Licenses?: number | null, reservedGo1Licenses?: number | null, mainOrganizationLicenses?: { __typename?: 'organization', go1Licenses?: number | null, reservedGo1Licenses?: number | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null, bookingContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, givenName?: string | null, familyName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }>, participantsPendingInvites: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } } | null };
 
 export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null };
 
@@ -68155,7 +68446,7 @@ export type OrgLicensesWithHistoryQueryVariables = Exact<{
 }>;
 
 
-export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, reservedGo1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, reservedBalance: number, change: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null }, main_organisation?: { __typename?: 'organization', id: any, go1Licenses?: number | null, reservedGo1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, reservedBalance: number, change: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null } | null };
+export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, reservedGo1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, reservedBalance: number, change: number }>, resourcePacks: Array<{ __typename?: 'organization_resource_packs', resourcePacksType: Resource_Packs_Type_Enum, totalResourcePacks: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null }, main_organisation?: { __typename?: 'organization', id: any, go1Licenses?: number | null, reservedGo1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, reservedBalance: number, change: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];
