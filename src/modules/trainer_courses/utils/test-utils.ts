@@ -1,6 +1,5 @@
 import { build, perBuild } from '@jackfranklin/test-data-bot'
 import { Chance } from 'chance'
-import { addHours } from 'date-fns'
 
 import {
   Course_Invite_Status_Enum,
@@ -76,16 +75,6 @@ export const buildTrainerCourse = build<TrainerCourseQueryFragment>({
       },
     },
     bildModules: [],
-    dates: {
-      aggregate: {
-        start: {
-          date: new Date().toISOString(),
-        },
-        end: {
-          date: addHours(new Date(), 8),
-        },
-      },
-    },
     courseParticipants: [],
   },
 })
@@ -96,16 +85,14 @@ export const buildTrainerCourseWithDates = (
 ): TrainerCourseQueryFragment =>
   buildTrainerCourse({
     overrides: {
-      dates: {
-        aggregate: {
-          start: {
-            date: start.toISOString(),
-          },
-          end: {
-            date: end.toISOString(),
-          },
+      schedule: [
+        {
+          start: start.toISOString(),
+          end: end.toISOString(),
+          id: undefined,
+          timeZone: '',
         },
-      },
+      ],
     },
   })
 
@@ -136,16 +123,14 @@ export const buildActionableTrainerCourseWithDates = (
   end: Date,
 ): TrainerCourseQueryFragment =>
   buildActionableTrainerCourse({
-    dates: {
-      aggregate: {
-        start: {
-          date: start.toISOString(),
-        },
-        end: {
-          date: end.toISOString(),
-        },
+    schedule: [
+      {
+        start: start.toISOString(),
+        end: end.toISOString(),
+        id: undefined,
+        timeZone: '',
       },
-    },
+    ],
   })
 
 type ExpectTableToContainArgs = {

@@ -58,11 +58,11 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
           <VenueCell course={course} />
           <TableCell>{t(`course-types.${course.type}`)}</TableCell>
           <DateCell
-            date={course.dates?.aggregate?.start?.date}
+            date={course.schedule[0].start}
             timeZone={course.schedule[0].timeZone}
           />
           <DateCell
-            date={course.dates?.aggregate?.end?.date}
+            date={course.schedule[0].end}
             timeZone={course.schedule[0].timeZone}
           />
           <DateCell

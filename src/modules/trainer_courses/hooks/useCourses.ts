@@ -353,8 +353,6 @@ export const useCourses = (
 
   const where = useMemo(() => {
     let obj: Course_Bool_Exp = {}
-
-    // if orgId is defined then provide all available courses within that org
     if (orgId) {
       const allAvailableOrgs = {}
       const onlyUserOrgs: Course_Bool_Exp = {

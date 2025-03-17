@@ -45,16 +45,6 @@ export const GET_TRAINER_COURSES = gql`
         count
       }
     }
-    dates: schedule_aggregate {
-      aggregate {
-        start: min {
-          date: start
-        }
-        end: max {
-          date: end
-        }
-      }
-    }
     modulesAgg: modules_aggregate {
       aggregate {
         count

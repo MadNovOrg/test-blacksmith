@@ -563,7 +563,7 @@ describe('trainers-pages/MyCourses', () => {
             const conditions =
               variables.where?.schedule?._and?.filter(obj =>
                 Object.keys(obj).includes('start'),
-              ).length === 1 ?? false
+              ).length === 1
 
             const courses = conditions
               ? [
@@ -629,7 +629,7 @@ describe('trainers-pages/MyCourses', () => {
             const conditions =
               variables.where?.schedule?._and?.filter(obj =>
                 Object.keys(obj).includes('end'),
-              ).length === 1 ?? false
+              ).length === 1
 
             const courses = conditions
               ? [
@@ -693,7 +693,7 @@ describe('trainers-pages/MyCourses', () => {
               variables.where?.schedule?._and?.filter(obj => {
                 const keys = Object.keys(obj)
                 return keys.includes('start') || keys.includes('end')
-              }).length === 2 ?? false
+              }).length === 2
             const courses = conditions
               ? [course_from_13_03_23_to_25_07_23]
               : allCourses
