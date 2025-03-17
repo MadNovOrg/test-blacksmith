@@ -135,7 +135,7 @@
     "lodash-es": "^4.17.21",
     "mui-image": "^1.0.7",
     "mui-tel-input": "^5.1.2",
-    "posthog-js": "^1.205.0",
+    "posthog-js": "^1.231.0",
     "react": "^19.0.0",
     "react-country-flag": "^3.1.0",
     "react-dom": "^19.0.0",
