@@ -209,7 +209,6 @@ export const LicenseOrderDetails = () => {
       <OrderDetails
         courseData={courseData}
         go1LicensesCost={go1LicensesCost}
-        includeGST={includeGST}
         numberOfLicenses={courseData.maxParticipants}
         numberOfResourcePacks={
           courseData.resourcePacksType ? courseData.maxParticipants : undefined

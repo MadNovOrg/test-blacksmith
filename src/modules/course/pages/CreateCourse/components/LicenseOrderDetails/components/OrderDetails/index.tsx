@@ -25,7 +25,6 @@ type Props = {
     'blendedLearning' | 'courseLevel' | 'resourcePacksType'
   >
   go1LicensesCost?: ReturnType<typeof calculateGo1LicenseCost>
-  includeGST?: boolean
   numberOfLicenses: number
   numberOfResourcePacks?: number
   residingCountry?: string
