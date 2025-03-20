@@ -8,30 +8,32 @@ export const GET_PARTICIPANT = gql`
     course_participant(
       where: { course_id: { _eq: $courseId }, profile_id: { _eq: $profileId } }
     ) {
-      profile {
-        fullName
-        avatar
-        archived
-      }
-      id
-      completed_evaluation
-      grade
-      dateGraded
       attended
-      healthSafetyConsent
+      certificate {
+        ...Certificate
+      }
+      completed_evaluation
+      dateGraded
+      go1EnrolmentId
+      go1EnrolmentStatus
+      grade
       gradingModules {
         completed
         module {
           id
-          name
           moduleGroup {
             id
             name
           }
+          name
         }
       }
-      certificate {
-        ...Certificate
+      healthSafetyConsent
+      id
+      profile {
+        archived
+        avatar
+        fullName
       }
     }
   }

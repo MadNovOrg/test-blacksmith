@@ -61,7 +61,9 @@ export const Certifications: React.FC<
 
     conditions.push({
       _or: [
-        { participant: { completed_evaluation: { _eq: true } } },
+        {
+          participant: { completed_evaluation: { _eq: true } },
+        },
         { legacyCourseCode: { _is_null: false, _neq: '' } },
       ],
     })

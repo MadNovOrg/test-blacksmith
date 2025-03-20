@@ -459,13 +459,14 @@ export type CourseParticipant = {
   bookingDate?: Date
   certificate?: CourseCertificate
   certificateChanges?: CourseCertificateChangelog[]
-  completed_evaluation: boolean
   completed: boolean
+  completed_evaluation: boolean
   course: Course
   dateGraded?: string
+  go1EnrolmentId?: number
   go1EnrolmentProgress: number | null
-  go1EnrolmentStatus: BlendedLearningStatus
   go1EnrolmentStarted?: boolean
+  go1EnrolmentStatus: BlendedLearningStatus
   grade?: Grade_Enum
   gradingFeedback?: string
   gradingModules: CourseParticipantModule[]

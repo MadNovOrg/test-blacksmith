@@ -130,7 +130,11 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   useEffect(() => {
-    if (locationState as LocationStateType) {
+    if (
+      (locationState as Partial<LocationStateType>) &&
+      locationState.action &&
+      locationState.course
+    ) {
       const {
         action,
         course: { id, code },

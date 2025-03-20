@@ -59,9 +59,13 @@ import {
 import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
 import { ResidingCountryDialog } from '@app/modules/welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
-import { CourseParticipant } from '@app/types'
+import { BlendedLearningStatus, CourseParticipant } from '@app/types'
 import { courseEnded, courseStarted, isLastCourseDay } from '@app/util'
 
+import {
+  BlendedLearningCourseAlert,
+  BlendedLearningCourseComplete,
+} from '../../components/BlendedLearningCourseInfo'
 import { CourseCertification } from '../../course_certification_tab/pages/CourseCertification/CourseCertification'
 import useCourseParticipants from '../../hooks/course-participant/useCourseParticipants'
 
@@ -349,6 +353,11 @@ export const CourseDetails: React.FC<
     (course && acl.isOneOfBookingContactsOfTheOpenCourse(course)) ||
     isOrgKeyContact
 
+  const showCertificationTab =
+    !bookingOnly &&
+    courseParticipant?.certificate &&
+    courseParticipant?.completed_evaluation
+
   return (
     <>
       <ResidingCountryDialog />
@@ -437,9 +446,7 @@ export const CourseDetails: React.FC<
                             value="checklist"
                           />
                         ) : null}
-                        {!bookingOnly &&
-                        courseParticipant?.completed_evaluation &&
-                        courseParticipant?.certificate ? (
+                        {showCertificationTab ? (
                           <PillTab
                             data-testid="participant-course-certification"
                             label={t(
@@ -589,7 +596,8 @@ export const CourseDetails: React.FC<
 
               <Container sx={{ pb: 2 }}>
                 <TabPanel sx={{ px: 0 }} value="checklist">
-                  {showFeedbackRequiredAlert ? (
+                  {showFeedbackRequiredAlert &&
+                  !courseParticipant.go1EnrolmentId ? (
                     <Alert variant="outlined" severity="error" sx={{ mb: 3 }}>
                       <Typography>
                         {t('pages.participant-course.feedback-required-alert')}
@@ -597,11 +605,19 @@ export const CourseDetails: React.FC<
                     </Alert>
                   ) : null}
 
+                  {showFeedbackRequiredAlert &&
+                  courseParticipant?.go1EnrolmentId &&
+                  (courseParticipant.go1EnrolmentStatus !==
+                    BlendedLearningStatus.COMPLETED ||
+                    !courseParticipant.completed_evaluation) ? (
+                    <BlendedLearningCourseAlert sx={{ mb: 3 }} />
+                  ) : null}
+
                   {isParticipant ? (
                     <>
                       <CoursePrerequisitesAlert
                         courseId={courseId}
-                        sx={{ m: 3 }}
+                        sx={{ my: 3 }}
                         showAction={true}
                       />
 
@@ -644,6 +660,15 @@ export const CourseDetails: React.FC<
                           )}
                         </Grid>
                       </ChecklistItem>
+
+                      {courseParticipant.go1EnrolmentId ? (
+                        <BlendedLearningCourseComplete
+                          blendedLearningStatus={
+                            courseParticipant.go1EnrolmentStatus
+                          }
+                        />
+                      ) : null}
+
                       <ChecklistItem
                         p={2}
                         sx={{
