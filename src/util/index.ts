@@ -1121,7 +1121,7 @@ export const getPricePerLicence = ({
 }
 
 const indirectCourseResourcePacksPrices: Record<
-  'AUD' | 'NZD',
+  'AUD' | 'NZ',
   Record<ResourcePacksOptions, Record<string, number>>
 > = {
   AUD: {
@@ -1144,7 +1144,7 @@ const indirectCourseResourcePacksPrices: Record<
       [Course_Level_Enum.Level_2]: 46,
     },
   },
-  NZD: {
+  NZ: {
     [ResourcePacksOptions.DigitalWorkbook]: {
       [Course_Level_Enum.Level_1]: 50,
       [Course_Level_Enum.Level_1Bs]: 50,
@@ -1176,10 +1176,10 @@ export const getPricePerResourcePackForIndirectCourse = ({
   resourcePacksTypeOption: ResourcePacksOptions
 }) => {
   const countryCode = (
-    residingCountry && ['AUD', 'NZD'].includes(residingCountry)
+    residingCountry && ['AUD', 'NZ'].includes(residingCountry)
       ? residingCountry
       : 'AUD'
-  ) as 'AUD' | 'NZD'
+  ) as 'AUD' | 'NZ'
 
   return indirectCourseResourcePacksPrices[countryCode][
     resourcePacksTypeOption

@@ -120,7 +120,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
         >
           <Box>
             <Typography variant="h6">
-              Resource packs -{' '}
+              Resource pack -{' '}
               {
                 resourcePacksTypeOptions[
                   courseData?.resourcePacksType as ResourcePacksOptions
@@ -187,7 +187,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
               </Typography>
             </ItemRow>
           ) : null}
-          {resourcePacksCost && resourcePacksCost.allowancePrice > 0 ? (
+          {resourcePacksCost &&
+          resourcePacksCost.allowancePrice > 0 &&
+          resourcePacksCost.allowancePrice !== resourcePacksCost.subtotal ? (
             <ItemRow>
               <Typography color={theme.palette.grey[600]}>
                 {t('resource-pack-allowance', { balance: 0 })}
