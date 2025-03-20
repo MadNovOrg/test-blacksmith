@@ -569,7 +569,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               <>
                 <Typography variant="body2">
                   <Trans i18nKey="pages.signup.tcs-label">
-                    I accept the{''}
+                    I accept the
                     <a
                       href={`${origin}/policies-procedures/terms-of-use/`}
                       target="_blank"
@@ -580,7 +580,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     >
                       Terms of Use
                     </a>
-                    and agree to Team Teach processing my personal data in{''}
+                    and agree to Team Teach processing my personal data in
                     accordance with our
                     <a
                       href={`${origin}/policies-procedures/privacy-policy/`}

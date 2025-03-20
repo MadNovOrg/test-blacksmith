@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 4.21.1
+
+### Patch Changes
+
+- b6458ea: Fix stolen 💰🥷 TCS linkns
+
 ## 4.21.0
 
 ### Minor Changes
