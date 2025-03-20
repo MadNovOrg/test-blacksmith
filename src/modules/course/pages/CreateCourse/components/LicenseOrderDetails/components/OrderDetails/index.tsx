@@ -120,7 +120,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
         >
           <Box>
             <Typography variant="h6">
-              Resource pack -{' '}
+              Resources pack -{' '}
               {
                 resourcePacksTypeOptions[
                   courseData?.resourcePacksType as ResourcePacksOptions

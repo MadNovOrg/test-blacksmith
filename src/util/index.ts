@@ -1152,8 +1152,8 @@ const indirectCourseResourcePacksPrices: Record<
       [Course_Level_Enum.Level_2]: 38,
     },
     [ResourcePacksOptions.PrintWorkbookStandard]: {
-      [Course_Level_Enum.Level_1]: 50,
-      [Course_Level_Enum.Level_1Bs]: 50,
+      [Course_Level_Enum.Level_1]: 57,
+      [Course_Level_Enum.Level_1Bs]: 57,
       [Course_Level_Enum.Level_1Np]: 57,
       [Course_Level_Enum.Level_2]: 45,
     },
