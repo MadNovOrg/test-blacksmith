@@ -473,4 +473,15 @@ describe('component: CourseForm - INDIRECT', () => {
       screen.getByLabelText(t('components.course-form.residing-country')),
     ).toBeInTheDocument()
   })
+
+  it('renders Resource Packs panel description', async () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+    useFeatureFlagEnabledMock.mockReturnValue(true)
+
+    renderForm({ type })
+
+    expect(
+      screen.getByTestId('resource-packs-section-description'),
+    ).toBeInTheDocument()
+  })
 })

@@ -10,18 +10,29 @@ export const InfoPanel: React.FC<
   React.PropsWithChildren<{
     title?: string
     titlePosition?: 'inside' | 'outside'
+    panelDescription?: React.ReactNode
     renderContent?: (
       content: React.ReactNode,
       props: BoxProps,
     ) => React.ReactNode
   }>
-> = ({ title, children, titlePosition = 'inside', renderContent, ...rest }) => {
+> = ({
+  title,
+  children,
+  titlePosition = 'inside',
+  panelDescription,
+  renderContent,
+  ...rest
+}) => {
   const content = (
     <>
       {title && titlePosition === 'inside' ? (
-        <Typography variant="h6" mb={2}>
-          {title}
-        </Typography>
+        <>
+          <Typography variant="h6" mb={2}>
+            {title}
+          </Typography>
+          <Box mb={2}>{panelDescription}</Box>
+        </>
       ) : null}
       {children}
     </>
@@ -35,9 +46,12 @@ export const InfoPanel: React.FC<
   return (
     <Box {...rest}>
       {titlePosition === 'outside' && title ? (
-        <Typography variant="h4" mb={2}>
-          {title}
-        </Typography>
+        <>
+          <Typography variant="h4" mb={2}>
+            {title}
+          </Typography>
+          <Box mb={2}>{panelDescription}</Box>
+        </>
       ) : null}
       {typeof renderContent === 'function'
         ? renderContent(content, contentBoxProps)

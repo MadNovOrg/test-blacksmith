@@ -53,6 +53,25 @@ export const ResourcePacksTypeSection = ({
       )}
       title={t('resource-packs-section-title')}
       titlePosition="outside"
+      panelDescription={
+        <Trans
+          i18nKey="components.course-form.resource-packs.section-description"
+          components={{
+            resourcePacksOrdersLink: (
+              <Link
+                target="_blank"
+                data-testid="resource-packs-section-description"
+                rel="noreferrer"
+                sx={{
+                  color: '#0000EE',
+                  textDecoration: 'underline',
+                }}
+                href={'https://www.teamteach.com/au/resource-pack-orders/'}
+              />
+            ),
+          }}
+        />
+      }
     >
       <Box>
         <FormControl fullWidth sx={{ mb: theme.spacing(2) }} variant="filled">
