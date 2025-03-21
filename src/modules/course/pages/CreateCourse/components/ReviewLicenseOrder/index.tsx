@@ -81,8 +81,6 @@ export const ReviewLicenseOrder: React.FC<
   }, [setCurrentStepKey])
 
   const displayTaxRow = acl.isAustralia()
-    ? isAustraliaCountry(courseData?.residingCountry)
-    : go1Licensing?.prices.vat
 
   const handleSubmitButtonClick = async () => {
     if (acl.isTrainer() && courseData?.type === Course_Type_Enum.Indirect) {
@@ -120,7 +118,13 @@ export const ReviewLicenseOrder: React.FC<
     ? courseData?.timeZone.timeZoneId
     : undefined
 
-  const taxType = acl.isAustralia() ? _t('common.gst') : _t('common.vat')
+  const taxType = useMemo(() => {
+    if (acl.isUK()) return _t('common.vat')
+
+    if (isAustraliaCountry(courseData?.residingCountry)) return _t('common.gst')
+
+    return _t('common.no-gst')
+  }, [_t, acl, courseData?.residingCountry, isAustraliaCountry])
 
   const taxAmount = useMemo(() => {
     if (acl.isUK()) return go1Licensing?.prices?.vat ?? 0
