@@ -98,7 +98,7 @@ export const AppRoutes = () => {
 function LoggedOutRoutes() {
   return (
     <Routes>
-      <Route index element={<Navigate replace to="login" />} />
+      <Route index element={<RedirectToLogin />} />
       <Route path="*" element={<RedirectToLogin />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="logout" element={<LogoutPage />} />
