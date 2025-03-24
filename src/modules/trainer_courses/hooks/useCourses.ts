@@ -572,8 +572,9 @@ export function getOrderBy({
     case 'createdAt':
       return { [by]: dir }
     case 'start':
-    case 'end':
       return { start_date: dir as Order_By }
+    case 'end':
+      return { end_date: dir as Order_By }
     default: {
       return { name: Order_By.Asc }
     }

@@ -15913,6 +15913,8 @@ export type Course = {
   deliveryType: Course_Delivery_Type_Enum;
   description?: Maybe<Scalars['String']>;
   displayOnWebsite?: Maybe<Scalars['Boolean']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: Maybe<Scalars['date']>;
   /** An array relationship */
   evaluation_answers: Array<Course_Evaluation_Answers>;
   /** An aggregate relationship */
@@ -17700,6 +17702,7 @@ export type Course_Bool_Exp = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   displayOnWebsite?: InputMaybe<Boolean_Comparison_Exp>;
+  end_date?: InputMaybe<Date_Comparison_Exp>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Bool_Exp>;
   exceptionsPending?: InputMaybe<Boolean_Comparison_Exp>;
@@ -22337,6 +22340,8 @@ export type Course_Insert_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   displayOnWebsite?: InputMaybe<Scalars['Boolean']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: InputMaybe<Scalars['date']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   expenses?: InputMaybe<Course_Expenses_Arr_Rel_Insert_Input>;
@@ -23273,6 +23278,8 @@ export type Course_Max_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: Maybe<Scalars['date']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
@@ -23312,6 +23319,8 @@ export type Course_Max_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -23348,6 +23357,8 @@ export type Course_Min_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: Maybe<Scalars['date']>;
   /** A computed field, executes function "course_free_slots" */
   freeSlots?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
@@ -23387,6 +23398,8 @@ export type Course_Min_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   free_course_materials?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -23931,6 +23944,7 @@ export type Course_Order_By = {
   deliveryType?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   displayOnWebsite?: InputMaybe<Order_By>;
+  end_date?: InputMaybe<Order_By>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Order_By>;
   exceptionsPending?: InputMaybe<Order_By>;
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Order_By>;
@@ -28510,6 +28524,8 @@ export enum Course_Select_Column {
   /** column name */
   DisplayOnWebsite = 'displayOnWebsite',
   /** column name */
+  EndDate = 'end_date',
+  /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
   FreeSpaces = 'freeSpaces',
@@ -28645,6 +28661,8 @@ export type Course_Set_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   displayOnWebsite?: InputMaybe<Scalars['Boolean']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: InputMaybe<Scalars['date']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   free_course_materials?: InputMaybe<Scalars['Int']>;
@@ -29103,6 +29121,8 @@ export type Course_Stream_Cursor_Value_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   displayOnWebsite?: InputMaybe<Scalars['Boolean']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  end_date?: InputMaybe<Scalars['date']>;
   exceptionsPending?: InputMaybe<Scalars['Boolean']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   free_course_materials?: InputMaybe<Scalars['Int']>;
@@ -29962,6 +29982,8 @@ export enum Course_Update_Column {
   Description = 'description',
   /** column name */
   DisplayOnWebsite = 'displayOnWebsite',
+  /** column name */
+  EndDate = 'end_date',
   /** column name */
   ExceptionsPending = 'exceptionsPending',
   /** column name */
