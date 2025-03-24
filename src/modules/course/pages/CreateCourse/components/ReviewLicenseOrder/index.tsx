@@ -17,6 +17,7 @@ import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
 import { getResourcePacksTypeOptionLabels } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
+import { WorkbookAddressDetails } from '@app/modules/course/components/CourseForm/components/WorkbooksAddressDetails'
 import { LoadingStatus } from '@app/util'
 
 import { useSaveCourse } from '../../hooks/useSaveCourse'
@@ -33,6 +34,7 @@ export const ReviewLicenseOrder: React.FC<
     courseData,
     go1Licensing,
     invoiceDetails,
+    workbookDeliveryAddress,
     resourcePacksCost,
     setCurrentStepKey,
   } = useCreateCourse()
@@ -144,6 +146,8 @@ export const ReviewLicenseOrder: React.FC<
     )
   }, [go1Licensing?.prices.amountDue, resourcePacksCost?.amountDue])
 
+  const alertCondition = !courseData || (!go1Licensing && !resourcePacksCost)
+
   return (
     <Box>
       <Typography variant="subtitle1" fontWeight="500" mb={2}>
@@ -156,7 +160,7 @@ export const ReviewLicenseOrder: React.FC<
         </Alert>
       ) : null}
 
-      {!courseData || (!go1Licensing && !resourcePacksCost) ? (
+      {alertCondition ? (
         <Alert
           severity="error"
           variant="outlined"
@@ -207,7 +211,11 @@ export const ReviewLicenseOrder: React.FC<
             <InfoPanel title={_t('common.payment-method')}>
               <InfoRow label={_t('common.pay-by-inv')}></InfoRow>
             </InfoPanel>
-
+            {workbookDeliveryAddress ? (
+              <InfoPanel>
+                <WorkbookAddressDetails details={workbookDeliveryAddress} />
+              </InfoPanel>
+            ) : null}
             <InfoPanel>
               <InvoiceDetails details={invoiceDetails} />
             </InfoPanel>
@@ -287,7 +295,7 @@ export const ReviewLicenseOrder: React.FC<
                 handleSubmitButtonClick()
             }}
             data-testid="courseBuilder-button"
-            disabled={!courseData || (!go1Licensing && !resourcePacksCost)}
+            disabled={alertCondition}
           >
             {courseData?.type === Course_Type_Enum.Indirect &&
             acl.isInternalUser()

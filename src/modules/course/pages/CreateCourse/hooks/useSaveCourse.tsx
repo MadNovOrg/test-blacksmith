@@ -67,6 +67,7 @@ export function useSaveCourse(): {
     exceptions,
     expenses,
     invoiceDetails,
+    workbookDeliveryAddress,
     trainers,
   } = useCreateCourse()
   const { setDateTimeTimeZone } = useTimeZones()
@@ -239,6 +240,7 @@ export function useSaveCourse(): {
         billingAddress: invoiceDetails?.billingAddress,
         clientPurchaseOrder: invoiceDetails?.purchaseOrder,
         paymentMethod: Payment_Methods_Enum.Invoice,
+        workbookDeliveryAddress: workbookDeliveryAddress,
 
         attendeesQuantity:
           courseData.type === Course_Type_Enum.Closed
@@ -505,7 +507,6 @@ export function useSaveCourse(): {
       setSavingStatus(LoadingStatus.ERROR)
     }
   }, [
-    expensesCurrency,
     courseData,
     draftError,
     insertError,
@@ -516,6 +517,7 @@ export function useSaveCourse(): {
     acl,
     isClosedCourse,
     invoiceDetails,
+    workbookDeliveryAddress,
     calculateVATrate,
     profile?.fullName,
     profile?.email,
@@ -528,13 +530,14 @@ export function useSaveCourse(): {
     courseName,
     isOpenCourse,
     hideMCM,
+    shouldSetWARenewalCycles,
     expenses,
+    expensesCurrency,
     resourcePackCost?.anz_resource_packs_pricing,
     courseHasManualPrice,
     setDateTimeTimeZone,
     draftId,
     removeCourseDraft,
-    shouldSetWARenewalCycles,
   ])
 
   return {

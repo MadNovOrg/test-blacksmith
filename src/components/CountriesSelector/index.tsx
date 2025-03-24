@@ -10,6 +10,7 @@ import useWorldCountries, {
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
+import { AustraliaCountryCode, NewZealandCountryCode } from '@app/util'
 
 export type CountriesSelectorProps = {
   onChange: (event: SyntheticEvent, selected: string | null) => void
@@ -21,6 +22,7 @@ export type CountriesSelectorProps = {
   onBlur?: () => void
   onlyUKCountries?: boolean
   showAllCountries?: boolean
+  onlyAUandNZ?: boolean
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -38,6 +40,7 @@ const CountriesSelector = ({
   required,
   value,
   showAllCountries,
+  onlyAUandNZ,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -63,6 +66,9 @@ const CountriesSelector = ({
     onlyUKCountries
   ) {
     countriesList = countries.filter(country => country.includes('GB'))
+  }
+  if (onlyAUandNZ) {
+    countriesList = [AustraliaCountryCode, NewZealandCountryCode]
   }
 
   return (

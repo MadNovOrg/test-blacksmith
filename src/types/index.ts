@@ -25,6 +25,7 @@ import {
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import { WorkbookDeliveryAddress } from '@app/modules/course/components/CourseForm/components/WorkbookDeliveryAddress'
 import { StepsEnum } from '@app/modules/course/pages/CreateCourse/types'
 import { AttendedCourseData } from '@app/modules/resources/utils'
 
@@ -907,8 +908,10 @@ export type Draft = {
   go1Licensing?: {
     prices: Go1LicensingPrices
     invoiceDetails: InvoiceDetails
+    workbookDeliveryAddress?: WorkbookDeliveryAddress
   }
   invoiceDetails?: InvoiceDetails
+  workbookDeliveryAddress?: WorkbookDeliveryAddress
 }
 
 export type AllCourseStatuses =

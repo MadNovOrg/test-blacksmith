@@ -24,6 +24,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
+import { WorkbookAddressDetails } from '@app/modules/course/components/CourseForm/components/WorkbooksAddressDetails'
 import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
 import { InvoiceDetails as InvoiceDetailsType } from '@app/types'
 
@@ -267,6 +268,16 @@ export const ReviewLicensesOrder: React.FC<
                       <InfoPanel title={_t('common.payment-method')}>
                         <InfoRow label={_t('common.pay-by-inv')}></InfoRow>
                       </InfoPanel>
+                      {orderData.order_by_pk?.workbookDeliveryAddress ? (
+                        <InfoPanel>
+                          <WorkbookAddressDetails
+                            details={
+                              orderData.order_by_pk?.workbookDeliveryAddress
+                            }
+                          />
+                        </InfoPanel>
+                      ) : null}
+
                       <InfoPanel>
                         <InvoiceDetails
                           details={

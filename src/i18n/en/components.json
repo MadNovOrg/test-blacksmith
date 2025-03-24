@@ -73,6 +73,7 @@
   "organisation-region": {
     "region": "Region",
     "stateTerritory": "State/Territory",
+    "postal-address-state-territory": "Postal Address State/Territory",
     "state": "State",
     "territory": "Territory"
   },

@@ -9,6 +9,7 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useEffect, useMemo } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -26,37 +27,58 @@ import {
   formSchema,
   InvoiceForm,
 } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
 import { COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
+import {
+  WorkbookDeliveryAddress,
+  WorkbookDeliveryAddressForm,
+  formSchema as workbookDeliveryAddressFormSchema,
+} from '@app/modules/course/components/CourseForm/components/WorkbookDeliveryAddress'
 import orgLicensesWithHistory from '@app/queries/go1-licensing/org-licenses-with-history'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'
+import { AustraliaCountryCode } from '@app/util'
 
 import { StepsEnum } from '../../types'
 import { calculateGo1LicenseCost, calculateResourcePackCost } from '../../utils'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 import { OrderDetails } from './components/OrderDetails'
-
 type Inputs = {
   invoiceDetails: InvoiceDetails
+  workbookDeliveryAddress?: WorkbookDeliveryAddress
+}
+const getCssProps = (isMobile: boolean) => {
+  return {
+    flexDirection: isMobile ? ('column' as const) : ('row' as const),
+    alignContent: isMobile ? 'left' : 'center',
+    marginTop: isMobile ? 2 : 0,
+  }
 }
 
 export const LicenseOrderDetails = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const cssProps = getCssProps(isMobile)
   const {
     acl: { isAustralia },
   } = useAuth()
-  const { isAustraliaCountry } = useWorldCountries()
+  const { isAustraliaCountry, getLabel } = useWorldCountries()
+
+  const indirectResourcePacksEnabled = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
 
   const {
     completeStep,
     courseData,
     invoiceDetails,
+    workbookDeliveryAddress,
     setCurrentStepKey,
     setGo1Licensing,
     setInvoiceDetails,
+    setWorkbookDeliveryAddress,
     setResourcePacksCost,
     setShowDraftConfirmationDialog,
   } = useCreateCourse()
@@ -64,12 +86,28 @@ export const LicenseOrderDetails = () => {
     'pages.create-course.license-order-details',
   )
 
+  const showDeliveryAddress = useMemo(() => {
+    return (
+      isAustralia() &&
+      indirectResourcePacksEnabled &&
+      [
+        ResourcePacksOptions.PrintWorkbookExpress,
+        ResourcePacksOptions.PrintWorkbookStandard,
+      ].includes(courseData?.resourcePacksType as ResourcePacksOptions)
+    )
+  }, [courseData?.resourcePacksType, indirectResourcePacksEnabled, isAustralia])
+
   const schema = useMemo(
     () =>
       yup.object({
         invoiceDetails: formSchema(_t),
+        ...(showDeliveryAddress
+          ? {
+              workbookDeliveryAddress: workbookDeliveryAddressFormSchema(_t),
+            }
+          : {}),
       }),
-    [_t],
+    [_t, showDeliveryAddress],
   )
 
   useEffect(() => {
@@ -94,9 +132,15 @@ export const LicenseOrderDetails = () => {
     mode: 'all',
     defaultValues: {
       invoiceDetails,
+      workbookDeliveryAddress: {
+        ...workbookDeliveryAddress,
+        countryCode:
+          workbookDeliveryAddress?.countryCode ?? AustraliaCountryCode,
+        country:
+          workbookDeliveryAddress?.country ?? getLabel(AustraliaCountryCode),
+      },
     },
   })
-
   const includeGST = isAustraliaCountry(courseData?.residingCountry)
 
   const go1LicensesCost = courseData?.blendedLearning
@@ -132,6 +176,9 @@ export const LicenseOrderDetails = () => {
 
   const onSubmit: SubmitHandler<Inputs> = data => {
     setInvoiceDetails(data.invoiceDetails)
+    if (showDeliveryAddress && data.workbookDeliveryAddress) {
+      setWorkbookDeliveryAddress(data.workbookDeliveryAddress)
+    }
 
     if (go1LicensesCost) {
       setGo1Licensing({
@@ -153,6 +200,9 @@ export const LicenseOrderDetails = () => {
     const values = methods.getValues()
 
     setInvoiceDetails(values.invoiceDetails)
+    if (showDeliveryAddress && values.workbookDeliveryAddress) {
+      setWorkbookDeliveryAddress(values.workbookDeliveryAddress)
+    }
 
     if (go1LicensesCost) {
       setGo1Licensing({
@@ -217,12 +267,22 @@ export const LicenseOrderDetails = () => {
         resourcePacksCost={resourcePacksCost}
       />
 
-      <Typography variant="h4" mb={2} mt={4}>
-        {t('invoice-title')}
-      </Typography>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <FormProvider {...methods}>
+          {showDeliveryAddress ? (
+            <Box>
+              <Typography variant="h4" mb={2} mt={4}>
+                {t('workbook-address.title')}
+              </Typography>
+              <Box p={3} mt={3} bgcolor="white">
+                <WorkbookDeliveryAddressForm />
+              </Box>
+            </Box>
+          ) : null}
 
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <Typography variant="h4" mb={2} mt={4}>
+            {t('invoice-title')}
+          </Typography>
           <Box p={3} bgcolor="white">
             <Typography variant="h5" mb={2}>
               {t('invoice-contact')}
@@ -233,8 +293,8 @@ export const LicenseOrderDetails = () => {
           <Box
             display="flex"
             justifyContent="space-between"
-            flexDirection={isMobile ? 'column' : 'row'}
-            alignContent={isMobile ? 'left' : 'center'}
+            flexDirection={cssProps.flexDirection}
+            alignContent={cssProps.alignContent}
             sx={{ mt: 4, mb: 4 }}
           >
             <Box>
@@ -247,8 +307,8 @@ export const LicenseOrderDetails = () => {
             </Box>
             <Box
               display="flex"
-              flexDirection={isMobile ? 'column' : 'row'}
-              sx={{ mt: isMobile ? 2 : 0 }}
+              flexDirection={cssProps.flexDirection}
+              sx={{ mt: cssProps.marginTop }}
             >
               <Button
                 variant="text"
@@ -269,8 +329,8 @@ export const LicenseOrderDetails = () => {
               </LoadingButton>
             </Box>
           </Box>
-        </form>
-      </FormProvider>
+        </FormProvider>
+      </form>
     </Box>
   )
 }

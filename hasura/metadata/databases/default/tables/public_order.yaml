@@ -112,6 +112,7 @@ insert_permissions:
         - user
         - source
         - sales_representative_id
+        - workbookDeliveryAddress
   - role: sales-representative
     permission:
       check: {}
@@ -139,6 +140,7 @@ insert_permissions:
         - registrants
         - user
         - vat
+        - workbookDeliveryAddress
   - role: tt-admin
     permission:
       check: {}
@@ -165,6 +167,7 @@ insert_permissions:
         - user
         - vat
         - xero_invoice_number
+        - workbookDeliveryAddress
   - role: tt-ops
     permission:
       check: {}
@@ -192,6 +195,7 @@ insert_permissions:
         - vat
         - vat
         - xero_invoice_number
+        - workbookDeliveryAddress
   - role: unverified
     permission:
       check: {}
@@ -211,6 +215,7 @@ insert_permissions:
         - promo_codes
         - client_purchase_order
         - user
+        - workbookDeliveryAddress
   - role: user
     permission:
       check: {}
@@ -230,6 +235,7 @@ insert_permissions:
         - promo_codes
         - client_purchase_order
         - user
+        - workbookDeliveryAddress
 select_permissions:
   - role: booking-contact
     permission:
@@ -288,6 +294,7 @@ select_permissions:
         - source
         - sales_representative_id
         - booking_contact
+        - workbookDeliveryAddress
       filter: {}
       allow_aggregations: true
   - role: sales-admin
@@ -318,6 +325,7 @@ select_permissions:
         - source
         - sales_representative_id
         - booking_contact
+        - workbookDeliveryAddress
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -348,6 +356,7 @@ select_permissions:
         - source
         - sales_representative_id
         - booking_contact
+        - workbookDeliveryAddress
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -363,6 +372,7 @@ select_permissions:
         - payment_method
         - source
         - xero_invoice_number
+        - workbookDeliveryAddress
       filter:
         courses:
           course:
@@ -402,6 +412,7 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+        - workbookDeliveryAddress
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -432,6 +443,7 @@ select_permissions:
         - user
         - vat
         - xero_invoice_number
+        - workbookDeliveryAddress
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -458,6 +470,7 @@ select_permissions:
         - order_due
         - xero_invoice_number
         - user
+        - workbookDeliveryAddress
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
@@ -487,6 +500,7 @@ select_permissions:
         - user
         - source
         - booking_contact
+        - workbookDeliveryAddress
       filter:
         _or:
           - profile_id:

@@ -14,21 +14,35 @@ interface IRegionDropdownProps {
   errormessage?: string
   value: string | null
   register: UseFormRegisterReturn
+  enableOther?: boolean
 }
 export const RegionSelector = React.forwardRef(function RegionSelector(
   props: IRegionDropdownProps,
 ) {
-  const { countryCode, required, error, errormessage } = props
+  const {
+    countryCode,
+    required,
+    error,
+    errormessage,
+    enableOther,
+    value,
+    register,
+  } = props
+
   const { isAustraliaCountry, isNewZealandCountry } = useWorldCountries()
   const { t } = useScopedTranslation('components.organisation-region')
   const isAustralia = isAustraliaCountry(countryCode)
   const isNewZeeland = isNewZealandCountry(countryCode)
 
+  const options = isAustralia ? australiaRegions : newZealandRegions
+  if (enableOther && !options.includes('Other')) {
+    options.push('Other')
+  }
   if (!isAustralia && !isNewZeeland) {
     return null
   }
+  const defaultLabel = isAustralia ? 'stateTerritory' : 'region'
 
-  const options = isAustralia ? australiaRegions : newZealandRegions
   return (
     <TextField
       sx={{ bgcolor: 'grey.100' }}
@@ -38,10 +52,10 @@ export const RegionSelector = React.forwardRef(function RegionSelector(
       required={required}
       error={error}
       helperText={errormessage}
-      label={t(isAustralia ? 'stateTerritory' : 'region')}
-      {...props.register}
-      value={props.value}
-      defaultValue={props.value}
+      label={t(enableOther ? 'postal-address-state-territory' : defaultLabel)}
+      {...register}
+      value={value}
+      defaultValue={value}
       data-testid="region-selector"
     >
       {options?.length ? (

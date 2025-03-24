@@ -45186,6 +45186,7 @@ export type Order = {
   stripePaymentId?: Maybe<Scalars['String']>;
   user: Scalars['jsonb'];
   vat?: Maybe<Scalars['float8']>;
+  workbookDeliveryAddress?: Maybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
 };
 
@@ -45236,6 +45237,12 @@ export type OrderRegistrantsArgs = {
 
 /** columns and relationships of "order" */
 export type OrderUserArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order" */
+export type OrderWorkbookDeliveryAddressArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
 
@@ -45375,6 +45382,7 @@ export type Order_Append_Input = {
   invitees?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** input type for inserting array relation for remote table "order" */
@@ -45439,6 +45447,7 @@ export type Order_Bool_Exp = {
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<Jsonb_Comparison_Exp>;
   vat?: InputMaybe<Float8_Comparison_Exp>;
+  workbookDeliveryAddress?: InputMaybe<Jsonb_Comparison_Exp>;
   xeroInvoiceNumber?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -45472,6 +45481,7 @@ export type Order_Delete_At_Path_Input = {
   invitees?: InputMaybe<Array<Scalars['String']>>;
   promoCodes?: InputMaybe<Array<Scalars['String']>>;
   user?: InputMaybe<Array<Scalars['String']>>;
+  workbookDeliveryAddress?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
@@ -45480,6 +45490,7 @@ export type Order_Delete_Elem_Input = {
   invitees?: InputMaybe<Scalars['Int']>;
   promoCodes?: InputMaybe<Scalars['Int']>;
   user?: InputMaybe<Scalars['Int']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
@@ -45488,6 +45499,7 @@ export type Order_Delete_Key_Input = {
   invitees?: InputMaybe<Scalars['String']>;
   promoCodes?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['String']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['String']>;
 };
 
 /** input type for incrementing numeric columns in table "order" */
@@ -45530,6 +45542,7 @@ export type Order_Insert_Input = {
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
@@ -45690,6 +45703,7 @@ export type Order_Order_By = {
   stripePaymentId?: InputMaybe<Order_By>;
   user?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
+  workbookDeliveryAddress?: InputMaybe<Order_By>;
   xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
@@ -45704,6 +45718,7 @@ export type Order_Prepend_Input = {
   invitees?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "order" */
@@ -45758,6 +45773,8 @@ export enum Order_Select_Column {
   User = 'user',
   /** column name */
   Vat = 'vat',
+  /** column name */
+  WorkbookDeliveryAddress = 'workbookDeliveryAddress',
   /** column name */
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
@@ -45885,6 +45902,7 @@ export type Order_Set_Input = {
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
@@ -45980,6 +45998,7 @@ export type Order_Stream_Cursor_Value_Input = {
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
@@ -46978,6 +46997,8 @@ export enum Order_Update_Column {
   User = 'user',
   /** column name */
   Vat = 'vat',
+  /** column name */
+  WorkbookDeliveryAddress = 'workbookDeliveryAddress',
   /** column name */
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
@@ -67419,7 +67440,7 @@ export type GetOrderDetailsForReviewQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderDetailsForReviewQuery = { __typename?: 'query_root', order_by_pk?: { __typename?: 'order', billingAddress: string, email: string, firstName: string, phone: string, purchaseOrder?: string | null, surname: string, organization: { __typename?: 'organization', id: any, name: string } } | null };
+export type GetOrderDetailsForReviewQuery = { __typename?: 'query_root', order_by_pk?: { __typename?: 'order', billingAddress: string, workbookDeliveryAddress?: any | null, email: string, firstName: string, phone: string, purchaseOrder?: string | null, surname: string, organization: { __typename?: 'organization', id: any, name: string } } | null };
 
 export type InsertCourseAuditMutationVariables = Exact<{
   object: Course_Audit_Insert_Input;

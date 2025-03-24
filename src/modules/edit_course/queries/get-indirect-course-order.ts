@@ -18,6 +18,7 @@ export const GET_ORDER_DETAILS_FOR_REVIEW = gql`
       }
       purchaseOrder: clientPurchaseOrder
       surname: billingFamilyName
+      workbookDeliveryAddress
     }
   }
 `

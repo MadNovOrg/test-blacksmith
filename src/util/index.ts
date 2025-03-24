@@ -519,6 +519,9 @@ export async function userExistsInCognito(email: string) {
     .catch(err => err.code === 'NotAuthorizedException')
 }
 
+export const AustraliaCountryCode = 'AU'
+export const NewZealandCountryCode = 'NZ'
+
 export function renderOrgAddress(org?: {
   address: {
     line1: string

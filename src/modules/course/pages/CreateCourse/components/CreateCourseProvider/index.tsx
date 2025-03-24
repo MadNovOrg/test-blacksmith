@@ -153,6 +153,9 @@ export const CreateCourseProvider: React.FC<
   const [invoiceDetails, setInvoiceDetails] = useState<
     ContextValue['invoiceDetails']
   >(initialValue?.invoiceDetails ?? undefined)
+  const [workbookDeliveryAddress, setWorkbookDeliveryAddress] = useState<
+    ContextValue['workbookDeliveryAddress']
+  >(initialValue?.workbookDeliveryAddress ?? undefined)
 
   const { strategies } = useBildStrategies(
     Boolean(courseData?.accreditedBy === Accreditors_Enum.Bild),
@@ -290,6 +293,7 @@ export const CreateCourseProvider: React.FC<
       setExpenses(data.expenses ?? {})
       setGo1Licensing(data.go1Licensing ?? undefined)
       setInvoiceDetails(data.invoiceDetails ?? undefined)
+      setWorkbookDeliveryAddress(data.workbookDeliveryAddress ?? undefined)
       setTrainers(data.trainers ?? [])
     },
     [],
@@ -348,6 +352,7 @@ export const CreateCourseProvider: React.FC<
         completedSteps,
         go1Licensing,
         invoiceDetails,
+        workbookDeliveryAddress,
       }
 
       const normalizedDraft = draft
@@ -393,6 +398,7 @@ export const CreateCourseProvider: React.FC<
       completedSteps,
       go1Licensing,
       invoiceDetails,
+      workbookDeliveryAddress,
       setCourseDraft,
       courseType,
       draftId,
@@ -416,6 +422,7 @@ export const CreateCourseProvider: React.FC<
       go1Licensing,
       initializeData,
       invoiceDetails,
+      workbookDeliveryAddress,
       pricing: { amount: 0, error: false },
       resourcePacksCost,
       saveDraft,
@@ -427,6 +434,7 @@ export const CreateCourseProvider: React.FC<
       setExpenses,
       setGo1Licensing,
       setInvoiceDetails,
+      setWorkbookDeliveryAddress,
       setResourcePacksCost,
       setShowDraftConfirmationDialog,
       setTrainers,
@@ -449,6 +457,7 @@ export const CreateCourseProvider: React.FC<
     go1Licensing,
     initializeData,
     invoiceDetails,
+    workbookDeliveryAddress,
     resourcePacksCost,
     saveDraft,
     showDraftConfirmationDialog,

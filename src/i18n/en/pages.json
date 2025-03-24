@@ -397,7 +397,59 @@
       "amount-due": "Amount due ({{currency}})",
       "vat": "VAT (20%)",
       "invoice-title": "Invoice contact details",
-      "invoice-contact": "Invoice to:"
+      "invoice-contact": "Invoice to:",
+      "workbook-address": {
+        "title": "Workbooks delivery address",
+        "order-contact": {
+          "title": "Order Contact Full Name",
+          "placeholder": "Order Contact Full Name *"
+        },
+        "organisation": {
+          "title": "Organisation Name",
+          "placeholder": "Organisation Name *"
+        },
+        "address": {
+          "title": "Delivery Address",
+          "country": {
+            "title": "Country",
+            "placeholder": "Country *"
+          },
+          "line-1": {
+            "title": "Postal Address Line 1",
+            "placeholder": "Postal Address Line 1 *"
+          },
+          "line-2": {
+            "title": "Postal Address Line 2",
+            "placeholder": "Postal Address Line 2"
+          },
+          "suburb": {
+            "title": "Postall Address Suburb",
+            "placeholder": "Postal Address Suburb *"
+          },
+          "city": {
+            "title": "Postal Address Town/City",
+            "placeholder": "Postal Address Town/City *"
+          },
+          "region": {
+            "title": "Postal Address State/Territory",
+            "placeholder": "Postal Address State/Territory *",
+            "errors": {
+              "required": {
+                "state": "Postal Address State",
+                "territory": "Territory"
+              }
+            }
+          },
+          "region-other": {
+            "title": "Please specify",
+            "placeholder": "Please specify *"
+          },
+          "postcode": {
+            "title": "Postcode",
+            "placeholder": "Postcode"
+          }
+        }
+      }
     },
     "license-order-review": {
       "title": "Confirm to complete creation",
