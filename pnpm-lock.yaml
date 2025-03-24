@@ -271,8 +271,8 @@ importers:
         specifier: ^2.13.0
         version: 2.13.0
       swiper:
-        specifier: ^11.2.4
-        version: 11.2.4
+        specifier: ^11.2.6
+        version: 11.2.6
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -12119,8 +12119,8 @@ packages:
   swap-case@2.0.2:
     resolution: {integrity: sha512-kc6S2YS/2yXbtkSMunBtKdah4VFETZ8Oh6ONSmSd9bRxhqTrtARUCBUiWXH3xVPpvR7tz2CSnkuXVE42EcGnMw==}
 
-  swiper@11.2.4:
-    resolution: {integrity: sha512-DTtglrsFfMYytid+oNy4QI3t2N2+XhhwSYbnyOhlwBmvY8Bkoj3ombK1/b80w8vDpQ+Lqlnbm+0737+i32MrcA==}
+  swiper@11.2.6:
+    resolution: {integrity: sha512-8aXpYKtjy3DjcbzZfz+/OX/GhcU5h+looA6PbAzHMZT6ESSycSp9nAjPCenczgJyslV+rUGse64LMGpWE3PX9Q==}
     engines: {node: '>= 4.7.0'}
 
   symbol-tree@3.2.4:
@@ -29201,7 +29201,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  swiper@11.2.4: {}
+  swiper@11.2.6: {}
 
   symbol-tree@3.2.4: {}
 
