@@ -15978,6 +15978,8 @@ export type Course = {
   search_fields?: Maybe<Scalars['String']>;
   source?: Maybe<Course_Source_Enum>;
   special_instructions?: Maybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: Maybe<Scalars['date']>;
   /** A computed field, executes function "course_state" */
   state?: Maybe<Scalars['String']>;
   status?: Maybe<Course_Status_Enum>;
@@ -17745,6 +17747,7 @@ export type Course_Bool_Exp = {
   search_fields?: InputMaybe<String_Comparison_Exp>;
   source?: InputMaybe<Course_Source_Enum_Comparison_Exp>;
   special_instructions?: InputMaybe<String_Comparison_Exp>;
+  start_date?: InputMaybe<Date_Comparison_Exp>;
   state?: InputMaybe<String_Comparison_Exp>;
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
   tempOrders?: InputMaybe<Order_Temp_Bool_Exp>;
@@ -22372,6 +22375,8 @@ export type Course_Insert_Input = {
   search_fields?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: InputMaybe<Scalars['date']>;
   status?: InputMaybe<Course_Status_Enum>;
   tempOrders?: InputMaybe<Order_Temp_Arr_Rel_Insert_Input>;
   trainers?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
@@ -23287,6 +23292,8 @@ export type Course_Max_Fields = {
   residingCountry?: Maybe<Scalars['String']>;
   search_fields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: Maybe<Scalars['date']>;
   /** A computed field, executes function "course_state" */
   state?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -23320,6 +23327,8 @@ export type Course_Max_Order_By = {
   residingCountry?: InputMaybe<Order_By>;
   search_fields?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -23358,6 +23367,8 @@ export type Course_Min_Fields = {
   residingCountry?: Maybe<Scalars['String']>;
   search_fields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: Maybe<Scalars['date']>;
   /** A computed field, executes function "course_state" */
   state?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -23391,6 +23402,8 @@ export type Course_Min_Order_By = {
   residingCountry?: InputMaybe<Order_By>;
   search_fields?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -23958,6 +23971,7 @@ export type Course_Order_By = {
   search_fields?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   special_instructions?: InputMaybe<Order_By>;
+  start_date?: InputMaybe<Order_By>;
   state?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
   tempOrders_aggregate?: InputMaybe<Order_Temp_Aggregate_Order_By>;
@@ -28554,6 +28568,8 @@ export enum Course_Select_Column {
   /** column name */
   SpecialInstructions = 'special_instructions',
   /** column name */
+  StartDate = 'start_date',
+  /** column name */
   Status = 'status',
   /** column name */
   Type = 'type',
@@ -28658,6 +28674,8 @@ export type Course_Set_Input = {
   search_fields?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: InputMaybe<Scalars['date']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -29114,6 +29132,8 @@ export type Course_Stream_Cursor_Value_Input = {
   search_fields?: InputMaybe<Scalars['String']>;
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
+  /** Column used only for querying courses in a sorted order as having this column here queries data quicker than relying on course_schedule values. This column is updated automatically via course_schedule triggers */
+  start_date?: InputMaybe<Scalars['date']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -30000,6 +30020,8 @@ export enum Course_Update_Column {
   Source = 'source',
   /** column name */
   SpecialInstructions = 'special_instructions',
+  /** column name */
+  StartDate = 'start_date',
   /** column name */
   Status = 'status',
   /** column name */

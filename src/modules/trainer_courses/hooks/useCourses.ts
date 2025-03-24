@@ -573,7 +573,7 @@ export function getOrderBy({
       return { [by]: dir }
     case 'start':
     case 'end':
-      return { schedule_aggregate: { max: { [by]: dir } } }
+      return { start_date: dir as Order_By }
     default: {
       return { name: Order_By.Asc }
     }

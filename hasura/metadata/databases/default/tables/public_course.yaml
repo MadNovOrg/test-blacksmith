@@ -550,6 +550,7 @@ select_permissions:
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -656,11 +657,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -724,11 +726,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -778,11 +781,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -875,11 +879,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -943,11 +948,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -999,11 +1005,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -1098,11 +1105,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -1160,6 +1168,7 @@ select_permissions:
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -1202,9 +1211,10 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
+        - start_date
         - updated_at
       computed_fields:
         - course_code
@@ -1263,11 +1273,12 @@ select_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
-        - resource_packs_type
         - resource_packs_delivery_type
+        - resource_packs_type
         - search_fields
         - source
         - special_instructions
+        - start_date
         - updated_at
       computed_fields:
         - course_code
