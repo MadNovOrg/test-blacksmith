@@ -423,12 +423,18 @@
             "placeholder": "Postal Address Line 2"
           },
           "suburb": {
-            "title": "Postall Address Suburb",
+            "title": "Postal Address Suburb",
             "placeholder": "Postal Address Suburb *"
           },
           "city": {
             "title": "Postal Address Town/City",
-            "placeholder": "Postal Address Town/City *"
+            "placeholder": "Postal Address Town/City *",
+            "errors": {
+              "required": {
+                "town": "Postal Address Town",
+                "city": "City"
+              }
+            }
           },
           "region": {
             "title": "Postal Address State/Territory",
@@ -445,8 +451,8 @@
             "placeholder": "Please specify *"
           },
           "postcode": {
-            "title": "Postcode",
-            "placeholder": "Postcode"
+            "title": "Post code",
+            "placeholder": "Post code"
           }
         }
       }

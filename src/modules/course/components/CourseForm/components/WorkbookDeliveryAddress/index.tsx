@@ -51,9 +51,12 @@ export function formSchema(t: TFunction) {
     suburb: yup
       .string()
       .required(requiredMsg(t, baseTranslation('address.suburb.title'))),
-    city: yup
-      .string()
-      .required(requiredMsg(t, baseTranslation('address.city.title'))),
+    city: yup.string().required(
+      t('validation-errors.required-composed-field', {
+        field1: t(baseTranslation('address.city.errors.required.town')),
+        field2: t(baseTranslation('address.city.errors.required.city')),
+      }),
+    ),
     region: yup.string().required(
       t('validation-errors.required-composed-field', {
         field1: t(baseTranslation('address.region.errors.required.state')),
