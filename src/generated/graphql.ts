@@ -45223,6 +45223,7 @@ export type Order = {
   profileId?: Maybe<Scalars['uuid']>;
   promoCodes?: Maybe<Scalars['jsonb']>;
   registrants: Scalars['json'];
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   /** An object relationship */
   salesRepresentative?: Maybe<Profile>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
@@ -45443,6 +45444,7 @@ export type Order_Avg_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45452,6 +45454,7 @@ export type Order_Avg_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45485,6 +45488,7 @@ export type Order_Bool_Exp = {
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
+  resourcePacksQuantity?: InputMaybe<Numeric_Comparison_Exp>;
   salesRepresentative?: InputMaybe<Profile_Bool_Exp>;
   salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
   source?: InputMaybe<String_Comparison_Exp>;
@@ -45552,6 +45556,7 @@ export type Order_Inc_Input = {
   orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   price?: InputMaybe<Scalars['float8']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   vat?: InputMaybe<Scalars['float8']>;
 };
 
@@ -45580,6 +45585,7 @@ export type Order_Insert_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   registrants?: InputMaybe<Scalars['json']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   salesRepresentative?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -45610,6 +45616,7 @@ export type Order_Max_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -45634,6 +45641,7 @@ export type Order_Max_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
@@ -45661,6 +45669,7 @@ export type Order_Min_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -45685,6 +45694,7 @@ export type Order_Min_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
@@ -45741,6 +45751,7 @@ export type Order_Order_By = {
   profileId?: InputMaybe<Order_By>;
   promoCodes?: InputMaybe<Order_By>;
   registrants?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   salesRepresentative?: InputMaybe<Profile_Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
@@ -45807,6 +45818,8 @@ export enum Order_Select_Column {
   PromoCodes = 'promoCodes',
   /** column name */
   Registrants = 'registrants',
+  /** column name */
+  ResourcePacksQuantity = 'resourcePacksQuantity',
   /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
   /** column name */
@@ -45941,6 +45954,7 @@ export type Order_Set_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   registrants?: InputMaybe<Scalars['json']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
@@ -45957,6 +45971,7 @@ export type Order_Stddev_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45966,6 +45981,7 @@ export type Order_Stddev_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45976,6 +45992,7 @@ export type Order_Stddev_Pop_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45985,6 +46002,7 @@ export type Order_Stddev_Pop_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45995,6 +46013,7 @@ export type Order_Stddev_Samp_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -46004,6 +46023,7 @@ export type Order_Stddev_Samp_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -46037,6 +46057,7 @@ export type Order_Stream_Cursor_Value_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   registrants?: InputMaybe<Scalars['json']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
@@ -46053,6 +46074,7 @@ export type Order_Sum_Fields = {
   orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   price?: Maybe<Scalars['float8']>;
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   vat?: Maybe<Scalars['float8']>;
 };
 
@@ -46062,6 +46084,7 @@ export type Order_Sum_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -47032,6 +47055,8 @@ export enum Order_Update_Column {
   /** column name */
   Registrants = 'registrants',
   /** column name */
+  ResourcePacksQuantity = 'resourcePacksQuantity',
+  /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
   /** column name */
   Source = 'source',
@@ -47073,6 +47098,7 @@ export type Order_Var_Pop_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -47082,6 +47108,7 @@ export type Order_Var_Pop_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -47092,6 +47119,7 @@ export type Order_Var_Samp_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -47101,6 +47129,7 @@ export type Order_Var_Samp_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -47111,6 +47140,7 @@ export type Order_Variance_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -47120,6 +47150,7 @@ export type Order_Variance_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -67815,7 +67846,7 @@ export type GetCourseOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, attendeesQuantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, schedule: Array<{ __typename?: 'course_schedule', timeZone: string }> } | null }> };
+export type GetCourseOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, attendeesQuantity: number, registrants: any, resourcePacksQuantity?: any | null, paymentMethod: Payment_Methods_Enum, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, resourcePacksType?: Resource_Packs_Type_Enum | null, resourcePacksDeliveryType?: Resource_Packs_Delivery_Type_Enum | null, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, schedule: Array<{ __typename?: 'course_schedule', timeZone: string }> } | null }> };
 
 export type GetShallowAttendeeAuditLogsQueryVariables = Exact<{
   where: Course_Participant_Audit_Bool_Exp;

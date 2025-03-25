@@ -7306,6 +7306,7 @@ export enum ResourceIdType {
 
 export enum ResourcePacksAddErrorEnum {
   GenericError = 'GENERIC_ERROR',
+  InvalidAmount = 'INVALID_AMOUNT',
   OrganizationNotFound = 'ORGANIZATION_NOT_FOUND'
 }
 
@@ -7325,8 +7326,8 @@ export type ResourcePacksAddOutput = {
 };
 
 export enum ResourcePacksTypeEnum {
-  ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
-  ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED'
+  DigitalWorkbook = 'DIGITAL_WORKBOOK',
+  PrintWorkbook = 'PRINT_WORKBOOK'
 }
 
 /** Set relationships between the Resource to ResourceCategories */
@@ -41866,6 +41867,7 @@ export type Mutation_RootTransferParticipantArgs = {
 /** mutation root */
 export type Mutation_RootUpdateAvatarArgs = {
   avatar: Scalars['bytea'];
+  profileId: Scalars['uuid'];
 };
 
 
@@ -45178,6 +45180,7 @@ export type Order = {
   profileId?: Maybe<Scalars['uuid']>;
   promoCodes?: Maybe<Scalars['jsonb']>;
   registrants: Scalars['json'];
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   /** An object relationship */
   salesRepresentative?: Maybe<Profile>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
@@ -45390,6 +45393,7 @@ export type Order_Avg_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45399,6 +45403,7 @@ export type Order_Avg_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45432,6 +45437,7 @@ export type Order_Bool_Exp = {
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
+  resourcePacksQuantity?: InputMaybe<Numeric_Comparison_Exp>;
   salesRepresentative?: InputMaybe<Profile_Bool_Exp>;
   salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
   source?: InputMaybe<String_Comparison_Exp>;
@@ -45495,6 +45501,7 @@ export type Order_Inc_Input = {
   orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   price?: InputMaybe<Scalars['float8']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   vat?: InputMaybe<Scalars['float8']>;
 };
 
@@ -45523,6 +45530,7 @@ export type Order_Insert_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   registrants?: InputMaybe<Scalars['json']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   salesRepresentative?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
@@ -45552,6 +45560,7 @@ export type Order_Max_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -45576,6 +45585,7 @@ export type Order_Max_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
@@ -45603,6 +45613,7 @@ export type Order_Min_Fields = {
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
   profileId?: Maybe<Scalars['uuid']>;
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   source?: Maybe<Scalars['String']>;
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -45627,6 +45638,7 @@ export type Order_Min_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
@@ -45683,6 +45695,7 @@ export type Order_Order_By = {
   profileId?: InputMaybe<Order_By>;
   promoCodes?: InputMaybe<Order_By>;
   registrants?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   salesRepresentative?: InputMaybe<Profile_Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
   source?: InputMaybe<Order_By>;
@@ -45747,6 +45760,8 @@ export enum Order_Select_Column {
   PromoCodes = 'promoCodes',
   /** column name */
   Registrants = 'registrants',
+  /** column name */
+  ResourcePacksQuantity = 'resourcePacksQuantity',
   /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
   /** column name */
@@ -45879,6 +45894,7 @@ export type Order_Set_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   registrants?: InputMaybe<Scalars['json']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
@@ -45894,6 +45910,7 @@ export type Order_Stddev_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45903,6 +45920,7 @@ export type Order_Stddev_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45913,6 +45931,7 @@ export type Order_Stddev_Pop_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45922,6 +45941,7 @@ export type Order_Stddev_Pop_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45932,6 +45952,7 @@ export type Order_Stddev_Samp_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -45941,6 +45962,7 @@ export type Order_Stddev_Samp_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -45974,6 +45996,7 @@ export type Order_Stream_Cursor_Value_Input = {
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   registrants?: InputMaybe<Scalars['json']>;
+  resourcePacksQuantity?: InputMaybe<Scalars['numeric']>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
   source?: InputMaybe<Scalars['String']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
@@ -45989,6 +46012,7 @@ export type Order_Sum_Fields = {
   orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   price?: Maybe<Scalars['float8']>;
+  resourcePacksQuantity?: Maybe<Scalars['numeric']>;
   vat?: Maybe<Scalars['float8']>;
 };
 
@@ -45998,6 +46022,7 @@ export type Order_Sum_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -46968,6 +46993,8 @@ export enum Order_Update_Column {
   /** column name */
   Registrants = 'registrants',
   /** column name */
+  ResourcePacksQuantity = 'resourcePacksQuantity',
+  /** column name */
   SalesRepresentativeId = 'salesRepresentativeId',
   /** column name */
   Source = 'source',
@@ -47007,6 +47034,7 @@ export type Order_Var_Pop_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -47016,6 +47044,7 @@ export type Order_Var_Pop_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -47026,6 +47055,7 @@ export type Order_Var_Samp_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -47035,6 +47065,7 @@ export type Order_Var_Samp_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 
@@ -47045,6 +47076,7 @@ export type Order_Variance_Fields = {
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
+  resourcePacksQuantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
 };
 
@@ -47054,6 +47086,7 @@ export type Order_Variance_Order_By = {
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  resourcePacksQuantity?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
 };
 

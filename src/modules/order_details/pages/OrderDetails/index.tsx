@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import { utcToZonedTime } from 'date-fns-tz'
 import { uniqueId } from 'lodash/fp'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { FC, useCallback, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
@@ -36,6 +37,11 @@ import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import {
+  getResourcePacksTypeOptionLabels,
+  matchResourcePacksCourseFieldsToSelectOption,
+} from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
 import { CourseTitleAndDuration } from '@app/modules/course_details/components/CourseTitleAndDuration'
 import { NotFound } from '@app/modules/not_found/pages/NotFound'
 import {
@@ -71,6 +77,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { acl } = useAuth()
   const { getLabel, isUKCountry } = useWorldCountries()
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
+
+  const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
 
   const [{ data, fetching }] = useCourseOrders({ orderId: id ?? '' })
 
@@ -281,6 +291,19 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
           registrants.length,
       ),
     [courses, registrants.length],
+  )
+
+  const hideOrderQuantity = useMemo(
+    () =>
+      acl.isAustralia() &&
+      mainCourse?.type === Course_Type_Enum.Indirect &&
+      enableIndirectCourseResourcePacks,
+    [acl, enableIndirectCourseResourcePacks, mainCourse?.type],
+  )
+
+  const resourcePacksTypeOptions = useMemo(
+    () => getResourcePacksTypeOptionLabels(_t),
+    [_t],
   )
 
   const expensesLineItems =
@@ -531,19 +554,27 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                                 )}
                               </Typography>
                             </Box>
-                            <Box textAlign="end" data-testid="'order-quantity'">
-                              <Typography variant="caption">
-                                {t('quantity')}
-                              </Typography>
-                              <Typography>
-                                {course?.type === Course_Type_Enum.Indirect
-                                  ? order.attendeesQuantity // order.attendeesQuantity represents the number go1 licenses redeemed per order
-                                  : (quantities.get(Number(course?.id)) ?? 0) +
-                                    (cancellationAudits ?? []).filter(audit => {
-                                      return audit.course_id === course?.id
-                                    }).length}
-                              </Typography>
-                            </Box>
+                            {!hideOrderQuantity ? (
+                              <Box
+                                textAlign="end"
+                                data-testid="'order-quantity'"
+                              >
+                                <Typography variant="caption">
+                                  {t('quantity')}
+                                </Typography>
+                                <Typography>
+                                  {course?.type === Course_Type_Enum.Indirect
+                                    ? order.attendeesQuantity // order.attendeesQuantity represents the number go1 licenses redeemed per order
+                                    : (quantities.get(Number(course?.id)) ??
+                                        0) +
+                                      (cancellationAudits ?? []).filter(
+                                        audit => {
+                                          return audit.course_id === course?.id
+                                        },
+                                      ).length}
+                                </Typography>
+                              </Box>
+                            ) : null}
                           </Box>
                         )
                       })}
@@ -791,6 +822,31 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         </Typography>
                         <Typography color="grey.700">
                           {order.attendeesQuantity}
+                        </Typography>
+                      </ItemRow>
+                    </DetailsItemBox>
+                  ) : null}
+
+                  {enableIndirectCourseResourcePacks &&
+                  mainCourse?.resourcePacksType ? (
+                    <DetailsItemBox>
+                      <ItemRow data-testid="resource-packs-redeemed">
+                        <Typography color="grey.700">
+                          {_t('pages.order-details.resource-packs-redeemed', {
+                            resourcePacksType:
+                              resourcePacksTypeOptions[
+                                matchResourcePacksCourseFieldsToSelectOption({
+                                  resourcePacksType:
+                                    mainCourse.resourcePacksType,
+                                  resourcePacksDeliveryType:
+                                    mainCourse.resourcePacksDeliveryType ??
+                                    null,
+                                }) as ResourcePacksOptions
+                              ],
+                          }).replace(/&amp;/g, '&')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {order.resourcePacksQuantity ?? 0}
                         </Typography>
                       </ItemRow>
                     </DetailsItemBox>

@@ -12,6 +12,7 @@ import {
   GetCourseOrdersQuery,
   GetShallowAttendeeAuditLogsQuery,
   Payment_Methods_Enum,
+  Resource_Packs_Type_Enum,
   Xero_Invoice_Status_Enum,
   XeroAddressType,
   XeroLineItemSummaryFragment,
@@ -645,6 +646,189 @@ describe('page: OrderDetails', () => {
         oldUserEmail: replacedUserEmail,
       }),
     )
+  })
+
+  it('renders blended learning licenses information if purchased', () => {
+    const unitPrice = 50
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              unitAmount: unitPrice,
+              description: 'Go1 licenses',
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...order,
+
+                    invoice,
+                    registrants: [],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 1,
+                  course: baseCourse,
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>,
+    )
+
+    expect(
+      screen.getByText(`${formatCurrency(unitPrice)} per attendee`),
+    ).toBeInTheDocument()
+  })
+
+  it('displays resource packs details related to an indirect course', () => {
+    useFeatureFlagEnabledMock.mockResolvedValue(true)
+
+    const courseCode = chance.string()
+
+    const unitPrice = 50
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              unitAmount: unitPrice,
+              description: `Resource Pack - Digital Workbook & Connect (${courseCode})`,
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...order,
+
+                    invoice,
+                    registrants: [],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 0,
+                  course: {
+                    ...baseCourse,
+                    course_code: courseCode,
+                    resourcePacksDeliveryType: null,
+                    resourcePacksType: Resource_Packs_Type_Enum.DigitalWorkbook,
+                  },
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>,
+    )
+
+    expect(
+      screen.getByText(`Resource pack - Digital Workbook & Connect redeemed`),
+    ).toBeInTheDocument()
+  })
+
+  it('displays resource packs details related to an indirect course', () => {
+    useFeatureFlagEnabledMock.mockReturnValue(false)
+
+    const courseCode = chance.string()
+
+    const unitPrice = 50
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              unitAmount: unitPrice,
+              description: `Resource Pack - Digital Workbook & Connect (${courseCode})`,
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: TypedDocumentNode }) => {
+        if (query === GET_COURSE_ORDERS) {
+          return fromValue<{ data: GetCourseOrdersQuery }>({
+            data: {
+              orders: [
+                {
+                  order: {
+                    ...order,
+
+                    invoice,
+                    registrants: [],
+                    organization: {
+                      name: chance.name(),
+                    },
+                    user: {
+                      fullName: chance.name(),
+                    },
+                  } as unknown as GetCourseOrdersQuery['orders'][0]['order'],
+                  quantity: 0,
+                  course: {
+                    ...baseCourse,
+                    course_code: courseCode,
+                    resourcePacksDeliveryType: null,
+                    resourcePacksType: Resource_Packs_Type_Enum.DigitalWorkbook,
+                  },
+                },
+              ] as unknown as GetCourseOrdersQuery['orders'],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>,
+    )
+
+    expect(
+      screen.queryByText(`Resource pack - Digital Workbook & Connect redeemed`),
+    ).not.toBeInTheDocument()
   })
 
   it('renders blended learning licenses information if purchased', () => {

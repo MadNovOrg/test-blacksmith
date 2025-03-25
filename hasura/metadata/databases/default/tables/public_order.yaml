@@ -31,6 +31,8 @@ configuration:
       custom_name: profileId
     promo_codes:
       custom_name: promoCodes
+    resource_packs_quantity:
+      custom_name: resourcePacksQuantity
     sales_representative_id:
       custom_name: salesRepresentativeId
     xero_invoice_number:
@@ -50,6 +52,7 @@ configuration:
     payment_method: paymentMethod
     profile_id: profileId
     promo_codes: promoCodes
+    resource_packs_quantity: resourcePacksQuantity
     sales_representative_id: salesRepresentativeId
     xero_invoice_number: xeroInvoiceNumber
   custom_root_fields: {}
@@ -102,6 +105,7 @@ insert_permissions:
         - vat
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - vat
         - created_at
         - organization_id
@@ -138,6 +142,7 @@ insert_permissions:
         - payment_method
         - promo_codes
         - registrants
+        - resource_packs_quantity
         - user
         - vat
         - workbookDeliveryAddress
@@ -162,6 +167,7 @@ insert_permissions:
         - payment_method
         - promo_codes
         - registrants
+        - resource_packs_quantity
         - sales_representative_id
         - source
         - user
@@ -189,6 +195,7 @@ insert_permissions:
         - payment_method
         - promo_codes
         - registrants
+        - resource_packs_quantity
         - sales_representative_id
         - source
         - user
@@ -211,6 +218,7 @@ insert_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - organization_id
         - promo_codes
         - client_purchase_order
@@ -231,6 +239,7 @@ insert_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - organization_id
         - promo_codes
         - client_purchase_order
@@ -279,6 +288,7 @@ select_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - created_at
         - price
         - vat
@@ -310,6 +320,7 @@ select_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - created_at
         - price
         - vat
@@ -341,6 +352,7 @@ select_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - created_at
         - price
         - vat
@@ -406,6 +418,7 @@ select_permissions:
         - profile_id
         - promo_codes
         - registrants
+        - resource_packs_quantity
         - sales_representative_id
         - source
         - stripePaymentId
@@ -437,6 +450,7 @@ select_permissions:
         - profile_id
         - promo_codes
         - registrants
+        - resource_packs_quantity
         - sales_representative_id
         - source
         - stripePaymentId
@@ -459,6 +473,7 @@ select_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - created_at
         - price
         - vat
@@ -487,6 +502,7 @@ select_permissions:
         - billing_email
         - billing_phone
         - registrants
+        - resource_packs_quantity
         - created_at
         - price
         - vat

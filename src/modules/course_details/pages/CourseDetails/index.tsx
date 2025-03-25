@@ -13,6 +13,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { isFuture, isPast } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -88,6 +89,10 @@ export const CourseDetails = () => {
   const [searchParams] = useSearchParams()
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
 
+  const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
+
   const [selectedTab, setSelectedTab] = useState(
     initialTab ?? CourseDetailsTabs.ATTENDEES,
   )
@@ -103,7 +108,7 @@ export const CourseDetails = () => {
     data: courseData,
     error: courseError,
     mutate,
-  } = useCourse(courseId ?? '')
+  } = useCourse(courseId ?? '', { includeResourcePacks: true })
 
   const course = courseData?.course
   const userIsTrainer = courseData?.isTrainer
@@ -136,6 +141,11 @@ export const CourseDetails = () => {
   const isCourseTypeClosed = course?.type === Course_Type_Enum.Closed
   const isCourseTypeIndirectBlended =
     course?.type === Course_Type_Enum.Indirect && course?.go1Integration
+  const isCourseTypeIndirectWithResourcePack = Boolean(
+    enableIndirectCourseResourcePacks &&
+      course?.type === Course_Type_Enum.Indirect &&
+      course?.resourcePacksType,
+  )
 
   const courseHasEnded = course && courseEnded(course)
   const courseCancelled =
@@ -196,8 +206,15 @@ export const CourseDetails = () => {
   const canViewLinkedOrderItem = useMemo(
     () =>
       linkedOrderItems?.length &&
-      (isCourseTypeClosed || isCourseTypeIndirectBlended),
-    [linkedOrderItems?.length, isCourseTypeClosed, isCourseTypeIndirectBlended],
+      (isCourseTypeClosed ||
+        isCourseTypeIndirectBlended ||
+        isCourseTypeIndirectWithResourcePack),
+    [
+      linkedOrderItems?.length,
+      isCourseTypeClosed,
+      isCourseTypeIndirectBlended,
+      isCourseTypeIndirectWithResourcePack,
+    ],
   )
 
   /**

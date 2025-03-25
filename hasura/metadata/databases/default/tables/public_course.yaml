@@ -547,6 +547,8 @@ select_permissions:
     - reaccreditation
     - renewal_cycle
     - residingCountry
+    - resource_packs_type
+    - resource_packs_delivery_type
     - search_fields
     - source
     - special_instructions
@@ -1173,6 +1175,8 @@ select_permissions:
     - reaccreditation
     - renewal_cycle
     - residingCountry
+    - resource_packs_type
+    - resource_packs_delivery_type
     - search_fields
     - source
     - special_instructions

@@ -1072,6 +1072,7 @@
     "sales-person": "Sales person",
     "licenses-redeemed": "Blended Learning licenses redeemed",
     "resource-packs-redeemed": "Resource pack - {{resourcePacksType}} redeemed",
+    "resource-packs-redeemed-general": "Resource Packs redeemed",
     "source": "Source",
     "mailout": "Mailout",
     "region": "Region",

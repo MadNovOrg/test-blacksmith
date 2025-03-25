@@ -15,6 +15,7 @@ export const GET_COURSE_ORDERS = gql`
         id
         attendeesQuantity
         registrants
+        resourcePacksQuantity
         paymentMethod
         currency
         source
@@ -73,6 +74,8 @@ export const GET_COURSE_ORDERS = gql`
         max_participants
         freeSpaces
         deliveryType
+        resourcePacksType
+        resourcePacksDeliveryType
         bookingContact {
           fullName
           email
