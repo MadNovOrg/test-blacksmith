@@ -294,6 +294,13 @@ export const CourseDetails: React.FC<
   const showFeedbackRequiredAlert =
     courseParticipant && courseParticipant.grade && !didAttendeeSubmitFeedback
 
+  const showBlendedLearningCourseAlert =
+    courseParticipant &&
+    courseParticipant.grade &&
+    courseParticipant.go1EnrolmentId &&
+    (courseParticipant.go1EnrolmentStatus !== BlendedLearningStatus.COMPLETED ||
+      !didAttendeeSubmitFeedback)
+
   const hideCourseEvaluationStatusChip =
     courseParticipant?.completed_evaluation && !didAttendeeSubmitFeedback
 
@@ -597,7 +604,7 @@ export const CourseDetails: React.FC<
               <Container sx={{ pb: 2 }}>
                 <TabPanel sx={{ px: 0 }} value="checklist">
                   {showFeedbackRequiredAlert &&
-                  !courseParticipant.go1EnrolmentId ? (
+                  !showBlendedLearningCourseAlert ? (
                     <Alert variant="outlined" severity="error" sx={{ mb: 3 }}>
                       <Typography>
                         {t('pages.participant-course.feedback-required-alert')}
@@ -605,11 +612,7 @@ export const CourseDetails: React.FC<
                     </Alert>
                   ) : null}
 
-                  {showFeedbackRequiredAlert &&
-                  courseParticipant?.go1EnrolmentId &&
-                  (courseParticipant.go1EnrolmentStatus !==
-                    BlendedLearningStatus.COMPLETED ||
-                    !courseParticipant.completed_evaluation) ? (
+                  {showBlendedLearningCourseAlert ? (
                     <BlendedLearningCourseAlert sx={{ mb: 3 }} />
                   ) : null}
 
