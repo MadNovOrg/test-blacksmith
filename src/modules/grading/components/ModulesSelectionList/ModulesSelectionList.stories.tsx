@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { ModulesSelectionList } from '.'
@@ -9,9 +9,9 @@ export default {
   title: 'pages/CourseGradingDetails/ModulesSelectionList',
   component: ModulesSelectionList,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof ModulesSelectionList>
+} as Meta<typeof ModulesSelectionList>
 
-const Template: ComponentStory<typeof ModulesSelectionList> = args => (
+const Template: StoryFn<typeof ModulesSelectionList> = args => (
   <ModulesSelectionList {...args} />
 )
 

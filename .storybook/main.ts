@@ -9,28 +9,25 @@ const config: StorybookConfig = {
     '../src/**/*.stories.mdx',
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-interactions',
-    {
-      name: '@storybook/addon-essentials',
-      options: {
-        mdxPluginOptions: {
-          mdxCompileOptions: {
-            remarkPlugins: [remarkGfm],
-          },
+
+  addons: ['@storybook/addon-links', '@storybook/addon-interactions', {
+    name: '@storybook/addon-essentials',
+    options: {
+      mdxPluginOptions: {
+        mdxCompileOptions: {
+          remarkPlugins: [remarkGfm],
         },
       },
     },
-    '@storybook/addon-mdx-gfm',
-  ],
+  }, '@storybook/addon-mdx-gfm', '@chromatic-com/storybook'],
+
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
-  docs: {
-    autodocs: true,
-  },
+
+  docs: {},
+
   viteFinal: config => {
     return mergeConfig(config, {
       resolve: {
@@ -42,5 +39,9 @@ const config: StorybookConfig = {
       },
     })
   },
+
+  typescript: {
+    reactDocgen: 'react-docgen-typescript'
+  }
 }
 export default config

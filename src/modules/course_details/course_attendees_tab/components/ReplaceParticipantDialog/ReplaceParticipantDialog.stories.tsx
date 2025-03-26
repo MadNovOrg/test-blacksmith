@@ -1,4 +1,4 @@
-import { ComponentMeta } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import { Client, CombinedError, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -23,7 +23,7 @@ export default {
     onClose: { action: 'cancelled' },
     onSuccess: { action: 'replaced' },
   },
-} as ComponentMeta<typeof ReplaceParticipantDialog>
+} as Meta<typeof ReplaceParticipantDialog>
 
 const participant: Props['participant'] = {
   id: 'some-id',

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { ComponentMeta } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import React from 'react'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
@@ -14,7 +14,7 @@ export default {
   title: 'components/CourseStatusChip',
   component: CourseStatusChip,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof CourseStatusChip>
+} as Meta<typeof CourseStatusChip>
 
 const ChipContainer: React.FC<React.PropsWithChildren<unknown>> = ({
   children,

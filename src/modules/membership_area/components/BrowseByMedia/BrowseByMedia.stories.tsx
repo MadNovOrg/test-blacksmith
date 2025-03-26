@@ -1,4 +1,4 @@
-import { ComponentMeta } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -10,7 +10,7 @@ export default {
   title: 'Membership/BrowseByMedia',
   component: BrowseByMedia,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof BrowseByMedia>
+} as Meta<typeof BrowseByMedia>
 
 export const Default = () => (
   <MemoryRouter>

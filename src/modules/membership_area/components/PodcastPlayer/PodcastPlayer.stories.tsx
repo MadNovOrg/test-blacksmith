@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { PodcastPlayer } from '.'
@@ -9,9 +9,9 @@ export default {
   title: 'Membership/PodcastPlayer',
   component: PodcastPlayer,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof PodcastPlayer>
+} as Meta<typeof PodcastPlayer>
 
-const Template: ComponentStory<typeof PodcastPlayer> = args => (
+const Template: StoryFn<typeof PodcastPlayer> = args => (
   <PodcastPlayer {...args} />
 )
 

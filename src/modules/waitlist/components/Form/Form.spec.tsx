@@ -40,7 +40,7 @@ describe(`Waitlist: ${Form.name}`, () => {
   it('validates form', async () => {
     render(
       <Provider value={client}>
-        <Form onSuccess={vi.fn} saving={false} courseId={chance.integer()} />
+        <Form onSuccess={vi.fn()} saving={false} courseId={chance.integer()} />
       </Provider>,
     )
 

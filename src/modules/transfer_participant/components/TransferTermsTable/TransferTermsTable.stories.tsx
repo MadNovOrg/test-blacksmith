@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import { addDays } from 'date-fns/esm'
 import React from 'react'
 
@@ -11,9 +11,9 @@ export default {
   title: 'pages/TransferParticipant/TransferTermsTable',
   component: TransferTermsTable,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof TransferTermsTable>
+} as Meta<typeof TransferTermsTable>
 
-const Template: ComponentStory<typeof TransferTermsTable> = args => (
+const Template: StoryFn<typeof TransferTermsTable> = args => (
   <Box width={400}>
     <TransferTermsTable {...args} />
   </Box>

@@ -1,5 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
-import React from 'react'
+import { Meta, StoryFn } from '@storybook/react'
 
 import ProgressBar from '.'
 
@@ -9,9 +8,9 @@ export default {
   title: 'components/ProgressBar',
   component: ProgressBar,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof ProgressBar>
+} as Meta<typeof ProgressBar>
 
-const Template: ComponentStory<typeof ProgressBar> = args => {
+const Template: StoryFn<typeof ProgressBar> = args => {
   return (
     <div className="w-40">
       <ProgressBar {...args} />

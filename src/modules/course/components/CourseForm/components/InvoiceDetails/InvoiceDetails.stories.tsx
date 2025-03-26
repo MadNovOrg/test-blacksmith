@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { InvoiceDetails } from '.'
@@ -9,9 +9,9 @@ export default {
   title: 'components/InvoiceDetails',
   component: InvoiceDetails,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof InvoiceDetails>
+} as Meta<typeof InvoiceDetails>
 
-const Template: ComponentStory<typeof InvoiceDetails> = args => (
+const Template: StoryFn<typeof InvoiceDetails> = args => (
   <InvoiceDetails {...args} />
 )
 

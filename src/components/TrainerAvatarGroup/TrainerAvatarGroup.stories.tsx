@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import {
@@ -14,9 +14,9 @@ export default {
   title: 'components/TrainerAvatarGroup',
   component: TrainerAvatarGroup,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof TrainerAvatarGroup>
+} as Meta<typeof TrainerAvatarGroup>
 
-const Template: ComponentStory<typeof TrainerAvatarGroup> = args => (
+const Template: StoryFn<typeof TrainerAvatarGroup> = args => (
   <TrainerAvatarGroup {...args} />
 )
 

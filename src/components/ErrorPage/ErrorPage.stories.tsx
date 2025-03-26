@@ -1,5 +1,4 @@
-import { ComponentMeta } from '@storybook/react'
-import React from 'react'
+import { Meta } from '@storybook/react'
 import { MemoryRouter } from 'react-router-dom'
 
 import { ErrorPage } from '.'
@@ -10,7 +9,7 @@ export default {
   title: 'components/ErrorPage',
   component: ErrorPage,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof ErrorPage>
+} as Meta<typeof ErrorPage>
 
 export const Default = () => (
   <MemoryRouter>

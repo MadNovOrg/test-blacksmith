@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { TransferModeEnum } from '../TransferParticipantProvider'
@@ -13,9 +13,9 @@ export default {
   component: FeesPanel,
   argTypes: { onChange: { action: 'form values changed' } },
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof FeesPanel>
+} as Meta<typeof FeesPanel>
 
-const Template: ComponentStory<typeof FeesPanel> = args => (
+const Template: StoryFn<typeof FeesPanel> = args => (
   <Box width={600} bgcolor="grey.200" p={4}>
     <FeesPanel {...args} />
   </Box>

@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
@@ -12,9 +12,9 @@ export default {
   title: 'Pages/CreateCourse/OrderDetails',
   component: OrderDetails,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof OrderDetails>
+} as Meta<typeof OrderDetails>
 
-const Template: ComponentStory<typeof OrderDetails> = args => (
+const Template: StoryFn<typeof OrderDetails> = args => (
   <Box bgcolor="#ececec" p={5}>
     <OrderDetails {...args} />
   </Box>

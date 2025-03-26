@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -10,7 +10,7 @@ export default {
   title: 'Membership/BlogPostItem',
   component: BlogPostItem,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof BlogPostItem>
+} as Meta<typeof BlogPostItem>
 
 const props: Props = {
   id: '1',
@@ -27,7 +27,7 @@ const props: Props = {
   ],
 }
 
-const Template: ComponentStory<typeof BlogPostItem> = args => (
+const Template: StoryFn<typeof BlogPostItem> = args => (
   <MemoryRouter initialEntries={[{ pathname: '/' }]}>
     <div style={{ width: 300 }}>
       <BlogPostItem {...args} />

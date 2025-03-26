@@ -1,6 +1,6 @@
 import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined'
 import { Box } from '@mui/material'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import theme from '@app/theme'
@@ -13,7 +13,7 @@ export default {
   title: 'Resources/ResourceCard',
   component: ResourceCard,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof ResourceCard>
+} as Meta<typeof ResourceCard>
 
 const props: Props = {
   title: 'Best practice & templates',
@@ -22,7 +22,7 @@ const props: Props = {
   icon: <TopicOutlinedIcon />,
 }
 
-const Template: ComponentStory<typeof ResourceCard> = args => (
+const Template: StoryFn<typeof ResourceCard> = args => (
   <Box
     bgcolor={theme.palette.grey[100]}
     display="flex"

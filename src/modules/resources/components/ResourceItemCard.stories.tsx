@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import theme from '@app/theme'
@@ -12,7 +12,7 @@ export default {
   title: 'Resources/ResourceItemCard',
   component: ResourceItemCard,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof ResourceItemCard>
+} as Meta<typeof ResourceItemCard>
 
 const props: Props = {
   resource: {
@@ -27,7 +27,7 @@ const props: Props = {
   },
 }
 
-const Template: ComponentStory<typeof ResourceItemCard> = args => (
+const Template: StoryFn<typeof ResourceItemCard> = args => (
   <Box
     bgcolor={theme.palette.grey[100]}
     display="flex"

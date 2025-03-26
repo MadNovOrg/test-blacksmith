@@ -1,5 +1,6 @@
 import { Auth } from 'aws-amplify'
 import { createSearchParams } from 'react-router-dom'
+import { MockedFunction } from 'vitest'
 
 import { gqlRequest } from '@app/lib/gql-request'
 
@@ -17,7 +18,9 @@ import { ForgotPasswordPage } from './ForgotPassword'
 
 vi.mock('@app/lib/gql-request')
 
-const gqlRequestMocked = vi.fn(vi.mocked(gqlRequest))
+const gqlRequestMocked = vi.fn(
+  vi.mocked(gqlRequest) as MockedFunction<typeof gqlRequest>,
+)
 
 const AuthMock = vi.fn(vi.mocked(Auth.forgotPassword))
 
@@ -77,7 +80,9 @@ describe('page: ForgotPassword', () => {
     await submitForm(email)
 
     waitFor(async () => {
-      await waitForCalls(AuthMock)
+      await waitForCalls(
+        AuthMock as unknown as MockedFunction<(...args: unknown[]) => unknown>,
+      )
       expect(AuthMock).toHaveBeenCalledWith(email)
 
       expect(mockNavigate).toHaveBeenCalledWith({
@@ -101,8 +106,14 @@ describe('page: ForgotPassword', () => {
 
     await submitForm(email)
     waitFor(async () => {
-      await waitForCalls(AuthMock)
-      await waitForCalls(gqlRequestMocked)
+      await waitForCalls(
+        AuthMock as unknown as MockedFunction<(...args: unknown[]) => unknown>,
+      )
+      await waitForCalls(
+        gqlRequestMocked as unknown as MockedFunction<
+          (...args: unknown[]) => unknown
+        >,
+      )
       expect(AuthMock).toHaveBeenCalledWith(email)
       expect(mockNavigate).toHaveBeenCalledWith('/login?passwordResent=true')
     })

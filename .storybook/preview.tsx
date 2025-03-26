@@ -19,12 +19,15 @@ const preview: Preview = {
       page: DocumentationTemplate,
     },
   },
+
   decorators: [
     withMuiThemeProvider,
     withI18Provider,
     withRouterProvider,
     urqlDecorator,
   ],
+
+  tags: ['autodocs']
 }
 
 export default preview

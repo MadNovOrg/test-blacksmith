@@ -1,6 +1,7 @@
 import { Auth } from 'aws-amplify'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { MockedFunction } from 'vitest'
 
 import { useAuth } from '@app/context/auth'
 import { AuthContextType } from '@app/context/auth/types'
@@ -48,7 +49,11 @@ describe('page: VerifyEmailPage', () => {
 
     expect(screen.queryByTestId('signup-verify-btn')).not.toBeInTheDocument()
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
-    await waitForCalls(AuthMock.verifyCurrentUserAttribute)
+    await waitForCalls(
+      AuthMock.verifyCurrentUserAttribute as MockedFunction<
+        (...args: unknown[]) => unknown
+      >,
+    )
     expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument(),
@@ -108,7 +113,11 @@ describe('page: VerifyEmailPage', () => {
     const submitBtn = screen.getByTestId('signup-verify-btn')
     await userEvent.click(submitBtn)
 
-    await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
+    await waitForCalls(
+      AuthMock.verifyCurrentUserAttributeSubmit as MockedFunction<
+        (...args: unknown[]) => unknown
+      >,
+    )
     expect(AuthMock.verifyCurrentUserAttributeSubmit).toHaveBeenCalledWith(
       'email',
       code,
@@ -136,7 +145,11 @@ describe('page: VerifyEmailPage', () => {
     const submitBtn = screen.getByTestId('signup-verify-btn')
     await userEvent.click(submitBtn)
 
-    await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
+    await waitForCalls(
+      AuthMock.verifyCurrentUserAttributeSubmit as MockedFunction<
+        (...args: unknown[]) => unknown
+      >,
+    )
 
     const error = await screen.findByTestId('signup-verify-error')
     expect(error).toHaveTextContent('Verification code is incorrect.')
@@ -161,7 +174,11 @@ describe('page: VerifyEmailPage', () => {
     const submitBtn = screen.getByTestId('signup-verify-btn')
     userEvent.click(submitBtn)
 
-    await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
+    await waitForCalls(
+      AuthMock.verifyCurrentUserAttributeSubmit as MockedFunction<
+        (...args: unknown[]) => unknown
+      >,
+    )
 
     const error = await screen.findByTestId('signup-verify-error')
     expect(error).toHaveTextContent(
@@ -180,7 +197,12 @@ describe('page: VerifyEmailPage', () => {
     const resendBtn = screen.getByTestId('signup-verify-resend')
     await userEvent.click(resendBtn)
 
-    await waitForCalls(AuthMock.verifyCurrentUserAttribute, 2)
+    await waitForCalls(
+      AuthMock.verifyCurrentUserAttribute as MockedFunction<
+        (...args: unknown[]) => unknown
+      >,
+      2,
+    )
     expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
   })
 
@@ -217,7 +239,11 @@ describe('page: VerifyEmailPage', () => {
 
     await userEvent.click(screen.getByTestId('btn-goto-login'))
 
-    await waitForCalls(AuthMock.currentUserPoolUser)
+    await waitForCalls(
+      AuthMock.currentUserPoolUser as MockedFunction<
+        (...args: unknown[]) => unknown
+      >,
+    )
     await waitForCalls(refreshSessionIfPossibleMock)
     await waitForCalls(loadProfileMock)
   })

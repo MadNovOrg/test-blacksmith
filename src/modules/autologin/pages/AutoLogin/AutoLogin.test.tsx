@@ -1,3 +1,5 @@
+import { MockedFunction } from 'vitest'
+
 import { gqlRequest } from '@app/lib/gql-request'
 import { RoleName } from '@app/types'
 
@@ -40,7 +42,11 @@ describe('AutoLogin', () => {
     render(<AutoLogin />, { auth: { profile: { email }, logout: mockLogout } })
 
     await waitFor(async () => {
-      await waitForCalls(gqlRequestMocked)
+      await waitForCalls(
+        gqlRequestMocked as unknown as MockedFunction<
+          (...args: unknown[]) => unknown
+        >,
+      )
 
       expect(mockLogout).not.toHaveBeenCalledWith()
 
@@ -62,7 +68,11 @@ describe('AutoLogin', () => {
     render(<AutoLogin />, { auth: { logout: mockLogout } })
 
     await waitFor(async () => {
-      await waitForCalls(gqlRequestMocked)
+      await waitForCalls(
+        gqlRequestMocked as unknown as MockedFunction<
+          (...args: unknown[]) => unknown
+        >,
+      )
 
       expect(mockLogout).toHaveBeenCalledWith(true)
 
@@ -90,7 +100,11 @@ describe('AutoLogin', () => {
     render(<AutoLogin />)
 
     await waitFor(async () => {
-      await waitForCalls(gqlRequestMocked)
+      await waitForCalls(
+        gqlRequestMocked as unknown as MockedFunction<
+          (...args: unknown[]) => unknown
+        >,
+      )
 
       expect(mockNavigate).not.toHaveBeenCalled()
     })
@@ -114,7 +128,11 @@ describe('AutoLogin', () => {
     render(<AutoLogin />)
 
     await waitFor(async () => {
-      await waitForCalls(gqlRequestMocked)
+      await waitForCalls(
+        gqlRequestMocked as unknown as MockedFunction<
+          (...args: unknown[]) => unknown
+        >,
+      )
 
       expect(mockNavigate).toHaveBeenCalledWith('/continueURL', {
         replace: true,

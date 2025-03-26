@@ -1,4 +1,4 @@
-import { ComponentMeta } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import React from 'react'
 
 import { AppBanner } from '.'
@@ -9,6 +9,6 @@ export default {
   title: 'Membership/AppBanner',
   component: AppBanner,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof AppBanner>
+} as Meta<typeof AppBanner>
 
 export const Default = () => <AppBanner />

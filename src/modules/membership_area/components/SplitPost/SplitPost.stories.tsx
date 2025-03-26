@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -10,7 +10,7 @@ export default {
   title: 'Membership/SplitPost',
   component: SplitPost,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof SplitPost>
+} as Meta<typeof SplitPost>
 
 const props: Props = {
   id: '1',
@@ -28,7 +28,7 @@ const props: Props = {
   ],
 }
 
-const Template: ComponentStory<typeof SplitPost> = args => (
+const Template: StoryFn<typeof SplitPost> = args => (
   <MemoryRouter initialEntries={['/']}>
     <div style={{ width: 1000 }}>
       <SplitPost {...args} />

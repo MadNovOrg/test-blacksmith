@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import { CourseAttendanceList } from './index'
@@ -8,9 +8,9 @@ import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
 export default {
   title: 'pages/CourseGradingDetails/CourseAttendanceList',
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof CourseAttendanceList>
+} as Meta<typeof CourseAttendanceList>
 
-const Template: ComponentStory<typeof CourseAttendanceList> = args => (
+const Template: StoryFn<typeof CourseAttendanceList> = args => (
   <CourseAttendanceList {...args} />
 )
 

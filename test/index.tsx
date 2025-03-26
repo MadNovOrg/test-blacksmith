@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
 import { QueryParamProvider } from 'use-query-params'
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
-import vi, { vi as v } from 'vitest'
+import { MockedFunction, vi as v } from 'vitest'
 import '@app/i18n/config'
 
 import { AuthContext } from '@app/context/auth'
@@ -66,7 +66,7 @@ function render(
 }
 
 function waitForCalls<T extends (...args: unknown[]) => unknown>(
-  target: vi.MockedFunction<T> | vi.SpyInstance,
+  target: MockedFunction<T>,
   calls = 1,
   timeout?: number,
 ): Promise<void> {
