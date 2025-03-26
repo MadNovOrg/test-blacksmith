@@ -740,7 +740,7 @@
         "description": "Here is a list of the areas that are due to be covered during the course."
       },
       "pre-course-materials": {
-        "title": "Pre-course Materials"
+        "title": "Course Materials"
       }
     },
     "course-has-been-cancelled": "{{ code }} has been cancelled.",

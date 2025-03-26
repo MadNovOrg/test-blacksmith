@@ -7,6 +7,7 @@ import {
   Button,
   CircularProgress,
   Container,
+  Skeleton,
   Stack,
   SxProps,
   useMediaQuery,
@@ -43,6 +44,7 @@ import { CourseCertifications } from '@app/modules/course_details/course_certifi
 import { EvaluationSummaryTab } from '@app/modules/course_details/course_evaluation_tab/components/EvaluationSummaryTab'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/modules/course_details/hooks/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { CourseCancellationRequestFeature } from '@app/modules/course_details/pages/CourseDetails/CourseCancellationRequestFeature'
+import { useResourceAreas } from '@app/modules/resources/hooks/use-resource-areas'
 import { ResidingCountryDialog } from '@app/modules/welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { courseEnded, LoadingStatus } from '@app/util'
@@ -54,7 +56,6 @@ import { CourseGrading } from '../../course_grading_tab/pages/CourseGrading'
 import { DietaryRequirementsTab } from '../../dietary_requirements_tab/DietaryRequirementsTab'
 import { DisabilitiesTab } from '../../disabilities_tab/components/DisabilitiesTab/DisabilitiesTab'
 import useCourseParticipants from '../../hooks/course-participant/useCourseParticipants'
-import { PreCourseMaterialsTab } from '../../pre_course_materials_tab/components/PreCourseMaterialsTab'
 
 export enum CourseDetailsTabs {
   ATTENDEES = 'ATTENDEES',
@@ -65,7 +66,6 @@ export enum CourseDetailsTabs {
   EDIT = 'EDIT',
   DISABILITIES = 'DISABILITIES',
   DIETARY_REQUIREMENTS = 'DIETARY_REQUIREMENTS',
-  PRE_COURSE_MATERIALS = 'PRE_COURSE_MATERIALS',
 }
 
 const snackbarStyles: SxProps = {
@@ -77,6 +77,7 @@ export const preCourseMaterialLevels = [
   Course_Level_Enum.Level_1,
   Course_Level_Enum.Level_2,
   Course_Level_Enum.IntermediateTrainer,
+  Course_Level_Enum.AdvancedTrainer,
 ]
 // 17.12.2024 - 95 cognivite complexity, tread with caution 😱😱
 export const CourseDetails = () => {
@@ -88,6 +89,12 @@ export const CourseDetails = () => {
   const { acl } = useAuth()
   const [searchParams] = useSearchParams()
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
+
+  const { allResourcesByArea, fetching: resourcesFetching } = useResourceAreas()
+
+  const courseMaterialsSectionId = allResourcesByArea?.basic.find(
+    resource => resource.name?.trim().toLowerCase() === 'course materials',
+  )?.id
 
   const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
     'indirect-course-resource-packs',
@@ -295,7 +302,7 @@ export const CourseDetails = () => {
     course?.trainers ?? [],
   )
 
-  const shouldShowPreCourseMaterials =
+  const shouldShowCourseMaterialsTab =
     !!course?.level &&
     preCourseMaterialLevels.includes(course.level) &&
     acl.canViewPreCourseMaterials(course)
@@ -491,15 +498,32 @@ export const CourseDetails = () => {
                     />
                   ) : null}
 
-                  {shouldShowPreCourseMaterials && (
-                    <PillTab
-                      label={t(
-                        'pages.course-details.tabs.pre-course-materials.title',
-                      )}
-                      value={CourseDetailsTabs.PRE_COURSE_MATERIALS}
-                      data-testid="pre-course-materials-tab"
-                    />
-                  )}
+                  {shouldShowCourseMaterialsTab &&
+                    (() => {
+                      if (resourcesFetching) {
+                        return (
+                          <Box ml={4}>
+                            <Skeleton
+                              data-testid="course-materials-loading-state"
+                              height={30}
+                              width={120}
+                            />
+                          </Box>
+                        )
+                      }
+                      if (!courseMaterialsSectionId) return null
+                      return (
+                        <PillTab
+                          data-testid="course-materials-tab"
+                          label={t(
+                            'pages.course-details.tabs.pre-course-materials.title',
+                          )}
+                          onClick={() =>
+                            navigate(`/resources/${courseMaterialsSectionId}`)
+                          }
+                        />
+                      )
+                    })()}
 
                   {showCourseBuilderOnEditPage ? (
                     <EditIcon
@@ -602,15 +626,6 @@ export const CourseDetails = () => {
                   <CourseOverview course={course} />
                 </TabPanel>
               ) : null}
-
-              {shouldShowPreCourseMaterials && (
-                <TabPanel
-                  sx={{ px: 0 }}
-                  value={CourseDetailsTabs.PRE_COURSE_MATERIALS}
-                >
-                  <PreCourseMaterialsTab />
-                </TabPanel>
-              )}
             </Container>
           </TabContext>
         </>

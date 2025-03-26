@@ -18,7 +18,9 @@ vi.mock('@app/hooks/useCourse')
 
 const useCourseMocked = vi.mocked(useCourse)
 
-describe(`component: ${PreCourseMaterialsTab.name}`, () => {
+// Skipped as PreCourseMaterialsTab wont be displayed anymore
+
+describe.skip(`component: ${PreCourseMaterialsTab.name}`, () => {
   it.each(preCourseMaterialLevels)(
     'should display the pre-course materials tab for level %s',
     async level => {
@@ -53,7 +55,6 @@ describe(`component: ${PreCourseMaterialsTab.name}`, () => {
       expect(screen.getByTestId('pre-course-materials-tab')).toBeInTheDocument()
     },
   )
-
   it('should not display the pre-course materials tab for other levels', () => {
     // Arrange
     const course = buildCourse({

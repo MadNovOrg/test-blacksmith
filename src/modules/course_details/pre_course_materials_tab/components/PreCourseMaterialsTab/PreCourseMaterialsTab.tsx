@@ -1,3 +1,6 @@
+// Currently not used anywhere
+// Check: https://behaviourhub.atlassian.net/browse/TTHP-5036
+
 import { Box } from '@mui/material'
 import { useQuery } from 'urql'
 
