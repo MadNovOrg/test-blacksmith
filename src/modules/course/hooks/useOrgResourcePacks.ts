@@ -28,10 +28,15 @@ export function useOrgResourcePacks({
   orgId: string | undefined
   pause?: boolean
 }): {
-  balance: Record<Resource_Packs_Type_Enum, number | undefined>
-  reserved: Record<Resource_Packs_Type_Enum, number | undefined>
+  resourcePacks: {
+    balance: Record<Resource_Packs_Type_Enum, number | undefined>
+    reserved: Record<Resource_Packs_Type_Enum, number | undefined>
+  }
+  refetch: ReturnType<
+    typeof useQuery<OrgResourcePacksQuery, OrgResourcePacksQueryVariables>
+  >[1]
 } {
-  const [{ data }] = useQuery<
+  const [{ data }, refetch] = useQuery<
     OrgResourcePacksQuery,
     OrgResourcePacksQueryVariables
   >({
@@ -71,5 +76,5 @@ export function useOrgResourcePacks({
     [data?.resourcePacks],
   )
 
-  return resourcePacks
+  return { resourcePacks, refetch }
 }

@@ -628,13 +628,15 @@ enum CancelIndividualFromCourseError {
 }
 
 enum ResourcePacksTypeEnum {
-  RESOURCE_PACKS_ADDED
-  RESOURCE_PACKS_REMOVED
+  DIGITAL_WORKBOOK
+  PRINT_WORKBOOK
 }
 
 enum ResourcePacksAddErrorEnum {
   GENERIC_ERROR
   ORGANIZATION_NOT_FOUND
+  INVALID_AMOUNT
+  NOT_ALLOWED
 }
 
 input PlansCreateInput {

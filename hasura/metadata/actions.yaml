@@ -20,6 +20,11 @@ actions:
     definition:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/resource-packs/add'
+    permissions:
+      - role: tt-ops
+      - role: sales-admin
+      - role: finance
+      - role: tt-admin
     comment: Manually add resource packs to organisation
   - name: approveCourse
     definition:
@@ -1043,10 +1048,10 @@ custom_types:
       values:
         - description: null
           is_deprecated: null
-          value: RESOURCE_PACKS_ADDED
+          value: DIGITAL_WORKBOOK
         - description: null
           is_deprecated: null
-          value: RESOURCE_PACKS_REMOVED
+          value: PRINT_WORKBOOK
     - name: ResourcePacksAddErrorEnum
       values:
         - description: null
@@ -1055,6 +1060,12 @@ custom_types:
         - description: null
           is_deprecated: null
           value: ORGANIZATION_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: INVALID_AMOUNT
+        - description: null
+          is_deprecated: null
+          value: NOT_ALLOWED
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput

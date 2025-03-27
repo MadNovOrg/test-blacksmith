@@ -121,7 +121,7 @@ export const ResourcePacksTypeSection = ({
                   component={'span'}
                   sx={{ fontSize: '14px', fontWeight: 600 }}
                 >
-                  {resourcePacks.balance[
+                  {resourcePacks.resourcePacks.balance[
                     Resource_Packs_Type_Enum.DigitalWorkbook
                   ] ?? 'Unknown'}
                 </Typography>
@@ -130,7 +130,7 @@ export const ResourcePacksTypeSection = ({
                   component={'span'}
                   sx={{ fontSize: '14px', fontWeight: 600 }}
                 >
-                  {resourcePacks.balance[
+                  {resourcePacks.resourcePacks.balance[
                     Resource_Packs_Type_Enum.PrintWorkbook
                   ] ?? 'Unknown'}
                 </Typography>
@@ -150,7 +150,7 @@ export const ResourcePacksTypeSection = ({
                   component={'span'}
                   sx={{ fontSize: '14px', fontWeight: 600 }}
                 >
-                  {resourcePacks.reserved[
+                  {resourcePacks.resourcePacks.reserved[
                     Resource_Packs_Type_Enum.DigitalWorkbook
                   ] ?? 'Unknown'}
                 </Typography>
@@ -159,7 +159,7 @@ export const ResourcePacksTypeSection = ({
                   component={'span'}
                   sx={{ fontSize: '14px', fontWeight: 600 }}
                 >
-                  {resourcePacks.reserved[
+                  {resourcePacks.resourcePacks.reserved[
                     Resource_Packs_Type_Enum.PrintWorkbook
                   ] ?? 'Unknown'}
                 </Typography>

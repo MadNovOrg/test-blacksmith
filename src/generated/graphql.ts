@@ -68103,6 +68103,13 @@ export type InsertOrgMutationVariables = Exact<{
 
 export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null };
 
+export type ManageOrgResourcePacksMutationVariables = Exact<{
+  input: ResourcePacksAddInput;
+}>;
+
+
+export type ManageOrgResourcePacksMutation = { __typename?: 'mutation_root', addResourcePacks?: { __typename?: 'ResourcePacksAddOutput', success: boolean, error?: ResourcePacksAddErrorEnum | null, totalResourcePacks?: number | null } | null };
+
 export type SaveOrganisationInvitesMutationVariables = Exact<{
   invites: Array<SaveOrgInviteInput> | SaveOrgInviteInput;
 }>;

@@ -1573,6 +1573,7 @@
           "error-license-price-required": "licences number is a required field",
           "issue-refund-label": "Issue a refund. This will add a credit note to the invoice."
         },
+
         "table": {
           "col-date": "Date",
           "col-event": "Event",
@@ -1611,6 +1612,25 @@
         }
       },
       "resource-packs": {
+        "form": {
+          "add": "Add",
+          "amount-placeholder": "Number of Resource packs",
+          "options": {
+            "DIGITAL_WORKBOOK": "Digital Workbook & Connect Packs",
+            "PRINT_WORKBOOK": "Print Workbook & Connect Packs"
+          },
+          "DIGITAL_WORKBOOK": "Digital Workbook & Connect",
+          "error-resource-packs-type-required": "Resource packs type is required",
+          "error-amount-max": "Maximum number of resource packs to remove is {{max}}",
+          "invoice-placeholder": "Invoice number",
+          "note-placeholder": "Add a note (optional)",
+          "PRINT_WORKBOOK": "Print Workbook & Connect Packs",
+          "remove": "Remove",
+          "resource-packs-type-placeholder": "Resource packs option",
+          "total-remaining-resource-packs": "Total remaining {{resourcePacksType}} resource packs: {{balance}}"
+        },
+        "manage-modal-title": "Manage Resource Packs",
+        "manage-modal-subtitle": "Add or remove number of Resource packs for this organisation. Any modifications will be applied immediately.",
         "title": "Resource Packs",
         "total-remaining-resource-packs": {
           "title": "Total remaining resource packs",

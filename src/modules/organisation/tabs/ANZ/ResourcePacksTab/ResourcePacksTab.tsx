@@ -1,10 +1,14 @@
 import { Box, Button, Grid, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
 
 import { Tile } from '@app/components/Tile'
 import { useAuth } from '@app/context/auth'
+import { Resource_Packs_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { useOrgResourcePacks } from '@app/modules/course/hooks/useOrgResourcePacks'
 
 import { ExportResourcePacksHistoryButton } from './components/ExportHistoryButton'
+import { ManageResourcePacksDialog } from './components/ManageResourcePacksDialog'
 import { TileContent } from './components/TileContent'
 
 type Props = {
@@ -13,8 +17,15 @@ type Props = {
 export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
   orgId,
 }) => {
-  const { acl } = useAuth()
   const { t } = useScopedTranslation('pages.org-details.tabs.resource-packs')
+
+  const { acl } = useAuth()
+
+  const [openManage, setOpenManage] = useState(false)
+
+  const onCloseManage = useCallback(() => setOpenManage(false), [])
+
+  const { resourcePacks, refetch } = useOrgResourcePacks({ orgId })
 
   return (
     <>
@@ -24,11 +35,18 @@ export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
             <TileContent
               titleTestId="remaining-resource-packs"
               title={t('total-remaining-resource-packs.title')}
-              firstRowCount={0}
+              firstRowCount={
+                resourcePacks.balance[
+                  Resource_Packs_Type_Enum.DigitalWorkbook
+                ] ?? 0
+              }
               firstRowLabel={t(
                 'total-remaining-resource-packs.digital-resource-packs',
               )}
-              secondRowCount={0}
+              secondRowCount={
+                resourcePacks.balance[Resource_Packs_Type_Enum.PrintWorkbook] ??
+                0
+              }
               secondRowLabel={t(
                 'total-remaining-resource-packs.print-resource-packs',
               )}
@@ -39,7 +57,7 @@ export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
                 variant="contained"
                 size="small"
                 onClick={() => {
-                  console.log('openModal')
+                  setOpenManage(true)
                 }}
                 data-testid="manage-remaining-resource-packs"
               >
@@ -53,9 +71,17 @@ export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
             <TileContent
               titleTestId="unused-resource-packs"
               title={t('unused-resource-packs.title')}
-              firstRowCount={0}
+              firstRowCount={
+                resourcePacks.reserved[
+                  Resource_Packs_Type_Enum.DigitalWorkbook
+                ] ?? 0
+              }
               firstRowLabel={t('unused-resource-packs.digital-resource-packs')}
-              secondRowCount={0}
+              secondRowCount={
+                resourcePacks.reserved[
+                  Resource_Packs_Type_Enum.PrintWorkbook
+                ] ?? 0
+              }
               secondRowLabel={t('unused-resource-packs.print-resource-packs')}
             />
           </Tile>
@@ -70,6 +96,13 @@ export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
           columns
         </Typography>
       </Box>
+
+      <ManageResourcePacksDialog
+        onClose={onCloseManage}
+        open={openManage}
+        orgId={orgId}
+        onFormSubmitSuccess={refetch}
+      />
     </>
   )
 }
