@@ -1,5 +1,39 @@
 # @teamteach/hub
 
+## 5.0.0
+
+### Major Changes
+
+- adbbd9b: Option to select resource pack types for Indirect courses in ANZ
+
+### Minor Changes
+
+- 37bd341: Add workbook delivery address to indirect courses
+- 04a94d2: Issue bl certificate after bl complete
+- adbbd9b: Resource packs in the order review form step and during order creation
+- f8f89e7: Add Indirect RP panel description
+- 02fe237: Resource packs line item in connect order
+- 0d49c74: Adjust trainer car expenses on ANZ
+- 5d4a11e: TTHP-5036 -- course materials section redirect to Resource Area on the Course Materials folder
+- adbbd9b: Resource packs order details form step
+- 090079f: Require login on auto login if the current logged in user does not match the one from link's token
+- c976156: Manage org's resource packs form
+- 0646095: Add additional check for resource pack on Indirect course creation page
+- 2e49d3c: Add resource packs tab on organisation details page
+- 7bd6cf7: Db changes for resource packs
+
+### Patch Changes
+
+- 4e40217: Remove GST for ANZ on Blended Learning
+- b1d7b57: Add start_date column on course table as well as adding a trigger on course_schedule to update this new column. start_date will only be used for sorting purposes as doing it through aggregates significantly impacts performance
+- 3739edc: Fix (TTHP-4996): organisations page individuals pagination not working properly
+- 1ec4439: Display trainer name with apostrophe on course trainer info
+- 88909df: Make userExistsInCognito async
+- 171fe99: Fix trainer icon order
+- fb08656: TTHP-4945 - Fix upload avatar uploading when admin uploads avatar for another user
+- 62054e0: Add logs for organisations
+- 34f75c8: chore/fix --- remove unecessary fields when querying for course
+
 ## 4.21.1
 
 ### Patch Changes
