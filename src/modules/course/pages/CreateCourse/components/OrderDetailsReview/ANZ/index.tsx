@@ -42,9 +42,16 @@ export const OrderDetailsReview: React.FC = () => {
     course_level: courseData?.courseLevel as Course_Level_Enum,
     course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: courseData?.reaccreditation ?? false,
-    currency: currency,
     pause: Boolean(hideMCM),
   })
+
+  const rpPrice = useMemo(
+    () =>
+      currency === Currency.Nzd
+        ? resourcePackPricingData?.resource_packs_pricing[0]?.NZD_price ?? 0
+        : resourcePackPricingData?.resource_packs_pricing[0]?.AUD_price ?? 0,
+    [currency, resourcePackPricingData?.resource_packs_pricing],
+  )
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()
 
@@ -54,17 +61,14 @@ export const OrderDetailsReview: React.FC = () => {
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
-      return (
-        courseData.maxParticipants *
-        (resourcePackPricingData?.anz_resource_packs_pricing[0]?.price ?? 0)
-      )
+      return courseData.maxParticipants * (rpPrice ?? 0)
     }
     return 0
   }, [
     courseData?.freeCourseMaterials,
     courseData?.maxParticipants,
     mandatoryCourseMaterialsEnabled,
-    resourcePackPricingData?.anz_resource_packs_pricing,
+    rpPrice,
   ])
 
   const freeCourseMaterialsCost = useMemo(() => {
@@ -73,18 +77,10 @@ export const OrderDetailsReview: React.FC = () => {
       courseData?.freeCourseMaterials !== null &&
       courseData?.freeCourseMaterials !== undefined
     ) {
-      return (
-        courseData.freeCourseMaterials *
-        (resourcePackPricingData?.anz_resource_packs_pricing[0]?.price ?? 0) *
-        -1
-      )
+      return courseData.freeCourseMaterials * rpPrice * -1
     }
     return 0
-  }, [
-    courseData?.freeCourseMaterials,
-    hideMCM,
-    resourcePackPricingData?.anz_resource_packs_pricing,
-  ])
+  }, [courseData?.freeCourseMaterials, hideMCM, rpPrice])
 
   const { startDate, endDate } = useMemo(
     () =>

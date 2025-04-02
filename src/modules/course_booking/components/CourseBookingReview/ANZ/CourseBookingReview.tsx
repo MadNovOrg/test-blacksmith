@@ -69,8 +69,13 @@ export const CourseBookingReview: React.FC<
     course_level: course?.level as Course_Level_Enum,
     course_delivery_type: course?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: course?.reaccreditation ?? false,
-    currency: booking?.currency ?? Currency.Aud,
   })
+
+  const rpPrice = (
+    booking.currency === Currency.Nzd
+      ? resourcePackPricing?.resource_packs_pricing[0].NZD_price
+      : resourcePackPricing?.resource_packs_pricing[0].AUD_price
+  ) as number
 
   const handleConfirmBooking = async () => {
     setCreatingOrder(true)
@@ -351,9 +356,7 @@ export const CourseBookingReview: React.FC<
               <Typography color="grey.700">
                 {formatCurrency(
                   {
-                    amount: (booking.quantity *
-                      resourcePackPricing?.anz_resource_packs_pricing[0]
-                        .price) as number,
+                    amount: booking.quantity * rpPrice,
                     currency: booking.currency,
                   },
                   t,

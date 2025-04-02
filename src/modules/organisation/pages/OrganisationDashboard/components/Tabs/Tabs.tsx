@@ -8,6 +8,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { AffiliatedOrgsTab } from '@app/modules/organisation/tabs/ANZ/AffiliatedOrgsTab/AffiliatedOrgsTab'
+import { ResourcePacksPricingTab } from '@app/modules/organisation/tabs/ANZ/ResourcePacksPricingTab/ResourcePacksPricingTab'
 import { ResourcePacksTab } from '@app/modules/organisation/tabs/ANZ/ResourcePacksTab/ResourcePacksTab'
 import { LicensesTab } from '@app/modules/organisation/tabs/Licenses/LicensesTab'
 import { OrgDetailsTab } from '@app/modules/organisation/tabs/OrganisationDetails'
@@ -22,6 +23,7 @@ export enum OrgDashboardTabs {
   INDIVIDUALS = 'INDIVIDUALS',
   LICENSES = 'LICENSES',
   RESOURCE_PACKS = 'RESOURCE_PACKS',
+  RESOURCE_PACKS_PRICING = 'RESOURCE_PACKS_PRICING',
   PERMISSIONS = 'PERMISSIONS',
 }
 
@@ -70,6 +72,12 @@ const TabsWithProps = [
     component: (id: string) => <ResourcePacksTab orgId={id} />,
   },
   {
+    tab: OrgDashboardTabs.RESOURCE_PACKS_PRICING,
+    dataTestId: 'org-resource-packs-pricing',
+    label: t('pages.org-details.tabs.resource-pack-pricing.title'),
+    component: (id: string) => <ResourcePacksPricingTab orgId={id} />,
+  },
+  {
     tab: OrgDashboardTabs.PERMISSIONS,
     dataTestId: 'org-permissions',
     label: t('pages.org-details.tabs.permissions.title'),
@@ -79,7 +87,11 @@ const TabsWithProps = [
 
 export const Tabs: FC<Props> = ({ organization }) => {
   const {
-    acl: { isAustralia, canManageKnowledgeHubAccess },
+    acl: {
+      isAustralia,
+      canManageKnowledgeHubAccess,
+      canViewResourcePacksPricing,
+    },
   } = useAuth()
   const { id } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -103,6 +115,11 @@ export const Tabs: FC<Props> = ({ organization }) => {
     )
       return false
     if (!canManageKnowledgeHubAccess() && tab === OrgDashboardTabs.PERMISSIONS)
+      return false
+    if (
+      (hideResourcePacks || !canViewResourcePacksPricing()) &&
+      tab === OrgDashboardTabs.RESOURCE_PACKS_PRICING
+    )
       return false
     return !(hideResourcePacks && tab === OrgDashboardTabs.RESOURCE_PACKS)
   })

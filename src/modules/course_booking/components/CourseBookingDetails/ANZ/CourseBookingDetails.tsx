@@ -161,8 +161,12 @@ export const CourseBookingDetails: React.FC<
     course_level: course?.level as Course_Level_Enum,
     course_delivery_type: course?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: course?.reaccreditation ?? false,
-    currency: booking.currency,
   })
+
+  const rpPrice =
+    booking.currency === Currency.Nzd
+      ? resourcePackPricing?.resource_packs_pricing[0]?.NZD_price
+      : resourcePackPricing?.resource_packs_pricing[0]?.AUD_price
 
   const onSubmit = async (data: FormInputs) => {
     const groupedParticipantsByEmail = groupBy(
@@ -475,9 +479,7 @@ export const CourseBookingDetails: React.FC<
               <Typography color="grey.700">
                 {formatCurrency(
                   {
-                    amount:
-                      resourcePackPricing?.anz_resource_packs_pricing[0]
-                        ?.price * booking.quantity,
+                    amount: rpPrice * booking.quantity,
                     currency: booking.currency,
                   },
                   t,

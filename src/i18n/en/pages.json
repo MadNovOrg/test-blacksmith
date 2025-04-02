@@ -1647,6 +1647,31 @@
           "button-label": "Export"
         }
       },
+      "resource-pack-pricing": {
+        "title": "Resource Packs Pricing",
+        "subtitle": "Pricing",
+        "apply-price-to-affiliates": {
+          "button-label": "Apply the prices on all organisation affiliates"
+        },
+        "prices-by-course-type": {
+          "types": {
+            "closed": "Closed",
+            "indirect": "Indirect"
+          },
+          "table": {
+            "columns": {
+              "course-level": "Course level",
+              "course-type": "Course type",
+              "attributes": "Attributes"
+            },
+            "alias": {
+              "reaccreditation": "Reaccreditation",
+              "non-reaccreditation": "Initial Accreditation"
+            },
+            "edit": "Edit"
+          }
+        }
+      },
       "permissions": {
         "title": "Permissions",
         "knowledge-hub-access": "By switching this toggle off, all members within this organization will cut off access to the Knowledge Hub, while access to Connect will still remain."

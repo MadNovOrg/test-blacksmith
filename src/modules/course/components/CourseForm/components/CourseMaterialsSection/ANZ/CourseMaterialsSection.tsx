@@ -1,6 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info'
 import { Box, Typography, Grid } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { InfoPanel } from '@app/components/InfoPanel'
@@ -62,8 +62,15 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
     course_level: courseLevel as Course_Level_Enum,
     course_delivery_type: deliveryType,
     reaccreditation,
-    currency: courseCurrency,
   })
+
+  const rpPrice = useMemo(
+    () =>
+      courseCurrency === Currency.Nzd
+        ? data?.resource_packs_pricing[0]?.NZD_price
+        : data?.resource_packs_pricing[0]?.AUD_price,
+    [courseCurrency, data?.resource_packs_pricing],
+  )
 
   useEffect(() => {
     if (!isCreation) {
@@ -97,9 +104,9 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
         <Typography fontWeight={600}>{t('panel-title')}</Typography>
         <Typography variant="body2" mb={2}>
           {t('panel-description', {
-            mcmAmount: `${CurrencySymbol[courseCurrency]}${
-              data?.anz_resource_packs_pricing[0]?.price
-            }${acl.isAustralia() && includeVAT ? GST : ''}`,
+            mcmAmount: `${CurrencySymbol[courseCurrency]}${rpPrice}${
+              acl.isAustralia() && includeVAT ? GST : ''
+            }`,
           })}
         </Typography>
 

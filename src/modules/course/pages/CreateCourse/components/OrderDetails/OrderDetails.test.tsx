@@ -57,11 +57,11 @@ vi.mock('@app/modules/resource_packs/hooks/useResourcePackPricing')
 const useResourcePackPricingMocked = vi.mocked(useResourcePackPricing)
 useResourcePackPricingMocked.mockReturnValue({
   data: {
-    anz_resource_packs_pricing: [
+    resource_packs_pricing: [
       {
         id: chance.guid(),
-        currency: Currency.Aud,
-        price: 52,
+        AUD_price: 52,
+        NZD_price: 56,
       },
     ],
   },

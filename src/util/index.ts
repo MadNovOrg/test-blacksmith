@@ -35,6 +35,8 @@ import {
   CourseLevel,
   InsertOrgLeadMutationVariables,
   Course as GeneratedCourseType,
+  Course_Delivery_Type_Enum,
+  Resource_Packs_Type_Enum,
 } from '@app/generated/graphql'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
 import { matchResourcePacksCourseFieldsToSelectOption } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
@@ -521,6 +523,20 @@ export async function userExistsInCognito(email: string) {
 
 export const AustraliaCountryCode = 'AU'
 export const NewZealandCountryCode = 'NZ'
+
+export const CourseTypeOrgRPPricings = [
+  Course_Type_Enum.Closed,
+  Course_Type_Enum.Indirect,
+]
+
+export const Resource_Pack_Course_Delivery_Type: Record<
+  Course_Delivery_Type_Enum,
+  Resource_Packs_Type_Enum
+> = {
+  [Course_Delivery_Type_Enum.Virtual]: Resource_Packs_Type_Enum.DigitalWorkbook,
+  [Course_Delivery_Type_Enum.F2F]: Resource_Packs_Type_Enum.PrintWorkbook,
+  [Course_Delivery_Type_Enum.Mixed]: Resource_Packs_Type_Enum.PrintWorkbook,
+}
 
 export function renderOrgAddress(org?: {
   address: {

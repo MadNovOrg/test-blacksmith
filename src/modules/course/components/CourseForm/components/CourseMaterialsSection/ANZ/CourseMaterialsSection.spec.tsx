@@ -3,7 +3,6 @@ import { renderHook } from '@testing-library/react'
 import {
   Course_Level_Enum,
   Course_Type_Enum,
-  Currency,
   GetResourcePackPricingsQuery,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -29,8 +28,8 @@ vi.mock('@app/modules/resource_packs/hooks/useResourcePackPricing')
 const mockedHook = vi.mocked(useResourcePackPricing)
 mockedHook.mockReturnValue({
   data: {
-    anz_resource_packs_pricing: [
-      { id: chance.guid(), currency: Currency.Aud, price: 52 },
+    resource_packs_pricing: [
+      { id: chance.guid(), AUD_price: 52, NZD_price: 56 },
     ],
   } as GetResourcePackPricingsQuery,
   error: undefined,

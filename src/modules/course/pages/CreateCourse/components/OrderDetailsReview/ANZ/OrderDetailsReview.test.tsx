@@ -41,11 +41,11 @@ describe('component: OrderDetailsReview', () => {
   it('displays course details, with pricing and resource packs, Aud Currency and GST included', async () => {
     useResourcePackPricingMocked.mockReturnValue({
       data: {
-        anz_resource_packs_pricing: [
+        resource_packs_pricing: [
           {
             id: chance.guid(),
-            currency: Currency.Aud,
-            price: 52,
+            AUD_price: 52,
+            NZD_price: 57,
           },
         ],
       },
@@ -133,11 +133,11 @@ describe('component: OrderDetailsReview', () => {
   it('displays course details, with pricing and resource packs, Aud Currency and GST excluded', async () => {
     useResourcePackPricingMocked.mockReturnValue({
       data: {
-        anz_resource_packs_pricing: [
+        resource_packs_pricing: [
           {
             id: chance.guid(),
-            currency: Currency.Aud,
-            price: 52,
+            AUD_price: 52,
+            NZD_price: 57,
           },
         ],
       },
@@ -226,11 +226,11 @@ describe('component: OrderDetailsReview', () => {
   it('displays course details, with pricing and resource packs, Nzd Currency and GST included', async () => {
     useResourcePackPricingMocked.mockReturnValue({
       data: {
-        anz_resource_packs_pricing: [
+        resource_packs_pricing: [
           {
             id: chance.guid(),
-            currency: Currency.Nzd,
-            price: 57,
+            AUD_price: 52,
+            NZD_price: 57,
           },
         ],
       },
@@ -319,11 +319,11 @@ describe('component: OrderDetailsReview', () => {
   it('displays course details, with pricing and resource packs, Nzd Currency and GST excluded', async () => {
     useResourcePackPricingMocked.mockReturnValue({
       data: {
-        anz_resource_packs_pricing: [
+        resource_packs_pricing: [
           {
             id: chance.guid(),
-            currency: Currency.Nzd,
-            price: 57,
+            AUD_price: 52,
+            NZD_price: 57,
           },
         ],
       },
@@ -414,11 +414,11 @@ describe('component: OrderDetailsReview', () => {
     const trainerProfileId = chance.guid()
     useResourcePackPricingMocked.mockReturnValue({
       data: {
-        anz_resource_packs_pricing: [
+        resource_packs_pricing: [
           {
             id: chance.guid(),
-            currency: Currency.Aud,
-            price: 52,
+            AUD_price: 52,
+            NZD_price: 57,
           },
         ],
       },
@@ -525,11 +525,11 @@ describe('component: OrderDetailsReview', () => {
     const trainerProfileId = chance.guid()
     useResourcePackPricingMocked.mockReturnValue({
       data: {
-        anz_resource_packs_pricing: [
+        resource_packs_pricing: [
           {
             id: chance.guid(),
-            currency: Currency.Nzd,
-            price: 56,
+            AUD_price: 52,
+            NZD_price: 57,
           },
         ],
       },

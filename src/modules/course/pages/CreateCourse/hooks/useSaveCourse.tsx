@@ -101,9 +101,17 @@ export function useSaveCourse(): {
     course_level: courseData?.courseLevel as Course_Level_Enum,
     course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: courseData?.reaccreditation ?? false,
-    currency: courseData?.priceCurrency as string,
     pause: acl.isUK() || hideMCM,
   })
+
+  const rpPrice = useMemo(
+    () =>
+      (courseData?.priceCurrency as Currency) === Currency.Nzd
+        ? resourcePackCost?.resource_packs_pricing[0]?.NZD_price
+        : resourcePackCost?.resource_packs_pricing[0]?.AUD_price,
+    [courseData?.priceCurrency, resourcePackCost?.resource_packs_pricing],
+  )
+
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isOpenCourse = courseData?.type === Course_Type_Enum.Open
   const isClosedCourse = courseData?.type === Course_Type_Enum.Closed
@@ -432,7 +440,7 @@ export function useSaveCourse(): {
                         courseData.maxParticipants ?? 0,
                         (courseData.priceCurrency as Currency) ??
                           expensesCurrency,
-                        resourcePackCost?.anz_resource_packs_pricing[0]?.price,
+                        rpPrice,
                       ),
                 },
               }
@@ -533,7 +541,7 @@ export function useSaveCourse(): {
     shouldSetWARenewalCycles,
     expenses,
     expensesCurrency,
-    resourcePackCost?.anz_resource_packs_pricing,
+    rpPrice,
     courseHasManualPrice,
     setDateTimeTimeZone,
     draftId,

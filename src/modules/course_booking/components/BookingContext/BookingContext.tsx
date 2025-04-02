@@ -183,9 +183,19 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     course_delivery_type: profile?.course
       ?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: profile?.course?.reaccreditation ?? false,
-    currency: profile?.course?.priceCurrency as Currency,
     pause: acl.isUK() || hideMCM,
   })
+
+  const rpPrice = useMemo(
+    () =>
+      (profile?.course?.priceCurrency as Currency) === Currency.Nzd
+        ? resourcePackPricing?.resource_packs_pricing[0]?.NZD_price
+        : resourcePackPricing?.resource_packs_pricing[0]?.AUD_price,
+    [
+      profile?.course?.priceCurrency,
+      resourcePackPricing?.resource_packs_pricing,
+    ],
+  )
   const [, createOrder] = useMutation<
     CreateOrderMutation,
     CreateOrderMutationVariables
@@ -339,9 +349,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
         booking.currency,
       )
     } else if (!hideMCM) {
-      mandatoryCourseMaterialsCost =
-        (resourcePackPricing?.anz_resource_packs_pricing[0]?.price ?? 0) *
-        booking.quantity
+      mandatoryCourseMaterialsCost = (rpPrice ?? 0) * booking.quantity
     }
 
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
@@ -402,7 +410,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     booking.vat,
     hideMCM,
     ready,
-    resourcePackPricing?.anz_resource_packs_pricing,
+    rpPrice,
   ])
 
   const placeOrder = useCallback(async () => {

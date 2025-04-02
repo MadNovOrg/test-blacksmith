@@ -84,4 +84,42 @@ describe(Tabs.name, () => {
     screen.getByTestId('org-details').click()
     expect(screen.getByTestId('org-details')).toBeInTheDocument()
   })
+  const resourcePacksPricingAllowedRoles = [
+    RoleName.TT_ADMIN,
+    RoleName.TT_OPS,
+    RoleName.FINANCE,
+    RoleName.SALES_ADMIN,
+  ]
+
+  it.each(resourcePacksPricingAllowedRoles)(
+    'should render org resource packs pricing tab for role --%s',
+    role => {
+      vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+      render(<Tabs organization={buildOrganization()} />, {
+        auth: {
+          activeRole: role,
+        },
+      })
+      expect(
+        screen.getByTestId('org-resource-packs-pricing'),
+      ).toBeInTheDocument()
+    },
+  )
+
+  it.each(
+    Object.values(RoleName).filter(
+      role => !resourcePacksPricingAllowedRoles.includes(role),
+    ),
+  )('should not render org resource packs pricing tab for role -- %s', role => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+
+    render(<Tabs organization={buildOrganization()} />, {
+      auth: {
+        activeRole: role,
+      },
+    })
+    expect(
+      screen.queryByTestId('org-resource-packs-pricing'),
+    ).not.toBeInTheDocument()
+  })
 })
