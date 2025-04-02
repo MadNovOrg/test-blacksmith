@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Link,
   Paper,
+  Skeleton,
   Stack,
   Table,
   TableBody,
@@ -37,12 +38,15 @@ import { useAuth } from '@app/context/auth'
 import { CertificateStatus, Course_Level_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
+import { useProfileRoles } from '@app/modules/profile/hooks/useProfileRoles'
 import useProfiles from '@app/modules/profile/hooks/useProfiles'
+import { useProfilesOrganisations } from '@app/modules/profile/hooks/useProfilesOrganisations'
 import theme from '@app/theme'
-import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { TrainerRoleTypeName } from '@app/types'
 
 import { MergeUsersDialog } from '../components/MergeUsersDialog/MergeUsersDialog'
-import UserRole from '../utils/UserRole'
+import UserRole from '../components/UserRoleChip/UserRole'
+import { getRoleOptions, getTrainerRoleTypesOptions } from '../utils'
 
 export const Users = () => {
   const { t } = useTranslation()
@@ -52,58 +56,16 @@ export const Users = () => {
   const { acl } = useAuth()
   const { getLabel } = useWorldCountries()
 
-  const roleOptions = useMemo<FilterOption[]>(() => {
-    const rolesToFilterBy = [
-      ...Object.values([
-        RoleName.USER,
-        RoleName.TRAINER,
-        RoleName.TT_OPS,
-        RoleName.SALES_REPRESENTATIVE,
-        RoleName.SALES_ADMIN,
-        RoleName.LD,
-        RoleName.FINANCE,
-        RoleName.TT_ADMIN,
-        RoleName.BOOKING_CONTACT,
-        RoleName.ORGANIZATION_KEY_CONTACT,
-        RoleName.UNVERIFIED,
-      ]),
-      'organization-admin',
-    ]
-
-    return rolesToFilterBy.map<FilterOption>(role => ({
-      id: role,
-      title: t(`role-names.${role}`),
-      selected: false,
-    }))
-  }, [t])
-
-  const trainerTypeOptions = useMemo<FilterOption[]>(() => {
-    if (acl.isAustralia()) {
-      return Object.values([
-        TrainerRoleTypeName.PRINCIPAL,
-        TrainerRoleTypeName.SENIOR,
-        TrainerRoleTypeName.MODERATOR,
-      ]).map<FilterOption>(type => ({
-        id: type,
-        title: t(`trainer-role-types.${type}`),
-        selected: false,
-      }))
-    }
-    return Object.values(TrainerRoleTypeName).map<FilterOption>(type => ({
-      id: type,
-      title: t(`trainer-role-types.${type}`),
-      selected: false,
-    }))
-  }, [acl, t])
-
   const [selected, setSelected] = useState<string[]>([])
   const [keyword, setKeyword] = useState('')
   const [keywordDebounced] = useDebounce(keyword, 300)
-  const [roleFilter, setRoleFilter] = useState<FilterOption[]>(roleOptions)
+  const [roleFilter, setRoleFilter] = useState<FilterOption[]>(getRoleOptions())
   const [filterByModerator, setFilterByModerator] = useState(false)
   const [filterByArchived, setFilterByArchived] = useState(false)
-  const [trainerTypeFilter, setTrainerTypeFilter] =
-    useState<FilterOption[]>(trainerTypeOptions)
+  const [trainerTypeFilter, setTrainerTypeFilter] = useState<FilterOption[]>(
+    getTrainerRoleTypesOptions({ isAustralia: acl.isAustralia() }),
+  )
+
   const [filterByCertificateLevel, setFilteredByCertificateLEvel] = useState<
     Course_Level_Enum[]
   >([])
@@ -379,6 +341,15 @@ export const Users = () => {
     offset: perPage * (currentPage - 1),
   })
 
+  const currentPageUserIds = useMemo(() => {
+    return users.map(user => user.id)
+  }, [users])
+
+  const { data: rolesData, fetching: loadingProfileRoles } =
+    useProfileRoles(currentPageUserIds)
+  const { data: organisationData, fetching: loadingOranisations } =
+    useProfilesOrganisations(currentPageUserIds)
+
   const cols = useMemo(() => {
     const _t = (col: string) => t(`common.${col}`)
     return [
@@ -614,44 +585,90 @@ export const Users = () => {
                           </TableCell>
 
                           <TableCell>
-                            {user.organizations.map(obj => (
-                              <Link
-                                display="block"
-                                color="secondary"
-                                key={obj.organization.id}
-                                href={`/organisations/${obj.organization.id}`}
-                              >
-                                {obj.organization.name}
-                              </Link>
-                            ))}
+                            {(() => {
+                              if (loadingOranisations)
+                                return (
+                                  <Skeleton variant="rectangular" width={100} />
+                                )
+                              const userOrganisations =
+                                organisationData?.profile.find(
+                                  profile => profile.id === user.id,
+                                )
+                              return (
+                                <Link>
+                                  {...(userOrganisations?.organizations.length
+                                    ? userOrganisations.organizations
+                                    : []
+                                  ).map(({ organization }) => (
+                                    <Link
+                                      display="block"
+                                      color="secondary"
+                                      key={organization.id}
+                                      href={`/organisations/${organization.id}`}
+                                    >
+                                      {organization.name}
+                                    </Link>
+                                  ))}
+                                </Link>
+                              )
+                            })()}
                           </TableCell>
 
                           <TableCell>
-                            <Box display="flex" flexWrap="wrap">
-                              <UserRole user={user} />
-                            </Box>
-                          </TableCell>
-                          <TableCell>
-                            <Box display="flex" flexWrap="wrap">
-                              {user.trainer_role_types.map(obj => {
-                                const { trainer_role_type } = obj
-                                return trainer_role_type ? (
-                                  <Chip
-                                    key={trainer_role_type.id}
-                                    sx={{
-                                      fontSize: '12px',
-                                      margin: '0 4px 4px 0',
-                                    }}
-                                    size="small"
-                                    label={t(
-                                      `trainer-role-types.${trainer_role_type.name}`,
-                                    )}
-                                    data-testid="trainer-role-type-chip"
+                            {(() => {
+                              if (loadingProfileRoles || loadingOranisations)
+                                return (
+                                  <Skeleton variant="rectangular" width={100} />
+                                )
+                              const userWithRoles = rolesData?.profile.find(
+                                profile => profile.id === user.id,
+                              )?.roles
+                              const isOrganisationAdmin = Boolean(
+                                organisationData?.profile
+                                  .find(profile => profile.id === user.id)
+                                  ?.organizations.some(
+                                    ({ isAdmin }) => isAdmin,
+                                  ),
+                              )
+
+                              if (!userWithRoles) return null
+                              return (
+                                <Box display="flex" flexWrap="wrap">
+                                  <UserRole
+                                    user={userWithRoles}
+                                    isOrganisationAdmin={isOrganisationAdmin}
                                   />
-                                ) : null
-                              })}
-                            </Box>
+                                </Box>
+                              )
+                            })()}
                           </TableCell>
+                          {(() => {
+                            const userTrainerRoles = rolesData?.profile.find(
+                              profile => profile.id === user.id,
+                            )?.trainer_role_types
+
+                            return (
+                              <Box display="flex" flexWrap="wrap">
+                                {(userTrainerRoles || []).map(obj => {
+                                  const { trainer_role_type } = obj
+                                  return trainer_role_type ? (
+                                    <Chip
+                                      key={trainer_role_type.name}
+                                      sx={{
+                                        fontSize: '12px',
+                                        margin: '0 4px 4px 0',
+                                      }}
+                                      size="small"
+                                      label={t(
+                                        `trainer-role-types.${trainer_role_type.name}`,
+                                      )}
+                                      data-testid="trainer-role-type-chip"
+                                    />
+                                  ) : null
+                                })}
+                              </Box>
+                            )
+                          })()}
                         </TableRow>
                       )
                     })}

@@ -1,35 +1,34 @@
 import { Chip, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { GetProfilesQuery } from '@app/generated/graphql'
+import { GetBulkProfilesRolesByProfileIdQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 interface IUserRoleProps {
-  user: GetProfilesQuery['profiles'][0]
+  user: GetBulkProfilesRolesByProfileIdQuery['profile'][0]['roles']
+  isOrganisationAdmin: boolean
 }
 
-const UserRole: React.FC<IUserRoleProps> = ({ user }) => {
+const UserRole: React.FC<IUserRoleProps> = ({ user, isOrganisationAdmin }) => {
   const { t } = useTranslation()
   const isExternalRole = (role: string) =>
     [RoleName.TRAINER, RoleName.USER].some(r => r === role)
 
-  const isOrganisationAdmin = user.organizations.some(
-    organisation => organisation.isAdmin,
-  )
+  const userRoles = user
 
   return (
     <Box display="flex" flexWrap="wrap">
-      {user.roles.map(userRoles => {
+      {userRoles.map(({ role }) => {
         return (
           <Chip
-            key={userRoles.role.id}
+            key={role.name}
             sx={{
               fontSize: '12px',
               margin: '0 4px 4px 0',
             }}
             size="small"
-            color={isExternalRole(userRoles.role.name) ? 'success' : 'info'}
-            label={t(`role-names.${userRoles.role.name}`)}
+            color={isExternalRole(role.name) ? 'success' : 'info'}
+            label={t(`role-names.${role.name}`)}
             data-testid="user-role-chip"
           />
         )

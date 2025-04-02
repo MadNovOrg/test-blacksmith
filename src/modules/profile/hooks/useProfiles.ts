@@ -8,32 +8,18 @@ import {
 
 export const GET_PROFILES = gql`
   query GetProfiles($limit: Int, $offset: Int, $where: profile_bool_exp) {
-    profiles: profile(limit: $limit, offset: $offset, where: $where) {
+    profiles: profile(
+      limit: $limit
+      offset: $offset
+      where: $where
+      order_by: { fullName: asc }
+    ) {
       id
       fullName
       avatar
       archived
       email
       countryCode
-      organizations {
-        isAdmin
-        organization {
-          id
-          name
-        }
-      }
-      roles {
-        role {
-          id
-          name
-        }
-      }
-      trainer_role_types {
-        trainer_role_type {
-          name
-          id
-        }
-      }
     }
     profile_aggregate(where: $where) {
       aggregate {

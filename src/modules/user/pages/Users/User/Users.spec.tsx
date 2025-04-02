@@ -2,10 +2,14 @@ import { build, perBuild } from '@jackfranklin/test-data-bot'
 import { useTranslation } from 'react-i18next'
 
 import {
+  GetBulkProfilesRolesByProfileIdQuery,
+  GetProfilesOrganisationsByProfileIdQuery,
   GetProfilesQuery,
   GetProfilesQueryVariables,
 } from '@app/generated/graphql'
+import { useProfileRoles } from '@app/modules/profile/hooks/useProfileRoles'
 import useProfiles from '@app/modules/profile/hooks/useProfiles'
+import { useProfilesOrganisations } from '@app/modules/profile/hooks/useProfilesOrganisations'
 import { AwsRegions, RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
@@ -20,9 +24,13 @@ import {
 
 import { Users } from './Users'
 
+vi.mock('@app/modules/profile/hooks/useProfilesOrganisations')
 vi.mock('@app/modules/profile/hooks/useProfiles')
+vi.mock('@app/modules/profile/hooks/useProfileRoles')
 
 const useProfilesMocked = vi.mocked(useProfiles)
+const useProfilesOrganisationsMocked = vi.mocked(useProfilesOrganisations)
+const useProfileRolesMocked = vi.mocked(useProfileRoles)
 
 const notAllowedRoles = [
   RoleName.FINANCE,
@@ -38,31 +46,6 @@ const mockProfile = build<
     fullName: perBuild(() => chance.name({ full: true })),
     email: perBuild(() => chance.email()),
     avatar: perBuild(() => chance.avatar()),
-    roles: [
-      {
-        role: {
-          id: perBuild(() => chance.guid()),
-          name: RoleName.USER,
-        },
-      },
-    ],
-    trainer_role_types: [
-      {
-        trainer_role_type: {
-          id: perBuild(() => chance.guid()),
-          name: TrainerRoleTypeName.PRINCIPAL,
-        },
-      },
-    ],
-    organizations: [
-      {
-        isAdmin: perBuild(() => chance.bool()),
-        organization: {
-          id: perBuild(() => chance.guid()),
-          name: perBuild(() => chance.word()),
-        },
-      },
-    ],
   },
 })
 
@@ -75,6 +58,15 @@ describe('page: Users', () => {
 
   const _t = (col: string) => t(`common.${col}`)
 
+  useProfileRolesMocked.mockReturnValue({
+    data: {} as GetBulkProfilesRolesByProfileIdQuery,
+    fetching: false,
+  })
+  useProfilesOrganisationsMocked.mockReturnValue({
+    data: {} as GetProfilesOrganisationsByProfileIdQuery,
+    fetching: false,
+  })
+
   it('displays a spinner while users are loading', () => {
     useProfilesMocked.mockReturnValue({
       profiles: [],
@@ -82,6 +74,11 @@ describe('page: Users', () => {
       count: 0,
       error: undefined,
       mutate: vi.fn(),
+    })
+
+    useProfileRolesMocked.mockReturnValue({
+      data: {} as GetBulkProfilesRolesByProfileIdQuery,
+      fetching: false,
     })
 
     render(<Users />)
@@ -104,6 +101,7 @@ describe('page: Users', () => {
   })
 
   it('displays table columns and fields', () => {
+    const organizationName = 'Test organization'
     const profile = mockProfile()
     useProfilesMocked.mockReturnValue({
       profiles: [profile],
@@ -111,6 +109,49 @@ describe('page: Users', () => {
       count: 0,
       error: undefined,
       mutate: vi.fn(),
+    })
+    useProfilesOrganisationsMocked.mockReturnValue({
+      data: {
+        profile: [
+          {
+            id: profile.id,
+            organizations: [
+              {
+                organization: {
+                  id: chance.guid(),
+                  name: organizationName,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      fetching: false,
+    })
+
+    useProfileRolesMocked.mockReturnValue({
+      fetching: false,
+      data: {
+        profile: [
+          {
+            id: profile.id,
+            roles: [
+              {
+                role: {
+                  name: RoleName.USER,
+                },
+              },
+            ],
+            trainer_role_types: [
+              {
+                trainer_role_type: {
+                  name: TrainerRoleTypeName.PRINCIPAL,
+                },
+              },
+            ],
+          },
+        ],
+      },
     })
 
     render(<Users />)
@@ -139,9 +180,7 @@ describe('page: Users', () => {
 
     expect(within(tableBody).getByText(profile.email ?? '')).toBeInTheDocument()
 
-    expect(
-      within(tableBody).getByText(profile.organizations[0].organization.name),
-    ).toBeInTheDocument()
+    expect(within(tableBody).getByText(organizationName)).toBeInTheDocument()
     expect(within(tableBody).getByText('Individual')).toBeInTheDocument()
     expect(within(tableBody).getByText('Principal')).toBeInTheDocument()
   })
