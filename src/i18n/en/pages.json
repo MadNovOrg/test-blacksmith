@@ -54,7 +54,7 @@
   "onboarding": {
     "title": "We need a bit more information",
     "submit-btn-text": "Update information",
-    "tcs-label": "I accept the <1>Terms of Use</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
+    "tcs-label": "I accept the <1>Terms of Use</1> and agree to Team Teach processing my personal data in accordance with the <3>Privacy Policy</3>",
     "tcs-required": "Accepting our T&C is required",
     "error-saving": "We're having issue saving your personal information.",
     "organisation-required-error": "Organisation is a required field"
@@ -1136,7 +1136,7 @@
     "confirmPassword-label": "Confirm Password",
     "confirmPassword-placeholder": "Please re-enter your password",
     "tcs-title": "Terms & Conditions",
-    "tcs-label": "I accept the <1>Terms of Use</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
+    "tcs-label": "I accept the <1>Terms of Use</1> and agree to Team Teach processing my personal data in accordance with the <3>Privacy Policy</3>",
     "tcs-required": "Accepting our T&C is required",
     "submit-btn": "Create account",
     "verify-hint": "A six-digit code has been sent to your email, please enter it below:",
@@ -1573,7 +1573,6 @@
           "error-license-price-required": "licences number is a required field",
           "issue-refund-label": "Issue a refund. This will add a credit note to the invoice."
         },
-
         "table": {
           "col-date": "Date",
           "col-event": "Event",
