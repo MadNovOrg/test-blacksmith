@@ -14,7 +14,7 @@ import {
   Course_Type_Enum,
   GetEvaluationsSummaryQuery,
   Grade_Enum,
-  CertificateStatus,
+  Certificate_Status_Enum,
   Course_Exception_Enum,
   Course_Trainer_Type_Enum,
   CourseTrainerType as GeneratedCourseTrainerType,
@@ -163,7 +163,7 @@ export type CourseCertificate = {
   participant?: CourseParticipant
   profileId: string
   profile: Profile
-  status: CertificateStatus
+  status: Certificate_Status_Enum
   blendedLearning: boolean
   reaccreditation: boolean
   courseAccreditedBy: Accreditors_Enum

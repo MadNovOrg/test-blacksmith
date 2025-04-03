@@ -31,7 +31,7 @@ import {
   GetCertificateQueryVariables,
   Grade_Enum,
   Course_Level_Enum,
-  CertificateStatus,
+  Certificate_Status_Enum,
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -172,8 +172,8 @@ export const CourseCertification: React.FC<
     )
   }
 
-  const isRevoked = certificate.status === CertificateStatus.Revoked
-  const isOnHold = certificate.status === CertificateStatus.OnHold
+  const isRevoked = certificate.status === Certificate_Status_Enum.Revoked
+  const isOnHold = certificate.status === Certificate_Status_Enum.OnHold
 
   const statusTooltip =
     isRevoked || isOnHold
@@ -219,7 +219,8 @@ export const CourseCertification: React.FC<
                   variant="contained"
                   color="primary"
                   disabled={
-                    isRevoked || certificate.status === CertificateStatus.OnHold
+                    isRevoked ||
+                    certificate.status === Certificate_Status_Enum.OnHold
                   }
                 >
                   <PDFDownloadLink
@@ -271,7 +272,7 @@ export const CourseCertification: React.FC<
           <Grid item md={8} xs={12}>
             {holdRequest ? (
               <HoldHeaderAlert
-                status={certificate.status as CertificateStatus}
+                status={certificate.status as Certificate_Status_Enum}
                 holdRequestEndDate={holdRequest.expiry_date}
                 holdRequestStartDate={holdRequest.start_date}
                 onEdit={() => setShowPutOnHoldModal({ edit: true, open: true })}
@@ -287,7 +288,7 @@ export const CourseCertification: React.FC<
               expiryDate={certificate.expiryDate}
               certificationNumber={certificationNumber}
               dateIssued={certificate.certificationDate}
-              status={certificate.status as CertificateStatus}
+              status={certificate.status as Certificate_Status_Enum}
               statusTooltip={statusTooltip}
               expireHoldDate={holdRequest?.expiry_date}
               onShowChangelogModal={() => setShowChangelogModal(true)}

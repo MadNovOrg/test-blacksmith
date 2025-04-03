@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react'
 
-import { CertificateStatus } from '@app/generated/graphql'
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 
 import { chance } from '@test/index'
 
@@ -21,6 +21,6 @@ export const Default: Story = {
   args: {
     orgId: chance.guid(),
     onChange: () => null,
-    certificateStatus: Object.values(CertificateStatus),
+    certificateStatus: Object.values(Certificate_Status_Enum),
   },
 }

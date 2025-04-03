@@ -17,7 +17,7 @@ import MUIImage from 'mui-image'
 import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
 import {
   Accreditors_Enum,
-  CertificateStatus,
+  Certificate_Status_Enum,
   Course_Participant_Module,
   GetCertificateQuery,
   Grade_Enum,
@@ -54,7 +54,7 @@ type CertificateInfoProps = {
   expiryDate: string
   certificationNumber: string
   dateIssued: string
-  status: CertificateStatus
+  status: Certificate_Status_Enum
   statusTooltip?: string
   expireHoldDate?: string
   onShowChangelogModal: VoidFunction
@@ -92,8 +92,8 @@ export const CertificateInfo: React.FC<
     return { modules: filteredModules, groups: strategy.groups }
   }
 
-  const isRevoked = status === CertificateStatus.Revoked
-  const isOnHold = status === CertificateStatus.OnHold
+  const isRevoked = status === Certificate_Status_Enum.Revoked
+  const isOnHold = status === Certificate_Status_Enum.OnHold
 
   const strategyModules: Record<string, Strategy> =
     courseParticipant?.bildGradingModules?.modules

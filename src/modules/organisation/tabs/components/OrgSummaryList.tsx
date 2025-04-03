@@ -17,10 +17,10 @@ import { useTranslation } from 'react-i18next'
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
-import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import theme from '@app/theme'
 
 import { useIndividualOrganizationStatistics } from '../../hooks/useIndividualOrganizationStatistics'
+import { useProfilesByOrganisation } from '../../hooks/useProfilesByOrganisation'
 
 type OrgSummaryListParams = {
   orgId: string
@@ -39,12 +39,6 @@ export const OrgSummaryList: React.FC<
   const [perPage, setPerPage] = useState(PER_PAGE)
   const showAllOrgs = acl.canViewAllOrganizations()
 
-  const { profilesByOrganisation } = useOrganisationProfiles({
-    orgId,
-    profileId: profile?.id,
-    showAll: showAllOrgs,
-  })
-
   const { data, reexecute } = useOrgV2({
     orgId,
     profileId: profile?.id,
@@ -52,6 +46,10 @@ export const OrgSummaryList: React.FC<
     shallow: true,
     limit: perPage,
     offset: perPage * currentPage,
+  })
+
+  const { profilesByOrganisation } = useProfilesByOrganisation({
+    ids: data?.orgs.map(org => org.id) ?? [],
   })
 
   const handleRowsPerPageChange = useCallback(
@@ -135,25 +133,27 @@ export const OrgSummaryList: React.FC<
                         },
                       }}
                     >
-                      {profilesByOrganisation.get(org.id)?.map(profile => (
-                        <Link
-                          href={`/profile/${profile?.id}`}
-                          key={profile?.id}
-                          underline="none"
-                          ml={-1}
-                        >
-                          <Avatar
-                            src={profile?.avatar ?? ''}
-                            name={
-                              profile?.archived
-                                ? undefined
-                                : profile?.fullName ?? ''
-                            }
+                      {profilesByOrganisation
+                        .get(org.id)
+                        ?.map(({ profile }) => (
+                          <Link
+                            href={`/profile/${profile?.id}`}
+                            key={profile?.id}
+                            underline="none"
+                            ml={-1}
                           >
-                            {profile?.archived ? <CloseIcon /> : null}
-                          </Avatar>
-                        </Link>
-                      ))}
+                            <Avatar
+                              src={profile?.avatar ?? ''}
+                              name={
+                                profile?.archived
+                                  ? undefined
+                                  : profile?.fullName ?? ''
+                              }
+                            >
+                              {profile?.archived ? <CloseIcon /> : null}
+                            </Avatar>
+                          </Link>
+                        ))}
                     </AvatarGroup>
                   </Link>
                 </TableCell>

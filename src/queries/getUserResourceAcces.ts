@@ -1,5 +1,7 @@
 import { gql } from 'urql'
 
+import { Certificate_Status_Enum } from '@app/generated/graphql'
+
 export const GET_USER_CAN_ACCESS_RESOURCES = gql`
   query GetUserCanAccessResources($profileId: uuid) {
     certificates: course_certificate_aggregate(
@@ -7,7 +9,7 @@ export const GET_USER_CAN_ACCESS_RESOURCES = gql`
         _and: {
           profileId: { _eq: $profileId }
           isRevoked: { _eq: false }
-          status: { _nin: ["EXPIRED_RECENTLY", "EXPIRED"] }
+          status: { _nin: [${Certificate_Status_Enum.ExpiredRecently}, ${Certificate_Status_Enum.Expired}] }
         }
       }
     ) {

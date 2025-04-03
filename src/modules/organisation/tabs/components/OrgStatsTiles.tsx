@@ -2,7 +2,7 @@ import { Grid } from '@mui/material'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CertificateStatus } from '@app/generated/graphql'
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 import { CountPanel } from '@app/modules/organisation/components/CountPanel'
 import { SelectableCountPanel } from '@app/modules/organisation/components/SelectableCountPanel/SelectableCountPanel'
 import { ALL_ORGS, noop } from '@app/util'
@@ -14,8 +14,8 @@ import { useUpcomingEnrollmentsStats } from '../../hooks/useUpcomingEnrollmentsS
 
 export type OrgStatsTilesParams = {
   orgId: string
-  selected?: CertificateStatus[]
-  onTileSelect?: (selectedTile: CertificateStatus | null) => void
+  selected?: Certificate_Status_Enum[]
+  onTileSelect?: (selectedTile: Certificate_Status_Enum | null) => void
 }
 
 export const OrgStatsTiles: React.FC<
@@ -137,8 +137,8 @@ export const OrgStatsTiles: React.FC<
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-active-certificates',
           )}
-          onClick={() => onTileSelect(CertificateStatus.Active)}
-          selected={selected.includes(CertificateStatus.Active)}
+          onClick={() => onTileSelect(Certificate_Status_Enum.Active)}
+          selected={selected.includes(Certificate_Status_Enum.Active)}
           testid="active-certifications"
         />
       </Grid>
@@ -154,8 +154,8 @@ export const OrgStatsTiles: React.FC<
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count: enrollmentStats?.on_hold_enrollments.aggregate?.count,
           })}
-          onClick={() => onTileSelect(CertificateStatus.OnHold)}
-          selected={selected.includes(CertificateStatus.OnHold)}
+          onClick={() => onTileSelect(Certificate_Status_Enum.OnHold)}
+          selected={selected.includes(Certificate_Status_Enum.OnHold)}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
@@ -172,8 +172,8 @@ export const OrgStatsTiles: React.FC<
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-certificates-to-expire',
           )}
-          onClick={() => onTileSelect(CertificateStatus.ExpiringSoon)}
-          selected={selected.includes(CertificateStatus.ExpiringSoon)}
+          onClick={() => onTileSelect(Certificate_Status_Enum.ExpiringSoon)}
+          selected={selected.includes(Certificate_Status_Enum.ExpiringSoon)}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={3} p={1} borderRadius={1}>
@@ -191,8 +191,8 @@ export const OrgStatsTiles: React.FC<
           tooltip={t(
             'pages.org-details.tabs.overview.members-with-expired-certificates',
           )}
-          onClick={() => onTileSelect(CertificateStatus.ExpiredRecently)}
-          selected={selected.includes(CertificateStatus.ExpiredRecently)}
+          onClick={() => onTileSelect(Certificate_Status_Enum.ExpiredRecently)}
+          selected={selected.includes(Certificate_Status_Enum.ExpiredRecently)}
         />
       </Grid>
     </Grid>

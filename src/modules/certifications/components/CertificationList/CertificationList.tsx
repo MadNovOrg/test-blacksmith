@@ -24,7 +24,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Grade_Enum,
   Course_Level_Enum,
-  CertificateStatus,
+  Certificate_Status_Enum,
 } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
@@ -122,7 +122,9 @@ export const CertificationList: React.FC<
     return [
       checkbox.headCol(
         filteredPatricipants.flatMap(p =>
-          p.certificate?.status === CertificateStatus.Revoked ? [] : [p.id],
+          p.certificate?.status === Certificate_Status_Enum.Revoked
+            ? []
+            : [p.id],
         ),
       ),
       ...col('name', { sorting: true }),
@@ -269,7 +271,8 @@ export const CertificationList: React.FC<
               onClick={() => {
                 downloadCertificates(
                   filteredPatricipants.filter(
-                    p => p.certificate?.status !== CertificateStatus.Revoked,
+                    p =>
+                      p.certificate?.status !== Certificate_Status_Enum.Revoked,
                   ) ?? [],
                 )
               }}

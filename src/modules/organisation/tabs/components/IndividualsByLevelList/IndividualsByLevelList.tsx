@@ -1,5 +1,6 @@
 import {
   Box,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -16,27 +17,32 @@ import { useTranslation } from 'react-i18next'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import {
-  CertificateStatus,
-  CourseLevel,
-  OrganizationProfile,
+  Certificate_Status_Enum,
+  Course_Level_Enum,
+  GetProfilesWithUpcomingEnrollmentsQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
 import theme from '@app/theme'
 import { ALL_ORGS } from '@app/util'
 
+import { useOrganisationProfilesByCertificateLevel } from '../../../hooks/useOrganisationProfielsByCertificateLevel/useOrganisationProfielsByCertificateLevel'
+import { useProfilesWithOrganisations } from '../../../hooks/useProfilesWithOrganisations/useProfilesWithOrganisations'
+import { useProfilesWithUpcomingEnrollments } from '../../../hooks/useProfilesWithUpcomingEnrollments/useProfilesWithUpcomingEnrollments'
+
 type IndividualsByLevelListParams = {
   orgId: string
-  courseLevel: CourseLevel | null
-  profilesByLevel: Map<CourseLevel | null, OrganizationProfile[]>
+  courseLevel: Course_Level_Enum | null
 }
 const PER_PAGE = 5
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
 
 export const IndividualsByLevelList: React.FC<
   React.PropsWithChildren<IndividualsByLevelListParams>
-> = ({ orgId, courseLevel, profilesByLevel }) => {
+> = ({ orgId, courseLevel }) => {
   const { t } = useTranslation()
+
+  const { profilesByLevel } = useOrganisationProfilesByCertificateLevel()
 
   const sorting = useTableSort('fullName', 'asc')
   const [currentPage, setCurrentPage] = useState(0)
@@ -57,12 +63,26 @@ export const IndividualsByLevelList: React.FC<
     return sorted.slice(currentPage * perPage, currentPage * perPage + perPage)
   }, [profilesByLevel, courseLevel, sorting, currentPage, perPage])
 
+  const currentPageUsersIds = currentPageUsers.map(p => p.id)
+
+  const { profileWithOrganisations } = useProfilesWithOrganisations({
+    ids: currentPageUsersIds,
+  })
+  const [
+    { data: enrollmentsData, fetching: fetchingEnrollments },
+    refetchEnrollments,
+  ] = useProfilesWithUpcomingEnrollments({
+    ids: currentPageUsersIds,
+    orgId,
+  })
+
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setPerPage(parseInt(event.target.value, 10))
       setCurrentPage(0)
+      refetchEnrollments()
     },
-    [],
+    [refetchEnrollments],
   )
 
   const cols = useMemo(() => {
@@ -97,6 +117,30 @@ export const IndividualsByLevelList: React.FC<
     ].filter(Boolean) as Col[]
   }, [courseLevel, t])
 
+  const userEnrollments = useMemo(() => {
+    const enrollmentsMap = new Map<
+      string,
+      {
+        courses: (
+          | GetProfilesWithUpcomingEnrollmentsQuery['profile'][0]['courses'][0]
+          | GetProfilesWithUpcomingEnrollmentsQuery['profile'][0]['upcomingEnrollments'][0]
+        )[]
+      }
+    >()
+    enrollmentsData?.profile.forEach(profileEnrollments => {
+      enrollmentsMap.set(profileEnrollments.id, {
+        courses: uniqBy(
+          [
+            ...profileEnrollments.courses,
+            ...profileEnrollments.upcomingEnrollments,
+          ],
+          'course.id',
+        ),
+      })
+    })
+    return enrollmentsMap
+  }, [enrollmentsData])
+
   return (
     <>
       <Table>
@@ -113,15 +157,8 @@ export const IndividualsByLevelList: React.FC<
               c => c?.courseLevel === courseLevel,
             )
             const certificationStatus =
-              certification?.status as CertificateStatus
-            const isRevoked = certificationStatus === CertificateStatus.Revoked
-            const isOnHold = certificationStatus === CertificateStatus.OnHold
-            const statusTooltip =
-              isRevoked || isOnHold
-                ? certification?.participant?.certificateChanges &&
-                  certification?.participant?.certificateChanges[0]?.payload
-                    ?.note
-                : undefined
+              certification?.status as Certificate_Status_Enum
+
             return (
               <TableRow key={profile.id} sx={{ backgroundColor: 'white' }}>
                 <TableCell>
@@ -134,41 +171,41 @@ export const IndividualsByLevelList: React.FC<
                 </TableCell>
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {profile.organizations?.map(orgMember => (
-                      <Box
-                        key={orgMember?.id}
-                        display="flex"
-                        flexDirection="row"
-                      >
-                        <Typography
-                          variant="body2"
-                          color={theme.palette.grey[900]}
+                    {profileWithOrganisations
+                      .get(profile.id)
+                      ?.organizations.map(orgMember => (
+                        <Box
+                          key={orgMember?.id}
+                          display="flex"
+                          flexDirection="row"
                         >
-                          {orgMember?.organization?.name}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color={theme.palette.grey[600]}
-                          ml={1}
-                        >
-                          {orgMember?.position}
-                        </Typography>
-                      </Box>
-                    ))}
+                          <Typography
+                            variant="body2"
+                            color={theme.palette.grey[900]}
+                          >
+                            {orgMember?.organization?.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color={theme.palette.grey[600]}
+                            ml={1}
+                          >
+                            {orgMember?.position}
+                          </Typography>
+                        </Box>
+                      ))}
                   </Box>
                 </TableCell>
                 {courseLevel ? (
                   <TableCell>
-                    <CertificateStatusChip
-                      status={certificationStatus}
-                      tooltip={String(statusTooltip ?? '')}
-                    />
+                    <CertificateStatusChip status={certificationStatus} />
                   </TableCell>
                 ) : null}
                 {courseLevel ? (
                   <TableCell>
                     <Typography variant="body2">
-                      {certificationStatus !== CertificateStatus.Revoked &&
+                      {certificationStatus !==
+                        Certificate_Status_Enum.Revoked &&
                         t('dates.default', {
                           date: new Date(certification?.expiryDate),
                         })}
@@ -177,19 +214,22 @@ export const IndividualsByLevelList: React.FC<
                 ) : null}
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">
-                    {[...uniqBy(profile.upcomingEnrollments, 'course.id')]?.map(
-                      enrollment => (
+                    {(() => {
+                      if (fetchingEnrollments) return <Skeleton width={300} />
+                      const enrollments = userEnrollments.get(profile.id)
+                      if (!enrollments) return null
+                      return enrollments.courses.map(({ course }) => (
                         <Link
-                          key={enrollment?.course?.id}
+                          key={course?.id}
                           variant="body2"
-                          href={`/manage-courses/${profile.id}/${enrollment?.course?.id}/details`}
+                          href={`/manage-courses/${profile.id}/${course?.id}/details`}
                         >
                           {`${t(
-                            `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`,
-                          )} ${enrollment?.course?.course_code}`}
+                            `common.certificates.${courseLevel?.toLowerCase()}`,
+                          )} ${course?.course_code}`}
                         </Link>
-                      ),
-                    )}
+                      ))
+                    })()}
                   </Box>
                 </TableCell>
               </TableRow>

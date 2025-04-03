@@ -35,7 +35,10 @@ import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import { CertificateStatus, Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Certificate_Status_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { useProfileRoles } from '@app/modules/profile/hooks/useProfileRoles'
@@ -70,7 +73,7 @@ export const Users = () => {
     Course_Level_Enum[]
   >([])
   const [certificateStatus, setCertificateStatus] = useState<
-    CertificateStatus[]
+    Certificate_Status_Enum[]
   >([])
 
   const merging = location.pathname.includes('/merge')

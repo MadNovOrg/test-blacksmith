@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import {
   GetProfileDetailsQuery,
-  CertificateStatus,
+  Certificate_Status_Enum,
 } from '@app/generated/graphql'
 import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
 import { PROFILE_TABLE_ROW_SX } from '@app/util'
@@ -71,7 +71,7 @@ export const CertificationsTable: FC<
               <TableBody>
                 {(certifications ?? []).map(certificate => {
                   const isRevoked =
-                    certificate.status === CertificateStatus.Revoked
+                    certificate.status === Certificate_Status_Enum.Revoked
 
                   return (
                     <TableRow
@@ -85,7 +85,9 @@ export const CertificationsTable: FC<
                         <Grid container direction="column" alignItems="start">
                           {certificate.status ? (
                             <CertificateStatusChip
-                              status={certificate.status as CertificateStatus}
+                              status={
+                                certificate.status as Certificate_Status_Enum
+                              }
                               tooltip={
                                 certificate.participant?.certificateChanges[0]
                                   ?.payload?.note

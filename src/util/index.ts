@@ -31,7 +31,7 @@ import {
   Course_Type_Enum,
   Submodule,
   Submodule_Aggregate,
-  CertificateStatus,
+  Certificate_Status_Enum,
   CourseLevel,
   InsertOrgLeadMutationVariables,
   Course as GeneratedCourseType,
@@ -674,13 +674,13 @@ export const INVOICE_STATUS_COLOR: Record<
 }
 
 function getAdvancedTrainerLevel(
-  certificates: { courseLevel: string; status: CertificateStatus }[],
+  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
 ): Course_Level_Enum | null {
   const advancedTrainer = certificates?.find(
     c => c.courseLevel === Course_Level_Enum.AdvancedTrainer,
   )
   if (advancedTrainer) {
-    if (advancedTrainer.status !== CertificateStatus.ExpiredRecently) {
+    if (advancedTrainer.status !== Certificate_Status_Enum.ExpiredRecently) {
       return Course_Level_Enum.AdvancedTrainer
     }
   }
@@ -688,7 +688,7 @@ function getAdvancedTrainerLevel(
 }
 
 function getAdvancedLevel(
-  certificates: { courseLevel: string; status: CertificateStatus }[],
+  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
 ): Course_Level_Enum | null {
   if (certificates?.find(c => c.courseLevel === Course_Level_Enum.Advanced)) {
     return Course_Level_Enum.Advanced
@@ -697,7 +697,7 @@ function getAdvancedLevel(
 }
 
 function getBildLevel(
-  certificates: { courseLevel: string; status: CertificateStatus }[],
+  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
 ): Course_Level_Enum | null {
   return certificates?.find(
     c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer,
@@ -707,7 +707,7 @@ function getBildLevel(
 }
 
 function addBildHierarchyLevels(
-  certificates: { courseLevel: string; status: CertificateStatus }[],
+  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
   levels: (Course_Level_Enum | CourseLevel)[],
 ) {
   const bildHierarchy = [
@@ -719,7 +719,7 @@ function addBildHierarchyLevels(
     const certificate = certificates?.find(c => c.courseLevel === level)
     if (certificate) {
       levels.push(level)
-      if (certificate.status !== CertificateStatus.ExpiredRecently) {
+      if (certificate.status !== Certificate_Status_Enum.ExpiredRecently) {
         break
       }
     }
@@ -727,7 +727,7 @@ function addBildHierarchyLevels(
 }
 
 function addHierarchyLevels(
-  certificates: { courseLevel: string; status: CertificateStatus }[],
+  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
   levels: (Course_Level_Enum | CourseLevel)[],
 ) {
   const hierarchy = [
@@ -739,7 +739,7 @@ function addHierarchyLevels(
     const certificate = certificates?.find(c => c.courseLevel === level)
     if (certificate) {
       levels.push(level)
-      if (certificate.status !== CertificateStatus.ExpiredRecently) {
+      if (certificate.status !== Certificate_Status_Enum.ExpiredRecently) {
         return
       }
     }
@@ -748,7 +748,7 @@ function addHierarchyLevels(
 
 // more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
 export function getProfileCertificationLevels(
-  certificates: { courseLevel: string; status: CertificateStatus }[],
+  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
 ): (Course_Level_Enum | CourseLevel | null)[] {
   const levels = []
 

@@ -1,12 +1,5 @@
-import { isFuture } from 'date-fns'
 import { TFunction } from 'i18next'
-import { Maybe } from 'yup'
 
-import {
-  CourseLevel,
-  OrganizationProfile,
-  UpcominEnrollment,
-} from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 
 export type FormInputs = {
@@ -157,64 +150,6 @@ export const getFormSchema = (
         }
       : {}),
   })
-
-const isEnrollmentEndDateInFuture = (enrollment: Maybe<UpcominEnrollment>) => {
-  const endDate = enrollment?.course?.schedule?.[0]?.end
-  if (!endDate) return false
-  return isFuture(new Date(endDate))
-}
-
-export type profilesByLevelType = Map<CourseLevel, OrganizationProfile[]>
-
-export const filterProfilesByEnrollments = (
-  profilesByLevel: profilesByLevelType,
-) => {
-  const filteredProfilesByLevel: profilesByLevelType = new Map()
-
-  profilesByLevel.forEach((profiles, level) => {
-    const notEndedCourses = profiles.map(profile => ({
-      ...profile,
-      upcomingEnrollments: profile?.upcomingEnrollments?.filter(enrollment =>
-        isEnrollmentEndDateInFuture(enrollment),
-      ),
-    }))
-
-    if (notEndedCourses.length) {
-      filteredProfilesByLevel.set(level, notEndedCourses)
-    }
-  })
-
-  return filteredProfilesByLevel
-}
-
-export const filterOrganisationProfilesById = (
-  profilesByOrganisation: profilesByLevelType,
-  profilesByLvl: profilesByLevelType,
-) => {
-  const filteredOrganisations: profilesByLevelType = new Map()
-
-  const idsInProfiles = new Set<string[]>()
-
-  profilesByLvl.forEach(profiles => {
-    profiles.forEach(profile => {
-      if (profile?.id) {
-        idsInProfiles.add(profile.id)
-      }
-    })
-  })
-
-  profilesByOrganisation.forEach((profiles, level) => {
-    const filteredProfiles = profiles.filter(profile =>
-      idsInProfiles?.has(profile.id),
-    )
-
-    if (filteredProfiles.length) {
-      filteredOrganisations.set(level, filteredProfiles)
-    }
-  })
-
-  return filteredOrganisations
-}
 
 export const australiaRegions = [
   'Australian Capital Territory',

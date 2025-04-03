@@ -20,7 +20,7 @@ import {
 
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { useAuth } from '@app/context/auth'
-import { CertificateStatus } from '@app/generated/graphql'
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { useOrgMembers } from '@app/modules/organisation/hooks/useOrgMembers'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
@@ -50,12 +50,14 @@ export const OrgIndividualsTab: React.FC<
   const [selectedTab, setSelectedTab] = useState(
     initialTab || OrgIndividualsSubtabs.USERS,
   )
-  const statuses = Object.values(CertificateStatus) as CertificateStatus[]
+  const statuses = Object.values(
+    Certificate_Status_Enum,
+  ) as Certificate_Status_Enum[]
   const [certificateStatus, setCertificateStatus] = useQueryParam(
     'status',
     withDefault(
-      createEnumArrayParam<CertificateStatus>(statuses),
-      [] as CertificateStatus[],
+      createEnumArrayParam<Certificate_Status_Enum>(statuses),
+      [] as Certificate_Status_Enum[],
     ),
   )
 
@@ -79,7 +81,7 @@ export const OrgIndividualsTab: React.FC<
   const [{ data: pendingInvitesData }] = useOrganisationPendingInvites(orgId)
 
   const onKPITileSelected = useCallback(
-    (status: CertificateStatus | null) => {
+    (status: Certificate_Status_Enum | null) => {
       if (status) {
         setCertificateStatus(currentStatuses => {
           if (currentStatuses?.includes(status)) {

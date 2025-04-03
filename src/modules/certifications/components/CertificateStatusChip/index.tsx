@@ -2,20 +2,20 @@ import { Box, Chip, ChipProps, Tooltip } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CertificateStatus } from '@app/generated/graphql'
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 
-export const colorsMap: Record<CertificateStatus, ChipProps['color']> = {
-  [CertificateStatus.Active]: 'success',
-  [CertificateStatus.OnHold]: 'warning',
-  [CertificateStatus.Revoked]: 'critical',
-  [CertificateStatus.Expired]: 'error',
-  [CertificateStatus.ExpiredRecently]: 'error',
-  [CertificateStatus.ExpiringSoon]: 'warning',
-  [CertificateStatus.Inactive]: 'error',
+export const colorsMap: Record<Certificate_Status_Enum, ChipProps['color']> = {
+  [Certificate_Status_Enum.Active]: 'success',
+  [Certificate_Status_Enum.OnHold]: 'warning',
+  [Certificate_Status_Enum.Revoked]: 'critical',
+  [Certificate_Status_Enum.Expired]: 'error',
+  [Certificate_Status_Enum.ExpiredRecently]: 'error',
+  [Certificate_Status_Enum.ExpiringSoon]: 'warning',
+  [Certificate_Status_Enum.Inactive]: 'error',
 } as const
 
 type Props = {
-  status: CertificateStatus
+  status: Certificate_Status_Enum
   tooltip?: string
 } & ChipProps
 

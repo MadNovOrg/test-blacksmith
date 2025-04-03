@@ -18,17 +18,17 @@ import {
 import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import {
-  CertificateStatus,
+  Certificate_Status_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
-  CourseLevel,
-  OrganizationProfile,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
-import { useOrganisationProfiles } from '@app/modules/organisation/hooks/useOrganisationProfiles'
 import { CourseForBookingTile } from '@app/modules/organisation/tabs/components/CourseForBookingTile'
 import { OrgStatsTiles } from '@app/modules/organisation/tabs/components/OrgStatsTiles'
 import { ALL_ORGS } from '@app/util'
+
+import { useOrganisationProfilesByCertificateLevel } from '../hooks/useOrganisationProfielsByCertificateLevel/useOrganisationProfielsByCertificateLevel'
 
 import { OrgIndividuals } from './components/OrgIndividuals'
 import { OrgSummaryList } from './components/OrgSummaryList'
@@ -40,27 +40,27 @@ type OrgOverviewTabParams = {
 const UPCOMING_COURSES_LIMIT = 5
 
 const LEVELS_IN_ORDER = [
-  CourseLevel.Advanced,
-  CourseLevel.AdvancedTrainer,
-  CourseLevel.BildAdvancedTrainer,
-  CourseLevel.BildIntermediateTrainer,
-  CourseLevel.BildRegular,
-  CourseLevel.IntermediateTrainer,
-  CourseLevel.Level_1,
-  CourseLevel.Level_1Bs,
-  CourseLevel.Level_1Np,
-  CourseLevel.Level_2,
-  CourseLevel.FoundationTrainer,
-  CourseLevel.FoundationTrainerPlus,
+  Course_Level_Enum.Advanced,
+  Course_Level_Enum.AdvancedTrainer,
+  Course_Level_Enum.BildAdvancedTrainer,
+  Course_Level_Enum.BildIntermediateTrainer,
+  Course_Level_Enum.BildRegular,
+  Course_Level_Enum.IntermediateTrainer,
+  Course_Level_Enum.Level_1,
+  Course_Level_Enum.Level_1Bs,
+  Course_Level_Enum.Level_1Np,
+  Course_Level_Enum.Level_2,
+  Course_Level_Enum.FoundationTrainer,
+  Course_Level_Enum.FoundationTrainerPlus,
 ]
 
-const statuses = Object.values(CertificateStatus) as CertificateStatus[]
+const statuses = Object.values(Certificate_Status_Enum)
 
 export const OrgOverviewTab: React.FC<
   React.PropsWithChildren<OrgOverviewTabParams>
 > = ({ orgId }) => {
   const [userByLevelSelectedTab, setUserByLevelSelectedTab] = useState<
-    CourseLevel | 'none'
+    Course_Level_Enum | 'none'
   >()
 
   const { t } = useTranslation()
@@ -80,22 +80,12 @@ export const OrgOverviewTab: React.FC<
   const [certificateStatus, setCertificateStatus] = useQueryParam(
     'status',
     withDefault(
-      createEnumArrayParam<CertificateStatus>(statuses),
-      [] as CertificateStatus[],
+      createEnumArrayParam<Certificate_Status_Enum>(statuses),
+      [] as Certificate_Status_Enum[],
     ),
   )
 
-  const {
-    profilesByLevel,
-    profilesByOrganisation,
-    fetching: profilesFetching,
-  } = useOrganisationProfiles({
-    orgId,
-    profileId: profile?.id,
-    showAll: acl.canViewAllOrganizations(),
-    withUpcomingEnrollmentsOnly: true,
-    pause: orgId === 'all',
-  })
+  const { profilesByLevel } = useOrganisationProfilesByCertificateLevel()
 
   const { courses: coursesForBooking, fetching: coursesLoading } =
     useUpcomingCourses(
@@ -125,25 +115,12 @@ export const OrgOverviewTab: React.FC<
     return LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level))
   }, [profilesByLevel])
 
-  const defaultTab = levelsToShow[0] ?? 'none'
-
   useEffect(() => {
-    if (userByLevelSelectedTab === undefined) {
-      setUserByLevelSelectedTab(defaultTab)
-    }
-  }, [userByLevelSelectedTab, defaultTab, orgId, profilesByLevel])
-
-  let selectedTab: CourseLevel | 'none' = defaultTab
-  if (userByLevelSelectedTab) {
-    const value =
-      userByLevelSelectedTab === 'none' ? null : userByLevelSelectedTab
-    selectedTab = profilesByLevel.get(value as CourseLevel)
-      ? userByLevelSelectedTab
-      : defaultTab
-  }
+    setUserByLevelSelectedTab(levelsToShow[0])
+  }, [levelsToShow])
 
   const onKPITileSelected = useCallback(
-    (status: CertificateStatus | null) => {
+    (status: Certificate_Status_Enum | null) => {
       if (status) {
         setCertificateStatus(currentStatuses => {
           if (currentStatuses?.includes(status)) {
@@ -188,15 +165,10 @@ export const OrgOverviewTab: React.FC<
 
         <OrgIndividuals
           orgId={orgId}
-          profilesFetching={profilesFetching}
           certificateStatus={certificateStatus}
-          profilesByLevel={
-            profilesByLevel as Map<CourseLevel, OrganizationProfile[]>
-          }
           setUserByLevelSelectedTab={setUserByLevelSelectedTab}
           levelsToShow={levelsToShow}
-          selectedTab={selectedTab}
-          orgIdNotInProfiles={!profilesByOrganisation.get(orgId)?.length}
+          selectedTab={userByLevelSelectedTab as Course_Level_Enum}
         />
 
         {orgId === ALL_ORGS ? (

@@ -597,16 +597,6 @@ export type CategoryToTaxonomyConnectionEdge = {
   node?: Maybe<Taxonomy>;
 };
 
-export enum CertificateStatus {
-  Active = 'ACTIVE',
-  Expired = 'EXPIRED',
-  ExpiredRecently = 'EXPIRED_RECENTLY',
-  ExpiringSoon = 'EXPIRING_SOON',
-  Inactive = 'INACTIVE',
-  OnHold = 'ON_HOLD',
-  Revoked = 'REVOKED'
-}
-
 /** A Comment object */
 export type Comment = DatabaseIdentifier & Node & {
   __typename?: 'Comment';
@@ -1332,19 +1322,6 @@ export enum CourseApprovalError {
   TrainerNotFound = 'TRAINER_NOT_FOUND'
 }
 
-export type CourseCertificate = {
-  __typename?: 'CourseCertificate';
-  courseLevel?: Maybe<CourseLevel>;
-  expiryDate?: Maybe<Scalars['date']>;
-  participant?: Maybe<CourseParticipant>;
-  status?: Maybe<Scalars['String']>;
-};
-
-export type CourseCertificateChangelog = {
-  __typename?: 'CourseCertificateChangelog';
-  payload?: Maybe<Payload>;
-};
-
 export type CourseCertificateLevel = {
   __typename?: 'CourseCertificateLevel';
   courseLevel: CourseLevel;
@@ -1388,11 +1365,6 @@ export enum CourseLevel {
   Level_1Np = 'LEVEL_1_NP',
   Level_2 = 'LEVEL_2'
 }
-
-export type CourseParticipant = {
-  __typename?: 'CourseParticipant';
-  certificateChanges?: Maybe<Array<Maybe<CourseCertificateChangelog>>>;
-};
 
 export enum CourseTrainerType {
   Assistant = 'ASSISTANT',
@@ -3078,12 +3050,6 @@ export type EnqueuedStylesheet = EnqueuedAsset & Node & {
   version?: Maybe<Scalars['String']>;
 };
 
-export type EnrollmentCourseSchedule = {
-  __typename?: 'EnrollmentCourseSchedule';
-  end?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['String']>;
-};
-
 /** Boolean expression to compare columns of type "Float". All fields are combined with logical 'AND'. */
 export type Float_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['Float']>;
@@ -4515,39 +4481,6 @@ export type OrgInvite = {
   orgName: Scalars['String'];
 };
 
-export type OrganizationInfo = {
-  __typename?: 'OrganizationInfo';
-  address?: Maybe<Scalars['jsonb']>;
-  id?: Maybe<Scalars['uuid']>;
-  name?: Maybe<Scalars['String']>;
-};
-
-export type OrganizationProfile = {
-  __typename?: 'OrganizationProfile';
-  archived?: Maybe<Scalars['Boolean']>;
-  avatar?: Maybe<Scalars['String']>;
-  certificates?: Maybe<Array<Maybe<CourseCertificate>>>;
-  fullName?: Maybe<Scalars['String']>;
-  id: Scalars['uuid'];
-  organizations?: Maybe<Array<Maybe<ProfileOrganization>>>;
-  upcomingEnrollments?: Maybe<Array<Maybe<UpcominEnrollment>>>;
-};
-
-export type OrganizationProfilesInput = {
-  certificateFilter?: InputMaybe<Array<InputMaybe<CertificateStatus>>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orgId?: InputMaybe<Scalars['uuid']>;
-  profileId?: InputMaybe<Scalars['uuid']>;
-  showAll?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type OrganizationProfilesOutput = {
-  __typename?: 'OrganizationProfilesOutput';
-  profilesByLevel?: Maybe<Array<Maybe<ProfilesByLevel>>>;
-  profilesByOrganisation?: Maybe<Array<Maybe<ProfilesByOrganization>>>;
-};
-
 /** The page type */
 export type Page = ContentNode & DatabaseIdentifier & HierarchicalContentNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
   __typename?: 'Page';
@@ -4893,11 +4826,6 @@ export type PageToRevisionConnectionWhereArgs = {
 export type Paging = {
   page?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
-};
-
-export type Payload = {
-  __typename?: 'Payload';
-  note?: Maybe<Scalars['String']>;
 };
 
 export enum PaymentMethod {
@@ -6109,25 +6037,6 @@ export type Post_Customauthor = AcfFieldGroup & {
   displayAuthor?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
-};
-
-export type ProfileOrganization = {
-  __typename?: 'ProfileOrganization';
-  id?: Maybe<Scalars['uuid']>;
-  organization: OrganizationInfo;
-  position?: Maybe<Scalars['String']>;
-};
-
-export type ProfilesByLevel = {
-  __typename?: 'ProfilesByLevel';
-  level?: Maybe<CourseLevel>;
-  profiles?: Maybe<Array<Maybe<OrganizationProfile>>>;
-};
-
-export type ProfilesByOrganization = {
-  __typename?: 'ProfilesByOrganization';
-  orgId?: Maybe<Scalars['uuid']>;
-  profiles?: Maybe<Array<Maybe<OrganizationProfile>>>;
 };
 
 export type PromoCodeOutput = {
@@ -9918,24 +9827,6 @@ export type UniformResourceIdentifiable = {
   isTermNode: Scalars['Boolean'];
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
-};
-
-export type UpcominEnrollment = {
-  __typename?: 'UpcominEnrollment';
-  course?: Maybe<UpcomingEnrollmentCourse>;
-  courseLevel?: Maybe<CourseLevel>;
-  orgId: Scalars['uuid'];
-  orgName?: Maybe<Scalars['String']>;
-};
-
-export type UpcomingEnrollmentCourse = {
-  __typename?: 'UpcomingEnrollmentCourse';
-  course_code?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-  level?: Maybe<CourseLevel>;
-  name?: Maybe<Scalars['String']>;
-  schedule?: Maybe<Array<Maybe<EnrollmentCourseSchedule>>>;
-  type?: Maybe<CourseType>;
 };
 
 export type UpdateAvatarResponse = {
@@ -14011,6 +13902,25 @@ export enum Certificate_Status_Constraint {
   CertificateStatusPkey = 'certificate_status_pkey'
 }
 
+export enum Certificate_Status_Enum {
+  Active = 'ACTIVE',
+  Expired = 'EXPIRED',
+  ExpiredRecently = 'EXPIRED_RECENTLY',
+  ExpiringSoon = 'EXPIRING_SOON',
+  Inactive = 'INACTIVE',
+  OnHold = 'ON_HOLD',
+  Revoked = 'REVOKED'
+}
+
+/** Boolean expression to compare columns of type "certificate_status_enum". All fields are combined with logical 'AND'. */
+export type Certificate_Status_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Certificate_Status_Enum>;
+  _in?: InputMaybe<Array<Certificate_Status_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Certificate_Status_Enum>;
+  _nin?: InputMaybe<Array<Certificate_Status_Enum>>;
+};
+
 /** input type for inserting data into table "certificate_status" */
 export type Certificate_Status_Insert_Input = {
   name?: InputMaybe<Scalars['String']>;
@@ -17940,7 +17850,7 @@ export type Course_Certificate = {
   profile?: Maybe<Profile>;
   profileId: Scalars['uuid'];
   reaccreditation?: Maybe<Scalars['Boolean']>;
-  status?: Maybe<Scalars['String']>;
+  status?: Maybe<Certificate_Status_Enum>;
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -18057,7 +17967,7 @@ export type Course_Certificate_Bool_Exp = {
   profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
-  status?: InputMaybe<String_Comparison_Exp>;
+  status?: InputMaybe<Certificate_Status_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -18694,7 +18604,7 @@ export type Course_Certificate_Insert_Input = {
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
-  status?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Certificate_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -18713,7 +18623,6 @@ export type Course_Certificate_Max_Fields = {
   legacyCourseCode?: Maybe<Scalars['String']>;
   number?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
-  status?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -18729,7 +18638,6 @@ export type Course_Certificate_Max_Order_By = {
   legacyCourseCode?: InputMaybe<Order_By>;
   number?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -18748,7 +18656,6 @@ export type Course_Certificate_Min_Fields = {
   legacyCourseCode?: Maybe<Scalars['String']>;
   number?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
-  status?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -18764,7 +18671,6 @@ export type Course_Certificate_Min_Order_By = {
   legacyCourseCode?: InputMaybe<Order_By>;
   number?: InputMaybe<Order_By>;
   profileId?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -18892,7 +18798,7 @@ export type Course_Certificate_Set_Input = {
   number?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
-  status?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Certificate_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -18953,7 +18859,7 @@ export type Course_Certificate_Stream_Cursor_Value_Input = {
   number?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
-  status?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Certificate_Status_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -47255,10 +47161,15 @@ export type Org_Distinct_Country_Codes_Stream_Cursor_Value_Input = {
 export type Org_Resource_Packs_History = {
   __typename?: 'org_resource_packs_history';
   change: Scalars['Int'];
+  /** An object relationship */
+  course?: Maybe<Course>;
+  courseId?: Maybe<Scalars['Int']>;
   created_at: Scalars['timestamp'];
   event: Resource_Packs_Events_Enum;
   id: Scalars['uuid'];
   orgId?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  organization?: Maybe<Organization>;
   payload?: Maybe<Scalars['jsonb']>;
   reservedBalance: Scalars['Int'];
   resourcePacksType: Resource_Packs_Type_Enum;
@@ -47310,6 +47221,7 @@ export type Org_Resource_Packs_History_Append_Input = {
 export type Org_Resource_Packs_History_Avg_Fields = {
   __typename?: 'org_resource_packs_history_avg_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47320,10 +47232,13 @@ export type Org_Resource_Packs_History_Bool_Exp = {
   _not?: InputMaybe<Org_Resource_Packs_History_Bool_Exp>;
   _or?: InputMaybe<Array<Org_Resource_Packs_History_Bool_Exp>>;
   change?: InputMaybe<Int_Comparison_Exp>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamp_Comparison_Exp>;
   event?: InputMaybe<Resource_Packs_Events_Enum_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
   reservedBalance?: InputMaybe<Int_Comparison_Exp>;
   resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum_Comparison_Exp>;
@@ -47354,6 +47269,7 @@ export type Org_Resource_Packs_History_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "org_resource_packs_history" */
 export type Org_Resource_Packs_History_Inc_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   reservedBalance?: InputMaybe<Scalars['Int']>;
   totalBalance?: InputMaybe<Scalars['Int']>;
 };
@@ -47361,10 +47277,13 @@ export type Org_Resource_Packs_History_Inc_Input = {
 /** input type for inserting data into table "org_resource_packs_history" */
 export type Org_Resource_Packs_History_Insert_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  courseId?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamp']>;
   event?: InputMaybe<Resource_Packs_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
   orgId?: InputMaybe<Scalars['uuid']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   payload?: InputMaybe<Scalars['jsonb']>;
   reservedBalance?: InputMaybe<Scalars['Int']>;
   resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum>;
@@ -47375,6 +47294,7 @@ export type Org_Resource_Packs_History_Insert_Input = {
 export type Org_Resource_Packs_History_Max_Fields = {
   __typename?: 'org_resource_packs_history_max_fields';
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
   orgId?: Maybe<Scalars['uuid']>;
@@ -47386,6 +47306,7 @@ export type Org_Resource_Packs_History_Max_Fields = {
 export type Org_Resource_Packs_History_Min_Fields = {
   __typename?: 'org_resource_packs_history_min_fields';
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
   orgId?: Maybe<Scalars['uuid']>;
@@ -47412,10 +47333,13 @@ export type Org_Resource_Packs_History_On_Conflict = {
 /** Ordering options when selecting data from "org_resource_packs_history". */
 export type Org_Resource_Packs_History_Order_By = {
   change?: InputMaybe<Order_By>;
+  course?: InputMaybe<Course_Order_By>;
+  courseId?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   event?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   payload?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
   resourcePacksType?: InputMaybe<Order_By>;
@@ -47437,6 +47361,8 @@ export enum Org_Resource_Packs_History_Select_Column {
   /** column name */
   Change = 'change',
   /** column name */
+  CourseId = 'courseId',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Event = 'event',
@@ -47457,6 +47383,7 @@ export enum Org_Resource_Packs_History_Select_Column {
 /** input type for updating data in table "org_resource_packs_history" */
 export type Org_Resource_Packs_History_Set_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamp']>;
   event?: InputMaybe<Resource_Packs_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -47471,6 +47398,7 @@ export type Org_Resource_Packs_History_Set_Input = {
 export type Org_Resource_Packs_History_Stddev_Fields = {
   __typename?: 'org_resource_packs_history_stddev_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47479,6 +47407,7 @@ export type Org_Resource_Packs_History_Stddev_Fields = {
 export type Org_Resource_Packs_History_Stddev_Pop_Fields = {
   __typename?: 'org_resource_packs_history_stddev_pop_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47487,6 +47416,7 @@ export type Org_Resource_Packs_History_Stddev_Pop_Fields = {
 export type Org_Resource_Packs_History_Stddev_Samp_Fields = {
   __typename?: 'org_resource_packs_history_stddev_samp_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47502,6 +47432,7 @@ export type Org_Resource_Packs_History_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Org_Resource_Packs_History_Stream_Cursor_Value_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamp']>;
   event?: InputMaybe<Resource_Packs_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -47516,6 +47447,7 @@ export type Org_Resource_Packs_History_Stream_Cursor_Value_Input = {
 export type Org_Resource_Packs_History_Sum_Fields = {
   __typename?: 'org_resource_packs_history_sum_fields';
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   reservedBalance?: Maybe<Scalars['Int']>;
   totalBalance?: Maybe<Scalars['Int']>;
 };
@@ -47524,6 +47456,8 @@ export type Org_Resource_Packs_History_Sum_Fields = {
 export enum Org_Resource_Packs_History_Update_Column {
   /** column name */
   Change = 'change',
+  /** column name */
+  CourseId = 'courseId',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -47565,6 +47499,7 @@ export type Org_Resource_Packs_History_Updates = {
 export type Org_Resource_Packs_History_Var_Pop_Fields = {
   __typename?: 'org_resource_packs_history_var_pop_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47573,6 +47508,7 @@ export type Org_Resource_Packs_History_Var_Pop_Fields = {
 export type Org_Resource_Packs_History_Var_Samp_Fields = {
   __typename?: 'org_resource_packs_history_var_samp_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47581,6 +47517,7 @@ export type Org_Resource_Packs_History_Var_Samp_Fields = {
 export type Org_Resource_Packs_History_Variance_Fields = {
   __typename?: 'org_resource_packs_history_variance_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -54595,7 +54532,6 @@ export type Query_Root = {
   getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
   getOrgInvite?: Maybe<OrgInvite>;
-  getOrganizationProfiles?: Maybe<OrganizationProfilesOutput>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
   /** Sync participants' go1 enrollment status */
   go1EnrollmentsStatusSync?: Maybe<Go1EnrollmentsSyncOutput>;
@@ -56528,11 +56464,6 @@ export type Query_RootGetCoursePricingArgs = {
 };
 
 
-export type Query_RootGetOrganizationProfilesArgs = {
-  input: OrganizationProfilesInput;
-};
-
-
 export type Query_RootGetXeroInvoicesForOrdersArgs = {
   invoiceNumbers: Array<Scalars['String']>;
 };
@@ -58209,7 +58140,9 @@ export enum Resource_Packs_Events_Constraint {
 
 export enum Resource_Packs_Events_Enum {
   ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
-  ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED'
+  ResourcePacksPurchased = 'RESOURCE_PACKS_PURCHASED',
+  ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED',
+  ResourcePacksReserved = 'RESOURCE_PACKS_RESERVED'
 }
 
 /** Boolean expression to compare columns of type "resource_packs_events_enum". All fields are combined with logical 'AND'. */

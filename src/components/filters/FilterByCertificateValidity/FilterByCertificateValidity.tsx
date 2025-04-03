@@ -7,17 +7,17 @@ import {
   withDefault,
 } from 'use-query-params'
 
-import { CertificateStatus } from '@app/generated/graphql'
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 import { noop } from '@app/util'
 
 import { FilterAccordion, FilterOption } from '../../FilterAccordion'
 
 type Props = {
-  onChange: (selected: CertificateStatus[]) => void
-  excludedStatuses?: Set<CertificateStatus>
+  onChange: (selected: Certificate_Status_Enum[]) => void
+  excludedStatuses?: Set<Certificate_Status_Enum>
 }
 
-const statuses = Object.values(CertificateStatus) as CertificateStatus[]
+const statuses = Object.values(Certificate_Status_Enum)
 
 export const FilterByCertificateValidity: React.FC<
   React.PropsWithChildren<Props>
@@ -27,8 +27,8 @@ export const FilterByCertificateValidity: React.FC<
   const [selected, setSelected] = useQueryParam(
     'status',
     withDefault(
-      createEnumArrayParam<CertificateStatus>(statuses),
-      [] as CertificateStatus[],
+      createEnumArrayParam<Certificate_Status_Enum>(statuses),
+      [] as Certificate_Status_Enum[],
     ),
   )
 
@@ -47,7 +47,7 @@ export const FilterByCertificateValidity: React.FC<
   }, [selected, excludedStatuses, t])
 
   const _onChange = useCallback(
-    (opts: FilterOption<CertificateStatus>[]) => {
+    (opts: FilterOption<Certificate_Status_Enum>[]) => {
       const sel = opts.flatMap(o => (o.selected ? o.id : []))
       setSelected(sel)
       onChange(sel)

@@ -32,7 +32,6 @@ export const UploadAvatar: FC<Props> = ({ setValue, values, loading }) => {
         return
       }
       const file = e.target.files[0]
-      console.log(file.size > maxAvatarFileSizeBytes)
       if (file.size > maxAvatarFileSizeBytes) {
         avatarErrorRef.current = t('avatar-too-large', {
           maxSize: maxAvatarFileSizeBytes / (1024 * 1024),

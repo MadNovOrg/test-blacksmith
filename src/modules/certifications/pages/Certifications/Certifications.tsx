@@ -25,7 +25,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   Course_Certificate_Bool_Exp,
-  CertificateStatus,
+  Certificate_Status_Enum,
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { CertificationsTable } from '@app/modules/certifications/components/CertificationsTable'
@@ -49,7 +49,7 @@ export const Certifications: React.FC<
     [],
   )
   const [certificateStatus, setCertificateStatus] = useState<
-    CertificateStatus[]
+    Certificate_Status_Enum[]
   >([])
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
 

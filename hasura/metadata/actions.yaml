@@ -196,16 +196,6 @@ actions:
     permissions:
       - role: user
       - role: anonymous
-  - name: getOrganizationProfiles
-    definition:
-      kind: ""
-      handler: '{{ACTIONS_HOST}}/organization/profiles'
-    permissions:
-      - role: sales-representative
-      - role: sales-admin
-      - role: tt-ops
-      - role: user
-      - role: tt-admin
   - name: getXeroInvoicesForOrders
     definition:
       kind: ""

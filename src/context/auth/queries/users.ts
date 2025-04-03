@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 import { PROFILE } from '@app/queries/fragments'
 
 export const GET_USER_PROFILE = gql`
@@ -20,9 +21,7 @@ export const GET_USER_PROFILE = gql`
           name
         }
       }
-      certificates(
-        where: { status: { _nin: ["ON_HOLD", "REVOKED", "EXPIRED"] } }
-      ) {
+      certificates(where: { status: { _nin: [${Certificate_Status_Enum.OnHold}, ${Certificate_Status_Enum.Revoked}, ${Certificate_Status_Enum.Expired}] } }) {
         expiryDate
         courseLevel
       }

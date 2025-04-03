@@ -10,35 +10,33 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import {
-  CertificateStatus,
-  CourseLevel,
-  OrganizationProfile,
+  Certificate_Status_Enum,
+  Course_Level_Enum,
 } from '@app/generated/graphql'
 
-import { IndividualsByLevelList } from './IndividualsByLevelList'
+import { useOrganisationProfilesByCertificateLevel } from '../../hooks/useOrganisationProfielsByCertificateLevel/useOrganisationProfielsByCertificateLevel'
+
+import { IndividualsByLevelList } from './IndividualsByLevelList/IndividualsByLevelList'
 
 type OrgIndividualsProps = {
   orgId: string
-  profilesFetching: boolean
-  certificateStatus: CertificateStatus[]
-  profilesByLevel: Map<CourseLevel, OrganizationProfile[]>
-  setUserByLevelSelectedTab: (value: CourseLevel | 'none') => void
-  levelsToShow: CourseLevel[]
-  selectedTab: CourseLevel | 'none'
-  orgIdNotInProfiles?: boolean
+  certificateStatus: Certificate_Status_Enum[]
+  setUserByLevelSelectedTab: (value: Course_Level_Enum | 'none') => void
+  levelsToShow: Course_Level_Enum[]
+  selectedTab: Course_Level_Enum | 'none'
 }
 
 export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
   orgId,
-  profilesFetching,
   certificateStatus,
-  profilesByLevel,
   setUserByLevelSelectedTab,
   levelsToShow,
   selectedTab,
-  orgIdNotInProfiles,
 }) => {
   const { t } = useTranslation()
+  const { fetching: profilesFetching, profilesByLevel } =
+    useOrganisationProfilesByCertificateLevel()
+
   if (profilesFetching) {
     return (
       <Stack sx={{ alignItems: 'center' }}>
@@ -49,9 +47,9 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
 
   return (
     <>
-      {orgId !== 'all' && orgIdNotInProfiles ? (
+      {!profilesByLevel.size ? (
         <>
-          {certificateStatus.length && !profilesFetching ? (
+          {certificateStatus.length ? (
             <>
               <Typography variant="body1" sx={{ margin: '1em 1em' }}>
                 {t('components.org-selector.no-individuals')}
@@ -101,11 +99,7 @@ export const OrgIndividuals: React.FC<OrgIndividualsProps> = ({
               sx={{ p: 0, overflowX: 'auto' }}
               data-testid={`tab-panel-${courseLevel}`}
             >
-              <IndividualsByLevelList
-                profilesByLevel={profilesByLevel}
-                orgId={orgId}
-                courseLevel={courseLevel}
-              />
+              <IndividualsByLevelList orgId={orgId} courseLevel={courseLevel} />
             </TabPanel>
           ))}
         </TabContext>

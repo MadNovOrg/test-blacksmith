@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
-import { CertificateStatus } from '@app/generated/graphql'
+import { Certificate_Status_Enum } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import { Grade } from '@app/modules/grading/components/Grade'
 import { CourseParticipant } from '@app/types'
@@ -30,8 +30,10 @@ export const ParticipantsRow: FC<{
 
   if (!participant.certificate) return null
   const status = participant.certificate?.status
-  const isRevoked = participant.certificate.status === CertificateStatus.Revoked
-  const isOnHold = participant.certificate.status === CertificateStatus.OnHold
+  const isRevoked =
+    participant.certificate.status === Certificate_Status_Enum.Revoked
+  const isOnHold =
+    participant.certificate.status === Certificate_Status_Enum.OnHold
   const statusTooltip =
     isRevoked || isOnHold
       ? participant.certificateChanges?.[0]?.payload?.note ?? '' // if revoked or on hold, the first changelog has the reason

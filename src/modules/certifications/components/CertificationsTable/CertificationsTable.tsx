@@ -23,7 +23,7 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
-  CertificateStatus,
+  Certificate_Status_Enum,
   Course_Level_Enum,
   GetCertificationsQuery,
   Grade_Enum,
@@ -59,7 +59,7 @@ export const CertificationsTable: React.FC<
     return [
       checkbox.headCol(
         certificates.flatMap(c =>
-          c.status === CertificateStatus.Revoked ||
+          c.status === Certificate_Status_Enum.Revoked ||
           c.participant?.grade === Grade_Enum.Fail
             ? []
             : [c.id],
@@ -144,7 +144,7 @@ export const CertificationsTable: React.FC<
               onClick={() => {
                 downloadCertificates(
                   certificates.filter(
-                    c => c.status !== CertificateStatus.Revoked,
+                    c => c.status !== Certificate_Status_Enum.Revoked,
                   ) ?? [],
                 )
               }}
@@ -167,9 +167,9 @@ export const CertificationsTable: React.FC<
             />
 
             {certificates.map(c => {
-              const status = c.status as CertificateStatus
-              const isRevoked = c.status === CertificateStatus.Revoked
-              const isOnHold = c.status === CertificateStatus.OnHold
+              const status = c.status as Certificate_Status_Enum
+              const isRevoked = c.status === Certificate_Status_Enum.Revoked
+              const isOnHold = c.status === Certificate_Status_Enum.OnHold
               const isFail = c.participant?.grade === Grade_Enum.Fail
               const statusTooltip =
                 isRevoked || isOnHold
@@ -210,7 +210,9 @@ export const CertificationsTable: React.FC<
 
                   <TableCell data-testid="status">
                     <CertificateStatusChip
-                      status={isFail ? CertificateStatus.Inactive : status}
+                      status={
+                        isFail ? Certificate_Status_Enum.Inactive : status
+                      }
                       tooltip={statusTooltip}
                     />
                   </TableCell>

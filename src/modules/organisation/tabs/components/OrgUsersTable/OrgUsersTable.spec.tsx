@@ -4,6 +4,7 @@ import { Client, Provider, TypedDocumentNode } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
+  Certificate_Status_Enum,
   Course_Level_Enum,
   Order_By,
   OrgMembersQuery,
@@ -78,7 +79,7 @@ describe(OrgUsersTable.name, () => {
           {
             id: chance.guid(),
             courseLevel: Course_Level_Enum.Level_1,
-            status: 'ACTIVE',
+            status: Certificate_Status_Enum.Active,
           },
         ],
       },

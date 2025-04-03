@@ -25,7 +25,7 @@ import { useAuth } from '@app/context/auth'
 import {
   OrgMembersQuery,
   Course_Level_Enum,
-  CertificateStatus,
+  Certificate_Status_Enum,
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -38,7 +38,7 @@ import { getProfileCertificationLevels } from '@app/util'
 type OrgUsersTableParams = {
   orgId: string
   onChange?: () => void
-  certificateStatus?: CertificateStatus[]
+  certificateStatus?: Certificate_Status_Enum[]
 }
 
 export const OrgUsersTable: React.FC<
@@ -150,7 +150,7 @@ export const OrgUsersTable: React.FC<
               const certificateLevelsToDisplay = getProfileCertificationLevels(
                 member.profile.certificates as {
                   courseLevel: string
-                  status: CertificateStatus
+                  status: Certificate_Status_Enum
                 }[],
               )
               const filteredCerts = member.profile.certificates.filter(
@@ -196,7 +196,7 @@ export const OrgUsersTable: React.FC<
                   <TableCell data-testid="member-certificates">
                     {filteredCerts.map(cert => {
                       const certificationStatus =
-                        cert?.status as CertificateStatus
+                        cert?.status as Certificate_Status_Enum
                       const statusTooltip =
                         cert.participant?.certificateChanges[0]?.payload?.note
 

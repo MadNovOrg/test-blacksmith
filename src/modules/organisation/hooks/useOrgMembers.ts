@@ -1,7 +1,7 @@
 import { gql, useQuery } from 'urql'
 
 import {
-  CertificateStatus,
+  Certificate_Status_Enum,
   Grade_Enum,
   Order_By,
   OrgMembersQuery,
@@ -24,6 +24,7 @@ export const MEMBERS_QUERY = gql`
     $withMembers: Boolean = true
     $all: Boolean = true
     $singularOrg: Boolean = false
+    $certStatus: certificate_status_enum
   ) {
     members: organization_member(
       limit: $limit
@@ -43,7 +44,7 @@ export const MEMBERS_QUERY = gql`
         certificates(
           where: {
             _and: [
-              { status: { _neq: "EXPIRED" }, isRevoked: { _eq: false } }
+              {status: { _neq: $certStatus }, isRevoked: { _eq: false } }
               {
                 _or: [{ grade: { _is_null: true } }, { grade: { _neq: "${Grade_Enum.Fail}" } }]
               }
@@ -92,7 +93,7 @@ export function useOrgMembers({
     dir: SortOrder
     by: string
   }
-  certificateFilter?: CertificateStatus[]
+  certificateFilter?: Certificate_Status_Enum[]
   withMembers?: boolean
 }) {
   const orderBy = getOrderBy(sort)
@@ -116,6 +117,7 @@ export function useOrgMembers({
       withMembers,
       all: orgId === ALL_ORGS,
       singularOrg: orgId !== ALL_ORGS,
+      certStatus: Certificate_Status_Enum.Expired,
     },
   })
 
