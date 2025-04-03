@@ -1,0 +1,48 @@
+table:
+  name: org_resource_packs_pricing_changelog
+  schema: public
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""

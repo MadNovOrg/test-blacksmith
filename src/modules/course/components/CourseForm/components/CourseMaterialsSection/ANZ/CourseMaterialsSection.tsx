@@ -1,6 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info'
 import { Box, Typography, Grid } from '@mui/material'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { InfoPanel } from '@app/components/InfoPanel'
@@ -14,7 +14,12 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { type CourseInput } from '@app/types'
-import { CurrencySymbol, GST, isNotNullish } from '@app/util'
+import {
+  CurrencySymbol,
+  getResourcePackPrice,
+  GST,
+  isNotNullish,
+} from '@app/util'
 
 type Props = {
   isCreation?: boolean
@@ -38,6 +43,7 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
     courseLevel,
     deliveryType,
     reaccreditation,
+    organization,
   ] = useWatch({
     control,
     name: [
@@ -49,6 +55,7 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
       'courseLevel',
       'deliveryType',
       'reaccreditation',
+      'organization',
     ],
   })
 
@@ -61,15 +68,13 @@ export const CourseMaterialsSection = ({ isCreation }: Props) => {
     course_type: type as Course_Type_Enum,
     course_level: courseLevel as Course_Level_Enum,
     course_delivery_type: deliveryType,
+    organisation_id: organization?.id ?? '',
     reaccreditation,
   })
 
-  const rpPrice = useMemo(
-    () =>
-      courseCurrency === Currency.Nzd
-        ? data?.resource_packs_pricing[0]?.NZD_price
-        : data?.resource_packs_pricing[0]?.AUD_price,
-    [courseCurrency, data?.resource_packs_pricing],
+  const rpPrice = getResourcePackPrice(
+    data?.resource_packs_pricing[0],
+    courseCurrency,
   )
 
   useEffect(() => {

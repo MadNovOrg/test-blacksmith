@@ -89,6 +89,8 @@
 - "!include public_org_created_from.yaml"
 - "!include public_org_distinct_country_codes.yaml"
 - "!include public_org_resource_packs_history.yaml"
+- "!include public_org_resource_packs_pricing.yaml"
+- "!include public_org_resource_packs_pricing_changelog.yaml"
 - "!include public_organisation_log.yaml"
 - "!include public_organisation_sector.yaml"
 - "!include public_organization.yaml"

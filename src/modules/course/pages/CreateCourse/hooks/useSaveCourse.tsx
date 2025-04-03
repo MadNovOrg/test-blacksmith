@@ -36,7 +36,7 @@ import { REMOVE_COURSE_DRAFT } from '@app/modules/course/queries/remove-course-d
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { isModeratorNeeded } from '@app/rules/trainers'
 import { BildStrategies } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { getResourcePackPrice, LoadingStatus } from '@app/util'
 
 import { transformBILDModules } from '../../CourseBuilder/components/BILDCourseBuilder/utils'
 import { useCreateCourse } from '../components/CreateCourseProvider'
@@ -101,15 +101,12 @@ export function useSaveCourse(): {
     course_level: courseData?.courseLevel as Course_Level_Enum,
     course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: courseData?.reaccreditation ?? false,
+    organisation_id: courseData?.organization?.id ?? '',
     pause: acl.isUK() || hideMCM,
   })
-
-  const rpPrice = useMemo(
-    () =>
-      (courseData?.priceCurrency as Currency) === Currency.Nzd
-        ? resourcePackCost?.resource_packs_pricing[0]?.NZD_price
-        : resourcePackCost?.resource_packs_pricing[0]?.AUD_price,
-    [courseData?.priceCurrency, resourcePackCost?.resource_packs_pricing],
+  const rpPrice = getResourcePackPrice(
+    resourcePackCost?.resource_packs_pricing[0],
+    courseData?.priceCurrency,
   )
 
   const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild

@@ -1,6 +1,14 @@
 table:
   name: resource_packs_pricing
   schema: public
+array_relationships:
+  - name: org_resource_packs_pricings
+    using:
+      foreign_key_constraint_on:
+        column: resource_packs_pricing_id
+        table:
+          name: org_resource_packs_pricing
+          schema: public
 select_permissions:
   - role: anonymous
     permission:

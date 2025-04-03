@@ -45,6 +45,7 @@ useResourcePackPricingMocked.mockReturnValue({
         id: chance.guid(),
         AUD_price: 52,
         NZD_price: 56,
+        org_resource_packs_pricings: [],
       },
     ],
   },

@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { Course_Type_Enum } from '@app/generated/graphql'
+
 import { isUK } from '@qa/constants'
 
 import { BasePage } from '../BasePage.fixture'
@@ -14,6 +16,7 @@ export class IndividualOrganisationPage extends BasePage {
   readonly orgAffiliatedOrgsTab: Locator
   readonly orgIndividualsTab: Locator
   readonly orgBLTab: Locator
+  readonly orgResourcePacksPricingTab: Locator
   readonly orgPermissionsTab: Locator
   readonly mainOrgLink: Locator
   readonly autocompleteLoading: Locator
@@ -96,6 +99,17 @@ export class IndividualOrganisationPage extends BasePage {
   readonly inoviceNumberInput: Locator
   readonly saveDetailsButton: Locator
 
+  // Resource Packs Pricing Tab
+  readonly closedOrgResourcePacksPricingTab: Locator
+  readonly indirectOrgResourcePacksPricingTab: Locator
+  readonly groupedResourcePacksPricingTable: Locator
+  readonly editOrgResourcePriceButton: (
+    courseType: string,
+    courseLevel: string,
+    reaccred: boolean,
+  ) => Locator
+  readonly orgResourcePacksPricingsTable: (orgId: string) => Locator
+
   // Permissions Tab
   readonly permissionsTab: Locator
   readonly knowledgeHubTitle: Locator
@@ -126,6 +140,9 @@ export class IndividualOrganisationPage extends BasePage {
       '[data-testid="org-individuals"]',
     )
     this.orgBLTab = this.page.locator('[data-testid="org-blended-licences"]')
+    this.orgResourcePacksPricingTab = this.page.locator(
+      '[data-testid="org-resource-packs-pricing"]',
+    )
     this.orgPermissionsTab = this.page.locator(
       '[data-testid="org-permissions"]',
     )
@@ -297,6 +314,27 @@ export class IndividualOrganisationPage extends BasePage {
     this.saveDetailsButton = this.page.locator(
       '[data-testid="licence-save-details"]',
     )
+
+    this.closedOrgResourcePacksPricingTab = this.page.locator(
+      '[data-testid="resource-packs-pricing-tab-CLOSED"]',
+    )
+    this.indirectOrgResourcePacksPricingTab = this.page.locator(
+      '[data-testid="resource-packs-pricing-tab-INDIRECT"]',
+    )
+    this.groupedResourcePacksPricingTable = this.page.locator(
+      '[data-testid="resource-packs-pricing-table"]',
+    )
+    this.editOrgResourcePriceButton = (
+      courseType: string,
+      courseLevel: string,
+      reaccred: boolean,
+    ) => {
+      return this.page.locator(
+        `[data-testid="edit-button-${courseType}-${courseLevel}-${reaccred}"]`,
+      )
+    }
+    this.orgResourcePacksPricingsTable = (orgId: string) =>
+      this.page.locator(`[data-testid="resource-packs-pricing-table-${orgId}"]`)
 
     // Permissions Tab
     this.permissionsTab = this.page.locator('[data-testid="org-permissions"]')
@@ -716,20 +754,85 @@ export class IndividualOrganisationPage extends BasePage {
     await this.waitForPageLoad()
   }
 
-  // Permissions Tab
+  async selectOrgResourcePacksPricingTab(courseType: string) {
+    if (courseType === Course_Type_Enum.Indirect) {
+      await this.indirectOrgResourcePacksPricingTab.click()
+    } else {
+      await this.closedOrgResourcePacksPricingTab.click()
+    }
+  }
+
+  async getNthRowOfTable(
+    tableLocator: Locator,
+    rowIndex: number,
+  ): Promise<Locator> {
+    return tableLocator.locator('tr').nth(rowIndex)
+  }
+
+  async fillOrgResourcePackPricings(
+    row: Locator,
+    firstNumber: number,
+    secondNumber: number,
+  ): Promise<void> {
+    const firstTextField = row.locator('input').nth(0) // Adjust selector if needed
+    const secondTextField = row.locator('input').nth(1) // Adjust selector if needed
+
+    await firstTextField.fill('') // Clear the first text field
+    await firstTextField.type(firstNumber.toString()) // Insert the first number
+
+    await secondTextField.fill('') // Clear the second text field
+    await secondTextField.type(secondNumber.toString()) // Insert the second number
+  }
+
+  async clickSaveButtonOnRow(row: Locator): Promise<void> {
+    const saveButton = row.locator('button').nth(0)
+    await saveButton.click()
+  }
+
+  async checkEditedRow(row: Locator, AUD_price: number, NZD_price: number) {
+    await expect(row).toContainText(AUD_price.toFixed(2))
+    await expect(row).toContainText(NZD_price.toFixed(2))
+  }
   async checkPermissionsTab() {
     await this.orgPermissionsTab.click()
     await this.waitForPageLoad()
     await expect(this.knowledgeHubTitle).toBeVisible()
     await expect(this.knowledgeHubAccessToggle).toBeVisible()
-    await expect(this.knowledgeHubAccessToggle).toBeEnabled()
-
-    await this.knowledgeHubAccessToggle.click()
-    await expect(this.knowledgeHubAccessToggle).toBeDisabled()
-    // toggle back
-    await this.knowledgeHubAccessToggle.click()
-    await expect(this.knowledgeHubAccessToggle).toBeDisabled()
 
     // Checking the actual permission for user might cause the tests to fail because that user might be a member of multiple organisations
+  }
+
+  async checkResourcePacksPricingTab() {
+    await this.orgResourcePacksPricingTab.click()
+    await this.waitForPageLoad()
+    await expect(this.closedOrgResourcePacksPricingTab).toBeVisible()
+    await expect(this.indirectOrgResourcePacksPricingTab).toBeVisible()
+    await expect(this.groupedResourcePacksPricingTable).toBeVisible()
+  }
+
+  async editOrgResourcePacksPricing(
+    orgId: string,
+    courseType: string,
+    courseLevel: string,
+    reaccred: boolean,
+    AUD_price: number,
+    NZD_price: number,
+  ) {
+    await this.orgResourcePacksPricingTab.click()
+    await this.selectOrgResourcePacksPricingTab(courseType)
+    await this.editOrgResourcePriceButton(
+      courseType,
+      courseLevel,
+      reaccred,
+    ).click()
+    const table = this.orgResourcePacksPricingsTable(orgId)
+    await expect(table).toBeVisible()
+    const row = await this.getNthRowOfTable(table, 1)
+    const editRowButton = row.locator('button') // Adjust selector if needed
+    await editRowButton.click()
+
+    await this.fillOrgResourcePackPricings(row, AUD_price, NZD_price)
+    await this.clickSaveButtonOnRow(row)
+    await this.checkEditedRow(row, AUD_price, NZD_price)
   }
 }

@@ -1684,6 +1684,45 @@
               "non-reaccreditation": "Initial Accreditation"
             },
             "edit": "Edit"
+          },
+          "edit-pricing-modal": {
+            "title": "Edit price",
+            "org-resource-packs-pricing-table": {
+              "columns": {
+                "resource-pack-option": "Resource pack option",
+                "price": "Price ({{currency}})",
+                "actions": "Actions"
+              },
+              "resource_packs_types": {
+                "CLOSED": {
+                  "DIGITAL_WORKBOOK": "Ebook",
+                  "PRINT_WORKBOOK": "Print Book"
+                },
+                "INDIRECT": {
+                  "DIGITAL_WORKBOOK": "Digital Workbook & Connect",
+                  "PRINT_WORKBOOK": {
+                    "STANDARD": "Print (Standard Delivery) & Connect",
+                    "EXPRESS": "Print (Express Delivery) & Connect"
+                  }
+                }
+              },
+              "validation-errors": {
+                "price-amount-required": "Price should be greater than 0.",
+                "price-amount-positive": "Price should be a positive value."
+              }
+            },
+            "org-resource-packs-pricing-course-details-section": {
+              "title": "Course details",
+              "columns": {
+                "course-level": "Course level",
+                "course-type": "Course type",
+                "attributes": "Attributes"
+              },
+              "alias": {
+                "reaccreditation": "Reaccreditation",
+                "non-reaccreditation": "Initial Accreditation"
+              }
+            }
           }
         }
       },

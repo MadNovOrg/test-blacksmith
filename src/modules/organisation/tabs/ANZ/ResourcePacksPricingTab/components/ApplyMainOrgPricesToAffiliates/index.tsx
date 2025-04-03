@@ -1,15 +1,11 @@
 import { LoadingButton } from '@mui/lab'
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-type Props = {
-  orgId: string
-}
-
-export const ApplyMainOrgRPPricingToAffiliates: React.FC<
-  React.PropsWithChildren<Props>
-> = ({ orgId }) => {
+export const ApplyMainOrgRPPricingToAffiliates: React.FC = () => {
+  const { id: orgId } = useParams()
   const { t } = useScopedTranslation(
     'pages.org-details.tabs.resource-pack-pricing.apply-price-to-affiliates',
   )

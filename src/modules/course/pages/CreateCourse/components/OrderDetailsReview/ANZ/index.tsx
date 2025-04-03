@@ -18,7 +18,7 @@ import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
-import { getGSTAmount } from '@app/util'
+import { getGSTAmount, getResourcePackPrice } from '@app/util'
 
 import { useCreateCourse } from '../../CreateCourseProvider'
 import { ExpensesDetails } from '../ExpensesDetails'
@@ -42,15 +42,13 @@ export const OrderDetailsReview: React.FC = () => {
     course_level: courseData?.courseLevel as Course_Level_Enum,
     course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: courseData?.reaccreditation ?? false,
+    organisation_id: courseData?.organization.id ?? '',
     pause: Boolean(hideMCM),
   })
 
-  const rpPrice = useMemo(
-    () =>
-      currency === Currency.Nzd
-        ? resourcePackPricingData?.resource_packs_pricing[0]?.NZD_price ?? 0
-        : resourcePackPricingData?.resource_packs_pricing[0]?.AUD_price ?? 0,
-    [currency, resourcePackPricingData?.resource_packs_pricing],
+  const rpPrice = getResourcePackPrice(
+    resourcePackPricingData?.resource_packs_pricing[0],
+    currency as Currency,
   )
 
   const { formatGMTDateTimeByTimeZone } = useTimeZones()

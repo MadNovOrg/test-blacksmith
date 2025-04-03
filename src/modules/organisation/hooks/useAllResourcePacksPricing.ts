@@ -7,7 +7,10 @@ import {
 } from '@app/generated/graphql'
 
 export const GET_ALL_RESOURCE_PACK_PRICINGS = gql`
-  query GetAllResourcePacksPricings($courseTypes: [course_type_enum!]) {
+  query GetAllResourcePacksPricings(
+    $courseTypes: [course_type_enum!]
+    $organisation_id: uuid!
+  ) {
     resource_packs_pricing(where: { course_type: { _in: $courseTypes } }) {
       id
       course_type
@@ -17,23 +20,35 @@ export const GET_ALL_RESOURCE_PACK_PRICINGS = gql`
       reaccred
       AUD_price
       NZD_price
+      org_resource_packs_pricings(
+        where: { organisation_id: { _eq: $organisation_id } }
+      ) {
+        id
+        AUD_price
+        NZD_price
+      }
     }
   }
 `
 
-export const useResourcePacksPricing = (courseTypes: Course_Type_Enum[]) => {
-  const [{ data, error, fetching }] = useQuery<
+export const useAllResourcePacksPricing = (
+  courseTypes: Course_Type_Enum[],
+  organisation_id: string,
+) => {
+  const [{ data, error, fetching }, refetch] = useQuery<
     GetAllResourcePacksPricingsQuery,
     GetAllResourcePacksPricingsQueryVariables
   >({
     query: GET_ALL_RESOURCE_PACK_PRICINGS,
     variables: {
       courseTypes,
+      organisation_id,
     },
   })
   return {
     data,
     error,
     fetching,
+    refetch,
   }
 }

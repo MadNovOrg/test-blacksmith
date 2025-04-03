@@ -8,8 +8,8 @@ import {
   Resource_Packs_Delivery_Type_Enum,
   Resource_Packs_Type_Enum,
 } from '@app/generated/graphql'
-import { useResourcePacksPricing } from '@app/modules/organisation/hooks/useResourcePacksPricing'
-import { AwsRegions } from '@app/types'
+import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
+import { AwsRegions, RoleName } from '@app/types'
 import { CourseTypeOrgRPPricings } from '@app/util'
 
 import { screen, chance, render, userEvent } from '@test/index'
@@ -19,8 +19,8 @@ import { ResourcePacksPricingTab } from './ResourcePacksPricingTab'
 vi.mock('posthog-js/react')
 const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
-vi.mock('@app/modules/organisation/hooks/useResourcePacksPricing')
-const useResourcePacksPricingMock = vi.mocked(useResourcePacksPricing)
+vi.mock('@app/modules/organisation/hooks/useAllResourcePacksPricing')
+const useAllResourcePacksPricingMock = vi.mocked(useAllResourcePacksPricing)
 
 const pricings = [
   {
@@ -29,6 +29,7 @@ const pricings = [
     course_level: Course_Level_Enum.Level_1,
     resource_packs_type: Resource_Packs_Type_Enum.PrintWorkbook,
     resource_packs_delivery_type: null,
+    org_resource_packs_pricings: [],
     reaccred: false,
     AUD_price: 52,
     NZD_price: 56,
@@ -40,6 +41,7 @@ const pricings = [
     resource_packs_type: Resource_Packs_Type_Enum.PrintWorkbook,
     resource_packs_delivery_type: Resource_Packs_Delivery_Type_Enum.Standard,
     reaccred: false,
+    org_resource_packs_pricings: [],
     AUD_price: 52,
     NZD_price: 56,
   },
@@ -53,52 +55,63 @@ describe('component: ResourcePacksPricingTab', () => {
   })
 
   beforeEach(() => {
-    useResourcePacksPricingMock.mockReturnValue({
+    useAllResourcePacksPricingMock.mockReturnValue({
       data: {
         resource_packs_pricing: pricings,
       },
       error: undefined,
       fetching: false,
+      refetch: vi.fn(),
     })
   })
 
   it('should render the component', () => {
-    render(<ResourcePacksPricingTab orgId={chance.guid()} />)
+    render(<ResourcePacksPricingTab />)
     expect(
       screen.getByTestId('resource-packs-pricing-title'),
     ).toBeInTheDocument()
   })
 
   it('should not render the table if pricings are still loading', () => {
-    useResourcePacksPricingMock.mockReturnValue({
+    useAllResourcePacksPricingMock.mockReturnValue({
       data: {
         resource_packs_pricing: pricings,
       },
       error: undefined,
       fetching: true,
+      refetch: vi.fn(),
     })
-    render(<ResourcePacksPricingTab orgId={chance.guid()} />)
+    render(<ResourcePacksPricingTab />)
     expect(
       screen.queryByTestId('resource-packs-pricing-table'),
     ).not.toBeInTheDocument()
   })
 
   it('should not render the table if there was an error loading prices', () => {
-    useResourcePacksPricingMock.mockReturnValue({
+    useAllResourcePacksPricingMock.mockReturnValue({
       data: {
         resource_packs_pricing: pricings,
       },
       error: new CombinedError({ networkError: Error('Error loading prices') }),
       fetching: false,
+      refetch: vi.fn(),
     })
-    render(<ResourcePacksPricingTab orgId={chance.guid()} />)
+    render(<ResourcePacksPricingTab />)
     expect(
       screen.queryByTestId('resource-packs-pricing-table'),
     ).not.toBeInTheDocument()
   })
 
   it('Should render the button, tabs and prices table', () => {
-    render(<ResourcePacksPricingTab orgId={chance.guid()} />)
+    render(<ResourcePacksPricingTab />, {
+      auth: {
+        activeRole: chance.pickone([
+          RoleName.TT_ADMIN,
+          RoleName.TT_OPS,
+          RoleName.FINANCE,
+        ]),
+      },
+    })
 
     // ApplyMainOrgRPPricingToAffiliates button
     expect(
@@ -122,7 +135,15 @@ describe('component: ResourcePacksPricingTab', () => {
   it.each(CourseTypeOrgRPPricings)(
     'Should render only the prices for the %s course type',
     async courseType => {
-      render(<ResourcePacksPricingTab orgId={chance.guid()} />)
+      render(<ResourcePacksPricingTab />, {
+        auth: {
+          activeRole: chance.pickone([
+            RoleName.TT_ADMIN,
+            RoleName.TT_OPS,
+            RoleName.FINANCE,
+          ]),
+        },
+      })
       const courseTypeTab = screen.getByTestId(
         `resource-packs-pricing-tab-${courseType}`,
       )

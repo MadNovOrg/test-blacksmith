@@ -1,6 +1,10 @@
-import { Course_Level_Enum } from '@app/generated/graphql'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
-import { AwsRegions } from '@app/types'
+import { AwsRegions, Organization } from '@app/types'
 
 import { render, screen } from '@test/index'
 
@@ -13,6 +17,13 @@ describe('component: OrderDetails', () => {
     blendedLearning: true,
     courseLevel: Course_Level_Enum.Level_1,
     resourcePacksType: undefined,
+    type: Course_Type_Enum.Indirect,
+    deliveryType: Course_Delivery_Type_Enum.F2F,
+    reaccreditation: false,
+    organization: {
+      id: 'org-id',
+    } as Organization,
+    priceCurrency: 'GBP',
   }
 
   it('calculates correctly if there is a full license allowance', () => {

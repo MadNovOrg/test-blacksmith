@@ -23,7 +23,6 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
-  Currency,
   PaymentMethod,
   Venue,
 } from '@app/generated/graphql'
@@ -33,6 +32,7 @@ import {
   formatCourseVenue,
   formatCurrency,
   getOrderDueDate,
+  getResourcePackPrice,
   isOrderDueDateImmediate,
 } from '@app/util'
 
@@ -68,14 +68,14 @@ export const CourseBookingReview: React.FC<
     course_type: course?.type as Course_Type_Enum,
     course_level: course?.level as Course_Level_Enum,
     course_delivery_type: course?.deliveryType as Course_Delivery_Type_Enum,
+    organisation_id: booking.orgId,
     reaccreditation: course?.reaccreditation ?? false,
   })
 
-  const rpPrice = (
-    booking.currency === Currency.Nzd
-      ? resourcePackPricing?.resource_packs_pricing[0].NZD_price
-      : resourcePackPricing?.resource_packs_pricing[0].AUD_price
-  ) as number
+  const rpPrice = getResourcePackPrice(
+    resourcePackPricing?.resource_packs_pricing[0],
+    booking.currency,
+  )
 
   const handleConfirmBooking = async () => {
     setCreatingOrder(true)

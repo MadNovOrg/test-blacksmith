@@ -15,12 +15,8 @@ import {
   ResourcePacksCost,
   ValidCourseInput,
 } from '@app/types'
-import {
-  getPricePerLicence,
-  getPricePerResourcePackForIndirectCourse,
-} from '@app/util'
+import { getPricePerLicence } from '@app/util'
 
-import { ResourcePacksOptions } from '../../components/CourseForm/components/ResourcePacksTypeSection/types'
 import { BILDBuilderCourseData } from '../CourseBuilder/components/BILDCourseBuilder/BILDCourseBuilder'
 import { ICMBuilderCourseData } from '../CourseBuilder/components/ICMCourseBuilderV2/ICMCourseBuilderV2'
 
@@ -160,31 +156,23 @@ export function calculateGo1LicenseCost({
 }
 
 export function calculateResourcePackCost({
-  courseLevel,
   numberOfResourcePacks,
   residingCountry,
   resourcePacksBalance,
-  resourcePacksTypeOption,
+  resourcePacksPrice,
 }: {
-  courseLevel: Course_Level_Enum
   numberOfResourcePacks: number
   residingCountry?: string
   resourcePacksBalance: number
-  resourcePacksTypeOption?: ResourcePacksOptions
+  resourcePacksPrice: number
 }): ResourcePacksCost | undefined {
-  if (!resourcePacksTypeOption) return undefined
+  if (!resourcePacksPrice) return undefined
 
-  const pricePerResourcePack = getPricePerResourcePackForIndirectCourse({
-    courseLevel,
-    residingCountry,
-    resourcePacksTypeOption,
-  })
-
-  const fullPrice = new Big(numberOfResourcePacks).times(pricePerResourcePack)
+  const fullPrice = new Big(numberOfResourcePacks).times(resourcePacksPrice)
   const allowancePrice =
     numberOfResourcePacks > resourcePacksBalance
-      ? new Big(resourcePacksBalance).times(pricePerResourcePack)
-      : new Big(numberOfResourcePacks).times(pricePerResourcePack)
+      ? new Big(resourcePacksBalance).times(resourcePacksPrice)
+      : new Big(numberOfResourcePacks).times(resourcePacksPrice)
 
   const gst = fullPrice
     .minus(allowancePrice)

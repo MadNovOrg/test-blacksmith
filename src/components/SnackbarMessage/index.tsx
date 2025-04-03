@@ -1,5 +1,5 @@
 import { Alert, AlertProps, Snackbar, SnackbarProps } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useUnmount } from 'react-use'
 
 import { SnackbarMessageKey, useSnackbar } from '@app/context/snackbar'
@@ -13,16 +13,17 @@ export const SnackbarMessage: React.FC<
   >
 > = ({ messageKey, variant = 'outlined', severity = 'success', ...props }) => {
   const { getSnackbarMessage, removeSnackbarMessage } = useSnackbar()
-  const message = getSnackbarMessage(messageKey)
+  const message = useMemo(
+    () => getSnackbarMessage(messageKey),
+    [getSnackbarMessage, messageKey],
+  )
 
   const [isOpen, setIsOpen] = useState(false)
 
   useUnmount(() => removeSnackbarMessage(messageKey))
 
   useEffect(() => {
-    if (message) {
-      setIsOpen(true)
-    }
+    setIsOpen(Boolean(message?.label))
   }, [message])
 
   const handleClose = () => {

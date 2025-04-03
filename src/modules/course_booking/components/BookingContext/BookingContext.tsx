@@ -42,7 +42,11 @@ import { GET_COURSE_PRICING_QUERY } from '@app/modules/course_booking/queries/ge
 import { GET_TEMP_PROFILE } from '@app/modules/course_booking/queries/get-temp-profile'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { InvoiceDetails, Profile } from '@app/types'
-import { getMandatoryCourseMaterialsCost, max } from '@app/util'
+import {
+  getMandatoryCourseMaterialsCost,
+  getResourcePackPrice,
+  max,
+} from '@app/util'
 
 import { sectors } from '../../utils'
 
@@ -183,19 +187,15 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     course_delivery_type: profile?.course
       ?.deliveryType as Course_Delivery_Type_Enum,
     reaccreditation: profile?.course?.reaccreditation ?? false,
+    organisation_id: booking.orgId ?? '',
     pause: acl.isUK() || hideMCM,
   })
 
-  const rpPrice = useMemo(
-    () =>
-      (profile?.course?.priceCurrency as Currency) === Currency.Nzd
-        ? resourcePackPricing?.resource_packs_pricing[0]?.NZD_price
-        : resourcePackPricing?.resource_packs_pricing[0]?.AUD_price,
-    [
-      profile?.course?.priceCurrency,
-      resourcePackPricing?.resource_packs_pricing,
-    ],
+  const rpPrice = getResourcePackPrice(
+    resourcePackPricing?.resource_packs_pricing[0],
+    profile?.course?.priceCurrency as Currency,
   )
+
   const [, createOrder] = useMutation<
     CreateOrderMutation,
     CreateOrderMutationVariables

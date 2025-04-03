@@ -18,7 +18,9 @@ import { useQuery } from 'urql'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Delivery_Type_Enum,
   Course_Level_Enum,
+  Course_Type_Enum,
   OrgLicensesWithHistoryQuery,
   OrgLicensesWithHistoryQueryVariables,
 } from '@app/generated/graphql'
@@ -34,10 +36,11 @@ import {
   WorkbookDeliveryAddressForm,
   formSchema as workbookDeliveryAddressFormSchema,
 } from '@app/modules/course/components/CourseForm/components/WorkbookDeliveryAddress'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import orgLicensesWithHistory from '@app/queries/go1-licensing/org-licenses-with-history'
 import { yup } from '@app/schemas'
 import { InvoiceDetails } from '@app/types'
-import { AustraliaCountryCode } from '@app/util'
+import { AustraliaCountryCode, getResourcePackPrice } from '@app/util'
 
 import { StepsEnum } from '../../types'
 import { calculateGo1LicenseCost, calculateResourcePackCost } from '../../utils'
@@ -141,6 +144,19 @@ export const LicenseOrderDetails = () => {
       },
     },
   })
+
+  const { data: resourcePackCost } = useResourcePackPricing({
+    course_type: courseData?.type as Course_Type_Enum,
+    course_level: courseData?.courseLevel as Course_Level_Enum,
+    course_delivery_type: courseData?.deliveryType as Course_Delivery_Type_Enum,
+    reaccreditation: Boolean(courseData?.reaccreditation),
+    resourcePacksOptions: courseData?.resourcePacksType,
+    organisation_id: courseData?.organization?.id ?? '',
+  })
+  const rpPrice = getResourcePackPrice(
+    resourcePackCost?.resource_packs_pricing[0],
+    courseData?.priceCurrency,
+  )
   const includeGST = isAustraliaCountry(courseData?.residingCountry)
 
   const go1LicensesCost = courseData?.blendedLearning
@@ -157,7 +173,6 @@ export const LicenseOrderDetails = () => {
     : undefined
 
   const resourcePacksCost = calculateResourcePackCost({
-    courseLevel: courseData?.courseLevel as Course_Level_Enum,
     numberOfResourcePacks: courseData?.maxParticipants ?? 0,
     residingCountry: courseData?.residingCountry,
     resourcePacksBalance:
@@ -171,7 +186,7 @@ export const LicenseOrderDetails = () => {
           ].resourcePacksType
         )
       })?.totalResourcePacks ?? 0,
-    resourcePacksTypeOption: courseData?.resourcePacksType,
+    resourcePacksPrice: rpPrice,
   })
 
   const onSubmit: SubmitHandler<Inputs> = data => {

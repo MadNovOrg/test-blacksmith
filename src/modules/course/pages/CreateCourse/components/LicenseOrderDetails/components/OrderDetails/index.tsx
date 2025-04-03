@@ -7,12 +7,10 @@ import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
 import { getResourcePacksTypeOptionLabels } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import theme from '@app/theme'
 import { ValidCourseInput } from '@app/types'
-import {
-  getPricePerLicence,
-  getPricePerResourcePackForIndirectCourse,
-} from '@app/util'
+import { getPricePerLicence, getResourcePackPrice } from '@app/util'
 
 import {
   calculateGo1LicenseCost,
@@ -22,7 +20,14 @@ import {
 type Props = {
   courseData: Pick<
     ValidCourseInput,
-    'blendedLearning' | 'courseLevel' | 'resourcePacksType'
+    | 'blendedLearning'
+    | 'courseLevel'
+    | 'resourcePacksType'
+    | 'type'
+    | 'deliveryType'
+    | 'reaccreditation'
+    | 'organization'
+    | 'priceCurrency'
   >
   go1LicensesCost?: ReturnType<typeof calculateGo1LicenseCost>
   numberOfLicenses: number
@@ -44,6 +49,20 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   } = useAuth()
   const { t, _t } = useScopedTranslation(
     'pages.create-course.license-order-details',
+  )
+
+  const { data: resourcePacksPricing } = useResourcePackPricing({
+    course_type: courseData.type,
+    course_level: courseData.courseLevel,
+    course_delivery_type: courseData.deliveryType,
+    reaccreditation: courseData.reaccreditation,
+    organisation_id: courseData.organization?.id,
+    resourcePacksOptions: courseData?.resourcePacksType as ResourcePacksOptions,
+  })
+
+  const rpCost = getResourcePackPrice(
+    resourcePacksPricing?.resource_packs_pricing[0],
+    courseData.priceCurrency,
   )
 
   const resourcePacksTypeOptions = useMemo(
@@ -131,12 +150,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
               <Typography color={theme.palette.grey[600]} mt={1}>
                 {t('price-per-attendee', {
                   price: _t('common.amount-with-currency', {
-                    amount: getPricePerResourcePackForIndirectCourse({
-                      residingCountry,
-                      courseLevel: courseData.courseLevel,
-                      resourcePacksTypeOption:
-                        courseData?.resourcePacksType as ResourcePacksOptions,
-                    }),
+                    amount: rpCost,
                     currency: currencyAbbreviation,
                   }),
                 })}

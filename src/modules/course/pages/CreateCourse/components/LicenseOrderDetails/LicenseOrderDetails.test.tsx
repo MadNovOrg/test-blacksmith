@@ -10,9 +10,17 @@ import {
   OrgLicensesWithHistoryQuery,
 } from '@app/generated/graphql'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { AwsRegions, ValidCourseInput } from '@app/types'
 
-import { fireEvent, render, screen, userEvent, waitFor } from '@test/index'
+import {
+  chance,
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+  waitFor,
+} from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
 import { CreateCourseProvider, useCreateCourse } from '../CreateCourseProvider'
@@ -51,6 +59,23 @@ vi.mock('@app/modules/course/hooks/useCourseDraft', () => ({
     .fn()
     .mockReturnValue({ removeDraft: vi.fn(), setDraft: vi.fn() }),
 }))
+
+vi.mock('@app/modules/resource_packs/hooks/useResourcePackPricing')
+const useResourcePackPricingMocked = vi.mocked(useResourcePackPricing)
+useResourcePackPricingMocked.mockReturnValue({
+  data: {
+    resource_packs_pricing: [
+      {
+        id: chance.guid(),
+        AUD_price: 52,
+        NZD_price: 56,
+        org_resource_packs_pricings: [],
+      },
+    ],
+  },
+  fetching: false,
+  error: undefined,
+})
 
 const CreateCourseContextConsumer: React.FC<
   React.PropsWithChildren<unknown>

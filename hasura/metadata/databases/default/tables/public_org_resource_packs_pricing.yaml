@@ -1,0 +1,230 @@
+table:
+  name: org_resource_packs_pricing
+  schema: public
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: organisation_id
+  - name: resource_packs_pricing
+    using:
+      foreign_key_constraint_on: resource_packs_pricing_id
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+    comment: ""
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+    comment: ""
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+    comment: ""
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+    comment: ""
+update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+      check: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+      check: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - id
+        - organisation_id
+        - resource_packs_pricing_id
+      filter: {}
+      check: {}
+    comment: ""
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      filter: {}
+    comment: ""
+event_triggers:
+  - name: org_resource_packs_pricing_insert
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/org-resource-packs-pricing/insert'
+  - name: org_resource_packs_pricing_update
+    definition:
+      enable_manual: true
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/org-resource-packs-pricing/update'

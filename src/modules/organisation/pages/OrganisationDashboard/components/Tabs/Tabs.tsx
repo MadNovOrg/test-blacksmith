@@ -75,7 +75,7 @@ const TabsWithProps = [
     tab: OrgDashboardTabs.RESOURCE_PACKS_PRICING,
     dataTestId: 'org-resource-packs-pricing',
     label: t('pages.org-details.tabs.resource-pack-pricing.title'),
-    component: (id: string) => <ResourcePacksPricingTab orgId={id} />,
+    component: () => <ResourcePacksPricingTab />,
   },
   {
     tab: OrgDashboardTabs.PERMISSIONS,

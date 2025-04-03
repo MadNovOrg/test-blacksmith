@@ -37,6 +37,8 @@ import {
   Course as GeneratedCourseType,
   Course_Delivery_Type_Enum,
   Resource_Packs_Type_Enum,
+  GetResourcePackPricingsQuery,
+  Resource_Packs_Delivery_Type_Enum,
 } from '@app/generated/graphql'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
 import { matchResourcePacksCourseFieldsToSelectOption } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
@@ -335,6 +337,20 @@ export const generateBildCourseName = (
   }
 }
 
+export const getResourcePackPrice = (
+  resourcePackPricing:
+    | GetResourcePackPricingsQuery['resource_packs_pricing'][0]
+    | undefined,
+  currency: Currency | string | null | undefined,
+): number => {
+  if (!resourcePackPricing) return 0
+  const orgPricing = resourcePackPricing.org_resource_packs_pricings?.[0]
+
+  return currency === Currency.Nzd
+    ? orgPricing?.NZD_price ?? resourcePackPricing.NZD_price
+    : orgPricing?.AUD_price ?? resourcePackPricing.AUD_price
+}
+
 export const COURSE_TYPE_TO_PREFIX = {
   [Course_Type_Enum.Open]: 'OP',
   [Course_Type_Enum.Closed]: 'CL',
@@ -529,13 +545,46 @@ export const CourseTypeOrgRPPricings = [
   Course_Type_Enum.Indirect,
 ]
 
-export const Resource_Pack_Course_Delivery_Type: Record<
+export const Resource_Pack_Type_By_DeliveryType: Record<
   Course_Delivery_Type_Enum,
   Resource_Packs_Type_Enum
 > = {
   [Course_Delivery_Type_Enum.Virtual]: Resource_Packs_Type_Enum.DigitalWorkbook,
   [Course_Delivery_Type_Enum.F2F]: Resource_Packs_Type_Enum.PrintWorkbook,
   [Course_Delivery_Type_Enum.Mixed]: Resource_Packs_Type_Enum.PrintWorkbook,
+}
+
+export const Resource_Packs_Type_By_Resource_Pack_Options: Record<
+  ResourcePacksOptions,
+  Resource_Packs_Type_Enum
+> = {
+  [ResourcePacksOptions.DigitalWorkbook]:
+    Resource_Packs_Type_Enum.DigitalWorkbook,
+  [ResourcePacksOptions.PrintWorkbookStandard]:
+    Resource_Packs_Type_Enum.PrintWorkbook,
+  [ResourcePacksOptions.PrintWorkbookExpress]:
+    Resource_Packs_Type_Enum.PrintWorkbook,
+}
+
+export const getResourcePacksType = (
+  type: Course_Type_Enum,
+  deliveryType: Course_Delivery_Type_Enum,
+  resourcePacksOptions?: ResourcePacksOptions,
+) => {
+  return type === Course_Type_Enum.Indirect && resourcePacksOptions
+    ? Resource_Packs_Type_By_Resource_Pack_Options[resourcePacksOptions]
+    : Resource_Pack_Type_By_DeliveryType[deliveryType]
+}
+
+export const Resource_Pack_Delivery_Type: Record<
+  ResourcePacksOptions,
+  Resource_Packs_Delivery_Type_Enum | null
+> = {
+  [ResourcePacksOptions.DigitalWorkbook]: null,
+  [ResourcePacksOptions.PrintWorkbookStandard]:
+    Resource_Packs_Delivery_Type_Enum.Standard,
+  [ResourcePacksOptions.PrintWorkbookExpress]:
+    Resource_Packs_Delivery_Type_Enum.Express,
 }
 
 export function renderOrgAddress(org?: {
@@ -1137,72 +1186,6 @@ export const getPricePerLicence = ({
     return blendedLearningLicensePrice.AUD
   }
   return blendedLearningLicensePrice.GBP
-}
-
-const indirectCourseResourcePacksPrices: Record<
-  'AUD' | 'NZ',
-  Record<ResourcePacksOptions, Record<string, number>>
-> = {
-  AUD: {
-    [ResourcePacksOptions.DigitalWorkbook]: {
-      [Course_Level_Enum.Level_1]: 46,
-      [Course_Level_Enum.Level_1Bs]: 46,
-      [Course_Level_Enum.Level_1Np]: 46,
-      [Course_Level_Enum.Level_2]: 35,
-    },
-    [ResourcePacksOptions.PrintWorkbookStandard]: {
-      [Course_Level_Enum.Level_1]: 52,
-      [Course_Level_Enum.Level_1Bs]: 52,
-      [Course_Level_Enum.Level_1Np]: 52,
-      [Course_Level_Enum.Level_2]: 41,
-    },
-    [ResourcePacksOptions.PrintWorkbookExpress]: {
-      [Course_Level_Enum.Level_1]: 57,
-      [Course_Level_Enum.Level_1Bs]: 57,
-      [Course_Level_Enum.Level_1Np]: 57,
-      [Course_Level_Enum.Level_2]: 46,
-    },
-  },
-  NZ: {
-    [ResourcePacksOptions.DigitalWorkbook]: {
-      [Course_Level_Enum.Level_1]: 50,
-      [Course_Level_Enum.Level_1Bs]: 50,
-      [Course_Level_Enum.Level_1Np]: 50,
-      [Course_Level_Enum.Level_2]: 38,
-    },
-    [ResourcePacksOptions.PrintWorkbookStandard]: {
-      [Course_Level_Enum.Level_1]: 57,
-      [Course_Level_Enum.Level_1Bs]: 57,
-      [Course_Level_Enum.Level_1Np]: 57,
-      [Course_Level_Enum.Level_2]: 45,
-    },
-    [ResourcePacksOptions.PrintWorkbookExpress]: {
-      [Course_Level_Enum.Level_1]: 62.5,
-      [Course_Level_Enum.Level_1Bs]: 62.5,
-      [Course_Level_Enum.Level_1Np]: 62.5,
-      [Course_Level_Enum.Level_2]: 50.5,
-    },
-  },
-}
-
-export const getPricePerResourcePackForIndirectCourse = ({
-  courseLevel,
-  residingCountry,
-  resourcePacksTypeOption,
-}: {
-  courseLevel: Course_Level_Enum
-  residingCountry?: string
-  resourcePacksTypeOption: ResourcePacksOptions
-}) => {
-  const countryCode = (
-    residingCountry && ['AUD', 'NZ'].includes(residingCountry)
-      ? residingCountry
-      : 'AUD'
-  ) as 'AUD' | 'NZ'
-
-  return indirectCourseResourcePacksPrices[countryCode][
-    resourcePacksTypeOption
-  ][courseLevel]
 }
 
 export const PROFILE_TABLE_SX = {

@@ -50,7 +50,7 @@ import { InvoiceForm } from '@app/modules/course/components/CourseForm/component
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { NonNullish } from '@app/types'
-import { formatCurrency } from '@app/util'
+import { formatCurrency, getResourcePackPrice } from '@app/util'
 
 import { ParticipantInput, useBooking } from '../../BookingContext'
 import { PromoCode } from '../../PromoCode'
@@ -160,13 +160,14 @@ export const CourseBookingDetails: React.FC<
     course_type: course?.type as Course_Type_Enum,
     course_level: course?.level as Course_Level_Enum,
     course_delivery_type: course?.deliveryType as Course_Delivery_Type_Enum,
+    organisation_id: booking.orgId,
     reaccreditation: course?.reaccreditation ?? false,
   })
 
-  const rpPrice =
-    booking.currency === Currency.Nzd
-      ? resourcePackPricing?.resource_packs_pricing[0]?.NZD_price
-      : resourcePackPricing?.resource_packs_pricing[0]?.AUD_price
+  const rpPrice = getResourcePackPrice(
+    resourcePackPricing?.resource_packs_pricing[0],
+    booking.currency,
+  )
 
   const onSubmit = async (data: FormInputs) => {
     const groupedParticipantsByEmail = groupBy(

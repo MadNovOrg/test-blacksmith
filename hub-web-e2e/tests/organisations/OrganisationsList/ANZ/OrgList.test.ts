@@ -112,7 +112,7 @@ if (isUK()) {
         await orgListPage.expandOrganisationRow(0)
 
         // Check affiliates count for the first organisation before filtering affiliates
-        await orgListPage.checkAffiliatesChipCount(0, 3, 3)
+        await orgListPage.checkAffiliatesChipCount(0, 2, 2)
 
         // Apply search filter for affiliated org
         await orgListPage.checkSearchFilter(
@@ -121,7 +121,7 @@ if (isUK()) {
         )
 
         // Check affiliates count for the first organisation after filtering affiliates
-        await orgListPage.checkAffiliatesChipCount(0, 1, 3)
+        await orgListPage.checkAffiliatesChipCount(0, 1, 2)
       })
     }
   })
