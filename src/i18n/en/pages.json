@@ -1642,6 +1642,22 @@
           "print-resource-packs": "Print Workbook & Connect"
         },
         "manage-button-label": "Manage",
+        "table": {
+          "added-by": "Added by {{fullName}}",
+          "col-amount": "Amount",
+          "col-balance": "Balance",
+          "col-date": "Date",
+          "col-event": "Event",
+          "col-option": "Option",
+          "col-reserved-balance": "Reserved",
+          "event": {
+            "DIGITAL_WORKBOOK": "Digital",
+            "PRINT_WORKBOOK": "Print"
+          },
+          "removed-by": "Removed by {{fullName}}",
+          "reserved-by": "Reserved by {{fullName}}",
+          "purchased-by": "Purchased at course creation by {{fullName}}"
+        },
         "export": {
           "button-label": "Export"
         }

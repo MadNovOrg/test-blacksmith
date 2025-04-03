@@ -7306,6 +7306,8 @@ export enum ResourceIdType {
 
 export enum ResourcePacksAddErrorEnum {
   GenericError = 'GENERIC_ERROR',
+  InvalidAmount = 'INVALID_AMOUNT',
+  NotAllowed = 'NOT_ALLOWED',
   OrganizationNotFound = 'ORGANIZATION_NOT_FOUND'
 }
 
@@ -7325,8 +7327,8 @@ export type ResourcePacksAddOutput = {
 };
 
 export enum ResourcePacksTypeEnum {
-  ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
-  ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED'
+  DigitalWorkbook = 'DIGITAL_WORKBOOK',
+  PrintWorkbook = 'PRINT_WORKBOOK'
 }
 
 /** Set relationships between the Resource to ResourceCategories */
@@ -47121,10 +47123,15 @@ export type Org_Distinct_Country_Codes_Stream_Cursor_Value_Input = {
 export type Org_Resource_Packs_History = {
   __typename?: 'org_resource_packs_history';
   change: Scalars['Int'];
+  /** An object relationship */
+  course?: Maybe<Course>;
+  courseId?: Maybe<Scalars['Int']>;
   created_at: Scalars['timestamp'];
   event: Resource_Packs_Events_Enum;
   id: Scalars['uuid'];
   orgId?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  organization?: Maybe<Organization>;
   payload?: Maybe<Scalars['jsonb']>;
   reservedBalance: Scalars['Int'];
   resourcePacksType: Resource_Packs_Type_Enum;
@@ -47176,6 +47183,7 @@ export type Org_Resource_Packs_History_Append_Input = {
 export type Org_Resource_Packs_History_Avg_Fields = {
   __typename?: 'org_resource_packs_history_avg_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47186,10 +47194,13 @@ export type Org_Resource_Packs_History_Bool_Exp = {
   _not?: InputMaybe<Org_Resource_Packs_History_Bool_Exp>;
   _or?: InputMaybe<Array<Org_Resource_Packs_History_Bool_Exp>>;
   change?: InputMaybe<Int_Comparison_Exp>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamp_Comparison_Exp>;
   event?: InputMaybe<Resource_Packs_Events_Enum_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
   reservedBalance?: InputMaybe<Int_Comparison_Exp>;
   resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum_Comparison_Exp>;
@@ -47220,6 +47231,7 @@ export type Org_Resource_Packs_History_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "org_resource_packs_history" */
 export type Org_Resource_Packs_History_Inc_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   reservedBalance?: InputMaybe<Scalars['Int']>;
   totalBalance?: InputMaybe<Scalars['Int']>;
 };
@@ -47227,10 +47239,13 @@ export type Org_Resource_Packs_History_Inc_Input = {
 /** input type for inserting data into table "org_resource_packs_history" */
 export type Org_Resource_Packs_History_Insert_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  courseId?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamp']>;
   event?: InputMaybe<Resource_Packs_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
   orgId?: InputMaybe<Scalars['uuid']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   payload?: InputMaybe<Scalars['jsonb']>;
   reservedBalance?: InputMaybe<Scalars['Int']>;
   resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum>;
@@ -47241,6 +47256,7 @@ export type Org_Resource_Packs_History_Insert_Input = {
 export type Org_Resource_Packs_History_Max_Fields = {
   __typename?: 'org_resource_packs_history_max_fields';
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
   orgId?: Maybe<Scalars['uuid']>;
@@ -47252,6 +47268,7 @@ export type Org_Resource_Packs_History_Max_Fields = {
 export type Org_Resource_Packs_History_Min_Fields = {
   __typename?: 'org_resource_packs_history_min_fields';
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
   orgId?: Maybe<Scalars['uuid']>;
@@ -47278,10 +47295,13 @@ export type Org_Resource_Packs_History_On_Conflict = {
 /** Ordering options when selecting data from "org_resource_packs_history". */
 export type Org_Resource_Packs_History_Order_By = {
   change?: InputMaybe<Order_By>;
+  course?: InputMaybe<Course_Order_By>;
+  courseId?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   event?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   payload?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
   resourcePacksType?: InputMaybe<Order_By>;
@@ -47303,6 +47323,8 @@ export enum Org_Resource_Packs_History_Select_Column {
   /** column name */
   Change = 'change',
   /** column name */
+  CourseId = 'courseId',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Event = 'event',
@@ -47323,6 +47345,7 @@ export enum Org_Resource_Packs_History_Select_Column {
 /** input type for updating data in table "org_resource_packs_history" */
 export type Org_Resource_Packs_History_Set_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamp']>;
   event?: InputMaybe<Resource_Packs_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -47337,6 +47360,7 @@ export type Org_Resource_Packs_History_Set_Input = {
 export type Org_Resource_Packs_History_Stddev_Fields = {
   __typename?: 'org_resource_packs_history_stddev_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47345,6 +47369,7 @@ export type Org_Resource_Packs_History_Stddev_Fields = {
 export type Org_Resource_Packs_History_Stddev_Pop_Fields = {
   __typename?: 'org_resource_packs_history_stddev_pop_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47353,6 +47378,7 @@ export type Org_Resource_Packs_History_Stddev_Pop_Fields = {
 export type Org_Resource_Packs_History_Stddev_Samp_Fields = {
   __typename?: 'org_resource_packs_history_stddev_samp_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47368,6 +47394,7 @@ export type Org_Resource_Packs_History_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Org_Resource_Packs_History_Stream_Cursor_Value_Input = {
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamp']>;
   event?: InputMaybe<Resource_Packs_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -47382,6 +47409,7 @@ export type Org_Resource_Packs_History_Stream_Cursor_Value_Input = {
 export type Org_Resource_Packs_History_Sum_Fields = {
   __typename?: 'org_resource_packs_history_sum_fields';
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   reservedBalance?: Maybe<Scalars['Int']>;
   totalBalance?: Maybe<Scalars['Int']>;
 };
@@ -47390,6 +47418,8 @@ export type Org_Resource_Packs_History_Sum_Fields = {
 export enum Org_Resource_Packs_History_Update_Column {
   /** column name */
   Change = 'change',
+  /** column name */
+  CourseId = 'courseId',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -47431,6 +47461,7 @@ export type Org_Resource_Packs_History_Updates = {
 export type Org_Resource_Packs_History_Var_Pop_Fields = {
   __typename?: 'org_resource_packs_history_var_pop_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47439,6 +47470,7 @@ export type Org_Resource_Packs_History_Var_Pop_Fields = {
 export type Org_Resource_Packs_History_Var_Samp_Fields = {
   __typename?: 'org_resource_packs_history_var_samp_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -47447,6 +47479,7 @@ export type Org_Resource_Packs_History_Var_Samp_Fields = {
 export type Org_Resource_Packs_History_Variance_Fields = {
   __typename?: 'org_resource_packs_history_variance_fields';
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
   totalBalance?: Maybe<Scalars['Float']>;
 };
@@ -57445,7 +57478,9 @@ export enum Resource_Packs_Events_Constraint {
 
 export enum Resource_Packs_Events_Enum {
   ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
-  ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED'
+  ResourcePacksPurchased = 'RESOURCE_PACKS_PURCHASED',
+  ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED',
+  ResourcePacksReserved = 'RESOURCE_PACKS_RESERVED'
 }
 
 /** Boolean expression to compare columns of type "resource_packs_events_enum". All fields are combined with logical 'AND'. */
@@ -68088,6 +68123,15 @@ export type DeleteOrgMutationVariables = Exact<{
 
 
 export type DeleteOrgMutation = { __typename?: 'mutation_root', deleteOrganisation?: { __typename?: 'DeleteOrganisationOutput', success: boolean } | null };
+
+export type GetOrgResourcePacksHistoryQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type GetOrgResourcePacksHistoryQuery = { __typename?: 'query_root', history: Array<{ __typename?: 'org_resource_packs_history', id: any, change: number, created_at: any, event: Resource_Packs_Events_Enum, payload?: any | null, reservedBalance: number, resourcePacksType: Resource_Packs_Type_Enum, totalBalance: number, course?: { __typename?: 'course', id: number, createdBy?: { __typename?: 'profile', id: any, fullName?: string | null } | null } | null }> };
 
 export type GetOrgTypesQueryVariables = Exact<{
   where: Organization_Type_Bool_Exp;

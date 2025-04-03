@@ -1,5 +1,5 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
-import { useCallback, useState } from 'react'
+import { Box, Button, Grid } from '@mui/material'
+import { useCallback, useRef, useState } from 'react'
 
 import { Tile } from '@app/components/Tile'
 import { useAuth } from '@app/context/auth'
@@ -9,6 +9,10 @@ import { useOrgResourcePacks } from '@app/modules/course/hooks/useOrgResourcePac
 
 import { ExportResourcePacksHistoryButton } from './components/ExportHistoryButton'
 import { ManageResourcePacksDialog } from './components/ManageResourcePacksDialog'
+import {
+  ResourcePacksHistoryTable,
+  ResourcePacksHistoryTableRef,
+} from './components/ResourcePacksHistoryTable'
 import { TileContent } from './components/TileContent'
 
 type Props = {
@@ -17,15 +21,24 @@ type Props = {
 export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
   orgId,
 }) => {
+  const historyTableRef = useRef<ResourcePacksHistoryTableRef>(null)
+
   const { t } = useScopedTranslation('pages.org-details.tabs.resource-packs')
 
   const { acl } = useAuth()
 
   const [openManage, setOpenManage] = useState(false)
-
   const onCloseManage = useCallback(() => setOpenManage(false), [])
 
   const { resourcePacks, refetch } = useOrgResourcePacks({ orgId })
+
+  const onManageFormSubmitSuccess = useCallback(() => {
+    refetch({ requestPolicy: 'network-only' })
+
+    historyTableRef.current?.refetchOrgResourcePacksHistory({
+      requestPolicy: 'network-only',
+    })
+  }, [refetch])
 
   return (
     <>
@@ -90,18 +103,16 @@ export const ResourcePacksTab: React.FC<React.PropsWithChildren<Props>> = ({
       <Box mt={2} mb={2} textAlign="right">
         <ExportResourcePacksHistoryButton orgId={orgId} disabled={false} />
       </Box>
+
       <Box>
-        <Typography>
-          TO DO: Implement table, based on the db structure, and requested
-          columns
-        </Typography>
+        <ResourcePacksHistoryTable orgId={orgId} ref={historyTableRef} />
       </Box>
 
       <ManageResourcePacksDialog
         onClose={onCloseManage}
+        onFormSubmitSuccess={onManageFormSubmitSuccess}
         open={openManage}
         orgId={orgId}
-        onFormSubmitSuccess={refetch}
       />
     </>
   )

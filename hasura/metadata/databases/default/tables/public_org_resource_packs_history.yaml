@@ -3,6 +3,8 @@ table:
   schema: public
 configuration:
   column_config:
+    course_id:
+      custom_name: courseId
     org_id:
       custom_name: orgId
     reserved_balance:
@@ -12,8 +14,137 @@ configuration:
     total_balance:
       custom_name: totalBalance
   custom_column_names:
+    course_id: courseId
     org_id: orgId
     reserved_balance: reservedBalance
     resource_packs_type: resourcePacksType
     total_balance: totalBalance
   custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter: {}
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter: {}
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - change
+        - course_id
+        - created_at
+        - event
+        - id
+        - org_id
+        - payload
+        - reserved_balance
+        - resource_packs_type
+        - total_balance
+      filter:
+        organization:
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+    comment: ""
