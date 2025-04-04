@@ -21,6 +21,7 @@ export const ORG_RESOURCE_PACKS_HISTORY = gql`
       change
       course {
         id
+        code: course_code
         createdBy {
           id
           fullName

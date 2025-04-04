@@ -11,7 +11,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 export type ResourcePacksEventColProps = {
   event: Pick<
     GetOrgResourcePacksHistoryQuery['history'][number],
-    'event' | 'payload'
+    'course' | 'event' | 'payload'
   >
 }
 
@@ -65,6 +65,12 @@ export const ResourcePacksEventCol = ({
         >
           {event.payload?.invoiceNumber ? (
             <Typography>{event.payload?.invoiceNumber}</Typography>
+          ) : null}
+
+          {event.course?.id ? (
+            <Link href={`/manage-courses/all/${event.course?.id}/details`}>
+              <Typography>{event.course.code}</Typography>
+            </Link>
           ) : null}
 
           {event.payload?.note ? (

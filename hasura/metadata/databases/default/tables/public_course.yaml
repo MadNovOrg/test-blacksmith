@@ -257,6 +257,12 @@ computed_fields:
       function:
         name: course_reserved_go1_licenses
         schema: public
+  - name: reservedResourcePacks
+    definition:
+      function:
+        name: course_reserved_resource_packs
+        schema: public
+    comment: A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history.
   - name: state
     definition:
       function:

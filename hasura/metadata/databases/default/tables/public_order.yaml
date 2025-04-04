@@ -608,6 +608,17 @@ update_permissions:
                 - CLOSED
       check: {}
 event_triggers:
+  - name: indirect_course_resource_packs_purchase
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - xero_invoice_number
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/purchase'
   - name: licenses_purchased
     definition:
       enable_manual: true
