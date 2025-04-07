@@ -464,6 +464,8 @@ insert_permissions:
         - reaccreditation
         - renewal_cycle
         - residingCountry
+        - resource_packs_delivery_type
+        - resource_packs_type
         - source
         - special_instructions
         - updated_at
@@ -1031,6 +1033,7 @@ select_permissions:
         - course_code
         - freeSlots
         - reservedGo1Licenses
+        - reservedResourcePacks
         - state
       filter:
         _or:
@@ -1132,6 +1135,7 @@ select_permissions:
         - course_code
         - freeSlots
         - reservedGo1Licenses
+        - reservedResourcePacks
         - state
       filter: {}
       allow_aggregations: true
@@ -1192,6 +1196,7 @@ select_permissions:
       computed_fields:
         - course_code
         - reservedGo1Licenses
+        - reservedResourcePacks
         - state
       filter: {}
       allow_aggregations: true

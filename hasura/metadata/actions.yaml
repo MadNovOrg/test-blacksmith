@@ -356,6 +356,17 @@ actions:
       handler: '{{ACTIONS_HOST}}/user/resend-password'
     permissions:
       - role: anonymous
+  - name: reserveResourcePacks
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/resource-packs/reserve'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+      - role: trainer
+      - role: sales-admin
+      - role: finance
+    comment: Used to reserve additional resource packs for an Indirect course without requiring the organization to purchase more.
   - name: saveOrgInvites
     definition:
       kind: synchronous
@@ -1056,6 +1067,23 @@ custom_types:
         - description: null
           is_deprecated: null
           value: NOT_ALLOWED
+    - name: ResourcePacksReserveErrorEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: ORGANIZATION_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: INVALID_AMOUNT
+        - description: null
+          is_deprecated: null
+          value: NOT_ALLOWED
+        - description: null
+          is_deprecated: null
+          value: INSUFFICIENT_RESOURCE_PACKS_AVAILABLE
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1101,6 +1129,7 @@ custom_types:
     - name: ImportOrganisationsInput
     - name: ImportOrganisationsConfig
     - name: ResourcePacksAddInput
+    - name: ResourcePacksReserveInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1205,5 +1234,6 @@ custom_types:
     - name: CancelIndividualFromCourseOutput
     - name: DbCleanOutput
     - name: ResourcePacksAddOutput
+    - name: ResourcePacksReserveOutput
   scalars:
     - name: Date

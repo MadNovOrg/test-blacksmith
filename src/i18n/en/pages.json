@@ -593,6 +593,9 @@
     "transfer": {
       "reason-for-transfer": "Reason for transfer"
     },
+    "purchase-additional-licences-and-resource-packs": "Blended learning - {{courseLevel}} Additional Blended Learning licenses and Resource Packs purchase",
+    "purchase-additional-licences": "Blended learning - {{courseLevel}} Additional Blended Learning licenses purchase",
+    "purchase-additional-resource-packs": "{{courseLevel}} Additional Resource Packs purchase",
     "cancellation-modal": {
       "title": "Cancel this entire course",
       "permanently-cancel-course": "This action will permanently cancel the course and notify all trainers, registered attendees, and organisations.",

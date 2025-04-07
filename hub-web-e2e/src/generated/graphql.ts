@@ -7235,6 +7235,28 @@ export type ResourcePacksAddOutput = {
   totalResourcePacks?: Maybe<Scalars['Int']>;
 };
 
+export enum ResourcePacksReserveErrorEnum {
+  GenericError = 'GENERIC_ERROR',
+  InsufficientResourcePacksAvailable = 'INSUFFICIENT_RESOURCE_PACKS_AVAILABLE',
+  InvalidAmount = 'INVALID_AMOUNT',
+  NotAllowed = 'NOT_ALLOWED',
+  OrganizationNotFound = 'ORGANIZATION_NOT_FOUND'
+}
+
+export type ResourcePacksReserveInput = {
+  courseId: Scalars['Int'];
+  orgId: Scalars['uuid'];
+  quantity: Scalars['Int'];
+  resourcePackType: ResourcePacksTypeEnum;
+};
+
+export type ResourcePacksReserveOutput = {
+  __typename?: 'ResourcePacksReserveOutput';
+  error?: Maybe<ResourcePacksReserveErrorEnum>;
+  success: Scalars['Boolean'];
+  totalResourcePacks?: Maybe<Scalars['Int']>;
+};
+
 export enum ResourcePacksTypeEnum {
   DigitalWorkbook = 'DIGITAL_WORKBOOK',
   PrintWorkbook = 'PRINT_WORKBOOK'
@@ -15631,6 +15653,8 @@ export type Course = {
   renewalCycle?: Maybe<Course_Renewal_Cycle_Enum>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
   residingCountry?: Maybe<Scalars['String']>;
   resourcePacksDeliveryType?: Maybe<Resource_Packs_Delivery_Type_Enum>;
   resourcePacksType?: Maybe<Resource_Packs_Type_Enum>;
@@ -16678,6 +16702,8 @@ export type Course_Avg_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by avg() on columns of table "course" */
@@ -17403,6 +17429,7 @@ export type Course_Bool_Exp = {
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   renewalCycle?: InputMaybe<Course_Renewal_Cycle_Enum_Comparison_Exp>;
   reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
+  reservedResourcePacks?: InputMaybe<Int_Comparison_Exp>;
   residingCountry?: InputMaybe<String_Comparison_Exp>;
   resourcePacksDeliveryType?: InputMaybe<Resource_Packs_Delivery_Type_Enum_Comparison_Exp>;
   resourcePacksType?: InputMaybe<Resource_Packs_Type_Enum_Comparison_Exp>;
@@ -22953,6 +22980,8 @@ export type Course_Max_Fields = {
   priceCurrency?: Maybe<Scalars['String']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
   residingCountry?: Maybe<Scalars['String']>;
   search_fields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
@@ -23032,6 +23061,8 @@ export type Course_Min_Fields = {
   priceCurrency?: Maybe<Scalars['String']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
   residingCountry?: Maybe<Scalars['String']>;
   search_fields?: Maybe<Scalars['String']>;
   special_instructions?: Maybe<Scalars['String']>;
@@ -23635,6 +23666,7 @@ export type Course_Order_By = {
   reaccreditation?: InputMaybe<Order_By>;
   renewalCycle?: InputMaybe<Order_By>;
   reservedGo1Licenses?: InputMaybe<Order_By>;
+  reservedResourcePacks?: InputMaybe<Order_By>;
   residingCountry?: InputMaybe<Order_By>;
   resourcePacksDeliveryType?: InputMaybe<Order_By>;
   resourcePacksType?: InputMaybe<Order_By>;
@@ -28673,6 +28705,8 @@ export type Course_Stddev_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by stddev() on columns of table "course" */
@@ -28704,6 +28738,8 @@ export type Course_Stddev_Pop_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by stddev_pop() on columns of table "course" */
@@ -28735,6 +28771,8 @@ export type Course_Stddev_Samp_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by stddev_samp() on columns of table "course" */
@@ -28832,6 +28870,8 @@ export type Course_Sum_Fields = {
   price?: Maybe<Scalars['numeric']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "course" */
@@ -29744,6 +29784,8 @@ export type Course_Var_Pop_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by var_pop() on columns of table "course" */
@@ -29775,6 +29817,8 @@ export type Course_Var_Samp_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by var_samp() on columns of table "course" */
@@ -29806,6 +29850,8 @@ export type Course_Variance_Fields = {
   price?: Maybe<Scalars['Float']>;
   /** A computed field, executes function "course_reserved_go1_licenses" */
   reservedGo1Licenses?: Maybe<Scalars['Int']>;
+  /** A computed field returns the total count of reserved resource packs for a course, derived from resource pack reservation events in the organization's resource pack management history. */
+  reservedResourcePacks?: Maybe<Scalars['Int']>;
 };
 
 /** order by variance() on columns of table "course" */
@@ -37320,6 +37366,8 @@ export type Mutation_Root = {
   /** replaceParticipant */
   replaceParticipant?: Maybe<ReplaceParticipantOutput>;
   resendPassword: Scalars['Boolean'];
+  /** Used to reserve additional resource packs for an Indirect course without requiring the organization to purchase more. */
+  reserveResourcePacks?: Maybe<ResourcePacksReserveOutput>;
   /** saveOrgInvites */
   saveOrgInvites?: Maybe<SampleOutput>;
   /** The action will create a schedule event for sending about training surveys to certified attendees */
@@ -41604,6 +41652,12 @@ export type Mutation_RootReplaceParticipantArgs = {
 /** mutation root */
 export type Mutation_RootResendPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootReserveResourcePacksArgs = {
+  input: ResourcePacksReserveInput;
 };
 
 

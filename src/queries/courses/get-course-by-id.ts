@@ -68,6 +68,8 @@ export const QUERY = gql`
       priceCurrency @include(if: $withInternationalFinance)
       includeVAT @include(if: $withInternationalFinance)
       free_course_materials @include(if: $withFreeCourseCourseMaterials)
+      reservedResourcePacks @include(if: $withResourcePacks)
+      resourcePacksDeliveryType @include(if: $withResourcePacks)
       resourcePacksType @include(if: $withResourcePacks)
       trainers {
         id

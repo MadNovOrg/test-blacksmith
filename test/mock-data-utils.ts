@@ -469,6 +469,8 @@ export const buildCourse = build<Course>({
     priceCurrency: Currency.Gbp,
     renewalCycle: Course_Renewal_Cycle_Enum.One,
     free_course_materials: undefined,
+    reservedResourcePacks: 0,
+    resourcePacksType: null,
   },
 })
 

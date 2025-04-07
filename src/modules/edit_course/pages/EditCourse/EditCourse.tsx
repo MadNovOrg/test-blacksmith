@@ -127,6 +127,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     mutateCourse,
     preEditedCourse: course,
     requireNewOrderForGo1Licenses,
+    requireNewOrderForResourcePacks,
     saveChanges,
     setCourseData,
     setCourseDataValid,
@@ -261,13 +262,18 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const nextStep = useCallback(
     (reviewInput?: ReviewChangesFormValues) => {
-      if (requireNewOrderForGo1Licenses) {
+      if (requireNewOrderForGo1Licenses || requireNewOrderForResourcePacks) {
         navigate('./review-licenses-order')
       } else {
         saveChanges(reviewInput)
       }
     },
-    [navigate, requireNewOrderForGo1Licenses, saveChanges],
+    [
+      navigate,
+      requireNewOrderForGo1Licenses,
+      requireNewOrderForResourcePacks,
+      saveChanges,
+    ],
   )
 
   const editCourse = useCallback(() => {
@@ -606,7 +612,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     data-testid="save-button"
                     disabled={submitDisabled}
                     endIcon={
-                      canGoToCourseBuilder || requireNewOrderForGo1Licenses ? (
+                      canGoToCourseBuilder ||
+                      requireNewOrderForGo1Licenses ||
+                      requireNewOrderForResourcePacks ? (
                         <ArrowForwardIcon />
                       ) : null
                     }
@@ -615,7 +623,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     sx={{ mt: isMobile ? 2 : 0 }}
                     variant="contained"
                   >
-                    {requireNewOrderForGo1Licenses
+                    {requireNewOrderForGo1Licenses ||
+                    requireNewOrderForResourcePacks
                       ? t(
                           'pages.create-course.step-navigation-review-and-confirm',
                         )

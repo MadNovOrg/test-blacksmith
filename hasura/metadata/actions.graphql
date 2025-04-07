@@ -258,6 +258,12 @@ type Mutation {
 }
 
 type Mutation {
+  reserveResourcePacks(
+    input: ResourcePacksReserveInput!
+  ): ResourcePacksReserveOutput
+}
+
+type Mutation {
   saveOrgInvites(
     invites: [SaveOrgInviteInput!]!
   ): SampleOutput
@@ -633,6 +639,14 @@ enum ResourcePacksAddErrorEnum {
   NOT_ALLOWED
 }
 
+enum ResourcePacksReserveErrorEnum {
+  GENERIC_ERROR
+  ORGANIZATION_NOT_FOUND
+  INVALID_AMOUNT
+  NOT_ALLOWED
+  INSUFFICIENT_RESOURCE_PACKS_AVAILABLE
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -971,6 +985,13 @@ input ResourcePacksAddInput {
   invoiceNumber: String!
   note: String
   orgId: uuid!
+  resourcePackType: ResourcePacksTypeEnum!
+}
+
+input ResourcePacksReserveInput {
+  courseId: Int!
+  orgId: uuid!
+  quantity: Int!
   resourcePackType: ResourcePacksTypeEnum!
 }
 
@@ -1610,6 +1631,12 @@ type ResourcePacksAddOutput {
   success: Boolean!
   totalResourcePacks: Int
   error: ResourcePacksAddErrorEnum
+}
+
+type ResourcePacksReserveOutput {
+  success: Boolean!
+  totalResourcePacks: Int
+  error: ResourcePacksReserveErrorEnum
 }
 
 scalar Date

@@ -115,7 +115,10 @@ export const CourseDetails = () => {
     data: courseData,
     error: courseError,
     mutate,
-  } = useCourse(courseId ?? '', { includeResourcePacks: true })
+  } = useCourse(courseId ?? '', {
+    includeResourcePacks:
+      acl.isAustralia() && acl.canCreateCourse(Course_Type_Enum.Indirect),
+  })
 
   const course = courseData?.course
   const userIsTrainer = courseData?.isTrainer

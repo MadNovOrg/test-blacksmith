@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/react'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, {
   useCallback,
   useContext,
@@ -38,6 +40,7 @@ import {
   Payment_Methods_Enum,
   ReserveGo1LicensesMutation,
   ReserveGo1LicensesMutationVariables,
+  ResourcePacksTypeEnum,
   UpdateCourseMutation,
   UpdateCourseMutationVariables,
 } from '@app/generated/graphql'
@@ -46,6 +49,7 @@ import useTimeZones from '@app/hooks/useTimeZones'
 import { FormValues as TrainersFormValues } from '@app/modules/course/components/ChooseTrainers'
 import { hasRenewalCycle } from '@app/modules/course/components/CourseForm/helpers'
 import { useBildStrategies } from '@app/modules/course/hooks/useBildStrategies'
+import { useOrgResourcePacks } from '@app/modules/course/hooks/useOrgResourcePacks'
 import { shouldGoIntoExceptionApproval } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { APPROVE_COURSE_MUTATION } from '@app/modules/course_details/hooks/courses/approve-course'
 import {
@@ -53,8 +57,8 @@ import {
   Course,
   CourseInput,
   CourseTrainerType,
-  Draft,
   InviteStatus,
+  InvoiceDetails,
   RoleName,
   ValidCourseInput,
 } from '@app/types'
@@ -75,6 +79,7 @@ import {
   INSERT_COURSE_ORDER,
   RESERVE_GO1_LICENSES_MUTATION,
   UPDATE_COURSE_MUTATION,
+  useReserveResourcePacks,
 } from '../../queries/update-course'
 import { CourseDiff, getChangedTrainers } from '../../utils/shared'
 
@@ -95,46 +100,48 @@ function assertCourseDataValid(
 const EditCourseContext = React.createContext<
   | {
       additionalLicensesOrderOnly: boolean
+      additionalRequiredResourcePacks: number
+      additionalResourcePacksToPurchase: number
       autoapproved: boolean
       blendedLearningIndirectCourseInvitees: Record<string, unknown>[]
       canGoToCourseBuilder: boolean
-      courseExceptions: Course_Exception_Enum[]
       courseData: CourseInput | null
       courseDataValid: boolean
       courseDiffs: CourseDiff[]
+      courseExceptions: Course_Exception_Enum[]
       courseFormInput: CourseInput | undefined
       editCourseReviewInput: ReviewChangesFormValues | undefined
       fetching: boolean
       getCourseName: () => string
-      go1LicensesData:
-        | (Draft['go1Licensing'] & { quantity: number })
-        | undefined
       hasError: boolean
+      invoiceDetails: InvoiceDetails | undefined
       mutateCourse: (opts?: Partial<OperationContext> | undefined) => void
       preEditedCourse: Maybe<Course> | undefined
       requiredLicenses: number
       requireNewOrderForGo1Licenses: boolean
+      requireNewOrderForResourcePacks: boolean
       saveAdditionalLicensesOrder: () => Promise<void>
       saveChanges: (reviewInput?: ReviewChangesFormValues) => Promise<void>
       setAdditionalLicensesOrderOnly: React.Dispatch<
         React.SetStateAction<boolean>
       >
+      setAdditionalRequiredResourcePacks: React.Dispatch<
+        React.SetStateAction<number>
+      >
       setBlendedLearningIndirectCourseInvitees: React.Dispatch<
         Record<string, unknown>[]
       >
+      setCourseData: React.Dispatch<React.SetStateAction<CourseInput | null>>
+      setCourseDataValid: React.Dispatch<React.SetStateAction<boolean>>
       setCourseExceptions: React.Dispatch<
         React.SetStateAction<Course_Exception_Enum[]>
       >
-      setCourseData: React.Dispatch<React.SetStateAction<CourseInput | null>>
-      setCourseDataValid: React.Dispatch<React.SetStateAction<boolean>>
       setEditCourseReviewInput: React.Dispatch<
         React.SetStateAction<ReviewChangesFormValues | undefined>
       >
-      setGo1LicensesData: React.Dispatch<
-        (Draft['go1Licensing'] & { quantity: number }) | undefined
-      >
-      setTrainersData: React.Dispatch<TrainersFormValues | undefined>
+      setInvoiceDetails: React.Dispatch<InvoiceDetails | undefined>
       setRequiredLicenses: React.Dispatch<React.SetStateAction<number>>
+      setTrainersData: React.Dispatch<TrainersFormValues | undefined>
       status: LoadingStatus
       trainersData: TrainersFormValues | undefined
     }
@@ -144,6 +151,10 @@ const EditCourseContext = React.createContext<
 export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const isIndirectCourseResourcePacksFlagEnabled = useFeatureFlagEnabled(
+    'indirect-course-resource-packs',
+  )
+
   const { id } = useParams()
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -180,11 +191,17 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   const [editCourseReviewInput, setEditCourseReviewInput] = useState<
     ReviewChangesFormValues | undefined
   >()
-  const [go1LicensesData, setGo1LicensesData] = useState<
-    Draft['go1Licensing'] & { quantity: number }
+  const [invoiceDetails, setInvoiceDetails] = useState<
+    InvoiceDetails | undefined
   >()
   const [order, setOrder] = useState<Order_Insert_Input | null>(null)
   const [requiredLicenses, setRequiredLicenses] = useState(0)
+  const [additionalRequiredResourcePacks, setAdditionalRequiredResourcePacks] =
+    useState(0)
+  const [
+    additionalResourcePacksToPurchase,
+    setAdditionalResourcePacksToPurchase,
+  ] = useState(0)
   const [trainersData, setTrainersData] = useState<TrainersFormValues>()
 
   const { strategies } = useBildStrategies(
@@ -198,8 +215,49 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   } = useCourse(id ?? '', {
     includeOrgLicenses: acl.canEditIndirectBLCourses(),
     includePendingInvitesCount: true,
-    includeResourcePacks: true,
+    includeResourcePacks:
+      acl.isAustralia() && acl.canCreateCourse(Course_Type_Enum.Indirect),
   })
+
+  const isIndirectCourseResourcePacksEnabled = useMemo(() => {
+    return Boolean(
+      acl.isAustralia() &&
+        isIndirectCourseResourcePacksFlagEnabled &&
+        courseInfo?.course?.organization?.id &&
+        courseInfo.course?.type === Course_Type_Enum.Indirect &&
+        courseInfo.course?.resourcePacksType,
+    )
+  }, [
+    acl,
+    courseInfo?.course?.organization?.id,
+    courseInfo?.course?.resourcePacksType,
+    courseInfo?.course?.type,
+    isIndirectCourseResourcePacksFlagEnabled,
+  ])
+
+  const coursesOrgResourcePacks = useOrgResourcePacks({
+    orgId: courseInfo?.course?.organization?.id,
+    pause: !isIndirectCourseResourcePacksEnabled,
+  })
+
+  const filteredOrgResourcePacks = useMemo(() => {
+    if (courseInfo?.course?.resourcePacksType) {
+      return {
+        balance:
+          coursesOrgResourcePacks.resourcePacks.balance[
+            courseInfo?.course?.resourcePacksType
+          ],
+        reserved:
+          coursesOrgResourcePacks.resourcePacks.reserved[
+            courseInfo?.course?.resourcePacksType
+          ],
+      }
+    }
+  }, [
+    courseInfo?.course?.resourcePacksType,
+    coursesOrgResourcePacks.resourcePacks.balance,
+    coursesOrgResourcePacks.resourcePacks.reserved,
+  ])
 
   const preEditedCourse = courseInfo?.course
 
@@ -213,21 +271,19 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     preEditedCourse?.type === Course_Type_Enum.Indirect
 
   useEffect(() => {
-    if (go1LicensesData) {
+    if (invoiceDetails) {
       const {
-        invoiceDetails: {
-          billingAddress,
-          email,
-          firstName,
-          phone,
-          purchaseOrder,
-          surname,
-          orgId,
-        },
-      } = go1LicensesData
+        billingAddress,
+        email,
+        firstName,
+        phone,
+        purchaseOrder,
+        surname,
+        orgId,
+      } = invoiceDetails
 
       const orderToBeCreated: Order_Insert_Input = {
-        attendeesQuantity: go1LicensesData.quantity,
+        attendeesQuantity: 0,
         billingAddress: billingAddress,
         billingEmail: email,
         billingFamilyName: surname,
@@ -252,7 +308,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     }
   }, [
     acl,
-    go1LicensesData,
+    invoiceDetails,
     preEditedCourse?.priceCurrency,
     profile?.email,
     profile?.fullName,
@@ -288,6 +344,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     ReserveGo1LicensesMutation,
     ReserveGo1LicensesMutationVariables
   >(RESERVE_GO1_LICENSES_MUTATION)
+
+  const [, reserveResourcePacks] = useReserveResourcePacks()
 
   const [{ fetching: updatingCourse, error: errorOnUpdate }, updateCourse] =
     useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(
@@ -345,6 +403,34 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     preEditedCourse?.status,
   ])
 
+  const isAdditionalResourcePacksRequired = useMemo(() => {
+    if (
+      !isIndirectCourseResourcePacksEnabled ||
+      filteredOrgResourcePacks?.balance === undefined
+    )
+      return false
+
+    const coursesReservedNumberOfResourcePacks =
+      preEditedCourse?.reservedResourcePacks ?? 0
+
+    const newNumberOfMaxParticipants = courseData?.maxParticipants ?? 0
+
+    const additionalResourcePacks =
+      newNumberOfMaxParticipants - coursesReservedNumberOfResourcePacks
+
+    if (additionalResourcePacks > 0) {
+      setAdditionalRequiredResourcePacks(additionalResourcePacks)
+      return true
+    }
+
+    return false
+  }, [
+    courseData?.maxParticipants,
+    filteredOrgResourcePacks?.balance,
+    isIndirectCourseResourcePacksEnabled,
+    preEditedCourse?.reservedResourcePacks,
+  ])
+
   const requireNewOrderForGo1Licenses = useMemo(() => {
     return (
       isAdditionalBlendedLearningLicensesRequired &&
@@ -357,6 +443,34 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     isAdditionalBlendedLearningLicensesRequired,
     isIndirectBlendedLearningCourse,
     requiredLicenses,
+  ])
+
+  const requireNewOrderForResourcePacks = useMemo(() => {
+    if (
+      isAdditionalResourcePacksRequired &&
+      additionalRequiredResourcePacks > 0
+    ) {
+      const insufficientNumberOfResourcePacks =
+        additionalRequiredResourcePacks -
+          (filteredOrgResourcePacks?.balance ?? 0) >
+        0
+
+      if (insufficientNumberOfResourcePacks) {
+        setAdditionalResourcePacksToPurchase(
+          additionalRequiredResourcePacks -
+            (filteredOrgResourcePacks?.balance ?? 0),
+        )
+
+        return true
+      }
+    }
+
+    setAdditionalResourcePacksToPurchase(0)
+    return false
+  }, [
+    additionalRequiredResourcePacks,
+    filteredOrgResourcePacks?.balance,
+    isAdditionalResourcePacksRequired,
   ])
 
   const [courseDiffs, autoapproved]: [CourseDiff[], boolean] = useMemo(() => {
@@ -469,6 +583,66 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
         requiredLicenses,
       ],
     )
+
+  const reserveAdditionalLicenses = useCallback(async () => {
+    const orgToManageGo1Licenses =
+      preEditedCourse?.organization?.main_organisation?.id ??
+      preEditedCourse?.organization?.id
+
+    if (
+      orgToManageGo1Licenses &&
+      isAdditionalBlendedLearningLicensesRequired &&
+      !requireNewOrderForGo1Licenses
+    ) {
+      try {
+        await reserveGo1Licenses({
+          go1LicensesOrgIdManage: orgToManageGo1Licenses,
+          decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
+          incrementGo1LicensesFromOrganizationPool: requiredLicenses,
+          reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],
+        })
+      } catch (err) {
+        Sentry.captureException(err)
+      }
+    }
+  }, [
+    getGo1LicensesReserveAudit,
+    isAdditionalBlendedLearningLicensesRequired,
+    preEditedCourse?.organization?.id,
+    preEditedCourse?.organization?.main_organisation?.id,
+    requireNewOrderForGo1Licenses,
+    requiredLicenses,
+    reserveGo1Licenses,
+  ])
+
+  const reserveAdditionalResourcePacks = useCallback(async () => {
+    if (
+      preEditedCourse?.organization?.id &&
+      additionalRequiredResourcePacks &&
+      !additionalResourcePacksToPurchase
+    ) {
+      try {
+        await reserveResourcePacks({
+          input: {
+            courseId: preEditedCourse.id,
+            orgId: preEditedCourse.organization.id,
+            quantity: additionalRequiredResourcePacks,
+            resourcePackType:
+              preEditedCourse.resourcePacksType as unknown as ResourcePacksTypeEnum,
+          },
+        })
+      } catch (err) {
+        Sentry.captureException(err)
+      }
+    }
+  }, [
+    additionalRequiredResourcePacks,
+    additionalResourcePacksToPurchase,
+    preEditedCourse?.id,
+    preEditedCourse?.organization?.id,
+    preEditedCourse?.resourcePacksType,
+    reserveResourcePacks,
+  ])
 
   // 17.12.2024 - 86 cognitive complexity - tread with caution
   const saveChanges = useCallback(
@@ -722,26 +896,9 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
             })
           }
 
-          const orgToManageGo1Licenses =
-            preEditedCourse.organization?.main_organisation?.id ??
-            preEditedCourse.organization?.id
+          await reserveAdditionalLicenses()
 
-          if (
-            orgToManageGo1Licenses &&
-            isAdditionalBlendedLearningLicensesRequired &&
-            !requireNewOrderForGo1Licenses
-          ) {
-            try {
-              await reserveGo1Licenses({
-                go1LicensesOrgIdManage: orgToManageGo1Licenses,
-                decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
-                incrementGo1LicensesFromOrganizationPool: requiredLicenses,
-                reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],
-              })
-            } catch (err) {
-              console.error(err)
-            }
-          }
+          await reserveAdditionalResourcePacks()
 
           if (courseDiffs.length) {
             const dateChanged = courseDiffs.find(d => d.type === 'date')
@@ -835,9 +992,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       courseFormInput?.id,
       editCourseReviewInput,
       getCourseName,
-      getGo1LicensesReserveAudit,
       insertAudit,
-      isAdditionalBlendedLearningLicensesRequired,
       isBILDCourse,
       isClosedTypeCourse,
       isOpenTypeCourse,
@@ -849,9 +1004,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       order,
       preEditedCourse,
       profile,
-      requireNewOrderForGo1Licenses,
-      requiredLicenses,
-      reserveGo1Licenses,
+      reserveAdditionalLicenses,
+      reserveAdditionalResourcePacks,
       setDateTimeTimeZone,
       trainersData,
       updateCourse,
@@ -906,6 +1060,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   const value = useMemo(
     () => ({
       additionalLicensesOrderOnly,
+      additionalRequiredResourcePacks,
+      additionalResourcePacksToPurchase,
       autoapproved,
       blendedLearningIndirectCourseInvitees,
       canGoToCourseBuilder,
@@ -917,21 +1073,23 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       editCourseReviewInput,
       fetching,
       getCourseName,
-      go1LicensesData,
       hasError,
+      invoiceDetails,
       mutateCourse,
       preEditedCourse,
       requiredLicenses,
       requireNewOrderForGo1Licenses,
+      requireNewOrderForResourcePacks,
       saveAdditionalLicensesOrder,
       saveChanges,
       setAdditionalLicensesOrderOnly,
+      setAdditionalRequiredResourcePacks,
       setBlendedLearningIndirectCourseInvitees,
       setCourseData,
       setCourseDataValid,
       setCourseExceptions,
       setEditCourseReviewInput,
-      setGo1LicensesData,
+      setInvoiceDetails,
       setRequiredLicenses,
       setTrainersData,
       status,
@@ -939,6 +1097,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     }),
     [
       additionalLicensesOrderOnly,
+      additionalRequiredResourcePacks,
+      additionalResourcePacksToPurchase,
       autoapproved,
       blendedLearningIndirectCourseInvitees,
       canGoToCourseBuilder,
@@ -950,12 +1110,13 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       editCourseReviewInput,
       fetching,
       getCourseName,
-      go1LicensesData,
       hasError,
+      invoiceDetails,
       mutateCourse,
       preEditedCourse,
-      requireNewOrderForGo1Licenses,
       requiredLicenses,
+      requireNewOrderForGo1Licenses,
+      requireNewOrderForResourcePacks,
       saveAdditionalLicensesOrder,
       saveChanges,
       status,

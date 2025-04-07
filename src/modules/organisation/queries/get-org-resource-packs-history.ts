@@ -27,6 +27,7 @@ export const ORG_RESOURCE_PACKS_HISTORY = gql`
           fullName
         }
       }
+      courseId
       created_at
       event
       payload

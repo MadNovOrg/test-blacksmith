@@ -15,18 +15,34 @@ import { useEffect, useMemo } from 'react'
 import { To, useLocation, useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Resource_Packs_Type_Enum,
+} from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import useTimeZones from '@app/hooks/useTimeZones'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
+import {
+  getResourcePacksTypeOptionLabels,
+  matchResourcePacksCourseFieldsToSelectOption,
+} from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
 import { WorkbookAddressDetails } from '@app/modules/course/components/CourseForm/components/WorkbooksAddressDetails'
-import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
+import {
+  calculateGo1LicenseCost,
+  calculateResourcePackCost,
+} from '@app/modules/course/pages/CreateCourse/utils'
+import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { InvoiceDetails as InvoiceDetailsType } from '@app/types'
+import { getResourcePackPrice } from '@app/util'
 
 import { useEditCourse } from '../../contexts/EditCourseProvider/EditCourseProvider'
 import { useOrderDetailsForReview } from '../../queries/get-indirect-course-order'
@@ -42,6 +58,8 @@ export const ReviewLicensesOrder: React.FC<
     'pages.create-course.license-order-review',
   )
 
+  const { isAustraliaCountry } = useWorldCountries()
+
   const state = location.state as {
     insufficientNumberOfLicenses: number
     invitees: Record<string, unknown>[]
@@ -49,8 +67,14 @@ export const ReviewLicensesOrder: React.FC<
 
   const { acl } = useAuth()
 
+  const resourcePacksTypeOptions = useMemo(
+    () => getResourcePacksTypeOptionLabels(_t),
+    [_t],
+  )
+
   const {
     additionalLicensesOrderOnly,
+    additionalResourcePacksToPurchase,
     canGoToCourseBuilder,
     courseData,
     getCourseName,
@@ -60,8 +84,24 @@ export const ReviewLicensesOrder: React.FC<
     saveChanges,
     setAdditionalLicensesOrderOnly,
     setBlendedLearningIndirectCourseInvitees,
-    setGo1LicensesData,
+    setInvoiceDetails,
   } = useEditCourse()
+
+  const { data: resourcePackCost } = useResourcePackPricing({
+    course_delivery_type:
+      preEditedCourse?.deliveryType as Course_Delivery_Type_Enum,
+    course_level: preEditedCourse?.level as Course_Level_Enum,
+    course_type: preEditedCourse?.type as Course_Type_Enum,
+    organisation_id: preEditedCourse?.organization?.id ?? '',
+    pause: !preEditedCourse?.resourcePacksType,
+    reaccreditation: Boolean(preEditedCourse?.reaccreditation),
+    resourcePacksOptions: courseData?.resourcePacksType,
+  })
+
+  const rpPrice = getResourcePackPrice(
+    resourcePackCost?.resource_packs_pricing[0],
+    courseData?.priceCurrency,
+  )
 
   const [{ data: orderData }] = useOrderDetailsForReview(
     preEditedCourse?.orders ? preEditedCourse?.orders[0].order.id ?? '' : '',
@@ -85,10 +125,13 @@ export const ReviewLicensesOrder: React.FC<
           0,
       )
 
-  const prices = useMemo(
-    () =>
-      calculateGo1LicenseCost({
+  const go1LicensesPrices = useMemo(() => {
+    if (numberOfLicenses > 0) {
+      return calculateGo1LicenseCost({
         isAustralia: acl.isAustralia(),
+        isAustraliaCountry: isAustraliaCountry(
+          preEditedCourse?.residingCountry,
+        ),
         // state.insufficientNumberOfLicenses represents the exact number of licenses required for purchase, which is why licenseBalance needs to be set to 0
         licenseBalance: state?.insufficientNumberOfLicenses
           ? 0
@@ -99,24 +142,89 @@ export const ReviewLicensesOrder: React.FC<
                 preEditedCourse?.organization?.go1Licenses ??
                 0,
             ),
-        numberOfLicenses,
+        numberOfLicenses: numberOfLicenses,
         residingCountry: courseData?.residingCountry ?? undefined,
-      }),
-    [
-      acl,
-      courseData?.residingCountry,
-      numberOfLicenses,
-      preEditedCourse?.organization?.go1Licenses,
-      preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
-      state?.insufficientNumberOfLicenses,
-    ],
-  )
+      })
+    }
+
+    return null
+  }, [
+    acl,
+    numberOfLicenses,
+    courseData?.residingCountry,
+    isAustraliaCountry,
+    preEditedCourse?.organization?.go1Licenses,
+    preEditedCourse?.organization?.mainOrganizationLicenses?.go1Licenses,
+    preEditedCourse?.residingCountry,
+    state?.insufficientNumberOfLicenses,
+  ])
+
+  const coursesResourcePacksOption = useMemo(() => {
+    if (preEditedCourse && additionalResourcePacksToPurchase > 0) {
+      return matchResourcePacksCourseFieldsToSelectOption({
+        resourcePacksType:
+          preEditedCourse.resourcePacksType as Resource_Packs_Type_Enum,
+        resourcePacksDeliveryType:
+          preEditedCourse.resourcePacksDeliveryType ?? null,
+      })
+    }
+
+    return null
+  }, [additionalResourcePacksToPurchase, preEditedCourse])
+
+  const resourcePacksPrices = useMemo(() => {
+    if (additionalResourcePacksToPurchase > 0 && coursesResourcePacksOption) {
+      return calculateResourcePackCost({
+        numberOfResourcePacks: additionalResourcePacksToPurchase,
+        residingCountry: courseData?.residingCountry,
+        resourcePacksBalance: 0,
+        resourcePacksPrice: rpPrice,
+      })
+    }
+
+    return null
+  }, [
+    additionalResourcePacksToPurchase,
+    courseData?.residingCountry,
+    coursesResourcePacksOption,
+    rpPrice,
+  ])
 
   const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
 
-  const taxAmount = acl.isAustralia() ? prices.gst : prices.vat
-
   const taxType = acl.isAustralia() ? _t('common.gst') : _t('common.vat')
+
+  const taxAmount = useMemo(() => {
+    if (acl.isUK()) return go1LicensesPrices?.vat ?? 0
+
+    return (go1LicensesPrices?.gst ?? 0) + (resourcePacksPrices?.gst ?? 0)
+  }, [
+    acl,
+    go1LicensesPrices?.gst,
+    go1LicensesPrices?.vat,
+    resourcePacksPrices?.gst,
+  ])
+
+  const subtotal = useMemo(() => {
+    const go1LicensesSubtotal =
+      (go1LicensesPrices?.subtotal ?? 0) -
+      (go1LicensesPrices?.allowancePrice ?? 0)
+
+    const resourcePacksSubtotal = resourcePacksPrices?.subtotal ?? 0
+
+    return go1LicensesSubtotal + resourcePacksSubtotal
+  }, [
+    go1LicensesPrices?.allowancePrice,
+    go1LicensesPrices?.subtotal,
+    resourcePacksPrices?.subtotal,
+  ])
+
+  const amountDue = useMemo(
+    () =>
+      (go1LicensesPrices?.amountDue ?? 0) +
+      (resourcePacksPrices?.amountDue ?? 0),
+    [go1LicensesPrices?.amountDue, resourcePacksPrices?.amountDue],
+  )
 
   const { startDate, endDate } = useMemo(
     () =>
@@ -139,19 +247,51 @@ export const ReviewLicensesOrder: React.FC<
     ? courseData?.timeZone.timeZoneId
     : undefined
 
+  const orderDetailsTitle = useMemo(() => {
+    if (
+      (go1LicensesPrices?.amountDue ?? 0) > 0 &&
+      (resourcePacksPrices?.amountDue ?? 0) > 0
+    ) {
+      return _t(
+        'pages.edit-course.purchase-additional-licences-and-resource-packs',
+        { courseLevel: _t(`common.course-levels.${preEditedCourse?.level}`) },
+      )
+    }
+
+    if ((go1LicensesPrices?.amountDue ?? 0) > 0) {
+      return _t('pages.edit-course.purchase-additional-licences', {
+        courseLevel: _t(`common.course-levels.${preEditedCourse?.level}`),
+      })
+    }
+
+    if ((resourcePacksPrices?.amountDue ?? 0) > 0) {
+      return _t('pages.edit-course.purchase-additional-resource-packs', {
+        courseLevel: _t(`common.course-levels.${preEditedCourse?.level}`),
+      })
+    }
+
+    return ''
+  }, [
+    _t,
+    go1LicensesPrices?.amountDue,
+    preEditedCourse?.level,
+    resourcePacksPrices?.amountDue,
+  ])
+
   useEffect(() => {
     if (!orderData?.order_by_pk) return
 
-    setGo1LicensesData({
-      prices,
-      invoiceDetails: {
-        ...orderData.order_by_pk,
-        orgId: orderData.order_by_pk?.organization.id,
-        orgName: orderData.order_by_pk?.organization.name,
-      } as InvoiceDetailsType,
-      quantity: numberOfLicenses,
-    })
-  }, [numberOfLicenses, orderData?.order_by_pk, prices, setGo1LicensesData])
+    setInvoiceDetails({
+      ...orderData.order_by_pk,
+      orgId: orderData.order_by_pk?.organization.id,
+      orgName: orderData.order_by_pk?.organization.name,
+    } as InvoiceDetailsType)
+  }, [
+    numberOfLicenses,
+    go1LicensesPrices,
+    orderData?.order_by_pk,
+    setInvoiceDetails,
+  ])
 
   useEffect(() => {
     if (
@@ -219,7 +359,7 @@ export const ReviewLicensesOrder: React.FC<
                   {_t('course-type')}
                 </Typography>
                 <Typography>
-                  {t(`course-types.${preEditedCourse.type}`)}
+                  {_t(`course-types.${preEditedCourse.type}`)}
                 </Typography>
               </Box>
             </Sticky>
@@ -228,16 +368,12 @@ export const ReviewLicensesOrder: React.FC<
             <Box mt={isMobile ? 4 : 8}>
               <Box mb={2}>
                 <Typography variant="subtitle1" fontWeight="500" mb={2}>
-                  {'Confirm to complete editing'}
+                  Confirm to complete editing
                 </Typography>
 
                 <Stack spacing="2px">
                   {courseData ? (
-                    <InfoPanel
-                      title={`${_t('common.blended-learning')} - ${_t(
-                        `common.course-levels.${preEditedCourse?.level}`,
-                      )} Additional Blended Learning licenses purchase`}
-                    >
+                    <InfoPanel title={orderDetailsTitle}>
                       <InfoRow
                         label={`${_t('dates.long', {
                           date: startDate,
@@ -290,12 +426,31 @@ export const ReviewLicensesOrder: React.FC<
                           }
                         />
                       </InfoPanel>
-                      <InfoPanel>
-                        <InfoRow
-                          label={_t('pages.order-details.licenses-redeemed')}
-                          value={licensesToPurchase.toString()}
-                        />
-                      </InfoPanel>
+                      {licensesToPurchase > 0 ? (
+                        <InfoPanel>
+                          <InfoRow
+                            label={_t('pages.order-details.licenses-redeemed')}
+                            value={licensesToPurchase.toString()}
+                          />
+                        </InfoPanel>
+                      ) : null}
+                      {additionalResourcePacksToPurchase > 0 &&
+                      coursesResourcePacksOption ? (
+                        <InfoPanel>
+                          <InfoRow
+                            label={_t(
+                              'pages.order-details.resource-packs-redeemed',
+                              {
+                                resourcePacksType:
+                                  resourcePacksTypeOptions[
+                                    coursesResourcePacksOption
+                                  ],
+                              },
+                            ).replace(/&amp;/g, '&')}
+                            value={additionalResourcePacksToPurchase.toString()}
+                          />
+                        </InfoPanel>
+                      ) : null}
                     </>
                   ) : null}
 
@@ -303,23 +458,18 @@ export const ReviewLicensesOrder: React.FC<
                     <InfoRow
                       label={_t('common.subtotal')}
                       value={_t('common.amount-with-currency', {
-                        amount: prices
-                          ? (
-                              prices.subtotal - (prices.allowancePrice ?? 0)
-                            ).toFixed(2)
-                          : undefined,
+                        amount: subtotal.toFixed(2),
                         currency: currencyAbbreviation,
                       })}
                     />
-                    {prices.vat ? (
-                      <InfoRow
-                        label={taxType}
-                        value={_t('common.amount-with-currency', {
-                          amount: taxAmount?.toFixed(2),
-                          currency: currencyAbbreviation,
-                        })}
-                      />
-                    ) : null}
+
+                    <InfoRow
+                      label={taxType}
+                      value={_t('common.amount-with-currency', {
+                        amount: taxAmount?.toFixed(2),
+                        currency: currencyAbbreviation,
+                      })}
+                    />
                   </InfoPanel>
                   <InfoPanel>
                     <InfoRow>
@@ -328,7 +478,7 @@ export const ReviewLicensesOrder: React.FC<
                       </Typography>
                       <Typography fontWeight="600">
                         {_t('common.amount-with-currency', {
-                          amount: prices.amountDue.toFixed(2),
+                          amount: amountDue.toFixed(2),
                           currency: currencyAbbreviation,
                         })}
                       </Typography>

@@ -36,100 +36,32 @@ export type Base = {
 }
 
 export type Course = {
-  // TODO: Delete this after Arlo migration
-  arloReferenceId?: string
-  id: number
-  attendeesCount?: { aggregate: { count: number } }
-  participantsPendingInvites?: { aggregate: { count: number } }
-  createdAt: string
-  createdById?: string
-  updatedAt?: string
-  name: string
-  residingCountry: string
-  level: Course_Level_Enum
-  deliveryType: Course_Delivery_Type_Enum
-  type: Course_Type_Enum
-  course_code: string
-  min_participants: number
-  max_participants: number
-  free_course_materials?: number
-  status: Course_Status_Enum
-  coursesReservedLicenses: number
-  reaccreditation: boolean
-  organization?: Organization
-  bildModules?: Array<Course_Bild_Module>
-  bookingContact?: Profile
-  is_tender?: boolean
-  bookingContactInviteData?: {
-    firstName: string
-    lastName: string
-    email: string
-  }
-  bookingContactProfileId?: string
-  organizationKeyContact?: Profile
-  organizationKeyContactInviteData?: Pick<Profile, 'email'> & {
-    firstName: string
-    lastName: string
-  }
-  organizationKeyContactProfileId?: string
-  schedule: CourseSchedule[]
-  trainers?: CourseTrainer[]
-  gradingConfirmed: boolean
-  gradingStarted: boolean
+  accreditedBy: Accreditors_Enum
   aolCostOfCourse?: number
   aolCountry?: string
-  aolRegion?: string
-  go1Integration: boolean
-  conversion: boolean
-  renewalCycle?: Course_Renewal_Cycle_Enum
-  dates: {
-    aggregate: {
-      start: { date: string }
-      end: { date: string }
-    }
-  }
-  modulesAgg: {
-    aggregate: {
-      count: number
-    }
-  }
-  participantsAgg: {
-    aggregate: {
-      count: number
-    }
-  }
-  moduleGroupIds: {
-    module: { moduleGroup: { id: string }; submodule: { id: string } }
-  }[]
-  certificateCount?: { aggregate: { count: number } }
-  participantSubmittedEvaluationCount?: { aggregate: { count: number } }
-  description?: string
-  freeSpaces?: number
   accountCode?: string
+  aolRegion?: string
+  // TODO: Delete this after Arlo migration
+  arloReferenceId?: string
+  attendeesCount?: { aggregate: { count: number } }
+  bildModules?: Array<Course_Bild_Module>
+  bildStrategies: Array<{ strategyName: string }>
+  bookingContact?: Profile
+  bookingContactInviteData?: {
+    email: string
+    firstName: string
+    lastName: string
+  }
+  bookingContactProfileId?: string
   cancellationRequest?: {
     id: string
     reason: string
   }
-  modulesDuration?: number
-  special_instructions?: string
-  parking_instructions?: string
-  accreditedBy: Accreditors_Enum
-  displayOnWebsite?: boolean
-  price?: number
-  priceCurrency?: string
-  includeVAT?: boolean
-  bildStrategies: Array<{
-    strategyName: string
-  }>
-  orders?: Array<{
-    order: {
-      id?: string
-      xeroInvoiceNumber?: string
-      salesRepresentativeId?: string
-      salesRepresentative?: Profile
-      source?: Course_Source_Enum
-    }
-  }>
+  certificateCount?: { aggregate: { count: number } }
+  conversion: boolean
+  courseExceptions: {
+    exception: Course_Exception_Enum
+  }[]
   courseParticipants?: {
     attended?: boolean | null
     grade?: Grade_Enum | null
@@ -138,12 +70,79 @@ export type Course = {
       bookingContactProfileId?: string | null
     }
   }[]
+  course_code: string
+  coursesReservedLicenses: number
+  createdAt: string
+  createdById?: string
   curriculum: unknown
-  courseExceptions: {
-    exception: Course_Exception_Enum
+  dates: {
+    aggregate: {
+      end: { date: string }
+      start: { date: string }
+    }
+  }
+  deliveryType: Course_Delivery_Type_Enum
+  description?: string
+  displayOnWebsite?: boolean
+  freeSpaces?: number
+  free_course_materials?: number
+  go1Integration: boolean
+  gradingConfirmed: boolean
+  gradingStarted: boolean
+  id: number
+  includeVAT?: boolean
+  is_tender?: boolean
+  level: Course_Level_Enum
+  max_participants: number
+  min_participants: number
+  moduleGroupIds: {
+    module: { moduleGroup: { id: string }; submodule: { id: string } }
   }[]
+  modulesAgg: {
+    aggregate: {
+      count: number
+    }
+  }
+  modulesDuration?: number
+  name: string
+  orders?: Array<{
+    order: {
+      id?: string
+      salesRepresentative?: Profile
+      salesRepresentativeId?: string
+      source?: Course_Source_Enum
+      xeroInvoiceNumber?: string
+    }
+  }>
+  organization?: Organization
+  organizationKeyContact?: Profile
+  organizationKeyContactInviteData?: Pick<Profile, 'email'> & {
+    firstName: string
+    lastName: string
+  }
+  organizationKeyContactProfileId?: string
+  parking_instructions?: string
+  participantSubmittedEvaluationCount?: { aggregate: { count: number } }
+  participantsAgg: {
+    aggregate: {
+      count: number
+    }
+  }
+  participantsPendingInvites?: { aggregate: { count: number } }
+  price?: number
+  priceCurrency?: string
+  reaccreditation: boolean
+  renewalCycle?: Course_Renewal_Cycle_Enum
+  reservedResourcePacks?: number | null
   resourcePacksDeliveryType?: Resource_Packs_Delivery_Type_Enum | null
   resourcePacksType?: Resource_Packs_Type_Enum | null
+  residingCountry: string
+  schedule: CourseSchedule[]
+  special_instructions?: string
+  status: Course_Status_Enum
+  trainers?: CourseTrainer[]
+  type: Course_Type_Enum
+  updatedAt?: string
 } & Omit<Base, 'id'>
 
 export type CourseModule = {

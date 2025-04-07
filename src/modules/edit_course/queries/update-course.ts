@@ -1,10 +1,13 @@
 import { gql } from 'graphql-request'
+import { useMutation } from 'urql'
 
 import {
   Course_Source_Enum,
   Course_Status_Enum,
   Course_Level_Enum,
   Course_Delivery_Type_Enum,
+  ReserveResourcePacksMutation,
+  ReserveResourcePacksMutationVariables,
 } from '@app/generated/graphql'
 import { CourseTrainerType } from '@app/types'
 
@@ -177,3 +180,17 @@ export const RESERVE_GO1_LICENSES_MUTATION = gql`
     }
   }
 `
+const RESERVE_RESOURCE_PACKS_TO_ORG = gql`
+  mutation ReserveResourcePacks($input: ResourcePacksReserveInput!) {
+    reserveResourcePacks(input: $input) {
+      success
+      error
+    }
+  }
+`
+export const useReserveResourcePacks = () => {
+  return useMutation<
+    ReserveResourcePacksMutation,
+    ReserveResourcePacksMutationVariables
+  >(RESERVE_RESOURCE_PACKS_TO_ORG)
+}

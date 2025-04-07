@@ -76,5 +76,10 @@ export function useOrgResourcePacks({
     [data?.resourcePacks],
   )
 
-  return { resourcePacks, refetch }
+  const resourcePacksData = useMemo(
+    () => ({ resourcePacks, refetch }),
+    [refetch, resourcePacks],
+  )
+
+  return resourcePacksData
 }
