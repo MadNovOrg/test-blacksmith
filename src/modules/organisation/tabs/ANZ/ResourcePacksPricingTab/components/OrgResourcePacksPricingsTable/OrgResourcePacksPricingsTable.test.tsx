@@ -10,6 +10,7 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
+import { RoleName } from '@app/types'
 import { CurrencySymbol } from '@app/util'
 
 import {
@@ -53,6 +54,8 @@ const updateOrgResourcePacksPricingMock = vi.fn().mockResolvedValue({
     },
   },
 })
+
+const allowedRoles = [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.FINANCE]
 
 vi.mock(
   '@app/modules/organisation/hooks/useOrgResourcePacksPricing',
@@ -202,6 +205,11 @@ describe('component: OrgResourcePacksPricingsTable', () => {
           <OrgResourcePacksPricingTable />
         </ResourcePacksPricingProvider>
       </Provider>,
+      {
+        auth: {
+          activeRole: chance.pickone(allowedRoles),
+        },
+      },
     )
   }
   beforeEach(() => {

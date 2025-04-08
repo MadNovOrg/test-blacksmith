@@ -14,7 +14,6 @@ import { sortBy } from 'lodash-es'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { TableHead } from '@app/components/Table/TableHead'
-import { useAuth } from '@app/context/auth'
 import {
   Course_Level_Enum,
   Course_Type_Enum,
@@ -43,7 +42,6 @@ const ROWS_PER_PAGE_OPTIONS = [10, 20, 30]
 export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
   courseType,
 }) => {
-  const { acl } = useAuth()
   const { t, _t } = useScopedTranslation(
     'pages.org-details.tabs.resource-pack-pricing.prices-by-course-type',
   )
@@ -86,13 +84,11 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
         id: 'attributes',
         label: t('table.columns.attributes'),
       },
-      acl.canEditResourcePacksPricing()
-        ? {
-            id: 'edit',
-          }
-        : null,
-    ].filter(Boolean)
-  }, [acl, t])
+      {
+        id: 'edit',
+      },
+    ]
+  }, [t])
 
   const handleEdit = (pricing: GroupedResourcePacksPricing) => {
     setSelectedPricing(pricing)
@@ -151,18 +147,16 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
                         {attributesColumn(pricing.reaccred, pricing.courseType)}
                       </Typography>
                     </TableCell>
-                    {acl.canEditResourcePacksPricing() ? (
-                      <TableCell sx={{ textAlign: 'center' }}>
-                        <Button
-                          onClick={() => handleEdit(pricing)}
-                          color="primary"
-                          startIcon={<EditIcon />}
-                          data-testid={`edit-button-${pricing.key}`}
-                        >
-                          <Typography>{t('table.edit')}</Typography>
-                        </Button>
-                      </TableCell>
-                    ) : null}
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <Button
+                        onClick={() => handleEdit(pricing)}
+                        color="primary"
+                        startIcon={<EditIcon />}
+                        data-testid={`edit-button-${pricing.key}`}
+                      >
+                        <Typography>{t('table.edit')}</Typography>
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 )
               })}

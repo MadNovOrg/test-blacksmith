@@ -18,6 +18,7 @@ import { useParams } from 'react-router-dom'
 
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Type_Enum,
@@ -55,6 +56,7 @@ const getNumberWithDigits = (number: number | string) =>
   Number(number).toFixed(2)
 
 export const OrgResourcePacksPricingTable: React.FC = () => {
+  const { acl } = useAuth()
   const { t } = useScopedTranslation(
     'pages.org-details.tabs.resource-pack-pricing.prices-by-course-type.edit-pricing-modal.org-resource-packs-pricing-table',
   )
@@ -66,6 +68,29 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
 
   const [, updateOrgResourcePacksPricing] = useUpdateOrgResourcePacksPricing()
   const [, saveNewOrgResourcePacksPricing] = useSaveNewOrgResourcePacksPricing()
+
+  const cols = useMemo(() => {
+    return [
+      {
+        id: 'resource-pack-option',
+        label: t('columns.resource-pack-option'),
+      },
+      {
+        id: 'aud-price',
+        label: t('columns.price', { currency: Currency.Aud }),
+      },
+      {
+        id: 'nzd-price',
+        label: t('columns.price', { currency: Currency.Nzd }),
+      },
+      acl.canEditResourcePacksPricing()
+        ? {
+            id: 'actions',
+            label: t('columns.actions'),
+          }
+        : null,
+    ].filter(Boolean)
+  }, [acl, t])
 
   // Update pricing values with AUD and NZD prices corresponding to the organisation
   const resourcePacksPricings = useMemo(() => {
@@ -111,13 +136,11 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
   }
 
   const handleChange = (field: 'audPrice' | 'nzdPrice', value: string) => {
-    // Remove leading zeros, but keep "0." if it's a decimal
-    if (/^0\d+/.test(value)) {
-      value = value.replace(/^0+/, '')
-    }
+    // Remove any invalid characters, including "+" and "-"
+    value = value.replace(/[^0-9.]/g, '')
 
-    // Ensure only valid numbers with up to 2 decimals
-    if (/^\d+(\.\d{0,2})?$/.test(value) || value === '') {
+    // Ensure only valid numeric values with a decimal point and no leading zero unless it's "0."
+    if (/^(0(\.\d{0,2})?|[1-9]\d*(\.\d{0,2})?)$/.test(value) || value === '') {
       setTempResourcePackPricing(prev => ({ ...prev, [field]: value }))
     }
   }
@@ -180,24 +203,6 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
       setEditId(null)
     }
   }
-  const cols = [
-    {
-      id: 'resource-pack-option',
-      label: t('columns.resource-pack-option'),
-    },
-    {
-      id: 'aud-price',
-      label: t('columns.price', { currency: Currency.Aud }),
-    },
-    {
-      id: 'nzd-price',
-      label: t('columns.price', { currency: Currency.Nzd }),
-    },
-    {
-      id: 'actions',
-      label: t('columns.actions'),
-    },
-  ]
 
   return (
     <>
@@ -246,15 +251,22 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
                   <TableCell sx={{ textAlign: 'center' }}>
                     {editId === pricing.id ? (
                       <TextField
-                        type="number"
+                        type="text"
                         size="small"
                         inputMode="decimal"
                         value={tempResourcePackPricing.audPrice}
                         inputProps={{
                           'data-testid': `edit-aud-price-${pricing.id}`,
+                          pattern:
+                            '^(0(\\.\\d{0,2})?|[1-9]\\d*(\\.\\d{0,2})?)$', // Disallow leading zero unless it's "0."
                         }}
                         sx={pricesTextFieldSx()}
-                        onChange={e => handleChange('audPrice', e.target.value)}
+                        onInput={e =>
+                          handleChange(
+                            'audPrice',
+                            (e.target as HTMLInputElement).value,
+                          )
+                        }
                       />
                     ) : (
                       `${CurrencySymbol[Currency.Aud]}${getNumberWithDigits(
@@ -265,15 +277,22 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
                   <TableCell sx={{ textAlign: 'center' }}>
                     {editId === pricing.id ? (
                       <TextField
-                        type="number"
+                        type="text"
                         size="small"
                         inputMode="decimal"
                         value={tempResourcePackPricing.nzdPrice}
                         inputProps={{
                           'data-testid': `edit-nzd-price-${pricing.id}`,
+                          pattern:
+                            '^(0(\\.\\d{0,2})?|[1-9]\\d*(\\.\\d{0,2})?)$', // Disallow leading zero unless it's "0."
                         }}
                         sx={pricesTextFieldSx()}
-                        onChange={e => handleChange('nzdPrice', e.target.value)}
+                        onInput={e =>
+                          handleChange(
+                            'nzdPrice',
+                            (e.target as HTMLInputElement).value,
+                          )
+                        }
                       />
                     ) : (
                       `${CurrencySymbol[Currency.Nzd]}${getNumberWithDigits(
@@ -281,40 +300,42 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
                       )}`
                     )}
                   </TableCell>
-                  <TableCell sx={{ textAlign: 'center' }}>
-                    {editId === pricing.id ? (
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        justifyContent={'center'}
-                      >
-                        <IconButton
-                          data-testid={`save-pricing-${pricing.id}`}
-                          color="primary"
-                          size="small"
-                          onClick={() => handleSave(pricing.id)}
+                  {acl.canEditResourcePacksPricing() ? (
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      {editId === pricing.id ? (
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          justifyContent={'center'}
                         >
-                          <SaveIcon />
-                        </IconButton>
+                          <IconButton
+                            data-testid={`save-pricing-${pricing.id}`}
+                            color="primary"
+                            size="small"
+                            onClick={() => handleSave(pricing.id)}
+                          >
+                            <SaveIcon />
+                          </IconButton>
+                          <IconButton
+                            data-testid={`cancel-pricing-${pricing.id}`}
+                            color="primary"
+                            size="small"
+                            onClick={handleClose}
+                          >
+                            <CancelIcon />
+                          </IconButton>
+                        </Stack>
+                      ) : (
                         <IconButton
-                          data-testid={`cancel-pricing-${pricing.id}`}
+                          data-testid={`edit-pricing-${pricing.id}`}
                           color="primary"
-                          size="small"
-                          onClick={handleClose}
+                          onClick={() => handleEdit(pricing)}
                         >
-                          <CancelIcon />
+                          <EditIcon />
                         </IconButton>
-                      </Stack>
-                    ) : (
-                      <IconButton
-                        data-testid={`edit-pricing-${pricing.id}`}
-                        color="primary"
-                        onClick={() => handleEdit(pricing)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    )}
-                  </TableCell>
+                      )}
+                    </TableCell>
+                  ) : null}
                 </TableRow>
               )
             })}
