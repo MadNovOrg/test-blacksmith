@@ -1693,7 +1693,7 @@
             "title": "Edit price",
             "org-resource-packs-pricing-table": {
               "columns": {
-                "resource-pack-option": "Resource pack option",
+                "resource-pack-option": "Resource Pack Option",
                 "price": "Price ({{currency}})",
                 "actions": "Actions"
               },
