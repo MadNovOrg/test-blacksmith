@@ -26,6 +26,7 @@ export const ResourcePacksEventCol = ({
 
   if (
     [
+      Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert,
       Resource_Packs_Events_Enum.ResourcePacksAdded,
       Resource_Packs_Events_Enum.ResourcePacksPurchased,
       Resource_Packs_Events_Enum.ResourcePacksRemoved,
@@ -33,6 +34,8 @@ export const ResourcePacksEventCol = ({
     ].includes(event.event)
   ) {
     const invokedByCopies = {
+      [Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert]:
+        t('reverted'),
       [Resource_Packs_Events_Enum.ResourcePacksAdded]: t('added-by', {
         fullName: event.payload?.invokedByName,
       }),
@@ -47,7 +50,11 @@ export const ResourcePacksEventCol = ({
       }),
     }
 
-    const InvokedByUser = () => {
+    const eventsWithoutInvokedBy = [
+      Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert,
+    ]
+
+    const EventDescription = () => {
       return (
         <Typography variant="body2">{invokedByCopies[event.event]}</Typography>
       )
@@ -84,13 +91,19 @@ export const ResourcePacksEventCol = ({
             </Tooltip>
           ) : null}
         </Grid>
-        {acl.isInternalUser() ? (
-          <Link href={`/profile/${event.payload?.invokedById}`}>
-            <InvokedByUser />
-          </Link>
-        ) : (
-          <InvokedByUser />
-        )}
+        {(() => {
+          if (
+            acl.isInternalUser() &&
+            !eventsWithoutInvokedBy.includes(event.event)
+          )
+            return (
+              <Link href={`/profile/${event.payload?.invokedById}`}>
+                <EventDescription />
+              </Link>
+            )
+
+          return <EventDescription />
+        })()}
       </Grid>
     )
   }

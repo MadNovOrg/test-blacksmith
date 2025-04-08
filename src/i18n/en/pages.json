@@ -1657,9 +1657,10 @@
             "DIGITAL_WORKBOOK": "Digital",
             "PRINT_WORKBOOK": "Print"
           },
+          "purchased-by": "Purchased at course creation by {{fullName}}",
           "removed-by": "Removed by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",
-          "purchased-by": "Purchased at course creation by {{fullName}}"
+          "reverted": "Returned to the organization"
         },
         "export": {
           "button-label": "Export"

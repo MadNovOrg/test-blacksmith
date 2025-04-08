@@ -58193,6 +58193,7 @@ export enum Resource_Packs_Events_Constraint {
 }
 
 export enum Resource_Packs_Events_Enum {
+  CourseReservedResourcePacksRevert = 'COURSE_RESERVED_RESOURCE_PACKS_REVERT',
   ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
   ResourcePacksPurchased = 'RESOURCE_PACKS_PURCHASED',
   ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED',
