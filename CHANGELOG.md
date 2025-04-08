@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 5.0.1
+
+### Patch Changes
+
+- 136b3f8: Handle resource permissions for individual roles on the course materials tab.
+
 ## 5.0.0
 
 ### Major Changes

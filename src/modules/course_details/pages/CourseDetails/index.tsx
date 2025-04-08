@@ -92,8 +92,8 @@ export const CourseDetails = () => {
 
   const { allResourcesByArea, fetching: resourcesFetching } = useResourceAreas()
 
-  const courseMaterialsSectionId = allResourcesByArea?.basic.find(
-    resource => resource.name?.trim().toLowerCase() === 'course materials',
+  const courseMaterialsSectionId = allResourcesByArea?.basic?.find(
+    resource => resource?.name?.trim().toLowerCase() === 'course materials',
   )?.id
 
   const enableIndirectCourseResourcePacks = useFeatureFlagEnabled(
