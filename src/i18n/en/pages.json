@@ -1657,6 +1657,7 @@
             "DIGITAL_WORKBOOK": "Digital",
             "PRINT_WORKBOOK": "Print"
           },
+          "issued": "Resource pack has been used",
           "purchased-by": "Purchased at course creation by {{fullName}}",
           "removed-by": "Removed by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",

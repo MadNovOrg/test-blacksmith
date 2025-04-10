@@ -58197,7 +58197,8 @@ export enum Resource_Packs_Events_Enum {
   ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
   ResourcePacksPurchased = 'RESOURCE_PACKS_PURCHASED',
   ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED',
-  ResourcePacksReserved = 'RESOURCE_PACKS_RESERVED'
+  ResourcePacksReserved = 'RESOURCE_PACKS_RESERVED',
+  ResourcePackIssued = 'RESOURCE_PACK_ISSUED'
 }
 
 /** Boolean expression to compare columns of type "resource_packs_events_enum". All fields are combined with logical 'AND'. */

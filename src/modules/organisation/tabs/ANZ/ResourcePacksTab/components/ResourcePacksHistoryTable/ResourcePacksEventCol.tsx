@@ -27,6 +27,7 @@ export const ResourcePacksEventCol = ({
   if (
     [
       Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert,
+      Resource_Packs_Events_Enum.ResourcePackIssued,
       Resource_Packs_Events_Enum.ResourcePacksAdded,
       Resource_Packs_Events_Enum.ResourcePacksPurchased,
       Resource_Packs_Events_Enum.ResourcePacksRemoved,
@@ -36,6 +37,7 @@ export const ResourcePacksEventCol = ({
     const invokedByCopies = {
       [Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert]:
         t('reverted'),
+      [Resource_Packs_Events_Enum.ResourcePackIssued]: t('issued'),
       [Resource_Packs_Events_Enum.ResourcePacksAdded]: t('added-by', {
         fullName: event.payload?.invokedByName,
       }),
@@ -52,6 +54,7 @@ export const ResourcePacksEventCol = ({
 
     const eventsWithoutInvokedBy = [
       Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert,
+      Resource_Packs_Events_Enum.ResourcePackIssued,
     ]
 
     const EventDescription = () => {

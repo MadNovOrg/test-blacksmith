@@ -731,6 +731,17 @@ event_triggers:
       num_retries: 5
       timeout_sec: 10
     webhook: '{{EVENTS_HOST}}/go1/link'
+  - name: indirect_course_resource_pack_issue
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/issue'
   - name: issue_go1_license
     definition:
       enable_manual: true
