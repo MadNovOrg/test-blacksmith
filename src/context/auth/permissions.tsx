@@ -947,6 +947,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance, acl.isSalesAdmin])(),
     canEditResourcePacksPricing: () =>
       anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance])(),
+    canApplyOrgResourcePacksPricingToAffiliates: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance])(),
     isUK: () => import.meta.env.VITE_AWS_REGION === AwsRegions.UK,
     isAustralia: () => import.meta.env.VITE_AWS_REGION === AwsRegions.Australia,
     canLinkToMainOrg: () =>

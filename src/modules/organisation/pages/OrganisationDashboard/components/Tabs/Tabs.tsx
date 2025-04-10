@@ -109,8 +109,7 @@ export const Tabs: FC<Props> = ({ organization }) => {
     isAustralia() && !organization?.main_organisation
   const OrgTabs = Object.values(TabsWithProps).filter(({ tab }) => {
     if (
-      !isAustralia() &&
-      !organization?.main_organisation &&
+      (!isAustralia() || organization?.main_organisation) &&
       tab === OrgDashboardTabs.AFFILIATED
     )
       return false

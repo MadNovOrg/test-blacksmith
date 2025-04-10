@@ -231,6 +231,8 @@ describe('component: OrgResourcePacksPricingsTable', () => {
       groupedData: [groupedResourcePacksPricing],
       setSelectedPricing: () => vi.fn(),
       error: undefined,
+      main_organisation_id: null,
+      orgResourcePacksPricings: [],
     })
   })
 

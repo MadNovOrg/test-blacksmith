@@ -747,3 +747,17 @@ event_triggers:
       num_retries: 5
       timeout_sec: 60
     webhook: '{{ACTIONS_HOST}}/organization/update'
+  - name: rp-pricing-on-link-to-main-org
+    definition:
+      enable_manual: false
+      insert:
+        columns:
+          - main_organisation_id
+      update:
+        columns:
+          - main_organisation_id
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{ACTIONS_HOST}}/organization/handle-org-resource-packs-pricing-on-link-to-main-org'

@@ -1671,12 +1671,22 @@
         "title": "Resource Packs Pricing",
         "subtitle": "Pricing",
         "apply-price-to-affiliates": {
-          "button-label": "Apply the prices on all organisation affiliates"
+          "button-label": "Apply the prices on all organisation affiliates",
+          "modal": {
+            "title": "Are you sure you want to apply the prices on all organisation affiliates?",
+            "content": "All prices of all affiliates will be overwritten.",
+            "confirm-button": "Confirm",
+            "cancel-button": "Cancel"
+          }
         },
         "prices-by-course-type": {
           "types": {
             "closed": "Closed",
             "indirect": "Indirect"
+          },
+          "affiliated-org-alerts": {
+            "same-prices-as-main": "All prices for this affiliate are the same as those of the main organisation.",
+            "different-prices-from-main": "Some prices for this affiliate are different from those of the main organisation."
           },
           "table": {
             "columns": {

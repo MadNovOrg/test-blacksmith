@@ -68841,13 +68841,28 @@ export type AllOrganizationProfilesQueryVariables = Exact<{
 
 export type AllOrganizationProfilesQuery = { __typename?: 'query_root', organization_member: Array<{ __typename?: 'organization_member', profile_id: any }> };
 
-export type GetAllResourcePacksPricingsQueryVariables = Exact<{
+export type GetAllResourcePacksPricingsForCourseTypeQueryVariables = Exact<{
   courseTypes?: InputMaybe<Array<Course_Type_Enum> | Course_Type_Enum>;
   organisation_id: Scalars['uuid'];
 }>;
 
 
-export type GetAllResourcePacksPricingsQuery = { __typename?: 'query_root', resource_packs_pricing: Array<{ __typename?: 'resource_packs_pricing', id: any, course_type: Course_Type_Enum, course_level: Course_Level_Enum, resource_packs_type: Resource_Packs_Type_Enum, resource_packs_delivery_type?: Resource_Packs_Delivery_Type_Enum | null, reaccred: boolean, AUD_price: any, NZD_price: any, org_resource_packs_pricings: Array<{ __typename?: 'org_resource_packs_pricing', id: any, AUD_price: any, NZD_price: any }> }> };
+export type GetAllResourcePacksPricingsForCourseTypeQuery = { __typename?: 'query_root', resource_packs_pricing: Array<{ __typename?: 'resource_packs_pricing', id: any, course_type: Course_Type_Enum, course_level: Course_Level_Enum, resource_packs_type: Resource_Packs_Type_Enum, resource_packs_delivery_type?: Resource_Packs_Delivery_Type_Enum | null, reaccred: boolean, AUD_price: any, NZD_price: any, org_resource_packs_pricings: Array<{ __typename?: 'org_resource_packs_pricing', id: any, AUD_price: any, NZD_price: any }> }> };
+
+export type ApplyMainOrgResourcePacksPricingsToAffiliatesMutationVariables = Exact<{
+  pricings: Array<Org_Resource_Packs_Pricing_Insert_Input> | Org_Resource_Packs_Pricing_Insert_Input;
+  affiliatesIds: Array<Scalars['uuid']> | Scalars['uuid'];
+}>;
+
+
+export type ApplyMainOrgResourcePacksPricingsToAffiliatesMutation = { __typename?: 'mutation_root', delete_org_resource_packs_pricing?: { __typename?: 'org_resource_packs_pricing_mutation_response', affected_rows: number } | null, insert_org_resource_packs_pricing?: { __typename?: 'org_resource_packs_pricing_mutation_response', affected_rows: number } | null };
+
+export type GetAllAffiliatedOrgIdsQueryVariables = Exact<{
+  organisation_id: Scalars['uuid'];
+}>;
+
+
+export type GetAllAffiliatedOrgIdsQuery = { __typename?: 'query_root', organization: Array<{ __typename?: 'organization', id: any }> };
 
 export type GetOrganizationStatisticsQueryVariables = Exact<{
   orgIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
@@ -68863,6 +68878,13 @@ export type LinkAffiliatedOrganisationMutationVariables = Exact<{
 
 
 export type LinkAffiliatedOrganisationMutation = { __typename?: 'mutation_root', update_organization_by_pk?: { __typename?: 'organization', id: any } | null };
+
+export type GetMainOrgIdQueryVariables = Exact<{
+  organisation_id: Scalars['uuid'];
+}>;
+
+
+export type GetMainOrgIdQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', main_organisation_id?: any | null } | null };
 
 export type OrgMembersQueryVariables = Exact<{
   offset: Scalars['Int'];
@@ -68894,6 +68916,13 @@ export type UpdateOrgResourcePacksPricingMutationVariables = Exact<{
 
 
 export type UpdateOrgResourcePacksPricingMutation = { __typename?: 'mutation_root', update_org_resource_packs_pricing_by_pk?: { __typename?: 'org_resource_packs_pricing', id: any, NZD_price: any, AUD_price: any } | null };
+
+export type GetOrgResourcePacksPricingsByOrgIdQueryVariables = Exact<{
+  organisation_id: Scalars['uuid'];
+}>;
+
+
+export type GetOrgResourcePacksPricingsByOrgIdQuery = { __typename?: 'query_root', org_resource_packs_pricing: Array<{ __typename?: 'org_resource_packs_pricing', id: any, resource_packs_pricing_id: any, AUD_price: any, NZD_price: any }> };
 
 export type GetOrganisationByNameQueryVariables = Exact<{
   query: Scalars['String'];

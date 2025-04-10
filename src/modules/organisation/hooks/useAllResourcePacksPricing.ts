@@ -2,12 +2,12 @@ import { gql, useQuery } from 'urql'
 
 import {
   Course_Type_Enum,
-  GetAllResourcePacksPricingsQuery,
-  GetAllResourcePacksPricingsQueryVariables,
+  GetAllResourcePacksPricingsForCourseTypeQuery,
+  GetAllResourcePacksPricingsForCourseTypeQueryVariables,
 } from '@app/generated/graphql'
 
-export const GET_ALL_RESOURCE_PACK_PRICINGS = gql`
-  query GetAllResourcePacksPricings(
+export const GET_ALL_RESOURCE_PACK_PRICINGS_FOR_COURSE_TYPE = gql`
+  query GetAllResourcePacksPricingsForCourseType(
     $courseTypes: [course_type_enum!]
     $organisation_id: uuid!
   ) {
@@ -36,10 +36,10 @@ export const useAllResourcePacksPricing = (
   organisation_id: string,
 ) => {
   const [{ data, error, fetching }, refetch] = useQuery<
-    GetAllResourcePacksPricingsQuery,
-    GetAllResourcePacksPricingsQueryVariables
+    GetAllResourcePacksPricingsForCourseTypeQuery,
+    GetAllResourcePacksPricingsForCourseTypeQueryVariables
   >({
-    query: GET_ALL_RESOURCE_PACK_PRICINGS,
+    query: GET_ALL_RESOURCE_PACK_PRICINGS_FOR_COURSE_TYPE,
     variables: {
       courseTypes,
       organisation_id,

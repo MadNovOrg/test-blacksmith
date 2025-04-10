@@ -90,6 +90,8 @@ describe('component: OrgResourcePacksPricingCourseDetailsSection', () => {
         groupedData: [],
         setSelectedPricing: () => vi.fn(),
         error: undefined,
+        main_organisation_id: null,
+        orgResourcePacksPricings: [],
       })
       const {
         result: {

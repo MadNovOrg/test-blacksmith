@@ -208,6 +208,16 @@ delete_permissions:
       filter: {}
     comment: ""
 event_triggers:
+  - name: org_resource_packs_pricing_delete
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: true
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/org-resource-packs-pricing/delete'
   - name: org_resource_packs_pricing_insert
     definition:
       enable_manual: true

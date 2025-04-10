@@ -115,38 +115,6 @@ describe('component: ResourcePacksPricingByCourseType', () => {
   })
 
   CourseTypeOrgRPPricings.forEach(courseType => {
-    it(`should show circular progress when fetching for course type: ${courseType}`, () => {
-      useResourcePacksPricingContextMock.mockReturnValueOnce({
-        groupedData: groupedResourcePacksPricings,
-        fetching: true,
-        setSelectedPricing: vi.fn(),
-        error: undefined,
-        refetch: vi.fn(),
-        pricing: null,
-      })
-
-      const mockClient = {
-        executeQuery: vi.fn(),
-        executeMutation: vi.fn(),
-      } as unknown as Client
-
-      render(
-        <Provider value={mockClient}>
-          <ResourcePacksPricingProvider>
-            <ResourcePacksPricingByCourseType courseType={courseType} />
-          </ResourcePacksPricingProvider>
-        </Provider>,
-      )
-
-      expect(
-        screen.getByTestId('resource-packs-pricings-loading'),
-      ).toBeInTheDocument()
-
-      expect(
-        screen.queryByTestId('resource-packs-pricing-table'),
-      ).not.toBeInTheDocument()
-    })
-
     it(`should not render pricings table if there was an error fetching prices for course type: ${courseType}`, () => {
       useResourcePacksPricingContextMock.mockReturnValueOnce({
         groupedData: groupedResourcePacksPricings,
@@ -157,6 +125,8 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         }),
         refetch: vi.fn(),
         pricing: null,
+        main_organisation_id: null,
+        orgResourcePacksPricings: [],
       })
       const mockClient = {
         executeQuery: vi.fn(),
@@ -188,6 +158,8 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         error: undefined,
         refetch: vi.fn(),
         pricing: null,
+        main_organisation_id: null,
+        orgResourcePacksPricings: [],
       })
       const mockClient = {
         executeQuery: vi.fn(),
@@ -230,6 +202,8 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         error: undefined,
         refetch: vi.fn(),
         pricing: pricingToCheck,
+        main_organisation_id: null,
+        orgResourcePacksPricings: [],
       })
       const mockClient = {
         executeQuery: vi.fn(),

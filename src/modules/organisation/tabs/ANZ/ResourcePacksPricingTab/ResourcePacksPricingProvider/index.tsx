@@ -8,17 +8,29 @@ import {
   Resource_Packs_Pricing,
 } from '@app/generated/graphql'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
+import { useMainOrgId } from '@app/modules/organisation/hooks/useMainOrgId'
+import { useOrgResourcePacksPricingsByOrgId } from '@app/modules/organisation/hooks/useOrgResourcePacksPricingsByOrgId'
 import { CourseTypeOrgRPPricings } from '@app/util'
 
 import { GroupedResourcePacksPricing } from '../components/ResourcePacksPricingsByCourseType'
 
+export type MinimalOrgResourcePacksPricing = {
+  id: string
+  resource_packs_pricing_id: string
+  AUD_price: number
+  NZD_price: number
+}
+
 export type ContextValue = {
+  main_organisation_id: string | null
   fetching: boolean
   refetch: () => void
   groupedData: GroupedResourcePacksPricing[]
   pricing: GroupedResourcePacksPricing | null
   setSelectedPricing: (pricing: GroupedResourcePacksPricing | null) => void
   error: CombinedError | undefined
+  orgResourcePacksPricings: MinimalOrgResourcePacksPricing[]
+  differentPricesFromMain?: boolean
 }
 
 export const ResourcePacksPricingContext = React.createContext<
@@ -33,6 +45,8 @@ export const ResourcePacksPricingProvider: React.FC<
   const [pricing, setPricing] = useState<GroupedResourcePacksPricing | null>(
     null,
   )
+
+  const { data: main_organisation_id } = useMainOrgId(orgId)
 
   const { data, fetching, error, refetch } = useAllResourcePacksPricing(
     CourseTypeOrgRPPricings,
@@ -66,6 +80,48 @@ export const ResourcePacksPricingProvider: React.FC<
     })
   }, [resourcePacksPricings])
 
+  const orgResourcePacksPricings = useMemo(() => {
+    const result = resourcePacksPricings.flatMap(item => {
+      if (item.org_resource_packs_pricings?.length) {
+        return item.org_resource_packs_pricings.map(value => ({
+          id: value.id,
+          resource_packs_pricing_id: item.id,
+          AUD_price: value.AUD_price,
+          NZD_price: value.NZD_price,
+        }))
+      }
+      return []
+    })
+    return result.length && result.some(item => Object.keys(item).length)
+      ? result
+      : []
+  }, [resourcePacksPricings])
+
+  const { data: mainOrgResourcePacksPricings } =
+    useOrgResourcePacksPricingsByOrgId(main_organisation_id)
+
+  const differentPricesFromMain = useMemo(() => {
+    if (
+      mainOrgResourcePacksPricings?.length !== orgResourcePacksPricings.length
+    )
+      return true
+
+    return orgResourcePacksPricings.some(pricing => {
+      // find the main org pricing
+      const mainOrgPricing = mainOrgResourcePacksPricings?.find(
+        mainPricing =>
+          mainPricing.resource_packs_pricing_id ===
+          pricing.resource_packs_pricing_id,
+      )
+      // if main org does not have pricing for that resource_packs_pricing_id value, then it uses the default and pricings are different
+      if (!mainOrgPricing) return true
+      return (
+        mainOrgPricing.AUD_price !== pricing.AUD_price ||
+        mainOrgPricing.NZD_price !== pricing.NZD_price
+      )
+    })
+  }, [mainOrgResourcePacksPricings, orgResourcePacksPricings])
+
   const setSelectedPricing = useCallback<ContextValue['setSelectedPricing']>(
     pricing => {
       setPricing(pricing)
@@ -79,20 +135,26 @@ export const ResourcePacksPricingProvider: React.FC<
 
   const value = useMemo<ContextValue>(
     () => ({
+      main_organisation_id,
       fetching,
       refetch: refetchPricings,
       groupedData: groupedPricings,
       pricing,
       setSelectedPricing,
       error,
+      orgResourcePacksPricings: orgResourcePacksPricings ?? [],
+      differentPricesFromMain,
     }),
     [
+      main_organisation_id,
       fetching,
       refetchPricings,
       groupedPricings,
       pricing,
       setSelectedPricing,
       error,
+      orgResourcePacksPricings,
+      differentPricesFromMain,
     ],
   )
 
