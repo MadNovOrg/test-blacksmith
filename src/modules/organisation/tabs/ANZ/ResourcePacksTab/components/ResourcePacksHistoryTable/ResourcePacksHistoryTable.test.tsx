@@ -28,7 +28,7 @@ describe('ResourcePacksHistoryTable', () => {
   it('renders the table with headers correctly', () => {
     useOrgResourcePacksHistoryMocked.mockReturnValue([
       {
-        data: { history: [] },
+        data: { history: [], total: { aggregate: { count: 0 } } },
         fetching: false,
         stale: false,
       },
@@ -72,7 +72,7 @@ describe('ResourcePacksHistoryTable', () => {
 
     useOrgResourcePacksHistoryMocked.mockReturnValue([
       {
-        data: { history: data },
+        data: { history: data, total: { aggregate: { count: data.length } } },
         fetching: false,
         stale: false,
       },

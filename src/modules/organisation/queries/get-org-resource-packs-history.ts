@@ -35,6 +35,13 @@ export const ORG_RESOURCE_PACKS_HISTORY = gql`
       resourcePacksType
       totalBalance
     }
+    total: org_resource_packs_history_aggregate(
+      where: { orgId: { _eq: $orgId } }
+    ) {
+      aggregate {
+        count
+      }
+    }
   }
 `
 export function useOrgResourcePacksHistory({

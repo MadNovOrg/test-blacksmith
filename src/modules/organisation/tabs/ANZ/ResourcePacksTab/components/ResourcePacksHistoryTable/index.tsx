@@ -33,7 +33,6 @@ export const ResourcePacksHistoryTable = forwardRef<
   )
 
   const { Pagination, perPage, currentPage } = useTablePagination({
-    id: 'org-resource-packs-history-tbl',
     initialPerPage: 12,
   })
 
@@ -102,7 +101,7 @@ export const ResourcePacksHistoryTable = forwardRef<
           ))}
         </TableBody>
       </Table>
-      <Pagination total={0} />
+      <Pagination total={resourcePacksHistory?.total.aggregate?.count ?? 0} />
     </>
   )
 })

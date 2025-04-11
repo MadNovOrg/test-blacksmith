@@ -69040,7 +69040,7 @@ export type GetOrgResourcePacksHistoryQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgResourcePacksHistoryQuery = { __typename?: 'query_root', history: Array<{ __typename?: 'org_resource_packs_history', id: any, change: number, courseId?: number | null, created_at: any, event: Resource_Packs_Events_Enum, payload?: any | null, reservedBalance: number, resourcePacksType: Resource_Packs_Type_Enum, totalBalance: number, course?: { __typename?: 'course', id: number, code?: string | null, createdBy?: { __typename?: 'profile', id: any, fullName?: string | null } | null } | null }> };
+export type GetOrgResourcePacksHistoryQuery = { __typename?: 'query_root', history: Array<{ __typename?: 'org_resource_packs_history', id: any, change: number, courseId?: number | null, created_at: any, event: Resource_Packs_Events_Enum, payload?: any | null, reservedBalance: number, resourcePacksType: Resource_Packs_Type_Enum, totalBalance: number, course?: { __typename?: 'course', id: number, code?: string | null, createdBy?: { __typename?: 'profile', id: any, fullName?: string | null } | null } | null }>, total: { __typename?: 'org_resource_packs_history_aggregate', aggregate?: { __typename?: 'org_resource_packs_history_aggregate_fields', count: number } | null } };
 
 export type GetOrgTypesQueryVariables = Exact<{
   where: Organization_Type_Bool_Exp;

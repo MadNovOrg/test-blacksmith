@@ -124,8 +124,11 @@ export const Tabs: FC<Props> = ({ organization }) => {
   })
 
   useEffect(() => {
+    const currentSearchParams = new URLSearchParams(searchParams)
+
+    if (selectedTab === currentSearchParams.get('tab')) return
+
     if (selectedTab === OrgDashboardTabs.INDIVIDUALS) {
-      const currentSearchParams = new URLSearchParams(searchParams)
       currentSearchParams.set('tab', selectedTab)
       setSearchParams(currentSearchParams)
     } else {
