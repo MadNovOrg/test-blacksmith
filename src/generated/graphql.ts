@@ -45959,6 +45959,7 @@ export type Order_Temp = {
   stripePaymentId?: Maybe<Scalars['String']>;
   user: Scalars['jsonb'];
   vat?: Maybe<Scalars['float8']>;
+  workbookDeliveryAddress?: Maybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: Maybe<Scalars['String']>;
 };
 
@@ -45983,6 +45984,12 @@ export type Order_TempRegistrantsArgs = {
 
 /** columns and relationships of "order_temp" */
 export type Order_TempUserArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order_temp" */
+export type Order_TempWorkbookDeliveryAddressArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
 
@@ -46121,6 +46128,7 @@ export type Order_Temp_Append_Input = {
   booking_contact?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** input type for inserting array relation for remote table "order_temp" */
@@ -46181,6 +46189,7 @@ export type Order_Temp_Bool_Exp = {
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
   user?: InputMaybe<Jsonb_Comparison_Exp>;
   vat?: InputMaybe<Float8_Comparison_Exp>;
+  workbookDeliveryAddress?: InputMaybe<Jsonb_Comparison_Exp>;
   xeroInvoiceNumber?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -46197,6 +46206,7 @@ export type Order_Temp_Delete_At_Path_Input = {
   booking_contact?: InputMaybe<Array<Scalars['String']>>;
   promoCodes?: InputMaybe<Array<Scalars['String']>>;
   user?: InputMaybe<Array<Scalars['String']>>;
+  workbookDeliveryAddress?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
@@ -46204,6 +46214,7 @@ export type Order_Temp_Delete_Elem_Input = {
   booking_contact?: InputMaybe<Scalars['Int']>;
   promoCodes?: InputMaybe<Scalars['Int']>;
   user?: InputMaybe<Scalars['Int']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
@@ -46211,6 +46222,7 @@ export type Order_Temp_Delete_Key_Input = {
   booking_contact?: InputMaybe<Scalars['String']>;
   promoCodes?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['String']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['String']>;
 };
 
 /** input type for incrementing numeric columns in table "order_temp" */
@@ -46250,6 +46262,7 @@ export type Order_Temp_Insert_Input = {
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
@@ -46398,6 +46411,7 @@ export type Order_Temp_Order_By = {
   stripePaymentId?: InputMaybe<Order_By>;
   user?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
+  workbookDeliveryAddress?: InputMaybe<Order_By>;
   xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
@@ -46411,6 +46425,7 @@ export type Order_Temp_Prepend_Input = {
   booking_contact?: InputMaybe<Scalars['jsonb']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   user?: InputMaybe<Scalars['jsonb']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "order_temp" */
@@ -46465,6 +46480,8 @@ export enum Order_Temp_Select_Column {
   User = 'user',
   /** column name */
   Vat = 'vat',
+  /** column name */
+  WorkbookDeliveryAddress = 'workbookDeliveryAddress',
   /** column name */
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
@@ -46592,6 +46609,7 @@ export type Order_Temp_Set_Input = {
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
@@ -46693,6 +46711,7 @@ export type Order_Temp_Stream_Cursor_Value_Input = {
   stripePaymentId?: InputMaybe<Scalars['String']>;
   user?: InputMaybe<Scalars['jsonb']>;
   vat?: InputMaybe<Scalars['float8']>;
+  workbookDeliveryAddress?: InputMaybe<Scalars['jsonb']>;
   xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
@@ -46769,6 +46788,8 @@ export enum Order_Temp_Update_Column {
   User = 'user',
   /** column name */
   Vat = 'vat',
+  /** column name */
+  WorkbookDeliveryAddress = 'workbookDeliveryAddress',
   /** column name */
   XeroInvoiceNumber = 'xeroInvoiceNumber'
 }

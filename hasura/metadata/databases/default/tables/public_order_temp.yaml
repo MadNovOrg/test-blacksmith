@@ -58,88 +58,91 @@ insert_permissions:
     permission:
       check: {}
       columns:
-        - order_due
-        - order_total
-        - price
-        - vat
-        - course_id
         - attendeesQuantity
-        - registrants
-        - booking_contact
-        - promo_codes
-        - user
         - billing_address
         - billing_email
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - client_purchase_order
+        - course_id
+        - created_at
         - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
         - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - registrants
+        - sales_representative_id
         - source
         - stripePaymentId
+        - user
+        - vat
+        - workbookDeliveryAddress
         - xero_invoice_number
-        - created_at
-        - id
-        - organization_id
-        - profile_id
-        - sales_representative_id
   - role: trainer
     permission:
       check: {}
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - order_due
-        - order_total
-        - price
-        - vat
-        - course_id
         - attendeesQuantity
-        - registrants
-        - promo_codes
-        - user
         - billing_address
         - billing_email
         - billing_family_name
         - billing_given_name
         - billing_phone
         - client_purchase_order
-        - currency
-        - payment_method
-        - stripePaymentId
-        - xero_invoice_number
+        - course_id
         - created_at
+        - currency
         - id
+        - order_due
+        - order_total
         - organization_id
+        - payment_method
+        - price
         - profile_id
+        - promo_codes
+        - registrants
+        - stripePaymentId
+        - user
+        - vat
+        - workbookDeliveryAddress
+        - xero_invoice_number
   - role: tt-ops
     permission:
       check: {}
       columns:
-        - vat
         - attendeesQuantity
-        - course_id
-        - registrants
-        - booking_contact
-        - promo_codes
-        - user
         - billing_address
         - billing_email
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - booking_contact
         - client_purchase_order
-        - currency
-        - payment_method
-        - source
-        - stripePaymentId
-        - xero_invoice_number
+        - course_id
         - created_at
+        - currency
         - id
         - organization_id
+        - payment_method
         - profile_id
+        - promo_codes
+        - registrants
         - sales_representative_id
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - workbookDeliveryAddress
+        - xero_invoice_number
     comment: ""
 update_permissions:
   - role: sales-admin
