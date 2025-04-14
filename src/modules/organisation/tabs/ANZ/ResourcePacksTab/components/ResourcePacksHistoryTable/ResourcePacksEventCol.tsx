@@ -30,6 +30,7 @@ export const ResourcePacksEventCol = ({
       Resource_Packs_Events_Enum.ResourcePackIssued,
       Resource_Packs_Events_Enum.ResourcePacksAdded,
       Resource_Packs_Events_Enum.ResourcePacksPurchased,
+      Resource_Packs_Events_Enum.ResourcePacksReleased,
       Resource_Packs_Events_Enum.ResourcePacksRemoved,
       Resource_Packs_Events_Enum.ResourcePacksReserved,
     ].includes(event.event)
@@ -44,6 +45,7 @@ export const ResourcePacksEventCol = ({
       [Resource_Packs_Events_Enum.ResourcePacksPurchased]: t('purchased-by', {
         fullName: event.payload?.invokedByName,
       }),
+      [Resource_Packs_Events_Enum.ResourcePacksReleased]: t('released'),
       [Resource_Packs_Events_Enum.ResourcePacksRemoved]: t('removed-by', {
         fullName: event.payload?.invokedByName,
       }),
@@ -55,6 +57,7 @@ export const ResourcePacksEventCol = ({
     const eventsWithoutInvokedBy = [
       Resource_Packs_Events_Enum.CourseReservedResourcePacksRevert,
       Resource_Packs_Events_Enum.ResourcePackIssued,
+      Resource_Packs_Events_Enum.ResourcePacksReleased,
     ]
 
     const EventDescription = () => {

@@ -1874,3 +1874,14 @@ event_triggers:
       num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/resource-packs/revert'
+  - name: indirect_course_resource_packs_release
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - course_status
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/release'

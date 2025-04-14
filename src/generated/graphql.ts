@@ -58196,6 +58196,7 @@ export enum Resource_Packs_Events_Enum {
   CourseReservedResourcePacksRevert = 'COURSE_RESERVED_RESOURCE_PACKS_REVERT',
   ResourcePacksAdded = 'RESOURCE_PACKS_ADDED',
   ResourcePacksPurchased = 'RESOURCE_PACKS_PURCHASED',
+  ResourcePacksReleased = 'RESOURCE_PACKS_RELEASED',
   ResourcePacksRemoved = 'RESOURCE_PACKS_REMOVED',
   ResourcePacksReserved = 'RESOURCE_PACKS_RESERVED',
   ResourcePackIssued = 'RESOURCE_PACK_ISSUED'

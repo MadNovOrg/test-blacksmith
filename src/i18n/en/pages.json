@@ -1659,6 +1659,7 @@
           },
           "issued": "Resource pack has been used",
           "purchased-by": "Purchased at course creation by {{fullName}}",
+          "released": "Released resource packs that were not used during the course",
           "removed-by": "Removed by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",
           "reverted": "Returned to the organization"
