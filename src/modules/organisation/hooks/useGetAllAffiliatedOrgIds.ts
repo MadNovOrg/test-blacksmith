@@ -16,7 +16,7 @@ export const GET_ALL_AFFILIATED_ORG_IDS = gql`
 export const useGetAllAffiliatedOrgIds = (
   organisation_id: string | undefined,
 ) => {
-  const [{ data, error, fetching }] = useQuery<
+  const [{ data, error, fetching }, refetch] = useQuery<
     GetAllAffiliatedOrgIdsQuery,
     GetAllAffiliatedOrgIdsQueryVariables
   >({
@@ -31,5 +31,6 @@ export const useGetAllAffiliatedOrgIds = (
     data: data?.organization,
     error,
     fetching,
+    refetch,
   }
 }

@@ -92,6 +92,9 @@ describe('component: OrgResourcePacksPricingCourseDetailsSection', () => {
         error: undefined,
         main_organisation_id: null,
         orgResourcePacksPricings: [],
+        affiliatesIds: [],
+        refetchAffiliatesIds: vi.fn(),
+        fetchingAffiliatesIds: false,
       })
       const {
         result: {

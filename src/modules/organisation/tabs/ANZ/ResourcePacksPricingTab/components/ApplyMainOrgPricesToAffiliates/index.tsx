@@ -1,18 +1,15 @@
 import { LoadingButton } from '@mui/lab'
 import { Button, Typography } from '@mui/material'
-import React, { useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState } from 'react'
 
 import { Dialog } from '@app/components/dialogs'
 import { Org_Resource_Packs_Pricing_Insert_Input } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useApplyOrgResourcePacksPriceOnAffiliates } from '@app/modules/organisation/hooks/useApplyOrgResourcePacksPriceOnAffiliates'
-import { useGetAllAffiliatedOrgIds } from '@app/modules/organisation/hooks/useGetAllAffiliatedOrgIds'
 
 import { useResourcePacksPricingContext } from '../../ResourcePacksPricingProvider/useResourcePacksPricingContext'
 
 export const ApplyMainOrgRPPricingToAffiliates: React.FC = () => {
-  const { id: orgId } = useParams()
   const { t } = useScopedTranslation(
     'pages.org-details.tabs.resource-pack-pricing.apply-price-to-affiliates',
   )
@@ -24,19 +21,14 @@ export const ApplyMainOrgRPPricingToAffiliates: React.FC = () => {
     orgResourcePacksPricings,
     fetching: fetchingMainOrgRPPricings,
     refetch,
+    affiliatesIds,
+    fetchingAffiliatesIds,
   } = useResourcePacksPricingContext()
 
   const [
     { fetching: savingAffiliatesPricings },
     applyMainOrgRPPricingToAffiliates,
   ] = useApplyOrgResourcePacksPriceOnAffiliates()
-
-  const { data, fetching: fetchingAffiliatesIds } =
-    useGetAllAffiliatedOrgIds(orgId)
-
-  const affiliatesIds = useMemo(() => {
-    return data?.flatMap(affiliate => affiliate.id)
-  }, [data])
 
   const handleClick = () => {
     setDisplayAffiliatesOverriteModal(true)

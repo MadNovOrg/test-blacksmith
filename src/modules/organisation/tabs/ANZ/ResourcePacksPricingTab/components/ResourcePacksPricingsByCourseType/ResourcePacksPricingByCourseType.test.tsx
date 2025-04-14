@@ -127,6 +127,9 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         pricing: null,
         main_organisation_id: null,
         orgResourcePacksPricings: [],
+        affiliatesIds: [],
+        refetchAffiliatesIds: vi.fn(),
+        fetchingAffiliatesIds: false,
       })
       const mockClient = {
         executeQuery: vi.fn(),
@@ -160,6 +163,9 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         pricing: null,
         main_organisation_id: null,
         orgResourcePacksPricings: [],
+        affiliatesIds: [],
+        refetchAffiliatesIds: vi.fn(),
+        fetchingAffiliatesIds: false,
       })
       const mockClient = {
         executeQuery: vi.fn(),
@@ -204,6 +210,9 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         pricing: pricingToCheck,
         main_organisation_id: null,
         orgResourcePacksPricings: [],
+        affiliatesIds: [],
+        refetchAffiliatesIds: vi.fn(),
+        fetchingAffiliatesIds: false,
       })
       const mockClient = {
         executeQuery: vi.fn(),

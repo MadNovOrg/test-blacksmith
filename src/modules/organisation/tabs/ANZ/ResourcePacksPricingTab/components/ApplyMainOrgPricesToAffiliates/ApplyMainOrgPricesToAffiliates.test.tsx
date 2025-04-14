@@ -155,6 +155,9 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
       pricing: null,
       setSelectedPricing: vi.fn(),
       error: undefined,
+      affiliatesIds: affiliatesIds,
+      refetchAffiliatesIds: vi.fn(),
+      fetchingAffiliatesIds: false,
     })
     mockGetAllAffiliatedOrgIdsMock.mockReturnValue({
       data: affiliatesIds.map(id => ({
@@ -162,6 +165,7 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
       })),
       error: undefined,
       fetching: false,
+      refetch: vi.fn(),
     })
   })
 

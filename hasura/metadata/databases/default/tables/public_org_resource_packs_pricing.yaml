@@ -195,6 +195,10 @@ update_permissions:
       check: {}
     comment: ""
 delete_permissions:
+  - role: finance
+    permission:
+      filter: {}
+    comment: ""
   - role: sales-admin
     permission:
       filter: {}

@@ -8,6 +8,7 @@ import {
   Resource_Packs_Pricing,
 } from '@app/generated/graphql'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
+import { useGetAllAffiliatedOrgIds } from '@app/modules/organisation/hooks/useGetAllAffiliatedOrgIds'
 import { useMainOrgId } from '@app/modules/organisation/hooks/useMainOrgId'
 import { useOrgResourcePacksPricingsByOrgId } from '@app/modules/organisation/hooks/useOrgResourcePacksPricingsByOrgId'
 import { CourseTypeOrgRPPricings } from '@app/util'
@@ -30,6 +31,9 @@ export type ContextValue = {
   setSelectedPricing: (pricing: GroupedResourcePacksPricing | null) => void
   error: CombinedError | undefined
   orgResourcePacksPricings: MinimalOrgResourcePacksPricing[]
+  affiliatesIds: string[]
+  fetchingAffiliatesIds: boolean
+  refetchAffiliatesIds: () => void
   differentPricesFromMain?: boolean
 }
 
@@ -122,6 +126,19 @@ export const ResourcePacksPricingProvider: React.FC<
     })
   }, [mainOrgResourcePacksPricings, orgResourcePacksPricings])
 
+  const {
+    data: orgAffiliatesIds,
+    fetching: fetchingAffiliatesIds,
+    refetch: refetchIds,
+  } = useGetAllAffiliatedOrgIds(orgId)
+
+  const affiliatesIds = useMemo(() => {
+    return orgAffiliatesIds?.flatMap(affiliate => affiliate.id)
+  }, [orgAffiliatesIds])
+  const refetchAffiliatesIds = useCallback(() => {
+    refetchIds({ requestPolicy: 'network-only' })
+  }, [refetchIds])
+
   const setSelectedPricing = useCallback<ContextValue['setSelectedPricing']>(
     pricing => {
       setPricing(pricing)
@@ -144,6 +161,9 @@ export const ResourcePacksPricingProvider: React.FC<
       error,
       orgResourcePacksPricings: orgResourcePacksPricings ?? [],
       differentPricesFromMain,
+      affiliatesIds: affiliatesIds ?? [],
+      fetchingAffiliatesIds,
+      refetchAffiliatesIds,
     }),
     [
       main_organisation_id,
@@ -155,6 +175,9 @@ export const ResourcePacksPricingProvider: React.FC<
       error,
       orgResourcePacksPricings,
       differentPricesFromMain,
+      affiliatesIds,
+      fetchingAffiliatesIds,
+      refetchAffiliatesIds,
     ],
   )
 

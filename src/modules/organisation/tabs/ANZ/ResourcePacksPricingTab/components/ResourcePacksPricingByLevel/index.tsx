@@ -1,6 +1,7 @@
 import { TabContext, TabList } from '@mui/lab'
 import { Alert, Box, Grid, Tab } from '@mui/material'
 import { useState } from 'react'
+import { useEffectOnce } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
 import { Course_Type_Enum } from '@app/generated/graphql'
@@ -18,10 +19,19 @@ export const ResourcePacksPricingByLevel: React.FC = () => {
     'pages.org-details.tabs.resource-pack-pricing.prices-by-course-type',
   )
 
-  const { main_organisation_id, differentPricesFromMain } =
-    useResourcePacksPricingContext()
+  const {
+    main_organisation_id,
+    differentPricesFromMain,
+    affiliatesIds,
+    refetchAffiliatesIds,
+    fetchingAffiliatesIds,
+  } = useResourcePacksPricingContext()
 
   const [selectedTab, setSelectedTab] = useState<Course_Type_Enum>(defaultTab)
+
+  useEffectOnce(() => {
+    refetchAffiliatesIds()
+  })
 
   return (
     <>
@@ -60,6 +70,8 @@ export const ResourcePacksPricingByLevel: React.FC = () => {
             </TabList>
           </Grid>
           {!main_organisation_id &&
+          !fetchingAffiliatesIds &&
+          affiliatesIds?.length &&
           acl.canApplyOrgResourcePacksPricingToAffiliates() ? (
             <Grid item xs={12} md={6}>
               <Box display="flex" justifyContent="flex-end">

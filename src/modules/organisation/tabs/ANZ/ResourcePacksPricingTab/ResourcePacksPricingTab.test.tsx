@@ -21,7 +21,6 @@ const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 vi.mock('@app/modules/organisation/hooks/useAllResourcePacksPricing')
 const useAllResourcePacksPricingMock = vi.mocked(useAllResourcePacksPricing)
-
 const pricings = [
   {
     id: chance.guid(),
@@ -112,11 +111,6 @@ describe('component: ResourcePacksPricingTab', () => {
         ]),
       },
     })
-
-    // ApplyMainOrgRPPricingToAffiliates button
-    expect(
-      screen.getByTestId('apply-main-org-prices-to-affiliates'),
-    ).toBeInTheDocument()
 
     // Closed and Indirect tabs
     expect(

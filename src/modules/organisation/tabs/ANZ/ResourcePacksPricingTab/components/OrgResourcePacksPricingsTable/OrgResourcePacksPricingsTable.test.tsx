@@ -233,6 +233,9 @@ describe('component: OrgResourcePacksPricingsTable', () => {
       error: undefined,
       main_organisation_id: null,
       orgResourcePacksPricings: [],
+      affiliatesIds: [],
+      refetchAffiliatesIds: vi.fn(),
+      fetchingAffiliatesIds: false,
     })
   })
 
