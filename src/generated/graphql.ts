@@ -69055,6 +69055,13 @@ export type DeleteOrgMutationVariables = Exact<{
 
 export type DeleteOrgMutation = { __typename?: 'mutation_root', deleteOrganisation?: { __typename?: 'DeleteOrganisationOutput', success: boolean } | null };
 
+export type GetAllOrgResourcePacksHistoryQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type GetAllOrgResourcePacksHistoryQuery = { __typename?: 'query_root', history: Array<{ __typename?: 'org_resource_packs_history', id: any, change: number, courseId?: number | null, created_at: any, event: Resource_Packs_Events_Enum, payload?: any | null, reservedBalance: number, resourcePacksType: Resource_Packs_Type_Enum, totalBalance: number, course?: { __typename?: 'course', id: number, code?: string | null, createdBy?: { __typename?: 'profile', id: any, fullName?: string | null } | null, schedule: Array<{ __typename?: 'course_schedule', start: any }> } | null }> };
+
 export type GetOrgResourcePacksHistoryQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;

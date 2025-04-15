@@ -1665,7 +1665,22 @@
           "reverted": "Returned to the organization"
         },
         "export": {
-          "button-label": "Export"
+          "button-label": "Export",
+          "columns": {
+            "date": "Date",
+            "event": "Event",
+            "option": "Option",
+            "invoice-nr": "Invoice number",
+            "course-code": "Course code",
+            "course-start": "Course start date",
+            "note": "Note",
+            "invoked-by": "Invoked by",
+            "amount": "Amount",
+            "balance": "Balance",
+            "reserved-balance": "Reserved",
+            "cost-per-resource-pack": "Cost per resource pack",
+            "currency": "Currency"
+          }
         }
       },
       "resource-pack-pricing": {
