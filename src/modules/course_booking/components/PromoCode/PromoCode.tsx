@@ -9,15 +9,10 @@ import {
 } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'urql'
 
-import {
-  CanApplyPromoCodeQuery,
-  CanApplyPromoCodeQueryVariables,
-  PromoCodeOutput,
-} from '@app/generated/graphql'
-import { CAN_APPLY_PROMO_CODE } from '@app/modules/course_booking/queries/can-apply-promo-code'
+import { PromoCodeOutput } from '@app/generated/graphql'
 
+import { useCanApplyPromoCode } from '../../hooks/useCanApplyPromoCode'
 import type { Discounts } from '../BookingContext/BookingContext'
 
 type Props = {
@@ -42,13 +37,7 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   const [value, setValue] = useState('')
   const [applyError, setApplyError] = useState('')
 
-  const [{ data: response, error }] = useQuery<
-    CanApplyPromoCodeQuery,
-    CanApplyPromoCodeQueryVariables
-  >({
-    query: CAN_APPLY_PROMO_CODE,
-    variables: { input: { code: value.trim(), courseId } },
-  })
+  const { data: response, error } = useCanApplyPromoCode(value.trim(), courseId)
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -115,7 +104,9 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
             >
               -{' '}
               {t('currency', {
-                amount: discounts[c]?.amountCurrency ?? 0,
+                amount:
+                  (discounts[c]?.amountCurrency ?? 0) +
+                  (discounts[c]?.freePlacesResourcePacksAmountCurrency ?? 0),
                 currency: courseCurrency,
               })}
             </Typography>
@@ -152,6 +143,7 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
               color="primary"
               size="small"
               onClick={handleApply}
+              data-testId="apply-promo-code-button"
             >
               {t('apply')}
             </Button>
@@ -176,6 +168,7 @@ export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
             color="primary"
             sx={{ fontWeight: '600' }}
             onClick={() => setAdding(true)}
+            data-testId="apply-promo-code-button"
           >
             {t('pages.book-course.apply-promo')}
           </Button>

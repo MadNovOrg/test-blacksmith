@@ -67983,19 +67983,19 @@ export type SetCourseDraftMutationVariables = Exact<{
 
 export type SetCourseDraftMutation = { __typename?: 'mutation_root', insert_course_draft_one?: { __typename?: 'course_draft', id: any } | null };
 
-export type GetOrderQueryVariables = Exact<{
-  orderId: Scalars['uuid'];
-}>;
-
-
-export type GetOrderQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, profileId?: any | null, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, start: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', start?: any | null } | null } | null }, end: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', end?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null } | null }> };
-
 export type CanApplyPromoCodeQueryVariables = Exact<{
   input: CanApplyPromoCodeInput;
 }>;
 
 
 export type CanApplyPromoCodeQuery = { __typename?: 'query_root', canApplyPromoCode: { __typename?: 'CanApplyPromoCodeOutput', result?: { __typename?: 'PromoCodeOutput', code: string, amount: number, type: string } | null } };
+
+export type GetOrderQueryVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type GetOrderQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'course_order', quantity?: number | null, order?: { __typename?: 'order', id: any, profileId?: any | null, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, source?: string | null, billingAddress: string, billingGivenName: string, billingFamilyName: string, billingEmail: string, billingPhone: string, bookingContact?: any | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null, organization: { __typename?: 'organization', name: string }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null, course?: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, go1Integration: boolean, max_participants: number, freeSpaces?: number | null, deliveryType: Course_Delivery_Type_Enum, bookingContactInviteData?: any | null, reaccreditation?: boolean | null, residingCountry?: string | null, start: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', start?: any | null } | null } | null }, end: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', date?: { __typename?: 'course_schedule_max_fields', end?: any | null } | null } | null }, bookingContact?: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null } | null } | null }> };
 
 export type CreateOrderMutationVariables = Exact<{
   input: CreateOrderInput;

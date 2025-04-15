@@ -56,7 +56,10 @@ export type Sector = keyof typeof sectors | ''
 
 export type Discounts = Record<
   string,
-  Pick<Promo_Code, 'amount' | 'type'> & { amountCurrency: number }
+  Pick<Promo_Code, 'amount' | 'type'> & {
+    amountCurrency: number
+    freePlacesResourcePacksAmountCurrency: number
+  }
 >
 
 export type Address = {
@@ -140,6 +143,21 @@ const initialState = {
 } as unknown as State
 
 const Context = React.createContext<ContextType>(initialContext as ContextType)
+
+export const getFreePlacesRPAmountCurrency = (
+  promoCodeType: Promo_Code_Type_Enum,
+  promoCodeAmount: number,
+  isANZ: boolean,
+  courseType: Course_Type_Enum,
+  rpPrice: number | undefined | null,
+) => {
+  const validRpPrice = rpPrice ?? 0
+  return promoCodeType === Promo_Code_Type_Enum.FreePlaces &&
+    isANZ &&
+    courseType === Course_Type_Enum.Open
+    ? validRpPrice * promoCodeAmount
+    : 0
+}
 
 export const BookingProvider: React.FC<React.PropsWithChildren> = ({
   children,
@@ -307,6 +325,14 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
             ? booking.price * promoCode.amount
             : (courseCost * promoCode.amount) / 100,
+        // On ANZ, if promo code is FreePlaces and course type is open, we need to calculate the discount on resource pack price
+        freePlacesResourcePacksAmountCurrency: getFreePlacesRPAmountCurrency(
+          promoCode.type as Promo_Code_Type_Enum,
+          promoCode.amount,
+          isAustralia(),
+          course?.type as Course_Type_Enum,
+          rpPrice,
+        ),
       }
     }
 
@@ -318,6 +344,9 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     promoCodes,
     booking.currency,
     course?.type,
+    acl,
+    rpPrice,
+    isAustralia,
   ])
 
   const addPromo = useCallback<ContextType['addPromo']>(
@@ -360,10 +389,19 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
           return !isNaN(isCorrectSum) ? isCorrectSum : 0
         }, 0)
 
+    const resourcePacksDiscount = !ready
+      ? 0
+      : booking.promoCodes.reduce((acc, c) => {
+          const isCorrectSum =
+            acc + booking.discounts[c]?.freePlacesResourcePacksAmountCurrency
+          return !isNaN(isCorrectSum) ? isCorrectSum : 0
+        }, 0)
+
     const subtotalDiscounted = max(
       subtotal +
         mandatoryCourseMaterialsCost -
         Math.min(Number(discount), courseCost) - // If discount is higher than course cost, we should not go negative
+        resourcePacksDiscount - // On ANZ it will be equal to rpPrice * promoCode.amount when promoCode is FreePlaces, course type is open otherwise 0
         freeSpacesDiscount,
       0,
     )

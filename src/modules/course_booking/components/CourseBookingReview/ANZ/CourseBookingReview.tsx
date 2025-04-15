@@ -391,7 +391,10 @@ export const CourseBookingReview: React.FC<
             <Typography color="grey.700">
               -{' '}
               {t('currency', {
-                amount: booking.discounts[code]?.amountCurrency,
+                amount:
+                  booking.discounts[code]?.amountCurrency +
+                  booking.discounts[code]
+                    ?.freePlacesResourcePacksAmountCurrency,
               })}
             </Typography>
           </Box>
