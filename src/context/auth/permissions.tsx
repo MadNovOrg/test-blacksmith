@@ -101,6 +101,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         Course,
         | 'courseParticipants'
         | 'go1Integration'
+        | 'resourcePacksType'
         | 'participantSubmittedEvaluationCount'
         | 'trainers'
         | 'type'
@@ -109,7 +110,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       // Only Indirect NON Blended Learning courses without any evaluation submitted or graded participant
       if (
         course.go1Integration ||
-        [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+        course.resourcePacksType ||
+        [(Course_Type_Enum.Closed, Course_Type_Enum.Open)].includes(
           course.type,
         ) ||
         !course.courseParticipants ||
