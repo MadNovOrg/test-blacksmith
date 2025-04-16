@@ -67,7 +67,7 @@ export function useCoursePrice(courseData?: {
   maxParticipants: number | null
 }) {
   const {
-    acl: { isAustralia },
+    acl: { isAustralia, isUK },
   } = useAuth()
   const { defaultCurrency } = useCurrencies()
   const { isUKCountry, isAustraliaCountry } = useWorldCountries()
@@ -111,6 +111,7 @@ export function useCoursePrice(courseData?: {
     isICMcourse &&
     isLevel2 &&
     isBlended &&
+    isUK() &&
     (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
 
   const extractCoursePrices = useCallback(
