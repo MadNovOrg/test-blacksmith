@@ -631,6 +631,17 @@ event_triggers:
       num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/course-invite'
+  - name: release_rp_license_invite_status_changed
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/course-invite-changed'
   - name: send_invite_email
     definition:
       enable_manual: false
