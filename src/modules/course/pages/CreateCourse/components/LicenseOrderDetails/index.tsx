@@ -172,22 +172,24 @@ export const LicenseOrderDetails = () => {
       })
     : undefined
 
-  const resourcePacksCost = calculateResourcePackCost({
-    numberOfResourcePacks: courseData?.maxParticipants ?? 0,
-    residingCountry: courseData?.residingCountry,
-    resourcePacksBalance:
-      orgData?.organization_by_pk?.resourcePacks?.find(rp => {
-        if (!courseData?.resourcePacksType) return false
+  const resourcePacksCost = courseData?.resourcePacksType
+    ? calculateResourcePackCost({
+        numberOfResourcePacks: courseData?.maxParticipants ?? 0,
+        residingCountry: courseData?.residingCountry,
+        resourcePacksBalance:
+          orgData?.organization_by_pk?.resourcePacks?.find(rp => {
+            if (!courseData?.resourcePacksType) return false
 
-        return (
-          rp.resourcePacksType ===
-          COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS[
-            courseData.resourcePacksType
-          ].resourcePacksType
-        )
-      })?.totalResourcePacks ?? 0,
-    resourcePacksPrice: rpPrice,
-  })
+            return (
+              rp.resourcePacksType ===
+              COURSE_FORM_RESOURCE_PACKS_OPTION_TO_COURSE_FIELDS[
+                courseData.resourcePacksType
+              ].resourcePacksType
+            )
+          })?.totalResourcePacks ?? 0,
+        resourcePacksPrice: rpPrice,
+      })
+    : undefined
 
   const onSubmit: SubmitHandler<Inputs> = data => {
     setInvoiceDetails(data.invoiceDetails)
