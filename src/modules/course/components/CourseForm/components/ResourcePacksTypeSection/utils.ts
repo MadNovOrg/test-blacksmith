@@ -63,7 +63,7 @@ export const matchResourcePacksCourseFieldsToSelectOption = cond<
       resourcePacksDeliveryType: Resource_Packs_Delivery_Type_Enum.Standard,
       resourcePacksType: Resource_Packs_Type_Enum.PrintWorkbook,
     }),
-    constant(ResourcePacksOptions.PrintWorkbookExpress),
+    constant(ResourcePacksOptions.PrintWorkbookStandard),
   ],
 
   [stubTrue, constant(undefined)],

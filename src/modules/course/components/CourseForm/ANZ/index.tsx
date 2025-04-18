@@ -91,6 +91,7 @@ export const AnzCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     trainerRatioNotMet,
     currentNumberOfParticipantsAndInvitees,
   })
+
   // Used for:
   // - Open course residing country https://behaviourhub.atlassian.net/browse/TTHP-2915
   // - Closed course ICM residing country https://behaviourhub.atlassian.net/browse/TTHP-3529
