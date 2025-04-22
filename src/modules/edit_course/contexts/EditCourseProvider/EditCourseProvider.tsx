@@ -615,34 +615,39 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     reserveGo1Licenses,
   ])
 
-  const reserveAdditionalResourcePacks = useCallback(async () => {
-    if (
-      preEditedCourse?.organization?.id &&
-      additionalRequiredResourcePacks &&
-      !additionalResourcePacksToPurchase
-    ) {
-      try {
-        await reserveResourcePacks({
-          input: {
-            courseId: preEditedCourse.id,
-            orgId: preEditedCourse.organization.id,
-            quantity: additionalRequiredResourcePacks,
-            resourcePackType:
-              preEditedCourse.resourcePacksType as unknown as ResourcePacksTypeEnum,
-          },
-        })
-      } catch (err) {
-        Sentry.captureException(err)
+  const reserveAdditionalResourcePacks = useCallback(
+    async (courseExceptionsApprovalPending: boolean) => {
+      if (courseExceptionsApprovalPending) return
+
+      if (
+        preEditedCourse?.organization?.id &&
+        additionalRequiredResourcePacks &&
+        !additionalResourcePacksToPurchase
+      ) {
+        try {
+          await reserveResourcePacks({
+            input: {
+              courseId: preEditedCourse.id,
+              orgId: preEditedCourse.organization.id,
+              quantity: additionalRequiredResourcePacks,
+              resourcePackType:
+                preEditedCourse.resourcePacksType as unknown as ResourcePacksTypeEnum,
+            },
+          })
+        } catch (err) {
+          Sentry.captureException(err)
+        }
       }
-    }
-  }, [
-    additionalRequiredResourcePacks,
-    additionalResourcePacksToPurchase,
-    preEditedCourse?.id,
-    preEditedCourse?.organization?.id,
-    preEditedCourse?.resourcePacksType,
-    reserveResourcePacks,
-  ])
+    },
+    [
+      additionalRequiredResourcePacks,
+      additionalResourcePacksToPurchase,
+      preEditedCourse?.id,
+      preEditedCourse?.organization?.id,
+      preEditedCourse?.resourcePacksType,
+      reserveResourcePacks,
+    ],
+  )
 
   // 17.12.2024 - 86 cognitive complexity - tread with caution
   const saveChanges = useCallback(
@@ -898,7 +903,9 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
 
           await reserveAdditionalLicenses()
 
-          await reserveAdditionalResourcePacks()
+          await reserveAdditionalResourcePacks(
+            status === Course_Status_Enum.ExceptionsApprovalPending,
+          )
 
           if (courseDiffs.length) {
             const dateChanged = courseDiffs.find(d => d.type === 'date')

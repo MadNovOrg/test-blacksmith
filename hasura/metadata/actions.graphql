@@ -570,10 +570,11 @@ enum BildStrategy {
 
 enum CourseApprovalError {
   COURSE_NOT_FOUND
-  TRAINER_NOT_FOUND
+  GENERIC_ERROR
   INVALID_COURSE_ID
   INVALID_STATUS
   NO_AUDIT_FOUND
+  TRAINER_NOT_FOUND
 }
 
 enum CancellationFeeType {

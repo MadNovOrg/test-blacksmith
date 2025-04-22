@@ -77,6 +77,7 @@ export const ReviewLicensesOrder: React.FC<
     additionalResourcePacksToPurchase,
     canGoToCourseBuilder,
     courseData,
+    fetching,
     getCourseName,
     preEditedCourse,
     requiredLicenses,
@@ -505,7 +506,7 @@ export const ReviewLicensesOrder: React.FC<
                   type="submit"
                   variant="contained"
                   endIcon={canGoToCourseBuilder ? <ArrowForwardIcon /> : null}
-                  loading={false}
+                  loading={fetching}
                   onClick={() => {
                     if (additionalLicensesOrderOnly) {
                       saveAdditionalLicensesOrder()
@@ -515,7 +516,7 @@ export const ReviewLicensesOrder: React.FC<
                     saveChanges()
                   }}
                   data-testid="courseBuilder-button"
-                  disabled={false}
+                  disabled={fetching}
                 >
                   {canGoToCourseBuilder
                     ? _t('pages.edit-course.course-builder-button-text')

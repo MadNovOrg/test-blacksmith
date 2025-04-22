@@ -938,7 +938,7 @@ custom_types:
           value: COURSE_NOT_FOUND
         - description: null
           is_deprecated: null
-          value: TRAINER_NOT_FOUND
+          value: GENERIC_ERROR
         - description: null
           is_deprecated: null
           value: INVALID_COURSE_ID
@@ -948,6 +948,9 @@ custom_types:
         - description: null
           is_deprecated: null
           value: NO_AUDIT_FOUND
+        - description: null
+          is_deprecated: null
+          value: TRAINER_NOT_FOUND
     - name: CancellationFeeType
       values:
         - description: null

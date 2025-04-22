@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab'
 import {
   Alert,
   Box,
@@ -17,17 +18,26 @@ import { Course_Exception_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { shouldGoIntoExceptionApproval } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 
 type Props = {
-  open: boolean
+  courseType?: Course_Type_Enum
+  exceptions: Course_Exception_Enum[]
+  loading?: boolean
   onCancel: () => void
   onSubmit: () => void
-  exceptions: Course_Exception_Enum[]
-  courseType?: Course_Type_Enum
+  open: boolean
   submitLabel?: string
 }
 
 export const CourseExceptionsConfirmation: React.FC<
   React.PropsWithChildren<Props>
-> = ({ open, onCancel, onSubmit, exceptions, submitLabel, courseType }) => {
+> = ({
+  courseType,
+  exceptions,
+  loading,
+  onCancel,
+  onSubmit,
+  open,
+  submitLabel,
+}) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 
@@ -123,16 +133,17 @@ export const CourseExceptionsConfirmation: React.FC<
             courseType: courseType ?? null,
             exceptions: exceptions,
           }) ? null : (
-            <Button
+            <LoadingButton
               onClick={onSubmit}
               type="button"
               variant="contained"
               color="primary"
               sx={{ ml: 1 }}
               data-testid="proceed-button"
+              loading={loading}
             >
               {submitLabel ?? t('pages.create-course.exceptions.proceed')}
-            </Button>
+            </LoadingButton>
           )}
         </Box>
       </Container>

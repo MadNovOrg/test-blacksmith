@@ -260,20 +260,27 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     trainerMethods.current?.reset()
   }, [])
 
+  const goToReviewAndConfirm = useMemo(
+    () =>
+      course?.status &&
+      course.status !== Course_Status_Enum.ExceptionsApprovalPending &&
+      (requireNewOrderForGo1Licenses || requireNewOrderForResourcePacks),
+    [
+      course?.status,
+      requireNewOrderForGo1Licenses,
+      requireNewOrderForResourcePacks,
+    ],
+  )
+
   const nextStep = useCallback(
     (reviewInput?: ReviewChangesFormValues) => {
-      if (requireNewOrderForGo1Licenses || requireNewOrderForResourcePacks) {
+      if (goToReviewAndConfirm) {
         navigate('./review-licenses-order')
       } else {
         saveChanges(reviewInput)
       }
     },
-    [
-      navigate,
-      requireNewOrderForGo1Licenses,
-      requireNewOrderForResourcePacks,
-      saveChanges,
-    ],
+    [goToReviewAndConfirm, navigate, saveChanges],
   )
 
   const editCourse = useCallback(() => {
@@ -610,11 +617,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                   <LoadingButton
                     data-testid="save-button"
-                    disabled={submitDisabled}
+                    disabled={submitDisabled || fetching}
                     endIcon={
-                      canGoToCourseBuilder ||
-                      requireNewOrderForGo1Licenses ||
-                      requireNewOrderForResourcePacks ? (
+                      canGoToCourseBuilder || goToReviewAndConfirm ? (
                         <ArrowForwardIcon />
                       ) : null
                     }
@@ -623,8 +628,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     sx={{ mt: isMobile ? 2 : 0 }}
                     variant="contained"
                   >
-                    {requireNewOrderForGo1Licenses ||
-                    requireNewOrderForResourcePacks
+                    {goToReviewAndConfirm
                       ? t(
                           'pages.create-course.step-navigation-review-and-confirm',
                         )
@@ -717,6 +721,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           <CourseExceptionsConfirmation
             courseType={courseData?.type ?? undefined}
             exceptions={courseExceptions}
+            loading={fetching}
             onCancel={() => setCourseExceptions([])}
             onSubmit={editCourse}
             open={courseExceptions.length > 0}
