@@ -169,7 +169,7 @@
     "@chromatic-com/storybook": "^3",
     "@emotion/babel-plugin": "11.13.5",
     "@graphql-codegen/cli": "^4.0.1",
-    "@graphql-codegen/typescript": "^3.0.3",
+    "@graphql-codegen/typescript": "^4.1.6",
     "@graphql-codegen/typescript-operations": "^3.0.4",
     "@inrupt/jest-jsdom-polyfills": "^1.7.0",
     "@jackfranklin/test-data-bot": "^2.1.0",
