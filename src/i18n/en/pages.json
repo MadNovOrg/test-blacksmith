@@ -1733,8 +1733,8 @@
                 "INDIRECT": {
                   "DIGITAL_WORKBOOK": "Digital Workbook & Connect",
                   "PRINT_WORKBOOK": {
-                    "STANDARD": "Print (Standard Delivery) & Connect",
-                    "EXPRESS": "Print (Express Delivery) & Connect"
+                    "STANDARD": "Print Workbook (Standard Delivery) & Connect",
+                    "EXPRESS": "Print Workbook (Express Delivery) & Connect"
                   }
                 }
               },

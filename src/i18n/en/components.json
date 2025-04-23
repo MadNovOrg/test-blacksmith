@@ -116,8 +116,8 @@
     "blended-learning-price-label-anz": "If not already pre-purchased by the chosen organisation, each additional license will result in a {{currency}}{{price}}{{gstWording}} fee per person attending this course. If you would like to bulk purchase licenses, please get in contact with <0><1>{{email}}</1></0>",
     "resource-pack-digital-workbook": "Digital Workbook & Connect",
     "resource-pack-print-workbook": {
-      "EXPRESS": "Print (Express Delivery) & Connect",
-      "STANDARD": "Print (Standard Delivery) & Connect"
+      "EXPRESS": "Print Workbook (Express Delivery) & Connect",
+      "STANDARD": "Print Workbook (Standard Delivery) & Connect"
     },
     "reaccreditation-label": "Reaccreditation",
     "conversion-label": "Conversion course",
