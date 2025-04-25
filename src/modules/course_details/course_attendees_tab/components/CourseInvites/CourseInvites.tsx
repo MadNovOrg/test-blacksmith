@@ -184,7 +184,11 @@ export const CourseInvites = ({
       setSaving(true)
       await invites.send({
         emails: [...emails, ...leftOvers],
-        course: { go1Integration: course.go1Integration, type: course.type },
+        course: {
+          go1Integration: course.go1Integration,
+          resourcePackType: course.resourcePacksType ?? null,
+          type: course.type,
+        },
       })
       invites.getInvites({
         requestPolicy: 'network-only',
@@ -195,14 +199,15 @@ export const CourseInvites = ({
       setError((err as Error).message)
     }
   }, [
-    closeModal,
-    course.go1Integration,
-    course.type,
     emails,
-    emailSchema,
-    invites,
-    invitesLeft,
     newEmail,
+    emailSchema,
+    invitesLeft,
+    invites,
+    course.go1Integration,
+    course.resourcePacksType,
+    course.type,
+    closeModal,
   ])
 
   const errorMessage = useMemo(() => {

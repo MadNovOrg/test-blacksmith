@@ -405,18 +405,6 @@ actions:
       - role: user
       - role: sales-representative
     comment: Send course information to the specified course attendees
-  - name: sendIndirectBLCourseInvites
-    definition:
-      kind: synchronous
-      handler: '{{ACTIONS_HOST}}/go1-licensing/send-invite'
-    permissions:
-      - role: user
-      - role: organization-key-contact
-      - role: tt-ops
-      - role: sales-admin
-      - role: trainer
-      - role: tt-admin
-    comment: Send course invitations and verify Go1 license validity for Indirect blended learning courses.
   - name: signUp
     definition:
       kind: synchronous
@@ -471,6 +459,18 @@ actions:
       - role: tt-admin
       - role: trainer
     comment: Creates or updates Zoom meeting with start date
+  - name: validateAndDispatchInvitesForIndirectCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/send-indirect-course-invite'
+    permissions:
+      - role: tt-admin
+      - role: organization-key-contact
+      - role: tt-ops
+      - role: trainer
+      - role: sales-admin
+      - role: user
+    comment: This action is triggered when inviting attendees to an Indirect course. It checks the availability of blended learning licenses (if the course is of the blended learning type) as well as the resource packs stock of the course's associated organization. Its primary use is for inviting participants after the course has been completed.
   - name: verifyUser
     definition:
       kind: synchronous
@@ -1029,17 +1029,6 @@ custom_types:
         - description: null
           is_deprecated: null
           value: INVALID_DATA
-    - name: SendIndirectBLCourseInvitesError
-      values:
-        - description: null
-          is_deprecated: null
-          value: INSUFFICIENT_NUMBER_OF_LICENSES
-        - description: null
-          is_deprecated: null
-          value: INTERNAL_SERVER_ERROR
-        - description: null
-          is_deprecated: null
-          value: UNAUTHORIZED
     - name: CancelIndividualFromCourseError
       values:
         - description: null
@@ -1087,6 +1076,17 @@ custom_types:
         - description: null
           is_deprecated: null
           value: INSUFFICIENT_RESOURCE_PACKS_AVAILABLE
+    - name: ValidateAndDispatchInvitesForIndirectCourseError
+      values:
+        - description: null
+          is_deprecated: null
+          value: INSUFFICIENT_NUMBER_OF_RESOURCES
+        - description: null
+          is_deprecated: null
+          value: INTERNAL_SERVER_ERROR
+        - description: null
+          is_deprecated: null
+          value: UNAUTHORIZED
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1128,11 +1128,11 @@ custom_types:
     - name: ImportUsersConfig
     - name: OrganizationProfilesInput
     - name: Invite
-    - name: SendIndirectBLCourseInvitesInput
     - name: ImportOrganisationsInput
     - name: ImportOrganisationsConfig
     - name: ResourcePacksAddInput
     - name: ResourcePacksReserveInput
+    - name: ValidateAndDispatchInvitesForIndirectCourseInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1231,12 +1231,12 @@ custom_types:
     - name: ImportArloCertificatesError
     - name: FailedImportEntries
     - name: InvalidEntries
-    - name: SendIndirectBLCourseInvitesOutput
     - name: ImportOrganisationsOutput
     - name: Go1EnrollmentsSyncOutput
     - name: CancelIndividualFromCourseOutput
     - name: DbCleanOutput
     - name: ResourcePacksAddOutput
     - name: ResourcePacksReserveOutput
+    - name: ValidateAndDispatchInvitesForIndirectCourseOutput
   scalars:
     - name: Date

@@ -640,3 +640,14 @@ event_triggers:
       num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/order'
+  - name: save_order_invites
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - xero_invoice_number
+    retry_conf:
+      interval_sec: 18
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/save-order-invites'

@@ -15,11 +15,12 @@ import {
   GetCourseInvitesQueryVariables,
   SaveCourseInvitesMutation,
   SaveCourseInvitesMutationVariables,
-  SaveIndirectBlCourseInvitesMutation,
-  SaveIndirectBlCourseInvitesMutationVariables,
+  ValidateAndDispatchInvitesForIndirectCourseMutation,
+  ValidateAndDispatchInvitesForIndirectCourseMutationVariables,
   SendCourseInvitesMutation,
   SendCourseInvitesMutationVariables,
-  SendIndirectBlCourseInvitesError,
+  ValidateAndDispatchInvitesForIndirectCourseError,
+  Resource_Packs_Type_Enum,
 } from '@app/generated/graphql'
 import usePollQuery from '@app/hooks/usePollQuery'
 import { SortOrder } from '@app/types'
@@ -90,13 +91,14 @@ export const SAVE_COURSE_INVITES = gql`
   }
 `
 
-export const SAVE_INDIRECT_BL_COURSE_INVITES = gql`
-  mutation SaveIndirectBLCourseInvites(
-    $input: SendIndirectBLCourseInvitesInput!
+export const VALIDATE_AND_DISPATCH_INVITES_FOR_INDIRECT_COURSE = gql`
+  mutation ValidateAndDispatchInvitesForIndirectCourse(
+    $input: ValidateAndDispatchInvitesForIndirectCourseInput!
   ) {
-    sendIndirectBLCourseInvites(input: $input) {
-      insufficientNumberOfLicenses
+    validateAndDispatchInvitesForIndirectCourse(input: $input) {
       error
+      extraLicensesRequiredToBuy
+      extraResourcePacksRequiredToBuy
       success
     }
   }
@@ -191,10 +193,10 @@ export default function useCourseInvites({
     SaveCourseInvitesMutationVariables
   >(SAVE_COURSE_INVITES)
 
-  const [, saveIndirectBLCourseInvites] = useMutation<
-    SaveIndirectBlCourseInvitesMutation,
-    SaveIndirectBlCourseInvitesMutationVariables
-  >(SAVE_INDIRECT_BL_COURSE_INVITES)
+  const [, dispatchInvitesForIndirectCourse] = useMutation<
+    ValidateAndDispatchInvitesForIndirectCourseMutation,
+    ValidateAndDispatchInvitesForIndirectCourseMutationVariables
+  >(VALIDATE_AND_DISPATCH_INVITES_FOR_INDIRECT_COURSE)
 
   const [, cancelInvite] = useMutation<
     CancelCourseInviteMutation,
@@ -260,7 +262,11 @@ export default function useCourseInvites({
       course,
     }: {
       emails: string[]
-      course: { go1Integration: boolean; type: Course_Type_Enum }
+      course: {
+        go1Integration: boolean
+        resourcePackType: Resource_Packs_Type_Enum | null
+        type: Course_Type_Enum
+      }
     }) => {
       const declinedInvites =
         invitesData?.courseInvites.filter(
@@ -301,9 +307,7 @@ export default function useCourseInvites({
         throw Error('EMAILS_ALREADY_INVITED')
       }
 
-      if (
-        !(course.go1Integration && course.type === Course_Type_Enum.Indirect)
-      ) {
+      if (course.type !== Course_Type_Enum.Indirect) {
         await Promise.all(declinedInvites.map(invite => resend(invite)))
       }
 
@@ -318,7 +322,11 @@ export default function useCourseInvites({
         inviter_id: inviter,
       }))
 
-      if (course.go1Integration && course.type === Course_Type_Enum.Indirect) {
+      const performInviteAction =
+        course.type === Course_Type_Enum.Indirect &&
+        (course.go1Integration || course.resourcePackType)
+
+      if (performInviteAction) {
         const actionInvitesData = [
           ...newEmails.map(email => ({
             email,
@@ -336,7 +344,7 @@ export default function useCourseInvites({
             })),
         ]
 
-        const resp = await saveIndirectBLCourseInvites({
+        const resp = await dispatchInvitesForIndirectCourse({
           input: {
             courseId,
             invites: actionInvitesData,
@@ -344,17 +352,24 @@ export default function useCourseInvites({
         })
 
         if (
-          !resp.data?.sendIndirectBLCourseInvites?.success &&
-          resp.data?.sendIndirectBLCourseInvites?.error ===
-            SendIndirectBlCourseInvitesError.InsufficientNumberOfLicenses &&
-          (resp.data.sendIndirectBLCourseInvites.insufficientNumberOfLicenses ??
-            0)
+          !resp.data?.validateAndDispatchInvitesForIndirectCourse?.success &&
+          resp.data?.validateAndDispatchInvitesForIndirectCourse?.error ===
+            ValidateAndDispatchInvitesForIndirectCourseError.InsufficientNumberOfResources &&
+          ((resp.data.validateAndDispatchInvitesForIndirectCourse
+            .extraLicensesRequiredToBuy ??
+            0) ||
+            (resp.data.validateAndDispatchInvitesForIndirectCourse
+              .extraResourcePacksRequiredToBuy ??
+              0))
         ) {
           navigate(`/courses/edit/${courseId}/review-licenses-order`, {
             state: {
+              extraResourcePacksRequiredToBuy:
+                resp.data.validateAndDispatchInvitesForIndirectCourse
+                  .extraResourcePacksRequiredToBuy,
               insufficientNumberOfLicenses: resp.data
-                .sendIndirectBLCourseInvites
-                .insufficientNumberOfLicenses as number,
+                .validateAndDispatchInvitesForIndirectCourse
+                .extraLicensesRequiredToBuy as number,
               invitees: actionInvitesData,
             },
           })
@@ -369,7 +384,7 @@ export default function useCourseInvites({
       resend,
       courseId,
       inviter,
-      saveIndirectBLCourseInvites,
+      dispatchInvitesForIndirectCourse,
       getExpiresInDateForInviteResend,
       navigate,
       saveInvites,

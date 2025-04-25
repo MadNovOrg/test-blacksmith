@@ -310,7 +310,8 @@ describe(CourseInvites.name, () => {
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
       emails,
       course: {
-        go1Integration: course.go1Integration,
+        go1Integration: false,
+        resourcePackType: null,
         type: course.type,
       },
     })
@@ -339,7 +340,8 @@ describe(CourseInvites.name, () => {
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
       emails,
       course: {
-        go1Integration: course.go1Integration,
+        go1Integration: false,
+        resourcePackType: null,
         type: course.type,
       },
     })
@@ -370,7 +372,8 @@ describe(CourseInvites.name, () => {
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
       emails,
       course: {
-        go1Integration: course.go1Integration,
+        go1Integration: false,
+        resourcePackType: null,
         type: course.type,
       },
     })
@@ -402,7 +405,8 @@ describe(CourseInvites.name, () => {
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
       emails: [email, leftOver],
       course: {
-        go1Integration: course.go1Integration,
+        go1Integration: false,
+        resourcePackType: null,
         type: course.type,
       },
     })
@@ -431,7 +435,8 @@ describe(CourseInvites.name, () => {
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith({
       emails: emails.map(e => e.trim()),
       course: {
-        go1Integration: course.go1Integration,
+        go1Integration: false,
+        resourcePackType: null,
         type: course.type,
       },
     })
@@ -523,8 +528,8 @@ describe(CourseInvites.name, () => {
   it('should render progress export button for blended learning', () => {
     const course = buildCourse({
       overrides: {
-        type: Course_Type_Enum.Indirect,
         go1Integration: true,
+        type: Course_Type_Enum.Indirect,
       },
     })
 
@@ -542,7 +547,6 @@ describe(CourseInvites.name, () => {
     const course2 = buildCourse({
       overrides: {
         type: Course_Type_Enum.Indirect,
-        go1Integration: false,
       },
     })
 
@@ -560,7 +564,6 @@ describe(CourseInvites.name, () => {
     const course = buildCourse({
       overrides: {
         type: Course_Type_Enum.Indirect,
-        go1Integration: false,
       },
     })
 
@@ -580,7 +583,6 @@ describe(CourseInvites.name, () => {
     const course = buildCourse({
       overrides: {
         type: Course_Type_Enum.Indirect,
-        go1Integration: true,
       },
     })
 
@@ -603,8 +605,8 @@ describe(CourseInvites.name, () => {
   it('should be called saveAs on progress button clicked', async () => {
     const course = buildCourse({
       overrides: {
-        type: Course_Type_Enum.Indirect,
         go1Integration: true,
+        type: Course_Type_Enum.Indirect,
       },
     })
 

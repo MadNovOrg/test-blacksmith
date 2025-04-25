@@ -103,7 +103,7 @@ const EditCourseContext = React.createContext<
       additionalRequiredResourcePacks: number
       additionalResourcePacksToPurchase: number
       autoapproved: boolean
-      blendedLearningIndirectCourseInvitees: Record<string, unknown>[]
+      indirectCourseInvitesAfterCourseCompletion: Record<string, unknown>[]
       canGoToCourseBuilder: boolean
       courseData: CourseInput | null
       courseDataValid: boolean
@@ -128,7 +128,7 @@ const EditCourseContext = React.createContext<
       setAdditionalRequiredResourcePacks: React.Dispatch<
         React.SetStateAction<number>
       >
-      setBlendedLearningIndirectCourseInvitees: React.Dispatch<
+      setIndirectCourseInvitesAfterCourseCompletion: React.Dispatch<
         Record<string, unknown>[]
       >
       setCourseData: React.Dispatch<React.SetStateAction<CourseInput | null>>
@@ -184,8 +184,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
    * @see additionalLicensesOrderOnly
    */
   const [
-    blendedLearningIndirectCourseInvitees,
-    setBlendedLearningIndirectCourseInvitees,
+    indirectCourseInvitesAfterCourseCompletion,
+    setIndirectCourseInvitesAfterCourseCompletion,
   ] = useState<Record<string, unknown>[]>([])
 
   const [editCourseReviewInput, setEditCourseReviewInput] = useState<
@@ -882,8 +882,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
                               ...order,
                               attendeesQuantity: 0,
                               invitees:
-                                blendedLearningIndirectCourseInvitees.length
-                                  ? blendedLearningIndirectCourseInvitees
+                                indirectCourseInvitesAfterCourseCompletion.length
+                                  ? indirectCourseInvitesAfterCourseCompletion
                                   : null,
                             },
                           },
@@ -990,7 +990,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     [
       acl,
       approveCourse,
-      blendedLearningIndirectCourseInvitees,
       canGoToCourseBuilder,
       courseData,
       courseDataValid,
@@ -999,6 +998,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       courseFormInput?.id,
       editCourseReviewInput,
       getCourseName,
+      indirectCourseInvitesAfterCourseCompletion,
       insertAudit,
       isBILDCourse,
       isClosedTypeCourse,
@@ -1030,8 +1030,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     const orderInput = {
       ...order,
       attendeesQuantity: 0,
-      invitees: blendedLearningIndirectCourseInvitees.length
-        ? blendedLearningIndirectCourseInvitees.map(invitee => ({
+      invitees: indirectCourseInvitesAfterCourseCompletion.length
+        ? indirectCourseInvitesAfterCourseCompletion.map(invitee => ({
             ...invitee,
             inviter_id: profile?.id,
           }))
@@ -1049,14 +1049,14 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
 
     navigate(`/courses/${preEditedCourse?.id}/details`, {
       state: {
-        invitees: blendedLearningIndirectCourseInvitees.map(
+        invitees: indirectCourseInvitesAfterCourseCompletion.map(
           invitee => invitee.email,
         ),
       },
     })
   }, [
     additionalLicensesOrderOnly,
-    blendedLearningIndirectCourseInvitees,
+    indirectCourseInvitesAfterCourseCompletion,
     insertCourseOrder,
     navigate,
     order,
@@ -1070,7 +1070,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       additionalRequiredResourcePacks,
       additionalResourcePacksToPurchase,
       autoapproved,
-      blendedLearningIndirectCourseInvitees,
       canGoToCourseBuilder,
       courseData,
       courseDataValid,
@@ -1081,6 +1080,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       fetching,
       getCourseName,
       hasError,
+      indirectCourseInvitesAfterCourseCompletion,
       invoiceDetails,
       mutateCourse,
       preEditedCourse,
@@ -1091,11 +1091,11 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       saveChanges,
       setAdditionalLicensesOrderOnly,
       setAdditionalRequiredResourcePacks,
-      setBlendedLearningIndirectCourseInvitees,
       setCourseData,
       setCourseDataValid,
       setCourseExceptions,
       setEditCourseReviewInput,
+      setIndirectCourseInvitesAfterCourseCompletion,
       setInvoiceDetails,
       setRequiredLicenses,
       setTrainersData,
@@ -1107,7 +1107,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       additionalRequiredResourcePacks,
       additionalResourcePacksToPurchase,
       autoapproved,
-      blendedLearningIndirectCourseInvitees,
       canGoToCourseBuilder,
       courseData,
       courseDataValid,
@@ -1118,6 +1117,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       fetching,
       getCourseName,
       hasError,
+      indirectCourseInvitesAfterCourseCompletion,
       invoiceDetails,
       mutateCourse,
       preEditedCourse,

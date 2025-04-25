@@ -28,14 +28,8 @@ export const useCanToggleParticipantAttendance = (
   isAttendanceDisabled: boolean,
 ) => {
   return useCallback(
-    ({
-      completed,
-      grade,
-      course: { go1Integration, type },
-    }: CourseParticipant) =>
-      (type === Course_Type_Enum.Indirect && go1Integration
-        ? !completed
-        : true) &&
+    ({ completed, grade, course: { type } }: CourseParticipant) =>
+      (type === Course_Type_Enum.Indirect ? !completed : true) &&
       canToggleAttendance &&
       !isAttendanceDisabled &&
       !grade,

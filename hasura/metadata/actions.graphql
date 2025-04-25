@@ -287,12 +287,6 @@ type Mutation {
 }
 
 type Mutation {
-  sendIndirectBLCourseInvites(
-    input: SendIndirectBLCourseInvitesInput!
-  ): SendIndirectBLCourseInvitesOutput
-}
-
-type Mutation {
   signUp(
     input: SignUpInput!
   ): SignUpOutput
@@ -327,6 +321,12 @@ type Mutation {
   upsertZoomMeeting(
     input: UpsertZoomMeetingInput
   ): UpsertZoomMeetingPayload
+}
+
+type Mutation {
+  validateAndDispatchInvitesForIndirectCourse(
+    input: ValidateAndDispatchInvitesForIndirectCourseInput!
+  ): ValidateAndDispatchInvitesForIndirectCourseOutput
 }
 
 type Mutation {
@@ -617,12 +617,6 @@ enum ImportFailCause {
   INVALID_DATA
 }
 
-enum SendIndirectBLCourseInvitesError {
-  INSUFFICIENT_NUMBER_OF_LICENSES
-  INTERNAL_SERVER_ERROR
-  UNAUTHORIZED
-}
-
 enum CancelIndividualFromCourseError {
   GO1_ENROLLMENT_NOT_FOUND
   GO1_ENROLLMENT_STARTED
@@ -646,6 +640,12 @@ enum ResourcePacksReserveErrorEnum {
   INVALID_AMOUNT
   NOT_ALLOWED
   INSUFFICIENT_RESOURCE_PACKS_AVAILABLE
+}
+
+enum ValidateAndDispatchInvitesForIndirectCourseError {
+  INSUFFICIENT_NUMBER_OF_RESOURCES
+  INTERNAL_SERVER_ERROR
+  UNAUTHORIZED
 }
 
 input PlansCreateInput {
@@ -950,11 +950,6 @@ input Invite {
   status: String
 }
 
-input SendIndirectBLCourseInvitesInput {
-  courseId: Int!
-  invites: [Invite!]!
-}
-
 input ImportOrganisationsInput {
   data: String!
   config: ImportOrganisationsConfig!
@@ -994,6 +989,11 @@ input ResourcePacksReserveInput {
   orgId: uuid!
   quantity: Int!
   resourcePackType: ResourcePacksTypeEnum!
+}
+
+input ValidateAndDispatchInvitesForIndirectCourseInput {
+  courseId: Int!
+  invites: [Invite!]!
 }
 
 type LinkProfileResult {
@@ -1604,12 +1604,6 @@ type InvalidEntries {
   email: String!
 }
 
-type SendIndirectBLCourseInvitesOutput {
-  insufficientNumberOfLicenses: Int
-  success: Boolean!
-  error: SendIndirectBLCourseInvitesError
-}
-
 type ImportOrganisationsOutput {
   jobId: String
   error: String
@@ -1638,6 +1632,13 @@ type ResourcePacksReserveOutput {
   success: Boolean!
   totalResourcePacks: Int
   error: ResourcePacksReserveErrorEnum
+}
+
+type ValidateAndDispatchInvitesForIndirectCourseOutput {
+  error: ValidateAndDispatchInvitesForIndirectCourseError
+  extraLicensesRequiredToBuy: Int
+  extraResourcePacksRequiredToBuy: Int
+  success: Boolean!
 }
 
 scalar Date

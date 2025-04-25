@@ -1316,6 +1316,7 @@ export enum ContentTypesOfWebinarsCategoryEnum {
 
 export enum CourseApprovalError {
   CourseNotFound = 'COURSE_NOT_FOUND',
+  GenericError = 'GENERIC_ERROR',
   InvalidCourseId = 'INVALID_COURSE_ID',
   InvalidStatus = 'INVALID_STATUS',
   NoAuditFound = 'NO_AUDIT_FOUND',
@@ -9097,24 +9098,6 @@ export type SendCourseInformationOutput = {
   success: Scalars['Boolean'];
 };
 
-export enum SendIndirectBlCourseInvitesError {
-  InsufficientNumberOfLicenses = 'INSUFFICIENT_NUMBER_OF_LICENSES',
-  InternalServerError = 'INTERNAL_SERVER_ERROR',
-  Unauthorized = 'UNAUTHORIZED'
-}
-
-export type SendIndirectBlCourseInvitesInput = {
-  courseId: Scalars['Int'];
-  invites: Array<Invite>;
-};
-
-export type SendIndirectBlCourseInvitesOutput = {
-  __typename?: 'SendIndirectBLCourseInvitesOutput';
-  error?: Maybe<SendIndirectBlCourseInvitesError>;
-  insufficientNumberOfLicenses?: Maybe<Scalars['Int']>;
-  success: Scalars['Boolean'];
-};
-
 /** Input for the sendPasswordResetEmail mutation */
 export type SendPasswordResetEmailInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -11195,6 +11178,25 @@ export enum UsersConnectionSearchColumnEnum {
   /** The URL of the user\s website. */
   Url = 'URL'
 }
+
+export enum ValidateAndDispatchInvitesForIndirectCourseError {
+  InsufficientNumberOfResources = 'INSUFFICIENT_NUMBER_OF_RESOURCES',
+  InternalServerError = 'INTERNAL_SERVER_ERROR',
+  Unauthorized = 'UNAUTHORIZED'
+}
+
+export type ValidateAndDispatchInvitesForIndirectCourseInput = {
+  courseId: Scalars['Int'];
+  invites: Array<Invite>;
+};
+
+export type ValidateAndDispatchInvitesForIndirectCourseOutput = {
+  __typename?: 'ValidateAndDispatchInvitesForIndirectCourseOutput';
+  error?: Maybe<ValidateAndDispatchInvitesForIndirectCourseError>;
+  extraLicensesRequiredToBuy?: Maybe<Scalars['Int']>;
+  extraResourcePacksRequiredToBuy?: Maybe<Scalars['Int']>;
+  success: Scalars['Boolean'];
+};
 
 /** The VideoSeriesCategory type */
 export type VideoSeriesCategory = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
@@ -37374,8 +37376,6 @@ export type Mutation_Root = {
   scheduleAboutTrainingSurveys?: Maybe<ScheduleAboutTrainingSurveysOutput>;
   /** Send course information to the specified course attendees */
   sendCourseInformation: SendCourseInformationOutput;
-  /** Send course invitations and verify Go1 license validity for Indirect blended learning courses. */
-  sendIndirectBLCourseInvites?: Maybe<SendIndirectBlCourseInvitesOutput>;
   /** Creates a temporary profile */
   signUp?: Maybe<SignUpOutput>;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
@@ -38151,6 +38151,8 @@ export type Mutation_Root = {
   update_xero_invoice_status_many?: Maybe<Array<Maybe<Xero_Invoice_Status_Mutation_Response>>>;
   /** Creates or updates Zoom meeting with start date */
   upsertZoomMeeting?: Maybe<UpsertZoomMeetingPayload>;
+  /** This action is triggered when inviting attendees to an Indirect course. It checks the availability of blended learning licenses (if the course is of the blended learning type) as well as the resource packs stock of the course's associated organization. Its primary use is for inviting participants after the course has been completed. */
+  validateAndDispatchInvitesForIndirectCourse?: Maybe<ValidateAndDispatchInvitesForIndirectCourseOutput>;
   verifyUser: Scalars['Boolean'];
   xeroCallback?: Maybe<XeroCallbackOutput>;
   xeroDisconnect?: Maybe<XeroDisconnectOutput>;
@@ -41675,12 +41677,6 @@ export type Mutation_RootSendCourseInformationArgs = {
 
 
 /** mutation root */
-export type Mutation_RootSendIndirectBlCourseInvitesArgs = {
-  input: SendIndirectBlCourseInvitesInput;
-};
-
-
-/** mutation root */
 export type Mutation_RootSignUpArgs = {
   input: SignUpInput;
 };
@@ -44657,6 +44653,12 @@ export type Mutation_RootUpdate_Xero_Invoice_Status_ManyArgs = {
 /** mutation root */
 export type Mutation_RootUpsertZoomMeetingArgs = {
   input?: InputMaybe<UpsertZoomMeetingInput>;
+};
+
+
+/** mutation root */
+export type Mutation_RootValidateAndDispatchInvitesForIndirectCourseArgs = {
+  input: ValidateAndDispatchInvitesForIndirectCourseInput;
 };
 
 
@@ -68095,12 +68097,12 @@ export type SaveCourseInvitesMutationVariables = Exact<{
 
 export type SaveCourseInvitesMutation = { __typename?: 'mutation_root', insert_course_invites?: { __typename?: 'course_invites_mutation_response', returning: Array<{ __typename?: 'course_invites', id: any }> } | null };
 
-export type SaveIndirectBlCourseInvitesMutationVariables = Exact<{
-  input: SendIndirectBlCourseInvitesInput;
+export type ValidateAndDispatchInvitesForIndirectCourseMutationVariables = Exact<{
+  input: ValidateAndDispatchInvitesForIndirectCourseInput;
 }>;
 
 
-export type SaveIndirectBlCourseInvitesMutation = { __typename?: 'mutation_root', sendIndirectBLCourseInvites?: { __typename?: 'SendIndirectBLCourseInvitesOutput', insufficientNumberOfLicenses?: number | null, error?: SendIndirectBlCourseInvitesError | null, success: boolean } | null };
+export type ValidateAndDispatchInvitesForIndirectCourseMutation = { __typename?: 'mutation_root', validateAndDispatchInvitesForIndirectCourse?: { __typename?: 'ValidateAndDispatchInvitesForIndirectCourseOutput', error?: ValidateAndDispatchInvitesForIndirectCourseError | null, extraLicensesRequiredToBuy?: number | null, extraResourcePacksRequiredToBuy?: number | null, success: boolean } | null };
 
 export type GetWaitlistQueryVariables = Exact<{
   where: Waitlist_Bool_Exp;

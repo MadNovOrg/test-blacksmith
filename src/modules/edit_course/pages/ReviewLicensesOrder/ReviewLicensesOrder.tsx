@@ -61,6 +61,7 @@ export const ReviewLicensesOrder: React.FC<
   const { isAustraliaCountry } = useWorldCountries()
 
   const state = location.state as {
+    extraResourcePacksRequiredToBuy: number
     insufficientNumberOfLicenses: number
     invitees: Record<string, unknown>[]
   } | null
@@ -84,7 +85,7 @@ export const ReviewLicensesOrder: React.FC<
     saveAdditionalLicensesOrder,
     saveChanges,
     setAdditionalLicensesOrderOnly,
-    setBlendedLearningIndirectCourseInvitees,
+    setIndirectCourseInvitesAfterCourseCompletion,
     setInvoiceDetails,
   } = useEditCourse()
 
@@ -126,6 +127,9 @@ export const ReviewLicensesOrder: React.FC<
           0,
       )
 
+  const extraResourcePacksToPurchase =
+    state?.extraResourcePacksRequiredToBuy ?? additionalResourcePacksToPurchase
+
   const go1LicensesPrices = useMemo(() => {
     if (numberOfLicenses > 0) {
       return calculateGo1LicenseCost({
@@ -161,7 +165,7 @@ export const ReviewLicensesOrder: React.FC<
   ])
 
   const coursesResourcePacksOption = useMemo(() => {
-    if (preEditedCourse && additionalResourcePacksToPurchase > 0) {
+    if (preEditedCourse && extraResourcePacksToPurchase > 0) {
       return matchResourcePacksCourseFieldsToSelectOption({
         resourcePacksType:
           preEditedCourse.resourcePacksType as Resource_Packs_Type_Enum,
@@ -171,12 +175,16 @@ export const ReviewLicensesOrder: React.FC<
     }
 
     return null
-  }, [additionalResourcePacksToPurchase, preEditedCourse])
+  }, [extraResourcePacksToPurchase, preEditedCourse])
 
   const resourcePacksPrices = useMemo(() => {
-    if (additionalResourcePacksToPurchase > 0 && coursesResourcePacksOption) {
+    if (
+      extraResourcePacksToPurchase > 0 ||
+      ((state?.insufficientNumberOfLicenses ?? 0) > 0 &&
+        coursesResourcePacksOption)
+    ) {
       return calculateResourcePackCost({
-        numberOfResourcePacks: additionalResourcePacksToPurchase,
+        numberOfResourcePacks: extraResourcePacksToPurchase,
         residingCountry: courseData?.residingCountry,
         resourcePacksBalance: 0,
         resourcePacksPrice: rpPrice,
@@ -185,10 +193,11 @@ export const ReviewLicensesOrder: React.FC<
 
     return null
   }, [
-    additionalResourcePacksToPurchase,
+    extraResourcePacksToPurchase,
     courseData?.residingCountry,
     coursesResourcePacksOption,
     rpPrice,
+    state?.insufficientNumberOfLicenses,
   ])
 
   const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
@@ -301,12 +310,12 @@ export const ReviewLicensesOrder: React.FC<
       !courseData
     ) {
       setAdditionalLicensesOrderOnly(true)
-      setBlendedLearningIndirectCourseInvitees(state.invitees)
+      setIndirectCourseInvitesAfterCourseCompletion(state.invitees)
     }
   }, [
     courseData,
     setAdditionalLicensesOrderOnly,
-    setBlendedLearningIndirectCourseInvitees,
+    setIndirectCourseInvitesAfterCourseCompletion,
     state?.insufficientNumberOfLicenses,
     state?.invitees,
   ])
@@ -435,7 +444,7 @@ export const ReviewLicensesOrder: React.FC<
                           />
                         </InfoPanel>
                       ) : null}
-                      {additionalResourcePacksToPurchase > 0 &&
+                      {extraResourcePacksToPurchase > 0 &&
                       coursesResourcePacksOption ? (
                         <InfoPanel>
                           <InfoRow
@@ -448,7 +457,7 @@ export const ReviewLicensesOrder: React.FC<
                                   ],
                               },
                             ).replace(/&amp;/g, '&')}
-                            value={additionalResourcePacksToPurchase.toString()}
+                            value={extraResourcePacksToPurchase.toString()}
                           />
                         </InfoPanel>
                       ) : null}

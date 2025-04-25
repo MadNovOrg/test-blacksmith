@@ -618,6 +618,19 @@ event_triggers:
       num_retries: 0
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/participant-added'
+  - name: do_invite_resource_pack_post_completion
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/course-invites-changed'
   - name: release_go1_license_invite_declined
     definition:
       enable_manual: false
@@ -631,17 +644,6 @@ event_triggers:
       num_retries: 3
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/course-invite'
-  - name: release_rp_license_invite_status_changed
-    definition:
-      enable_manual: false
-      update:
-        columns:
-          - status
-    retry_conf:
-      interval_sec: 20
-      num_retries: 3
-      timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/resource-packs/course-invite-changed'
   - name: send_invite_email
     definition:
       enable_manual: false
