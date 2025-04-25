@@ -1652,18 +1652,18 @@
           "col-date": "Date",
           "col-event": "Event",
           "col-option": "Option",
-          "col-reserved-balance": "Reserved",
+          "col-reserved-balance": "Reserved balance",
           "event": {
             "DIGITAL_WORKBOOK": "Digital",
             "PRINT_WORKBOOK": "Print"
           },
           "issued": "Resource pack has been used",
           "purchased-by": "Purchased at course creation by {{fullName}}",
-          "released": "Released resource packs that were not used during the course",
+          "released": "Unused resource packs during course",
           "removed-by": "Removed by {{fullName}}",
           "reserved-by": "Reserved by {{fullName}}",
           "reverted-issued": "Undo the allocation of the resource pack after a participant cancels",
-          "reverted": "Returned to the organization"
+          "reverted": "Course cancelled"
         },
         "export": {
           "button-label": "Export",
