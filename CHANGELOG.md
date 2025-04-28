@@ -1,5 +1,37 @@
 # @teamteach/hub
 
+## 5.1.0
+
+### Minor Changes
+
+- f140339: Apply free spaces discount on resource packs pricings on ANZ
+- 27c4bb1: Org's resource packs management - course exceptions approval scenarios
+- 53ac716: Add wording to suggest to users to use express delivery print workbooks when the course is less than 4 weeks away
+- 776ccad: Add org resource pack pricings tab
+- 61b1e80: Export Resource Packs events history
+- 49671a9: Indirect course resource packs management on edit course details
+- a2ba157: Org's resource packs management - participants' cancellation
+- 47f4949: TTHP-5047 registration wording change
+- 3639502: Org's resource packs management - course completion
+- f522589: Apply Main Org RP Pricings on affiliates.
+- 9fe760e: Introduce resource packs pricing for each organisation
+- 4a6d474: Change the wording for the indirect resource packs checkbox
+- 67fada8: Org's resource packs management - course cancellation
+- dcba4c1: Org's resource packs management - after course completion
+- 14d7a45: Indirect course org's resource packs management on course creation
+- 029bfab: Org's resource packs management history
+- 5c877cc: Rename print workbooks.
+- a0bfea8: Org's resource packs management - participants' attendance
+- fde7a8a: Optimizes heavy queries on the organizations/all page
+
+### Patch Changes
+
+- e9d55ac: Fix Users page alphabetical user sorting while maintaining performance
+- c0de7f8: Hide resource packs from order details for the UK region
+- 8be788e: Correct the Print Standard delivery resource pack type on the course edit form.
+- 99ce1d9: Change the specialUKCondition which requires for a L2 BL Closed ICM course with less than 9 participants to have a manual price. This condition should only be applied to the UK environment.
+- e0b93d0: Fix (TTHP-5107): fix historical certifications with the certification_date set as the course's start date instead of end date
+
 ## 5.0.1
 
 ### Patch Changes
