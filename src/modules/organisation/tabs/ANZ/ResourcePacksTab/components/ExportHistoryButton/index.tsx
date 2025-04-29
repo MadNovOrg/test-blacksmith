@@ -59,7 +59,7 @@ export const ExportResourcePacksHistoryButton: React.FC<
             exportOption[historyItem.resourcePacksType],
             historyItem.payload?.invoiceNumber ?? '',
             historyItem.course?.code ?? '',
-            _t('dates.defaultShort', {
+            _t('dates.withTime', {
               date: historyItem.course?.schedule[0]?.start ?? '',
             }),
             historyItem.payload?.note ?? '',
