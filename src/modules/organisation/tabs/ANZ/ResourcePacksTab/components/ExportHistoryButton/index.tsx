@@ -52,14 +52,14 @@ export const ExportResourcePacksHistoryButton: React.FC<
         ],
         ...resourcePacksHistory.history.map(historyItem => {
           return [
-            _t('dates.withTime', {
+            _t('dates.defaultShort', {
               date: historyItem.created_at,
             }),
             historyItem.event,
             exportOption[historyItem.resourcePacksType],
             historyItem.payload?.invoiceNumber ?? '',
             historyItem.course?.code ?? '',
-            _t('dates.withTime', {
+            _t('dates.defaultShort', {
               date: historyItem.course?.schedule[0]?.start ?? '',
             }),
             historyItem.payload?.note ?? '',
