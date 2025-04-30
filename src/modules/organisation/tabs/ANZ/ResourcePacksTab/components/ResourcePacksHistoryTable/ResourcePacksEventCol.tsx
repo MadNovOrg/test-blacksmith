@@ -80,15 +80,19 @@ export const ResourcePacksEventCol = ({
             justifyContent: 'start',
           }}
         >
-          {event.payload?.invoiceNumber ? (
-            <Typography>{event.payload?.invoiceNumber}</Typography>
-          ) : null}
+          {(() => {
+            if (event.payload?.invoiceNumber) {
+              return <Typography>{event.payload?.invoiceNumber}</Typography>
+            }
 
-          {event.course?.id ? (
-            <Link href={`/manage-courses/all/${event.course?.id}/details`}>
-              <Typography>{event.course.code}</Typography>
-            </Link>
-          ) : null}
+            if (event.course?.id) {
+              return (
+                <Link href={`/manage-courses/all/${event.course?.id}/details`}>
+                  <Typography>{event.course.code}</Typography>
+                </Link>
+              )
+            }
+          })()}
 
           {event.payload?.note ? (
             <Tooltip title={event.payload.note}>
