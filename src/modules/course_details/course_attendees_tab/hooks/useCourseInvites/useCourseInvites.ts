@@ -307,7 +307,11 @@ export default function useCourseInvites({
         throw Error('EMAILS_ALREADY_INVITED')
       }
 
-      if (course.type !== Course_Type_Enum.Indirect) {
+      const processIndirectCourseInvitation =
+        course.type === Course_Type_Enum.Indirect &&
+        (course.go1Integration || course.resourcePackType)
+
+      if (!processIndirectCourseInvitation) {
         await Promise.all(declinedInvites.map(invite => resend(invite)))
       }
 
@@ -322,11 +326,7 @@ export default function useCourseInvites({
         inviter_id: inviter,
       }))
 
-      const performInviteAction =
-        course.type === Course_Type_Enum.Indirect &&
-        (course.go1Integration || course.resourcePackType)
-
-      if (performInviteAction) {
+      if (processIndirectCourseInvitation) {
         const actionInvitesData = [
           ...newEmails.map(email => ({
             email,
