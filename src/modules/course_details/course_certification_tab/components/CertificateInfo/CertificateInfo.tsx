@@ -295,7 +295,14 @@ export const CertificateInfo: React.FC<
                                       }
 
                                       return (
-                                        <Typography key={lesson.name}>
+                                        <Typography
+                                          key={lesson.name}
+                                          color={
+                                            !lesson.covered
+                                              ? 'grey.600'
+                                              : undefined
+                                          }
+                                        >
                                           {lesson.name}
                                         </Typography>
                                       )
@@ -306,7 +313,10 @@ export const CertificateInfo: React.FC<
                               <Divider />
                             </>
                           ) : (
-                            <Typography key={lesson.name}>
+                            <Typography
+                              key={lesson.name}
+                              color={!lesson.covered ? 'grey.600' : undefined}
+                            >
                               {lesson.name}
                             </Typography>
                           )
