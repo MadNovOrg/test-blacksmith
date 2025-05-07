@@ -49,10 +49,6 @@ export const CourseForBookingTile: React.FC<
     const start = utcToZonedTime(new Date(course.schedules[0].start), timeZone)
     const end = utcToZonedTime(new Date(course.schedules[0].end), timeZone)
 
-    if (course.id == 11014) {
-      console.log('start', start, 'end', end)
-    }
-
     const days = Math.abs(differenceInDays(start, end)) + 1
     return days === 1
       ? `${t('dates.defaultShort', {
@@ -63,7 +59,7 @@ export const CourseForBookingTile: React.FC<
         })}-${t('dates.defaultShort', {
           date: end,
         })} (${days} ${t('common.days')})`
-  }, [course.id, course.schedules, t])
+  }, [course.schedules, t])
 
   const venue = course.schedules[0].venue
 

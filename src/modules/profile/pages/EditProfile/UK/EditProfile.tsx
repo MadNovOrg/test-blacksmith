@@ -49,6 +49,7 @@ import { useUpdateProfile } from '@app/modules/profile/hooks/useUpdateProfile'
 import {
   ukDefaultTrainerRoles as defaultTrainerRoles,
   ukTrainerRolesNames as trainerRolesNames,
+  AgreementTypeNames,
 } from '@app/modules/profile/utils'
 import { RoleName } from '@app/types'
 import { Shards } from '@app/util'
@@ -87,6 +88,7 @@ export const EditProfilePage: React.FC<
     updateProfileFetching,
     updateProfileRolesFetching,
     updateTrainerRolesFetching,
+    updateTrainerAgreementTypesFetching,
   } = useUpdateProfile()
 
   const { onSubmit } = useFormSubmit()
@@ -166,7 +168,6 @@ export const EditProfilePage: React.FC<
   const isOtherJobTitle = useMemo(() => {
     return Boolean(profile?.jobTitle && !jobTitles.includes(profile.jobTitle))
   }, [jobTitles, profile?.jobTitle])
-
   useEffect(() => {
     profileEditDefaultValues({
       setValue,
@@ -174,6 +175,7 @@ export const EditProfilePage: React.FC<
       isOtherJobTitle,
       trainerRolesNames,
       defaultTrainerRoles,
+      trainerAgreementTypes: AgreementTypeNames,
       profile,
     })
   }, [
@@ -221,6 +223,7 @@ export const EditProfilePage: React.FC<
         updateTrainerRolesFetching,
         updateOrgMemberFetching,
         removeOrgMemberFetching,
+        updateTrainerAgreementTypesFetching,
       ].some(v => v),
     [
       updateProfileFetching,
@@ -228,6 +231,7 @@ export const EditProfilePage: React.FC<
       updateTrainerRolesFetching,
       updateOrgMemberFetching,
       removeOrgMemberFetching,
+      updateTrainerAgreementTypesFetching,
     ],
   )
 

@@ -1,7 +1,11 @@
 import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { RoleName, TrainerRoleTypeName } from '@app/types'
+import {
+  RoleName,
+  TrainerAgreementTypeName,
+  TrainerRoleTypeName,
+} from '@app/types'
 import { capitalize } from '@app/util'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
@@ -124,6 +128,7 @@ describe('component: EditRoles', () => {
           trainerRoles: {
             trainerRole: [TrainerRoleTypeName.PRINCIPAL],
             BILDRole: TrainerRoleTypeName.BILD_SENIOR,
+            agreementTypes: [TrainerAgreementTypeName.AOL],
           },
         },
       ],
@@ -143,6 +148,7 @@ describe('component: EditRoles', () => {
     expect(screen.getByTestId('bild-role-select')).toHaveTextContent(
       'BILD senior',
     )
+    expect(screen.getByTestId('agreement-type-select')).toHaveTextContent('AOL')
   })
   it('autoselects roles if available', async () => {
     // Arrange
@@ -155,6 +161,7 @@ describe('component: EditRoles', () => {
           trainerRoles: {
             trainerRole: [TrainerRoleTypeName.PRINCIPAL],
             BILDRole: '',
+            agreementTypes: [],
           },
         },
       ],
@@ -177,6 +184,91 @@ describe('component: EditRoles', () => {
       }),
     ).toHaveAttribute('aria-selected', 'true')
   })
+
+  it('autoselects agreement type if available', async () => {
+    // Arrange
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.TRAINER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoles: {
+            trainerRole: [TrainerRoleTypeName.PRINCIPAL],
+            BILDRole: '',
+            agreementTypes: [TrainerAgreementTypeName.AOL],
+          },
+        },
+      ],
+    }
+    // Act
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>,
+    )
+    // Assert
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: TrainerAgreementTypeName.AOL,
+      }),
+    )
+    const checkboxAOL = screen.getByTestId('checkbox-AOL')
+    expect(checkboxAOL).toBeInTheDocument()
+    expect(checkboxAOL).toBeVisible()
+    expect(checkboxAOL).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('can select or deselect options from the agreement type dropdown', async () => {
+    // Arrange
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.TRAINER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoles: {
+            trainerRole: [TrainerRoleTypeName.PRINCIPAL],
+            BILDRole: '',
+            agreementTypes: [TrainerAgreementTypeName.AOL],
+          },
+        },
+      ],
+    }
+    // Act
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>,
+    )
+    // Assert
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: capitalize(TrainerAgreementTypeName.AOL).toLocaleUpperCase(),
+      }),
+    )
+    await userEvent.click(
+      screen.getByRole('option', {
+        name: capitalize(TrainerAgreementTypeName.AOL).toLocaleUpperCase(),
+      }),
+    )
+    expect(
+      screen.getByRole('option', {
+        name: capitalize(TrainerAgreementTypeName.AOL).toLocaleUpperCase(),
+      }),
+    ).toHaveAttribute('aria-selected', 'false')
+    await userEvent.click(
+      screen.getByRole('option', {
+        name: capitalize(TrainerAgreementTypeName.AOL).toLocaleUpperCase(),
+      }),
+    )
+    expect(
+      screen.getByRole('option', {
+        name: capitalize(TrainerAgreementTypeName.AOL).toLocaleUpperCase(),
+      }),
+    ).toHaveAttribute('aria-selected', 'true')
+  })
   it('can select or deselect options from the dropdown', async () => {
     // Arrange
     const mockRoles = {
@@ -188,6 +280,7 @@ describe('component: EditRoles', () => {
           trainerRoles: {
             trainerRole: [TrainerRoleTypeName.PRINCIPAL],
             BILDRole: '',
+            agreementTypes: [],
           },
         },
       ],

@@ -433,7 +433,10 @@ export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
                     </Typography>
 
                     <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                      <DetailsRow label={t('pages.view-profile.user-role')}>
+                      <DetailsRow
+                        label={t('pages.view-profile.user-role')}
+                        data-testid="user-role"
+                      >
                         <Box flex={1}>
                           {profile.roles.map(({ role }) => (
                             <Chip
@@ -453,6 +456,20 @@ export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
                                   `trainer-role-types.${trainer_role_type?.name}`,
                                 )}
                                 sx={{ marginRight: 1, marginBottom: 0.5 }}
+                                data-testid={`trainer-role-type-${trainer_role_type.name}`}
+                              />
+                            ),
+                          )}
+                          {profile.profile_trainer_agreement_types?.map(
+                            ({ agreement_type }) => (
+                              <Chip
+                                key={agreement_type}
+                                label={t(
+                                  `trainer-agreement-types.${agreement_type}`,
+                                )}
+                                color="default"
+                                sx={{ marginRight: 1, marginBottom: 0.5 }}
+                                data-testid={`trainer-agreement-type-${agreement_type}`}
                               />
                             ),
                           )}

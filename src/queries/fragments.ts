@@ -72,6 +72,10 @@ export const PROFILE = gql`
         name
       }
     }
+    profile_trainer_agreement_types {
+      agreement_type
+      id
+    }
     preferences
     createdAt
     updatedAt

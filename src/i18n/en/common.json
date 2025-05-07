@@ -388,6 +388,10 @@
     "special-agreement-aol": "Special agreement AOL",
     "moderator": "Moderator"
   },
+  "trainer-agreement-types": {
+    "ETA": "ETA",
+    "AOL": "AOL"
+  },
   "validation-hints": {
     "password-hint-message": "Password must include 8 or more characters, 1 number, 1 uppercase character and 1 special character.",
     "residing-country-hint-message": "Please select the country you currently live in.",

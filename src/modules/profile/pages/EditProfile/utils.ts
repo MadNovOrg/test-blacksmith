@@ -6,7 +6,12 @@ import { InferType } from 'yup'
 
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 import { yup, schemas } from '@app/schemas'
-import { Organization, RoleName, TrainerRoleTypeName } from '@app/types'
+import {
+  Organization,
+  RoleName,
+  TrainerAgreementTypeName,
+  TrainerRoleTypeName,
+} from '@app/types'
 
 import { RolesFields, rolesFormSchema } from '../../components/EditRoles/UK'
 import {
@@ -127,12 +132,14 @@ export const profileEditDefaultValues = ({
   isOtherJobTitle,
   trainerRolesNames,
   defaultTrainerRoles,
+  trainerAgreementTypes,
 }: {
   setValue: UseFormSetValue<EditProfileInputs>
   profile: GetProfileDetailsQuery['profile']
   isProfileStaleRef: RefObject<boolean>
   isOtherJobTitle: boolean
   trainerRolesNames: TrainerRoleTypeName[]
+  trainerAgreementTypes?: TrainerAgreementTypeName[]
   defaultTrainerRoles:
     | typeof ukDefaultTrainerRoles
     | typeof anzDefaultTrainerRoles
@@ -213,6 +220,19 @@ export const profileEditDefaultValues = ({
           ...defaultTrainerRoles,
         },
       )
+      if (
+        profile?.profile_trainer_agreement_types?.map(obj =>
+          trainerAgreementTypes?.includes(
+            obj.agreement_type as unknown as TrainerAgreementTypeName,
+          ),
+        )
+      ) {
+        ;(
+          formattedTrainerRoleTypes as typeof ukDefaultTrainerRoles
+        ).agreementTypes = profile.profile_trainer_agreement_types?.map(
+          obj => obj.agreement_type,
+        )
+      }
 
       const formattedRoles = [] as RolesFields
 

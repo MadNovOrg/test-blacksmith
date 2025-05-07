@@ -326,6 +326,11 @@ export enum TrainerRoleTypeName {
   ASSISTANT = 'assistant',
 }
 
+export enum TrainerAgreementTypeName {
+  AOL = 'AOL',
+  ETA = 'ETA',
+}
+
 export enum CourseState {
   SCHEDULED = 'SCHEDULED',
   IN_PROGRESS = 'IN_PROGRESS',

@@ -2,12 +2,12 @@ import { renderHook } from '@testing-library/react'
 import { useSearchParams } from 'react-router-dom'
 
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
+import { TrainerAgreementTypeName, TrainerRoleTypeName } from '@app/types'
 
 import { buildProfile } from '@test/mock-data-utils'
 
-import { EditProfileInputs } from '../../pages/EditProfile/utils'
-
-import { useFormSubmit } from './useFormSubmit'
+import { EditProfileInputs } from '../../../pages/EditProfile/utils'
+import { useFormSubmit } from '../useFormSubmit'
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
@@ -59,6 +59,38 @@ describe(useFormSubmit.name, () => {
             userRole: 'tt-employee',
             employeeRoles: [{}],
             salesRoles: [{}],
+          },
+        ],
+      } as EditProfileInputs,
+      isManualFormError: false,
+      profile: {
+        id: '123',
+      } as GetProfileDetailsQuery['profile'],
+      values: {} as EditProfileInputs,
+    })
+    expect(mockNavigate).toHaveBeenCalledTimes(1)
+  })
+
+  it('should navigate back if update was done succesfully and trainer role was assigned', async () => {
+    const { result } = renderHook(() => useFormSubmit())
+    const { onSubmit } = result.current
+
+    await onSubmit({
+      data: {
+        firstName: 'John',
+        disabilities: '',
+        organization: {
+          id: '123',
+        },
+        roles: [
+          {
+            userRole: 'trainer',
+            employeeRoles: [{}],
+            salesRoles: [{}],
+            trainerRoles: {
+              trainerRole: [TrainerRoleTypeName.PRINCIPAL],
+              agreementTypes: [TrainerAgreementTypeName.AOL],
+            },
           },
         ],
       } as EditProfileInputs,

@@ -11,12 +11,15 @@ import {
   UpdateOrgMemberMutationVariables,
   RemoveOrgMemberMutation,
   RemoveOrgMemberMutationVariables,
+  UpdateTrainerAgreementTypesMutation,
+  UpdateTrainerAgreementTypesMutationVariables,
 } from '@app/generated/graphql'
 
 import { REMOVE_ORG_MEMBER_MUTATION } from '../queries/remove-org-member'
 import { UPDATE_ORG_MEMBER_MUTATION } from '../queries/update-org-member'
 import { UPDATE_PROFILE_MUTATION } from '../queries/update-profile'
 import { UPDATE_PROFILE_ROLES_MUTATION } from '../queries/update-profile-roles'
+import { UPDATE_PROFILE_TRAINER_AGREEMENT_TYPES } from '../queries/update-trainer-agreement-types'
 import { UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '../queries/update-trainer-role-types'
 
 export const useUpdateProfile = () => {
@@ -42,6 +45,13 @@ export const useUpdateProfile = () => {
     RemoveOrgMemberMutation,
     RemoveOrgMemberMutationVariables
   >(REMOVE_ORG_MEMBER_MUTATION)
+  const [
+    { fetching: updateTrainerAgreementTypesFetching },
+    updateTrainerAgreementTypes,
+  ] = useMutation<
+    UpdateTrainerAgreementTypesMutation,
+    UpdateTrainerAgreementTypesMutationVariables
+  >(UPDATE_PROFILE_TRAINER_AGREEMENT_TYPES)
 
   return {
     updateProfile,
@@ -49,10 +59,12 @@ export const useUpdateProfile = () => {
     updateProfileTrainerRoles,
     updateOrgMember,
     removeOrgMember,
+    updateTrainerAgreementTypes,
     updateProfileFetching,
     updateProfileRolesFetching,
     updateTrainerRolesFetching,
     updateOrgMemberFetching,
     removeOrgMemberFetching,
+    updateTrainerAgreementTypesFetching,
   }
 }

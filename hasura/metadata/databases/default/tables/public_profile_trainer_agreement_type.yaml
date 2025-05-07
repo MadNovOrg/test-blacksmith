@@ -1,0 +1,78 @@
+table:
+  name: profile_trainer_agreement_type
+  schema: public
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+    comment: ""
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+    comment: ""
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter: {}
+    comment: ""
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      filter: {}
+    comment: ""

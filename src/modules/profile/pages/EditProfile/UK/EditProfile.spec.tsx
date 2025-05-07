@@ -5,6 +5,7 @@ import { fromValue, never } from 'wonka'
 import { GetUserKnowledgeHubAccessQuery } from '@app/generated/graphql'
 import useProfile from '@app/modules/profile/hooks/useProfile'
 import useRoles from '@app/modules/profile/hooks/useRoles'
+import useTrainerAgreementTypes from '@app/modules/profile/hooks/useTrainerAgreementTypes'
 import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '@app/modules/profile/queries/get-user-knowledge-hub-access'
 import { RoleName } from '@app/types'
 
@@ -18,13 +19,27 @@ vi.mock('@app/modules/profile/hooks/useProfile')
 
 const useRolesMock = vi.mocked(useRoles)
 vi.mock('@app/modules/profile/hooks/useRoles')
-
+vi.mock('@app/modules/profile/hooks/useTrainerAgreementTypes')
+const useTrainerAgreementTypesMock = vi.mocked(useTrainerAgreementTypes)
 describe(EditProfilePage.name, () => {
   const {
     result: {
       current: { t },
     },
   } = renderHook(() => useTranslation())
+
+  beforeEach(() => {
+    useRolesMock.mockReturnValue({
+      roles: [],
+      fetching: false,
+      error: undefined,
+    })
+    useTrainerAgreementTypesMock.mockReturnValue({
+      trainerAgreementTypes: [],
+      error: undefined,
+      fetching: false,
+    })
+  })
 
   it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
     'should display switch for access to Knowledge Hub for %s role',
@@ -37,12 +52,6 @@ describe(EditProfilePage.name, () => {
         },
         certifications: [],
       } as unknown as ReturnType<typeof useProfile>)
-
-      useRolesMock.mockReturnValue({
-        roles: [],
-        fetching: false,
-        error: undefined,
-      })
 
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
@@ -96,12 +105,6 @@ describe(EditProfilePage.name, () => {
         certifications: [],
       } as unknown as ReturnType<typeof useProfile>)
 
-      useRolesMock.mockReturnValue({
-        roles: [],
-        fetching: false,
-        error: undefined,
-      })
-
       const client = {
         executeQuery: ({ query }: { query: TypedDocumentNode }) => {
           if (query === GET_USER_KNOWLEDGE_HUB_ACCESS) {
@@ -144,12 +147,6 @@ describe(EditProfilePage.name, () => {
       certifications: [],
     } as unknown as ReturnType<typeof useProfile>)
 
-    useRolesMock.mockReturnValue({
-      roles: [],
-      fetching: false,
-      error: undefined,
-    })
-
     const client = {
       executeQuery: () => never,
     } as unknown as Client
@@ -177,12 +174,6 @@ describe(EditProfilePage.name, () => {
       },
       certifications: [],
     } as unknown as ReturnType<typeof useProfile>)
-
-    useRolesMock.mockReturnValue({
-      roles: [],
-      error: undefined,
-      fetching: false,
-    })
 
     const client = {
       executeQuery: () => never,

@@ -31,7 +31,10 @@ import {
   salesRole,
   BILDRolesNames,
 } from '@app/modules/profile'
-import { ukTrainerRolesNames as trainerRolesNames } from '@app/modules/profile/utils'
+import {
+  AgreementTypeNames,
+  ukTrainerRolesNames as trainerRolesNames,
+} from '@app/modules/profile/utils'
 import { yup } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { capitalize } from '@app/util'
@@ -64,6 +67,7 @@ export function rolesFormSchema() {
             trainerRole: yup.array(),
             BILDRole: yup.string(),
             moderatorRole: yup.boolean(),
+            agreementTypes: yup.array(),
           })
           .required(),
       }),
@@ -285,6 +289,72 @@ export const EditRoles = () => {
                       {t(`pages.view-profile.remove-role`)}
                     </Button>
                   </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Box width="100%">
+                      <FormControl
+                        fullWidth
+                        variant="filled"
+                        sx={{ marginRight: 2 }}
+                      >
+                        <InputLabel>
+                          {t('pages.view-profile.agreement-type')}
+                        </InputLabel>
+                        <Controller
+                          name={`roles.${index}.trainerRoles.agreementTypes`}
+                          control={control}
+                          render={({ field }) => (
+                            <Select
+                              data-testid="agreement-type-select"
+                              label={t('pages.view-profile.agreement-type')}
+                              sx={{ flexGrow: 1, marginRight: 1 }}
+                              {...field}
+                              fullWidth={isMobile}
+                              multiple
+                              value={field.value}
+                              renderValue={selected =>
+                                selected
+                                  .map(s => capitalize(s).toLocaleUpperCase())
+                                  .join(', ')
+                              }
+                            >
+                              {AgreementTypeNames.map(agreementType => (
+                                <MenuItem
+                                  value={agreementType}
+                                  key={agreementType}
+                                  data-testid={`checkbox-${agreementType.toLocaleUpperCase()}`}
+                                >
+                                  <Checkbox
+                                    checked={field.value?.includes(
+                                      agreementType,
+                                    )}
+                                  />
+                                  {t(
+                                    `trainer-agreement-types.${agreementType}`,
+                                  )}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </FormControl>
+                    </Box>
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        setValue(
+                          `roles.${index}.trainerRoles.agreementTypes`,
+                          [],
+                        )
+                      }}
+                    >
+                      {t(`pages.view-profile.remove-role`)}
+                    </Button>
+                  </Grid>
                   <Grid item xs={12} md={6}>
                     <Box mt={2}>
                       <FormControl fullWidth variant="filled">
@@ -453,6 +523,7 @@ export const EditRoles = () => {
                       trainerRole: [],
                       BILDRole: '',
                       moderatorRole: false,
+                      agreementTypes: [],
                     },
                   })
                 }}

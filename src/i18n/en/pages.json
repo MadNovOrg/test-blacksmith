@@ -1936,6 +1936,7 @@
     "trainer-role": "Trainer role (optional)",
     "aol-role": "AOL role (optional)",
     "bild-role": "BILD role (optional)",
+    "agreement-type": "Agreement Type (optional)",
     "add-role": "Additional role",
     "remove-role": "Remove",
     "sales-permissions": "Sales permission",

@@ -5,13 +5,16 @@ import { useAuth } from '@app/context/auth'
 import {
   GetProfileDetailsQuery,
   Profile_Role_Insert_Input,
+  Profile_Trainer_Agreement_Type_Insert_Input,
   Profile_Trainer_Role_Type_Insert_Input,
+  Trainer_Agreement_Type_Enum,
 } from '@app/generated/graphql'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { EditProfileInputs } from '../../pages/EditProfile/utils'
 import { EmployeeRoleName } from '../../utils'
 import useRoles from '../useRoles'
+import useTrainerAgreementTypes from '../useTrainerAgreementTypes'
 import useTrainerRoleTypes from '../useTrainerRoleTypes'
 import { useUpdateProfile } from '../useUpdateProfile'
 
@@ -21,9 +24,12 @@ export const useFormSubmit = () => {
     updateOrgMember,
     updateProfileRoles,
     updateProfileTrainerRoles,
+    updateTrainerAgreementTypes,
   } = useUpdateProfile()
   const { roles: systemRoles } = useRoles()
   const { trainerRoleTypes: systemTrainerRoleTypes } = useTrainerRoleTypes()
+  const { trainerAgreementTypes: systemTrainerAgreementTypes } =
+    useTrainerAgreementTypes()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
@@ -122,6 +128,12 @@ export const useFormSubmit = () => {
             ...(obj.salesRoles as RoleName[]),
           )
         })
+        const updatedTrainerAggreementTypes: unknown[] = []
+        data.roles.forEach(obj => {
+          if (obj.userRole === RoleName.TRAINER) {
+            updatedTrainerAggreementTypes.push(obj.trainerRoles.agreementTypes)
+          }
+        })
         const filteredRoles = systemRoles?.reduce(
           (filteredRoles, systemRole) => {
             if (updatedRoles.find(role => role === systemRole.name)) {
@@ -167,6 +179,25 @@ export const useFormSubmit = () => {
           [] as Profile_Trainer_Role_Type_Insert_Input[],
         )
 
+        const filteredTrainerAgreementTypes =
+          systemTrainerAgreementTypes?.reduce(
+            (filteredTrainerAgreementTypes, agreementType) => {
+              if (
+                updatedTrainerAggreementTypes
+                  .flat()
+                  .find(type => type === agreementType.name)
+              ) {
+                filteredTrainerAgreementTypes.push({
+                  profile_id: profile.id,
+                  agreement_type:
+                    agreementType.name as Trainer_Agreement_Type_Enum,
+                })
+              }
+              return filteredTrainerAgreementTypes
+            },
+            [] as Profile_Trainer_Agreement_Type_Insert_Input[],
+          )
+
         await updateProfileRoles({
           id: profile?.id,
           roles: filteredRoles ?? [],
@@ -175,6 +206,11 @@ export const useFormSubmit = () => {
         await updateProfileTrainerRoles({
           id: profile?.id,
           trainerRoleTypes: filteredTrainerRoleTypes ?? [],
+        })
+
+        await updateTrainerAgreementTypes({
+          profile_id: profile.id,
+          trainerAgreementTypes: filteredTrainerAgreementTypes ?? [],
         })
       }
 

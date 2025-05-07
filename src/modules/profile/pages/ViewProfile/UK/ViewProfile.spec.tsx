@@ -4,10 +4,14 @@ import { never } from 'wonka'
 
 import useProfile from '@app/modules/profile/hooks/useProfile'
 import { ViewProfilePage } from '@app/modules/profile/pages/ViewProfile/UK'
-import { RoleName } from '@app/types'
+import {
+  RoleName,
+  TrainerAgreementTypeName,
+  TrainerRoleTypeName,
+} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { chance, render, screen } from '@test/index'
 import { buildCertificate, buildProfile } from '@test/mock-data-utils'
 
 vi.mock('@app/modules/profile/hooks/useProfile')
@@ -128,6 +132,60 @@ describe('page: ViewProfile', () => {
       )
 
       expect(screen.queryByTestId('delete-profile-button')).toBeNull()
+    })
+  })
+  describe('userRole section', () => {
+    it('should display trainer role and agreement type', async () => {
+      useProfileMock.mockReturnValue({
+        profile: {
+          ...buildProfile(),
+          courses: [],
+          archived: false,
+          trainer_role_types: [
+            {
+              trainer_role_type: {
+                id: chance.guid(),
+                name: TrainerRoleTypeName.PRINCIPAL,
+              },
+            },
+          ],
+          profile_trainer_agreement_types: [
+            {
+              id: chance.guid(),
+              agreement_type: TrainerAgreementTypeName.AOL,
+            },
+          ],
+        },
+        certifications: [],
+        status: LoadingStatus.SUCCESS,
+      } as unknown as ReturnType<typeof useProfile>)
+
+      const client = {
+        executeQuery: () => never,
+      } as unknown as Client
+
+      render(
+        <Provider value={client}>
+          <ViewProfilePage />
+        </Provider>,
+        {
+          auth: {
+            activeRole: RoleName.TT_ADMIN,
+          },
+        },
+      )
+
+      expect(screen.getByTestId('user-role')).toBeInTheDocument()
+      expect(
+        screen.getByTestId(
+          `trainer-role-type-${TrainerRoleTypeName.PRINCIPAL}`,
+        ),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByTestId(
+          `trainer-agreement-type-${TrainerAgreementTypeName.AOL}`,
+        ),
+      ).toBeInTheDocument()
     })
   })
 })

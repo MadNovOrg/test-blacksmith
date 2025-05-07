@@ -1,4 +1,8 @@
-import { RoleName, TrainerRoleTypeName } from '@app/types'
+import {
+  RoleName,
+  TrainerAgreementTypeName,
+  TrainerRoleTypeName,
+} from '@app/types'
 
 enum RoleColor {
   SUCCESS = 'success',
@@ -65,6 +69,7 @@ export const salesRole = {
 
 export const ukDefaultTrainerRoles = {
   trainerRole: [] as string[],
+  agreementTypes: [] as string[],
   BILDRole: '',
   moderatorRole: false,
 }
@@ -88,6 +93,10 @@ export const anzTrainerRolesNames: TrainerRoleTypeName[] = [
 
 export const BILDRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.BILD_SENIOR,
+]
+export const AgreementTypeNames: TrainerAgreementTypeName[] = [
+  TrainerAgreementTypeName.AOL,
+  TrainerAgreementTypeName.ETA,
 ]
 
 export const userSubRoles: RoleName[] = [
