@@ -8,10 +8,17 @@ export const SnackbarMessage: React.FC<
   React.PropsWithChildren<
     {
       messageKey: SnackbarMessageKey
+      alertProps?: AlertProps
     } & SnackbarProps &
       Pick<AlertProps, 'variant' | 'severity'>
   >
-> = ({ messageKey, variant = 'outlined', severity = 'success', ...props }) => {
+> = ({
+  messageKey,
+  variant = 'outlined',
+  alertProps,
+  severity = 'success',
+  ...props
+}) => {
   const { getSnackbarMessage, removeSnackbarMessage } = useSnackbar()
   const message = useMemo(
     () => getSnackbarMessage(messageKey),
@@ -36,10 +43,10 @@ export const SnackbarMessage: React.FC<
       open={isOpen}
       autoHideDuration={15000}
       anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-      {...props}
       onClose={handleClose}
+      {...props}
     >
-      <Alert severity={severity} variant={variant}>
+      <Alert severity={severity} variant={variant} {...alertProps}>
         {message?.label}
       </Alert>
     </Snackbar>

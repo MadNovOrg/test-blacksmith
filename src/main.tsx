@@ -68,6 +68,11 @@ const posthogApiKey =
     ? import.meta.env.VITE_PUBLIC_POSTHOG_KEY_AU
     : import.meta.env.VITE_PUBLIC_POSTHOG_KEY
 
+const currentVersion = localStorage.getItem('appVersion')
+if (!currentVersion || currentVersion === 'undefined') {
+  localStorage.setItem('appVersion', '0.0.0')
+}
+
 root.render(
   <React.StrictMode>
     <PostHogProvider

@@ -47,3 +47,5 @@ interface ImportMetaEnv {
   VITE_GO1_BASE_URL: string
   VITE_GO1_ANZ_BASE_URL: string
 }
+
+declare const PACKAGE_JSON_VERSION: string

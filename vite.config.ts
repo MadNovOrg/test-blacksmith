@@ -6,6 +6,8 @@ import { loadEnv } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
 
+import { version } from './package.json'
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = { ...process.env, ...loadEnv(mode, process.cwd()) }
@@ -128,6 +130,9 @@ export default defineConfig(({ mode }) => {
       cache: {
         dir: '../../node_modules/.vitest',
       },
+    },
+    define: {
+      PACKAGE_JSON_VERSION: JSON.stringify(version),
     },
   }
 })

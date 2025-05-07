@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { GQLProvider } from './components/GQLProvider'
 import { ScrollToTop } from './components/ScrollToTop'
+import { UpdateVersionBanner } from './components/UpdateVersionBanner'
 import { SnackbarProvider } from './context/snackbar'
 import { useConfigureSentryTags } from './hooks/useConfigureSentryTags'
 import { GTMPageTracker } from './lib/tag-manager'
@@ -20,6 +21,7 @@ function App() {
       <>
         <CssBaseline />
         <SnackbarProvider>
+          <UpdateVersionBanner />
           <ScrollToTop />
           <Helmet
             defaultTitle={t('pages.browser-tab-titles.main-title')}

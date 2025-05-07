@@ -798,5 +798,7 @@
     "step-3": "Authenticate with Google Drive",
     "step-4": "Choose folders to import",
     "step-5": "Check the status of your import in the status popup"
-  }
+  },
+  "version-update": "New version is available!",
+  "update": "Update"
 }
