@@ -71,12 +71,9 @@ const getUKIndirectCourseRatio = ({
   reaccreditation,
   usesAOL,
 }: TrainerRatioCriteria) => {
-  if (
-    (courseLevel === Level_1 || courseLevel === Level_2) &&
-    !reaccreditation &&
-    !usesAOL
-  ) {
-    return ratio(1, 24, 12)
+  if (courseLevel === Level_1 || courseLevel === Level_2) {
+    if (!reaccreditation && !usesAOL) return ratio(1, 24, 12)
+    return ratio(0, 12, 12)
   }
 
   if (courseLevel === Advanced) {
