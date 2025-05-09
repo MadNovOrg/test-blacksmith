@@ -33,7 +33,14 @@ export const UpdateVersionBanner = () => {
       label: (
         <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
           <Typography>{t('version-update')}</Typography>
-          <Button onClick={handleUpdateVersionButtonClick}>
+          <Button
+            sx={{
+              textTransform: 'capitalize',
+              fontWeight: 'bold',
+              color: 'rgb(13, 40, 96)',
+            }}
+            onClick={handleUpdateVersionButtonClick}
+          >
             {t('update')}
           </Button>
         </Box>
@@ -46,7 +53,10 @@ export const UpdateVersionBanner = () => {
   return (
     <SnackbarMessage
       autoHideDuration={null}
-      sx={{ display: 'flex', alignItems: 'center' }}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
       severity="warning"
       alertProps={{
         sx: {
@@ -54,6 +64,10 @@ export const UpdateVersionBanner = () => {
           '& .MuiAlert-icon': {
             alignSelf: 'center',
           },
+          backgroundColor: 'rgb(255, 248, 237)',
+          borderColor: 'rgb(242, 166, 31)',
+          color: 'rgb(102, 99, 94)',
+          height: '56px',
         },
       }}
       messageKey="version-update"

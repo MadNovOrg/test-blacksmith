@@ -15,6 +15,8 @@ import './i18n/config'
 
 import App from './App'
 import { ErrorPage } from './components/ErrorPage'
+import { UpdateVersionBanner } from './components/UpdateVersionBanner'
+import { SnackbarProvider } from './context/snackbar'
 import theme from './theme'
 import { AwsRegions } from './types'
 
@@ -63,6 +65,8 @@ TagManager.initialize({ gtmId: import.meta.env.VITE_GTM_ID })
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById('app')!)
+const updateBanner = createRoot(document.getElementById('update-banner')!)
+
 const posthogApiKey =
   import.meta.env.VITE_AWS_REGION === AwsRegions.Australia
     ? import.meta.env.VITE_PUBLIC_POSTHOG_KEY_AU
@@ -72,6 +76,14 @@ const currentVersion = localStorage.getItem('appVersion')
 if (!currentVersion || currentVersion === 'undefined') {
   localStorage.setItem('appVersion', '0.0.0')
 }
+
+updateBanner.render(
+  <React.StrictMode>
+    <SnackbarProvider>
+      <UpdateVersionBanner />
+    </SnackbarProvider>
+  </React.StrictMode>,
+)
 
 root.render(
   <React.StrictMode>
