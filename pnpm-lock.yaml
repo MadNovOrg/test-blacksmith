@@ -289,8 +289,8 @@ importers:
         specifier: ^1.1.3
         version: 1.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       sanitize-html:
-        specifier: ^2.15.0
-        version: 2.15.0
+        specifier: ^2.16.0
+        version: 2.16.0
       swiper:
         specifier: ^11.2.6
         version: 11.2.6
@@ -479,8 +479,8 @@ importers:
         specifier: ^6.1.9
         version: 6.1.9
       '@types/sanitize-html':
-        specifier: ^2.11.0
-        version: 2.11.0
+        specifier: ^2.16.0
+        version: 2.16.0
       '@types/uuid':
         specifier: ^9.0.8
         version: 9.0.8
@@ -4750,8 +4750,8 @@ packages:
   '@types/resolve@1.20.5':
     resolution: {integrity: sha512-aten5YPFp8G+cMpkTK5MCcUW5GlwZUby+qlt0/3oFgOCooFgzqvZQ9/0tROY49sUYmhEybBBj3jwpkQ/R3rjjw==}
 
-  '@types/sanitize-html@2.11.0':
-    resolution: {integrity: sha512-7oxPGNQHXLHE48r/r/qjn7q0hlrs3kL7oZnGj0Wf/h9tj/6ibFyRkNbsDxaBBZ4XUZ0Dx5LGCyDJ04ytSofacQ==}
+  '@types/sanitize-html@2.16.0':
+    resolution: {integrity: sha512-l6rX1MUXje5ztPT0cAFtUayXF06DqPhRyfVXareEN5gGCFaP/iwsxIyKODr9XDhfxPpN6vXUFNfo5kZMXCxBtw==}
 
   '@types/semver@7.5.1':
     resolution: {integrity: sha512-cJRQXpObxfNKkFAZbJl2yjWtJCqELQIdShsogr1d2MilP8dKD9TE/nEKHkJgUNHdGKCQaf9HbIynuV2csLGVLg==}
@@ -6632,8 +6632,8 @@ packages:
   dompurify@3.2.4:
     resolution: {integrity: sha512-ysFSFEDVduQpyhzAob/kkuJjf5zWkZD8/A9ywSp1byueyuCfHamrCBa14/Oc2iiB0e51B+NpxSl5gmzn+Ms/mg==}
 
-  domutils@3.0.1:
-    resolution: {integrity: sha512-z08c1l761iKhDFtfXO04C7kTdPBLi41zwOZl00WS8b5eiaebNpY00HKbztwBq+e3vyqWNwWF3mP9YLUeqIrF+Q==}
+  domutils@3.2.2:
+    resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
 
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
@@ -7690,8 +7690,8 @@ packages:
   html-parse-stringify@3.0.1:
     resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
 
-  htmlparser2@8.0.1:
-    resolution: {integrity: sha512-4lVbmc1diZC7GUJQtRQ5yBAeUCL1exyMwmForWkRLnwyzWBFxN633SALPMGYaWZvKe9j1pRZJpauvmxENSp/EA==}
+  htmlparser2@8.0.2:
+    resolution: {integrity: sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==}
 
   http-cache-semantics@4.1.1:
     resolution: {integrity: sha512-er295DKPVsV82j5kw1Gjt+ADA/XYHsajl82cGNQG2eyoPkvgUhX+nDIyelzhIWbbsXP39EHcI6l5tYs2FYqYXQ==}
@@ -10429,8 +10429,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  sanitize-html@2.15.0:
-    resolution: {integrity: sha512-wIjst57vJGpLyBP8ioUbg6ThwJie5SuSIjHxJg53v5Fg+kUK+AXlb7bK3RNXpp315MvwM+0OBGCV6h5pPHsVhA==}
+  sanitize-html@2.16.0:
+    resolution: {integrity: sha512-0s4caLuHHaZFVxFTG74oW91+j6vW7gKbGD6CD2+miP73CE6z6YtOBN0ArtLd2UGyi4IC7K47v3ENUbQX4jV3Mg==}
 
   saxes@6.0.0:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
@@ -18440,9 +18440,9 @@ snapshots:
 
   '@types/resolve@1.20.5': {}
 
-  '@types/sanitize-html@2.11.0':
+  '@types/sanitize-html@2.16.0':
     dependencies:
-      htmlparser2: 8.0.1
+      htmlparser2: 8.0.2
 
   '@types/semver@7.5.1': {}
 
@@ -20289,7 +20289,7 @@ snapshots:
       boolbase: 1.0.0
       css-what: 6.1.0
       domhandler: 5.0.3
-      domutils: 3.0.1
+      domutils: 3.2.2
       nth-check: 2.1.1
 
   css-tree@1.1.3:
@@ -20743,7 +20743,7 @@ snapshots:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
-  domutils@3.0.1:
+  domutils@3.2.2:
     dependencies:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
@@ -22085,11 +22085,11 @@ snapshots:
     dependencies:
       void-elements: 3.1.0
 
-  htmlparser2@8.0.1:
+  htmlparser2@8.0.2:
     dependencies:
       domelementtype: 2.3.0
       domhandler: 5.0.3
-      domutils: 3.0.1
+      domutils: 3.2.2
       entities: 4.5.0
 
   http-cache-semantics@4.1.1: {}
@@ -25791,11 +25791,11 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sanitize-html@2.15.0:
+  sanitize-html@2.16.0:
     dependencies:
       deepmerge: 4.3.1
       escape-string-regexp: 4.0.0
-      htmlparser2: 8.0.1
+      htmlparser2: 8.0.2
       is-plain-object: 5.0.0
       parse-srcset: 1.0.2
       postcss: 8.5.3
