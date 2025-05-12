@@ -410,8 +410,8 @@ importers:
         specifier: ^8.6.9
         version: 8.6.9(storybook@8.6.12(prettier@2.8.8))
       '@storybook/blocks':
-        specifier: ^8.6.9
-        version: 8.6.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))
+        specifier: ^8.6.12
+        version: 8.6.12(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))
       '@storybook/react':
         specifier: ^8.6.9
         version: 8.6.9(@storybook/test@8.6.9(storybook@8.6.12(prettier@2.8.8)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))(typescript@5.5.4)
@@ -4075,6 +4075,18 @@ packages:
 
   '@storybook/addons@7.6.17':
     resolution: {integrity: sha512-Ok18Y698Ccyg++MoUNJNHY0cXUvo8ETFIRLJk1g9ElJ70j6kPgNnzW2pAtZkBNmswHtofZ7pT156cj96k/LgfA==}
+
+  '@storybook/blocks@8.6.12':
+    resolution: {integrity: sha512-DohlTq6HM1jDbHYiXL4ZvZ00VkhpUp5uftzj/CZDLY1fYHRjqtaTwWm2/OpceivMA8zDitLcq5atEZN+f+siTg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      storybook: ^8.6.12
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   '@storybook/blocks@8.6.9':
     resolution: {integrity: sha512-+vSRkHLD7ho3Wd1WVA1KrYAnv7BnGHOhHWHAgTR5IdeMdgzQxm6+HHeqGB5sncilA0AjVC6udBIgHbCSuD61dA==}
@@ -17638,6 +17650,15 @@ snapshots:
       - react
       - react-dom
     optional: true
+
+  '@storybook/blocks@8.6.12(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))':
+    dependencies:
+      '@storybook/icons': 1.4.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      storybook: 8.6.12(prettier@2.8.8)
+      ts-dedent: 2.2.0
+    optionalDependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   '@storybook/blocks@8.6.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))':
     dependencies:
