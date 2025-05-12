@@ -353,8 +353,8 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(graphql@16.10.0)
       '@inrupt/jest-jsdom-polyfills':
-        specifier: ^1.7.0
-        version: 1.7.0
+        specifier: ^3.2.7
+        version: 3.2.7
       '@jackfranklin/test-data-bot':
         specifier: ^2.1.0
         version: 2.1.0
@@ -2759,8 +2759,8 @@ packages:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
     deprecated: Use @eslint/object-schema instead
 
-  '@inrupt/jest-jsdom-polyfills@1.7.0':
-    resolution: {integrity: sha512-oH2eZ48PlgkdDDTRKa+rRAM13FDBqcW3y2B0Hh1s5+NCIjIiRLVEFhTCZ4LYYhkjFVU5g2HFhWxYrHQYJceZyQ==}
+  '@inrupt/jest-jsdom-polyfills@3.2.7':
+    resolution: {integrity: sha512-AonOcUL3Xo7fhSa8mZi5SANZEyDmyYaOq7t0brlhucygxdzhu1dePuizQwZiynqhkkWw67BoyHyYVXjG4jX+fQ==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3569,15 +3569,15 @@ packages:
     resolution: {integrity: sha512-8s8yYjd19pDSsBpbkOHnT6Z2+UJSuLQx61pCFM0s5wSRvKCEMDjd/cHY3/GI1szHIWbpXpsJdg3V6ISGGx9xDw==}
     engines: {node: '>= 10.0.0'}
 
-  '@peculiar/asn1-schema@2.3.3':
-    resolution: {integrity: sha512-6GptMYDMyWBHTUKndHaDsRZUO/XMSgIns2krxcm2L7SEExRHwawFvSwNBhqNPR9HJwv3MruAiF1bhN0we6j6GQ==}
+  '@peculiar/asn1-schema@2.3.15':
+    resolution: {integrity: sha512-QPeD8UA8axQREpgR5UTAfu2mqQmm97oUqahDtNdBcfj3qAnoXzFdQW+aNf/tD2WVXF8Fhmftxoj0eMIT++gX2w==}
 
   '@peculiar/json-schema@1.1.12':
     resolution: {integrity: sha512-coUfuoMeIB7B8/NMekxaDzLhaYmp0HZNPEjYRm9goRou8UZIC3z21s0sL9AWoCw4EG876QyO3kYrc61WNF9B/w==}
     engines: {node: '>=8.0.0'}
 
-  '@peculiar/webcrypto@1.4.1':
-    resolution: {integrity: sha512-eK4C6WTNYxoI7JOabMoZICiyqRRtJB220bh0Mbj5RwRycleZf9BPyZoxsTvpP0FpmVS2aS13NKOuh5/tN3sIRw==}
+  '@peculiar/webcrypto@1.5.0':
+    resolution: {integrity: sha512-BRs5XUAwiyCDQMsVA9IDvDa7UBR9gAvPHgugOeGng3YN6vJ9JYonyDc0lNczErgtCWtucjR5N7VtaonboD/ezg==}
     engines: {node: '>=10.12.0'}
 
   '@phenomnomnominal/tsquery@5.0.1':
@@ -5058,11 +5058,11 @@ packages:
   '@vitest/utils@3.0.9':
     resolution: {integrity: sha512-ilHM5fHhZ89MCp5aAaM9uhfl1c2JdxVxl3McqsdVyVNN6JffnEen8UMCdRTzOhGXNQGo5GNL9QugHrz727Wnng==}
 
-  '@web-std/blob@3.0.4':
-    resolution: {integrity: sha512-+dibyiw+uHYK4dX5cJ7HA+gtDAaUUe6JsOryp2ZpAC7h4ICsh49E34JwHoEKPlPvP0llCrNzz45vvD+xX5QDBg==}
+  '@web-std/blob@3.0.5':
+    resolution: {integrity: sha512-Lm03qr0eT3PoLBuhkvFBLf0EFkAsNz/G/AYCzpOdi483aFaVX86b4iQs0OHhzHJfN5C15q17UtDbyABjlzM96A==}
 
-  '@web-std/file@3.0.2':
-    resolution: {integrity: sha512-pIH0uuZsmY8YFvSHP1NsBIiMT/1ce0suPrX74fEeO3Wbr1+rW0fUGEe4d0R99iLwXtyCwyserqCFI4BJkJlkRA==}
+  '@web-std/file@3.0.3':
+    resolution: {integrity: sha512-X7YYyvEERBbaDfJeC9lBKC5Q5lIEWYCP1SNftJNwNH/VbFhdHm+3neKOQP+kWEYJmosbDFq+NEUG7+XIvet/Jw==}
 
   '@web-std/stream@1.0.0':
     resolution: {integrity: sha512-jyIbdVl+0ZJyKGTV0Ohb9E6UnxP+t7ZzX4Do3AHjZKxUXKMs9EmqnBDQgHF7bEw0EzbQygOjtt/7gvtmi//iCQ==}
@@ -5426,8 +5426,8 @@ packages:
   asap@2.0.6:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
 
-  asn1js@3.0.5:
-    resolution: {integrity: sha512-FVnvrKJwpt9LP2lAMl8qZswRNm3T4q9CON+bxldk2iwk3FFpuwhx2FfinyitizWHsVYyaY+y5JzDR0rCMV5yTQ==}
+  asn1js@3.0.6:
+    resolution: {integrity: sha512-UOCGPYbl0tv8+006qks/dTgV9ajs97X2p0FAbyS2iyCRrmLSRolDaHdp+v/CLgnzHc3fVB+CwYiUmei7ndFcgA==}
     engines: {node: '>=12.0.0'}
 
   assertion-error@1.1.0:
@@ -9953,8 +9953,8 @@ packages:
   pure-rand@6.0.1:
     resolution: {integrity: sha512-t+x1zEHDjBwkDGY5v5ApnZ/utcd4XYDiJsaQQoptTXgUXX95sDg1elCdJghzicm7n2mbCBJ3uYWr6M22SO19rg==}
 
-  pvtsutils@1.3.2:
-    resolution: {integrity: sha512-+Ipe2iNUyrZz+8K/2IOo+kKikdtfhRKzNpQbruF2URmqPtoqAs8g3xS7TJvFF2GcPXjh7DkqMnpVveRFq4PgEQ==}
+  pvtsutils@1.3.6:
+    resolution: {integrity: sha512-PLgQXQ6H2FWCaeRak8vvk1GW462lMxB5s3Jm673N82zI4vqtVUPuZdffdZbPDFRoU8kAhItWFtPCWiPpp4/EDg==}
 
   pvutils@1.1.3:
     resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
@@ -11332,8 +11332,8 @@ packages:
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
-  undici@7.5.0:
-    resolution: {integrity: sha512-NFQG741e8mJ0fLQk90xKxFdaSM7z4+IQpAgsFI36bCDY9Z2+aXXZjVy2uUksMouWfMI9+w5ejOq5zYYTBCQJDQ==}
+  undici@7.9.0:
+    resolution: {integrity: sha512-e696y354tf5cFZPXsF26Yg+5M63+5H3oE6Vtkh2oqbvsE2Oe7s2nIbcQh5lmG7Lp/eS29vJtTpw9+p6PX0qNSg==}
     engines: {node: '>=20.18.1'}
 
   unfetch@4.2.0:
@@ -11658,14 +11658,18 @@ packages:
     resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
     engines: {node: '>= 8'}
 
+  web-streams-polyfill@3.3.3:
+    resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
+    engines: {node: '>= 8'}
+
   web-vitals@4.2.4:
     resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
 
   web-worker@1.3.0:
     resolution: {integrity: sha512-BSR9wyRsy/KOValMgd5kMyr3JzpdeoR9KVId8u5GVlTTAtNChlsE4yTxeY7zMdNSyOmoKBv8NH2qeRY9Tg+IaA==}
 
-  webcrypto-core@1.7.5:
-    resolution: {integrity: sha512-gaExY2/3EHQlRNNNVSrbG2Cg94Rutl7fAaKILS1w8ZDhGxdFOaw6EbCfHIxPy9vt/xwp5o0VQAx9aySPF6hU1A==}
+  webcrypto-core@1.8.1:
+    resolution: {integrity: sha512-P+x1MvlNCXlKbLSOY4cYrdreqPG5hbzkmawbcXLKN/mf6DZW0SdNNkZ+sjwsqVkI4A4Ko2sPZmkZtCKY58w83A==}
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -15624,12 +15628,12 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.2': {}
 
-  '@inrupt/jest-jsdom-polyfills@1.7.0':
+  '@inrupt/jest-jsdom-polyfills@3.2.7':
     dependencies:
-      '@peculiar/webcrypto': 1.4.1
-      '@web-std/blob': 3.0.4
-      '@web-std/file': 3.0.2
-      undici: 7.5.0
+      '@peculiar/webcrypto': 1.5.0
+      '@web-std/blob': 3.0.5
+      '@web-std/file': 3.0.3
+      undici: 7.9.0
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -16963,23 +16967,23 @@ snapshots:
       node-addon-api: 3.2.1
       node-gyp-build: 4.6.0
 
-  '@peculiar/asn1-schema@2.3.3':
+  '@peculiar/asn1-schema@2.3.15':
     dependencies:
-      asn1js: 3.0.5
-      pvtsutils: 1.3.2
+      asn1js: 3.0.6
+      pvtsutils: 1.3.6
       tslib: 2.8.1
 
   '@peculiar/json-schema@1.1.12':
     dependencies:
       tslib: 2.8.1
 
-  '@peculiar/webcrypto@1.4.1':
+  '@peculiar/webcrypto@1.5.0':
     dependencies:
-      '@peculiar/asn1-schema': 2.3.3
+      '@peculiar/asn1-schema': 2.3.15
       '@peculiar/json-schema': 1.1.12
-      pvtsutils: 1.3.2
+      pvtsutils: 1.3.6
       tslib: 2.8.1
-      webcrypto-core: 1.7.5
+      webcrypto-core: 1.8.1
 
   '@phenomnomnominal/tsquery@5.0.1(typescript@5.5.4)':
     dependencies:
@@ -18872,18 +18876,18 @@ snapshots:
       loupe: 3.1.3
       tinyrainbow: 2.0.0
 
-  '@web-std/blob@3.0.4':
+  '@web-std/blob@3.0.5':
     dependencies:
       '@web-std/stream': 1.0.0
       web-encoding: 1.1.5
 
-  '@web-std/file@3.0.2':
+  '@web-std/file@3.0.3':
     dependencies:
-      '@web-std/blob': 3.0.4
+      '@web-std/blob': 3.0.5
 
   '@web-std/stream@1.0.0':
     dependencies:
-      web-streams-polyfill: 3.2.1
+      web-streams-polyfill: 3.3.3
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:
@@ -18967,7 +18971,7 @@ snapshots:
 
   '@whatwg-node/fetch@0.8.2':
     dependencies:
-      '@peculiar/webcrypto': 1.4.1
+      '@peculiar/webcrypto': 1.5.0
       '@whatwg-node/node-fetch': 0.3.6
       busboy: 1.6.0
       urlpattern-polyfill: 6.0.2
@@ -19363,9 +19367,9 @@ snapshots:
 
   asap@2.0.6: {}
 
-  asn1js@3.0.5:
+  asn1js@3.0.6:
     dependencies:
-      pvtsutils: 1.3.2
+      pvtsutils: 1.3.6
       pvutils: 1.1.3
       tslib: 2.8.1
 
@@ -25211,7 +25215,7 @@ snapshots:
 
   pure-rand@6.0.1: {}
 
-  pvtsutils@1.3.2:
+  pvtsutils@1.3.6:
     dependencies:
       tslib: 2.8.1
 
@@ -26761,7 +26765,7 @@ snapshots:
 
   undici-types@6.19.8: {}
 
-  undici@7.5.0: {}
+  undici@7.9.0: {}
 
   unfetch@4.2.0: {}
 
@@ -27129,16 +27133,18 @@ snapshots:
 
   web-streams-polyfill@3.2.1: {}
 
+  web-streams-polyfill@3.3.3: {}
+
   web-vitals@4.2.4: {}
 
   web-worker@1.3.0: {}
 
-  webcrypto-core@1.7.5:
+  webcrypto-core@1.8.1:
     dependencies:
-      '@peculiar/asn1-schema': 2.3.3
+      '@peculiar/asn1-schema': 2.3.15
       '@peculiar/json-schema': 1.1.12
-      asn1js: 3.0.5
-      pvtsutils: 1.3.2
+      asn1js: 3.0.6
+      pvtsutils: 1.3.6
       tslib: 2.8.1
 
   webidl-conversions@3.0.1: {}
