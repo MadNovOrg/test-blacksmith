@@ -1,41 +1,41 @@
 import { render, renderHook, screen, waitFor } from '@testing-library/react'
-import { useTranslation } from 'react-i18next'
 
 import { SnackbarProvider } from '@app/context/snackbar'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { chance } from '@test/index'
 
-import { UpdateVersionBanner } from './UpdateVersionBanner'
+import { UpdateVersionDialog } from './UpdateVersionDialog'
 
-describe(UpdateVersionBanner.name, () => {
+describe(UpdateVersionDialog.name, () => {
   const {
     result: {
       current: { t },
     },
-  } = renderHook(() => useTranslation())
+  } = renderHook(() => useScopedTranslation('components.update-version-dialog'))
   it('should render if local version is different than app version', () => {
     localStorage.setItem('appVersion', PACKAGE_JSON_VERSION + chance.word())
     render(
       <SnackbarProvider>
-        <UpdateVersionBanner />
+        <UpdateVersionDialog />
       </SnackbarProvider>,
     )
-    expect(screen.getByText(t('version-update'))).toBeInTheDocument()
+    expect(screen.getByText(t('title'))).toBeInTheDocument()
   })
   it('should not render if local version is the same as app version', () => {
     localStorage.setItem('appVersion', PACKAGE_JSON_VERSION)
     render(
       <SnackbarProvider>
-        <UpdateVersionBanner />
+        <UpdateVersionDialog />
       </SnackbarProvider>,
     )
-    expect(screen.queryByText(t('version-update'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('title'))).not.toBeInTheDocument()
   })
   it('should set version  update button is clicked', () => {
     localStorage.setItem('appVersion', PACKAGE_JSON_VERSION + chance.word())
     render(
       <SnackbarProvider>
-        <UpdateVersionBanner />
+        <UpdateVersionDialog />
       </SnackbarProvider>,
     )
     const button = screen.getByText(t('update'))
@@ -60,7 +60,7 @@ describe(UpdateVersionBanner.name, () => {
 
     render(
       <SnackbarProvider>
-        <UpdateVersionBanner />
+        <UpdateVersionDialog />
       </SnackbarProvider>,
     )
     const button = screen.getByText(t('update'))

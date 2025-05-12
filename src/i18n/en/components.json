@@ -626,5 +626,10 @@
     "PROFILE_NO_MATCH-error": "Personal information on the certificate doesn't match profile's personal information",
     "CERTIFICATE_NOT_FOUND-error": "We could not locate this certificate, please contact Team Teach.",
     "generic-error": "There was an error importing certificate"
+  },
+  "update-version-dialog": {
+    "title": "Important Update Required",
+    "content": "A new and improved version of Team Teach Connect is now available!",
+    "update": "Update now"
   }
 }

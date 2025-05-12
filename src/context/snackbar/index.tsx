@@ -23,7 +23,6 @@ export type SnackbarMessageKey =
   | 'bulk-attendance-error'
   | 'draft-saved'
   | 'resource-pack-pricing-error'
-  | 'version-update'
 export type SnackbarMessage = { label: React.ReactNode }
 
 export type SnackbarState = {

@@ -15,7 +15,7 @@ import './i18n/config'
 
 import App from './App'
 import { ErrorPage } from './components/ErrorPage'
-import { UpdateVersionBanner } from './components/UpdateVersionBanner'
+import { UpdateVersionDialog } from './components/UpdateVersionDialog'
 import { SnackbarProvider } from './context/snackbar'
 import theme from './theme'
 import { AwsRegions } from './types'
@@ -80,7 +80,9 @@ if (!currentVersion || currentVersion === 'undefined') {
 updateBanner.render(
   <React.StrictMode>
     <SnackbarProvider>
-      <UpdateVersionBanner />
+      <ThemeProvider theme={theme}>
+        <UpdateVersionDialog />
+      </ThemeProvider>
     </SnackbarProvider>
   </React.StrictMode>,
 )

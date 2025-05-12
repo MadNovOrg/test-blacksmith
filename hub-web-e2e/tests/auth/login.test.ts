@@ -8,6 +8,7 @@ test('login successfully @smoke', async ({ page }) => {
   const loginPage = new LoginPage(page)
   await loginPage.goto()
   await loginPage.cookieConsentDeclinedButton.click()
+  await loginPage.updateVersionbannerAccept.click()
   const myCoursesPage = await loginPage.logIn(
     users.trainer.email,
     users.trainer.password,

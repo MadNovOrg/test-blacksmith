@@ -30,11 +30,12 @@ type Props = {
     Actions: () => ReactNode
   }>
   showClose?: boolean
-  onClose: () => void
+  onClose: (event?: object, reason?: string) => void
   maxWidth?: number
   minWidth?: number
   'data-testid'?: string
   noPaddings?: boolean
+  disableEscapeKeyDown?: boolean
 }
 
 export const Dialog: FC<PropsWithChildren<Props>> = ({
@@ -50,6 +51,7 @@ export const Dialog: FC<PropsWithChildren<Props>> = ({
   minWidth,
   'data-testid': testId,
   noPaddings = false,
+  disableEscapeKeyDown = false,
 }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -61,6 +63,7 @@ export const Dialog: FC<PropsWithChildren<Props>> = ({
       fullScreen={isMobile}
       onClose={onClose}
       data-testid={testId}
+      disableEscapeKeyDown={disableEscapeKeyDown}
     >
       <DialogTitle
         sx={{

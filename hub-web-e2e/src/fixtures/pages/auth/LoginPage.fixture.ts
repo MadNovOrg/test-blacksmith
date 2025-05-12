@@ -15,6 +15,7 @@ export class LoginPage extends BasePage {
   readonly passwordErrorText: Locator
   readonly generalErrorText: Locator
   readonly cookieConsentDeclinedButton: Locator
+  readonly updateVersionbannerAccept: Locator
 
   constructor(page: Page) {
     super(page)
@@ -29,6 +30,9 @@ export class LoginPage extends BasePage {
     this.generalErrorText = this.page.locator('[data-testid="login-error"]')
     this.cookieConsentDeclinedButton = this.page.locator(
       '#hs-eu-decline-button',
+    )
+    this.updateVersionbannerAccept = this.page.locator(
+      '[data-testid="update-version-button"]',
     )
   }
 
@@ -70,6 +74,7 @@ export class LoginPage extends BasePage {
   }
 
   async clickForgotPasswordLink(): Promise<ForgotPasswordPage> {
+    await this.updateVersionbannerAccept.click()
     await this.forgotPasswordLink.click()
     return new ForgotPasswordPage(this.page)
   }

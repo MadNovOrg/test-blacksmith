@@ -23,7 +23,7 @@ it('disables submit button when code not entered', async () => {
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={vi.fn}
       />
     </Provider>,
@@ -46,7 +46,7 @@ it('calls a function when clicked on cancel button', async () => {
       <ImportCertificateModal
         open={true}
         onCancel={onCancel}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={vi.fn}
       />
     </Provider>,
@@ -85,7 +85,7 @@ it('imports legacy certificate', async () => {
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
       />
     </Provider>,
@@ -129,7 +129,7 @@ it('imports certificate for other user if profile id is passed', async () => {
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
         profileId="profile-id"
       />
@@ -158,7 +158,7 @@ it('shows an alert when there is a generic error', async () => {
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
       />
     </Provider>,
@@ -196,7 +196,7 @@ it('shows an alert when the certificate has already been imported', async () => 
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
       />
     </Provider>,
@@ -234,7 +234,7 @@ it("shows an alert when the certificate data doesn't match the profile", async (
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
       />
     </Provider>,
@@ -272,7 +272,7 @@ it("shows an alert when the certificate level isn't supported", async () => {
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
       />
     </Provider>,
@@ -310,7 +310,7 @@ it("shows an alert when the certificate isn't found", async () => {
       <ImportCertificateModal
         open={true}
         onCancel={vi.fn}
-        onClose={vi.fn}
+        onClose={vi.fn((_?: object, __?: string) => null)}
         onSubmit={onSubmit}
       />
     </Provider>,
