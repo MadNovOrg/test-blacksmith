@@ -1,5 +1,15 @@
 # @teamteach/hub
 
+## 5.2.0
+
+### Minor Changes
+
+- 255ad9d: feat TTHP-5139 creates and triggers an update banner whenever the current app version is different that the package.json version
+
+### Patch Changes
+
+- a6683e1: Fix Indirect type course participants invite
+
 ## 5.1.0
 
 ### Minor Changes
