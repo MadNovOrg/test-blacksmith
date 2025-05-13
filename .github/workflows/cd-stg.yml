@@ -40,6 +40,7 @@ jobs:
       stripe_key: ${{ secrets.STRIPE_KEY_STG }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      frontend_distribution: ${{ secrets.FRONTEND_DISTRO_STG }}
 
   stg-cd-anz:
     if: ${{ github.event.inputs.region == 'Australia' || github.event.inputs.region == 'Both' }}
@@ -62,6 +63,7 @@ jobs:
       stripe_key: ${{ secrets.STRIPE_KEY_STG_ANZ }}
       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      frontend_distribution: ${{secrets.FRONTEND_DISTRO_STG_ANZ}}
 
   zap-full-scan-anz:
     name: OWASP ZAP Baseline Scan

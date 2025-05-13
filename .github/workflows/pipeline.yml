@@ -51,6 +51,8 @@ on:
         required: false
       hubspot_login_form:
         required: false
+      frontend_distribution:
+        required: false
 
 jobs:
   build-deploy:
@@ -106,7 +108,16 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{secrets.sentry_auth_token}}
 
       - name: Deploy to S3 bucket
-        run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
+        run: |
+          aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
+          if [[ "${{ inputs.mode }}" != "development" && -n "${{ inputs.mode }}" && -n "${{ secrets.frontend_distribution }}" ]]; then
+            aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.frontend_distribution }} \
+            --paths '/*'
+          else
+            echo "Skipping CloudFront invalidation for non-staging/prod environment."
+          fi
+        shell: bash
 
       - name: Get application version
         id: package_version
@@ -121,7 +132,7 @@ jobs:
           SENTRY_PROJECT: 'team-teach-hub'
         with:
           environment: ${{ inputs.mode }}
-          version: ${{steps.package_version.outputs.version}}
+          release: ${{steps.package_version.outputs.version}}
 
   hasura_migrations:
     name: Hasura migrations
