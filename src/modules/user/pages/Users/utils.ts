@@ -13,6 +13,7 @@ export const getTrainerRoleTypesOptions = ({
       TrainerRoleTypeName.PRINCIPAL,
       TrainerRoleTypeName.SENIOR,
       TrainerRoleTypeName.MODERATOR,
+      TrainerRoleTypeName.INTERNAL,
     ]).map<FilterOption>(type => ({
       id: type,
       title: t(`trainer-role-types.${type}`),

@@ -261,7 +261,7 @@ describe('page: Users', () => {
     })
   })
 
-  it('Has only Principal, Senior and Moderator trainer types on ANZ', async () => {
+  it('Has only Principal, Senior, Internal and Moderator trainer types on ANZ', async () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
     const profile = mockProfile()
     const filteredProfile = mockProfile()
@@ -269,6 +269,7 @@ describe('page: Users', () => {
       TrainerRoleTypeName.PRINCIPAL,
       TrainerRoleTypeName.SENIOR,
       TrainerRoleTypeName.MODERATOR,
+      TrainerRoleTypeName.INTERNAL,
     ]
 
     const unexpectedTrainerTypes = Object.values(TrainerRoleTypeName).filter(

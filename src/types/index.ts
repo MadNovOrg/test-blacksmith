@@ -313,17 +313,18 @@ export enum RoleName {
 }
 
 export enum TrainerRoleTypeName {
+  AOL_ETA = 'aol-eta',
+  ASSISTANT = 'assistant',
+  BILD_SENIOR = 'bild-senior',
+  EMPLOYER_AOL = 'employer-aol',
+  EMPLOYER_TRAINER = 'employer-trainer',
+  INTERNAL = 'internal',
+  MODERATOR = 'moderator',
   PRINCIPAL = 'principal',
   SENIOR = 'senior',
   SENIOR_ASSIST = 'senior-assist',
-  EMPLOYER_TRAINER = 'employer-trainer',
-  TRAINER_ETA = 'trainer-eta',
-  AOL_ETA = 'aol-eta',
-  BILD_SENIOR = 'bild-senior',
-  EMPLOYER_AOL = 'employer-aol',
   SPECIAL_AGREEMENT_AOL = 'special-agreement-aol',
-  MODERATOR = 'moderator',
-  ASSISTANT = 'assistant',
+  TRAINER_ETA = 'trainer-eta',
 }
 
 export enum TrainerAgreementTypeName {

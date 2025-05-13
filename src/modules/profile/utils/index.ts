@@ -80,6 +80,7 @@ export const ukTrainerRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.SENIOR_ASSIST,
   TrainerRoleTypeName.TRAINER_ETA,
   TrainerRoleTypeName.EMPLOYER_AOL,
+  TrainerRoleTypeName.INTERNAL,
 ]
 export const anzDefaultTrainerRoles = {
   trainerRole: [] as string[],
@@ -89,6 +90,7 @@ export const anzDefaultTrainerRoles = {
 export const anzTrainerRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.PRINCIPAL,
   TrainerRoleTypeName.SENIOR,
+  TrainerRoleTypeName.INTERNAL,
 ]
 
 export const BILDRolesNames: TrainerRoleTypeName[] = [

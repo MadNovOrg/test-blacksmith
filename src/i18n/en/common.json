@@ -380,13 +380,14 @@
     "senior": "Senior",
     "senior-assist": "Senior assist",
     "employer-trainer": "Employer trainer",
-    "eta": "ETA",
-    "trainer-eta": "Trainer ETA",
+    "eta": "Engaged",
+    "trainer-eta": "Engaged",
     "aol-eta": "AOL ETA",
     "bild-senior": "BILD senior",
     "employer-aol": "Employer AOL",
     "special-agreement-aol": "Special agreement AOL",
-    "moderator": "Moderator"
+    "moderator": "Moderator",
+    "internal": "Internal"
   },
   "trainer-agreement-types": {
     "ETA": "ETA",
