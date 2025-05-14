@@ -68,6 +68,7 @@ export const courseWithManualPrice = ({
   blendedLearning,
   maxParticipants,
   residingCountry,
+  closedCourseWithManualPrice,
 }: {
   accreditedBy: Accreditors_Enum
   courseType: Course_Type_Enum
@@ -75,6 +76,7 @@ export const courseWithManualPrice = ({
   blendedLearning: boolean
   maxParticipants: number
   residingCountry: WorldCountriesCodes
+  closedCourseWithManualPrice?: boolean
 }) => {
   const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
@@ -84,6 +86,8 @@ export const courseWithManualPrice = ({
   const isOpenCourse = courseType === Course_Type_Enum.Open
   const isLEVEL2 = courseLevel === Course_Level_Enum.Level_2
   const isUKcountry = Object.keys(UKsCountriesCodes).includes(residingCountry)
+
+  if (closedCourseWithManualPrice) return true
 
   const specialUKcountryCondition =
     isICMcourse &&

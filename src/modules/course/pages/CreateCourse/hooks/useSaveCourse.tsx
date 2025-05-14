@@ -35,7 +35,7 @@ import { INSERT_COURSE_MUTATION } from '@app/modules/course/queries/insert-cours
 import { REMOVE_COURSE_DRAFT } from '@app/modules/course/queries/remove-course-draft'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { isModeratorNeeded } from '@app/rules/trainers'
-import { BildStrategies } from '@app/types'
+import { BildStrategies, ClosedCoursePricingType } from '@app/types'
 import { getResourcePackPrice, LoadingStatus } from '@app/util'
 
 import { transformBILDModules } from '../../CourseBuilder/components/BILDCourseBuilder/utils'
@@ -73,6 +73,11 @@ export function useSaveCourse(): {
   const { setDateTimeTimeZone } = useTimeZones()
   const { isUKCountry, isAustraliaCountry } = useWorldCountries()
   const hideMCM = useFeatureFlagEnabled('hide-mcm')
+
+  const closedCourseWithManualPrice =
+    courseData?.type === Course_Type_Enum.Closed &&
+    courseData.closedCoursePricingType === ClosedCoursePricingType.CUSTOM &&
+    isUKCountry(courseData.residingCountry)
 
   // ------------ Can Be Removed after 30/04/2025 ------------
   const waRenewalCyclesEnabled = useFeatureFlagEnabled(
@@ -123,6 +128,7 @@ export function useSaveCourse(): {
         blendedLearning: Boolean(courseData?.blendedLearning),
         maxParticipants: courseData?.maxParticipants ?? 0,
         residingCountry: courseData?.residingCountry as WorldCountriesCodes,
+        closedCourseWithManualPrice,
       })
 
   const courseWithNoPrice = useMemo(() => {

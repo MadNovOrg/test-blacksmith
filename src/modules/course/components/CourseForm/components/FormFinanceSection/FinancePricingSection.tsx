@@ -21,7 +21,7 @@ import { InfoRow } from '@app/components/InfoPanel'
 import { useAuth } from '@app/context/auth'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
-import { CourseInput } from '@app/types'
+import { CourseInput, ClosedCoursePricingType } from '@app/types'
 import { getGSTAmount, getVatAmount } from '@app/util'
 
 import { DisabledFields } from '../..'
@@ -38,6 +38,7 @@ interface Props {
   disabledFields: Set<DisabledFields>
   register: UseFormRegister<CourseInput>
   control?: Control<CourseInput>
+  values?: CourseInput
 }
 
 const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
@@ -52,6 +53,7 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
   disabledFields,
   register,
   control,
+  values,
 }) => {
   const { isUKCountry } = useWorldCountries()
   const isLevel2 = courseLevel === Course_Level_Enum.Level_2
@@ -60,7 +62,13 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
     acl: { isAustralia },
   } = useAuth()
 
+  const pricingType = useMemo(() => {
+    return values?.closedCoursePricingType || ClosedCoursePricingType.STANDARD
+  }, [values?.closedCoursePricingType])
+
   const disabledVATandCurrency = useMemo(() => {
+    if (isCreateCourse && pricingType === ClosedCoursePricingType.CUSTOM)
+      return true
     if (!isCreateCourse) {
       return true
     }
@@ -74,12 +82,21 @@ const FinancePricingSection: React.FC<React.PropsWithChildren<Props>> = ({
     }
 
     return false
-  }, [isBlended, isCreateCourse, isLevel2, isUKCountry, residingCountry])
+  }, [
+    isBlended,
+    isCreateCourse,
+    isLevel2,
+    isUKCountry,
+    residingCountry,
+    pricingType,
+  ])
 
-  // these fields are only shown for International Courses
+  // these fields are only shown for International Courses and for UK Closed Courses due to https://behaviourhub.atlassian.net/browse/TTHP-5053
   const showCurrencyAndVATfields = useMemo(
-    () => !isUKCountry(residingCountry),
-    [isUKCountry, residingCountry],
+    () =>
+      !isUKCountry(residingCountry) ||
+      pricingType === ClosedCoursePricingType.CUSTOM,
+    [isUKCountry, residingCountry, pricingType],
   )
 
   const taxAmount = (price: number) => {

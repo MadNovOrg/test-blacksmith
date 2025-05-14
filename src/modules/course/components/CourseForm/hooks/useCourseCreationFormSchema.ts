@@ -20,7 +20,7 @@ import {
 import { useCurrencies } from '@app/hooks/useCurrencies/useCurrencies'
 import { priceFieldIsMandatory } from '@app/modules/course/pages/CreateCourse/utils'
 import { schemas, yup } from '@app/schemas'
-import { CourseInput } from '@app/types'
+import { ClosedCoursePricingType, CourseInput } from '@app/types'
 import { extractTime, requiredMsg } from '@app/util'
 
 import { schema as renewalCycleSchema } from '../components/RenewalCycleRadios/RenewalCycleRadios'
@@ -447,6 +447,10 @@ export const useCourseCreationFormSchema = ({
               then: schema =>
                 schema.required(requiredMsg(t, 'vat')).default(false),
             }),
+          closedCoursePricingType: yup
+            .string()
+            .nullable()
+            .oneOf(Object.values(ClosedCoursePricingType)),
         })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .when((values: CourseInput[], schema: any) => {
@@ -571,8 +575,12 @@ export const useCourseCreationFormSchema = ({
       venue: courseInput?.venue ?? null,
       zoomMeetingUrl: courseInput?.zoomMeetingUrl ?? null,
       zoomProfileId: courseInput?.zoomProfileId ?? null, // need to be schedule [0]
+      closedCoursePricingType:
+        courseInput?.closedCoursePricingType ||
+        ClosedCoursePricingType.STANDARD,
     }),
     [
+      courseInput?.closedCoursePricingType,
       courseInput?.accreditedBy,
       courseInput?.accountCode,
       courseInput?.aolCountry,

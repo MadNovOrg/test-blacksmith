@@ -14,6 +14,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useCurrencies } from '@app/hooks/useCurrencies'
+import { ClosedCoursePricingType } from '@app/types'
 
 export const COURSE_PRICE_QUERY = gql`
   query CoursePrice($startDate: date, $priceCurrency: String!) {
@@ -65,6 +66,7 @@ export function useCoursePrice(courseData?: {
   reaccreditation: boolean
   blended: boolean
   maxParticipants: number | null
+  closedCoursePricingType?: ClosedCoursePricingType
 }) {
   const {
     acl: { isAustralia, isUK },
@@ -87,6 +89,10 @@ export function useCoursePrice(courseData?: {
     }
     return (
       !courseData ||
+      (isUKCountry(courseData.residingCountry) &&
+        courseData.courseType === Course_Type_Enum.Closed &&
+        courseData.closedCoursePricingType ===
+          ClosedCoursePricingType.CUSTOM) ||
       !isValid(courseData?.startDateTime) ||
       isBILDcourse ||
       !isUKCountry(courseData.residingCountry)

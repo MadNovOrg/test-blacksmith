@@ -683,6 +683,7 @@ export type CourseInput = {
   zoomMeetingUrl: string | null
   zoomProfileId: string | null
   gradingStarted?: boolean
+  closedCoursePricingType?: ClosedCoursePricingType
 }
 
 export type ValidCourseInput = DeepNonNullable<
@@ -982,4 +983,9 @@ export type HubspotApiFormData = {
     pageUri?: string
     pageName?: string
   }
+}
+
+export enum ClosedCoursePricingType {
+  STANDARD = 'standard',
+  CUSTOM = 'custom',
 }

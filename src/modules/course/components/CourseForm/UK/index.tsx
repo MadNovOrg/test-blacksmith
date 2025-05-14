@@ -20,7 +20,7 @@ import {
   courseWithManualPrice,
   isCourseWithNoPrice,
 } from '@app/modules/course/pages/CreateCourse/utils'
-import { CourseInput } from '@app/types'
+import { CourseInput, ClosedCoursePricingType } from '@app/types'
 
 import { Props } from '..'
 import { AttendeesSection } from '../components/AttendeesSection'
@@ -139,6 +139,10 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       blendedLearning: values.blendedLearning,
       maxParticipants: values.maxParticipants ?? 0,
       residingCountry: values.residingCountry as WorldCountriesCodes,
+      closedCourseWithManualPrice:
+        isClosedCourse &&
+        isUKCountry(values.residingCountry) &&
+        values.closedCoursePricingType === ClosedCoursePricingType.CUSTOM,
     })
   }, [
     courseType,
@@ -147,6 +151,9 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     values.courseLevel,
     values.maxParticipants,
     values.residingCountry,
+    values.closedCoursePricingType,
+    isClosedCourse,
+    isUKCountry,
   ])
 
   const courseWithNoPrice = useMemo(() => {
@@ -200,6 +207,7 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     reaccreditation: values.reaccreditation,
     blended: values.blendedLearning,
     maxParticipants: values.maxParticipants,
+    closedCoursePricingType: values.closedCoursePricingType,
   })
 
   const courseResidingCountry =
@@ -225,7 +233,12 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   // this sets the course price for UK residing countries
   // based on its Type, LEVEL and blended & reaccreditation status
   useEffect(() => {
-    if (isCreation && isUKCountry(values.residingCountry) && isICM) {
+    if (
+      isCreation &&
+      isUKCountry(values.residingCountry) &&
+      courseInput?.closedCoursePricingType !== ClosedCoursePricingType.CUSTOM &&
+      isICM
+    ) {
       setValue('price', coursePrice?.priceAmount)
       setValue('priceCurrency', coursePrice?.priceCurrency)
     }
@@ -247,6 +260,7 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     values.residingCountry,
     coursePrice?.priceAmount,
     coursePrice?.priceCurrency,
+    courseInput?.closedCoursePricingType,
   ])
 
   useEffect(() => {
@@ -415,6 +429,7 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               register={register}
               setValue={setValue}
               control={control}
+              values={values}
             />
           ) : null}
 

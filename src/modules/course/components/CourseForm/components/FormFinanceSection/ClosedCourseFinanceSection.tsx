@@ -1,4 +1,11 @@
-import { Box, Grid, Typography } from '@mui/material'
+import {
+  Box,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material'
 import { t } from 'i18next'
 import {
   FieldErrors,
@@ -8,10 +15,20 @@ import {
   Controller,
 } from 'react-hook-form'
 
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { InfoPanel } from '@app/components/InfoPanel'
 import { ProfileSelector } from '@app/components/ProfileSelector'
-import { Course_Level_Enum, FindProfilesQuery } from '@app/generated/graphql'
-import { CourseInput, Profile, RoleName } from '@app/types'
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  FindProfilesQuery,
+} from '@app/generated/graphql'
+import {
+  CourseInput,
+  ClosedCoursePricingType,
+  Profile,
+  RoleName,
+} from '@app/types'
 
 import { DisabledFields } from '../..'
 import { SourceDropdown } from '../SourceDropdown'
@@ -34,6 +51,7 @@ interface Props {
   register: UseFormRegister<CourseInput>
   setValue: UseFormSetValue<CourseInput>
   control?: Control<CourseInput>
+  values?: CourseInput
 }
 
 const ClosedCourseFinanceSection: React.FC<React.PropsWithChildren<Props>> = ({
@@ -52,7 +70,13 @@ const ClosedCourseFinanceSection: React.FC<React.PropsWithChildren<Props>> = ({
   register,
   setValue,
   control,
+  values,
 }) => {
+  const { isUKCountry } = useWorldCountries()
+
+  const shouldShowPricingTypeRadio =
+    isUKCountry(residingCountry) && values?.type === Course_Type_Enum.Closed
+
   return (
     <InfoPanel
       title={t('components.course-form.finance-section-title')}
@@ -64,6 +88,34 @@ const ClosedCourseFinanceSection: React.FC<React.PropsWithChildren<Props>> = ({
       )}
     >
       <Grid container spacing={2}>
+        {shouldShowPricingTypeRadio && (
+          <Grid container px={2}>
+            <RadioGroup
+              onChange={event =>
+                setValue(
+                  'closedCoursePricingType',
+                  event.target.value as ClosedCoursePricingType,
+                )
+              }
+              sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}
+              defaultValue={values?.closedCoursePricingType}
+            >
+              <FormControlLabel
+                disabled={!isCreateCourse}
+                control={<Radio />}
+                label={t('components.course-form.standard-pricing')}
+                value={ClosedCoursePricingType.STANDARD}
+              />
+              <FormControlLabel
+                disabled={!isCreateCourse}
+                control={<Radio />}
+                label={t('components.course-form.custom-pricing')}
+                value={ClosedCoursePricingType.CUSTOM}
+              />
+            </RadioGroup>
+          </Grid>
+        )}
+
         <Grid item md={6} sm={12}>
           <Typography fontWeight={600}>
             {t('components.course-form.sales-rep-title')}
@@ -126,6 +178,7 @@ const ClosedCourseFinanceSection: React.FC<React.PropsWithChildren<Props>> = ({
           disabledFields={disabledFields}
           control={control}
           register={register}
+          values={values}
         />
       ) : null}
 

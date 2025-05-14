@@ -209,6 +209,8 @@
     "free-spaces-required": "Free spaces is a required field",
     "free-spaces-less-equal": "Free spaces must be less or equal to the maximum number of attendees",
     "finance-section-title": "Finance",
+    "standard-pricing": "Standard pricing",
+    "custom-pricing": "Custom pricing",
     "sales-rep-title": "Sales",
     "sales-rep-placeholder": "Sales representative",
     "sales-rep-error": "Sales representative is a required field",
