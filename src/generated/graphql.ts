@@ -69845,6 +69845,7 @@ export type GetProfileDetailsQueryVariables = Exact<{
   withCourseHistory?: InputMaybe<Scalars['Boolean']>;
   withCourseTrainerHistory?: InputMaybe<Scalars['Boolean']>;
   withKnowledgeHubAccess?: InputMaybe<Scalars['Boolean']>;
+  whereCertificates?: InputMaybe<Course_Certificate_Bool_Exp>;
 }>;
 
 

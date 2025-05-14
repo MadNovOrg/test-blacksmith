@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 
-import useProfile from '../../hooks/useProfile'
+import useProfile from '../../hooks/useProfile/useProfile'
 import { EditProfileInputs } from '../../pages/EditProfile/utils'
 import { avatarSize, maxAvatarFileSizeBytes } from '../../utils'
 

@@ -47,7 +47,7 @@ import {
   TableMenuSelections,
 } from '@app/modules/profile/components/TableMenu'
 import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { getRoleColor } from '@app/modules/profile/utils'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'

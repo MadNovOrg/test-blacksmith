@@ -21,7 +21,7 @@ import { useCourseDraft } from '@app/modules/course/hooks/useCourseDraft'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
 import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import {
   BildStrategies,
   ValidCourseInput,
@@ -57,7 +57,7 @@ vi.mock('@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink')
 
 vi.mock('@app/modules/course/hooks/useCourseDraft')
 
-vi.mock('@app/modules/profile/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn().mockResolvedValue(true),

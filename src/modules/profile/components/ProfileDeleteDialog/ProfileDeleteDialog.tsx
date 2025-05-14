@@ -14,7 +14,7 @@ import {
   DeleteUserOutput,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { MUTATION as DELETE_PROFILE_MUTATION } from '@app/modules/profile/queries/delete-profile'
 
 export type Props = {

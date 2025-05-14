@@ -43,7 +43,7 @@ import { PersonalDetailsSection } from '@app/modules/profile/components/Personal
 import { UploadAvatarAndCTAButtons } from '@app/modules/profile/components/UploadAvatarAndCTAButtons'
 import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
 import { useFormSubmit } from '@app/modules/profile/hooks/useFormSubmit'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import useRoles from '@app/modules/profile/hooks/useRoles'
 import { useUpdateProfile } from '@app/modules/profile/hooks/useUpdateProfile'
 import {

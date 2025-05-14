@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 
 type CoursePrerequisitesAlertProps = {
   courseId?: string

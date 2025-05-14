@@ -21,7 +21,7 @@ import {
   MergeUserMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { MERGE_USERS_MUTATION } from '@app/modules/user/queries/merge-users'
 import { LoadingStatus } from '@app/util'
 

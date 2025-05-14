@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useMutation, useQuery } from 'urql'
 
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
 import {
   ArchiveProfileMutation,
   ArchiveProfileMutationVariables,
@@ -24,7 +25,7 @@ type RequiredCertificateCondition = {
   isUKCountry: boolean
 }
 
-const matchRequiredCertificates = cond<
+export const matchRequiredCertificates = cond<
   RequiredCertificateCondition,
   Course_Level_Enum[]
 >([
@@ -124,6 +125,9 @@ export default function useProfile(
   withKnowledgeHubAccess = false,
 ) {
   const { isUKCountry } = useWorldCountries()
+  const {
+    acl: { isTTAdmin },
+  } = useAuth()
   const [{ data: getProfileResponse, error: getProfileError }, reexecuteQuery] =
     useQuery<GetProfileDetailsQuery, GetProfileDetailsQueryVariables>({
       query: QUERY,
@@ -134,6 +138,21 @@ export default function useProfile(
         withCourseHistory,
         withCourseTrainerHistory: withCourseHistory,
         withKnowledgeHubAccess: withKnowledgeHubAccess,
+        whereCertificates: {
+          ...(isTTAdmin()
+            ? { profileId: { _eq: profileId } }
+            : {
+                _and: [
+                  { profileId: { _eq: profileId } },
+                  {
+                    _or: [
+                      { participant: { completed_evaluation: { _eq: true } } },
+                      { legacyCourseCode: { _is_null: false, _neq: '' } },
+                    ],
+                  },
+                ],
+              }),
+        },
       },
     })
   const [, updateAvatarMutation] = useMutation<
@@ -157,6 +176,7 @@ export default function useProfile(
       if (courseId) {
         courses = courses.filter(c => c.id === parseInt(courseId))
       }
+
       return courses
         .map(c => {
           const requiredCertificate = matchRequiredCertificates({
@@ -205,6 +225,7 @@ export default function useProfile(
     if (!profileId) {
       return
     }
+
     archiveProfile({
       profileId,
     })

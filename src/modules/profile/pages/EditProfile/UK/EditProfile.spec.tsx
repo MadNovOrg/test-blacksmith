@@ -3,7 +3,7 @@ import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import { GetUserKnowledgeHubAccessQuery } from '@app/generated/graphql'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import useRoles from '@app/modules/profile/hooks/useRoles'
 import useTrainerAgreementTypes from '@app/modules/profile/hooks/useTrainerAgreementTypes'
 import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '@app/modules/profile/queries/get-user-knowledge-hub-access'
@@ -15,7 +15,7 @@ import { buildProfile } from '@test/mock-data-utils'
 import { EditProfilePage } from './EditProfile'
 
 const useProfileMock = vi.mocked(useProfile)
-vi.mock('@app/modules/profile/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
 
 const useRolesMock = vi.mocked(useRoles)
 vi.mock('@app/modules/profile/hooks/useRoles')

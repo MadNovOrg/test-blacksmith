@@ -85,9 +85,7 @@ export const CertificationsTable: FC<
                         <Grid container direction="column" alignItems="start">
                           {certificate.status ? (
                             <CertificateStatusChip
-                              status={
-                                certificate.status as Certificate_Status_Enum
-                              }
+                              status={certificate.status}
                               tooltip={
                                 certificate.participant?.certificateChanges[0]
                                   ?.payload?.note

@@ -2,14 +2,14 @@ import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import { DeleteProfileMutation, DeleteUserError } from '@app/generated/graphql'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { LoadingStatus } from '@app/util'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { ProfileDeleteDialog } from '.'
 
-vi.mock('@app/modules/profile/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
 const useProfileMock = vi.mocked(useProfile)
 
 describe('DeleteUsersDialog', () => {

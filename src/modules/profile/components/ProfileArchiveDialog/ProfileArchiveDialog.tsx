@@ -8,7 +8,7 @@ import { noop } from 'ts-essentials'
 import { Dialog } from '@app/components/dialogs'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 
 export type Props = {
   onClose?: () => void

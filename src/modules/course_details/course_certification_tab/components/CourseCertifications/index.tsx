@@ -29,7 +29,9 @@ export const CourseCertifications: React.FC<
           : {}),
         certificate: {
           id: { _is_null: false },
-          participant: { completed_evaluation: { _eq: true } },
+          ...(acl.isTTAdmin()
+            ? {}
+            : { participant: { completed_evaluation: { _eq: true } } }),
         },
       },
     },

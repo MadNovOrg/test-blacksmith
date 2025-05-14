@@ -34,7 +34,7 @@ import {
   checkCourseDetailsForExceptions,
   isTrainersRatioNotMet,
 } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import {
   CourseInput,
   InviteStatus,

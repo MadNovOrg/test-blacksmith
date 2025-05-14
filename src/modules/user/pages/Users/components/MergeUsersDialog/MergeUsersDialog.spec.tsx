@@ -2,7 +2,7 @@ import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import { MergeUserError, MergeUserMutation } from '@app/generated/graphql'
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -10,7 +10,7 @@ import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { MergeUsersDialog } from './MergeUsersDialog'
 
-vi.mock('@app/modules/profile/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
 
 const useProfileMock = vi.mocked(useProfile)
 

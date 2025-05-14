@@ -5,7 +5,7 @@ import { chance, render, screen, userEvent } from '@test/index'
 
 import UndoRevokeModal from './UndoRevokeModal'
 
-vi.mock('@app/modules/profile/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
 
 describe('UndoRevokeModal', () => {
   const onCloseMock = vi.fn()

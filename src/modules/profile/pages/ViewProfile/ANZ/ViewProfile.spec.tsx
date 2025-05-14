@@ -2,7 +2,7 @@ import React from 'react'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
-import useProfile from '@app/modules/profile/hooks/useProfile'
+import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { ViewProfilePage } from '@app/modules/profile/pages/ViewProfile/ANZ'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -10,7 +10,8 @@ import { LoadingStatus } from '@app/util'
 import { render, screen } from '@test/index'
 import { buildCertificate, buildProfile } from '@test/mock-data-utils'
 
-vi.mock('@app/modules/profile/hooks/useProfile')
+vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
+
 const useProfileMock = vi.mocked(useProfile)
 describe('page: ViewProfile', () => {
   describe('delete profile', () => {

@@ -288,6 +288,15 @@ export const CourseDetails = () => {
     return allowRequestCancelConditions.every(el => Boolean(el))
   }, [acl, course])
 
+  const renderCertificationsTabCondition = useMemo(() => {
+    if (!course) return false
+    if (acl.isTTAdmin()) return course.certificateCount?.aggregate.count
+    return (
+      course.certificateCount?.aggregate.count &&
+      course.participantSubmittedEvaluationCount?.aggregate.count
+    )
+  }, [course, acl])
+
   useEffect(() => {
     if (course && !course.status && !polling) {
       startPolling()
@@ -480,9 +489,7 @@ export const CourseDetails = () => {
                       data-testid="disabilities-tab"
                     />
                   ) : null}
-                  {course.certificateCount?.aggregate.count &&
-                  course.participantSubmittedEvaluationCount?.aggregate
-                    .count ? (
+                  {renderCertificationsTabCondition ? (
                     <PillTab
                       label={t(
                         'pages.course-details.tabs.certifications.title',

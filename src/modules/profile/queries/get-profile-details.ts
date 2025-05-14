@@ -17,6 +17,7 @@ export const QUERY = gql`
     $withCourseHistory: Boolean = false
     $withCourseTrainerHistory: Boolean = false
     $withKnowledgeHubAccess: Boolean = false
+    $whereCertificates: course_certificate_bool_exp = {}
   ) {
     profile: profile_by_pk(id: $profileId) {
       ...Profile
@@ -101,17 +102,7 @@ export const QUERY = gql`
       }
     }
     certificates: course_certificate(
-      where: {
-        _and: [
-          { profileId: { _eq: $profileId } }
-          {
-            _or: [
-              { participant: { completed_evaluation: { _eq: true } } }
-              { legacyCourseCode: { _is_null: false, _neq: "" } }
-            ]
-          }
-        ]
-      }
+      where: $whereCertificates
       order_by: { expiryDate: desc }
     ) {
       ...Certificate

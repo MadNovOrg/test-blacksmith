@@ -16,7 +16,7 @@ const mockNavigate = vi.fn()
 vi.mock('@app/hooks/useCourse')
 vi.mock('@app/modules/resources/hooks/use-resource-areas')
 vi.mock('react-router-dom', async () => ({
-  ...((await vi.importActual('react-router-dom')) as object),
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }))
 
@@ -245,5 +245,132 @@ describe('page: CourseDetails', () => {
       screen.getByTestId('course-materials-loading-state'),
     ).toBeInTheDocument()
     expect(screen.queryByTestId('course-materials-tab')).not.toBeInTheDocument()
+  })
+  it('renders certifications tab for admins if there are certifications and no evaluations', () => {
+    const course = buildCourse()
+
+    useCourseMocked.mockReturnValue({
+      mutate: vi.fn(),
+      data: {
+        course: {
+          certificateCount: {
+            aggregate: {
+              count: 1,
+            },
+          },
+          ...course,
+        },
+      },
+      status: LoadingStatus.SUCCESS,
+    })
+
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+    })
+
+    render(
+      <Routes>
+        <Route path="/course/:id/details" element={<CourseDetails />} />
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      { initialEntries: [`/course/${course.id}/details`] },
+    )
+
+    expect(screen.getByTestId('certifications-tab')).toBeInTheDocument()
+  })
+  it('should not render the certifications tab if there are certificates but role is different than admin', () => {
+    const course = buildCourse()
+
+    useCourseMocked.mockReturnValue({
+      mutate: vi.fn(),
+      data: {
+        course: {
+          certificateCount: {
+            aggregate: {
+              count: 1,
+            },
+          },
+          participantSubmittedEvaluationCount: {
+            aggregate: {
+              count: 0,
+            },
+          },
+          ...course,
+        },
+      },
+      status: LoadingStatus.SUCCESS,
+    })
+
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+    })
+
+    render(
+      <Routes>
+        <Route path="/course/:id/details" element={<CourseDetails />} />
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.TT_OPS,
+        },
+      },
+      { initialEntries: [`/course/${course.id}/details`] },
+    )
+
+    expect(screen.queryByTestId('certifications-tab')).not.toBeInTheDocument()
+  })
+  it('should render the certifications tab if there are certificates and evaluations and role is different than admin', () => {
+    const course = buildCourse()
+
+    useCourseMocked.mockReturnValue({
+      mutate: vi.fn(),
+      data: {
+        course: {
+          certificateCount: {
+            aggregate: {
+              count: 1,
+            },
+          },
+          participantSubmittedEvaluationCount: {
+            aggregate: {
+              count: 1,
+            },
+          },
+          ...course,
+        },
+      },
+      status: LoadingStatus.SUCCESS,
+    })
+
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+    })
+
+    render(
+      <Routes>
+        <Route path="/course/:id/details" element={<CourseDetails />} />
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.TT_OPS,
+        },
+      },
+      { initialEntries: [`/course/${course.id}/details`] },
+    )
+
+    expect(screen.getByTestId('certifications-tab')).toBeInTheDocument()
   })
 })
