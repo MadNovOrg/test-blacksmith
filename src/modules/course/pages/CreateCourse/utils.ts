@@ -27,6 +27,7 @@ export const priceFieldIsMandatory = ({
   blendedLearning,
   maxParticipants,
   residingCountry,
+  closedCourseWithManualPrice,
 }: {
   accreditedBy: Accreditors_Enum
   courseType: Course_Type_Enum
@@ -34,6 +35,7 @@ export const priceFieldIsMandatory = ({
   blendedLearning: boolean
   maxParticipants: number
   residingCountry: WorldCountriesCodes
+  closedCourseWithManualPrice?: boolean
 }) => {
   const isBILDcourse = accreditedBy === Accreditors_Enum.Bild
   const isICMcourse = accreditedBy === Accreditors_Enum.Icm
@@ -50,15 +52,12 @@ export const priceFieldIsMandatory = ({
     isUKcountry &&
     maxParticipants <= 8
 
-  if (
+  return (
     specialUKcountryCondition ||
     (!isUKcountry && !isIndirectCourse) ||
-    (isBILDcourse && !isIndirectCourse)
-  ) {
-    return true
-  }
-
-  return false
+    (isBILDcourse && !isIndirectCourse) ||
+    closedCourseWithManualPrice
+  )
 }
 
 export const courseWithManualPrice = ({

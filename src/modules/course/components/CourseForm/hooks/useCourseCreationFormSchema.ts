@@ -461,6 +461,11 @@ export const useCourseCreationFormSchema = ({
             ) {
               return false
             }
+            const closedCourseWithManualPrice =
+              values[0].closedCoursePricingType ===
+                ClosedCoursePricingType.CUSTOM &&
+              values[0].type === Course_Type_Enum.Closed &&
+              isUKCountry(values[0].residingCountry)
             return priceFieldIsMandatory({
               accreditedBy: values[0].accreditedBy as Accreditors_Enum,
               blendedLearning: values[0].blendedLearning,
@@ -468,6 +473,7 @@ export const useCourseCreationFormSchema = ({
               courseLevel: values[0].courseLevel as Course_Level_Enum,
               courseType,
               residingCountry: values[0].residingCountry as Countries_Code,
+              closedCourseWithManualPrice,
             })
           }
           if (showPriceField()) {
