@@ -52,6 +52,8 @@ import { getRoleColor } from '@app/modules/profile/utils'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
+import { TrainerRoleChip } from '../components/TrainerRoleChip'
+
 export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { profile: currentUserProfile, activeRole, verified, acl } = useAuth()
@@ -450,13 +452,11 @@ export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
                           ))}
                           {profile.trainer_role_types.map(
                             ({ trainer_role_type }) => (
-                              <Chip
-                                key={trainer_role_type.name}
-                                label={t(
-                                  `trainer-role-types.${trainer_role_type?.name}`,
-                                )}
-                                sx={{ marginRight: 1, marginBottom: 0.5 }}
-                                data-testid={`trainer-role-type-${trainer_role_type.name}`}
+                              <TrainerRoleChip
+                                key={trainer_role_type.id}
+                                trainerRole={
+                                  trainer_role_type.name as TrainerRoleTypeName
+                                }
                               />
                             ),
                           )}

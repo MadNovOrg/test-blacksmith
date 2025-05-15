@@ -48,7 +48,10 @@ import {
 } from '@app/modules/profile/components/TableMenu'
 import { UserGo1License } from '@app/modules/profile/components/UserGo1License'
 import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
-import { getRoleColor } from '@app/modules/profile/utils'
+import {
+  getRoleColor,
+  getTrainerRoleChipColor,
+} from '@app/modules/profile/utils'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -451,6 +454,9 @@ export const ViewProfilePage: React.FC<React.PropsWithChildren> = () => {
                                 key={trainer_role_type.name}
                                 label={t(
                                   `trainer-role-types.${trainer_role_type?.name}`,
+                                )}
+                                color={getTrainerRoleChipColor(
+                                  trainer_role_type.name as TrainerRoleTypeName,
                                 )}
                                 sx={{ marginRight: 1, marginBottom: 0.5 }}
                               />

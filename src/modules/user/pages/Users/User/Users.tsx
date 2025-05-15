@@ -661,6 +661,12 @@ export const Users = () => {
                                         fontSize: '12px',
                                         margin: '0 4px 4px 0',
                                       }}
+                                      color={
+                                        trainer_role_type.name ===
+                                        TrainerRoleTypeName.INTERNAL
+                                          ? 'warning'
+                                          : 'default'
+                                      }
                                       size="small"
                                       label={t(
                                         `trainer-role-types.${trainer_role_type.name}`,

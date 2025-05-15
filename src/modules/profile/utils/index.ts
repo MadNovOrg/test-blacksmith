@@ -15,6 +15,12 @@ export function getRoleColor(name: string) {
     : RoleColor.INFO
 }
 
+export function getTrainerRoleChipColor(trainerRole: TrainerRoleTypeName) {
+  if (trainerRole === TrainerRoleTypeName.INTERNAL) return 'warning'
+
+  return 'default'
+}
+
 export enum DietaryRestrictionRadioValues {
   NO = 'NO',
   YES = 'YES',

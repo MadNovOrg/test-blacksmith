@@ -33,7 +33,8 @@ import {
 } from '@app/modules/profile'
 import { yup } from '@app/schemas'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
-import { capitalize } from '@app/util'
+
+import { getTrainerRoleLabels } from '../utils'
 
 export function rolesFormSchema() {
   return yup
@@ -205,8 +206,10 @@ export const EditRoles = () => {
                               fullWidth={isMobile}
                               multiple
                               value={field.value}
-                              renderValue={selected =>
-                                selected.map(s => capitalize(s)).join(', ')
+                              renderValue={selectedTrainerRoles =>
+                                getTrainerRoleLabels(
+                                  selectedTrainerRoles as TrainerRoleTypeName[],
+                                )
                               }
                             >
                               {trainerRolesNames.map(roleName => (
@@ -214,10 +217,9 @@ export const EditRoles = () => {
                                   <Checkbox
                                     checked={field.value?.includes(roleName)}
                                   />
-                                  {roleName == TrainerRoleTypeName.AOL_ETA ||
-                                  roleName == TrainerRoleTypeName.TRAINER_ETA
-                                    ? t(`trainer-role-types.eta`)
-                                    : t(`trainer-role-types.${roleName}`)}
+                                  {getTrainerRoleLabels([
+                                    roleName,
+                                  ] as TrainerRoleTypeName[])}
                                 </MenuItem>
                               ))}
                             </Select>
