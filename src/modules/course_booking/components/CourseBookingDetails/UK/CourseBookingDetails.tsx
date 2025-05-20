@@ -55,6 +55,7 @@ import { formatCurrency, getMandatoryCourseMaterialsCost } from '@app/util'
 import { ParticipantInput, useBooking } from '../../BookingContext'
 import { PromoCode } from '../../PromoCode'
 import { AttendeeValidCertificate } from '../components/AttendeeValidCertificate'
+import { BookingContactDetails } from '../components/BookingContactDetails/BookingContactDetails'
 import {
   isAttendeeValidCertificateMandatory,
   FormInputs,
@@ -66,13 +67,12 @@ export const CourseBookingDetails: React.FC<
 > = () => {
   const { t } = useTranslation()
 
-  const { acl, profile } = useAuth()
-  const [bookingContactProfile, setBookingContactProfile] = useState<
-    Partial<UserSelectorProfile>
-  >({})
+  const { acl } = useAuth()
+
   const [participantsProfiles, setParticipantProfiles] = useState<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
+
   const navigate = useNavigate()
   const defaultCurrency = Currency.Gbp
 
@@ -108,6 +108,7 @@ export const CourseBookingDetails: React.FC<
   )
 
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
+
   const isAddressInfoRequired =
     course?.type === Course_Type_Enum.Open &&
     course?.level === Course_Level_Enum.Level_1 &&
@@ -175,20 +176,6 @@ export const CourseBookingDetails: React.FC<
   }
 
   useEffect(() => {
-    if (profile && !isInternalUserBooking) {
-      setValue('bookingContact', {
-        firstName: profile.givenName,
-        lastName: profile.familyName,
-        email: profile.email,
-      })
-      setBookingContactProfile({
-        familyName: profile?.familyName,
-        givenName: profile?.givenName,
-      })
-    }
-  }, [profile, isInternalUserBooking, setValue])
-
-  useEffect(() => {
     if (booking.quantity !== values.quantity) {
       setBooking({ quantity: values.quantity })
     }
@@ -233,23 +220,6 @@ export const CourseBookingDetails: React.FC<
       givenName: newParticipant.firstName,
     }
     setParticipantProfiles([...participants])
-  }
-
-  const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
-    setBookingContactProfile({})
-    setValue(
-      'bookingContact',
-      {
-        email: profile?.email ?? '',
-        firstName: profile?.givenName ?? '',
-        lastName: profile?.familyName ?? '',
-      },
-      { shouldValidate: true },
-    )
-    setBookingContactProfile({
-      familyName: profile?.familyName,
-      givenName: profile?.givenName,
-    })
   }
 
   const handleEmailChange = async (email: string, index: number) => {
@@ -660,79 +630,12 @@ export const CourseBookingDetails: React.FC<
             </Box>
           )}
 
-          <Box mb={3}>
-            <Grid container alignItems={'center'} gap={0.5}>
-              <Typography fontWeight={600}>
-                {t('components.course-form.booking-contact')}
-              </Typography>
-              <Tooltip title={t('authorised-organisation-contact')}>
-                <InfoIcon
-                  color={'info'}
-                  sx={{ cursor: 'pointer', zIndex: 1 }}
-                />
-              </Tooltip>
-            </Grid>
-
-            <Grid container spacing={3} mb={3}>
-              <Grid item md={12}>
-                <UserSelector
-                  value={values.bookingContact.email ?? undefined}
-                  onChange={handleChangeBookingContact}
-                  onEmailChange={email => {
-                    setValue('bookingContact', {
-                      ...values.bookingContact,
-                      email,
-                    })
-                    setBookingContactProfile({})
-                  }}
-                  required
-                  error={errors.bookingContact?.email?.message}
-                  textFieldProps={{ variant: 'filled' }}
-                  organisationId={values.orgId}
-                />
-              </Grid>
-              <Grid item md={6}>
-                <TextField
-                  label={t('first-name')}
-                  variant="filled"
-                  placeholder={t('first-name-placeholder')}
-                  {...register(`bookingContact.firstName`)}
-                  inputProps={{
-                    'data-testid': `bookingContact-input-first-name`,
-                  }}
-                  sx={{ bgcolor: 'grey.100' }}
-                  error={!!errors.bookingContact?.firstName}
-                  helperText={errors.bookingContact?.firstName?.message ?? ''}
-                  InputLabelProps={{
-                    shrink: Boolean(values.bookingContact.firstName),
-                  }}
-                  fullWidth
-                  required
-                  disabled={Boolean(bookingContactProfile?.familyName)}
-                />
-              </Grid>
-              <Grid item md={6}>
-                <TextField
-                  label={t('surname')}
-                  variant="filled"
-                  placeholder={t('surname-placeholder')}
-                  {...register(`bookingContact.lastName`)}
-                  inputProps={{
-                    'data-testid': `bookingContact-input-surname`,
-                  }}
-                  sx={{ bgcolor: 'grey.100' }}
-                  error={!!errors.bookingContact?.lastName}
-                  helperText={errors.bookingContact?.lastName?.message ?? ''}
-                  InputLabelProps={{
-                    shrink: Boolean(values.bookingContact.lastName),
-                  }}
-                  fullWidth
-                  required
-                  disabled={Boolean(bookingContactProfile?.givenName)}
-                />
-              </Grid>
-            </Grid>
-          </Box>
+          <BookingContactDetails
+            errors={errors}
+            register={register}
+            setValue={setValue}
+            values={values}
+          />
         </Box>
 
         <Typography variant="subtitle1" fontWeight="500">

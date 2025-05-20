@@ -907,7 +907,7 @@ describe('component: CreateCourseForm', () => {
     expect(screen.getByTestId('residing-country-selector')).toBeInTheDocument()
     const countrySelectors = screen.getAllByTestId('countries-selector-input')
 
-    expect(countrySelectors.length).toEqual(2)
+    expect(countrySelectors.length).toEqual(3)
 
     expect(countrySelectors[0].innerText).toEqual(countrySelectors[1].innerText)
     countrySelectors.forEach(selector => {

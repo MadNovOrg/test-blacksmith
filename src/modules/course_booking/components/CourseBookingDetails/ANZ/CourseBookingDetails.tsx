@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import InfoIcon from '@mui/icons-material/Info'
 import {
   Alert,
   Box,
@@ -12,7 +11,6 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import Big from 'big.js'
@@ -52,6 +50,7 @@ import { formatCurrency, getResourcePackPrice } from '@app/util'
 import { ParticipantInput, useBooking } from '../../BookingContext'
 import { PromoCode } from '../../PromoCode'
 import { AttendeeValidCertificate } from '../components/AttendeeValidCertificate'
+import { BookingContactDetails } from '../components/BookingContactDetails/BookingContactDetails'
 import {
   isAttendeeValidCertificateMandatory,
   FormInputs,
@@ -63,11 +62,9 @@ export const CourseBookingDetails: React.FC<
 > = () => {
   const { t } = useTranslation()
 
-  const { acl, profile } = useAuth()
-  const [bookingContactProfile, setBookingContactProfile] = useState<
-    Partial<UserSelectorProfile>
-  >({})
-  const [participantProfiles, setParticipantProfiles] = useState<
+  const { acl } = useAuth()
+
+  const [participantsProfiles, setParticipantsProfiles] = useState<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
@@ -171,20 +168,6 @@ export const CourseBookingDetails: React.FC<
   }
 
   useEffect(() => {
-    if (profile && !isInternalUserBooking) {
-      setValue('bookingContact', {
-        firstName: profile.givenName,
-        lastName: profile.familyName,
-        email: profile.email,
-      })
-      setBookingContactProfile({
-        familyName: profile?.familyName,
-        givenName: profile?.givenName,
-      })
-    }
-  }, [profile, isInternalUserBooking, setValue])
-
-  useEffect(() => {
     if (booking.quantity !== values.quantity) {
       setBooking({ quantity: values.quantity })
     }
@@ -197,7 +180,7 @@ export const CourseBookingDetails: React.FC<
   )
 
   useEffect(() => {
-    setParticipantProfiles(
+    setParticipantsProfiles(
       Array.from(Array(values.participants.length)).fill({}),
     )
   }, [values.participants.length])
@@ -206,7 +189,7 @@ export const CourseBookingDetails: React.FC<
     profile: UserSelectorProfile,
     index: number,
   ) => {
-    const participants = participantProfiles
+    const participants = participantsProfiles
     participants[index] = {}
     const newParticipant = {
       email: profile?.email ?? '',
@@ -228,24 +211,7 @@ export const CourseBookingDetails: React.FC<
       familyName: newParticipant.lastName,
       givenName: newParticipant.firstName,
     }
-    setParticipantProfiles([...participants])
-  }
-
-  const handleChangeBookingContact = async (profile: UserSelectorProfile) => {
-    setBookingContactProfile({})
-    setValue(
-      'bookingContact',
-      {
-        email: profile?.email ?? '',
-        firstName: profile?.givenName ?? '',
-        lastName: profile?.familyName ?? '',
-      },
-      { shouldValidate: true },
-    )
-    setBookingContactProfile({
-      familyName: profile?.familyName,
-      givenName: profile?.givenName,
-    })
+    setParticipantsProfiles([...participants])
   }
 
   const handleEmailChange = async (email: string, index: number) => {
@@ -254,9 +220,9 @@ export const CourseBookingDetails: React.FC<
       ...participant,
       email,
     })
-    const participants = participantProfiles
+    const participants = participantsProfiles
     participants[index] = {}
-    setParticipantProfiles([...participants])
+    setParticipantsProfiles([...participants])
   }
 
   const handleOnChangeAttendeeCertificate = (state: boolean) => {
@@ -334,6 +300,7 @@ export const CourseBookingDetails: React.FC<
   const taxType = () => {
     return t('custom-gst', { amount: booking.vat })
   }
+
   return (
     <FormProvider {...methods}>
       <Helmet>
@@ -648,79 +615,12 @@ export const CourseBookingDetails: React.FC<
             </Box>
           )}
 
-          <Box mb={3}>
-            <Grid container alignItems={'center'} gap={0.5}>
-              <Typography fontWeight={600}>
-                {t('components.course-form.booking-contact')}
-              </Typography>
-              <Tooltip title={t('authorised-organisation-contact')}>
-                <InfoIcon
-                  color={'info'}
-                  sx={{ cursor: 'pointer', zIndex: 1 }}
-                />
-              </Tooltip>
-            </Grid>
-
-            <Grid container spacing={3} mb={3}>
-              <Grid item md={12}>
-                <UserSelector
-                  value={values.bookingContact.email ?? undefined}
-                  onChange={handleChangeBookingContact}
-                  onEmailChange={email => {
-                    setValue('bookingContact', {
-                      ...values.bookingContact,
-                      email,
-                    })
-                    setBookingContactProfile({})
-                  }}
-                  required
-                  error={errors.bookingContact?.email?.message}
-                  textFieldProps={{ variant: 'filled' }}
-                  organisationId={values.orgId}
-                />
-              </Grid>
-              <Grid item md={6}>
-                <TextField
-                  label={t('first-name')}
-                  variant="filled"
-                  placeholder={t('first-name-placeholder')}
-                  {...register(`bookingContact.firstName`)}
-                  inputProps={{
-                    'data-testid': `bookingContact-input-first-name`,
-                  }}
-                  sx={{ bgcolor: 'grey.100' }}
-                  error={!!errors.bookingContact?.firstName}
-                  helperText={errors.bookingContact?.firstName?.message ?? ''}
-                  InputLabelProps={{
-                    shrink: Boolean(values.bookingContact.firstName),
-                  }}
-                  fullWidth
-                  required
-                  disabled={Boolean(bookingContactProfile?.familyName)}
-                />
-              </Grid>
-              <Grid item md={6}>
-                <TextField
-                  label={t('surname')}
-                  variant="filled"
-                  placeholder={t('surname-placeholder')}
-                  {...register(`bookingContact.lastName`)}
-                  inputProps={{
-                    'data-testid': `bookingContact-input-surname`,
-                  }}
-                  sx={{ bgcolor: 'grey.100' }}
-                  error={!!errors.bookingContact?.lastName}
-                  helperText={errors.bookingContact?.lastName?.message ?? ''}
-                  InputLabelProps={{
-                    shrink: Boolean(values.bookingContact.lastName),
-                  }}
-                  fullWidth
-                  required
-                  disabled={Boolean(bookingContactProfile?.givenName)}
-                />
-              </Grid>
-            </Grid>
-          </Box>
+          <BookingContactDetails
+            errors={errors}
+            register={register}
+            setValue={setValue}
+            values={values}
+          />
         </Box>
 
         <Typography variant="subtitle1" fontWeight="500">
@@ -775,7 +675,9 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
-                      disabled={Boolean(participantProfiles[index]?.familyName)}
+                      disabled={Boolean(
+                        participantsProfiles[index]?.familyName,
+                      )}
                     />
                   </Grid>
                   <Grid item md={6}>
@@ -797,7 +699,7 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
-                      disabled={Boolean(participantProfiles[index]?.givenName)}
+                      disabled={Boolean(participantsProfiles[index]?.givenName)}
                     />
                   </Grid>
                 </Grid>

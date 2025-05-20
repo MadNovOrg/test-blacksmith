@@ -1,16 +1,17 @@
 import { Grid, Typography, TextField } from '@mui/material'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useUpdateEffect } from 'react-use'
 import { useQuery } from 'urql'
 
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { OrgSelector as ANZOrgSelector } from '@app/components/OrgSelector/ANZ'
 import { OrgSelector as UKOrgSelector } from '@app/components/OrgSelector/UK'
 import { CallbackOption, isHubOrg } from '@app/components/OrgSelector/UK/utils'
-import {
-  Profile as UserSelectorProfile,
-  UserSelector,
-} from '@app/components/UserSelector'
+import { UserSelector } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
@@ -39,6 +40,12 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
     formState: { errors },
   } = useFormContext<CourseInput>()
   const { t, _t } = useScopedTranslation('components.course-form')
+
+  const { getLabel: getCountryLabel } = useWorldCountries()
+
+  const [needsContactResidingCountry, setNeedsContactResidingCountry] =
+    useState(false)
+
   const courseType = useWatch({ control, name: 'type' }) as Course_Type_Enum
   const accreditedBy = useWatch({ control, name: 'accreditedBy' })
   const organization = useWatch({ control, name: 'organization' })
@@ -81,9 +88,10 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
   }, [bookingContact, organizationKeyContact])
 
   const contactData = useRef({
+    countryCode: '',
+    email: '',
     firstName: '',
     lastName: '',
-    email: '',
   }).current
 
   const [{ data: foundProfileData }, reexecuteQuery] = useQuery<
@@ -96,6 +104,13 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
     },
     pause: true,
   })
+
+  useEffect(() => {
+    if (!currentContact[courseType]?.residingCountryCode) {
+      setNeedsContactResidingCountry(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseType])
 
   const handleOrgSelectorChange = useCallback(
     (org: CallbackOption) => {
@@ -117,14 +132,17 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
 
   const handleContactChange = useCallback(
     (field: 'bookingContact' | 'organizationKeyContact' = 'bookingContact') =>
-      (value: string | UserSelectorProfile) => {
+      (
+        value: string | GetNotDetailedProfileQuery['profiles'][number] | null,
+      ) => {
         const isEmail = typeof value === 'string'
 
         if (typeof value !== 'string') {
           Object.assign(contactData, {
+            countryCode: value?.countryCode,
+            email: value?.email,
             firstName: value?.givenName,
             lastName: value?.familyName,
-            email: value?.email,
           })
 
           setValue(`${field}.firstName`, contactData.firstName, {
@@ -134,6 +152,9 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
             shouldValidate: true,
           })
           setValue(`${field}.email`, contactData.email, {
+            shouldValidate: true,
+          })
+          setValue(`${field}.residingCountryCode`, contactData.countryCode, {
             shouldValidate: true,
           })
         } else {
@@ -164,7 +185,10 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
         reexecuteQuery({ requestPolicy: 'network-only' })
       } else if (isValidEmail && !isNotAlreadyFetched) {
         const contactChange = handleContactChange(keyContactField[courseType])
-        contactChange(foundProfileData?.profiles[0] as UserSelectorProfile)
+        contactChange(
+          foundProfileData
+            ?.profiles[0] as GetNotDetailedProfileQuery['profiles'][number],
+        )
       }
     }
   }, [
@@ -261,7 +285,11 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
                 helperText={
                   errors.organizationKeyContact?.firstName?.message ?? ''
                 }
-                disabled={disabledFields.has('organizationKeyContact')}
+                disabled={
+                  !organization ||
+                  disabledFields.has('organizationKeyContact') ||
+                  !!organizationKeyContact?.profileId
+                }
                 InputLabelProps={{
                   shrink: !!organizationKeyContact?.firstName,
                 }}
@@ -279,11 +307,50 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
                 helperText={
                   errors.organizationKeyContact?.lastName?.message ?? ''
                 }
-                disabled={disabledFields.has('organizationKeyContact')}
+                disabled={
+                  !organization ||
+                  disabledFields.has('organizationKeyContact') ||
+                  !!organizationKeyContact?.profileId
+                }
                 InputLabelProps={{
                   shrink: !!organizationKeyContact?.lastName,
                 }}
                 fullWidth
+              />
+            </Grid>
+            <Grid item md={12} xs={12}>
+              <CountriesSelector
+                onChange={(_, code) => {
+                  setValue(
+                    'organizationKeyContact.residingCountryCode',
+                    code as WorldCountriesCodes,
+                    {
+                      shouldValidate: true,
+                    },
+                  )
+                  setValue(
+                    'organizationKeyContact.residingCountry',
+                    getCountryLabel(code as WorldCountriesCodes) ?? '',
+                  )
+                }}
+                disableClearable
+                disabled={Boolean(
+                  disabledFields.has('organizationKeyContact') ||
+                    (organizationKeyContact?.profileId &&
+                      (contactData.countryCode ||
+                        (organizationKeyContact.residingCountryCode &&
+                          !needsContactResidingCountry))),
+                )}
+                error={!!errors.organizationKeyContact?.residingCountryCode}
+                helperText={
+                  errors.organizationKeyContact?.residingCountryCode?.message ??
+                  ''
+                }
+                label={_t('residing-country')}
+                onBlur={undefined}
+                required
+                value={organizationKeyContact?.residingCountryCode ?? ''}
+                variant="filled"
               />
             </Grid>
           </Grid>
@@ -352,6 +419,39 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
                   shrink: !!bookingContact?.lastName,
                 }}
                 fullWidth
+              />
+            </Grid>
+            <Grid item md={12} xs={12}>
+              <CountriesSelector
+                onChange={(_, code) => {
+                  setValue(
+                    'bookingContact.residingCountryCode',
+                    code as WorldCountriesCodes,
+                    {
+                      shouldValidate: true,
+                    },
+                  )
+                  setValue(
+                    'bookingContact.residingCountry',
+                    getCountryLabel(code as WorldCountriesCodes) ?? '',
+                  )
+                }}
+                disableClearable
+                disabled={Boolean(
+                  disabledFields.has('bookingContact') ||
+                    (bookingContact?.profileId &&
+                      (contactData.countryCode ||
+                        (bookingContact.residingCountryCode &&
+                          !needsContactResidingCountry))),
+                )}
+                error={!!errors.bookingContact?.residingCountryCode}
+                helperText={
+                  errors.bookingContact?.residingCountryCode?.message ?? ''
+                }
+                label={_t('residing-country')}
+                required
+                value={bookingContact?.residingCountryCode ?? ''}
+                variant="filled"
               />
             </Grid>
           </Grid>

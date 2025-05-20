@@ -83,6 +83,8 @@ import {
 } from '../../queries/update-course'
 import { CourseDiff, getChangedTrainers } from '../../utils/shared'
 
+import { useUpdateContactResidingCountry } from './hooks/use-update-contact-residing-country'
+
 function assertCourseDataValid(
   data: CourseInput,
   isValid: boolean,
@@ -351,6 +353,11 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     useMutation<UpdateCourseMutation, UpdateCourseMutationVariables>(
       UPDATE_COURSE_MUTATION,
     )
+
+  const { editContactResidingCountry } = useUpdateContactResidingCountry({
+    courseData,
+    initialCourseData: preEditedCourse,
+  })
 
   const hasError = Boolean(
     errorOnAuditInsert ||
@@ -907,6 +914,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
             status === Course_Status_Enum.ExceptionsApprovalPending,
           )
 
+          await editContactResidingCountry()
+
           if (courseDiffs.length) {
             const dateChanged = courseDiffs.find(d => d.type === 'date')
 
@@ -996,6 +1005,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       courseDiffs,
       courseExceptions,
       courseFormInput?.id,
+      editContactResidingCountry,
       editCourseReviewInput,
       getCourseName,
       indirectCourseInvitesAfterCourseCompletion,

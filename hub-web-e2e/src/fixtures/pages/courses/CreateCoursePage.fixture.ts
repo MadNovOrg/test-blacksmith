@@ -428,7 +428,7 @@ export class CreateCoursePage extends BasePage {
       course.type === Course_Type_Enum.Indirect &&
       course.organizationKeyContactProfile
     ) {
-      await this.selectOrgKeyContact(course.organizationKeyContactProfile)
+      await this.selectOrgKeyContact(course.organizationKeyContactProfile, true)
     }
 
     await this.selectCourseLevel(course.level)

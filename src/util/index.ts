@@ -411,6 +411,73 @@ export const convertScheduleDateToLocalTime = (
   return timeZoneSchedule
 }
 
+export const getBookingContact = (
+  course: Pick<Course, 'bookingContact' | 'bookingContactInviteData'>,
+) => {
+  if (course.bookingContact) {
+    const { email, givenName, familyName, id, country, countryCode } =
+      course.bookingContact
+
+    return {
+      email,
+      firstName: givenName,
+      lastName: familyName,
+      profileId: id,
+      residingCountry: country,
+      residingCountryCode: countryCode,
+    }
+  }
+
+  if (course.bookingContactInviteData) {
+    const { email, firstName, lastName, residingCountry, residingCountryCode } =
+      course.bookingContactInviteData
+    return {
+      email,
+      firstName,
+      lastName,
+      residingCountry,
+      residingCountryCode,
+    }
+  }
+
+  return null
+}
+
+export const getOrgKeyContact = (
+  course: Pick<
+    Course,
+    'organizationKeyContact' | 'organizationKeyContactInviteData'
+  >,
+) => {
+  if (course.organizationKeyContact) {
+    const { email, givenName, familyName, id, country, countryCode } =
+      course.organizationKeyContact
+
+    return {
+      email,
+      firstName: givenName,
+      lastName: familyName,
+      profileId: id,
+      residingCountry: country,
+      residingCountryCode: countryCode,
+    }
+  }
+
+  if (course.organizationKeyContactInviteData) {
+    const { email, firstName, lastName, residingCountry, residingCountryCode } =
+      course.organizationKeyContactInviteData
+    return {
+      email,
+      firstName,
+      lastName,
+      residingCountry,
+      residingCountryCode,
+    }
+  }
+
+  return null
+}
+
 export const courseToCourseInput = (course: Course): CourseInput => {
   const timeZoneSchedule = convertScheduleDateToLocalTime(
     course.schedule[0].start,
@@ -424,34 +491,8 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     deliveryType: course.deliveryType,
     organization: course.organization ?? null,
     arloReferenceId: course.arloReferenceId ?? undefined,
-    bookingContact: course.bookingContact
-      ? {
-          profileId: course.bookingContact.id,
-          firstName: course.bookingContact.givenName,
-          lastName: course.bookingContact.familyName,
-          email: course.bookingContact.email,
-        }
-      : course.bookingContactInviteData
-      ? {
-          firstName: course.bookingContactInviteData.firstName,
-          lastName: course.bookingContactInviteData.lastName,
-          email: course.bookingContactInviteData.email,
-        }
-      : null,
-    organizationKeyContact: course.organizationKeyContact
-      ? {
-          profileId: course.organizationKeyContact.id,
-          firstName: course.organizationKeyContact?.givenName,
-          lastName: course.organizationKeyContact?.familyName,
-          email: course.organizationKeyContact?.email,
-        }
-      : course?.organizationKeyContactInviteData
-      ? {
-          firstName: course.organizationKeyContactInviteData?.firstName,
-          lastName: course.organizationKeyContactInviteData?.lastName,
-          email: course.organizationKeyContactInviteData?.email,
-        }
-      : null,
+    bookingContact: getBookingContact(course),
+    organizationKeyContact: getOrgKeyContact(course),
     blendedLearning: course.go1Integration,
     reaccreditation: course.reaccreditation,
     courseLevel: course.level,

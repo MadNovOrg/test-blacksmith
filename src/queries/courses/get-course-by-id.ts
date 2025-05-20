@@ -120,22 +120,26 @@ export const QUERY = gql`
 
       bookingContact {
         id
-        fullName
-        avatar
         archived
+        avatar
+        country
+        countryCode
         email
-        givenName
         familyName
+        fullName
+        givenName
       }
       bookingContactInviteData
       organizationKeyContact {
         id
-        fullName
-        avatar
         archived
+        avatar
+        country
+        countryCode
         email
-        givenName
         familyName
+        fullName
+        givenName
       }
       organizationKeyContactInviteData
       orders @include(if: $withOrders) {

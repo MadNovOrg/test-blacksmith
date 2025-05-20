@@ -51,6 +51,8 @@ export type Course = {
     email: string
     firstName: string
     lastName: string
+    residingCountry?: string
+    residingCountryCode?: string
   }
   bookingContactProfileId?: string
   cancellationRequest?: {
@@ -119,6 +121,8 @@ export type Course = {
   organizationKeyContactInviteData?: Pick<Profile, 'email'> & {
     firstName: string
     lastName: string
+    residingCountry?: string
+    residingCountryCode?: string
   }
   organizationKeyContactProfileId?: string
   parking_instructions?: string
@@ -642,6 +646,8 @@ export type CourseInput = {
     firstName: string
     lastName: string
     profileId?: string
+    residingCountry?: string
+    residingCountryCode?: string
   } | null
   conversion: boolean
   courseCost: number | null
@@ -664,6 +670,8 @@ export type CourseInput = {
     firstName: string
     lastName: string
     profileId?: string
+    residingCountry?: string
+    residingCountryCode?: string
   } | null
   parkingInstructions: string
   price: number | null | undefined

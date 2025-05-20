@@ -8,10 +8,11 @@ export const QUERY = gql`
   query GetNotDetailedProfile($where: profile_bool_exp = {}) {
     profiles: profile(where: $where) {
       id
+      countryCode
       email
       familyName
-      givenName
       fullName
+      givenName
     }
   }
 `

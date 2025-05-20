@@ -77,9 +77,11 @@ export type ParticipantInput = {
 } & Address
 
 export type BookingContact = {
+  email: string
   firstName: string
   lastName: string
-  email: string
+  residingCountry: string | null
+  residingCountryCode: string | null
 }
 
 type CourseDetails = GetTempProfileQuery['tempProfiles'][0]['course']
@@ -286,6 +288,8 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
             email: '',
             firstName: '',
             lastName: '',
+            residingCountry: '',
+            residingCountryCode: '',
           },
           attendeeValidCertificate: false,
         })

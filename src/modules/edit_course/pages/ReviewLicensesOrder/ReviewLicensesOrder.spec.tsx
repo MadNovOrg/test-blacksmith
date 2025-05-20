@@ -22,6 +22,7 @@ import {
   buildCourse,
   buildCourseSchedule,
   buildOrganization,
+  buildProfile,
 } from '@test/mock-data-utils'
 
 import { EditCourseWithContext } from '../../contexts/EditCourseProvider'
@@ -171,6 +172,12 @@ describe(ReviewLicensesOrder.name, () => {
             },
           }),
         },
+        organizationKeyContact: buildProfile({
+          overrides: {
+            country: 'Australia',
+            countryCode: 'AU',
+          },
+        }),
         resourcePacksDeliveryType: null,
         resourcePacksType: Resource_Packs_Type_Enum.DigitalWorkbook,
         schedule: [

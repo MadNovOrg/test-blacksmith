@@ -74,7 +74,7 @@ const CountriesSelector = ({
   return (
     <Autocomplete
       disabled={disabled}
-      value={!value ? undefined : value}
+      value={!value ? null : value}
       id="country-select-demo"
       data-testid="countries-selector-autocomplete"
       options={countriesList}

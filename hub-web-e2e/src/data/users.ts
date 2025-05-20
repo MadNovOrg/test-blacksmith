@@ -12,7 +12,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   ops: {
@@ -23,7 +23,7 @@ export const users = {
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
     organization: { name: 'London First School' },
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   userOrgAdmin: {
@@ -34,7 +34,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   trainer: {
@@ -44,7 +44,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   trainerWithOrg: {
@@ -54,7 +54,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   trainer2: {
@@ -63,7 +63,7 @@ export const users = {
     email: 'trainer.and.user@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   trainer3: {
@@ -72,7 +72,7 @@ export const users = {
     email: 'trainer03@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   trainer4: {
@@ -81,7 +81,7 @@ export const users = {
     email: 'trainer02@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   trainer5: {
@@ -90,7 +90,7 @@ export const users = {
     email: 'trainer05@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   assistant: {
@@ -99,7 +99,7 @@ export const users = {
     email: 'assistant@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   assistant2: {
@@ -108,7 +108,7 @@ export const users = {
     email: 'assistant.with.org@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   bildSeniorTrainer: {
@@ -117,7 +117,7 @@ export const users = {
     email: 'bild.senior@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   bild2SeniorTrainer: {
@@ -126,7 +126,7 @@ export const users = {
     email: 'bild.senior2@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   resetPassword: {
@@ -135,7 +135,7 @@ export const users = {
     email: 'password@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   user1: {
@@ -145,7 +145,7 @@ export const users = {
     email: 'user1@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   user2: {
@@ -155,7 +155,7 @@ export const users = {
     email: 'user2@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   user1WithOrg: {
@@ -166,7 +166,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   user2WithOrg: {
@@ -177,7 +177,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   userWithInvite: {
@@ -186,7 +186,7 @@ export const users = {
     email: 'user.with.invite@teamteach.testinator.com',
     password: 'Test12345!',
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   salesAdmin: {
@@ -197,7 +197,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'London First School' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
   ttOrgAdmin: {
@@ -208,7 +208,7 @@ export const users = {
     password: 'Test12345!',
     organization: { name: 'Team Teach' },
     country: isUK() ? 'England' : 'Australia',
-    countryCode: isUK() ? 'GB-ENG' : 'AUD',
+    countryCode: isUK() ? 'GB-ENG' : 'AU',
     job_title: 'CEO',
   },
 } as const satisfies Record<string, User>

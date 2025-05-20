@@ -31,7 +31,11 @@ import {
   userEvent,
   waitFor,
 } from '@test/index'
-import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseSchedule,
+  buildProfile,
+} from '@test/mock-data-utils'
 
 import { EditCourseWithContext } from '../../contexts/EditCourseProvider'
 
@@ -1016,6 +1020,9 @@ describe(EditCourse.name, () => {
 
     const closedCourse = buildCourse({
       overrides: {
+        bookingContact: buildProfile({
+          overrides: { country: 'Australia', countryCode: 'AU' },
+        }),
         type: Course_Type_Enum.Closed,
         level: Course_Level_Enum.Level_2,
         residingCountry: 'AU',

@@ -167,6 +167,10 @@ export const getSchema = ({
         .test('is-email', t('validation-errors.email-invalid'), email => {
           return isEmail(email)
         }),
+      residingCountry: yup.string(),
+      residingCountryCode: yup
+        .string()
+        .required(requiredMsg(t, 'residing-country')),
     }),
 
     paymentMethod: yup.string().oneOf(Object.values(PaymentMethod)).required(),

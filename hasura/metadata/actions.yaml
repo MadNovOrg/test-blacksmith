@@ -443,6 +443,7 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/user/update'
     permissions:
+      - role: trainer
       - role: tt-ops
       - role: sales-admin
       - role: tt-admin

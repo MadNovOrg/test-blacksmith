@@ -101,7 +101,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
             }
           : null),
         country: getCountryLabel('AU'),
-        countryCode: 'AU',
+        countryCode: profile?.countryCode ?? 'AU',
         phoneCountryCode:
           profile?.phoneCountryCode ?? DEFAULT_PHONE_COUNTRY_ANZ,
       },

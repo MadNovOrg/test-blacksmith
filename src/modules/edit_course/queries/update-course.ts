@@ -188,6 +188,7 @@ const RESERVE_RESOURCE_PACKS_TO_ORG = gql`
     }
   }
 `
+
 export const useReserveResourcePacks = () => {
   return useMutation<
     ReserveResourcePacksMutation,

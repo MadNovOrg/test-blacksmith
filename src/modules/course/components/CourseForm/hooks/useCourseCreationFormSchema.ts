@@ -115,12 +115,16 @@ export const useCourseCreationFormSchema = ({
           ...(isClosedCourse
             ? {
                 bookingContact: yup.object({
-                  profileId: yup.string(),
+                  email: schemas.email(t).required(requiredMsg(t, 'email')),
                   firstName: yup
                     .string()
                     .required(requiredMsg(t, 'first-name')),
                   lastName: yup.string().required(requiredMsg(t, 'last-name')),
-                  email: schemas.email(t).required(requiredMsg(t, 'email')),
+                  profileId: yup.string(),
+                  residingCountry: yup.string(),
+                  residingCountryCode: yup
+                    .string()
+                    .required(requiredMsg(t, 'residing-country')),
                 }),
                 freeSpaces: yup
                   .number()
@@ -148,11 +152,6 @@ export const useCourseCreationFormSchema = ({
           ...(isIndirectCourse
             ? {
                 organizationKeyContact: yup.object({
-                  profileId: yup.string(),
-                  firstName: yup
-                    .string()
-                    .required(requiredMsg(t, 'first-name')),
-                  lastName: yup.string().required(requiredMsg(t, 'surname')),
                   email: schemas
                     .email(t)
                     .required(requiredMsg(t, 'email'))
@@ -163,6 +162,15 @@ export const useCourseCreationFormSchema = ({
                         return isEmail(email)
                       },
                     ),
+                  firstName: yup
+                    .string()
+                    .required(requiredMsg(t, 'first-name')),
+                  lastName: yup.string().required(requiredMsg(t, 'surname')),
+                  profileId: yup.string(),
+                  residingCountry: yup.string(),
+                  residingCountryCode: yup
+                    .string()
+                    .required(requiredMsg(t, 'residing-country')),
                 }),
               }
             : null),

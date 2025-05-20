@@ -119,13 +119,13 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         ),
       )
 
-      const countriesSelector = screen.getByTestId(
+      const countriesSelector = screen.getAllByTestId(
         'countries-selector-autocomplete',
       )
-      expect(countriesSelector).toBeInTheDocument()
-      countriesSelector.focus()
+      expect(countriesSelector[0]).toBeInTheDocument()
+      countriesSelector[0].focus()
 
-      const textField = within(countriesSelector).getByTestId(
+      const textField = within(countriesSelector[0]).getByTestId(
         'countries-selector-input',
       )
       expect(textField).toBeInTheDocument()

@@ -291,6 +291,7 @@ select_permissions:
         - date_graded
         - go1_enrolment_id
         - go1_enrolment_progress
+        - go1_enrolment_started
         - go1_enrolment_status
         - grade
         - graded_on

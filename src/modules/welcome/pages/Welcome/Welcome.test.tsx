@@ -20,7 +20,9 @@ describe('/', () => {
   })
 
   it('renders Information Required dialog if user doesnt have residing country', async () => {
-    const profile = buildProfile()
+    const profile = buildProfile({
+      overrides: { country: undefined, countryCode: undefined },
+    })
     render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
 
     vi.runAllTimers()
@@ -54,7 +56,9 @@ describe('/', () => {
   })
 
   it('Pressing Go to my Profile button on Information Required dialog, navigates user to profile', async () => {
-    const profile = buildProfile()
+    const profile = buildProfile({
+      overrides: { country: undefined, countryCode: undefined },
+    })
     render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
 
     vi.runAllTimers()
