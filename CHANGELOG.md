@@ -1,5 +1,22 @@
 # @teamteach/hub
 
+## 5.3.0
+
+### Minor Changes
+
+- 6a64c3a: feat TTHP-5139 creates and triggers an update banner whenever the current app version is different that the package.json version
+- e1b3006: Add list of checkboxes to select trainer agreement type on user profile
+- d2a63d1: TTHP-5053 Allow Custom pricing for UK closed courses
+
+### Patch Changes
+
+- 398867e: Order the resources by start title's index
+- 12b36b7: Fix Indirect type course participants invite
+- ab675fd: Fix assist trainers ratio for AOL and reaccreditaion Indirect courses
+- 93457e6: allow internal roles to view the certifications tab after grading and before attendees evaluate the course
+- bc041d0: Show uncovered modules in certificate details
+- b36d8dd: New trainer role type labeled as 'Internal'
+
 ## 5.2.0
 
 ### Minor Changes
