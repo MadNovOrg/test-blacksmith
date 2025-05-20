@@ -61,7 +61,7 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
     renderForm({ type: Course_Type_Enum.Indirect })
     await selectLevel(Course_Level_Enum.Level_2)
 
-    expect(screen.queryByTestId('aol-checkbox')).toBeInTheDocument()
+    expect(screen.queryByTestId('aol-radio-group')).toBeInTheDocument()
   })
 
   it.each(Object.values(AwsRegions))(

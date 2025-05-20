@@ -195,6 +195,8 @@
     "contact-person-error": "Contact name is a required field",
     "aol-title": "Area Operating License (AOL)",
     "aol-label": "Is this course being delivered under a Team Teach Area Operating Licence?",
+    "aol-label-yes": "Yes, I am delivering under an active licence.",
+    "aol-label-no": "No, I am delivering directly to my organisation/employer.",
     "course-cost-placeholder": "Cost of course (Per person)",
     "course-cost": "How much are you charging for this course?",
     "course-cost-title": "Course Cost",

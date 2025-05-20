@@ -35,6 +35,16 @@ select_permissions:
         - profile_id
       filter: {}
     comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - agreement_type
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+    comment: ""
   - role: tt-admin
     permission:
       columns:

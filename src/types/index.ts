@@ -265,6 +265,9 @@ export type Profile = {
   }>
   roles: Array<{ role: Role }> // roles assigned in profile_role
   trainer_role_types: Array<{ trainer_role_type: TrainerRoleType }>
+  profile_trainer_agreement_types?: Array<{
+    agreement_type: TrainerAgreementTypeName
+  }>
   lastActivity?: Date
   certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
   courses?: {

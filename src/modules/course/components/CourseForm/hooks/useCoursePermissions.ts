@@ -6,7 +6,11 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
-import { CourseInput, TrainerRoleTypeName } from '@app/types'
+import {
+  CourseInput,
+  TrainerAgreementTypeName,
+  TrainerRoleTypeName,
+} from '@app/types'
 import { bildStrategiesToArray } from '@app/util'
 
 import {
@@ -123,8 +127,16 @@ export const useCoursePermissions = (
           TrainerRoleTypeName.PRINCIPAL,
           TrainerRoleTypeName.SENIOR,
         ].includes(trainerRole.trainer_role_type.name),
+      ) ||
+      profile?.profile_trainer_agreement_types?.some(
+        agreementType =>
+          agreementType.agreement_type === TrainerAgreementTypeName.AOL,
       ),
-    [acl, profile?.trainer_role_types],
+    [
+      acl,
+      profile?.profile_trainer_agreement_types,
+      profile?.trainer_role_types,
+    ],
   )
 
   return {

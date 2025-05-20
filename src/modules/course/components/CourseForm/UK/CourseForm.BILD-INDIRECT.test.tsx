@@ -261,7 +261,7 @@ describe('UkCourseForm - indirect BILD', () => {
     await selectBildCategory()
     await selectLevel(Course_Level_Enum.BildRegular)
 
-    expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('aol-radio-group')).not.toBeInTheDocument()
   })
 
   it("doesn't allow changing residing country", async () => {

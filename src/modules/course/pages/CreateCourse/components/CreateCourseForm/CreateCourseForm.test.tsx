@@ -842,7 +842,7 @@ describe('component: CreateCourseForm', () => {
     expect(
       screen.queryByText('Area Operating License (AOL)'),
     ).not.toBeInTheDocument()
-    expect(screen.queryByTestId('aol-checkbox')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('aol-radio-group')).not.toBeInTheDocument()
   })
 
   it('AOL country is the same as course residing country', async () => {
@@ -895,8 +895,8 @@ describe('component: CreateCourseForm', () => {
     expect(
       screen.queryByText('Area Operating License (AOL)'),
     ).toBeInTheDocument()
-    const aolCheckbox = screen.getByTestId('aol-checkbox')
-    await userEvent.click(aolCheckbox)
+    const aolYes = screen.getByTestId('aol-radio-group-yes')
+    await userEvent.click(aolYes)
 
     expect(
       screen.getByTestId('course-aol-region-select-England'),

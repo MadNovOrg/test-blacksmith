@@ -7,7 +7,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Checkbox,
   InputAdornment,
   TextField,
   useTheme,
@@ -17,8 +16,9 @@ import {
   RadioGroup,
   Radio,
   FormHelperText,
+  FormLabel,
 } from '@mui/material'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useFormContext, Controller, useWatch } from 'react-hook-form'
 
 import CountriesSelector from '@app/components/CountriesSelector'
@@ -259,6 +259,29 @@ export const GeneralDetailsSection = ({
     }
   }, [canMixed, deliveryType, resetSpecialInstructionsToDefault, setValue])
 
+  const handleAOLChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const optForAOL = event.target.value === 'yes'
+
+      setValue('usesAOL', optForAOL, {
+        shouldValidate: true,
+      })
+
+      if (!optForAOL) {
+        if (isCreation) {
+          resetField('courseCost')
+        } else {
+          setValue('courseCost', null)
+        }
+      } else if (!isCreation) {
+        resetField('courseCost')
+      }
+    },
+    [isCreation, resetField, setValue],
+  )
+
+  const aolRadioGroupValue = useMemo(() => (usesAOL ? 'yes' : 'no'), [usesAOL])
+
   return (
     <InfoPanel
       title={t('general-details-title')}
@@ -364,37 +387,31 @@ export const GeneralDetailsSection = ({
             <Typography mt={2} fontWeight={600}>
               {t('aol-title')}
             </Typography>
-            <Alert severity="info" sx={{ mt: 1 }}>
+            <Alert severity="info" sx={{ my: 1 }}>
               {t('aol-info')}
             </Alert>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={e => {
-                    setValue('usesAOL', e.target.checked, {
-                      shouldValidate: true,
-                    })
-                    if (!e.target.checked) {
-                      if (isCreation) {
-                        resetField('courseCost')
-                      } else {
-                        setValue('courseCost', null)
-                      }
-                    } else {
-                      if (!isCreation) {
-                        resetField('courseCost')
-                      }
-                    }
-                  }}
-                  checked={usesAOL && !isL1BS}
-                  disabled={
-                    disabledFields.has('usesAOL') || isL1BS || !allowUseAOL
-                  }
-                  data-testid="aol-checkbox"
+
+            <FormControl
+              onChange={handleAOLChange}
+              disabled={disabledFields.has('usesAOL') || isL1BS || !allowUseAOL}
+              data-testid="aol-radio-group"
+            >
+              <FormLabel>{t('aol-label')}</FormLabel>
+              <RadioGroup defaultValue="no" value={aolRadioGroupValue}>
+                <FormControlLabel
+                  control={<Radio />}
+                  data-testid="aol-radio-group-yes"
+                  label={t('aol-label-yes')}
+                  value="yes"
                 />
-              }
-              label={t('aol-label')}
-            />
+                <FormControlLabel
+                  control={<Radio />}
+                  data-testid="aol-radio-group-no"
+                  label={t('aol-label-no')}
+                  value="no"
+                />
+              </RadioGroup>
+            </FormControl>
 
             {usesAOL ? (
               <>
