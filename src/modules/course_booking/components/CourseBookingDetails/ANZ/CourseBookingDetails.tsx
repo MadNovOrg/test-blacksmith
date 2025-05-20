@@ -25,9 +25,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { OrgSelector } from '@app/components/OrgSelector/ANZ'
 import { isHubOrg } from '@app/components/OrgSelector/ANZ/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
@@ -37,7 +35,6 @@ import {
 } from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import {
-  Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
@@ -70,7 +67,7 @@ export const CourseBookingDetails: React.FC<
   const [bookingContactProfile, setBookingContactProfile] = useState<
     Partial<UserSelectorProfile>
   >({})
-  const [participantsProfiles, setParticipantProfiles] = useState<
+  const [participantProfiles, setParticipantProfiles] = useState<
     Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
   >([])
   const navigate = useNavigate()
@@ -90,18 +87,6 @@ export const CourseBookingDetails: React.FC<
     internalBooking,
   } = useBooking()
 
-  const isIntlEnabled = useMemo(
-    () =>
-      [
-        Boolean(course),
-        course?.accreditedBy === Accreditors_Enum.Icm,
-        course?.type === Course_Type_Enum.Open,
-        course?.deliveryType === Course_Delivery_Type_Enum.Virtual,
-        course?.level === Course_Level_Enum.Level_1,
-      ].every(el => el),
-    [course],
-  )
-
   const { getLabel } = useWorldCountries()
 
   const qtyOptions = useMemo(
@@ -112,13 +97,10 @@ export const CourseBookingDetails: React.FC<
     'hide-payment-by-cc-on-anz',
   )
   const isInternalUserBooking = acl.canInviteAttendees(Course_Type_Enum.Open)
-  const isAddressInfoRequired =
-    course?.type === Course_Type_Enum.Open &&
-    course?.level === Course_Level_Enum.Level_1 &&
-    course?.deliveryType === Course_Delivery_Type_Enum.Virtual
+
   const schema = useMemo(() => {
-    return getSchema({ isAddressInfoRequired })
-  }, [isAddressInfoRequired])
+    return getSchema({ isAddressInfoRequired: false })
+  }, [])
 
   const methods = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -151,7 +133,6 @@ export const CourseBookingDetails: React.FC<
     watch,
     control,
     setValue,
-    trigger,
   } = methods
 
   const values = watch()
@@ -225,7 +206,7 @@ export const CourseBookingDetails: React.FC<
     profile: UserSelectorProfile,
     index: number,
   ) => {
-    const participants = participantsProfiles
+    const participants = participantProfiles
     participants[index] = {}
     const newParticipant = {
       email: profile?.email ?? '',
@@ -273,7 +254,7 @@ export const CourseBookingDetails: React.FC<
       ...participant,
       email,
     })
-    const participants = participantsProfiles
+    const participants = participantProfiles
     participants[index] = {}
     setParticipantProfiles([...participants])
   }
@@ -327,18 +308,6 @@ export const CourseBookingDetails: React.FC<
   const showRegistrantSuggestions =
     values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
 
-  const onCountryChange = useCallback(
-    async (index: number, countryCode: string | null) => {
-      const postCode = values.participants[index].postCode
-
-      setValue(`participants.${index}.country`, getLabel(countryCode) ?? '')
-      await trigger(`participants.${index}.country`)
-      if (errors.participants?.[index]?.postCode || postCode) {
-        await trigger(`participants.${index}.postCode`)
-      }
-    },
-    [errors.participants, getLabel, setValue, trigger, values.participants],
-  )
   const courseTimezone = useMemo(() => {
     return course?.schedule.length ? course?.schedule[0].timeZone : undefined
   }, [course?.schedule])
@@ -758,7 +727,7 @@ export const CourseBookingDetails: React.FC<
           {t('registration')}
         </Typography>
         <Box bgcolor="common.white" p={2} mb={4} data-testid="registrants-box">
-          {booking.participants.map((_, index) => {
+          {booking.participants.map((participant, index) => {
             const emailValue = values.participants[index]?.email
             const emailDuplicated =
               !!values.participants[index] &&
@@ -769,7 +738,7 @@ export const CourseBookingDetails: React.FC<
                   emailValue.trim().toLocaleLowerCase(),
               ).length > 1
             return (
-              <Box key={`participant-${index}`} display="flex" gap={1}>
+              <Box key={participant.email} display="flex" gap={1}>
                 <Typography p={1}>{index + 1}</Typography>
                 <Grid container spacing={3} mb={3}>
                   <Grid item md={12}>
@@ -806,9 +775,7 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
-                      disabled={Boolean(
-                        participantsProfiles[index]?.familyName,
-                      )}
+                      disabled={Boolean(participantProfiles[index]?.familyName)}
                     />
                   </Grid>
                   <Grid item md={6}>
@@ -830,146 +797,9 @@ export const CourseBookingDetails: React.FC<
                       }}
                       fullWidth
                       required
-                      disabled={Boolean(participantsProfiles[index]?.givenName)}
+                      disabled={Boolean(participantProfiles[index]?.givenName)}
                     />
                   </Grid>
-                  {isAddressInfoRequired ? (
-                    <Grid item md={12} data-testid="address-form">
-                      <Typography variant="subtitle1">
-                        {t('common.postal-address')}
-                      </Typography>
-                      <Box mb={3}>
-                        <TextField
-                          id="primaryAddressLine"
-                          label={t('line1')}
-                          variant="filled"
-                          sx={{ bgcolor: 'grey.100' }}
-                          {...register(`participants.${index}.addressLine1`)}
-                          error={!!getParticipantError(index, 'addressLine1')}
-                          InputLabelProps={{
-                            shrink: Boolean(
-                              values.participants[index].addressLine1,
-                            ),
-                          }}
-                          helperText={
-                            getParticipantError(index, 'addressLine1')
-                              ?.message ?? ''
-                          }
-                          inputProps={{ 'data-testid': 'addr-line1' }}
-                          fullWidth
-                          required
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        <TextField
-                          id="secondaryAddressLine"
-                          label={t('line2')}
-                          {...register(`participants.${index}.addressLine2`)}
-                          placeholder={t('common.addr.line2-placeholder')}
-                          error={!!getParticipantError(index, 'addressLine2')}
-                          InputLabelProps={{
-                            shrink: Boolean(
-                              values.participants[index].addressLine2,
-                            ),
-                          }}
-                          sx={{ bgcolor: 'grey.100' }}
-                          variant="filled"
-                          helperText={
-                            getParticipantError(index, 'addressLine2')
-                              ?.message ?? ''
-                          }
-                          inputProps={{ 'data-testid': 'addr-line2' }}
-                          fullWidth
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        <TextField
-                          id="city"
-                          label={t('city')}
-                          {...register(`participants.${index}.city`)}
-                          placeholder={t('common.addr.city')}
-                          error={!!getParticipantError(index, 'city')}
-                          InputLabelProps={{
-                            shrink: Boolean(values.participants[index].city),
-                          }}
-                          sx={{ bgcolor: 'grey.100' }}
-                          variant="filled"
-                          helperText={
-                            getParticipantError(index, 'city')?.message ?? ''
-                          }
-                          inputProps={{ 'data-testid': 'city' }}
-                          fullWidth
-                          required
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        <TextField
-                          error={!!getParticipantError(index, 'postCode')}
-                          fullWidth
-                          helperText={
-                            getParticipantError(index, 'postCode')?.message ??
-                            ''
-                          }
-                          id="postCode"
-                          inputProps={{ 'data-testid': 'postCode' }}
-                          label={t(
-                            'components.venue-selector.modal.fields.postCode',
-                          )}
-                          placeholder={t('common.addr.postCode')}
-                          required
-                          sx={{ bgcolor: 'grey.100' }}
-                          type={'text'}
-                          variant="filled"
-                          {...register(`participants.${index}.postCode`)}
-                          InputLabelProps={{
-                            shrink: Boolean(
-                              values.participants[index].postCode,
-                            ),
-                          }}
-                          InputProps={{
-                            endAdornment: (
-                              <Tooltip
-                                title={t('post-code-tooltip')}
-                                data-testid="post-code-tooltip"
-                              >
-                                <InfoIcon color={'action'} />
-                              </Tooltip>
-                            ),
-                          }}
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        {isIntlEnabled ? (
-                          <CountriesSelector
-                            error={Boolean(
-                              getParticipantError(index, 'country')?.message,
-                            )}
-                            helperText={
-                              getParticipantError(index, 'country')?.message ??
-                              ''
-                            }
-                            onChange={async (_, code) =>
-                              await onCountryChange(index, code)
-                            }
-                            onlyUKCountries={true}
-                            value={values.participants[index].country}
-                          />
-                        ) : (
-                          <CountryDropdown
-                            required
-                            register={register(`participants.${index}.country`)}
-                            error={!!getParticipantError(index, 'country')}
-                            value={values.participants[index].country}
-                            errormessage={
-                              getParticipantError(index, 'country')?.message ??
-                              ''
-                            }
-                            label={t('country')}
-                          />
-                        )}
-                      </Box>
-                    </Grid>
-                  ) : null}
                 </Grid>
               </Box>
             )
@@ -977,12 +807,6 @@ export const CourseBookingDetails: React.FC<
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}`}
           </Alert>
-          {isAddressInfoRequired ? (
-            <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
-              <b>{t('important')}:</b>{' '}
-              {`${t('pages.book-course.notice-participants')}`}
-            </Alert>
-          ) : null}
           {showAttendeeValidCertificate && (
             <AttendeeValidCertificate
               handleCheckboxValue={handleOnChangeAttendeeCertificate}
