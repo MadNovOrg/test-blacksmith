@@ -14,6 +14,8 @@ INSERT INTO course_pricing (
 ('OPEN', 'INTERMEDIATE_TRAINER', false, true, 600, 'INT.RE.OP', 'GBP'),
 ('OPEN', 'FOUNDATION_TRAINER_PLUS', false, false, 1295, 'FTP.OP', 'GBP'),
 ('OPEN', 'FOUNDATION_TRAINER_PLUS', false, true, 600, 'FTP.RE.OP', 'GBP'),
+('CLOSED', 'FOUNDATION_TRAINER_PLUS', false, false, 1295, 'FTP.CL', 'GBP'),
+('CLOSED', 'FOUNDATION_TRAINER_PLUS', false, true, 600, 'FTP.RE.CL', 'GBP'),
 ('OPEN', 'ADVANCED_TRAINER', false, false, 1570, 'INT.RE.OP', 'GBP'),
 ('OPEN', 'ADVANCED_TRAINER', false, true, 710, 'INT.RE.OP', 'GBP'),
 ('CLOSED', 'LEVEL_1', true, false, 101, 'LEVEL1.CL', 'GBP'), -- 9
@@ -31,6 +33,7 @@ INSERT INTO course_pricing (
 -- ('CLOSED', 'LEVEL_2', false, false, 171, 'LEVEL2.CL'), -- 21 (MIXED. same as 19)
 -- ('CLOSED', 'LEVEL_2', false, true, 101, 'LEVEL2.RE.CL'), -- 22 (MIXED. same as 20)
 ('CLOSED', 'ADVANCED', false, false, 151, 'ADVMOD.CL', 'GBP'), -- 23
+
 ('CLOSED', 'INTERMEDIATE_TRAINER', false, false, 1290, 'INT.CL', 'GBP'), -- 24
 ('CLOSED', 'INTERMEDIATE_TRAINER', false, true, 540, 'INT.RE.CL', 'GBP'), -- 25
 ('CLOSED', 'ADVANCED_TRAINER', false, false, 1250, 'ADV.CL', 'GBP'), -- 26

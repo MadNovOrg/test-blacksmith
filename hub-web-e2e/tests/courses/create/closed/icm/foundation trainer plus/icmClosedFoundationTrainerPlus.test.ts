@@ -83,7 +83,9 @@ allowdUsers.forEach(allowedUser => {
               end: addMonths(new Date(new Date().setHours(17, 0)), 2),
               venue: buildVenue({
                 overrides: {
-                  name: isUK() ? 'Ireland Vinayaka Temple' : 'Sydney Town Hall',
+                  name: isUK()
+                    ? 'Queen Elizabeth II Centre'
+                    : 'Sydney Town Hall',
                 },
               }),
             },

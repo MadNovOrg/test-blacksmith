@@ -49,7 +49,14 @@ export const useCourseFormEffects = () => {
 
       if (
         acl.isUK() &&
-        (newCourseLevel === Course_Level_Enum.FoundationTrainerPlus ||
+        newCourseLevel === Course_Level_Enum.FoundationTrainerPlus &&
+        !isIndirectCourse
+      )
+        return Countries_Code.DEFAULT_RESIDING_COUNTRY
+      if (
+        acl.isUK() &&
+        ((newCourseLevel === Course_Level_Enum.FoundationTrainerPlus &&
+          isIndirectCourse) ||
           (newCourseLevel === Course_Level_Enum.Level_1Bs && !isIndirectCourse))
       )
         return Countries_Code.IRELAND

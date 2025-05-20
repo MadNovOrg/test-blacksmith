@@ -483,7 +483,8 @@ export class CreateCoursePage extends BasePage {
 
     if (
       isUK() &&
-      (course.level === Course_Level_Enum.FoundationTrainerPlus ||
+      ((course.level === Course_Level_Enum.FoundationTrainerPlus &&
+        course.type === Course_Type_Enum.Indirect) ||
         (course.type === Course_Type_Enum.Closed &&
           course.level === Course_Level_Enum.Level_1Bs))
     ) {
