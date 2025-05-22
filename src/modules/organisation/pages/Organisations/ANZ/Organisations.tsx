@@ -12,15 +12,22 @@ import {
   TableCell,
   TablePagination,
   TableRow,
+  Checkbox,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 import {
   ArrayParam,
@@ -37,8 +44,10 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
+import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
+import { MergeOrganisations } from '@app/modules/organisation/components/MergeOrganisations'
 import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 import theme from '@app/theme'
 import {
@@ -54,6 +63,11 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { acl, profile } = useAuth()
   const [showExportModal, setShowExportModal] = useState(false)
   const sorting = useTableSort('name', 'asc')
+  const location = useLocation()
+  const merging = location.pathname.includes('/merge')
+  const [organisationsForMerging, setOrganisationsForMerging] = useState<
+    GetOrganisationDetailsQuery['orgs'][0][]
+  >([])
 
   const [openRows, setOpenRows] = useState<{ [key: number]: boolean }>({})
 
@@ -62,6 +76,11 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   }
   const cols = useMemo(
     () => [
+      {
+        id: 'merge',
+        label: '',
+        sorting: false,
+      },
       {
         id: 'org-id',
       },
@@ -277,6 +296,52 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     borderBottom: '0.031rem solid #c9c8c7',
   }
 
+  const handleOrganisationsForMerging = useCallback(
+    (organisation: GetOrganisationDetailsQuery['orgs'][0]) => {
+      if (
+        organisationsForMerging.some(
+          organisationForMerging =>
+            organisationForMerging.id === organisation.id,
+        )
+      ) {
+        setOrganisationsForMerging(
+          organisationsForMerging.filter(
+            mergingOrganisation => mergingOrganisation.id !== organisation.id,
+          ),
+        )
+      } else {
+        setOrganisationsForMerging(prev => [...prev, organisation])
+      }
+    },
+    [organisationsForMerging],
+  )
+
+  const disableAffiliatesFromBeingMerged = useMemo(() => {
+    const orgs = data?.orgs
+    const mainOrgs = orgs
+      ?.filter(org => org.main_organisation === null)
+      .map(main => main.id)
+    return mainOrgs?.some(mainOrgId =>
+      organisationsForMerging.map(org => org.id).includes(mainOrgId),
+    )
+  }, [organisationsForMerging, data?.orgs])
+
+  const disableMainFromBeingMerged = useMemo(() => {
+    const orgs = data?.orgs
+
+    const affiliatedOrgs = orgs?.map(org => org.affiliated_organisations).flat()
+
+    return affiliatedOrgs?.some(affiliatedOrgId =>
+      organisationsForMerging.map(org => org.id).includes(affiliatedOrgId?.id),
+    )
+  }, [data?.orgs, organisationsForMerging])
+
+  useEffect(() => {
+    if (merging) {
+      setOrganisationsForMerging([])
+    }
+  }, [merging])
+
   return (
     <FullHeightPageLayout>
       <Helmet>
@@ -326,19 +391,19 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
               alignItems="center"
               justifyContent="flex-end"
               mb={2}
+              gap={2}
             >
-              {acl.isTTAdmin() ? (
+              {acl.isTTAdmin() && !merging ? (
                 <Button
                   variant="contained"
                   data-testid="export-blended-learning-licence-summary"
                   onClick={() => setShowExportModal(true)}
-                  sx={{ marginRight: '1em' }}
                 >
                   {t('pages.admin.organizations.export.blended-learning')}
                 </Button>
               ) : null}
 
-              {acl.canCreateOrgs() ? (
+              {acl.canCreateOrgs() && !merging ? (
                 <Button
                   variant="contained"
                   data-testid="add-new-org-button"
@@ -347,6 +412,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                   {t('pages.admin.organizations.add-new-organization')}
                 </Button>
               ) : null}
+              <MergeOrganisations selectedOrgs={organisationsForMerging} />
             </Box>
             <ExportBlendedDialog
               isOpen={showExportModal}
@@ -384,6 +450,21 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                       data-testid={`org-row-${org.id}`}
                       style={openRows[org.id] ? {} : borderBottomStyle}
                     >
+                      {merging && (
+                        <Checkbox
+                          value={org}
+                          onClick={() =>
+                            handleOrganisationsForMerging(
+                              org as GetOrganisationDetailsQuery['orgs'][0],
+                            )
+                          }
+                          checked={organisationsForMerging.some(
+                            organisationForMerging =>
+                              organisationForMerging.id === org.id,
+                          )}
+                          disabled={disableMainFromBeingMerged}
+                        />
+                      )}
                       <TableCell style={{ maxWidth: '50px' }}>
                         <IconButton
                           aria-label="expand row"
@@ -470,6 +551,31 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                                           key={affiliatedOrg.id}
                                           data-testid={`affiliated-org-row-${affiliatedOrg?.id}`}
                                         >
+                                          {merging && (
+                                            <TableCell>
+                                              <Checkbox
+                                                value={affiliatedOrg}
+                                                onClick={() =>
+                                                  handleOrganisationsForMerging(
+                                                    affiliatedOrg as GetOrganisationDetailsQuery['orgs'][0],
+                                                  )
+                                                }
+                                                checked={organisationsForMerging.some(
+                                                  organisationForMerging =>
+                                                    organisationForMerging.id ===
+                                                    affiliatedOrg.id,
+                                                )}
+                                                disabled={
+                                                  organisationsForMerging.some(
+                                                    organisationForMerging =>
+                                                      affiliatedOrg.main_organisation_id ===
+                                                      organisationForMerging.id,
+                                                  ) ||
+                                                  disableAffiliatesFromBeingMerged
+                                                }
+                                              />
+                                            </TableCell>
+                                          )}
                                           <TableCell
                                             style={{
                                               minWidth: '50px',

@@ -29,6 +29,12 @@ export const OrganisationRoutes: React.FC = () => {
         path="list"
         element={isUKRegion ? <UKOrganisations /> : <ANZOrganisations />}
       />
+      {acl.isTTAdmin() ? (
+        <Route
+          path="/merge"
+          element={isUKRegion ? <UKOrganisations /> : <ANZOrganisations />}
+        />
+      ) : null}
       <Route path=":id">
         <Route index element={<OrgDashboard />} />
         {acl.canEditOrgs() ? (

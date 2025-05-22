@@ -8,15 +8,22 @@ import {
   TableCell,
   TablePagination,
   TableRow,
+  Checkbox,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 import {
   ArrayParam,
@@ -33,8 +40,10 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
+import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
+import { MergeOrganisations } from '@app/modules/organisation/components/MergeOrganisations'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import theme from '@app/theme'
 import {
@@ -47,11 +56,22 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(DEFAULT_PAGINATION_LIMIT)
   const navigate = useNavigate()
+  const location = useLocation()
   const { acl, profile } = useAuth()
   const [showExportModal, setShowExportModal] = useState(false)
   const sorting = useTableSort('name', 'asc')
+  const merging = location.pathname.includes('/merge')
+  const [organisationsForMerging, setOrganisationsForMerging] = useState<
+    GetOrganisationDetailsQuery['orgs'][0][]
+  >([])
+
   const cols = useMemo(
     () => [
+      {
+        id: 'merge',
+        label: '',
+        sorting: false,
+      },
       {
         id: 'name',
         label: t('pages.admin.organizations.columns.name'),
@@ -174,8 +194,10 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       return cols.filter(col => col.id != gerionColId)
     }
 
+    if (!merging) return cols.filter(col => col.id !== 'merge')
+
     return cols
-  }, [cols, showRegionCol])
+  }, [cols, showRegionCol, merging])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -205,6 +227,12 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
 
     return countries
   }, [acl, allOrganisationsData])
+
+  useEffect(() => {
+    if (merging) {
+      setOrganisationsForMerging([])
+    }
+  }, [merging])
 
   return (
     <FullHeightPageLayout>
@@ -255,19 +283,19 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
               alignItems="center"
               justifyContent="flex-end"
               mb={2}
+              gap={2}
             >
-              {acl.isTTAdmin() ? (
+              {acl.isTTAdmin() && !merging ? (
                 <Button
                   variant="contained"
                   data-testid="export-blended-learning-licence-summary"
                   onClick={() => setShowExportModal(true)}
-                  sx={{ marginRight: '1em' }}
                 >
                   {t('pages.admin.organizations.export.blended-learning')}
                 </Button>
               ) : null}
 
-              {acl.canCreateOrgs() ? (
+              {acl.canCreateOrgs() && !merging ? (
                 <Button
                   variant="contained"
                   data-testid="add-new-org-button"
@@ -276,6 +304,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                   {t('pages.admin.organizations.add-new-organization')}
                 </Button>
               ) : null}
+              <MergeOrganisations selectedOrgs={organisationsForMerging} />
             </Box>
             <ExportBlendedDialog
               isOpen={showExportModal}
@@ -307,6 +336,34 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
 
                 {allOrganisationsData.map(org => (
                   <TableRow key={org.id} data-testid={`org-row-${org.id}`}>
+                    {merging && (
+                      <TableCell>
+                        <Checkbox
+                          value={org}
+                          onClick={() => {
+                            if (
+                              organisationsForMerging.some(
+                                organisationForMerging =>
+                                  organisationForMerging.id === org.id,
+                              )
+                            ) {
+                              setOrganisationsForMerging(
+                                organisationsForMerging.filter(
+                                  mergingOrganisation =>
+                                    mergingOrganisation.id !== org.id,
+                                ),
+                              )
+                            } else {
+                              setOrganisationsForMerging(prev => [...prev, org])
+                            }
+                          }}
+                          checked={organisationsForMerging.some(
+                            organisationForMerging =>
+                              organisationForMerging.id === org.id,
+                          )}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell>
                       <Link href={`../${org?.id}`} variant="body2">
                         {org?.name}

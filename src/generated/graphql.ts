@@ -4094,6 +4094,22 @@ export type MenuToMenuItemConnectionWhereArgs = {
   parentId?: InputMaybe<Scalars['ID']>;
 };
 
+export type MergeOrganisationsInput = {
+  main: Scalars['uuid'];
+  merge: Array<InputMaybe<Scalars['uuid']>>;
+};
+
+export type MergeOrganisationsOutput = {
+  __typename?: 'MergeOrganisationsOutput';
+  message: Scalars['String'];
+  status: MergeOrganisationsStatus;
+};
+
+export enum MergeOrganisationsStatus {
+  Fail = 'FAIL',
+  Success = 'SUCCESS'
+}
+
 export enum MergeUserError {
   GeneralError = 'GENERAL_ERROR'
 }
@@ -37373,6 +37389,8 @@ export type Mutation_Root = {
   insert_xero_invoice_status_one?: Maybe<Xero_Invoice_Status>;
   /** joinWaitlist */
   joinWaitlist: JoinWaitlistOutput;
+  /** This actions manages the merging of two or more organisations */
+  mergeOrganisations?: Maybe<MergeOrganisationsOutput>;
   /** Merge users */
   mergeUser: MergeUserOutput;
   /** Notify course's trainer(s) and attendees about course editing */
@@ -41696,6 +41714,12 @@ export type Mutation_RootInsert_Xero_Invoice_Status_OneArgs = {
 /** mutation root */
 export type Mutation_RootJoinWaitlistArgs = {
   input: JoinWaitlistInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootMergeOrganisationsArgs = {
+  input: MergeOrganisationsInput;
 };
 
 
@@ -69447,7 +69471,7 @@ export type GetMainOrganisationDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetMainOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, affiliated_organisations?: Array<{ __typename?: 'organization', id: any, name: string, address: any, sector?: string | null, createdAt: any, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }>, affiliated_organisations_aggregate?: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null }, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, specificOrg: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, affiliated_organisations?: Array<{ __typename?: 'organization', id: any, name: string, address: any, sector?: string | null, createdAt: any, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }>, affiliated_organisations_aggregate?: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null }, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type GetMainOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, affiliated_organisations?: Array<{ __typename?: 'organization', id: any, name: string, address: any, sector?: string | null, createdAt: any, main_organisation_id?: any | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }>, affiliated_organisations_aggregate?: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null }, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, specificOrg: Array<{ __typename?: 'organization', region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, affiliated_organisations?: Array<{ __typename?: 'organization', id: any, name: string, address: any, sector?: string | null, createdAt: any, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }> }>, affiliated_organisations_aggregate?: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null }, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type GetOrganisationDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
@@ -69518,6 +69542,13 @@ export type GetMainOrgIdQueryVariables = Exact<{
 
 
 export type GetMainOrgIdQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', main_organisation_id?: any | null } | null };
+
+export type MergeOrganisationsMutationVariables = Exact<{
+  input: MergeOrganisationsInput;
+}>;
+
+
+export type MergeOrganisationsMutation = { __typename?: 'mutation_root', mergeOrganisations?: { __typename?: 'MergeOrganisationsOutput', status: MergeOrganisationsStatus, message: string } | null };
 
 export type OrgMembersQueryVariables = Exact<{
   offset: Scalars['Int'];

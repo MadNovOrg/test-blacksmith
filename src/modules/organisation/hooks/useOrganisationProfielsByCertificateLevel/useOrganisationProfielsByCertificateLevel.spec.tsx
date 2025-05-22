@@ -116,6 +116,7 @@ describe(useOrganisationProfilesByCertificateLevel.name, () => {
 
     expect(useQueryMock).toHaveBeenCalledWith({
       query: GET_PROFILES_WITH_CERTIFICATIONS,
+      requestPolicy: 'cache-first',
       variables: {
         whereOrganizations: {
           _or: [

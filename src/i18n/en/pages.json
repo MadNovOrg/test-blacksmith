@@ -1178,6 +1178,23 @@
         "affiliates-count": "Affiliates Count"
       },
       "add-new-organization": "Add new organisation",
+      "merge": {
+        "title": "Merge organisations",
+        "merge-selected": "Merge Selected",
+        "merge": "Merge",
+        "select-main": "Select the main organisation",
+        "address": "Address",
+        "details": " Details",
+        "organisation-merge-SUCCESS": "Organisations merged successfully",
+        "organisation-merge-FAIL": "Unable to merge organisations, please check logs",
+        "merge-alert": "This action is irreversible. The duplicate organisation(s) information will be merged into the main organisation record. Once the merge is complete the duplicate organisation(s) will be deleted.",
+        "warning": {
+          "title": "This is a destructive action",
+          "body1": "Proceeding will permanently delete the merged organisations.This action is irreversible and the data cannot be recovered.",
+          "body2": " Are you sure you want to continue?",
+          "proceed": "Confirm"
+        }
+      },
       "export": {
         "filter-by-captured-date": "Filter by captured date",
         "dates-non-null": "Please insert dates",

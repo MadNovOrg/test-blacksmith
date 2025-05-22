@@ -56,6 +56,7 @@ export const GET_MAIN_ORGANISATION_DETAILS_QUERY = gql`
         address
         sector
         createdAt
+        main_organisation_id
         members @include(if: $withMembers) {
           profile {
             lastActivity

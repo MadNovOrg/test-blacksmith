@@ -132,6 +132,7 @@ export const useOrganisationProfilesByCertificateLevel = () => {
       whereOrganizations: organisationsCondition,
       whereProfileCertificates: certificatesCondition,
     },
+    requestPolicy: 'cache-first',
   })
 
   const profiles = data?.profiles

@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { PropsWithChildren, FC, ReactNode } from 'react'
 
-type Props = {
+export type Props = {
   id?: string
   open: boolean
 

@@ -293,6 +293,15 @@ actions:
     permissions:
       - role: user
     comment: knowledgeHubResources
+  - name: mergeOrganisations
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/merge'
+    permissions:
+      - role: ld
+      - role: tt-ops
+      - role: tt-admin
+    comment: This actions manages the merging of two or more organisations
   - name: mergeUser
     definition:
       kind: synchronous
@@ -1088,6 +1097,14 @@ custom_types:
         - description: null
           is_deprecated: null
           value: UNAUTHORIZED
+    - name: MergeOrganisationsStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: SUCCESS
+        - description: null
+          is_deprecated: null
+          value: FAIL
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1134,6 +1151,7 @@ custom_types:
     - name: ResourcePacksAddInput
     - name: ResourcePacksReserveInput
     - name: ValidateAndDispatchInvitesForIndirectCourseInput
+    - name: MergeOrganisationsInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1239,5 +1257,6 @@ custom_types:
     - name: ResourcePacksAddOutput
     - name: ResourcePacksReserveOutput
     - name: ValidateAndDispatchInvitesForIndirectCourseOutput
+    - name: MergeOrganisationsOutput
   scalars:
     - name: Date

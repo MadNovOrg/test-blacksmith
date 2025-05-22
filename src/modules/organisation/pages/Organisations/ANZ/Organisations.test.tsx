@@ -172,4 +172,40 @@ describe('page: Organisations', () => {
       })
     })
   })
+  it('it displays checkbox next to each organisation while merging', () => {
+    render(
+      <Organizations />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      {
+        initialEntries: ['/organisations/merge'],
+      },
+    )
+    const orgsTable = screen.getByTestId('orgs-table')
+    expect(orgsTable).toBeInTheDocument()
+    const checkboxes = screen.getAllByRole('checkbox')
+    expect(checkboxes.length).toBe(mainOrgs.length)
+  })
+  it('displays checkboxes for affiliated organisations while merging', async () => {
+    render(
+      <Organizations />,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      },
+      {
+        initialEntries: ['/organisations/merge'],
+      },
+    )
+    const firstRowDropdownButton = screen.getByTestId(
+      `org-row-toggle-${firstMainOrgId}`,
+    )
+    await userEvent.click(firstRowDropdownButton)
+    const checkboxes = screen.getAllByRole('checkbox')
+    expect(checkboxes.length).toBe(affiliatedOrgs.length + mainOrgs.length)
+  })
 })

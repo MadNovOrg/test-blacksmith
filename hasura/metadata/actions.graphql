@@ -208,6 +208,12 @@ type Query {
 }
 
 type Mutation {
+  mergeOrganisations(
+    input: MergeOrganisationsInput!
+  ): MergeOrganisationsOutput
+}
+
+type Mutation {
   mergeUser(
     primaryUser: uuid!
     mergeWith: uuid!
@@ -648,6 +654,11 @@ enum ValidateAndDispatchInvitesForIndirectCourseError {
   UNAUTHORIZED
 }
 
+enum MergeOrganisationsStatus {
+  SUCCESS
+  FAIL
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -994,6 +1005,11 @@ input ResourcePacksReserveInput {
 input ValidateAndDispatchInvitesForIndirectCourseInput {
   courseId: Int!
   invites: [Invite!]!
+}
+
+input MergeOrganisationsInput {
+  main: uuid!
+  merge: [uuid]!
 }
 
 type LinkProfileResult {
@@ -1639,6 +1655,11 @@ type ValidateAndDispatchInvitesForIndirectCourseOutput {
   extraLicensesRequiredToBuy: Int
   extraResourcePacksRequiredToBuy: Int
   success: Boolean!
+}
+
+type MergeOrganisationsOutput {
+  status: MergeOrganisationsStatus!
+  message: String!
 }
 
 scalar Date
