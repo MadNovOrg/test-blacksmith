@@ -22,7 +22,7 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { OrgSelectionToolbar } from '@app/modules/organisation/components/OrgSelectionToolbar/OrgSelectionToolbar'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import theme from '@app/theme'
-import { ALL_ORGS } from '@app/util'
+import { ALL_ORGS, MERGE } from '@app/util'
 
 import { OrgOverviewTab } from '../../tabs/OrgOverviewTab'
 
@@ -50,7 +50,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
     showAll: acl.canViewAllOrganizations(),
     shallow: true,
     withMainOrganisation: isAustraliaRegion,
-    ...(id !== ALL_ORGS
+    ...(id !== ALL_ORGS && id !== MERGE
       ? { withSpecificOrganisation: true, specificOrgId: id }
       : []),
   })

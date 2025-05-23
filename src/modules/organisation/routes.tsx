@@ -29,7 +29,7 @@ export const OrganisationRoutes: React.FC = () => {
         path="list"
         element={isUKRegion ? <UKOrganisations /> : <ANZOrganisations />}
       />
-      {acl.isTTAdmin() ? (
+      {acl.isAdmin() ? (
         <Route
           path="/merge"
           element={isUKRegion ? <UKOrganisations /> : <ANZOrganisations />}

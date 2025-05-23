@@ -1193,6 +1193,7 @@ export const saveNewOrganizationDataInLocalState = (
 ) => (organizationData = { ...organization })
 
 export const ALL_ORGS = 'all'
+export const MERGE = 'merge'
 export const UKTimezone = 'Europe/London'
 
 export const getTruthyObjectProps = <T>(obj: Record<string, unknown>) => {

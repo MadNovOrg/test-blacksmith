@@ -285,7 +285,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
               mb={2}
               gap={2}
             >
-              {acl.isTTAdmin() && !merging ? (
+              {acl.isAdmin() && !merging ? (
                 <Button
                   variant="contained"
                   data-testid="export-blended-learning-licence-summary"
