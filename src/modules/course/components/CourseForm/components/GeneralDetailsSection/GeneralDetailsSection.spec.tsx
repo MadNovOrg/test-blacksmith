@@ -2,7 +2,7 @@ import { setMedia } from 'mock-match-media'
 import { getI18n } from 'react-i18next'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import { AwsRegions } from '@app/types'
+import { AwsRegions, RoleName } from '@app/types'
 
 import { act, screen, userEvent, waitFor } from '@test/index'
 
@@ -58,7 +58,7 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
   )
 
   it('displays AOL checkbox for indirect course type', async () => {
-    renderForm({ type: Course_Type_Enum.Indirect })
+    renderForm({ role: RoleName.TT_ADMIN, type: Course_Type_Enum.Indirect })
     await selectLevel(Course_Level_Enum.Level_2)
 
     expect(screen.queryByTestId('aol-radio-group')).toBeInTheDocument()

@@ -106,11 +106,7 @@ export const GeneralDetailsSection = ({
     Course_Delivery_Type_Enum.F2F,
     Course_Delivery_Type_Enum.Mixed,
   ].includes(deliveryType)
-  const shouldShowAOL =
-    acl.isUK() && isIndirectCourse && isUKCountry(residingCountry) && !isBild
-  const usesAOL =
-    useWatch({ control, name: 'usesAOL' }) && shouldShowAOL && !isL1BS
-
+  const usesAOLValue = useWatch({ control, name: 'usesAOL' })
   const shouldShowCountrySelector = !isBild
 
   const {
@@ -131,6 +127,21 @@ export const GeneralDetailsSection = ({
     reaccreditation,
     accreditedBy,
   })
+
+  const shouldShowAOL = useMemo(
+    () =>
+      acl.isUK() &&
+      isIndirectCourse &&
+      isUKCountry(residingCountry) &&
+      allowUseAOL &&
+      !isBild,
+    [acl, allowUseAOL, isBild, isIndirectCourse, isUKCountry, residingCountry],
+  )
+
+  const usesAOL = useMemo(
+    () => usesAOLValue && shouldShowAOL && !isL1BS,
+    [isL1BS, shouldShowAOL, usesAOLValue],
+  )
 
   const { defaultSpecialInstructions, resetSpecialInstructionsToDefault } =
     useSpecialInstructions({
@@ -393,7 +404,7 @@ export const GeneralDetailsSection = ({
 
             <FormControl
               onChange={handleAOLChange}
-              disabled={disabledFields.has('usesAOL') || isL1BS || !allowUseAOL}
+              disabled={disabledFields.has('usesAOL') || isL1BS}
               data-testid="aol-radio-group"
             >
               <FormLabel>{t('aol-label')}</FormLabel>

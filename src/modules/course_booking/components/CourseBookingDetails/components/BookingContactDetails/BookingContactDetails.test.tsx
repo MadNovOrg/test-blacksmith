@@ -17,7 +17,7 @@ const mockUseAuth = useAuth as MockedFunction<typeof useAuth>
 
 describe('BookingContactDetails', () => {
   const mockProfile = {
-    countryCode: chance.string({ length: 2 }),
+    countryCode: 'GB-ENG',
     email: chance.email(),
     familyName: chance.last(),
     givenName: chance.first(),
@@ -91,7 +91,7 @@ describe('BookingContactDetails', () => {
         email: mockProfile.email,
         firstName: mockProfile.givenName,
         lastName: mockProfile.familyName,
-        residingCountry: null,
+        residingCountry: 'England',
         residingCountryCode: mockProfile.countryCode,
       })
     })
