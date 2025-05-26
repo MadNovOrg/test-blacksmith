@@ -219,6 +219,7 @@
     "source-label": "How did you hear about us?",
     "source-title": "Source",
     "booking-contact": "Booking contact",
+    "booking-contact-residing-country-helper-text": "Please select the country this contact currently lives in",
     "account-code-title": "Account Code",
     "price-placeholder": "Price per attendee",
     "price": "Price",

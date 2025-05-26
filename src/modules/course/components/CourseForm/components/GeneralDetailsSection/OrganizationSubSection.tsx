@@ -344,7 +344,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
                 error={!!errors.organizationKeyContact?.residingCountryCode}
                 helperText={
                   errors.organizationKeyContact?.residingCountryCode?.message ??
-                  ''
+                  t('booking-contact-residing-country-helper-text')
                 }
                 label={_t('residing-country')}
                 onBlur={undefined}
@@ -446,7 +446,8 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
                 )}
                 error={!!errors.bookingContact?.residingCountryCode}
                 helperText={
-                  errors.bookingContact?.residingCountryCode?.message ?? ''
+                  errors.bookingContact?.residingCountryCode?.message ??
+                  t('booking-contact-residing-country-helper-text')
                 }
                 label={_t('residing-country')}
                 required

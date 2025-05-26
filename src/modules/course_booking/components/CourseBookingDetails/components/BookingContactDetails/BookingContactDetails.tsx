@@ -169,7 +169,10 @@ export const BookingContactDetails = ({
             disabled={Boolean(bookingContactProfile?.countryCode)}
             error={!!errors.bookingContact?.residingCountryCode}
             helperText={
-              errors.bookingContact?.residingCountryCode?.message ?? ''
+              errors.bookingContact?.residingCountryCode?.message ??
+              t(
+                'components.course-form.booking-contact-residing-country-helper-text',
+              )
             }
             label={t('residing-country')}
             required
