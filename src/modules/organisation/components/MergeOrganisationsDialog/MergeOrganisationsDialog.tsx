@@ -48,6 +48,28 @@ export const MergeOrganisationsDialog: FC<
                 }
               >
                 {selectedOrgs.map(org => {
+                  const {
+                    headEmailAddress: _headEmailAddress,
+                    headFirstName: _headFirstName,
+                    headSurname: _headSurname,
+                    settingName: _settingName,
+                    ...attributes
+                  } = (org?.attributes ?? {}) as {
+                    headSurname?: string
+                    settingName?: string
+                    headFirstName?: string
+                    headEmailAddress?: string
+                  }
+
+                  const { countryCode: _countryCode, ...address } =
+                    (org?.address ?? {}) as {
+                      countryCode?: string
+                    }
+
+                  const attrs = {
+                    ...attributes,
+                    type: org.organisationType,
+                  }
                   return (
                     <FormControlLabel
                       key={org.id}
@@ -58,13 +80,15 @@ export const MergeOrganisationsDialog: FC<
                           <Typography variant="h6">{org.name}</Typography>
                           <Typography variant="body2">
                             <b>{t('address')}: </b>
-                            {Object.values(org?.address ?? {}).join(', ') ||
-                              '-'}
+                            {Object.values(address ?? {})
+                              .filter(Boolean)
+                              .join(', ') || '-'}
                           </Typography>
                           <Typography variant="body2">
                             <b>{t('details')}:</b>{' '}
-                            {Object.values(org?.attributes ?? {}).join(', ') ||
-                              '-'}
+                            {Object.values(attrs ?? {})
+                              .filter(Boolean)
+                              .join(', ') || '-'}
                           </Typography>
                         </Box>
                       }

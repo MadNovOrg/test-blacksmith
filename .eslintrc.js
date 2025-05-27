@@ -71,6 +71,8 @@ module.exports = {
       'error',
       {
         argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
       },
     ],
     'react-hooks/exhaustive-deps': 'error',
