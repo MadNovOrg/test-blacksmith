@@ -53,12 +53,18 @@ export const MergeOrganisationsDialog: FC<
                     headFirstName: _headFirstName,
                     headSurname: _headSurname,
                     settingName: _settingName,
+                    ofstedRating: _ofstedRating,
+                    localAuthority: _localAuthority,
+                    ofstedLastInspection: _ofstedLastInspection,
                     ...attributes
                   } = (org?.attributes ?? {}) as {
                     headSurname?: string
                     settingName?: string
                     headFirstName?: string
                     headEmailAddress?: string
+                    ofstedRating?: string
+                    localAuthority?: string
+                    ofstedLastInspection?: string
                   }
 
                   const { countryCode: _countryCode, ...address } =
