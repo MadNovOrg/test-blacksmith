@@ -317,24 +317,16 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   )
 
   const disableAffiliatesFromBeingMerged = useMemo(() => {
-    const orgs = data?.orgs
-    const mainOrgs = orgs
-      ?.filter(org => org.main_organisation === null)
-      .map(main => main.id)
-    return mainOrgs?.some(mainOrgId =>
-      organisationsForMerging.map(org => org.id).includes(mainOrgId),
+    return organisationsForMerging.some(
+      organisations => organisations.main_organisation === null,
     )
-  }, [organisationsForMerging, data?.orgs])
+  }, [organisationsForMerging])
 
   const disableMainFromBeingMerged = useMemo(() => {
-    const orgs = data?.orgs
-
-    const affiliatedOrgs = orgs?.map(org => org.affiliated_organisations).flat()
-
-    return affiliatedOrgs?.some(affiliatedOrgId =>
-      organisationsForMerging.map(org => org.id).includes(affiliatedOrgId?.id),
+    return organisationsForMerging.some(
+      organisation => organisation.main_organisation !== null,
     )
-  }, [data?.orgs, organisationsForMerging])
+  }, [organisationsForMerging])
 
   useEffect(() => {
     if (merging) {
