@@ -37,7 +37,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { CertificateDocument } from '@app/modules/certifications/components/CertificatePDF'
 import { ManageCertificateMenu } from '@app/modules/course_details/course_certification_tab/components/ManageCertificateMenu'
-import { GET_CERTIFICATE_QUERY } from '@app/modules/course_details/course_certification_tab/hooks/get-certificate'
+import { GET_CERTIFICATE_QUERY } from '@app/modules/course_details/course_certification_tab/queries/get-certificate'
 import { NonNullish } from '@app/types'
 
 import CertificateHoldHistoryModal from '../../components/CertificateHoldHistoryModal/CertificateHoldHistoryModal'
@@ -92,7 +92,7 @@ export const CourseCertification: React.FC<
   const [showCertificateHoldHistoryModal, setShowCertificateHoldHistoryModal] =
     useState(false)
 
-  const [{ data, error, fetching }, mutate] = useQuery<
+  const [{ data, error, fetching }, refetch] = useQuery<
     GetCertificateQuery,
     GetCertificateQueryVariables
   >({ query: GET_CERTIFICATE_QUERY, variables: { id: certificateId } })
@@ -270,7 +270,7 @@ export const CourseCertification: React.FC<
             </Grid>
           </Grid>
           <Grid item md={8} xs={12}>
-            {holdRequest ? (
+            {holdRequest?.expiry_date ? (
               <HoldHeaderAlert
                 status={certificate.status as Certificate_Status_Enum}
                 holdRequestEndDate={holdRequest.expiry_date}
@@ -314,13 +314,15 @@ export const CourseCertification: React.FC<
                 <PutOnHoldModal
                   onClose={() => {
                     setShowPutOnHoldModal({ edit: false, open: false })
-                    mutate()
+                    refetch()
                   }}
                   participantId={courseParticipant.id}
                   certificateId={certificateId}
                   certificateExpiryDate={certificate.expiryDate}
                   edit={showPutOnHoldModal.edit}
                   changelogs={holdChangelogs}
+                  holdRequest={holdRequest}
+                  refetch={refetch}
                 />
               ),
             }}
@@ -388,7 +390,7 @@ export const CourseCertification: React.FC<
                 onClose={() => setShowRevokeCertModal(false)}
                 onSuccess={() => {
                   setShowRevokeCertModal(false)
-                  mutate()
+                  refetch()
                 }}
               />
             ),
@@ -412,7 +414,7 @@ export const CourseCertification: React.FC<
                 onClose={() => setShowUndoRevokeModal(false)}
                 onSuccess={() => {
                   setShowUndoRevokeModal(false)
-                  mutate()
+                  refetch()
                 }}
               />
             ),

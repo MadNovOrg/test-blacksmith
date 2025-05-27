@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const INSERT_CERTIFICATE_CHANGELOG_MUTATION = gql`
   mutation InsertCourseCertificateChangelog(

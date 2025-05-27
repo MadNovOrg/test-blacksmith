@@ -13,7 +13,7 @@ import {
   UpdateGradeMutation,
   UpdateGradeMutationVariables,
 } from '@app/generated/graphql'
-import { GET_CERTIFICATE_QUERY } from '@app/modules/course_details/course_certification_tab/hooks/get-certificate'
+import { GET_CERTIFICATE_QUERY } from '@app/modules/course_details/course_certification_tab/queries/get-certificate'
 import { CourseGradingMenu } from '@app/modules/course_details/course_grading_tab/components/CourseGradingMenu/CourseGradingMenu'
 import { UPDATE_GRADE } from '@app/modules/grading/queries/update-grade'
 import theme from '@app/theme'

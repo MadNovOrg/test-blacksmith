@@ -14,7 +14,7 @@ import {
   RevokeCertMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { MUTATION as REVOKE_CERT_MUTATION } from '@app/modules/course_details/course_certification_tab/hooks/revoke-certificate'
+import { MUTATION as REVOKE_CERT_MUTATION } from '@app/modules/course_details/course_certification_tab/queries/revoke-certificate'
 
 export type RevokeCertModalProps = {
   certificateId: string

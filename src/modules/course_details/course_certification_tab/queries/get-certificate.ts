@@ -9,6 +9,7 @@ export const GET_CERTIFICATE_QUERY = gql`
     certificateHoldRequest: course_certificate_hold_request(
       where: { certificate_id: { _eq: $id } }
     ) {
+      id
       expiry_date
       start_date
     }

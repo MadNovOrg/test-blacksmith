@@ -14,7 +14,7 @@ import { addDays, parseISO, differenceInDays } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from 'urql'
 import * as yup from 'yup'
@@ -27,8 +27,8 @@ import {
   InsertCourseCertificateHoldRequestMutation,
   InsertCourseCertificateHoldRequestMutationVariables,
 } from '@app/generated/graphql'
-import { INSERT_CERTIFICATE_CHANGELOG_MUTATION } from '@app/modules/course_details/course_certification_tab/hooks/insert-course-certificate-changelog'
-import { INSERT_CERTIFICATE_HOLD_MUTATION } from '@app/modules/course_details/course_certification_tab/hooks/insert-course-certificate-hold-request'
+import { INSERT_CERTIFICATE_CHANGELOG_MUTATION } from '@app/modules/course_details/course_certification_tab/queries/insert-course-certificate-changelog'
+import { INSERT_CERTIFICATE_HOLD_MUTATION } from '@app/modules/course_details/course_certification_tab/queries/insert-course-certificate-hold-request'
 import theme from '@app/theme'
 import { NonNullish } from '@app/types'
 
@@ -53,16 +53,18 @@ type PutOnHoldModalProps = {
   edit: boolean
   changelogs: NonNullish<CertificateChangelog['certificateChanges']>
   onClose: () => void
+  holdRequest?: GetCertificateQuery['certificateHoldRequest'][0]
+  refetch: () => void
 }
 
-enum HoldReasons {
+export enum HoldReasons {
   Maternity = 'MATERNITY',
   Sickness = 'SICKNESS',
   Legal = 'LEGAL',
   Others = 'OTHERS',
 }
 
-const type = [
+export const type = [
   HoldReasons.Maternity,
   HoldReasons.Sickness,
   HoldReasons.Legal,
@@ -77,6 +79,8 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
     edit,
     changelogs,
     certificateExpiryDate,
+    holdRequest,
+    refetch,
   }) {
     const { t } = useTranslation()
     const [error, setError] = useState<string>()
@@ -93,17 +97,12 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
       InsertCourseCertificateHoldRequestMutationVariables
     >(INSERT_CERTIFICATE_HOLD_MUTATION)
 
-    const minDate = useMemo(() => new Date(Date.now()), [])
     const schema = useMemo(() => {
       return yup
         .object({
-          dateFrom: yup
-            .date()
-            .typeError(t('validation-errors.invalid-date'))
-            .required(t('validation-errors.required-date')),
+          dateFrom: yup.date().required(t('validation-errors.required-date')),
           dateTo: yup
             .date()
-            .typeError(t('validation-errors.invalid-date'))
             .required(t('validation-errors.required-date'))
             .min(
               yup.ref('dateFrom'),
@@ -131,99 +130,84 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
       handleSubmit,
       formState: { errors },
       watch,
+      register,
       control,
-      getValues,
     } = useForm<yup.InferType<typeof schema>>({
       resolver: yupResolver(schema),
       defaultValues: {
-        dateFrom: edit
-          ? parseISO(lastChangelog?.payload?.startDate)
-          : undefined,
-        dateTo: edit ? parseISO(lastChangelog?.payload?.expireDate) : undefined,
-        reasonSelected: edit ? lastChangelog?.payload?.reason : '',
-        note: edit ? lastChangelog?.payload?.note : '',
+        dateFrom: edit ? parseISO(holdRequest?.start_date) : undefined,
+        dateTo: edit ? parseISO(holdRequest?.expiry_date) : undefined,
+        reasonSelected: edit ? lastChangelog.payload.reason : '',
+        note: edit ? lastChangelog.payload.note : '',
       },
     })
 
     const handleClose = useCallback(() => {
-      setShowHoldModal(true)
+      setShowHoldModal(false)
       onClose()
     }, [onClose])
 
-    const submitHandler: SubmitHandler<yup.InferType<typeof schema>> =
-      useCallback(async () => {
-        const values = getValues()
-        if (!values.dateFrom || !values.dateTo) {
-          return
-        }
+    const onSubmit = (data: yup.InferType<typeof schema>) => {
+      const currentDate = new Date(Date.now())
+      data.dateTo.setHours(
+        currentDate.getHours(),
+        currentDate.getMinutes() + MINUTES_IN_FUTURE,
+      )
 
-        const currentDate = new Date(Date.now())
-        values.dateTo.setHours(
-          currentDate.getHours(),
-          currentDate.getMinutes() + MINUTES_IN_FUTURE,
-        )
-
-        insertCertificateChangelog({
-          participantId,
-          payload: {
-            startDate: values.dateFrom,
-            expireDate: values.dateTo,
-            note: values.note,
-            reason: values.reasonSelected,
-            certificateId,
-          },
-          type: Course_Certificate_Changelog_Type_Enum.PutOnHold,
-        })
-          .then(async ({ data }) => {
-            const changelogId = data?.insertChangeLog?.id
-
-            let timeDiff = 0
-            const dateFrom = zonedTimeToUtc(values.dateFrom, 'GMT')
-            const dateTo = zonedTimeToUtc(values.dateTo, 'GMT')
-
-            if (edit) {
-              timeDiff = differenceInDays(
-                dateTo,
-                new Date(lastChangelog?.payload?.expireDate),
-              )
-            } else {
-              timeDiff = differenceInDays(dateTo, dateFrom)
-            }
-
-            const totalDiff = addDays(new Date(certificateExpiryDate), timeDiff)
-            const expireDate = zonedTimeToUtc(new Date(totalDiff), 'GMT')
-
-            try {
-              await insertCertificateHold({
-                certificateId,
-                changelogId: changelogId,
-                expireDate: dateTo,
-                startDate: dateFrom,
-                newExpiryDate: expireDate.toISOString(),
-              })
-            } catch (e: unknown) {
-              setError((e as Error).message)
-            }
-
-            handleClose()
-          })
-          .catch(err => {
-            setError(err)
-          })
-      }, [
-        certificateExpiryDate,
-        certificateId,
-        edit,
-        getValues,
-        handleClose,
-        insertCertificateChangelog,
-        insertCertificateHold,
-        lastChangelog?.payload?.expireDate,
+      insertCertificateChangelog({
         participantId,
-      ])
+        payload: {
+          startDate: data.dateFrom,
+          expireDate: data.dateTo,
+          note: data.note,
+          reason: data.reasonSelected,
+          certificateId,
+        },
+        type: Course_Certificate_Changelog_Type_Enum.PutOnHold,
+      })
+        .then(async ({ data: response }) => {
+          const changelogId = response?.insertChangeLog?.id
+
+          let timeDiff = 0
+          const dateFrom = zonedTimeToUtc(data.dateFrom, 'GMT')
+          const dateTo = zonedTimeToUtc(data.dateTo, 'GMT')
+
+          if (edit) {
+            timeDiff = differenceInDays(
+              dateTo,
+              new Date(holdRequest?.expiry_date),
+            )
+          } else {
+            timeDiff = differenceInDays(dateTo, dateFrom)
+          }
+
+          const totalDiff = addDays(new Date(certificateExpiryDate), timeDiff)
+          const expireDate = zonedTimeToUtc(new Date(totalDiff), 'GMT')
+
+          try {
+            await insertCertificateHold({
+              certificateId,
+              changelogId: changelogId,
+              expireDate: dateTo,
+              startDate: dateFrom,
+              newExpiryDate: expireDate.toISOString(),
+            })
+            refetch()
+          } catch (e: unknown) {
+            setError((e as Error).message)
+          }
+
+          handleClose()
+        })
+        .catch(err => {
+          setError(err)
+        })
+    }
 
     const values = watch()
     const canSubmit = showHoldModal && !edit
+
+    const minDate = useMemo(() => new Date(Date.now()), [])
 
     return (
       <LocalizationProvider
@@ -231,7 +215,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
         adapterLocale={enLocale}
       >
         <Box px={2}>
-          <form onSubmit={handleSubmit(submitHandler)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             {showHoldModal ? (
               <Grid container spacing={4}>
                 <Grid item xs={12} container rowGap={2}>
@@ -244,40 +228,34 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Controller
-                      name="reasonSelected"
-                      control={control}
-                      render={({ field }) => (
-                        <TextField
-                          id="reasonSelected"
-                          select
-                          label={t(
-                            'common.course-certificate.put-on-hold-modal.select-reason',
-                          )}
-                          variant="filled"
-                          data-testid="reason-input"
-                          value={field.value}
-                          onChange={field.onChange}
-                          inputProps={{ 'data-testid': 'hold-reason-select' }}
-                          error={!!errors.reasonSelected}
-                          helperText={errors.reasonSelected?.message}
-                          disabled={edit}
-                          fullWidth
-                        >
-                          {type.map(level => (
-                            <MenuItem
-                              key={level}
-                              value={level}
-                              data-testid={`hold-reason-option-${level}`}
-                            >
-                              {t(
-                                `common.course-certificate.put-on-hold-modal.reasons.${level.toLocaleLowerCase()}`,
-                              )}
-                            </MenuItem>
-                          ))}
-                        </TextField>
+                    <TextField
+                      {...register('reasonSelected')}
+                      select
+                      label={t(
+                        'common.course-certificate.put-on-hold-modal.select-reason',
                       )}
-                    />
+                      value={values.reasonSelected}
+                      defaultValue={values.reasonSelected}
+                      variant="filled"
+                      data-testid="reason-input"
+                      inputProps={{ 'data-testid': 'hold-reason-select' }}
+                      error={!!errors.reasonSelected}
+                      helperText={errors.reasonSelected?.message}
+                      disabled={edit}
+                      fullWidth
+                    >
+                      {type.map(level => (
+                        <MenuItem
+                          key={level}
+                          value={level}
+                          data-testid={`hold-reason-option-${level}`}
+                        >
+                          {t(
+                            `common.course-certificate.put-on-hold-modal.reasons.${level.toLocaleLowerCase()}`,
+                          )}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </Grid>
                 </Grid>
                 <Grid item xs={12} container rowGap={2}>
@@ -296,21 +274,15 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Controller
-                      name="note"
-                      control={control}
-                      render={({ field }) => (
-                        <TextField
-                          fullWidth
-                          variant="filled"
-                          data-testid="add-notes"
-                          error={!!errors.note}
-                          helperText={errors.note?.message}
-                          label={t(
-                            'common.course-certificate.put-on-hold-modal.please-add-a-note',
-                          )}
-                          {...field}
-                        />
+                    <TextField
+                      {...register('note')}
+                      fullWidth
+                      variant="filled"
+                      data-testid="add-notes"
+                      error={!!errors.note}
+                      helperText={errors.note?.message}
+                      label={t(
+                        'common.course-certificate.put-on-hold-modal.please-add-a-note',
                       )}
                     />
                   </Grid>
@@ -422,7 +394,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                 onClose={handleClose}
                 reasonSelected={values.reasonSelected}
                 dateTo={values.dateTo}
-                expireDate={lastChangelog?.payload?.expireDate}
+                expireDate={holdRequest?.expiry_date}
                 error={error}
               />
             )}

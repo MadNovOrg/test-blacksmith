@@ -18,22 +18,6 @@ module.exports = {
       parserOptions: {
         ecmaVersion: 12,
       },
-      // TODO Uncomment & Cleanup
-      // rules: {
-      //   'jest/no-large-snapshots': ['error'],
-      //   'jest/expect-expect': [
-      //     'error',
-      //     {
-      //       assertFunctionNames: [
-      //         'expect',
-      //         'waitForText',
-      //         'waitForCalls',
-      //         'runTestsForTrainer',
-      //         'expectCourseTableTo',
-      //       ],
-      //     },
-      //   ],
-      // },
     },
   ],
   parserOptions: {

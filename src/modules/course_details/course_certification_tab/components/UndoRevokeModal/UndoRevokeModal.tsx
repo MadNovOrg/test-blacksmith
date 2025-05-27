@@ -13,7 +13,7 @@ import {
   UndoRevokeCertMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { MUTATION as UNDO_REVOKE_CERT_MUTATION } from '@app/modules/course_details/course_certification_tab/hooks/undo-revoke-certificate'
+import { MUTATION as UNDO_REVOKE_CERT_MUTATION } from '@app/modules/course_details/course_certification_tab/queries/undo-revoke-certificate'
 
 export type UndoRevokeModalProps = {
   certificateId: string
