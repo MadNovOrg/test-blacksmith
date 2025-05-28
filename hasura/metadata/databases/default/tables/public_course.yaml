@@ -1776,7 +1776,10 @@ event_triggers:
     definition:
       enable_manual: true
       update:
-        columns: '*'
+        columns:
+          - go1_integration
+          - course_type
+          - course_status
     retry_conf:
       interval_sec: 10
       num_retries: 0
