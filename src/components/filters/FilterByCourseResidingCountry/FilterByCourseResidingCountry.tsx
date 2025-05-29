@@ -26,18 +26,27 @@ import {
 import { noop } from '@app/util'
 
 type Props = {
+  includeAllCountries?: boolean
   onChange: (selected: string[]) => void
   saveOnPageRefresh?: boolean
 }
 
 export const FilterByCourseResidingCountry: React.FC<
   React.PropsWithChildren<Props>
-> = ({ onChange = noop, saveOnPageRefresh = true }) => {
+> = ({
+  includeAllCountries = false,
+  onChange = noop,
+  saveOnPageRefresh = true,
+}) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
-  const { getLabel: getCountryLabel } = useWorldCountries()
 
-  const { ANZCountriesCodes, countriesCodesWithUKs } = useWorldCountries()
+  const {
+    ANZCountriesCodes,
+    countriesCodesWithUKs,
+    getLabel: getCountryLabel,
+  } = useWorldCountries()
+
   const CourseResidingCountryParam = withDefault(
     createEnumArrayParam<string>(
       acl.isAustralia() ? ANZCountriesCodes : countriesCodesWithUKs,
@@ -54,6 +63,7 @@ export const FilterByCourseResidingCountry: React.FC<
       ? GET_ANZ_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY
       : GET_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY,
     requestPolicy: 'cache-and-network',
+    pause: includeAllCountries,
   })
 
   const [{ data: CourseVenueCountries }] = useQuery<
@@ -64,9 +74,18 @@ export const FilterByCourseResidingCountry: React.FC<
       ? GET_ANZ_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY
       : GET_DISTINCT_COURSE_VENUE_COUNTRIES_QUERY,
     requestPolicy: 'cache-and-network',
+    pause: includeAllCountries,
   })
 
   useEffect(() => {
+    if (includeAllCountries) {
+      setResidingCountries(
+        acl.isAustralia() ? ANZCountriesCodes : countriesCodesWithUKs,
+      )
+
+      return
+    }
+
     if (
       CourseResidingCountries &&
       CourseResidingCountries?.course?.length > 0
@@ -85,6 +104,10 @@ export const FilterByCourseResidingCountry: React.FC<
     CourseVenueCountries,
     setVenueCountries,
     setResidingCountries,
+    includeAllCountries,
+    acl,
+    ANZCountriesCodes,
+    countriesCodesWithUKs,
   ])
 
   const setOfUniqueCountries = new Set([
@@ -150,15 +173,16 @@ export const FilterByCourseResidingCountry: React.FC<
 
   return (
     <FilterAccordion
+      data-testid="course-residing-country-filter"
       defaultExpanded={
         saveOnPageRefresh
           ? selectedInQueryParams.length > 0
           : selectedOptions.length > 0
       }
-      options={options}
-      title={t('filters.residing-country')}
       onChange={_onChange}
-      data-testid="course-residing-country-filter"
+      options={options}
+      sort={!includeAllCountries}
+      title={t('filters.residing-country')}
     />
   )
 }

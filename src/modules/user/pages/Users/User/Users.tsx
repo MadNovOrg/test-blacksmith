@@ -17,7 +17,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -30,6 +30,7 @@ import useWorldCountries, {
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByCertificateValidity } from '@app/components/filters/FilterByCertificateValidity'
 import { FilterByCourseLevel } from '@app/components/filters/FilterByCourseLevel'
+import { FilterByCourseResidingCountry as FilterByResidingCountry } from '@app/components/filters/FilterByCourseResidingCountry'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
@@ -68,6 +69,9 @@ export const Users = () => {
   const [trainerTypeFilter, setTrainerTypeFilter] = useState<FilterOption[]>(
     getTrainerRoleTypesOptions({ isAustralia: acl.isAustralia() }),
   )
+  const [selectedResidingCountry, setSelectedResidingCountry] = useState<
+    string[]
+  >([])
 
   const [filterByCertificateLevel, setFilteredByCertificateLEvel] = useState<
     Course_Level_Enum[]
@@ -318,6 +322,13 @@ export const Users = () => {
       })
     }
 
+    if (selectedResidingCountry.length) {
+      Object.assign(filterConditions, {
+        countryCode: { _in: selectedResidingCountry },
+      })
+      isFiltered = true
+    }
+
     // ? Strange for this to be in a useMemo
     setCurrentPage(0)
 
@@ -330,6 +341,7 @@ export const Users = () => {
     keywordDebounced,
     filterByModerator,
     filterByArchived,
+    selectedResidingCountry,
     setCurrentPage,
   ])
 
@@ -409,6 +421,10 @@ export const Users = () => {
     })
   }
 
+  const handleResidingCountryChange = useCallback((countries: string[]) => {
+    setSelectedResidingCountry(countries)
+  }, [])
+
   return (
     <FullHeightPageLayout>
       <Helmet>
@@ -468,6 +484,10 @@ export const Users = () => {
                 value={keyword}
                 onChange={setKeyword}
                 placeholder={t('common.search')}
+              />
+              <FilterByResidingCountry
+                onChange={handleResidingCountryChange}
+                includeAllCountries
               />
               <FilterAccordion
                 options={roleFilter}
