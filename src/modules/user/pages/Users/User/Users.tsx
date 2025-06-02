@@ -486,8 +486,9 @@ export const Users = () => {
                 placeholder={t('common.search')}
               />
               <FilterByResidingCountry
-                onChange={handleResidingCountryChange}
                 includeAllCountries
+                onChange={handleResidingCountryChange}
+                title={t('user-residing-country')}
               />
               <FilterAccordion
                 options={roleFilter}

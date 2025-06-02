@@ -29,6 +29,7 @@ type Props = {
   includeAllCountries?: boolean
   onChange: (selected: string[]) => void
   saveOnPageRefresh?: boolean
+  title?: string
 }
 
 export const FilterByCourseResidingCountry: React.FC<
@@ -37,6 +38,7 @@ export const FilterByCourseResidingCountry: React.FC<
   includeAllCountries = false,
   onChange = noop,
   saveOnPageRefresh = true,
+  title,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -182,7 +184,7 @@ export const FilterByCourseResidingCountry: React.FC<
       onChange={_onChange}
       options={options}
       sort={!includeAllCountries}
-      title={t('filters.residing-country')}
+      title={title ?? t('filters.residing-country')}
     />
   )
 }

@@ -206,6 +206,7 @@
   "name": "Name",
   "residing-country": "Residing Country",
   "attendee": "Attendee",
+  "user-residing-country": "User Residing Country",
   "trainer-type": "Trainer Type",
   "course-type": "Course Type",
   "course-status": "Course Status",
