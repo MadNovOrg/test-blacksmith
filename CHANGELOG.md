@@ -1,5 +1,22 @@
 # @teamteach/hub
 
+## 5.4.0
+
+### Minor Changes
+
+- 1e683fe: Filter users based on their country of residence
+- 7f5f01b: Change default residing country for OPEN/CLOSED FT+ courses to England instead of Ireland.
+- 123fd1b: TTHP-5045 remove postal address from booking on anz level 1 open virtual courses
+- e69b5a7: TTHP-5160 anz | uk allow internal users to merge organisations
+- d310568: Adjust AOL permission depending on the type of agreement
+
+### Patch Changes
+
+- c1e7d39: Mandatory country field for booking and for the organization's key contact
+- a39f80b: Hide AOL sections for users who do not have permission to edit them, rather than disabling them.
+- 8f97174: Fix TTHP-5169 on hold certificate update
+- bea8423: Update search_fields column of the course table to be take into consideration course_trainer deletion
+
 ## 5.3.0
 
 ### Minor Changes
