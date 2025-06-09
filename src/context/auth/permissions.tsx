@@ -111,7 +111,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       if (
         course.go1Integration ||
         course.resourcePacksType ||
-        [(Course_Type_Enum.Closed, Course_Type_Enum.Open)].includes(
+        [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
           course.type,
         ) ||
         !course.courseParticipants ||
