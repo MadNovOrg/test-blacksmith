@@ -68809,13 +68809,6 @@ export type SendCourseInformationMutationVariables = Exact<{
 
 export type SendCourseInformationMutation = { __typename?: 'mutation_root', sendCourseInformation: { __typename?: 'SendCourseInformationOutput', success: boolean, error?: SendCourseInformationError | null } };
 
-export type DeleteHoldRequestMutationVariables = Exact<{
-  id: Scalars['uuid'];
-}>;
-
-
-export type DeleteHoldRequestMutation = { __typename?: 'mutation_root', delete_course_certificate_hold_request_by_pk?: { __typename?: 'course_certificate_hold_request', id: any } | null };
-
 export type GetCertificateQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -69792,7 +69785,7 @@ export type GetBulkProfilesRolesByProfileIdQueryVariables = Exact<{
 }>;
 
 
-export type GetBulkProfilesRolesByProfileIdQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string } }> }> };
+export type GetBulkProfilesRolesByProfileIdQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, profile_trainer_agreement_types: Array<{ __typename?: 'profile_trainer_agreement_type', id: any, agreement_type: Trainer_Agreement_Type_Enum }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string } }> }> };
 
 export type GetProfilesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;

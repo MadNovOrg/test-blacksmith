@@ -50,7 +50,11 @@ import { TrainerRoleTypeName } from '@app/types'
 
 import { MergeUsersDialog } from '../components/MergeUsersDialog/MergeUsersDialog'
 import UserRole from '../components/UserRoleChip/UserRole'
-import { getRoleOptions, getTrainerRoleTypesOptions } from '../utils'
+import {
+  getAgreementTypeOptions,
+  getRoleOptions,
+  getTrainerRoleTypesOptions,
+} from '../utils'
 
 export const Users = () => {
   const { t } = useTranslation()
@@ -69,6 +73,9 @@ export const Users = () => {
   const [trainerTypeFilter, setTrainerTypeFilter] = useState<FilterOption[]>(
     getTrainerRoleTypesOptions({ isAustralia: acl.isAustralia() }),
   )
+  const [agreementTypeFilter, setAgreementTypeFilter] = useState<
+    FilterOption[]
+  >(getAgreementTypeOptions())
   const [selectedResidingCountry, setSelectedResidingCountry] = useState<
     string[]
   >([])
@@ -96,6 +103,10 @@ export const Users = () => {
     )
 
     const selectedTrainerTypes = trainerTypeFilter.flatMap(item =>
+      item.selected ? item.id : [],
+    )
+
+    const selectedAgreementTypes = agreementTypeFilter.flatMap(item =>
       item.selected ? item.id : [],
     )
 
@@ -176,6 +187,15 @@ export const Users = () => {
           trainer_role_type: {
             name: { _in: selectedTrainerTypes },
           },
+        },
+      })
+      isFiltered = true
+    }
+
+    if (selectedAgreementTypes.length) {
+      Object.assign(filterConditions, {
+        profile_trainer_agreement_types: {
+          agreement_type: { _in: selectedAgreementTypes },
         },
       })
       isFiltered = true
@@ -336,6 +356,7 @@ export const Users = () => {
   }, [
     roleFilter,
     trainerTypeFilter,
+    agreementTypeFilter,
     filterByCertificateLevel,
     certificateStatus,
     keywordDebounced,
@@ -504,6 +525,17 @@ export const Users = () => {
                 defaultExpanded={false}
                 data-testid="FilterTrainerType"
               />
+
+              {acl.isUK() ? (
+                <FilterAccordion
+                  data-testid="FilterAgreementTypeAccordion"
+                  defaultExpanded={false}
+                  onChange={setAgreementTypeFilter}
+                  options={agreementTypeFilter}
+                  title={t('agreement-type')}
+                />
+              ) : null}
+
               <FilterByCourseLevel
                 excludedStatuses={
                   acl.isAustralia()
@@ -644,9 +676,15 @@ export const Users = () => {
                                 return (
                                   <Skeleton variant="rectangular" width={100} />
                                 )
+
+                              const agreementTypes = rolesData?.profile.find(
+                                profile => profile.id === user.id,
+                              )?.profile_trainer_agreement_types
+
                               const userWithRoles = rolesData?.profile.find(
                                 profile => profile.id === user.id,
                               )?.roles
+
                               const isOrganisationAdmin = Boolean(
                                 organisationData?.profile
                                   .find(profile => profile.id === user.id)
@@ -656,11 +694,15 @@ export const Users = () => {
                               )
 
                               if (!userWithRoles) return null
+
                               return (
                                 <Box display="flex" flexWrap="wrap">
                                   <UserRole
                                     user={userWithRoles}
                                     isOrganisationAdmin={isOrganisationAdmin}
+                                    agreementTypes={agreementTypes?.map(
+                                      agreement => agreement.agreement_type,
+                                    )}
                                   />
                                 </Box>
                               )

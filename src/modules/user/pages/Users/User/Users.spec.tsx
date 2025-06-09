@@ -135,6 +135,7 @@ describe('page: Users', () => {
         profile: [
           {
             id: profile.id,
+            profile_trainer_agreement_types: [],
             roles: [
               {
                 role: {
@@ -574,5 +575,41 @@ describe('page: Users', () => {
 
       expect(within(dialog).getByText(/compare users/i)).toBeInTheDocument()
     })
+  })
+
+  it('renders the agreement type filter conditionally based on the UK locale.', () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+
+    useProfilesMocked.mockReturnValue({
+      count: 0,
+      error: undefined,
+      isLoading: false,
+      mutate: vi.fn(),
+      profiles: [],
+    })
+
+    render(<Users />)
+
+    expect(
+      screen.getByTestId('FilterAgreementTypeAccordion'),
+    ).toBeInTheDocument()
+  })
+
+  it("doesn't renders the agreement type filter conditionally based on the Australia locale.", () => {
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+
+    useProfilesMocked.mockReturnValue({
+      count: 0,
+      error: undefined,
+      isLoading: false,
+      mutate: vi.fn(),
+      profiles: [],
+    })
+
+    render(<Users />)
+
+    expect(
+      screen.queryByTestId('FilterAgreementTypeAccordion'),
+    ).not.toBeInTheDocument()
   })
 })

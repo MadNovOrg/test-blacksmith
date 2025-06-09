@@ -1,7 +1,16 @@
 import { t } from 'i18next'
 
 import { FilterOption } from '@app/components/FilterAccordion'
+import { Trainer_Agreement_Type_Enum } from '@app/generated/graphql'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
+
+export const getAgreementTypeOptions = () => {
+  return Object.values(Trainer_Agreement_Type_Enum).map<FilterOption>(type => ({
+    id: type,
+    selected: false,
+    title: t(`trainer-agreement-types.${type}`),
+  }))
+}
 
 export const getTrainerRoleTypesOptions = ({
   isAustralia,

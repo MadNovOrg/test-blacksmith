@@ -9,6 +9,10 @@ const GET_PROFILES_ROLES_BY_PROFILE_ID = gql`
   query GetBulkProfilesRolesByProfileId($profileIds: [uuid!]!) {
     profile(where: { id: { _in: $profileIds } }) {
       id
+      profile_trainer_agreement_types {
+        id
+        agreement_type
+      }
       roles(where: { profile_id: { _in: $profileIds } }) {
         role {
           name

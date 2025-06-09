@@ -208,6 +208,7 @@
   "attendee": "Attendee",
   "user-residing-country": "User Residing Country",
   "trainer-type": "Trainer Type",
+  "agreement-type": "Agreement Type",
   "course-type": "Course Type",
   "course-status": "Course Status",
   "course-state": "Course State",
