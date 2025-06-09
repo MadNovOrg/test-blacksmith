@@ -2,6 +2,7 @@ import axios from 'axios'
 import { isPast } from 'date-fns'
 import Cookies from 'js-cookie'
 
+import { Grade_Enum } from '@app/generated/graphql'
 import { HubspotApiFormData, RoleName } from '@app/types'
 import { expiryDateWithGracePeriod } from '@app/util'
 
@@ -101,11 +102,16 @@ export async function fetchUserProfile(
       activeCertificates: certificates
         .filter(
           c =>
+            c.grade !== Grade_Enum.Fail &&
+            !c.isRevoked &&
             !isPast(
               expiryDateWithGracePeriod(c.courseLevel, new Date(c.expiryDate)),
             ),
         )
-        .map(certificate => certificate.courseLevel),
+        .map(certificate => ({
+          level: certificate.courseLevel,
+          grade: (certificate.grade ?? null) as Grade_Enum | null,
+        })),
     }
   } catch (err) {
     console.error(err)

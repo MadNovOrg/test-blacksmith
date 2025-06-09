@@ -10,6 +10,7 @@ import {
   Course_Trainer_Type_Enum,
   CourseTrainerType,
   Course as GeneratedCourseType,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import {
   getANZLevels,
@@ -386,24 +387,36 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       courseType: Course_Type_Enum,
       levels: Course_Level_Enum[],
     ) => {
-      if (!activeRole) {
-        return []
-      }
+      if (!activeRole) return []
 
       if (anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])()) {
         return levels
       }
 
-      return levels.filter(courseLevel => {
-        const allowedCertificates = (
-          acl.isAustralia()
-            ? REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ
-            : REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
-        )[courseType][courseLevel]
+      const certificateMap = acl.isAustralia()
+        ? REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ
+        : REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
+
+      const hasValidCertificate = (
+        allowed: string,
+        active: { level: string; grade: Grade_Enum | null },
+      ): boolean => {
+        const matchesLevel = active.level === allowed
+        const isNotUKAssistOnly =
+          !acl.isUK() || active.grade !== Grade_Enum.AssistOnly
+        return matchesLevel && isNotUKAssistOnly
+      }
+
+      const isLevelAllowed = (courseLevel: Course_Level_Enum): boolean => {
+        const allowedCertificates = certificateMap[courseType][courseLevel]
         return allowedCertificates.some(allowed =>
-          activeCertificates.some(active => active === allowed),
+          activeCertificates.some(active =>
+            hasValidCertificate(allowed, active),
+          ),
         )
-      })
+      }
+
+      return levels.filter(isLevelAllowed)
     },
 
     canCreateSomeCourseLevel: () => {
@@ -819,7 +832,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
             return [
               Course_Level_Enum.BildIntermediateTrainer,
               Course_Level_Enum.BildAdvancedTrainer,
-            ].some(level => activeCertificates.includes(level))
+            ].some(level => activeCertificates.some(c => c.level === level))
           }
 
           return [RoleName.TT_OPS, RoleName.TT_ADMIN].includes(activeRole)
@@ -837,8 +850,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canDeliveryTertiaryAdvancedStrategy: () => {
       if (activeRole === RoleName.TRAINER) {
-        return activeCertificates.includes(
-          Course_Level_Enum.BildAdvancedTrainer,
+        return activeCertificates.some(
+          c => Course_Level_Enum.BildAdvancedTrainer === c.level,
         )
       }
 

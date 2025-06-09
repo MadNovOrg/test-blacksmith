@@ -5,6 +5,7 @@ import {
   ResourceDetailsQuery,
   ResourceSummaryFragment,
   Course_Level_Enum,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
@@ -235,7 +236,12 @@ describe('page: ResourceCategoryDetails', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
     )

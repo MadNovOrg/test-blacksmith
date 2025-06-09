@@ -8,6 +8,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   GetCoursesSourcesQuery,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
@@ -358,7 +359,12 @@ describe('component: UkCourseForm - CLOSED', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_2],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_2,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },

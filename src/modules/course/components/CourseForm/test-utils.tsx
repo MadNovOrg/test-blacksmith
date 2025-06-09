@@ -5,6 +5,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import useZoomMeetingUrl from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
 import { Profile, RoleName } from '@app/types'
@@ -87,7 +88,7 @@ export const renderForm = ({
   }
   return render(<FormToRender {...props} type={type} isCreation={true} />, {
     auth: {
-      activeCertificates: [certificateLevel],
+      activeCertificates: [{ level: certificateLevel, grade: Grade_Enum.Pass }],
       activeRole: role,
       profile,
     },

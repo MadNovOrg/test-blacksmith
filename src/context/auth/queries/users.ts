@@ -22,8 +22,10 @@ export const GET_USER_PROFILE = gql`
         }
       }
       certificates(where: { status: { _nin: [${Certificate_Status_Enum.OnHold}, ${Certificate_Status_Enum.Revoked}, ${Certificate_Status_Enum.Expired}] } }) {
-        expiryDate
         courseLevel
+        expiryDate
+        grade
+        isRevoked
       }
       courses {
         grade

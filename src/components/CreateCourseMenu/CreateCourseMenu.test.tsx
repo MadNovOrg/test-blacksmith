@@ -2,7 +2,7 @@ import { Typography } from '@mui/material'
 import React from 'react'
 import { Routes, Route, useSearchParams } from 'react-router-dom'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
+import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { render, userEvent, screen, within, waitFor } from '@test/index'
@@ -132,7 +132,12 @@ describe('components: CreateCourseMenu', () => {
         auth: {
           activeRole: RoleName.TRAINER,
           allowedRoles: generateRolesUpTo(RoleName.TRAINER),
-          activeCertificates: [Course_Level_Enum.IntermediateTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.IntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
       { initialEntries: ['/'] },
@@ -178,7 +183,12 @@ describe('components: CreateCourseMenu', () => {
     render(<CreateCourseMenu />, {
       auth: {
         activeRole: RoleName.TRAINER,
-        activeCertificates: [Course_Level_Enum.Level_1],
+        activeCertificates: [
+          {
+            level: Course_Level_Enum.Level_1,
+            grade: Grade_Enum.Pass,
+          },
+        ],
       },
     })
 

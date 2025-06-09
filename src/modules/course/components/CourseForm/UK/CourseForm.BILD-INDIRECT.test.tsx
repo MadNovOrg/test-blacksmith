@@ -1,6 +1,10 @@
 import { t } from 'i18next'
 
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { AwsRegions, RoleName } from '@app/types'
 
@@ -41,7 +45,12 @@ describe('UkCourseForm - indirect BILD', () => {
       await waitFor(() => {
         render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
           auth: {
-            activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
+            activeCertificates: [
+              {
+                level: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+              },
+            ],
             activeRole: role,
           },
         })
@@ -59,7 +68,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildIntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -76,7 +90,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -93,7 +112,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -126,7 +150,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildIntermediateTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildIntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -143,7 +172,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -160,7 +194,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -184,7 +223,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -205,7 +249,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -230,7 +279,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })
@@ -252,7 +306,12 @@ describe('UkCourseForm - indirect BILD', () => {
     await waitFor(() => {
       render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TRAINER,
         },
       })

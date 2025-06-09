@@ -15,6 +15,7 @@ import {
   SearchTrainersQuery,
   Course_Level_Enum,
   Currency,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import useZoomMeetingLink from '@app/modules/course/components/CourseForm/hooks/useZoomMeetingLink'
 import { useCourseDraft } from '@app/modules/course/hooks/useCourseDraft'
@@ -275,7 +276,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
       { initialEntries: ['/?type=INDIRECT'] },
@@ -346,7 +352,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -450,7 +461,12 @@ describe('component: CreateCourseForm', () => {
       {
         auth: {
           activeRole: RoleName.TRAINER,
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.AdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
 
           profile: {
             id: chance.guid(),
@@ -536,7 +552,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -606,7 +627,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -685,7 +711,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -763,7 +794,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -832,7 +868,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -885,7 +926,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -977,7 +1023,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1041,7 +1092,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1130,7 +1186,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1236,7 +1297,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1342,7 +1408,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_2],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_2,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1443,7 +1514,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1549,7 +1625,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1632,7 +1713,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1736,7 +1822,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1840,7 +1931,12 @@ describe('component: CreateCourseForm', () => {
       </Provider>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.Level_1],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.Level_1,
+              grade: Grade_Enum.Pass,
+            },
+          ],
           activeRole: RoleName.TT_ADMIN,
         },
       },
@@ -1906,7 +2002,12 @@ describe('component: CreateCourseForm', () => {
       </Routes>,
       {
         auth: {
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
       { initialEntries: ['/?type=INDIRECT'] },

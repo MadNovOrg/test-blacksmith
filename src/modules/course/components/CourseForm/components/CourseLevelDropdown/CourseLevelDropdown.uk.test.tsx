@@ -6,6 +6,7 @@ import {
   Accreditors_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import { AwsRegions, RoleName } from '@app/types'
 
@@ -134,7 +135,12 @@ describe('component: CourseLevelDropdown [UK]', () => {
               courseLevel: Course_Level_Enum.IntermediateTrainer,
             },
           ],
-          activeCertificates: [Course_Level_Enum.IntermediateTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.IntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
     )
@@ -161,7 +167,12 @@ describe('component: CourseLevelDropdown [UK]', () => {
       {
         auth: {
           activeRole: RoleName.TRAINER,
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.AdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
     )
@@ -186,7 +197,12 @@ describe('component: CourseLevelDropdown [UK]', () => {
       {
         auth: {
           activeRole: RoleName.TRAINER,
-          activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       },
     )

@@ -5,6 +5,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
+  Grade_Enum,
 } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { AwsRegions, RoleName } from '@app/types'
@@ -71,7 +72,12 @@ describe('component: UkCourseForm - OPEN', () => {
     await waitFor(() =>
       render(<UkCourseForm type={type} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.AdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       }),
     )
@@ -121,7 +127,12 @@ describe('component: UkCourseForm - OPEN', () => {
     await waitFor(() =>
       render(<UkCourseForm type={type} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.AdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       }),
     )
@@ -175,7 +186,12 @@ describe('component: UkCourseForm - OPEN', () => {
     await waitFor(() =>
       render(<UkCourseForm type={type} />, {
         auth: {
-          activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.AdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
         },
       }),
     )

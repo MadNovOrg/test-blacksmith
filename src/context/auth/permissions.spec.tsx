@@ -1319,7 +1319,12 @@ describe(getACL.name, () => {
       // Arrange
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
-        activeCertificates: [Course_Level_Enum.IntermediateTrainer],
+        activeCertificates: [
+          {
+            level: Course_Level_Enum.IntermediateTrainer,
+            grade: Grade_Enum.Pass,
+          },
+        ],
       })
 
       // Act & Assert
@@ -2714,8 +2719,14 @@ describe(getACL.name, () => {
         const acl = getACLStub({
           activeRole: RoleName.TRAINER,
           activeCertificates: [
-            Course_Level_Enum.BildIntermediateTrainer,
-            Course_Level_Enum.BildAdvancedTrainer,
+            {
+              level: Course_Level_Enum.BildIntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
           ],
         })
 
@@ -2756,8 +2767,14 @@ describe(getACL.name, () => {
           const acl = getACLStub({
             activeRole: activeRole,
             activeCertificates: [
-              Course_Level_Enum.BildIntermediateTrainer,
-              Course_Level_Enum.BildAdvancedTrainer,
+              {
+                level: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+              },
+              {
+                level: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+              },
             ],
           })
 
@@ -2772,7 +2789,12 @@ describe(getACL.name, () => {
     it(`should return true for a ${RoleName.TRAINER} role with ${Course_Level_Enum.BildAdvancedTrainer} active certificate`, () => {
       const acl = getACLStub({
         activeRole: RoleName.TRAINER,
-        activeCertificates: [Course_Level_Enum.BildAdvancedTrainer],
+        activeCertificates: [
+          {
+            level: Course_Level_Enum.BildAdvancedTrainer,
+            grade: Grade_Enum.Pass,
+          },
+        ],
       })
 
       // Act & Assert
@@ -3021,7 +3043,12 @@ describe(getACL.name, () => {
       },
     )
 
-    it.each(Object.values(Course_Level_Enum))(
+    it.each(
+      Object.values(Course_Level_Enum).map(level => ({
+        level,
+        grade: Grade_Enum.Pass,
+      })),
+    )(
       'should allow only specific levels when trainer holds %s certificate',
       activeCertificate => {
         const acl = getACLStub({
@@ -3033,7 +3060,7 @@ describe(getACL.name, () => {
         ).filter(courseLevel =>
           REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL[Course_Type_Enum.Open][
             courseLevel as Course_Level_Enum
-          ].includes(activeCertificate),
+          ].includes(activeCertificate.level),
         )
 
         expect(

@@ -22,6 +22,7 @@ import {
   Currency,
   Resource_Packs_Type_Enum,
   Resource_Packs_Delivery_Type_Enum,
+  GetProfileByIdQuery,
 } from '@app/generated/graphql'
 import { TimeZoneDataType } from '@app/hooks/useTimeZones'
 import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
@@ -157,19 +158,19 @@ export type CourseModule = {
 } & Base
 
 export type CourseCertificate = {
-  number: string
-  courseId: string
-  expiryDate: string
-  certificationDate: string
-  courseName: string
-  courseLevel: Course_Level_Enum
-  participant?: CourseParticipant
-  profileId: string
-  profile: Profile
-  status: Certificate_Status_Enum
   blendedLearning: boolean
-  reaccreditation: boolean
+  certificationDate: string
   courseAccreditedBy: Accreditors_Enum
+  courseId: string
+  courseLevel: Course_Level_Enum
+  courseName: string
+  expiryDate: string
+  number: string
+  participant?: CourseParticipant
+  profile: Profile
+  profileId: string
+  reaccreditation: boolean
+  status: Certificate_Status_Enum
 } & Base
 
 export type Address = {
@@ -273,7 +274,11 @@ export type Profile = {
     agreement_type: TrainerAgreementTypeName
   }>
   lastActivity?: Date
-  certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
+  certificates?: (NonNullish<
+    GetProfileByIdQuery['profile']
+  >['certificates'][number] & {
+    courseLevel: Course_Level_Enum
+  })[]
   courses?: {
     grade?: Grade_Enum | null
     course:

@@ -31,7 +31,12 @@ describe('component: NavLinks', () => {
         },
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
-        activeCertificates: [Course_Level_Enum.Level_1],
+        activeCertificates: [
+          {
+            level: Course_Level_Enum.Level_1,
+            grade: Grade_Enum.Pass,
+          },
+        ],
         certificates: [
           {
             courseLevel: Course_Level_Enum.Level_1,
@@ -136,7 +141,12 @@ describe('component: NavLinks', () => {
           ],
         },
         activeRole: RoleName.TRAINER,
-        activeCertificates: [Course_Level_Enum.AdvancedTrainer],
+        activeCertificates: [
+          {
+            level: Course_Level_Enum.AdvancedTrainer,
+            grade: Grade_Enum.Pass,
+          },
+        ],
         certificates: [
           {
             courseLevel: Course_Level_Enum.Level_1,

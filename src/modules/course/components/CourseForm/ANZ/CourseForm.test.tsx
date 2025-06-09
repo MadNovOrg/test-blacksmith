@@ -1,7 +1,11 @@
 import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { AwsRegions } from '@app/types'
 import {
@@ -97,7 +101,12 @@ describe('component: ANZCourseForm', () => {
         <AnzCourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {
-            activeCertificates: [Course_Level_Enum.IntermediateTrainer],
+            activeCertificates: [
+              {
+                level: Course_Level_Enum.IntermediateTrainer,
+                grade: Grade_Enum.Pass,
+              },
+            ],
           },
         },
       )
