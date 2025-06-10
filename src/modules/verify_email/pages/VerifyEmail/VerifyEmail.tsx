@@ -65,12 +65,17 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
     RemoveUnverifiedRoleMutationVariables
   >(REMOVE_UNVERIFIED_ROLE)
 
+  console.log('profile', profile)
+
   const onSuccess = useCallback(async () => {
+    console.log('useCallback', profile)
+
     if (profile?.id) {
+      console.log('Removing unverified role for profile', profile.id)
       await removeUnverifiedRole({ profileId: profile.id })
     }
     setSuccess(true)
-  }, [profile?.id, removeUnverifiedRole])
+  }, [profile, removeUnverifiedRole])
 
   return (
     <Box display="flex" justifyContent="center">
