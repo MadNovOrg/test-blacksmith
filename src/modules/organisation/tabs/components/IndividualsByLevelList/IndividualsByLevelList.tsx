@@ -153,9 +153,14 @@ export const IndividualsByLevelList: React.FC<
         />
         <TableBody>
           {currentPageUsers.map(profile => {
-            const certification = profile?.certificates?.find(
-              c => c?.courseLevel === courseLevel,
-            )
+            const certification = profile?.certificates
+              ?.filter(c => c?.courseLevel === courseLevel)
+              ?.sort(
+                (a, b) =>
+                  +(b?.status === Certificate_Status_Enum.Active) -
+                  +(a?.status === Certificate_Status_Enum.Active),
+              )[0]
+
             const certificationStatus =
               certification?.status as Certificate_Status_Enum
 

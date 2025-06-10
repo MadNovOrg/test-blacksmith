@@ -718,14 +718,12 @@ function getAdvancedTrainerLevel(
   certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
 ): Course_Level_Enum | null {
   const advancedTrainer = certificates?.find(
-    c => c.courseLevel === Course_Level_Enum.AdvancedTrainer,
+    c =>
+      c.courseLevel === Course_Level_Enum.AdvancedTrainer &&
+      c.status !== Certificate_Status_Enum.ExpiredRecently,
   )
-  if (advancedTrainer) {
-    if (advancedTrainer.status !== Certificate_Status_Enum.ExpiredRecently) {
-      return Course_Level_Enum.AdvancedTrainer
-    }
-  }
-  return null
+
+  return advancedTrainer ? Course_Level_Enum.AdvancedTrainer : null
 }
 
 function getAdvancedLevel(
