@@ -135,3 +135,13 @@ delete_permissions:
   - role: tt-ops
     permission:
       filter: {}
+  - role: user
+    permission:
+      filter:
+        _and:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - role:
+              name:
+                _eq: unverified
+    comment: ""

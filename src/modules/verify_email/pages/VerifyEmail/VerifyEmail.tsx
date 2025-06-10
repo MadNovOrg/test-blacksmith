@@ -1,15 +1,21 @@
 import { Box, Typography, Button } from '@mui/material'
 import { Auth } from 'aws-amplify'
 import { TFunction } from 'i18next'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { useAuth } from '@app/context/auth'
+import {
+  RemoveUnverifiedRoleMutation,
+  RemoveUnverifiedRoleMutationVariables,
+} from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 
 import { Form } from '../../components/Form/Form'
+import { REMOVE_UNVERIFIED_ROLE } from '../../queries'
 
 type LocationState = {
   from: { pathname: string; search: string }
@@ -33,7 +39,7 @@ const defaultNextPath = { pathname: '/profile', search: '' }
 export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
   const { t } = useTranslation()
   const location = useLocation()
-  const { loadProfile } = useAuth()
+  const { loadProfile, profile } = useAuth()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
   const locationState = (location.state || {}) as LocationState
@@ -53,6 +59,18 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
 
     return continueToNextPage()
   }
+
+  const [, removeUnverifiedRole] = useMutation<
+    RemoveUnverifiedRoleMutation,
+    RemoveUnverifiedRoleMutationVariables
+  >(REMOVE_UNVERIFIED_ROLE)
+
+  const onSuccess = useCallback(async () => {
+    if (profile?.id) {
+      await removeUnverifiedRole({ profileId: profile.id })
+    }
+    setSuccess(true)
+  }, [profile?.id, removeUnverifiedRole])
 
   return (
     <Box display="flex" justifyContent="center">
@@ -89,7 +107,7 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
           <Form
             displayVerifyLater={displayVerifyLater}
             onVerifyLater={continueToNextPage}
-            onSuccess={() => setSuccess(true)}
+            onSuccess={onSuccess}
           />
         )}
       </Box>

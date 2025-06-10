@@ -70088,6 +70088,13 @@ export type MergeUserMutationVariables = Exact<{
 
 export type MergeUserMutation = { __typename?: 'mutation_root', mergeUser: { __typename?: 'MergeUserOutput', success: boolean, error?: MergeUserError | null } };
 
+export type RemoveUnverifiedRoleMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type RemoveUnverifiedRoleMutation = { __typename?: 'mutation_root', delete_profile_role?: { __typename?: 'profile_role_mutation_response', affected_rows: number } | null };
+
 export type CancelMyselfFromCourseWaitlistMutationVariables = Exact<{
   courseId: Scalars['Int'];
   cancellationSecret: Scalars['uuid'];
