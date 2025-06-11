@@ -1,44 +1,33 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import InfoIcon from '@mui/icons-material/Info'
 import {
   Alert,
   Box,
   Button,
   FormControl,
   FormControlLabel,
-  Grid,
   InputLabel,
   NativeSelect,
   Radio,
   RadioGroup,
-  TextField,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import Big from 'big.js'
 import { utcToZonedTime } from 'date-fns-tz'
 import { groupBy, filter } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import CountriesSelector from '@app/components/CountriesSelector'
 import useWorldCountries, {
   UKsCodes,
 } from '@app/components/CountriesSelector/hooks/useWorldCountries'
-import { CountryDropdown } from '@app/components/CountryDropdown'
 import { OrgSelector } from '@app/components/OrgSelector/UK'
 import { isHubOrg } from '@app/components/OrgSelector/UK/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
-import {
-  Profile as UserSelectorProfile,
-  UserSelector,
-} from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import {
-  Accreditors_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
@@ -49,10 +38,10 @@ import {
 import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceForm } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
-import { NonNullish } from '@app/types'
 import { formatCurrency, getMandatoryCourseMaterialsCost } from '@app/util'
 
-import { ParticipantInput, useBooking } from '../../BookingContext'
+import { useBooking } from '../../BookingContext'
+import { CourseBookingRegistrants } from '../../CourseBookingRegistrants'
 import { PromoCode } from '../../PromoCode'
 import { AttendeeValidCertificate } from '../components/AttendeeValidCertificate'
 import { BookingContactDetails } from '../components/BookingContactDetails/BookingContactDetails'
@@ -69,10 +58,6 @@ export const CourseBookingDetails: React.FC<
 
   const { acl } = useAuth()
 
-  const [participantsProfiles, setParticipantProfiles] = useState<
-    Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
-  >([])
-
   const navigate = useNavigate()
   const defaultCurrency = Currency.Gbp
 
@@ -87,18 +72,6 @@ export const CourseBookingDetails: React.FC<
     setBooking,
     internalBooking,
   } = useBooking()
-
-  const isIntlEnabled = useMemo(
-    () =>
-      [
-        Boolean(course),
-        course?.accreditedBy === Accreditors_Enum.Icm,
-        course?.type === Course_Type_Enum.Open,
-        course?.deliveryType === Course_Delivery_Type_Enum.Virtual,
-        course?.level === Course_Level_Enum.Level_1,
-      ].every(el => el),
-    [course],
-  )
 
   const { getLabel, isUKCountry } = useWorldCountries()
 
@@ -187,52 +160,6 @@ export const CourseBookingDetails: React.FC<
     course?.residingCountry,
   )
 
-  useEffect(() => {
-    setParticipantProfiles(
-      Array.from(Array(values.participants.length)).fill({}),
-    )
-  }, [values.participants.length])
-
-  const handleEmailSelector = async (
-    profile: UserSelectorProfile,
-    index: number,
-  ) => {
-    const participants = participantsProfiles
-    participants[index] = {}
-    const newParticipant = {
-      email: profile?.email ?? '',
-      firstName: profile?.givenName ?? '',
-      lastName: profile?.familyName ?? '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      postCode: '',
-      country: '',
-    }
-    setValue(
-      `participants.${index}`,
-      { ...newParticipant },
-      { shouldValidate: false },
-    )
-
-    participants[index] = {
-      familyName: newParticipant.lastName,
-      givenName: newParticipant.firstName,
-    }
-    setParticipantProfiles([...participants])
-  }
-
-  const handleEmailChange = async (email: string, index: number) => {
-    const participant = values.participants[index]
-    setValue(`participants.${index}`, {
-      ...participant,
-      email,
-    })
-    const participants = participantsProfiles
-    participants[index] = {}
-    setParticipantProfiles([...participants])
-  }
-
   const handleOnChangeAttendeeCertificate = (state: boolean) => {
     setValue('attendeeValidCertificate', state, { shouldValidate: true })
   }
@@ -243,14 +170,16 @@ export const CourseBookingDetails: React.FC<
 
       for (let i = 0; i < booking.quantity - values.participants.length; i++) {
         participants.push({
-          firstName: '',
-          lastName: '',
-          email: '',
           addressLine1: '',
           addressLine2: '',
           city: '',
-          postCode: '',
           country: '',
+          email: '',
+          firstName: '',
+          lastName: '',
+          postCode: '',
+          residingCountry: '',
+          residingCountryCode: null,
         })
       }
 
@@ -258,13 +187,6 @@ export const CourseBookingDetails: React.FC<
       setBooking({ participants })
     }
   }, [booking.quantity, booking.participants, setBooking, values, setValue])
-
-  const getParticipantError = useCallback(
-    (index: number, field: keyof ParticipantInput) => {
-      return errors.participants?.[index]?.[field]
-    },
-    [errors.participants],
-  )
 
   const courseVenue = course?.schedule[0].venue
   const locationNameAddressCity = [
@@ -279,21 +201,6 @@ export const CourseBookingDetails: React.FC<
     .filter(item => item)
     .join(', ')
 
-  const showRegistrantSuggestions =
-    values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
-
-  const onCountryChange = useCallback(
-    async (index: number, countryCode: string | null) => {
-      const postCode = values.participants[index].postCode
-
-      setValue(`participants.${index}.country`, getLabel(countryCode) ?? '')
-      await trigger(`participants.${index}.country`)
-      if (errors.participants?.[index]?.postCode || postCode) {
-        await trigger(`participants.${index}.postCode`)
-      }
-    },
-    [errors.participants, getLabel, setValue, trigger, values.participants],
-  )
   const courseTimezone = useMemo(() => {
     return course?.schedule.length ? course?.schedule[0].timeZone : undefined
   }, [course?.schedule])
@@ -642,222 +549,13 @@ export const CourseBookingDetails: React.FC<
           {t('registration')}
         </Typography>
         <Box bgcolor="common.white" p={2} mb={4} data-testid="registrants-box">
-          {booking.participants.map((_, index) => {
-            const emailValue = values.participants[index]?.email
-            const emailDuplicated =
-              !!values.participants[index] &&
-              !!emailValue &&
-              values.participants.filter(
-                p =>
-                  p.email.trim().toLocaleLowerCase() ===
-                  emailValue.trim().toLocaleLowerCase(),
-              ).length > 1
-            return (
-              <Box key={`participant-${index}`} display="flex" gap={1}>
-                <Typography p={1}>{index + 1}</Typography>
-                <Grid container spacing={3} mb={3}>
-                  <Grid item md={12}>
-                    <UserSelector
-                      value={values.participants[index].email}
-                      onChange={profile => handleEmailSelector(profile, index)}
-                      onEmailChange={email => handleEmailChange(email, index)}
-                      disableSuggestions={!showRegistrantSuggestions}
-                      textFieldProps={{ variant: 'filled' }}
-                      error={
-                        emailDuplicated
-                          ? t('pages.book-course.duplicated-email-addresses')
-                          : getParticipantError(index, 'email')?.message ?? ''
-                      }
-                      organisationId={values.orgId}
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      label={t('first-name')}
-                      variant="filled"
-                      placeholder={t('first-name-placeholder')}
-                      {...register(`participants.${index}.firstName`)}
-                      inputProps={{
-                        'data-testid': `participant-${index}-input-first-name`,
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!getParticipantError(index, 'firstName')}
-                      helperText={
-                        getParticipantError(index, 'firstName')?.message ?? ''
-                      }
-                      InputLabelProps={{
-                        shrink: Boolean(values.participants[index].firstName),
-                      }}
-                      fullWidth
-                      required
-                      disabled={Boolean(
-                        participantsProfiles[index]?.familyName,
-                      )}
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      label={t('surname')}
-                      variant="filled"
-                      placeholder={t('surname-placeholder')}
-                      {...register(`participants.${index}.lastName`)}
-                      inputProps={{
-                        'data-testid': `participant-${index}-input-surname`,
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!getParticipantError(index, 'lastName')}
-                      helperText={
-                        getParticipantError(index, 'lastName')?.message ?? ''
-                      }
-                      InputLabelProps={{
-                        shrink: Boolean(values.participants[index].lastName),
-                      }}
-                      fullWidth
-                      required
-                      disabled={Boolean(participantsProfiles[index]?.givenName)}
-                    />
-                  </Grid>
-                  {isAddressInfoRequired ? (
-                    <Grid item md={12} data-testid="address-form">
-                      <Typography variant="subtitle1">
-                        {t('common.postal-address')}
-                      </Typography>
-                      <Box mb={3}>
-                        <TextField
-                          id="primaryAddressLine"
-                          label={t('line1')}
-                          variant="filled"
-                          sx={{ bgcolor: 'grey.100' }}
-                          {...register(`participants.${index}.addressLine1`)}
-                          error={!!getParticipantError(index, 'addressLine1')}
-                          InputLabelProps={{
-                            shrink: Boolean(
-                              values.participants[index].addressLine1,
-                            ),
-                          }}
-                          helperText={
-                            getParticipantError(index, 'addressLine1')
-                              ?.message ?? ''
-                          }
-                          inputProps={{ 'data-testid': 'addr-line1' }}
-                          fullWidth
-                          required
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        <TextField
-                          id="secondaryAddressLine"
-                          label={t('line2')}
-                          {...register(`participants.${index}.addressLine2`)}
-                          placeholder={t('common.addr.line2-placeholder')}
-                          error={!!getParticipantError(index, 'addressLine2')}
-                          InputLabelProps={{
-                            shrink: Boolean(
-                              values.participants[index].addressLine2,
-                            ),
-                          }}
-                          sx={{ bgcolor: 'grey.100' }}
-                          variant="filled"
-                          helperText={
-                            getParticipantError(index, 'addressLine2')
-                              ?.message ?? ''
-                          }
-                          inputProps={{ 'data-testid': 'addr-line2' }}
-                          fullWidth
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        <TextField
-                          id="city"
-                          label={t('city')}
-                          {...register(`participants.${index}.city`)}
-                          placeholder={t('common.addr.city')}
-                          error={!!getParticipantError(index, 'city')}
-                          InputLabelProps={{
-                            shrink: Boolean(values.participants[index].city),
-                          }}
-                          sx={{ bgcolor: 'grey.100' }}
-                          variant="filled"
-                          helperText={
-                            getParticipantError(index, 'city')?.message ?? ''
-                          }
-                          inputProps={{ 'data-testid': 'city' }}
-                          fullWidth
-                          required
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        <TextField
-                          error={!!getParticipantError(index, 'postCode')}
-                          fullWidth
-                          helperText={
-                            getParticipantError(index, 'postCode')?.message ??
-                            ''
-                          }
-                          id="postCode"
-                          inputProps={{ 'data-testid': 'postCode' }}
-                          label={t(
-                            'components.venue-selector.modal.fields.postCode',
-                          )}
-                          placeholder={t('common.addr.postCode')}
-                          required
-                          sx={{ bgcolor: 'grey.100' }}
-                          type={'text'}
-                          variant="filled"
-                          {...register(`participants.${index}.postCode`)}
-                          InputLabelProps={{
-                            shrink: Boolean(
-                              values.participants[index].postCode,
-                            ),
-                          }}
-                          InputProps={{
-                            endAdornment: (
-                              <Tooltip
-                                title={t('post-code-tooltip')}
-                                data-testid="post-code-tooltip"
-                              >
-                                <InfoIcon color={'action'} />
-                              </Tooltip>
-                            ),
-                          }}
-                        />
-                      </Box>
-                      <Box mb={3}>
-                        {isIntlEnabled ? (
-                          <CountriesSelector
-                            error={Boolean(
-                              getParticipantError(index, 'country')?.message,
-                            )}
-                            helperText={
-                              getParticipantError(index, 'country')?.message ??
-                              ''
-                            }
-                            onChange={async (_, code) =>
-                              await onCountryChange(index, code)
-                            }
-                            onlyUKCountries={true}
-                            value={values.participants[index].country}
-                          />
-                        ) : (
-                          <CountryDropdown
-                            required
-                            register={register(`participants.${index}.country`)}
-                            error={!!getParticipantError(index, 'country')}
-                            value={values.participants[index].country}
-                            errormessage={
-                              getParticipantError(index, 'country')?.message ??
-                              ''
-                            }
-                            label={t('country')}
-                          />
-                        )}
-                      </Box>
-                    </Grid>
-                  ) : null}
-                </Grid>
-              </Box>
-            )
-          })}
+          <CourseBookingRegistrants
+            errors={errors}
+            register={register}
+            setValue={setValue}
+            trigger={trigger}
+            values={values}
+          />
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}`}
           </Alert>

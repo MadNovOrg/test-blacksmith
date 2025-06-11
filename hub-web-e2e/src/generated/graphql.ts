@@ -1596,6 +1596,8 @@ export type CreateOrderParticipantInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   postCode?: InputMaybe<Scalars['String']>;
+  residingCountry?: InputMaybe<Scalars['String']>;
+  residingCountryCode?: InputMaybe<Scalars['String']>;
 };
 
 /** Input for the createPage mutation */
@@ -4093,6 +4095,22 @@ export type MenuToMenuItemConnectionWhereArgs = {
   /** The ID of the parent menu object */
   parentId?: InputMaybe<Scalars['ID']>;
 };
+
+export type MergeOrganisationsInput = {
+  main: Scalars['uuid'];
+  merge: Array<InputMaybe<Scalars['uuid']>>;
+};
+
+export type MergeOrganisationsOutput = {
+  __typename?: 'MergeOrganisationsOutput';
+  message: Scalars['String'];
+  status: MergeOrganisationsStatus;
+};
+
+export enum MergeOrganisationsStatus {
+  Fail = 'FAIL',
+  Success = 'SUCCESS'
+}
 
 export enum MergeUserError {
   GeneralError = 'GENERAL_ERROR'
@@ -37373,6 +37391,8 @@ export type Mutation_Root = {
   insert_xero_invoice_status_one?: Maybe<Xero_Invoice_Status>;
   /** joinWaitlist */
   joinWaitlist: JoinWaitlistOutput;
+  /** This actions manages the merging of two or more organisations */
+  mergeOrganisations?: Maybe<MergeOrganisationsOutput>;
   /** Merge users */
   mergeUser: MergeUserOutput;
   /** Notify course's trainer(s) and attendees about course editing */
@@ -41696,6 +41716,12 @@ export type Mutation_RootInsert_Xero_Invoice_Status_OneArgs = {
 /** mutation root */
 export type Mutation_RootJoinWaitlistArgs = {
   input: JoinWaitlistInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootMergeOrganisationsArgs = {
+  input: MergeOrganisationsInput;
 };
 
 

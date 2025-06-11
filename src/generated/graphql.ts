@@ -1596,6 +1596,7 @@ export type CreateOrderParticipantInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   postCode?: InputMaybe<Scalars['String']>;
+  residingCountryCode?: InputMaybe<Scalars['String']>;
 };
 
 /** Input for the createPage mutation */
@@ -68052,7 +68053,7 @@ export type GetOrgMembersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, countryCode?: string | null, email?: string | null, familyName?: string | null, fullName?: string | null, givenName?: string | null } }> };
+export type GetOrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, country?: string | null, countryCode?: string | null, email?: string | null, familyName?: string | null, fullName?: string | null, givenName?: string | null } }> };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];

@@ -13,16 +13,17 @@ import { Course_Type_Enum } from '@app/generated/graphql'
 import { AustraliaCountryCode, NewZealandCountryCode } from '@app/util'
 
 export type CountriesSelectorProps = {
-  onChange: (event: SyntheticEvent, selected: string | null) => void
-  value: string | undefined | null
   courseResidingCountry?: string
   courseType?: Course_Type_Enum
   disableClearable?: boolean
+  index?: number
   isBILDcourse?: boolean
   onBlur?: () => void
+  onChange: (event: SyntheticEvent, selected: string | null) => void
+  onlyAUandNZ?: boolean
   onlyUKCountries?: boolean
   showAllCountries?: boolean
-  onlyAUandNZ?: boolean
+  value: string | undefined | null
 } & BaseTextFieldProps
 
 const CountriesSelector = ({
@@ -32,15 +33,16 @@ const CountriesSelector = ({
   disabled,
   error,
   helperText,
+  index,
   isBILDcourse,
   label,
   onBlur,
   onChange,
+  onlyAUandNZ,
   onlyUKCountries = false,
   required,
-  value,
   showAllCountries,
-  onlyAUandNZ,
+  value,
 }: CountriesSelectorProps) => {
   const {
     countriesCodesWithUKs: countries,
@@ -76,7 +78,9 @@ const CountriesSelector = ({
       disabled={disabled}
       value={!value ? null : value}
       id="country-select-demo"
-      data-testid="countries-selector-autocomplete"
+      data-testid={`countries-selector-autocomplete${
+        index !== undefined ? `-${index}` : ''
+      }`}
       options={countriesList}
       autoHighlight
       getOptionLabel={code => getLabel(code as WorldCountriesCodes) ?? ''}

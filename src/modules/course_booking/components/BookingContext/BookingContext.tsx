@@ -71,9 +71,12 @@ export type Address = {
 }
 
 export type ParticipantInput = {
-  firstName: string
-  lastName: string
   email: string
+  firstName: string
+  hasResidingCountry?: boolean
+  lastName: string
+  residingCountry: string | null
+  residingCountryCode: string | null
 } & Address
 
 export type BookingContact = {
@@ -459,6 +462,11 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
     const promoCodes =
       booking.courseType !== Course_Type_Enum.Closed ? booking.promoCodes : []
     if (course?.id) {
+      const registrants = booking.participants.map(p => ({
+        ...p,
+        hasResidingCountry: undefined, // hasResidingCountry is not used in the backend
+      }))
+
       const { data: createOrderResponse } = await createOrder({
         input: {
           courseId: course.id,
@@ -470,7 +478,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren> = ({
           billingEmail: booking.invoiceDetails?.email ?? '',
           billingPhone: booking.invoiceDetails?.phone ?? '',
           clientPurchaseOrder: booking.invoiceDetails?.purchaseOrder ?? '',
-          registrants: booking.participants,
+          registrants,
           organizationId: booking.orgId,
           promoCodes,
           source: booking.source,

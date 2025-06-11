@@ -759,14 +759,16 @@ input CanApplyPromoCodeInput {
 }
 
 input CreateOrderParticipantInput {
-  email: String!
-  firstName: String!
-  lastName: String!
   addressLine1: String
   addressLine2: String
   city: String
   country: String
+  email: String!
+  firstName: String!
+  lastName: String!
   postCode: String
+  residingCountry: String
+  residingCountryCode: String
 }
 
 input CreateOrderInput {

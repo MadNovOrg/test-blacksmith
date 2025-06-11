@@ -10,7 +10,7 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-interface ICountryDropdownProps {
+export interface ICountryDropdownProps {
   required: boolean
   error: boolean
   errormessage?: string

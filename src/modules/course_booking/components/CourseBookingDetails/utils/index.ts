@@ -116,6 +116,11 @@ export const getSchema = ({
             .test('is-email', t('validation-errors.email-invalid'), email => {
               return isEmail(email)
             }),
+          residingCountry: yup.string(),
+          residingCountryCode: yup
+            .string()
+            .required(requiredMsg(t, 'residing-country')),
+          hasResidingCountry: yup.boolean(),
           ...(isAddressInfoRequired
             ? {
                 addressLine1: yup.string().required(requiredMsg(t, 'line1')),

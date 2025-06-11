@@ -5,19 +5,17 @@ import {
   Button,
   FormControl,
   FormControlLabel,
-  Grid,
   InputLabel,
   NativeSelect,
   Radio,
   RadioGroup,
-  TextField,
   Typography,
 } from '@mui/material'
 import Big from 'big.js'
 import { utcToZonedTime } from 'date-fns-tz'
 import { groupBy, filter } from 'lodash'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -27,10 +25,6 @@ import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldC
 import { OrgSelector } from '@app/components/OrgSelector/ANZ'
 import { isHubOrg } from '@app/components/OrgSelector/ANZ/utils'
 import { ProfileSelector } from '@app/components/ProfileSelector'
-import {
-  Profile as UserSelectorProfile,
-  UserSelector,
-} from '@app/components/UserSelector'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Delivery_Type_Enum,
@@ -44,10 +38,10 @@ import useTimeZones from '@app/hooks/useTimeZones'
 import { InvoiceForm } from '@app/modules/course/components/CourseForm/components/InvoiceForm'
 import { SourceDropdown } from '@app/modules/course/components/CourseForm/components/SourceDropdown'
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
-import { NonNullish } from '@app/types'
 import { formatCurrency, getResourcePackPrice } from '@app/util'
 
-import { ParticipantInput, useBooking } from '../../BookingContext'
+import { useBooking } from '../../BookingContext'
+import { CourseBookingRegistrants } from '../../CourseBookingRegistrants'
 import { PromoCode } from '../../PromoCode'
 import { AttendeeValidCertificate } from '../components/AttendeeValidCertificate'
 import { BookingContactDetails } from '../components/BookingContactDetails/BookingContactDetails'
@@ -64,9 +58,6 @@ export const CourseBookingDetails: React.FC<
 
   const { acl } = useAuth()
 
-  const [participantsProfiles, setParticipantsProfiles] = useState<
-    Pick<NonNullish<UserSelectorProfile>, 'familyName' | 'givenName'>[]
-  >([])
   const navigate = useNavigate()
   const defaultCurrency = Currency.Aud
 
@@ -124,12 +115,13 @@ export const CourseBookingDetails: React.FC<
   })
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
     control,
+    formState: { errors },
+    handleSubmit,
+    register,
     setValue,
+    trigger,
+    watch,
   } = methods
 
   const values = watch()
@@ -179,52 +171,6 @@ export const CourseBookingDetails: React.FC<
     course?.residingCountry,
   )
 
-  useEffect(() => {
-    setParticipantsProfiles(
-      Array.from(Array(values.participants.length)).fill({}),
-    )
-  }, [values.participants.length])
-
-  const handleEmailSelector = async (
-    profile: UserSelectorProfile,
-    index: number,
-  ) => {
-    const participants = participantsProfiles
-    participants[index] = {}
-    const newParticipant = {
-      email: profile?.email ?? '',
-      firstName: profile?.givenName ?? '',
-      lastName: profile?.familyName ?? '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      postCode: '',
-      country: '',
-    }
-    setValue(
-      `participants.${index}`,
-      { ...newParticipant },
-      { shouldValidate: false },
-    )
-
-    participants[index] = {
-      familyName: newParticipant.lastName,
-      givenName: newParticipant.firstName,
-    }
-    setParticipantsProfiles([...participants])
-  }
-
-  const handleEmailChange = async (email: string, index: number) => {
-    const participant = values.participants[index]
-    setValue(`participants.${index}`, {
-      ...participant,
-      email,
-    })
-    const participants = participantsProfiles
-    participants[index] = {}
-    setParticipantsProfiles([...participants])
-  }
-
   const handleOnChangeAttendeeCertificate = (state: boolean) => {
     setValue('attendeeValidCertificate', state, { shouldValidate: true })
   }
@@ -235,14 +181,16 @@ export const CourseBookingDetails: React.FC<
 
       for (let i = 0; i < booking.quantity - values.participants.length; i++) {
         participants.push({
-          firstName: '',
-          lastName: '',
-          email: '',
           addressLine1: '',
           addressLine2: '',
           city: '',
-          postCode: '',
           country: '',
+          email: '',
+          firstName: '',
+          lastName: '',
+          postCode: '',
+          residingCountry: '',
+          residingCountryCode: null,
         })
       }
 
@@ -250,13 +198,6 @@ export const CourseBookingDetails: React.FC<
       setBooking({ participants })
     }
   }, [booking.quantity, booking.participants, setBooking, values, setValue])
-
-  const getParticipantError = useCallback(
-    (index: number, field: keyof ParticipantInput) => {
-      return errors.participants?.[index]?.[field]
-    },
-    [errors.participants],
-  )
 
   const courseVenue = course?.schedule[0].venue
   const locationNameAddressCity = [
@@ -270,9 +211,6 @@ export const CourseBookingDetails: React.FC<
   const locationPostCodeCountry = [courseVenue?.postCode, courseVenue?.country]
     .filter(item => item)
     .join(', ')
-
-  const showRegistrantSuggestions =
-    values.orgId && (acl.isAdmin() || acl.isOrgAdmin(values.orgId))
 
   const courseTimezone = useMemo(() => {
     return course?.schedule.length ? course?.schedule[0].timeZone : undefined
@@ -627,85 +565,13 @@ export const CourseBookingDetails: React.FC<
           {t('registration')}
         </Typography>
         <Box bgcolor="common.white" p={2} mb={4} data-testid="registrants-box">
-          {booking.participants.map((participant, index) => {
-            const emailValue = values.participants[index]?.email
-            const emailDuplicated =
-              !!values.participants[index] &&
-              !!emailValue &&
-              values.participants.filter(
-                p =>
-                  p.email.trim().toLocaleLowerCase() ===
-                  emailValue.trim().toLocaleLowerCase(),
-              ).length > 1
-            return (
-              <Box key={participant.email} display="flex" gap={1}>
-                <Typography p={1}>{index + 1}</Typography>
-                <Grid container spacing={3} mb={3}>
-                  <Grid item md={12}>
-                    <UserSelector
-                      value={values.participants[index].email}
-                      onChange={profile => handleEmailSelector(profile, index)}
-                      onEmailChange={email => handleEmailChange(email, index)}
-                      disableSuggestions={!showRegistrantSuggestions}
-                      textFieldProps={{ variant: 'filled' }}
-                      error={
-                        emailDuplicated
-                          ? t('pages.book-course.duplicated-email-addresses')
-                          : getParticipantError(index, 'email')?.message ?? ''
-                      }
-                      organisationId={values.orgId}
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      label={t('first-name')}
-                      variant="filled"
-                      placeholder={t('first-name-placeholder')}
-                      {...register(`participants.${index}.firstName`)}
-                      inputProps={{
-                        'data-testid': `participant-${index}-input-first-name`,
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!getParticipantError(index, 'firstName')}
-                      helperText={
-                        getParticipantError(index, 'firstName')?.message ?? ''
-                      }
-                      InputLabelProps={{
-                        shrink: Boolean(values.participants[index].firstName),
-                      }}
-                      fullWidth
-                      required
-                      disabled={Boolean(
-                        participantsProfiles[index]?.familyName,
-                      )}
-                    />
-                  </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      label={t('surname')}
-                      variant="filled"
-                      placeholder={t('surname-placeholder')}
-                      {...register(`participants.${index}.lastName`)}
-                      inputProps={{
-                        'data-testid': `participant-${index}-input-surname`,
-                      }}
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!getParticipantError(index, 'lastName')}
-                      helperText={
-                        getParticipantError(index, 'lastName')?.message ?? ''
-                      }
-                      InputLabelProps={{
-                        shrink: Boolean(values.participants[index].lastName),
-                      }}
-                      fullWidth
-                      required
-                      disabled={Boolean(participantsProfiles[index]?.givenName)}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            )
-          })}
+          <CourseBookingRegistrants
+            errors={errors}
+            register={register}
+            setValue={setValue}
+            trigger={trigger}
+            values={values}
+          />
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}`}
           </Alert>

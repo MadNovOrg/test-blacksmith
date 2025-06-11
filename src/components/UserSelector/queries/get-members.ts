@@ -12,6 +12,7 @@ export const GET_ORG_MEMBERS = gql`
     ) {
       profile {
         id
+        country
         countryCode
         email
         familyName
