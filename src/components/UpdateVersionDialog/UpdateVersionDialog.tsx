@@ -1,5 +1,13 @@
 import RefreshIcon from '@mui/icons-material/Refresh'
-import { Alert, Box, Button, Grid, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import { useState } from 'react'
 import { useEffectOnce } from 'react-use'
 
@@ -9,7 +17,12 @@ import { Dialog } from '../dialogs'
 
 export const UpdateVersionDialog = () => {
   const currentVersion = localStorage.getItem('appVersion')
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const { t } = useScopedTranslation('components.update-version-dialog')
+
   const [isOpen, setIsOpen] = useState<boolean>(
     currentVersion === 'undefined' || currentVersion !== PACKAGE_JSON_VERSION,
   )
@@ -62,7 +75,13 @@ export const UpdateVersionDialog = () => {
         ),
         Content: () => <Typography>{t('content')}</Typography>,
         Actions: () => (
-          <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Grid
+            container
+            sx={{
+              display: 'flex',
+              justifyContent: !isMobile ? 'flex-end' : 'flex-start',
+            }}
+          >
             <Button
               variant="contained"
               data-testid="update-version-button"
@@ -76,6 +95,7 @@ export const UpdateVersionDialog = () => {
           </Grid>
         ),
       }}
+      contentSx={{ flexGrow: 0 }}
     />
   )
 }

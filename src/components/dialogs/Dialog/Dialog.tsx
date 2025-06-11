@@ -7,6 +7,8 @@ import {
   DialogActions,
   useMediaQuery,
   useTheme,
+  SxProps,
+  Theme,
 } from '@mui/material'
 import { PropsWithChildren, FC, ReactNode } from 'react'
 
@@ -36,6 +38,7 @@ export type Props = {
   'data-testid'?: string
   noPaddings?: boolean
   disableEscapeKeyDown?: boolean
+  contentSx?: SxProps<Theme>
 }
 
 export const Dialog: FC<PropsWithChildren<Props>> = ({
@@ -49,6 +52,7 @@ export const Dialog: FC<PropsWithChildren<Props>> = ({
   children,
   maxWidth = 500,
   minWidth,
+  contentSx,
   'data-testid': testId,
   noPaddings = false,
   disableEscapeKeyDown = false,
@@ -104,7 +108,7 @@ export const Dialog: FC<PropsWithChildren<Props>> = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      <DialogContent sx={{ maxWidth, minWidth }}>
+      <DialogContent sx={{ maxWidth, minWidth, ...contentSx }}>
         {slots?.Content ? slots?.Content?.() : children}
       </DialogContent>
       {slots?.Actions ? (
