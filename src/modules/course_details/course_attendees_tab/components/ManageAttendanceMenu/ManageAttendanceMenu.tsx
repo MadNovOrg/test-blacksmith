@@ -19,15 +19,17 @@ enum CourseAction {
   Replace,
   Transfer,
   SendInformation,
+  BlendedLearningSync,
 }
 
 type ManageAttendanceMenuProps<T> = {
+  course: Course
+  courseParticipant: T
+  onBlendedLearningSyncClick?: (item: T) => void
   onCancelClick?: (item: T) => void
   onReplaceClick?: (item: T) => void
-  onTransferClick?: (item: T) => void
   onResendInformationClick?: (item: T) => void
-  courseParticipant: T
-  course: Course
+  onTransferClick?: (item: T) => void
 }
 
 export const ManageAttendanceMenu = <
@@ -39,12 +41,13 @@ export const ManageAttendanceMenu = <
     profile: Pick<Profile, 'organizations'>
   },
 >({
+  course,
+  courseParticipant,
+  onBlendedLearningSyncClick,
   onCancelClick,
   onReplaceClick,
-  onTransferClick,
   onResendInformationClick,
-  courseParticipant,
-  course,
+  onTransferClick,
 }: ManageAttendanceMenuProps<T>) => {
   const { acl } = useAuth()
   const { t } = useTranslation()
@@ -77,8 +80,15 @@ export const ManageAttendanceMenu = <
         onClick: onResendInformationClick,
         testId: 'attendee-resend-course-information',
       },
+      [CourseAction.BlendedLearningSync]: {
+        icon: <SwapHorizIcon color="primary" />,
+        label: 'Blended Learning Sync',
+        onClick: onBlendedLearningSyncClick,
+        testId: 'attendee-blended-learning-sync',
+      },
     }),
     [
+      onBlendedLearningSyncClick,
       onCancelClick,
       onReplaceClick,
       onResendInformationClick,
@@ -157,6 +167,20 @@ export const ManageAttendanceMenu = <
             !courseParticipant.grade &&
               acl.canTransferParticipant(participantOrgIds, course),
           ),
+        ],
+        [
+          matches({
+            courseType: Course_Type_Enum.Closed,
+            action: CourseAction.BlendedLearningSync,
+          }),
+          constant(acl.canSyncBlendedLearning(course)),
+        ],
+        [
+          matches({
+            courseType: Course_Type_Enum.Indirect,
+            action: CourseAction.BlendedLearningSync,
+          }),
+          constant(acl.canSyncBlendedLearning(course)),
         ],
         [stubTrue, constant(false)],
       ]),

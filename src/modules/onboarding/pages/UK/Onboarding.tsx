@@ -100,7 +100,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               },
             }
           : null),
-        country: getCountryLabel('GB-ENG'),
+        country: profile?.country ?? getCountryLabel('GB-ENG'),
         countryCode: profile?.countryCode ?? 'GB-ENG',
         phoneCountryCode: profile?.phoneCountryCode ?? DEFAULT_PHONE_COUNTRY_UK,
       },

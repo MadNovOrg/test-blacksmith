@@ -24,6 +24,13 @@ export const ActionsColumn: FC<{
     [navigate],
   )
 
+  const onBlendedLearningSyncClick = useCallback(
+    (participant: CourseParticipant) => {
+      navigate(`../blended-learning-sync/${participant.id}`, { replace: true })
+    },
+    [navigate],
+  )
+
   const canViewRowActions = useCanViewRowActions(course)
 
   const rowActions = useMemo(
@@ -32,12 +39,14 @@ export const ActionsColumn: FC<{
       onReplaceClick: setAttendeeToReplace,
       onCancelClick: setAttendeeToCancel,
       onResendInformationClick: setAttendeeToResendInfo,
+      onBlendedLearningSyncClick,
     }),
     [
       handleTransferAttendee,
       setAttendeeToReplace,
       setAttendeeToCancel,
       setAttendeeToResendInfo,
+      onBlendedLearningSyncClick,
     ],
   )
 

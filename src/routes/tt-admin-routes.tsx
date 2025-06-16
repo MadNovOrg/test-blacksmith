@@ -18,6 +18,7 @@ import {
 import { AdminPage } from '@app/modules/admin/pages/AdminPage'
 import { PricingRoutes } from '@app/modules/admin/Pricing'
 import { XeroConnect } from '@app/modules/admin/Xero/pages'
+import { CourseParticipantBlendedLearningSync } from '@app/modules/blended-learning-sync/pages/CourseParticipantBlendedLearningSync'
 import { CertificationsRoutes } from '@app/modules/certifications/routes'
 import { CourseBuilder } from '@app/modules/course/pages/CourseBuilder/CourseBuilder'
 import { CreateCourse } from '@app/modules/course/pages/CreateCourse'
@@ -117,6 +118,10 @@ const TTAdminRoutes = () => {
               }
             />
           </Route>
+
+          <Route path="blended-learning-sync/:participantId">
+            <Route index element={<CourseParticipantBlendedLearningSync />} />
+          </Route>
         </Route>
       </Route>
 
@@ -145,6 +150,13 @@ const TTAdminRoutes = () => {
                 <Route path="submit" element={<TrainerFeedback />} />
                 <Route path="view" element={<CourseEvaluation />} />
                 <Route path="summary" element={<EvaluationSummary />} />
+              </Route>
+
+              <Route path="blended-learning-sync/:participantId">
+                <Route
+                  index
+                  element={<CourseParticipantBlendedLearningSync />}
+                />
               </Route>
             </Route>
           </Route>

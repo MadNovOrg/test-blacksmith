@@ -730,6 +730,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ])()
     },
 
+    canSyncBlendedLearning: (course: Course) => {
+      return anyPass([acl.isTTAdmin, acl.isTTOps])() && course.go1Integration
+    },
+
     canManageParticipantAttendance: (
       participantOrgIds: string[],
       course: Course,

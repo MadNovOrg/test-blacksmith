@@ -108,3 +108,18 @@ export const GET_COURSE_PARTICIPANTS = gql`
     }
   }
 `
+
+export const GET_COURSE_PARTICIPANT_BY_PK = gql`
+  query CourseParticipantByPK($id: uuid!) {
+    courseParticipant: course_participant_by_pk(id: $id) {
+      id
+      go1EnrolmentId
+      profile {
+        id
+        avatar
+        email
+        fullName
+      }
+    }
+  }
+`

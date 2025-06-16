@@ -196,6 +196,13 @@ actions:
     permissions:
       - role: user
       - role: anonymous
+  - name: getUserGO1Enrollments
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/go1/user-enrollments'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
   - name: getXeroInvoicesForOrders
     definition:
       kind: ""
@@ -1105,6 +1112,22 @@ custom_types:
         - description: null
           is_deprecated: null
           value: FAIL
+    - name: EnrollmentStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: COMPLETED
+        - description: null
+          is_deprecated: null
+          value: INPROGRESS
+    - name: GO1EnrollmentStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: COMPLETED
+        - description: null
+          is_deprecated: null
+          value: INPROGRESS
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -1258,5 +1281,9 @@ custom_types:
     - name: ResourcePacksReserveOutput
     - name: ValidateAndDispatchInvitesForIndirectCourseOutput
     - name: MergeOrganisationsOutput
+    - name: GetUserGO1EnrollmentsOutput
+    - name: GetUserGO1Enrollment
+    - name: LearningObject
+    - name: GO1LearningObject
   scalars:
     - name: Date

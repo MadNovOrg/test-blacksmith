@@ -2057,6 +2057,21 @@
       "success-btn-text": "Go to my courses"
     }
   },
+  "blended-learning-sync": {
+    "attendee-label": "Attendee",
+    "cancel-btn-text": "Cancel",
+    "col-learning-name": "Learning Name",
+    "col-status": "Status",
+    "error-fetching-data": "An error occurred while retrieving the Go1 data for the course participant. Please try again later.",
+    "heading": "Participant Blended Learning Sync",
+    "no-enrollments": "This user doesn't have an account on Go1 or doesn't have any Go1 enrollments. You can create a new user with the same email through the Go1 admin dashboard and assign the required enrollment immediately. Ensure you fill in the optional fields with Connect course data during the user creation process.",
+    "status-COMPLETED": "Completed",
+    "status-INPROGRESS": "In Progress",
+    "sync-btn-text": "Sync",
+    "sync-info": "Please note that due to Go1 restrictions the enrollments with <strong>Assigned</strong> or <strong>Not Started</strong> statuses cannot be fetched and are not displayed in the list below. These enrollments will be available for synchronisation once the user begins the Go1 learning.",
+    "table-subtitle": "Please select the Go1 enrollment to be synced for this user within this course.",
+    "table-title": "Select the Go1 enrollment"
+  },
   "individual-cancellation": {
     "title": "Cancel {{ fullName }} from {{ courseCode }}?",
     "description": "This action will notify the attendee and booking contact (if applicable) and Finance will update the invoice for this booking where necessary.",

@@ -142,6 +142,12 @@ type Query {
 }
 
 type Query {
+  getUserGO1Enrollments(
+    profileId: String!
+  ): GetUserGO1EnrollmentsOutput!
+}
+
+type Query {
   getXeroInvoicesForOrders(
     invoiceNumbers: [String!]!
   ): [XeroInvoice]!
@@ -657,6 +663,16 @@ enum ValidateAndDispatchInvitesForIndirectCourseError {
 enum MergeOrganisationsStatus {
   SUCCESS
   FAIL
+}
+
+enum EnrollmentStatus {
+  COMPLETED
+  INPROGRESS
+}
+
+enum GO1EnrollmentStatus {
+  COMPLETED
+  INPROGRESS
 }
 
 input PlansCreateInput {
@@ -1662,6 +1678,27 @@ type ValidateAndDispatchInvitesForIndirectCourseOutput {
 type MergeOrganisationsOutput {
   status: MergeOrganisationsStatus!
   message: String!
+}
+
+type GetUserGO1EnrollmentsOutput {
+  enrollments: [GetUserGO1Enrollment!]!
+  success: Boolean!
+}
+
+type GetUserGO1Enrollment {
+  id: Int!
+  learningObject: GO1LearningObject
+  status: GO1EnrollmentStatus
+}
+
+type LearningObject {
+  id: Int!
+  title: String!
+}
+
+type GO1LearningObject {
+  id: Int!
+  title: String!
 }
 
 scalar Date
