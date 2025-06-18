@@ -76,6 +76,8 @@
 - "!include public_import_job_type.yaml"
 - "!include public_job_title.yaml"
 - "!include public_legacy_certificate.yaml"
+- "!include public_merge_organizations_logs.yaml"
+- "!include public_merged_organizations.yaml"
 - "!include public_module.yaml"
 - "!include public_module_category.yaml"
 - "!include public_module_group.yaml"

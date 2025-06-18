@@ -1,0 +1,68 @@
+table:
+  name: merge_organizations_logs
+  schema: public
+configuration:
+  column_config:
+    actioned_by_id:
+      custom_name: actionedById
+    created_at:
+      custom_name: createdAt
+    primary_organization_id:
+      custom_name: primaryOrganizationId
+    primary_organization_name:
+      custom_name: primaryOrganizationName
+  custom_column_names:
+    actioned_by_id: actionedById
+    created_at: createdAt
+    primary_organization_id: primaryOrganizationId
+    primary_organization_name: primaryOrganizationName
+  custom_root_fields: {}
+object_relationships:
+  - name: actionedBy
+    using:
+      foreign_key_constraint_on: actioned_by_id
+array_relationships:
+  - name: mergedOrganizations
+    using:
+      foreign_key_constraint_on:
+        column: merge_organizations_log_id
+        table:
+          name: merged_organizations
+          schema: public
+select_permissions:
+  - role: ld
+    permission:
+      columns:
+        - actioned_by_id
+        - created_at
+        - id
+        - primary_organization_id
+        - primary_organization_name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - actioned_by_id
+        - created_at
+        - id
+        - primary_organization_id
+        - primary_organization_name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - actioned_by_id
+        - created_at
+        - id
+        - primary_organization_id
+        - primary_organization_name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+    comment: ""

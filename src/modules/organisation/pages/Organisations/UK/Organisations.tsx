@@ -44,6 +44,7 @@ import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
 import { MergeOrganisations } from '@app/modules/organisation/components/MergeOrganisations'
+import { OrganisationsTabs } from '@app/modules/organisation/components/OrganisationsTabs/OrganisationsTabs'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import theme from '@app/theme'
 import {
@@ -241,13 +242,18 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Helmet>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
-          <BackButton label={t('pages.admin.back-to-settings')} />
+          <BackButton
+            label={t('pages.admin.back-to-settings')}
+            to="/organisations/all"
+          />
 
           <Typography variant="h1" py={2} fontWeight={600}>
             {t('pages.admin.organizations.title')}
           </Typography>
         </Container>
       </Box>
+
+      <OrganisationsTabs activeTab={0} />
 
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Box display="flex" gap={4}>

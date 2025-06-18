@@ -1596,6 +1596,7 @@ export type CreateOrderParticipantInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   postCode?: InputMaybe<Scalars['String']>;
+  residingCountry?: InputMaybe<Scalars['String']>;
   residingCountryCode?: InputMaybe<Scalars['String']>;
 };
 
@@ -32485,7 +32486,7 @@ export type Hubspot_Audit = {
   authentication_mode: Scalars['String'];
   created_at: Scalars['timestamptz'];
   error?: Maybe<Scalars['jsonb']>;
-  hubspot_cookie: Scalars['String'];
+  hubspot_cookie?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   page_details?: Maybe<Scalars['jsonb']>;
   profile_id?: Maybe<Scalars['uuid']>;
@@ -34267,6 +34268,485 @@ export type Legacy_Certificate_Var_Samp_Fields = {
 export type Legacy_Certificate_Variance_Fields = {
   __typename?: 'legacy_certificate_variance_fields';
   legacyId?: Maybe<Scalars['Float']>;
+};
+
+/** This table records data related to organization merge actions. */
+export type Merge_Organizations_Logs = {
+  __typename?: 'merge_organizations_logs';
+  /** An object relationship */
+  actionedBy: Profile;
+  actionedById: Scalars['uuid'];
+  createdAt: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  /** An array relationship */
+  mergedOrganizations: Array<Merged_Organizations>;
+  /** An aggregate relationship */
+  mergedOrganizations_aggregate: Merged_Organizations_Aggregate;
+  primaryOrganizationId: Scalars['uuid'];
+  primaryOrganizationName: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+
+/** This table records data related to organization merge actions. */
+export type Merge_Organizations_LogsMergedOrganizationsArgs = {
+  distinct_on?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merged_Organizations_Order_By>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+
+/** This table records data related to organization merge actions. */
+export type Merge_Organizations_LogsMergedOrganizations_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merged_Organizations_Order_By>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+/** aggregated selection of "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Aggregate = {
+  __typename?: 'merge_organizations_logs_aggregate';
+  aggregate?: Maybe<Merge_Organizations_Logs_Aggregate_Fields>;
+  nodes: Array<Merge_Organizations_Logs>;
+};
+
+/** aggregate fields of "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Aggregate_Fields = {
+  __typename?: 'merge_organizations_logs_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Merge_Organizations_Logs_Max_Fields>;
+  min?: Maybe<Merge_Organizations_Logs_Min_Fields>;
+};
+
+
+/** aggregate fields of "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Merge_Organizations_Logs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "merge_organizations_logs". All fields are combined with a logical 'AND'. */
+export type Merge_Organizations_Logs_Bool_Exp = {
+  _and?: InputMaybe<Array<Merge_Organizations_Logs_Bool_Exp>>;
+  _not?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+  _or?: InputMaybe<Array<Merge_Organizations_Logs_Bool_Exp>>;
+  actionedBy?: InputMaybe<Profile_Bool_Exp>;
+  actionedById?: InputMaybe<Uuid_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  mergedOrganizations?: InputMaybe<Merged_Organizations_Bool_Exp>;
+  mergedOrganizations_aggregate?: InputMaybe<Merged_Organizations_Aggregate_Bool_Exp>;
+  primaryOrganizationId?: InputMaybe<Uuid_Comparison_Exp>;
+  primaryOrganizationName?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "merge_organizations_logs" */
+export enum Merge_Organizations_Logs_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  MergeOrganizationsLogsPkey = 'merge_organizations_logs_pkey'
+}
+
+/** input type for inserting data into table "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Insert_Input = {
+  actionedBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  actionedById?: InputMaybe<Scalars['uuid']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  mergedOrganizations?: InputMaybe<Merged_Organizations_Arr_Rel_Insert_Input>;
+  primaryOrganizationId?: InputMaybe<Scalars['uuid']>;
+  primaryOrganizationName?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Merge_Organizations_Logs_Max_Fields = {
+  __typename?: 'merge_organizations_logs_max_fields';
+  actionedById?: Maybe<Scalars['uuid']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  primaryOrganizationId?: Maybe<Scalars['uuid']>;
+  primaryOrganizationName?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Merge_Organizations_Logs_Min_Fields = {
+  __typename?: 'merge_organizations_logs_min_fields';
+  actionedById?: Maybe<Scalars['uuid']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  primaryOrganizationId?: Maybe<Scalars['uuid']>;
+  primaryOrganizationName?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Mutation_Response = {
+  __typename?: 'merge_organizations_logs_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Merge_Organizations_Logs>;
+};
+
+/** input type for inserting object relation for remote table "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Obj_Rel_Insert_Input = {
+  data: Merge_Organizations_Logs_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Merge_Organizations_Logs_On_Conflict>;
+};
+
+/** on_conflict condition type for table "merge_organizations_logs" */
+export type Merge_Organizations_Logs_On_Conflict = {
+  constraint: Merge_Organizations_Logs_Constraint;
+  update_columns?: Array<Merge_Organizations_Logs_Update_Column>;
+  where?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "merge_organizations_logs". */
+export type Merge_Organizations_Logs_Order_By = {
+  actionedBy?: InputMaybe<Profile_Order_By>;
+  actionedById?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  mergedOrganizations_aggregate?: InputMaybe<Merged_Organizations_Aggregate_Order_By>;
+  primaryOrganizationId?: InputMaybe<Order_By>;
+  primaryOrganizationName?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: merge_organizations_logs */
+export type Merge_Organizations_Logs_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "merge_organizations_logs" */
+export enum Merge_Organizations_Logs_Select_Column {
+  /** column name */
+  ActionedById = 'actionedById',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PrimaryOrganizationId = 'primaryOrganizationId',
+  /** column name */
+  PrimaryOrganizationName = 'primaryOrganizationName',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Set_Input = {
+  actionedById?: InputMaybe<Scalars['uuid']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  primaryOrganizationId?: InputMaybe<Scalars['uuid']>;
+  primaryOrganizationName?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "merge_organizations_logs" */
+export type Merge_Organizations_Logs_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Merge_Organizations_Logs_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Merge_Organizations_Logs_Stream_Cursor_Value_Input = {
+  actionedById?: InputMaybe<Scalars['uuid']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  primaryOrganizationId?: InputMaybe<Scalars['uuid']>;
+  primaryOrganizationName?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "merge_organizations_logs" */
+export enum Merge_Organizations_Logs_Update_Column {
+  /** column name */
+  ActionedById = 'actionedById',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PrimaryOrganizationId = 'primaryOrganizationId',
+  /** column name */
+  PrimaryOrganizationName = 'primaryOrganizationName',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Merge_Organizations_Logs_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Merge_Organizations_Logs_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Merge_Organizations_Logs_Bool_Exp;
+};
+
+/** This table contains records of all organizations that have been merged, each associated with a specific merge event. */
+export type Merged_Organizations = {
+  __typename?: 'merged_organizations';
+  id: Scalars['uuid'];
+  /** An object relationship */
+  mergeOrganizationsLog: Merge_Organizations_Logs;
+  merge_organizations_log_id: Scalars['uuid'];
+  organizationData: Scalars['jsonb'];
+  organizationId: Scalars['uuid'];
+  organizationName: Scalars['String'];
+};
+
+
+/** This table contains records of all organizations that have been merged, each associated with a specific merge event. */
+export type Merged_OrganizationsOrganizationDataArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "merged_organizations" */
+export type Merged_Organizations_Aggregate = {
+  __typename?: 'merged_organizations_aggregate';
+  aggregate?: Maybe<Merged_Organizations_Aggregate_Fields>;
+  nodes: Array<Merged_Organizations>;
+};
+
+export type Merged_Organizations_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Merged_Organizations_Aggregate_Bool_Exp_Count>;
+};
+
+export type Merged_Organizations_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Merged_Organizations_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "merged_organizations" */
+export type Merged_Organizations_Aggregate_Fields = {
+  __typename?: 'merged_organizations_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Merged_Organizations_Max_Fields>;
+  min?: Maybe<Merged_Organizations_Min_Fields>;
+};
+
+
+/** aggregate fields of "merged_organizations" */
+export type Merged_Organizations_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "merged_organizations" */
+export type Merged_Organizations_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Merged_Organizations_Max_Order_By>;
+  min?: InputMaybe<Merged_Organizations_Min_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Merged_Organizations_Append_Input = {
+  organizationData?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "merged_organizations" */
+export type Merged_Organizations_Arr_Rel_Insert_Input = {
+  data: Array<Merged_Organizations_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Merged_Organizations_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "merged_organizations". All fields are combined with a logical 'AND'. */
+export type Merged_Organizations_Bool_Exp = {
+  _and?: InputMaybe<Array<Merged_Organizations_Bool_Exp>>;
+  _not?: InputMaybe<Merged_Organizations_Bool_Exp>;
+  _or?: InputMaybe<Array<Merged_Organizations_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  mergeOrganizationsLog?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+  merge_organizations_log_id?: InputMaybe<Uuid_Comparison_Exp>;
+  organizationData?: InputMaybe<Jsonb_Comparison_Exp>;
+  organizationId?: InputMaybe<Uuid_Comparison_Exp>;
+  organizationName?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "merged_organizations" */
+export enum Merged_Organizations_Constraint {
+  /** unique or primary key constraint on columns "organization_id" */
+  MergedOrganizationsOrganizationIdKey = 'merged_organizations_organization_id_key',
+  /** unique or primary key constraint on columns "id" */
+  MergedOrganizationsPkey = 'merged_organizations_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Merged_Organizations_Delete_At_Path_Input = {
+  organizationData?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Merged_Organizations_Delete_Elem_Input = {
+  organizationData?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Merged_Organizations_Delete_Key_Input = {
+  organizationData?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for inserting data into table "merged_organizations" */
+export type Merged_Organizations_Insert_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  mergeOrganizationsLog?: InputMaybe<Merge_Organizations_Logs_Obj_Rel_Insert_Input>;
+  merge_organizations_log_id?: InputMaybe<Scalars['uuid']>;
+  organizationData?: InputMaybe<Scalars['jsonb']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  organizationName?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Merged_Organizations_Max_Fields = {
+  __typename?: 'merged_organizations_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  merge_organizations_log_id?: Maybe<Scalars['uuid']>;
+  organizationId?: Maybe<Scalars['uuid']>;
+  organizationName?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "merged_organizations" */
+export type Merged_Organizations_Max_Order_By = {
+  id?: InputMaybe<Order_By>;
+  merge_organizations_log_id?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  organizationName?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Merged_Organizations_Min_Fields = {
+  __typename?: 'merged_organizations_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  merge_organizations_log_id?: Maybe<Scalars['uuid']>;
+  organizationId?: Maybe<Scalars['uuid']>;
+  organizationName?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "merged_organizations" */
+export type Merged_Organizations_Min_Order_By = {
+  id?: InputMaybe<Order_By>;
+  merge_organizations_log_id?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  organizationName?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "merged_organizations" */
+export type Merged_Organizations_Mutation_Response = {
+  __typename?: 'merged_organizations_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Merged_Organizations>;
+};
+
+/** on_conflict condition type for table "merged_organizations" */
+export type Merged_Organizations_On_Conflict = {
+  constraint: Merged_Organizations_Constraint;
+  update_columns?: Array<Merged_Organizations_Update_Column>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "merged_organizations". */
+export type Merged_Organizations_Order_By = {
+  id?: InputMaybe<Order_By>;
+  mergeOrganizationsLog?: InputMaybe<Merge_Organizations_Logs_Order_By>;
+  merge_organizations_log_id?: InputMaybe<Order_By>;
+  organizationData?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  organizationName?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: merged_organizations */
+export type Merged_Organizations_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Merged_Organizations_Prepend_Input = {
+  organizationData?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "merged_organizations" */
+export enum Merged_Organizations_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  MergeOrganizationsLogId = 'merge_organizations_log_id',
+  /** column name */
+  OrganizationData = 'organizationData',
+  /** column name */
+  OrganizationId = 'organizationId',
+  /** column name */
+  OrganizationName = 'organizationName'
+}
+
+/** input type for updating data in table "merged_organizations" */
+export type Merged_Organizations_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  merge_organizations_log_id?: InputMaybe<Scalars['uuid']>;
+  organizationData?: InputMaybe<Scalars['jsonb']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  organizationName?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "merged_organizations" */
+export type Merged_Organizations_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Merged_Organizations_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Merged_Organizations_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  merge_organizations_log_id?: InputMaybe<Scalars['uuid']>;
+  organizationData?: InputMaybe<Scalars['jsonb']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  organizationName?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "merged_organizations" */
+export enum Merged_Organizations_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  MergeOrganizationsLogId = 'merge_organizations_log_id',
+  /** column name */
+  OrganizationData = 'organizationData',
+  /** column name */
+  OrganizationId = 'organizationId',
+  /** column name */
+  OrganizationName = 'organizationName'
+}
+
+export type Merged_Organizations_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Merged_Organizations_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Merged_Organizations_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Merged_Organizations_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Merged_Organizations_Delete_Key_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Merged_Organizations_Prepend_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Merged_Organizations_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Merged_Organizations_Bool_Exp;
 };
 
 /** columns and relationships of "module" */
@@ -36674,6 +37154,14 @@ export type Mutation_Root = {
   delete_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** delete single row from the table: "legacy_certificate" */
   delete_legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
+  /** delete data from the table: "merge_organizations_logs" */
+  delete_merge_organizations_logs?: Maybe<Merge_Organizations_Logs_Mutation_Response>;
+  /** delete single row from the table: "merge_organizations_logs" */
+  delete_merge_organizations_logs_by_pk?: Maybe<Merge_Organizations_Logs>;
+  /** delete data from the table: "merged_organizations" */
+  delete_merged_organizations?: Maybe<Merged_Organizations_Mutation_Response>;
+  /** delete single row from the table: "merged_organizations" */
+  delete_merged_organizations_by_pk?: Maybe<Merged_Organizations>;
   /** delete data from the table: "module" */
   delete_module?: Maybe<Module_Mutation_Response>;
   /** delete single row from the table: "module" */
@@ -37204,6 +37692,14 @@ export type Mutation_Root = {
   insert_legacy_certificate?: Maybe<Legacy_Certificate_Mutation_Response>;
   /** insert a single row into the table: "legacy_certificate" */
   insert_legacy_certificate_one?: Maybe<Legacy_Certificate>;
+  /** insert data into the table: "merge_organizations_logs" */
+  insert_merge_organizations_logs?: Maybe<Merge_Organizations_Logs_Mutation_Response>;
+  /** insert a single row into the table: "merge_organizations_logs" */
+  insert_merge_organizations_logs_one?: Maybe<Merge_Organizations_Logs>;
+  /** insert data into the table: "merged_organizations" */
+  insert_merged_organizations?: Maybe<Merged_Organizations_Mutation_Response>;
+  /** insert a single row into the table: "merged_organizations" */
+  insert_merged_organizations_one?: Maybe<Merged_Organizations>;
   /** insert data into the table: "module" */
   insert_module?: Maybe<Module_Mutation_Response>;
   /** insert data into the table: "module_category" */
@@ -37910,6 +38406,18 @@ export type Mutation_Root = {
   update_legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
   /** update multiples rows of table: "legacy_certificate" */
   update_legacy_certificate_many?: Maybe<Array<Maybe<Legacy_Certificate_Mutation_Response>>>;
+  /** update data of the table: "merge_organizations_logs" */
+  update_merge_organizations_logs?: Maybe<Merge_Organizations_Logs_Mutation_Response>;
+  /** update single row of the table: "merge_organizations_logs" */
+  update_merge_organizations_logs_by_pk?: Maybe<Merge_Organizations_Logs>;
+  /** update multiples rows of table: "merge_organizations_logs" */
+  update_merge_organizations_logs_many?: Maybe<Array<Maybe<Merge_Organizations_Logs_Mutation_Response>>>;
+  /** update data of the table: "merged_organizations" */
+  update_merged_organizations?: Maybe<Merged_Organizations_Mutation_Response>;
+  /** update single row of the table: "merged_organizations" */
+  update_merged_organizations_by_pk?: Maybe<Merged_Organizations>;
+  /** update multiples rows of table: "merged_organizations" */
+  update_merged_organizations_many?: Maybe<Array<Maybe<Merged_Organizations_Mutation_Response>>>;
   /** update data of the table: "module" */
   update_module?: Maybe<Module_Mutation_Response>;
   /** update single row of the table: "module" */
@@ -39253,6 +39761,30 @@ export type Mutation_RootDelete_Legacy_CertificateArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Legacy_Certificate_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Merge_Organizations_LogsArgs = {
+  where: Merge_Organizations_Logs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Merge_Organizations_Logs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Merged_OrganizationsArgs = {
+  where: Merged_Organizations_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Merged_Organizations_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -41007,6 +41539,34 @@ export type Mutation_RootInsert_Legacy_CertificateArgs = {
 export type Mutation_RootInsert_Legacy_Certificate_OneArgs = {
   object: Legacy_Certificate_Insert_Input;
   on_conflict?: InputMaybe<Legacy_Certificate_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Merge_Organizations_LogsArgs = {
+  objects: Array<Merge_Organizations_Logs_Insert_Input>;
+  on_conflict?: InputMaybe<Merge_Organizations_Logs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Merge_Organizations_Logs_OneArgs = {
+  object: Merge_Organizations_Logs_Insert_Input;
+  on_conflict?: InputMaybe<Merge_Organizations_Logs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Merged_OrganizationsArgs = {
+  objects: Array<Merged_Organizations_Insert_Input>;
+  on_conflict?: InputMaybe<Merged_Organizations_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Merged_Organizations_OneArgs = {
+  object: Merged_Organizations_Insert_Input;
+  on_conflict?: InputMaybe<Merged_Organizations_On_Conflict>;
 };
 
 
@@ -43614,6 +44174,56 @@ export type Mutation_RootUpdate_Legacy_Certificate_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Legacy_Certificate_ManyArgs = {
   updates: Array<Legacy_Certificate_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Merge_Organizations_LogsArgs = {
+  _set?: InputMaybe<Merge_Organizations_Logs_Set_Input>;
+  where: Merge_Organizations_Logs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Merge_Organizations_Logs_By_PkArgs = {
+  _set?: InputMaybe<Merge_Organizations_Logs_Set_Input>;
+  pk_columns: Merge_Organizations_Logs_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Merge_Organizations_Logs_ManyArgs = {
+  updates: Array<Merge_Organizations_Logs_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Merged_OrganizationsArgs = {
+  _append?: InputMaybe<Merged_Organizations_Append_Input>;
+  _delete_at_path?: InputMaybe<Merged_Organizations_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Merged_Organizations_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Merged_Organizations_Delete_Key_Input>;
+  _prepend?: InputMaybe<Merged_Organizations_Prepend_Input>;
+  _set?: InputMaybe<Merged_Organizations_Set_Input>;
+  where: Merged_Organizations_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Merged_Organizations_By_PkArgs = {
+  _append?: InputMaybe<Merged_Organizations_Append_Input>;
+  _delete_at_path?: InputMaybe<Merged_Organizations_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Merged_Organizations_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Merged_Organizations_Delete_Key_Input>;
+  _prepend?: InputMaybe<Merged_Organizations_Prepend_Input>;
+  _set?: InputMaybe<Merged_Organizations_Set_Input>;
+  pk_columns: Merged_Organizations_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Merged_Organizations_ManyArgs = {
+  updates: Array<Merged_Organizations_Updates>;
 };
 
 
@@ -55069,6 +55679,18 @@ export type Query_Root = {
   legacy_certificate_aggregate: Legacy_Certificate_Aggregate;
   /** fetch data from the table: "legacy_certificate" using primary key columns */
   legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
+  /** fetch data from the table: "merge_organizations_logs" */
+  merge_organizations_logs: Array<Merge_Organizations_Logs>;
+  /** fetch aggregated fields from the table: "merge_organizations_logs" */
+  merge_organizations_logs_aggregate: Merge_Organizations_Logs_Aggregate;
+  /** fetch data from the table: "merge_organizations_logs" using primary key columns */
+  merge_organizations_logs_by_pk?: Maybe<Merge_Organizations_Logs>;
+  /** fetch data from the table: "merged_organizations" */
+  merged_organizations: Array<Merged_Organizations>;
+  /** fetch aggregated fields from the table: "merged_organizations" */
+  merged_organizations_aggregate: Merged_Organizations_Aggregate;
+  /** fetch data from the table: "merged_organizations" using primary key columns */
+  merged_organizations_by_pk?: Maybe<Merged_Organizations>;
   /** fetch data from the table: "module" */
   module: Array<Module>;
   /** fetch aggregated fields from the table: "module" */
@@ -57224,6 +57846,52 @@ export type Query_RootLegacy_Certificate_AggregateArgs = {
 
 
 export type Query_RootLegacy_Certificate_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootMerge_Organizations_LogsArgs = {
+  distinct_on?: InputMaybe<Array<Merge_Organizations_Logs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merge_Organizations_Logs_Order_By>>;
+  where?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+};
+
+
+export type Query_RootMerge_Organizations_Logs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Merge_Organizations_Logs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merge_Organizations_Logs_Order_By>>;
+  where?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+};
+
+
+export type Query_RootMerge_Organizations_Logs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootMerged_OrganizationsArgs = {
+  distinct_on?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merged_Organizations_Order_By>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+
+export type Query_RootMerged_Organizations_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merged_Organizations_Order_By>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+
+export type Query_RootMerged_Organizations_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -60652,6 +61320,22 @@ export type Subscription_Root = {
   legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
   /** fetch data from the table in a streaming manner: "legacy_certificate" */
   legacy_certificate_stream: Array<Legacy_Certificate>;
+  /** fetch data from the table: "merge_organizations_logs" */
+  merge_organizations_logs: Array<Merge_Organizations_Logs>;
+  /** fetch aggregated fields from the table: "merge_organizations_logs" */
+  merge_organizations_logs_aggregate: Merge_Organizations_Logs_Aggregate;
+  /** fetch data from the table: "merge_organizations_logs" using primary key columns */
+  merge_organizations_logs_by_pk?: Maybe<Merge_Organizations_Logs>;
+  /** fetch data from the table in a streaming manner: "merge_organizations_logs" */
+  merge_organizations_logs_stream: Array<Merge_Organizations_Logs>;
+  /** fetch data from the table: "merged_organizations" */
+  merged_organizations: Array<Merged_Organizations>;
+  /** fetch aggregated fields from the table: "merged_organizations" */
+  merged_organizations_aggregate: Merged_Organizations_Aggregate;
+  /** fetch data from the table: "merged_organizations" using primary key columns */
+  merged_organizations_by_pk?: Maybe<Merged_Organizations>;
+  /** fetch data from the table in a streaming manner: "merged_organizations" */
+  merged_organizations_stream: Array<Merged_Organizations>;
   /** fetch data from the table: "module" */
   module: Array<Module>;
   /** fetch aggregated fields from the table: "module" */
@@ -63414,6 +64098,66 @@ export type Subscription_RootLegacy_Certificate_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Legacy_Certificate_Stream_Cursor_Input>>;
   where?: InputMaybe<Legacy_Certificate_Bool_Exp>;
+};
+
+
+export type Subscription_RootMerge_Organizations_LogsArgs = {
+  distinct_on?: InputMaybe<Array<Merge_Organizations_Logs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merge_Organizations_Logs_Order_By>>;
+  where?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+};
+
+
+export type Subscription_RootMerge_Organizations_Logs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Merge_Organizations_Logs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merge_Organizations_Logs_Order_By>>;
+  where?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+};
+
+
+export type Subscription_RootMerge_Organizations_Logs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootMerge_Organizations_Logs_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Merge_Organizations_Logs_Stream_Cursor_Input>>;
+  where?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
+};
+
+
+export type Subscription_RootMerged_OrganizationsArgs = {
+  distinct_on?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merged_Organizations_Order_By>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+
+export type Subscription_RootMerged_Organizations_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Merged_Organizations_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Merged_Organizations_Order_By>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
+};
+
+
+export type Subscription_RootMerged_Organizations_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootMerged_Organizations_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Merged_Organizations_Stream_Cursor_Input>>;
+  where?: InputMaybe<Merged_Organizations_Bool_Exp>;
 };
 
 
@@ -69734,6 +70478,22 @@ export type ImportOrganisationsMutationVariables = Exact<{
 
 
 export type ImportOrganisationsMutation = { __typename?: 'mutation_root', importOrganisations?: { __typename?: 'ImportOrganisationsOutput', jobId?: string | null, error?: string | null } | null };
+
+export type GetMergeOrgsLogsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  where: Merge_Organizations_Logs_Bool_Exp;
+}>;
+
+
+export type GetMergeOrgsLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'merge_organizations_logs', id: any, actionedById: any, createdAt: any, primaryOrganizationId: any, primaryOrganizationName: string, actionedBy: { __typename?: 'profile', fullName?: string | null }, mergedOrganizations: Array<{ __typename?: 'merged_organizations', id: any, organizationId: any, organizationName: string }> }>, aggregate: { __typename?: 'merge_organizations_logs_aggregate', aggregate?: { __typename?: 'merge_organizations_logs_aggregate_fields', count: number } | null } };
+
+export type GetOrgsByIdsQueryVariables = Exact<{
+  ids: Array<Scalars['uuid']> | Scalars['uuid'];
+}>;
+
+
+export type GetOrgsByIdsQuery = { __typename?: 'query_root', organization: Array<{ __typename?: 'organization', id: any, name: string }> };
 
 export type DeleteOrgMutationVariables = Exact<{
   orgId: Scalars['uuid'];

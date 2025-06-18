@@ -12,6 +12,7 @@ import { OrganisationImport } from './pages/Import'
 import { Importing } from './pages/Import/components/Importing'
 import { Preview } from './pages/Import/components/Preview'
 import { Upload } from './pages/Import/components/Upload'
+import { MergeOrganizationLogs } from './pages/MergeOrganizationLogs/MergeOrganizationLogs'
 import { OrgDashboard } from './pages/OrganisationDashboard/OrgDashboard'
 import { Organizations as ANZOrganisations } from './pages/Organisations/ANZ/Organisations'
 import { Organizations as UKOrganisations } from './pages/Organisations/UK/Organisations'
@@ -34,6 +35,9 @@ export const OrganisationRoutes: React.FC = () => {
           path="/merge"
           element={isUKRegion ? <UKOrganisations /> : <ANZOrganisations />}
         />
+      ) : null}
+      {acl.isAdmin() ? (
+        <Route path="/merge-logs" element={<MergeOrganizationLogs />} />
       ) : null}
       <Route path=":id">
         <Route index element={<OrgDashboard />} />
