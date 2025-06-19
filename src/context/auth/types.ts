@@ -52,7 +52,6 @@ export type Claims = {
   'x-hasura-user-email': string
   'x-hasura-allowed-roles': RoleName[]
   'x-hasura-default-role': RoleName
-  'x-hasura-tt-organizations': string
 }
 
 export enum AuthMode {

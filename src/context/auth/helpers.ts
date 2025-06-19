@@ -77,15 +77,13 @@ export async function fetchUserProfile(
     const activeRole = allowedRoles.has(desiredRole) ? desiredRole : defaultRole
     lsActiveRole.set(activeRole)
 
-    const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
-
     const certificates = profile.certificates ?? []
 
     return {
       profile,
       isOrgAdmin: isOrgAdmin ?? false,
       managedOrgIds: managedOrgIds ?? [],
-      organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
+      organizationIds: profile.organizations.map(o => o.organization.id),
       defaultRole,
       claimsRoles: claimsRolesSet,
       allowedRoles,

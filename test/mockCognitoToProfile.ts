@@ -26,7 +26,6 @@ export const defaultCognitoProfile = {
     'x-hasura-user-email': profile?.email ?? '',
     'x-hasura-allowed-roles': [RoleName.USER, RoleName.TRAINER],
     'x-hasura-default-role': RoleName.USER,
-    'x-hasura-tt-organizations': '{}',
   },
   emailVerified: true,
   isOrgAdmin: false,

@@ -150,19 +150,6 @@ describe.skip('context: Auth', () => {
     })
   })
 
-  it('parses organization ids as expected', async () => {
-    const [id1, id2] = [chance.guid(), chance.guid()]
-    mockCognitoToProfile({
-      claims: { 'x-hasura-tt-organizations': `{"${id1}", "${id2}"}` },
-    })
-
-    const { result } = render()
-
-    await waitFor(() => {
-      expect(result.current.organizationIds).toStrictEqual([id1, id2])
-    })
-  })
-
   describe('login', () => {
     it('logs in when inputs are valid', async () => {
       const [email, pass] = [chance.email(), chance.string()]
