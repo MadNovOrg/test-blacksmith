@@ -77,11 +77,15 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   }
   const cols = useMemo(
     () => [
-      {
-        id: 'merge',
-        label: '',
-        sorting: false,
-      },
+      ...(merging
+        ? [
+            {
+              id: 'merge',
+              label: '',
+              sorting: false,
+            },
+          ]
+        : []),
       {
         id: 'org-id',
       },
@@ -117,7 +121,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
         label: t('pages.admin.organizations.columns.affiliates-count'),
       },
     ],
-    [t],
+    [t, merging],
   )
   const [query, setQuery] = useQueryParam('query', withDefault(StringParam, ''))
   const [debouncedQuery] = useDebounce(query, 300)
