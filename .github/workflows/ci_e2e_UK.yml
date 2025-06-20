@@ -73,7 +73,12 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
+        run: |
+          if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
+            pnpm install
+          else
+            pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
+          fi
 
       - name: Hasura Migration
         run: |
