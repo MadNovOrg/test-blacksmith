@@ -62,7 +62,7 @@ jobs:
       - name: Install Dependencies
         run: |
           if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            pnpm install
+            pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
           else
             pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
           fi
