@@ -571,9 +571,6 @@ importers:
       jest-environment-node:
         specifier: ^29.4.1
         version: 29.7.0
-      jest-offline:
-        specifier: ^1.0.1
-        version: 1.0.1
       jsdom:
         specifier: ~22.1.0
         version: 22.1.0
@@ -8011,9 +8008,6 @@ packages:
     resolution: {integrity: sha512-ITOMZn+UkYS4ZFh83xYAOzWStloNzJFO2s8DWrE4lhtGD+AorgnbkiKERe4wQVBydIGPx059g6riW5Btp6Llnw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  jest-offline@1.0.1:
-    resolution: {integrity: sha512-pcYJ8rVxWP3SS9de15iSQY87ErLGGgMC4qtVcRLb/qemrefI1IgnAzOusp0eemGu7JoAGlb4oBGnZorehu95KA==}
-
   jest-pnp-resolver@1.2.3:
     resolution: {integrity: sha512-+3NpwQEnRoIBtx4fyhblQDPgJI0H1IEIkX7ShLUjPGA7TtUTvI1oiKi3SR4oBR0hQhQR80l4WAe5RrXBwWMA8w==}
     engines: {node: '>=6'}
@@ -8929,10 +8923,6 @@ packages:
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
-
-  mitm@1.7.2:
-    resolution: {integrity: sha512-SuiJbc5xisP/iUYvsKAvrvPeoyJQbYI3WOfnp8A7XHDn4wkdtmGZe2ZTFXIo3K1of05oxUiaJIK+GoAU5KgFOw==}
-    engines: {node: '>= 0.10.24'}
 
   mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
@@ -10986,9 +10976,6 @@ packages:
   unc-path-regex@0.1.2:
     resolution: {integrity: sha512-eXL4nmJT7oCpkZsHZUOJo8hcX3GbsiDOa0Qu9F646fi8dT3XuSVopVqAcEiVzSKKH7UoDti23wNX3qGFxcW5Qg==}
     engines: {node: '>=0.10.0'}
-
-  underscore@1.13.6:
-    resolution: {integrity: sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
@@ -15943,6 +15930,12 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  '@nrwl/devkit@16.10.0(nx@16.10.0(@swc/core@1.9.2(@swc/helpers@0.5.17)))':
+    dependencies:
+      '@nx/devkit': 16.10.0(nx@16.10.0(@swc/core@1.9.2(@swc/helpers@0.5.17)))
+    transitivePeerDependencies:
+      - nx
+
   '@nrwl/devkit@16.10.0(nx@16.7.4(@swc/core@1.9.2(@swc/helpers@0.5.17)))':
     dependencies:
       '@nx/devkit': 16.10.0(nx@16.7.4(@swc/core@1.9.2(@swc/helpers@0.5.17)))
@@ -16157,7 +16150,7 @@ snapshots:
 
   '@nx/devkit@16.10.0(nx@16.10.0(@swc/core@1.9.2(@swc/helpers@0.5.17)))':
     dependencies:
-      '@nrwl/devkit': 16.10.0(nx@16.7.4(@swc/core@1.9.2(@swc/helpers@0.5.17)))
+      '@nrwl/devkit': 16.10.0(nx@16.10.0(@swc/core@1.9.2(@swc/helpers@0.5.17)))
       ejs: 3.1.10
       enquirer: 2.3.6
       ignore: 5.2.0
@@ -22171,10 +22164,6 @@ snapshots:
       '@types/node': 20.14.8
       jest-util: 29.7.0
 
-  jest-offline@1.0.1:
-    dependencies:
-      mitm: 1.7.2
-
   jest-pnp-resolver@1.2.3(jest-resolve@29.7.0):
     optionalDependencies:
       jest-resolve: 29.7.0
@@ -23684,11 +23673,6 @@ snapshots:
   minipass@7.0.4: {}
 
   minipass@7.1.2: {}
-
-  mitm@1.7.2:
-    dependencies:
-      semver: 5.7.2
-      underscore: 1.13.6
 
   mkdirp@0.5.6:
     dependencies:
@@ -25982,8 +25966,6 @@ snapshots:
       through: 2.3.8
 
   unc-path-regex@0.1.2: {}
-
-  underscore@1.13.6: {}
 
   undici-types@5.26.5: {}
 
