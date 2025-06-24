@@ -339,7 +339,7 @@ importers:
         version: 7.27.1(@babel/core@7.26.10)
       '@chromatic-com/storybook':
         specifier: ^3
-        version: 3.2.6(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))
+        version: 3.2.7(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))
       '@emotion/babel-plugin':
         specifier: 11.13.5
         version: 11.13.5
@@ -2226,8 +2226,8 @@ packages:
   '@changesets/write@0.3.2':
     resolution: {integrity: sha512-kDxDrPNpUgsjDbWBvUo27PzKX4gqeKOlhibaOXDJA6kuBisGqNHv/HwGJrAu8U/dSf8ZEFIeHIPtvSlZI1kULw==}
 
-  '@chromatic-com/storybook@3.2.6':
-    resolution: {integrity: sha512-FDmn5Ry2DzQdik+eq2sp/kJMMT36Ewe7ONXUXM2Izd97c7r6R/QyGli8eyh/F0iyqVvbLveNYFyF0dBOJNwLqw==}
+  '@chromatic-com/storybook@3.2.7':
+    resolution: {integrity: sha512-fCGhk4cd3VA8RNg55MZL5CScdHqljsQcL9g6Ss7YuobHpSo9yytEWNdgMd5QxAHSPBlLGFHjnSmliM3G/BeBqw==}
     engines: {node: '>=16.0.0', yarn: '>=1.22.18'}
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
@@ -5242,8 +5242,8 @@ packages:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
 
-  ansi-regex@6.0.1:
-    resolution: {integrity: sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==}
+  ansi-regex@6.1.0:
+    resolution: {integrity: sha512-7HSX4QQb4CspciLpVFwyRe79O3xsIZDDLER21kERQ71oaPodF8jL725AgJMFAYbooIqolJoRLuM81SpeUkpkvA==}
     engines: {node: '>=12'}
 
   ansi-styles@3.2.1:
@@ -5788,8 +5788,8 @@ packages:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
     engines: {node: '>= 8.10.0'}
 
-  chromatic@11.27.0:
-    resolution: {integrity: sha512-jQ2ufjS+ePpg+NtcPI9B2eOi+pAzlRd2nhd1LgNMsVCC9Bzf5t8mJtyd8v2AUuJS0LdX0QVBgkOnlNv9xviHzA==}
+  chromatic@11.29.0:
+    resolution: {integrity: sha512-yisBlntp9hHVj19lIQdpTlcYIXuU9H/DbFuu6tyWHmj6hWT2EtukCCcxYXL78XdQt1vm2GfIrtgtKpj/Rzmo4A==}
     hasBin: true
     peerDependencies:
       '@chromatic-com/cypress': ^0.*.* || ^1.0.0
@@ -11064,6 +11064,10 @@ packages:
     resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
     engines: {node: '>= 10.0.0'}
 
+  universalify@2.0.1:
+    resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
+    engines: {node: '>= 10.0.0'}
+
   unixify@1.0.0:
     resolution: {integrity: sha512-6bc58dPYhCMHHuwxldQxO3RRNZ4eCogZ/st++0+fcC1nr0jiGUtAdBJ2qzmLQWSxbtz42pWt4QQMiZ9HvZf5cg==}
     engines: {node: '>=0.10.0'}
@@ -14584,9 +14588,9 @@ snapshots:
       human-id: 1.0.2
       prettier: 2.8.8
 
-  '@chromatic-com/storybook@3.2.6(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))':
+  '@chromatic-com/storybook@3.2.7(react@19.0.0)(storybook@8.6.12(prettier@2.8.8))':
     dependencies:
-      chromatic: 11.27.0
+      chromatic: 11.29.0
       filesize: 10.1.6
       jsonfile: 6.1.0
       react-confetti: 6.4.0(react@19.0.0)
@@ -18795,7 +18799,7 @@ snapshots:
 
   ansi-regex@5.0.1: {}
 
-  ansi-regex@6.0.1: {}
+  ansi-regex@6.1.0: {}
 
   ansi-styles@3.2.1:
     dependencies:
@@ -19533,7 +19537,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chromatic@11.27.0: {}
+  chromatic@11.29.0: {}
 
   chrome-launcher@0.15.2:
     dependencies:
@@ -22482,7 +22486,7 @@ snapshots:
 
   jsonfile@6.1.0:
     dependencies:
-      universalify: 2.0.0
+      universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
 
@@ -25507,7 +25511,7 @@ snapshots:
 
   strip-ansi@7.1.0:
     dependencies:
-      ansi-regex: 6.0.1
+      ansi-regex: 6.1.0
 
   strip-bom@3.0.0: {}
 
@@ -26070,6 +26074,8 @@ snapshots:
   universalify@0.2.0: {}
 
   universalify@2.0.0: {}
+
+  universalify@2.0.1: {}
 
   unixify@1.0.0:
     dependencies:
