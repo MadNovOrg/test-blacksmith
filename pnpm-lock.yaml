@@ -181,8 +181,8 @@ importers:
         specifier: ^6.2.1
         version: 6.2.1
       chance:
-        specifier: 1.1.11
-        version: 1.1.11
+        specifier: 1.1.13
+        version: 1.1.13
       convert-units:
         specifier: ^2.3.4
         version: 2.3.4
@@ -5761,8 +5761,8 @@ packages:
     resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
-  chance@1.1.11:
-    resolution: {integrity: sha512-kqTg3WWywappJPqtgrdvbA380VoXO2eu9VCV895JgbyHsaErXdyHK9LOZ911OvAk6L0obK7kDk9CGs8+oBawVA==}
+  chance@1.1.13:
+    resolution: {integrity: sha512-V6lQCljcLznE7tUYUM9EOAnnKXbctE6j/rdQkYOHIWbfGQbrzTsAXNW9CdU5XCo4ArXQCj/rb6HgxPlmGJcaUg==}
 
   change-case-all@1.0.15:
     resolution: {integrity: sha512-3+GIFhk3sNuvFAJKU46o26OdzudQlPNBCu1ZQi3cMeMHhty1bhDxu2WrEilVNYaGvqUtR1VSigFcJOiS13dRhQ==}
@@ -19483,7 +19483,7 @@ snapshots:
 
   chalk@5.4.1: {}
 
-  chance@1.1.11: {}
+  chance@1.1.13: {}
 
   change-case-all@1.0.15:
     dependencies:

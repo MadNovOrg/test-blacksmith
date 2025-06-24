@@ -111,7 +111,7 @@
     "autosuggest-highlight": "^3.3.4",
     "aws-amplify": "^5.3.6",
     "big.js": "^6.2.1",
-    "chance": "1.1.11",
+    "chance": "1.1.13",
     "convert-units": "^2.3.4",
     "country-tz": "^1.0.0",
     "date-fns": "^2.30.0",
