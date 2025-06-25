@@ -79,11 +79,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [[ "${{ github.actor }}" == "dependabot[bot]" ]]; then
-            pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
-          else
-            pnpm pkg delete scripts.prepare && pnpm install --frozen-lockfile
-          fi
+          pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
 
       - name: Playwright setup
         run: pnpx playwright install
