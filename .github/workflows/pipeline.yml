@@ -85,7 +85,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm pkg delete scripts.prepare && pnpm i
+        run: pnpm pkg delete scripts.prepare && pnpm i --no-frozen-lockfile
 
       - name: Build web
         run: pnpm build --mode ${{inputs.mode}}
