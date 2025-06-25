@@ -1,7 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Autocomplete,
-  Box,
   Button,
   FormHelperText,
   Grid,
@@ -35,8 +34,6 @@ import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/modules/course_details/c
 import { Course } from '@app/types'
 import { courseEnded } from '@app/util'
 
-import { useInviteTTClientsToIndirectCourses } from '../../hooks/useInviteTTClientsToIndirectCourses'
-
 type Props = {
   course: Course
   attendeesCount?: number
@@ -51,8 +48,6 @@ export const CourseInvites = ({
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
-  const { checkTTClients, notifyInternalsOfIndirectInviteAttempt } =
-    useInviteTTClientsToIndirectCourses()
 
   const { acl, profile } = useAuth()
 
@@ -75,12 +70,6 @@ export const CourseInvites = ({
   const [saving, setSaving] = useState(false)
   const [newEmail, setNewEmail] = useState('')
   const [emails, setEmails] = useState<string[]>([])
-  const [emailsState, setEmailsState] = useState<{
-    invited: number
-    total: number
-    ttClientEmails: string[]
-  }>({ invited: 0, total: 0, ttClientEmails: [] })
-  const [showTTClientsModal, setShowTTClientsModal] = useState(false)
 
   const [{ data, fetching, error: exportError }, reexecuteQuery] = useQuery<
     ExportBlendedLearningCourseDataQuery,
@@ -99,44 +88,6 @@ export const CourseInvites = ({
       untilInvitees: state?.invitees ?? [],
     },
   })
-
-  const closeModal = useCallback(() => {
-    setNewEmail('')
-    setEmails([])
-    setError('')
-    setSaving(false)
-    setShowModal(false)
-  }, [])
-
-  const inviteUsers = useCallback(
-    async (emails: Array<string>) => {
-      try {
-        setSaving(true)
-        await invites.send({
-          emails,
-          course: {
-            go1Integration: course.go1Integration,
-            resourcePackType: course.resourcePacksType ?? null,
-            type: course.type,
-          },
-        })
-        invites.getInvites({
-          requestPolicy: 'network-only',
-        })
-        closeModal()
-      } catch (err) {
-        setSaving(false)
-        setError((err as Error).message)
-      }
-    },
-    [
-      closeModal,
-      course.go1Integration,
-      course.resourcePacksType,
-      course.type,
-      invites,
-    ],
-  )
 
   useEffect(() => {
     const startInvitesPolling =
@@ -167,6 +118,14 @@ export const CourseInvites = ({
     course?.status === Course_Status_Enum.Cancelled ||
     course?.status === Course_Status_Enum.Declined ||
     course?.status === Course_Status_Enum.Draft
+
+  const closeModal = useCallback(() => {
+    setNewEmail('')
+    setEmails([])
+    setError('')
+    setSaving(false)
+    setShowModal(false)
+  }, [])
 
   const onEmailsChange = (
     ev: React.SyntheticEvent<Element, Event>,
@@ -221,45 +180,34 @@ export const CourseInvites = ({
       return setError('LIMIT_REACHED')
     }
 
-    if (
-      course.type === Course_Type_Enum.Indirect &&
-      !acl.canInviteClientsToIndirectCourses()
-    ) {
-      const emailsData = await checkTTClients({
-        input: {
-          emailList: [...emails, ...leftOvers],
-          course: course.id,
+    try {
+      setSaving(true)
+      await invites.send({
+        emails: [...emails, ...leftOvers],
+        course: {
+          go1Integration: course.go1Integration,
+          resourcePackType: course.resourcePacksType ?? null,
+          type: course.type,
         },
       })
-
-      const inviteesAsTTClients = emailsData?.clientEmails
-
-      const emailsToInvite = emailsData?.nonClientEmails
-
-      if (emailsToInvite?.length) await inviteUsers(emailsToInvite)
-      if (inviteesAsTTClients?.length) {
-        setEmailsState({
-          invited: emailsToInvite?.length || 0,
-          total: emails.length + leftOvers.length,
-          ttClientEmails: inviteesAsTTClients,
-        })
-        closeModal()
-        setShowTTClientsModal(Boolean(inviteesAsTTClients.length))
-      }
-    } else {
-      await inviteUsers([...emails, ...leftOvers])
+      invites.getInvites({
+        requestPolicy: 'network-only',
+      })
+      closeModal()
+    } catch (err) {
+      setSaving(false)
+      setError((err as Error).message)
     }
   }, [
-    course.id,
     emails,
     newEmail,
     emailSchema,
     invitesLeft,
+    invites,
+    course.go1Integration,
+    course.resourcePacksType,
     course.type,
     closeModal,
-    inviteUsers,
-    acl,
-    checkTTClients,
   ])
 
   const errorMessage = useMemo(() => {
@@ -522,74 +470,6 @@ export const CourseInvites = ({
           </FormHelperText>
         )}
       </Dialog>
-      <Dialog
-        open={showTTClientsModal}
-        onClose={() => setShowTTClientsModal(false)}
-        slots={{
-          Title: () => (
-            <>
-              {t(
-                'pages.course-participants.trainer-inviting-tt-clients-dialog.title',
-                {
-                  invited: emailsState.invited,
-                  total: emailsState.total,
-                },
-              )}
-            </>
-          ),
-          Content: () => (
-            <>
-              <Typography mb={2}>
-                {' '}
-                {t(
-                  'pages.course-participants.trainer-inviting-tt-clients-dialog.content.tt-client-emails',
-                )}
-              </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}>
-                {emailsState.ttClientEmails.join(', ')}
-              </Typography>
-              <Typography my={2}>
-                {t(
-                  'pages.course-participants.trainer-inviting-tt-clients-dialog.content.notification-information',
-                )}
-              </Typography>
-              <Typography>
-                {t(
-                  'pages.course-participants.trainer-inviting-tt-clients-dialog.content.notification-information-24h',
-                )}
-              </Typography>
-            </>
-          ),
-          Actions: () => (
-            <Box display={'flex'} gap={2} sx={{ ml: 'auto' }}>
-              <Button
-                data-testid="cancel-tt-clients-invite"
-                color="secondary"
-                variant="outlined"
-                onClick={() => setShowTTClientsModal(false)}
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                data-testid="confirm-tt-clients-invite"
-                onClick={async () => {
-                  await notifyInternalsOfIndirectInviteAttempt({
-                    input: {
-                      invitedBy: profile?.id,
-                      course: course.id,
-                      inviteesList: emailsState.ttClientEmails,
-                    },
-                  })
-                  setShowTTClientsModal(false)
-                }}
-                variant="contained"
-              >
-                {t('confirm')}
-              </Button>
-            </Box>
-          ),
-        }}
-      />
     </>
   )
 }

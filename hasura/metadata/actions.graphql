@@ -56,12 +56,6 @@ type Mutation {
   ): CancelMyselfFromCourseWaitlistOutput
 }
 
-type Query {
-  checkTTClients(
-    input: CheckTTClientsInput!
-  ): CheckTTClientsOutput
-}
-
 type Mutation {
   createOrder(
     input: CreateOrderInput!
@@ -237,12 +231,6 @@ type Mutation {
     oldCourse: NotifyCourseInput!
     oldTrainers: [NotifyCourseTrainerInput]!
   ): NotifyCourseEditOutput!
-}
-
-type Mutation {
-  notifyInternalUsersOfInviteAttempt(
-    input: NotifyInternalUsersOfInviteAttemptInput!
-  ): NotifyInternalUsersOfInviteAttemptOutput
 }
 
 type Mutation {
@@ -1042,17 +1030,6 @@ input MergeOrganisationsInput {
   merge: [uuid]!
 }
 
-input NotifyInternalUsersOfInviteAttemptInput {
-  invitedBy: uuid!
-  inviteesList: [String!]!
-  course: Int!
-}
-
-input CheckTTClientsInput {
-  emailList: [String!]!
-  course: Int!
-}
-
 type LinkProfileResult {
   status: Boolean!
 }
@@ -1722,15 +1699,6 @@ type LearningObject {
 type GO1LearningObject {
   id: Int!
   title: String!
-}
-
-type NotifyInternalUsersOfInviteAttemptOutput {
-  success: Boolean!
-}
-
-type CheckTTClientsOutput {
-  clientEmails: [String!]!
-  nonClientEmails: [String!]!
 }
 
 scalar Date

@@ -986,8 +986,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canEditNamesAndDOB: () =>
       acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
     canEditRoles: () => acl.isTTAdmin() || acl.isTTOps(),
-    canInviteClientsToIndirectCourses: () =>
-      acl.isAdmin() || acl.isSalesAdmin(),
   })
 
   return acl

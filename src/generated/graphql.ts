@@ -597,17 +597,6 @@ export type CategoryToTaxonomyConnectionEdge = {
   node?: Maybe<Taxonomy>;
 };
 
-export type CheckTtClientsInput = {
-  course: Scalars['Int'];
-  emailList: Array<Scalars['String']>;
-};
-
-export type CheckTtClientsOutput = {
-  __typename?: 'CheckTTClientsOutput';
-  clientEmails: Array<Scalars['String']>;
-  nonClientEmails: Array<Scalars['String']>;
-};
-
 /** A Comment object */
 export type Comment = DatabaseIdentifier & Node & {
   __typename?: 'Comment';
@@ -4509,17 +4498,6 @@ export type NotifyCourseInput = {
 export type NotifyCourseTrainerInput = {
   id: Scalars['uuid'];
   type: CourseTrainerType;
-};
-
-export type NotifyInternalUsersOfInviteAttemptInput = {
-  course: Scalars['Int'];
-  invitedBy: Scalars['uuid'];
-  inviteesList: Array<Scalars['String']>;
-};
-
-export type NotifyInternalUsersOfInviteAttemptOutput = {
-  __typename?: 'NotifyInternalUsersOfInviteAttemptOutput';
-  success: Scalars['Boolean'];
 };
 
 export enum OrderDirection {
@@ -37354,10 +37332,6 @@ export type Mutation_Root = {
   delete_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** delete single row from the table: "trust_type" */
   delete_trust_type_by_pk?: Maybe<Trust_Type>;
-  /** delete data from the table: "tt_client_invite_log" */
-  delete_tt_client_invite_log?: Maybe<Tt_Client_Invite_Log_Mutation_Response>;
-  /** delete single row from the table: "tt_client_invite_log" */
-  delete_tt_client_invite_log_by_pk?: Maybe<Tt_Client_Invite_Log>;
   /** delete data from the table: "user_auth_audit_type" */
   delete_user_auth_audit_type?: Maybe<User_Auth_Audit_Type_Mutation_Response>;
   /** delete single row from the table: "user_auth_audit_type" */
@@ -37898,10 +37872,6 @@ export type Mutation_Root = {
   insert_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** insert a single row into the table: "trust_type" */
   insert_trust_type_one?: Maybe<Trust_Type>;
-  /** insert data into the table: "tt_client_invite_log" */
-  insert_tt_client_invite_log?: Maybe<Tt_Client_Invite_Log_Mutation_Response>;
-  /** insert a single row into the table: "tt_client_invite_log" */
-  insert_tt_client_invite_log_one?: Maybe<Tt_Client_Invite_Log>;
   /** insert data into the table: "user_auth_audit_type" */
   insert_user_auth_audit_type?: Maybe<User_Auth_Audit_Type_Mutation_Response>;
   /** insert a single row into the table: "user_auth_audit_type" */
@@ -37946,8 +37916,6 @@ export type Mutation_Root = {
   mergeUser: MergeUserOutput;
   /** Notify course's trainer(s) and attendees about course editing */
   notifyCourseEdit: NotifyCourseEditOutput;
-  /** notifyInternalUsersOfInviteAttempt */
-  notifyInternalUsersOfInviteAttempt?: Maybe<NotifyInternalUsersOfInviteAttemptOutput>;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
   /** This action is called when a Admin / LD role Rejects a course in status Exceptions Approval Pending */
@@ -38706,12 +38674,6 @@ export type Mutation_Root = {
   update_trust_type_by_pk?: Maybe<Trust_Type>;
   /** update multiples rows of table: "trust_type" */
   update_trust_type_many?: Maybe<Array<Maybe<Trust_Type_Mutation_Response>>>;
-  /** update data of the table: "tt_client_invite_log" */
-  update_tt_client_invite_log?: Maybe<Tt_Client_Invite_Log_Mutation_Response>;
-  /** update single row of the table: "tt_client_invite_log" */
-  update_tt_client_invite_log_by_pk?: Maybe<Tt_Client_Invite_Log>;
-  /** update multiples rows of table: "tt_client_invite_log" */
-  update_tt_client_invite_log_many?: Maybe<Array<Maybe<Tt_Client_Invite_Log_Mutation_Response>>>;
   /** update data of the table: "user_auth_audit_type" */
   update_user_auth_audit_type?: Maybe<User_Auth_Audit_Type_Mutation_Response>;
   /** update single row of the table: "user_auth_audit_type" */
@@ -40334,18 +40296,6 @@ export type Mutation_RootDelete_Trust_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Trust_Type_By_PkArgs = {
   name: Scalars['String'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Tt_Client_Invite_LogArgs = {
-  where: Tt_Client_Invite_Log_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Tt_Client_Invite_Log_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -42221,20 +42171,6 @@ export type Mutation_RootInsert_Trust_Type_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Tt_Client_Invite_LogArgs = {
-  objects: Array<Tt_Client_Invite_Log_Insert_Input>;
-  on_conflict?: InputMaybe<Tt_Client_Invite_Log_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Tt_Client_Invite_Log_OneArgs = {
-  object: Tt_Client_Invite_Log_Insert_Input;
-  on_conflict?: InputMaybe<Tt_Client_Invite_Log_On_Conflict>;
-};
-
-
-/** mutation root */
 export type Mutation_RootInsert_User_Auth_Audit_TypeArgs = {
   objects: Array<User_Auth_Audit_Type_Insert_Input>;
   on_conflict?: InputMaybe<User_Auth_Audit_Type_On_Conflict>;
@@ -42383,12 +42319,6 @@ export type Mutation_RootMergeUserArgs = {
 export type Mutation_RootNotifyCourseEditArgs = {
   oldCourse: NotifyCourseInput;
   oldTrainers: Array<InputMaybe<NotifyCourseTrainerInput>>;
-};
-
-
-/** mutation root */
-export type Mutation_RootNotifyInternalUsersOfInviteAttemptArgs = {
-  input: NotifyInternalUsersOfInviteAttemptInput;
 };
 
 
@@ -45290,28 +45220,6 @@ export type Mutation_RootUpdate_Trust_Type_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Trust_Type_ManyArgs = {
   updates: Array<Trust_Type_Updates>;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Tt_Client_Invite_LogArgs = {
-  _inc?: InputMaybe<Tt_Client_Invite_Log_Inc_Input>;
-  _set?: InputMaybe<Tt_Client_Invite_Log_Set_Input>;
-  where: Tt_Client_Invite_Log_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Tt_Client_Invite_Log_By_PkArgs = {
-  _inc?: InputMaybe<Tt_Client_Invite_Log_Inc_Input>;
-  _set?: InputMaybe<Tt_Client_Invite_Log_Set_Input>;
-  pk_columns: Tt_Client_Invite_Log_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Tt_Client_Invite_Log_ManyArgs = {
-  updates: Array<Tt_Client_Invite_Log_Updates>;
 };
 
 
@@ -55339,8 +55247,6 @@ export type Query_Root = {
   certificate_status_aggregate: Certificate_Status_Aggregate;
   /** fetch data from the table: "certificate_status" using primary key columns */
   certificate_status_by_pk?: Maybe<Certificate_Status>;
-  /** This action will check which emails are TT clients and which are not out of a list of given emails */
-  checkTTClients?: Maybe<CheckTtClientsOutput>;
   /** fetch data from the table: "color" */
   color: Array<Color>;
   /** fetch aggregated fields from the table: "color" */
@@ -56050,12 +55956,6 @@ export type Query_Root = {
   trust_type_aggregate: Trust_Type_Aggregate;
   /** fetch data from the table: "trust_type" using primary key columns */
   trust_type_by_pk?: Maybe<Trust_Type>;
-  /** fetch data from the table: "tt_client_invite_log" */
-  tt_client_invite_log: Array<Tt_Client_Invite_Log>;
-  /** fetch aggregated fields from the table: "tt_client_invite_log" */
-  tt_client_invite_log_aggregate: Tt_Client_Invite_Log_Aggregate;
-  /** fetch data from the table: "tt_client_invite_log" using primary key columns */
-  tt_client_invite_log_by_pk?: Maybe<Tt_Client_Invite_Log>;
   /** fetch data from the table: "upcoming_enrollments" */
   upcoming_enrollments: Array<Upcoming_Enrollments>;
   /** fetch aggregated fields from the table: "upcoming_enrollments" */
@@ -56333,11 +56233,6 @@ export type Query_RootCertificate_Status_AggregateArgs = {
 
 export type Query_RootCertificate_Status_By_PkArgs = {
   name: Scalars['String'];
-};
-
-
-export type Query_RootCheckTtClientsArgs = {
-  input: CheckTtClientsInput;
 };
 
 
@@ -59015,29 +58910,6 @@ export type Query_RootTrust_Type_AggregateArgs = {
 
 export type Query_RootTrust_Type_By_PkArgs = {
   name: Scalars['String'];
-};
-
-
-export type Query_RootTt_Client_Invite_LogArgs = {
-  distinct_on?: InputMaybe<Array<Tt_Client_Invite_Log_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Tt_Client_Invite_Log_Order_By>>;
-  where?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-};
-
-
-export type Query_RootTt_Client_Invite_Log_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Tt_Client_Invite_Log_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Tt_Client_Invite_Log_Order_By>>;
-  where?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-};
-
-
-export type Query_RootTt_Client_Invite_Log_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -61812,14 +61684,6 @@ export type Subscription_Root = {
   trust_type_by_pk?: Maybe<Trust_Type>;
   /** fetch data from the table in a streaming manner: "trust_type" */
   trust_type_stream: Array<Trust_Type>;
-  /** fetch data from the table: "tt_client_invite_log" */
-  tt_client_invite_log: Array<Tt_Client_Invite_Log>;
-  /** fetch aggregated fields from the table: "tt_client_invite_log" */
-  tt_client_invite_log_aggregate: Tt_Client_Invite_Log_Aggregate;
-  /** fetch data from the table: "tt_client_invite_log" using primary key columns */
-  tt_client_invite_log_by_pk?: Maybe<Tt_Client_Invite_Log>;
-  /** fetch data from the table in a streaming manner: "tt_client_invite_log" */
-  tt_client_invite_log_stream: Array<Tt_Client_Invite_Log>;
   /** fetch data from the table: "upcoming_enrollments" */
   upcoming_enrollments: Array<Upcoming_Enrollments>;
   /** fetch aggregated fields from the table: "upcoming_enrollments" */
@@ -65607,36 +65471,6 @@ export type Subscription_RootTrust_Type_StreamArgs = {
 };
 
 
-export type Subscription_RootTt_Client_Invite_LogArgs = {
-  distinct_on?: InputMaybe<Array<Tt_Client_Invite_Log_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Tt_Client_Invite_Log_Order_By>>;
-  where?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-};
-
-
-export type Subscription_RootTt_Client_Invite_Log_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Tt_Client_Invite_Log_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Tt_Client_Invite_Log_Order_By>>;
-  where?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-};
-
-
-export type Subscription_RootTt_Client_Invite_Log_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Subscription_RootTt_Client_Invite_Log_StreamArgs = {
-  batch_size: Scalars['Int'];
-  cursor: Array<InputMaybe<Tt_Client_Invite_Log_Stream_Cursor_Input>>;
-  where?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-};
-
-
 export type Subscription_RootUpcoming_EnrollmentsArgs = {
   distinct_on?: InputMaybe<Array<Upcoming_Enrollments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -66384,249 +66218,6 @@ export type Trust_Type_Updates = {
   _set?: InputMaybe<Trust_Type_Set_Input>;
   /** filter the rows which have to be updated */
   where: Trust_Type_Bool_Exp;
-};
-
-/** This table stores data related to indirect course invitations targeting users marked as TeamTeach Clients ( attempted a Closed or Open course in the past 36 months or attempts on in the future 12 months ) */
-export type Tt_Client_Invite_Log = {
-  __typename?: 'tt_client_invite_log';
-  /** An object relationship */
-  course: Course;
-  course_id: Scalars['Int'];
-  id: Scalars['uuid'];
-  invited_at: Scalars['timestamptz'];
-  invited_by: Scalars['uuid'];
-  invitees_list: Scalars['String'];
-  /** An object relationship */
-  profile: Profile;
-};
-
-/** aggregated selection of "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Aggregate = {
-  __typename?: 'tt_client_invite_log_aggregate';
-  aggregate?: Maybe<Tt_Client_Invite_Log_Aggregate_Fields>;
-  nodes: Array<Tt_Client_Invite_Log>;
-};
-
-/** aggregate fields of "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Aggregate_Fields = {
-  __typename?: 'tt_client_invite_log_aggregate_fields';
-  avg?: Maybe<Tt_Client_Invite_Log_Avg_Fields>;
-  count: Scalars['Int'];
-  max?: Maybe<Tt_Client_Invite_Log_Max_Fields>;
-  min?: Maybe<Tt_Client_Invite_Log_Min_Fields>;
-  stddev?: Maybe<Tt_Client_Invite_Log_Stddev_Fields>;
-  stddev_pop?: Maybe<Tt_Client_Invite_Log_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Tt_Client_Invite_Log_Stddev_Samp_Fields>;
-  sum?: Maybe<Tt_Client_Invite_Log_Sum_Fields>;
-  var_pop?: Maybe<Tt_Client_Invite_Log_Var_Pop_Fields>;
-  var_samp?: Maybe<Tt_Client_Invite_Log_Var_Samp_Fields>;
-  variance?: Maybe<Tt_Client_Invite_Log_Variance_Fields>;
-};
-
-
-/** aggregate fields of "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Tt_Client_Invite_Log_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** aggregate avg on columns */
-export type Tt_Client_Invite_Log_Avg_Fields = {
-  __typename?: 'tt_client_invite_log_avg_fields';
-  course_id?: Maybe<Scalars['Float']>;
-};
-
-/** Boolean expression to filter rows from the table "tt_client_invite_log". All fields are combined with a logical 'AND'. */
-export type Tt_Client_Invite_Log_Bool_Exp = {
-  _and?: InputMaybe<Array<Tt_Client_Invite_Log_Bool_Exp>>;
-  _not?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-  _or?: InputMaybe<Array<Tt_Client_Invite_Log_Bool_Exp>>;
-  course?: InputMaybe<Course_Bool_Exp>;
-  course_id?: InputMaybe<Int_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  invited_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  invited_by?: InputMaybe<Uuid_Comparison_Exp>;
-  invitees_list?: InputMaybe<String_Comparison_Exp>;
-  profile?: InputMaybe<Profile_Bool_Exp>;
-};
-
-/** unique or primary key constraints on table "tt_client_invite_log" */
-export enum Tt_Client_Invite_Log_Constraint {
-  /** unique or primary key constraint on columns "id" */
-  TtClientInviteLogPkey = 'tt_client_invite_log_pkey'
-}
-
-/** input type for incrementing numeric columns in table "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Inc_Input = {
-  course_id?: InputMaybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Insert_Input = {
-  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
-  course_id?: InputMaybe<Scalars['Int']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  invited_at?: InputMaybe<Scalars['timestamptz']>;
-  invited_by?: InputMaybe<Scalars['uuid']>;
-  invitees_list?: InputMaybe<Scalars['String']>;
-  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
-};
-
-/** aggregate max on columns */
-export type Tt_Client_Invite_Log_Max_Fields = {
-  __typename?: 'tt_client_invite_log_max_fields';
-  course_id?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['uuid']>;
-  invited_at?: Maybe<Scalars['timestamptz']>;
-  invited_by?: Maybe<Scalars['uuid']>;
-  invitees_list?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Tt_Client_Invite_Log_Min_Fields = {
-  __typename?: 'tt_client_invite_log_min_fields';
-  course_id?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['uuid']>;
-  invited_at?: Maybe<Scalars['timestamptz']>;
-  invited_by?: Maybe<Scalars['uuid']>;
-  invitees_list?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Mutation_Response = {
-  __typename?: 'tt_client_invite_log_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Tt_Client_Invite_Log>;
-};
-
-/** on_conflict condition type for table "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_On_Conflict = {
-  constraint: Tt_Client_Invite_Log_Constraint;
-  update_columns?: Array<Tt_Client_Invite_Log_Update_Column>;
-  where?: InputMaybe<Tt_Client_Invite_Log_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "tt_client_invite_log". */
-export type Tt_Client_Invite_Log_Order_By = {
-  course?: InputMaybe<Course_Order_By>;
-  course_id?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  invited_at?: InputMaybe<Order_By>;
-  invited_by?: InputMaybe<Order_By>;
-  invitees_list?: InputMaybe<Order_By>;
-  profile?: InputMaybe<Profile_Order_By>;
-};
-
-/** primary key columns input for table: tt_client_invite_log */
-export type Tt_Client_Invite_Log_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "tt_client_invite_log" */
-export enum Tt_Client_Invite_Log_Select_Column {
-  /** column name */
-  CourseId = 'course_id',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  InvitedAt = 'invited_at',
-  /** column name */
-  InvitedBy = 'invited_by',
-  /** column name */
-  InviteesList = 'invitees_list'
-}
-
-/** input type for updating data in table "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Set_Input = {
-  course_id?: InputMaybe<Scalars['Int']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  invited_at?: InputMaybe<Scalars['timestamptz']>;
-  invited_by?: InputMaybe<Scalars['uuid']>;
-  invitees_list?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate stddev on columns */
-export type Tt_Client_Invite_Log_Stddev_Fields = {
-  __typename?: 'tt_client_invite_log_stddev_fields';
-  course_id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Tt_Client_Invite_Log_Stddev_Pop_Fields = {
-  __typename?: 'tt_client_invite_log_stddev_pop_fields';
-  course_id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Tt_Client_Invite_Log_Stddev_Samp_Fields = {
-  __typename?: 'tt_client_invite_log_stddev_samp_fields';
-  course_id?: Maybe<Scalars['Float']>;
-};
-
-/** Streaming cursor of the table "tt_client_invite_log" */
-export type Tt_Client_Invite_Log_Stream_Cursor_Input = {
-  /** Stream column input with initial value */
-  initial_value: Tt_Client_Invite_Log_Stream_Cursor_Value_Input;
-  /** cursor ordering */
-  ordering?: InputMaybe<Cursor_Ordering>;
-};
-
-/** Initial value of the column from where the streaming should start */
-export type Tt_Client_Invite_Log_Stream_Cursor_Value_Input = {
-  course_id?: InputMaybe<Scalars['Int']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  invited_at?: InputMaybe<Scalars['timestamptz']>;
-  invited_by?: InputMaybe<Scalars['uuid']>;
-  invitees_list?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate sum on columns */
-export type Tt_Client_Invite_Log_Sum_Fields = {
-  __typename?: 'tt_client_invite_log_sum_fields';
-  course_id?: Maybe<Scalars['Int']>;
-};
-
-/** update columns of table "tt_client_invite_log" */
-export enum Tt_Client_Invite_Log_Update_Column {
-  /** column name */
-  CourseId = 'course_id',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  InvitedAt = 'invited_at',
-  /** column name */
-  InvitedBy = 'invited_by',
-  /** column name */
-  InviteesList = 'invitees_list'
-}
-
-export type Tt_Client_Invite_Log_Updates = {
-  /** increments the numeric columns with given value of the filtered values */
-  _inc?: InputMaybe<Tt_Client_Invite_Log_Inc_Input>;
-  /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Tt_Client_Invite_Log_Set_Input>;
-  /** filter the rows which have to be updated */
-  where: Tt_Client_Invite_Log_Bool_Exp;
-};
-
-/** aggregate var_pop on columns */
-export type Tt_Client_Invite_Log_Var_Pop_Fields = {
-  __typename?: 'tt_client_invite_log_var_pop_fields';
-  course_id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate var_samp on columns */
-export type Tt_Client_Invite_Log_Var_Samp_Fields = {
-  __typename?: 'tt_client_invite_log_var_samp_fields';
-  course_id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate variance on columns */
-export type Tt_Client_Invite_Log_Variance_Fields = {
-  __typename?: 'tt_client_invite_log_variance_fields';
-  course_id?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "upcoming_enrollments" */
@@ -69910,20 +69501,6 @@ export type ValidateAndDispatchInvitesForIndirectCourseMutationVariables = Exact
 
 
 export type ValidateAndDispatchInvitesForIndirectCourseMutation = { __typename?: 'mutation_root', validateAndDispatchInvitesForIndirectCourse?: { __typename?: 'ValidateAndDispatchInvitesForIndirectCourseOutput', error?: ValidateAndDispatchInvitesForIndirectCourseError | null, extraLicensesRequiredToBuy?: number | null, extraResourcePacksRequiredToBuy?: number | null, success: boolean } | null };
-
-export type CheckTtClientsQueryVariables = Exact<{
-  input: CheckTtClientsInput;
-}>;
-
-
-export type CheckTtClientsQuery = { __typename?: 'query_root', checkTTClients?: { __typename?: 'CheckTTClientsOutput', clientEmails: Array<string>, nonClientEmails: Array<string> } | null };
-
-export type NotifyInternalUsersOfInviteAttemptMutationVariables = Exact<{
-  input: NotifyInternalUsersOfInviteAttemptInput;
-}>;
-
-
-export type NotifyInternalUsersOfInviteAttemptMutation = { __typename?: 'mutation_root', notifyInternalUsersOfInviteAttempt?: { __typename?: 'NotifyInternalUsersOfInviteAttemptOutput', success: boolean } | null };
 
 export type GetWaitlistQueryVariables = Exact<{
   where: Waitlist_Bool_Exp;

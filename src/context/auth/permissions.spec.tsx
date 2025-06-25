@@ -19,7 +19,7 @@ import {
   buildProfile,
 } from '@test/mock-data-utils'
 
-import { getACL } from './permissions'
+import { getACL, injectACL } from './permissions'
 import { AuthContextType } from './types'
 
 describe(getACL.name, () => {
@@ -3069,29 +3069,13 @@ describe(getACL.name, () => {
       },
     )
   })
-  describe('canInviteClientsToIndirectCourses', () => {
-    it.each([
-      RoleName.TT_ADMIN,
-      RoleName.TT_OPS,
-      RoleName.LD,
-      RoleName.SALES_ADMIN,
-    ])(
-      'can invite clients to indirect courses when activeRole is %s',
-      activeRole => {
-        const acl = getACLStub({ activeRole })
-        expect(acl.canInviteClientsToIndirectCourses()).toBeTruthy()
-      },
-    )
-    it.each([
-      RoleName.TRAINER,
-      RoleName.BOOKING_CONTACT,
-      RoleName.ORGANIZATION_KEY_CONTACT,
-    ])(
-      'cannot invite clients to indirect courses when activeRole is %s',
-      activeRole => {
-        const acl = getACLStub({ activeRole })
-        expect(acl.canInviteClientsToIndirectCourses()).toBeFalsy()
-      },
-    )
+})
+
+/**
+ * TODO @RMX | Fill separetely
+ */
+describe(injectACL.name, () => {
+  it('should do something', () => {
+    expect(true).toBeTruthy()
   })
 })

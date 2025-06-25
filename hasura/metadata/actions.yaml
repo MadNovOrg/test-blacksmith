@@ -83,13 +83,6 @@ actions:
       - role: anonymous
       - role: user
     comment: Removes current anonymous user from course waitlist
-  - name: checkTTClients
-    definition:
-      kind: ""
-      handler: '{{ACTIONS_HOST}}/invite/indirect-invite-attempt/check-clients'
-    permissions:
-      - role: user
-    comment: This action will check which emails are TT clients and which are not out of a list of given emails
   - name: createOrder
     definition:
       kind: synchronous
@@ -335,13 +328,6 @@ actions:
       - role: trainer
       - role: sales-admin
     comment: Notify course's trainer(s) and attendees about course editing
-  - name: notifyInternalUsersOfInviteAttempt
-    definition:
-      kind: synchronous
-      handler: '{{ACTIONS_HOST}}/invite/indirect-invite-attempt/notify'
-    permissions:
-      - role: user
-    comment: notifyInternalUsersOfInviteAttempt
   - name: plansCreate
     definition:
       kind: synchronous
@@ -1189,8 +1175,6 @@ custom_types:
     - name: ResourcePacksReserveInput
     - name: ValidateAndDispatchInvitesForIndirectCourseInput
     - name: MergeOrganisationsInput
-    - name: NotifyInternalUsersOfInviteAttemptInput
-    - name: CheckTTClientsInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -1301,7 +1285,5 @@ custom_types:
     - name: GetUserGO1Enrollment
     - name: LearningObject
     - name: GO1LearningObject
-    - name: NotifyInternalUsersOfInviteAttemptOutput
-    - name: CheckTTClientsOutput
   scalars:
     - name: Date
