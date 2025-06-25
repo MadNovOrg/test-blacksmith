@@ -872,7 +872,15 @@
         "message": "Do you want to resend the course information to {{fullName}}?"
       }
     },
-    "course-information-sent": "Course information sent."
+    "course-information-sent": "Course information sent.",
+    "trainer-inviting-tt-clients-dialog": {
+      "title": "{{invited}} out of {{total}} individual(s) have been succesfully invited.",
+      "content": {
+        "tt-client-emails": "The following individual(s) can only be invited to the course by Team Teach:",
+        "notification-information": "If you continue, a request will be sent to Team Teach to add the individual(s) listed above to the course. They will not be invited to the course unless Team Teach confirms that this is within protocols.",
+        "notification-information-24h": "You will receive an email from Team Teach within 24 hours. "
+      }
+    }
   },
   "course-grading-details": {
     "title": "Grading Criteria",

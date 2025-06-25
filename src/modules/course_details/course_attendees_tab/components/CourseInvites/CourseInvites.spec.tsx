@@ -1,19 +1,28 @@
 import { add, addWeeks, sub } from 'date-fns'
 import { saveAs } from 'file-saver'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
-import { Client, Provider } from 'urql'
+import { useTranslation } from 'react-i18next'
+import { Client, Provider, useClient } from 'urql'
+import { Mock } from 'vitest'
 import { fromValue } from 'wonka'
 
 import {
+  CheckTtClientsQuery,
   Course_Invite_Status_Enum,
   Course_Type_Enum,
   ExportBlendedLearningCourseDataQuery,
-  GetCourseInvitesQuery,
 } from '@app/generated/graphql'
 import useCourseInvites from '@app/modules/course_details/course_attendees_tab/hooks/useCourseInvites/useCourseInvites'
 import { Course, RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitForCalls } from '@test/index'
+import {
+  chance,
+  render,
+  renderHook,
+  screen,
+  userEvent,
+  waitForCalls,
+} from '@test/index'
 import {
   buildBlExportData,
   buildCourse,
@@ -34,6 +43,11 @@ vi.mock('file-saver', () => ({ saveAs: () => vi.fn() }))
 
 vi.mock('posthog-js/react', () => ({
   useFeatureFlagEnabled: vi.fn(),
+}))
+
+vi.mock('urql', async () => ({
+  ...(await vi.importActual('urql')),
+  useClient: vi.fn(),
 }))
 
 const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
@@ -61,6 +75,12 @@ const urqlMockClient = {
 } as never as Client
 
 describe(CourseInvites.name, () => {
+  const {
+    result: {
+      current: { t },
+    },
+  } = renderHook(() => useTranslation())
+
   let course: Course
   beforeEach(() => {
     const courseSchedule = buildCourseSchedule({
@@ -234,7 +254,7 @@ describe(CourseInvites.name, () => {
     useCourseInvitesMock.mockReturnValue({
       ...useCourseInvitesDefaults,
       data: [
-        buildInvite() as GetCourseInvitesQuery['courseInvites'][0],
+        buildInvite(),
         buildInvite({
           overrides: { status: Course_Invite_Status_Enum.Accepted },
         }),
@@ -631,5 +651,67 @@ describe(CourseInvites.name, () => {
     await userEvent.click(exportProgressBtn)
 
     expect(saveAs).toHaveBeenCalled()
+  })
+  it('should display dialog when trainer attempts to invite a tt client to an indirect course', async () => {
+    const clientEmails = [chance.email()]
+
+    const mockQueryResult = {
+      data: {
+        checkTTClients: {
+          clientEmails,
+          nonClientEmails: [],
+        },
+      },
+    } as CheckTtClientsQuery
+
+    const mockClient = {
+      query: vi.fn(() => ({
+        toPromise: vi.fn().mockResolvedValue(mockQueryResult),
+      })),
+    }
+    ;(useClient as Mock).mockReturnValue(mockClient)
+
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    render(
+      <CourseInvites course={{ ...course, type: Course_Type_Enum.Indirect }} />,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+        },
+      },
+    )
+
+    expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
+    await userEvent.click(screen.getByTestId('course-invite-btn'))
+
+    const autocomplete = screen.getByTestId('modal-invites-emails')
+    const input = autocomplete.querySelector('input') as HTMLInputElement
+
+    expect(input.value).toBe('')
+
+    await userEvent.type(input, clientEmails[0])
+    await userEvent.type(autocomplete, '{enter}')
+
+    await userEvent.click(screen.getByTestId('modal-invites-send'))
+
+    expect(
+      screen.getByText(
+        t(
+          'pages.course-participants.trainer-inviting-tt-clients-dialog.content.tt-client-emails',
+        ),
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        t(
+          'pages.course-participants.trainer-inviting-tt-clients-dialog.title',
+          {
+            invited: [].length,
+            total: [clientEmails].length,
+          },
+        ),
+      ),
+    ).toBeInTheDocument()
   })
 })
