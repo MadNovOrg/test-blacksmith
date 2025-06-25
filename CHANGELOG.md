@@ -1,5 +1,23 @@
 # @teamteach/hub
 
+## 5.5.0
+
+### Minor Changes
+
+- 513418f: Merge organisations logs
+- a16cede: Participants' country fields on Open course booking
+- 55473e0: User's agreement type filter
+- 66edea3: Make sure Go1 and Connect are synchronized as needed.
+- ab8208e: Only "Pass" certified trainers are permitted to lead the course.
+
+### Patch Changes
+
+- 830e152: Adjust access control for the delete button
+- 3d3a597: Remove the unverified role after the user successfully verifies their email.
+- baa6de0: Fix view individuals by levels, 'advanced trainer' tab
+- 1abeba4: fix (TTHP-5236 | 5234): page not found while accepting a course invite
+- 35a3212: Adjust the button alignment in the update version modal for mobile devices.
+
 ## 5.4.0
 
 ### Minor Changes
