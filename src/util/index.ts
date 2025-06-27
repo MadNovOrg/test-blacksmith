@@ -162,9 +162,9 @@ export function getSWRLoadingStatus(
 }
 
 export const MCMAmount: Record<Currency, number> = {
-  [Currency.Gbp]: 10,
-  [Currency.Eur]: 12,
-  [Currency.Usd]: 13,
+  [Currency.Gbp]: 12.5,
+  [Currency.Eur]: 15,
+  [Currency.Usd]: 16,
   [Currency.Aud]: 20,
   [Currency.Nzd]: 20,
 }

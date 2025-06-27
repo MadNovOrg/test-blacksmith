@@ -1,3 +1,4 @@
+// TODO: Refactor these tests to use calculated values instead of hardcoded values
 import { addHours } from 'date-fns'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
@@ -86,15 +87,15 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20£200.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20£250.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 10-£100.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 10-£125.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
-    ).toMatchInlineSnapshot(`"Sub total£1,600.00"`)
+    ).toMatchInlineSnapshot(`"Sub total£1,625.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
       `"VAT (20%)£300.00"`,
@@ -102,7 +103,7 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent,
-    ).toMatchInlineSnapshot(`"Amount due GBP£1,900.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,925.00"`)
   })
 
   it('displays course details, with pricing and resource packs, GBP Currency and VAT excluded', async () => {
@@ -166,15 +167,15 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20£200.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20£250.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 10-£100.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 10-£125.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
-    ).toMatchInlineSnapshot(`"Sub total£1,600.00"`)
+    ).toMatchInlineSnapshot(`"Sub total£1,625.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
       `"VAT (0%)£0.00"`,
@@ -182,7 +183,7 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent,
-    ).toMatchInlineSnapshot(`"Amount due GBP£1,600.00"`)
+    ).toMatchInlineSnapshot(`"Amount due GBP£1,625.00"`)
   })
 
   it('displays course details, with pricing and resource packs, EUR Currency and VAT included', async () => {
@@ -246,15 +247,15 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20€240.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20€300.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 10-€120.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 10-€150.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
-    ).toMatchInlineSnapshot(`"Sub total€1,620.00"`)
+    ).toMatchInlineSnapshot(`"Sub total€1,650.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
       `"VAT (20%)€300.00"`,
@@ -262,7 +263,7 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent,
-    ).toMatchInlineSnapshot(`"Amount due EUR€1,920.00"`)
+    ).toMatchInlineSnapshot(`"Amount due EUR€1,950.00"`)
   })
 
   it('displays course details, with pricing and resource packs, EUR Currency and VAT excluded', async () => {
@@ -326,15 +327,15 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20€240.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 20€300.00"`)
 
     expect(
       screen.getByTestId('free-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Free Course Materials x 10-€120.00"`)
+    ).toMatchInlineSnapshot(`"Free Course Materials x 10-€150.00"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
-    ).toMatchInlineSnapshot(`"Sub total€1,620.00"`)
+    ).toMatchInlineSnapshot(`"Sub total€1,650.00"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
       `"VAT (0%)€0.00"`,
@@ -342,6 +343,6 @@ describe('component: OrderDetailsReview', () => {
 
     expect(
       screen.getByTestId('total-costs-row').textContent,
-    ).toMatchInlineSnapshot(`"Amount due EUR€1,620.00"`)
+    ).toMatchInlineSnapshot(`"Amount due EUR€1,650.00"`)
   })
 })

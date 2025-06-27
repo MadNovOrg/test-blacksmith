@@ -1,3 +1,4 @@
+// TODO: Refactor these tests to use calculated values instead of hardcoded ones
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Provider, Client, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
@@ -161,11 +162,11 @@ describe('component: BookingDetailsReview', () => {
 
     expect(
       screen.getByTestId('mandatory-course-materials-row').textContent,
-    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 1£10.00"`)
+    ).toMatchInlineSnapshot(`"Mandatory Course Materials x 1£12.50"`)
 
     expect(
       screen.getByTestId('subtotal-row').textContent,
-    ).toMatchInlineSnapshot(`"Subtotal£130.00"`)
+    ).toMatchInlineSnapshot(`"Subtotal£132.50"`)
 
     expect(screen.getByTestId('vat-row').textContent).toMatchInlineSnapshot(
       `"VAT (20%)£24.00"`,
@@ -173,6 +174,6 @@ describe('component: BookingDetailsReview', () => {
 
     expect(
       screen.getByTestId('amount-due-row').textContent,
-    ).toMatchInlineSnapshot(`"Amount due (GBP)£154.00"`)
+    ).toMatchInlineSnapshot(`"Amount due (GBP)£156.50"`)
   })
 })
