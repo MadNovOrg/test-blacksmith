@@ -21,9 +21,15 @@ configuration:
     profile_id: profileId
   custom_root_fields: {}
 object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
   - name: organization
     using:
       foreign_key_constraint_on: org_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
 array_relationships:
   - name: expire_go1_license_jobs
     using:
@@ -76,6 +82,16 @@ event_triggers:
       num_retries: 5
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/block'
+  - name: discard_go1_user_data
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1/discard-go1-user-data'
   - name: go1_license_expire_date_changed
     definition:
       enable_manual: true
