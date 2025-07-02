@@ -1,5 +1,8 @@
+import { useLocation } from 'react-router-dom'
+
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { IndividualCourseStatusChip } from '@app/components/IndividualCourseStatus'
+import { useAuth } from '@app/context/auth'
 import {
   AttendeeCourse,
   AttendeeCourseStatus,
@@ -11,36 +14,39 @@ export const CourseHeroStatusChip: React.FC<{
   isManaged: boolean
   course: Course
 }> = ({ isManaged, course }) => {
-  const isCourseManaged = () => {
-    if (isManaged) {
-      return (
-        <IndividualCourseStatusChip
-          course={{
-            ...course,
-            schedule: [
-              {
-                ...course.schedule[0],
-                timeZone: course.schedule[0].timeZone ?? UKTimezone,
-              },
-            ],
-          }}
-          participants={course.courseParticipants ?? []}
-        />
-      )
-    }
+  const location = useLocation()
+  const isMyCourses = location.pathname.includes('/courses/')
 
+  const { acl } = useAuth()
+
+  if (isMyCourses && acl.isUser()) {
     return <AttendeeCourseStatus course={course as unknown as AttendeeCourse} />
   }
-  if (course.status) {
+
+  if (isManaged) {
     return (
-      <CourseStatusChip
-        status={
-          course.cancellationRequest
-            ? AdminOnlyCourseStatus.CancellationRequested
-            : course.status
-        }
+      <IndividualCourseStatusChip
+        course={{
+          ...course,
+          schedule: [
+            {
+              ...course.schedule[0],
+              timeZone: course.schedule[0].timeZone ?? UKTimezone,
+            },
+          ],
+        }}
+        participants={course.courseParticipants ?? []}
       />
     )
   }
-  return isCourseManaged()
+
+  return (
+    <CourseStatusChip
+      status={
+        course.cancellationRequest
+          ? AdminOnlyCourseStatus.CancellationRequested
+          : course.status
+      }
+    />
+  )
 }
