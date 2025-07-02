@@ -1,19 +1,30 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
+import { useAuth } from '@app/context/auth'
 import { Currency } from '@app/generated/graphql'
+
+const ANZ_CURRENCIES = [Currency.Aud, Currency.Nzd]
 
 type Props = {
   onChange: (input: { currencies: Currency[] }) => void
 }
 
-const possibleCurrencies = Object.values(Currency)
-
 export const FilterByCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
   onChange,
 }) => {
+  const { acl } = useAuth()
+
   const { t } = useTranslation()
+
+  const possibleCurrencies = useMemo(
+    () =>
+      Object.values(Currency).filter(
+        currency => !acl.isUK() || ANZ_CURRENCIES.includes(currency),
+      ),
+    [acl],
+  )
 
   const [options, setOptions] = useState<FilterOption[]>(() =>
     possibleCurrencies.map(currency => ({
