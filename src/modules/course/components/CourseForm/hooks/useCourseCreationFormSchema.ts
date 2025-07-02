@@ -490,7 +490,7 @@ export const useCourseCreationFormSchema = ({
                 .number()
                 .positive(t('components.course-form.price-number-error'))
                 .typeError(t('components.course-form.price-number-error'))
-                .required(),
+                .required(t('components.course-form.price-number-error')),
             })
           }
         }),
