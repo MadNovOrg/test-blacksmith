@@ -92,7 +92,7 @@ describe('page: Onboarding', () => {
       expect(screen.getByText(/Surname is required/i)).toBeInTheDocument()
       expect(screen.getByText(/Phone is required/i)).toBeInTheDocument()
       expect(
-        screen.getByText(/organisation is a required field/i),
+        screen.getByText(/please choose an organization from the dropdown/i),
       ).toBeInTheDocument()
 
       expect(

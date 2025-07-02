@@ -39,8 +39,9 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { UPDATE_PROFILE_MUTATION } from '@app/modules/profile/queries/update-profile'
-import { schemas, yup } from '@app/schemas'
-import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
+import { INPUT_DATE_FORMAT } from '@app/util'
+
+import { useOnboardingSchema } from '../../hooks/use-get-form-schema'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [isManualFormError, setIsManualFormError] = useState(false)
@@ -57,34 +58,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
   const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
-  const schema = yup.object({
-    givenName: yup.string().required(requiredMsg(_t, 'first-name')),
-    familyName: yup.string().required(requiredMsg(_t, 'surname')),
-    country: yup.string().required(),
-    countryCode: yup.string().required(),
-    phone: schemas.phone(_t),
-    phoneCountryCode: yup.string().optional(),
-    dob: yup
-      .date()
-      .nullable()
-      .typeError(t('validation-errors.invalid-date-optional'))
-      .required(_t('validation-errors.date-required')),
-    tcs: yup.boolean().oneOf([true], t('tcs-required')),
-    jobTitle: yup.string().required(requiredMsg(_t, 'job-title')),
-    otherJobTitle: yup.string().when('jobTitle', ([jobTitle], schema) => {
-      return jobTitle === 'Other'
-        ? schema.required(_t('validation-errors.other-job-title-required'))
-        : schema
-    }),
-    organization: yup
-      .object<Partial<Organization>>()
-      .shape({
-        id: yup.string().required(t('organisation-required-error')),
-        name: yup.string().required(t('organisation-required-error')),
-        moderatorRole: yup.boolean(),
-      })
-      .required(t('organisation-required-error')),
-  })
+
+  const schema = useOnboardingSchema()
 
   const { register, handleSubmit, formState, watch, setValue, control } =
     useForm<InferType<typeof schema>>({
@@ -296,7 +271,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               showTrainerOrgOnly={false}
               error={
                 errors.organization?.id?.message ||
-                errors.organization?.name?.message
+                errors.organization?.name?.message ||
+                errors.organization?.message
               }
               value={values.organization ?? null}
               onChange={orgSelectorOnChange}
