@@ -196,7 +196,8 @@ export const OrgDetailsTab: React.FC<
                           size={responsiveCSSProps(isMobile).buttonSize}
                           data-testid="delete-org-button"
                           sx={{
-                            fontSize: responsiveCSSProps(isMobile).buttonSize,
+                            fontSize:
+                              responsiveCSSProps(isMobile).buttonFontSize,
                             width: '50%',
                             mt: 1,
                           }}
