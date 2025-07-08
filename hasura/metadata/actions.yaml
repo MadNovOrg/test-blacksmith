@@ -32,6 +32,8 @@ actions:
       handler: '{{ACTIONS_HOST}}/course/approve'
       forward_client_headers: true
     permissions:
+      - role: tt-ops
+      - role: trainer
       - role: ld
       - role: tt-admin
   - name: arloCallback

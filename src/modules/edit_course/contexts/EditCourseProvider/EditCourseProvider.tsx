@@ -213,7 +213,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   const {
     data: courseInfo,
     mutate: mutateCourse,
-    status,
+    status: loadingStatus,
   } = useCourse(id ?? '', {
     includeOrgLicenses: acl.canEditIndirectBLCourses(),
     includePendingInvitesCount: true,
@@ -372,6 +372,14 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     notifyCourseEditLoading ||
     updatingCourse
 
+  // STATUS
+  const status =
+    preEditedCourse?.type &&
+    courseExceptions.length > 0 &&
+    shouldGoIntoExceptionApproval(acl, preEditedCourse.type)
+      ? Course_Status_Enum.ExceptionsApprovalPending
+      : null
+
   const isBILDCourse = courseData?.accreditedBy === Accreditors_Enum.Bild
   const isClosedTypeCourse = courseData?.type === Course_Type_Enum.Closed
   const isOpenTypeCourse = courseData?.type === Course_Type_Enum.Open
@@ -388,7 +396,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
   const isAdditionalBlendedLearningLicensesRequired = useMemo(() => {
     if (
       !courseData?.maxParticipants ||
-      preEditedCourse?.status === Course_Status_Enum.ExceptionsApprovalPending
+      status === Course_Status_Enum.ExceptionsApprovalPending
     )
       return false
 
@@ -407,7 +415,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
     courseData?.maxParticipants,
     isIndirectBlendedLearningCourse,
     preEditedCourse?.coursesReservedLicenses,
-    preEditedCourse?.status,
+    status,
   ])
 
   const isAdditionalResourcePacksRequired = useMemo(() => {
@@ -522,7 +530,8 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
 
   const mustApproveExceptions = preEditedCourse
     ? preEditedCourse.status === Course_Status_Enum.ExceptionsApprovalPending &&
-      !shouldGoIntoExceptionApproval(acl, preEditedCourse?.type)
+      (!shouldGoIntoExceptionApproval(acl, preEditedCourse?.type) ||
+        !courseExceptions.length)
     : false
 
   const getCourseName = useCallback(() => {
@@ -591,40 +600,55 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       ],
     )
 
-  const reserveAdditionalLicenses = useCallback(async () => {
-    const orgToManageGo1Licenses =
-      preEditedCourse?.organization?.main_organisation?.id ??
-      preEditedCourse?.organization?.id
-
-    if (
-      orgToManageGo1Licenses &&
-      isAdditionalBlendedLearningLicensesRequired &&
-      !requireNewOrderForGo1Licenses
-    ) {
-      try {
-        await reserveGo1Licenses({
-          go1LicensesOrgIdManage: orgToManageGo1Licenses,
-          decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
-          incrementGo1LicensesFromOrganizationPool: requiredLicenses,
-          reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],
-        })
-      } catch (err) {
-        Sentry.captureException(err)
+  const reserveAdditionalLicenses = useCallback(
+    async (courseExceptionsApprovalPending: boolean) => {
+      /**
+       * We don't make a reservation during edit if the first order hasn't been created yet — this will be handled on the backend.
+       */
+      if (courseExceptionsApprovalPending || !preEditedCourse?.orders?.length) {
+        return
       }
-    }
-  }, [
-    getGo1LicensesReserveAudit,
-    isAdditionalBlendedLearningLicensesRequired,
-    preEditedCourse?.organization?.id,
-    preEditedCourse?.organization?.main_organisation?.id,
-    requireNewOrderForGo1Licenses,
-    requiredLicenses,
-    reserveGo1Licenses,
-  ])
+
+      const orgToManageGo1Licenses =
+        preEditedCourse?.organization?.main_organisation?.id ??
+        preEditedCourse?.organization?.id
+
+      if (
+        orgToManageGo1Licenses &&
+        isAdditionalBlendedLearningLicensesRequired &&
+        !requireNewOrderForGo1Licenses
+      ) {
+        try {
+          await reserveGo1Licenses({
+            go1LicensesOrgIdManage: orgToManageGo1Licenses,
+            decrementGo1LicensesFromOrganizationPool: -requiredLicenses,
+            incrementGo1LicensesFromOrganizationPool: requiredLicenses,
+            reserveGo1LicensesAudit: [getGo1LicensesReserveAudit()],
+          })
+        } catch (err) {
+          Sentry.captureException(err)
+        }
+      }
+    },
+    [
+      getGo1LicensesReserveAudit,
+      isAdditionalBlendedLearningLicensesRequired,
+      preEditedCourse?.orders?.length,
+      preEditedCourse?.organization?.id,
+      preEditedCourse?.organization?.main_organisation?.id,
+      requireNewOrderForGo1Licenses,
+      requiredLicenses,
+      reserveGo1Licenses,
+    ],
+  )
 
   const reserveAdditionalResourcePacks = useCallback(
     async (courseExceptionsApprovalPending: boolean) => {
-      if (courseExceptionsApprovalPending) return
+      /**
+       * We don't make a reservation during edit if the first order hasn't been created yet — this will be handled on the backend.
+       */
+      if (courseExceptionsApprovalPending || !preEditedCourse?.orders?.length)
+        return
 
       if (
         preEditedCourse?.organization?.id &&
@@ -650,6 +674,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       additionalRequiredResourcePacks,
       additionalResourcePacksToPurchase,
       preEditedCourse?.id,
+      preEditedCourse?.orders?.length,
       preEditedCourse?.organization?.id,
       preEditedCourse?.resourcePacksType,
       reserveResourcePacks,
@@ -723,13 +748,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
           Course_Delivery_Type_Enum.Mixed,
         ].includes(courseData.deliveryType) && courseData.venue
           ? courseData.venue.id
-          : null
-
-      // STATUS
-      const status =
-        courseExceptions.length > 0 &&
-        shouldGoIntoExceptionApproval(acl, preEditedCourse.type)
-          ? Course_Status_Enum.ExceptionsApprovalPending
           : null
 
       // DATE & TIME
@@ -851,7 +869,6 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
         },
         ...(status === Course_Status_Enum.ExceptionsApprovalPending
           ? {
-              exceptions: courseExceptions,
               exceptionsInput: courseExceptions.map(exception => ({
                 courseId: preEditedCourse.id,
                 exception,
@@ -902,17 +919,19 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
         })
 
         if (resp.data?.updateCourse?.id) {
+          await reserveAdditionalLicenses(
+            status === Course_Status_Enum.ExceptionsApprovalPending,
+          )
+
+          await reserveAdditionalResourcePacks(
+            status === Course_Status_Enum.ExceptionsApprovalPending,
+          )
+
           if (mustApproveExceptions) {
             await approveCourse({
               input: { courseId: preEditedCourse.id, reason: '' },
             })
           }
-
-          await reserveAdditionalLicenses()
-
-          await reserveAdditionalResourcePacks(
-            status === Course_Status_Enum.ExceptionsApprovalPending,
-          )
 
           await editContactResidingCountry()
 
@@ -1024,6 +1043,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       reserveAdditionalLicenses,
       reserveAdditionalResourcePacks,
       setDateTimeTimeZone,
+      status,
       trainersData,
       updateCourse,
     ],
@@ -1109,7 +1129,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       setInvoiceDetails,
       setRequiredLicenses,
       setTrainersData,
-      status,
+      status: loadingStatus,
       trainersData,
     }),
     [
@@ -1136,7 +1156,7 @@ export const EditCourseProvider: React.FC<React.PropsWithChildren> = ({
       requireNewOrderForResourcePacks,
       saveAdditionalLicensesOrder,
       saveChanges,
-      status,
+      loadingStatus,
       trainersData,
     ],
   )

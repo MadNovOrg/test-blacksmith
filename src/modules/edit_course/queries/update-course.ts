@@ -68,7 +68,6 @@ export const UPDATE_COURSE_MUTATION = gql`
   mutation UpdateCourse(
     $courseId: Int!
     $courseInput: course_set_input!
-    $exceptions: [course_exception_enum!] = []
     $exceptionsInput: [course_exceptions_insert_input!] = []
     $orderInput: order_set_input!
     $ordersInsertInput: [course_order_insert_input!] = []
@@ -90,7 +89,7 @@ export const UPDATE_COURSE_MUTATION = gql`
     }
 
     deletedExceptions: delete_course_exceptions(
-      where: { courseId: { _eq: $courseId }, exception: { _in: $exceptions } }
+      where: { courseId: { _eq: $courseId } }
     ) {
       affectedRows: affected_rows
     }
