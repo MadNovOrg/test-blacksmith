@@ -11,6 +11,7 @@ import {
   Payment_Methods_Enum,
   Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
+import { AwsRegions } from '@app/types'
 
 import {
   render,
@@ -117,6 +118,7 @@ describe('page: Orders filtering', () => {
   })
   it('filters by currency', async () => {
     let queryVariables: OrdersQueryVariables
+    vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
 
     const client = {
       executeQuery: ({ variables }: { variables: OrdersQueryVariables }) => {

@@ -21,7 +21,7 @@ export const FilterByCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
   const possibleCurrencies = useMemo(
     () =>
       Object.values(Currency).filter(
-        currency => !acl.isUK() || ANZ_CURRENCIES.includes(currency),
+        currency => acl.isUK() || ANZ_CURRENCIES.includes(currency),
       ),
     [acl],
   )
