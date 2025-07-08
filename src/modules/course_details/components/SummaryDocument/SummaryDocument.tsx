@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: '8px',
-    lineHeight: '1.6pt',
-    marginBottom: '5px',
+    lineHeight: '8px',
+    marginBottom: '6px',
   },
   largerText: {
     fontSize: '10px',
@@ -399,7 +399,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
               {course.name}
             </Text>
 
-            <Text style={styles.textAlignCenter}>
+            <Text style={[styles.textAlignCenter, { marginTop: '15px' }]}>
               {t(`common.course-types.${course.type}`)} Course
             </Text>
 
@@ -443,7 +443,6 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
               <Text style={[styles.largestText, styles.bold]}>
                 {t('course-evaluation.pdf-export.schedule-and-venue')}
               </Text>
-
               <Text style={styles.text}>
                 {t('course-evaluation.pdf-export.started-at')}:{' '}
                 {t('dates.withTime', { date: course.schedule[0].start })}
@@ -522,7 +521,7 @@ export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
                                       style={[
                                         styles.text,
                                         styles.bold,
-                                        { marginBottom: 1, marginTop: 3 },
+                                        { marginBottom: 10, marginTop: 3 },
                                       ]}
                                     >
                                       {group.name}
