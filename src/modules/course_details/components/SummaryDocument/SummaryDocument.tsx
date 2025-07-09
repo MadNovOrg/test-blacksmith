@@ -120,6 +120,7 @@ Font.register({
     },
   ],
 })
+Font.registerHyphenationCallback(word => [word])
 
 const styles = StyleSheet.create({
   strikeThrough: {
@@ -172,6 +173,9 @@ const styles = StyleSheet.create({
   },
   courseNameText: {
     fontSize: '18px',
+    width: '100%',
+    flexWrap: 'wrap',
+    lineHeight: 1.2,
   },
   flexRow: {
     flexDirection: 'row',
