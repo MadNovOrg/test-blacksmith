@@ -80,7 +80,7 @@ export const Users = () => {
     string[]
   >([])
 
-  const [filterByCertificateLevel, setFilteredByCertificateLEvel] = useState<
+  const [filterByCertificateLevel, setfilterByCertificateLevel] = useState<
     Course_Level_Enum[]
   >([])
   const [certificateStatus, setCertificateStatus] = useState<
@@ -426,15 +426,7 @@ export const Users = () => {
     ] as Col[]
   }, [t])
 
-  const handleMergeCancel = () => {
-    setShowMergeDialog(false)
-    setSelected([])
-    refreshUsers({
-      requestPolicy: 'network-only',
-    })
-  }
-
-  const handleMergeSuccess = () => {
+  const handleMerge = () => {
     setShowMergeDialog(false)
     setSelected([])
     refreshUsers({
@@ -543,6 +535,7 @@ export const Users = () => {
                         Course_Level_Enum.BildAdvancedTrainer,
                         Course_Level_Enum.BildIntermediateTrainer,
                         Course_Level_Enum.BildRegular,
+                        Course_Level_Enum.Advanced,
                       ])
                     : new Set([
                         Course_Level_Enum.FoundationTrainer,
@@ -550,7 +543,7 @@ export const Users = () => {
                       ])
                 }
                 title={t('certificate-level')}
-                onChange={setFilteredByCertificateLEvel}
+                onChange={setfilterByCertificateLevel}
               />
               <FilterByCertificateValidity onChange={setCertificateStatus} />
               <FormControlLabel
@@ -758,8 +751,8 @@ export const Users = () => {
         </Box>
         {showMergeDialog && (
           <MergeUsersDialog
-            onClose={handleMergeCancel}
-            onSuccess={handleMergeSuccess}
+            onClose={handleMerge}
+            onSuccess={handleMerge}
             profileId1={selected[0]}
             profileId2={selected[1]}
           />
