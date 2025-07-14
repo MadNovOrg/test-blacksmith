@@ -3,12 +3,18 @@ table:
   schema: public
 configuration:
   column_config:
+    course_id:
+      custom_name: courseId
     reserved_balance:
       custom_name: reservedBalance
   custom_column_names:
+    course_id: courseId
     reserved_balance: reservedBalance
   custom_root_fields: {}
 object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
   - name: organization
     using:
       foreign_key_constraint_on: org_id
