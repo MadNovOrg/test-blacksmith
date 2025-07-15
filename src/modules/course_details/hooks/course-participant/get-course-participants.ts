@@ -33,6 +33,7 @@ export const GET_COURSE_PARTICIPANTS = gql`
   ${ORDER}
   ${CERTIFICATE}
   ${CERTIFICATE_CHANGELOG}
+
   query CourseParticipants(
     $limit: Int
     $offset: Int
@@ -49,42 +50,15 @@ export const GET_COURSE_PARTICIPANTS = gql`
     ) {
       id
       attended
-      profile {
-        id
-        fullName
-        avatar
-        archived
-        email
-        course_evaluation_answers_aggregate(
-          where: { courseId: { _eq: $courseId } }
-        ) {
-          aggregate {
-            count
-          }
-        }
-        contactDetails
-        organizations {
-          organization {
-            id
-            name
-          }
-        }
-      }
-      invoiceID
       bookingDate
-      go1EnrolmentProgress
-      go1EnrolmentStarted
-      go1EnrolmentStatus
-      grade
-      healthSafetyConsent
       certificate {
         ...Certificate
       }
+      certificateChanges(order_by: { createdAt: desc }) {
+        ...CertificateChangelog
+      }
       completed
       completed_evaluation
-      order @include(if: $withOrder) {
-        ...Order
-      }
       course {
         ...Course
         accreditedBy
@@ -93,14 +67,43 @@ export const GET_COURSE_PARTICIPANTS = gql`
           strategyName
         }
         organization {
-          name
           id
+          name
+        }
+        resourcePacksType
+      }
+      go1EnrolmentProgress
+      go1EnrolmentStarted
+      go1EnrolmentStatus
+      grade
+      healthSafetyConsent
+      invoiceID
+      order @include(if: $withOrder) {
+        ...Order
+      }
+      profile {
+        id
+        fullName
+        avatar
+        archived
+        email
+        contactDetails
+        course_evaluation_answers_aggregate(
+          where: { courseId: { _eq: $courseId } }
+        ) {
+          aggregate {
+            count
+          }
+        }
+        organizations {
+          organization {
+            id
+            name
+          }
         }
       }
-      certificateChanges(order_by: { createdAt: desc }) {
-        ...CertificateChangelog
-      }
     }
+
     courseParticipantsAggregation: course_participant_aggregate(where: $where) {
       aggregate {
         count

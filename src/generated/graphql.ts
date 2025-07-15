@@ -31556,6 +31556,8 @@ export type Go1_History_Events_Updates = {
 /** Organization's users Go1 licenses */
 export type Go1_Licenses = {
   __typename?: 'go1_licenses';
+  /** An object relationship */
+  course?: Maybe<Course>;
   courseId?: Maybe<Scalars['Int']>;
   enrolledOn: Scalars['timestamptz'];
   expireDate: Scalars['timestamptz'];
@@ -31567,6 +31569,8 @@ export type Go1_Licenses = {
   orgId: Scalars['uuid'];
   /** An object relationship */
   organization: Organization;
+  /** An object relationship */
+  profile: Profile;
   profileId: Scalars['uuid'];
 };
 
@@ -31669,6 +31673,7 @@ export type Go1_Licenses_Bool_Exp = {
   _and?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
   _not?: InputMaybe<Go1_Licenses_Bool_Exp>;
   _or?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   enrolledOn?: InputMaybe<Timestamptz_Comparison_Exp>;
   expireDate?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -31677,6 +31682,7 @@ export type Go1_Licenses_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   orgId?: InputMaybe<Uuid_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
+  profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
@@ -31694,6 +31700,9 @@ export type Go1_Licenses_History = {
   balance: Scalars['Int'];
   captured_at: Scalars['timestamptz'];
   change: Scalars['Int'];
+  /** An object relationship */
+  course?: Maybe<Course>;
+  courseId?: Maybe<Scalars['Int']>;
   event: Go1_History_Events_Enum;
   id: Scalars['uuid'];
   org_id: Scalars['uuid'];
@@ -31782,6 +31791,7 @@ export type Go1_Licenses_History_Avg_Fields = {
   __typename?: 'go1_licenses_history_avg_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -31789,6 +31799,7 @@ export type Go1_Licenses_History_Avg_Fields = {
 export type Go1_Licenses_History_Avg_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -31800,6 +31811,8 @@ export type Go1_Licenses_History_Bool_Exp = {
   balance?: InputMaybe<Int_Comparison_Exp>;
   captured_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   change?: InputMaybe<Int_Comparison_Exp>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
   event?: InputMaybe<Go1_History_Events_Enum_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   org_id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -31833,6 +31846,7 @@ export type Go1_Licenses_History_Delete_Key_Input = {
 export type Go1_Licenses_History_Inc_Input = {
   balance?: InputMaybe<Scalars['Int']>;
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   reservedBalance?: InputMaybe<Scalars['Int']>;
 };
 
@@ -31841,6 +31855,8 @@ export type Go1_Licenses_History_Insert_Input = {
   balance?: InputMaybe<Scalars['Int']>;
   captured_at?: InputMaybe<Scalars['timestamptz']>;
   change?: InputMaybe<Scalars['Int']>;
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  courseId?: InputMaybe<Scalars['Int']>;
   event?: InputMaybe<Go1_History_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
@@ -31855,6 +31871,7 @@ export type Go1_Licenses_History_Max_Fields = {
   balance?: Maybe<Scalars['Int']>;
   captured_at?: Maybe<Scalars['timestamptz']>;
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   org_id?: Maybe<Scalars['uuid']>;
   reservedBalance?: Maybe<Scalars['Int']>;
@@ -31865,6 +31882,7 @@ export type Go1_Licenses_History_Max_Order_By = {
   balance?: InputMaybe<Order_By>;
   captured_at?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
@@ -31876,6 +31894,7 @@ export type Go1_Licenses_History_Min_Fields = {
   balance?: Maybe<Scalars['Int']>;
   captured_at?: Maybe<Scalars['timestamptz']>;
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   org_id?: Maybe<Scalars['uuid']>;
   reservedBalance?: Maybe<Scalars['Int']>;
@@ -31886,6 +31905,7 @@ export type Go1_Licenses_History_Min_Order_By = {
   balance?: InputMaybe<Order_By>;
   captured_at?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
@@ -31912,6 +31932,8 @@ export type Go1_Licenses_History_Order_By = {
   balance?: InputMaybe<Order_By>;
   captured_at?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  course?: InputMaybe<Course_Order_By>;
+  courseId?: InputMaybe<Order_By>;
   event?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
@@ -31939,6 +31961,8 @@ export enum Go1_Licenses_History_Select_Column {
   /** column name */
   Change = 'change',
   /** column name */
+  CourseId = 'courseId',
+  /** column name */
   Event = 'event',
   /** column name */
   Id = 'id',
@@ -31955,6 +31979,7 @@ export type Go1_Licenses_History_Set_Input = {
   balance?: InputMaybe<Scalars['Int']>;
   captured_at?: InputMaybe<Scalars['timestamptz']>;
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   event?: InputMaybe<Go1_History_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
@@ -31967,6 +31992,7 @@ export type Go1_Licenses_History_Stddev_Fields = {
   __typename?: 'go1_licenses_history_stddev_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -31974,6 +32000,7 @@ export type Go1_Licenses_History_Stddev_Fields = {
 export type Go1_Licenses_History_Stddev_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -31982,6 +32009,7 @@ export type Go1_Licenses_History_Stddev_Pop_Fields = {
   __typename?: 'go1_licenses_history_stddev_pop_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -31989,6 +32017,7 @@ export type Go1_Licenses_History_Stddev_Pop_Fields = {
 export type Go1_Licenses_History_Stddev_Pop_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -31997,6 +32026,7 @@ export type Go1_Licenses_History_Stddev_Samp_Fields = {
   __typename?: 'go1_licenses_history_stddev_samp_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -32004,6 +32034,7 @@ export type Go1_Licenses_History_Stddev_Samp_Fields = {
 export type Go1_Licenses_History_Stddev_Samp_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -32020,6 +32051,7 @@ export type Go1_Licenses_History_Stream_Cursor_Value_Input = {
   balance?: InputMaybe<Scalars['Int']>;
   captured_at?: InputMaybe<Scalars['timestamptz']>;
   change?: InputMaybe<Scalars['Int']>;
+  courseId?: InputMaybe<Scalars['Int']>;
   event?: InputMaybe<Go1_History_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
@@ -32032,6 +32064,7 @@ export type Go1_Licenses_History_Sum_Fields = {
   __typename?: 'go1_licenses_history_sum_fields';
   balance?: Maybe<Scalars['Int']>;
   change?: Maybe<Scalars['Int']>;
+  courseId?: Maybe<Scalars['Int']>;
   reservedBalance?: Maybe<Scalars['Int']>;
 };
 
@@ -32039,6 +32072,7 @@ export type Go1_Licenses_History_Sum_Fields = {
 export type Go1_Licenses_History_Sum_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -32050,6 +32084,8 @@ export enum Go1_Licenses_History_Update_Column {
   CapturedAt = 'captured_at',
   /** column name */
   Change = 'change',
+  /** column name */
+  CourseId = 'courseId',
   /** column name */
   Event = 'event',
   /** column name */
@@ -32086,6 +32122,7 @@ export type Go1_Licenses_History_Var_Pop_Fields = {
   __typename?: 'go1_licenses_history_var_pop_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -32093,6 +32130,7 @@ export type Go1_Licenses_History_Var_Pop_Fields = {
 export type Go1_Licenses_History_Var_Pop_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -32101,6 +32139,7 @@ export type Go1_Licenses_History_Var_Samp_Fields = {
   __typename?: 'go1_licenses_history_var_samp_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -32108,6 +32147,7 @@ export type Go1_Licenses_History_Var_Samp_Fields = {
 export type Go1_Licenses_History_Var_Samp_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -32116,6 +32156,7 @@ export type Go1_Licenses_History_Variance_Fields = {
   __typename?: 'go1_licenses_history_variance_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  courseId?: Maybe<Scalars['Float']>;
   reservedBalance?: Maybe<Scalars['Float']>;
 };
 
@@ -32123,6 +32164,7 @@ export type Go1_Licenses_History_Variance_Fields = {
 export type Go1_Licenses_History_Variance_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
 
@@ -32133,6 +32175,7 @@ export type Go1_Licenses_Inc_Input = {
 
 /** input type for inserting data into table "go1_licenses" */
 export type Go1_Licenses_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
   enrolledOn?: InputMaybe<Scalars['timestamptz']>;
   expireDate?: InputMaybe<Scalars['timestamptz']>;
@@ -32140,6 +32183,7 @@ export type Go1_Licenses_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   orgId?: InputMaybe<Scalars['uuid']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
+  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
 };
 
@@ -32203,6 +32247,7 @@ export type Go1_Licenses_On_Conflict = {
 
 /** Ordering options when selecting data from "go1_licenses". */
 export type Go1_Licenses_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
   enrolledOn?: InputMaybe<Order_By>;
   expireDate?: InputMaybe<Order_By>;
@@ -32210,6 +32255,7 @@ export type Go1_Licenses_Order_By = {
   id?: InputMaybe<Order_By>;
   orgId?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
 };
 
@@ -70136,7 +70182,7 @@ export type CourseParticipantsQueryVariables = Exact<{
 }>;
 
 
-export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentProgress?: any | null, go1EnrolmentStarted: boolean, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, completed: boolean, completed_evaluation?: boolean | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, course_evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: Certificate_Status_Enum | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null } | null, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, is_tender: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', name: string, id: any } | null }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }> }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, bookingDate?: any | null, completed: boolean, completed_evaluation?: boolean | null, go1EnrolmentProgress?: any | null, go1EnrolmentStarted: boolean, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, healthSafetyConsent: boolean, invoiceID?: any | null, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: Certificate_Status_Enum | null, legacyCourseCode?: string | null, blendedLearning?: boolean | null, reaccreditation?: boolean | null, courseAccreditedBy?: Accreditors_Enum | null } | null, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum }>, course: { __typename?: 'course', accreditedBy: Accreditors_Enum, resourcePacksType?: Resource_Packs_Type_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, is_tender: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, bildStrategies: Array<{ __typename?: 'course_bild_strategy', id: any, strategyName: string }>, organization?: { __typename?: 'organization', id: any, name: string } | null }, order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null } | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, course_evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> } }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
 export type CourseParticipantByPkQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -70287,7 +70333,6 @@ export type NotifyCourseEditMutation = { __typename?: 'mutation_root', notifyCou
 export type UpdateCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
   courseInput: Course_Set_Input;
-  exceptions?: InputMaybe<Array<Course_Exception_Enum> | Course_Exception_Enum>;
   exceptionsInput?: InputMaybe<Array<Course_Exceptions_Insert_Input> | Course_Exceptions_Insert_Input>;
   orderInput: Order_Set_Input;
   ordersInsertInput?: InputMaybe<Array<Course_Order_Insert_Input> | Course_Order_Insert_Input>;

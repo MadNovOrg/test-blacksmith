@@ -38,12 +38,11 @@ export type Base = {
 
 export type Course = {
   accreditedBy: Accreditors_Enum
+  accountCode?: string
   aolCostOfCourse?: number
   aolCountry?: string
-  accountCode?: string
   aolRegion?: string
-  // TODO: Delete this after Arlo migration
-  arloReferenceId?: string
+  arloReferenceId?: string // TODO: Delete this after Arlo migration
   attendeesCount?: { aggregate: { count: number } }
   bildModules?: Array<Course_Bild_Module>
   bildStrategies: Array<{ strategyName: string }>
@@ -62,6 +61,7 @@ export type Course = {
   }
   certificateCount?: { aggregate: { count: number } }
   conversion: boolean
+  course_code: string
   courseExceptions: {
     exception: Course_Exception_Enum
   }[]
@@ -73,7 +73,6 @@ export type Course = {
       bookingContactProfileId?: string | null
     }
   }[]
-  course_code: string
   coursesReservedLicenses: number
   createdAt: string
   createdById?: string
