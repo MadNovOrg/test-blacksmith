@@ -334,7 +334,6 @@ export enum TrainerRoleTypeName {
   PRINCIPAL = 'principal',
   SENIOR = 'senior',
   SENIOR_ASSIST = 'senior-assist',
-  SPECIAL_AGREEMENT_AOL = 'special-agreement-aol',
   TRAINER_ETA = 'trainer-eta',
 }
 
