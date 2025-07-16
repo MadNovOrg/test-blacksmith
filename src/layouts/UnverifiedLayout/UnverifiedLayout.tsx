@@ -5,7 +5,7 @@ export const UnverifiedLayout: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   return (
-    <Box bgcolor="grey.200" flex={1}>
+    <Box bgcolor="grey.200" flex={1} sx={{ height: '100%' }}>
       {children}
     </Box>
   )
