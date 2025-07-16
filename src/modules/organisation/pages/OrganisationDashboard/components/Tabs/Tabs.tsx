@@ -134,6 +134,11 @@ export const Tabs: FC<Props> = ({ organization }) => {
   useEffect(() => {
     const currentSearchParams = new URLSearchParams(location.search)
     const urlTab = currentSearchParams.get('tab') as OrgDashboardTabs
+
+    if (urlTab) {
+      setSearchParams({ tab: urlTab }, { replace: true })
+    }
+
     const isPlaywright = Boolean(currentSearchParams.get('e2e'))
 
     const isPopNavigation = navigationType === 'POP'
@@ -153,13 +158,9 @@ export const Tabs: FC<Props> = ({ organization }) => {
 
     if (!isTabChanged) return
 
-    if (selectedTab === OrgDashboardTabs.INDIVIDUALS) {
-      currentSearchParams.set('tab', selectedTab)
-      setSearchParams(currentSearchParams)
-    } else {
-      setSearchParams({ tab: selectedTab })
-    }
+    setSearchParams({ tab: selectedTab })
   }, [selectedTab, setSelectedTab, setSearchParams, navigationType, navigate])
+
   const tabToDisplay = () => {
     if (selectedTab === OrgDashboardTabs.AFFILIATED && !showAffiliatedOrgsTab) {
       return OrgDashboardTabs.OVERVIEW
