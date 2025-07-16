@@ -534,10 +534,7 @@ export const ICMCourseBuilder: React.FC<
             {t(
               'pages.trainer-base.create-course.new-course.time-commitment-message',
               {
-                hours: Math.max(
-                  minimumTimeCommitment,
-                  Math.ceil((estimatedDurationRef.current ?? 0) / 60),
-                ),
+                hours: minimumTimeCommitment,
               },
             )}
             {editMode ? (
