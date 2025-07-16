@@ -3,7 +3,12 @@ import { Tab } from '@mui/material'
 import { t } from 'i18next'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { FC, useEffect, useMemo, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import {
+  useNavigate,
+  useNavigationType,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
@@ -94,6 +99,9 @@ export const Tabs: FC<Props> = ({ organization }) => {
     },
   } = useAuth()
   const { id } = useParams()
+  const navigationType = useNavigationType()
+  const navigate = useNavigate()
+
   const [searchParams, setSearchParams] = useSearchParams()
   const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
   const [selectedTab, setSelectedTab] = useState<OrgDashboardTabs>(
@@ -124,9 +132,26 @@ export const Tabs: FC<Props> = ({ organization }) => {
   })
 
   useEffect(() => {
-    const currentSearchParams = new URLSearchParams(searchParams)
+    const currentSearchParams = new URLSearchParams(location.search)
+    const urlTab = currentSearchParams.get('tab') as OrgDashboardTabs
+    const isPlaywright = Boolean(currentSearchParams.get('e2e'))
 
-    if (selectedTab === currentSearchParams.get('tab')) return
+    const isPopNavigation = navigationType === 'POP'
+    const isTabChanged = urlTab !== selectedTab
+
+    if (isPopNavigation && !isPlaywright) {
+      if (!urlTab) {
+        navigate(-1)
+        return
+      }
+
+      if (isTabChanged) {
+        setSelectedTab(urlTab)
+      }
+      return
+    }
+
+    if (!isTabChanged) return
 
     if (selectedTab === OrgDashboardTabs.INDIVIDUALS) {
       currentSearchParams.set('tab', selectedTab)
@@ -134,8 +159,7 @@ export const Tabs: FC<Props> = ({ organization }) => {
     } else {
       setSearchParams({ tab: selectedTab })
     }
-  }, [selectedTab, setSearchParams, searchParams])
-
+  }, [selectedTab, setSelectedTab, setSearchParams, navigationType, navigate])
   const tabToDisplay = () => {
     if (selectedTab === OrgDashboardTabs.AFFILIATED && !showAffiliatedOrgsTab) {
       return OrgDashboardTabs.OVERVIEW

@@ -346,7 +346,7 @@ export class IndividualOrganisationPage extends BasePage {
     )
   }
   async goto(id: string): Promise<void> {
-    await super.goto(`organisations/${id}`)
+    await super.goto(`organisations/${id}?e2e=true`)
   }
 
   async checkOrganisationTitle(orgName: string) {
