@@ -136,7 +136,8 @@ export const Tabs: FC<Props> = ({ organization }) => {
     const urlTab = currentSearchParams.get('tab') as OrgDashboardTabs
 
     if (urlTab) {
-      setSearchParams({ tab: urlTab }, { replace: true })
+      currentSearchParams.set('tab', urlTab)
+      setSearchParams(currentSearchParams, { replace: true })
     }
 
     const isPlaywright = Boolean(currentSearchParams.get('e2e'))
@@ -158,7 +159,7 @@ export const Tabs: FC<Props> = ({ organization }) => {
 
     if (!isTabChanged) return
 
-    setSearchParams({ tab: selectedTab })
+    setSearchParams({ ...currentSearchParams, tab: selectedTab })
   }, [selectedTab, setSelectedTab, setSearchParams, navigationType, navigate])
 
   const tabToDisplay = () => {
