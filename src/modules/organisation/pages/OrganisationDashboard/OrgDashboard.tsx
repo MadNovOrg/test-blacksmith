@@ -1,3 +1,4 @@
+import InsightsIcon from '@mui/icons-material/Insights'
 import {
   Alert,
   Box,
@@ -7,6 +8,7 @@ import {
   Typography,
   Link,
 } from '@mui/material'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 import React, { useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
@@ -40,6 +42,19 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const isAustraliaRegion = acl.isAustralia()
+  const externalDashboardUrlEnabled = useFeatureFlagEnabled(
+    'external-dashboard-url-enabled',
+  )
+
+  const showExternalDashboardUrl = useMemo(
+    () =>
+      externalDashboardUrlEnabled &&
+      (acl.isAdmin() || acl.isOrgAdmin()) &&
+      id !== ALL_ORGS &&
+      id !== MERGE,
+    [id, externalDashboardUrlEnabled, acl],
+  )
+
   const {
     data: allOrgs,
     fetching,
@@ -49,6 +64,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
     profileId: profile?.id,
     showAll: acl.canViewAllOrganizations(),
     shallow: true,
+    withExternalDashboardUrl: showExternalDashboardUrl,
     withMainOrganisation: isAustraliaRegion,
     ...(id !== ALL_ORGS && id !== MERGE
       ? { withSpecificOrganisation: true, specificOrgId: id }
@@ -96,6 +112,32 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
     )
   }
 
+  const ExternalUrlLink = () => {
+    return (
+      <Box display={'flex'} gap={1} alignItems={'center'}>
+        <InsightsIcon
+          sx={{
+            color: `${theme.colors.teal[500]}`,
+          }}
+        />
+        <Link
+          href="https://google.com"
+          variant="h5"
+          rel="noopener"
+          target="_blank"
+          underline="always"
+          sx={{
+            fontSize: '1rem',
+            cursor: 'pointer',
+            color: `${theme.colors.teal[500]}`,
+          }}
+        >
+          {t('pages.org-details.insight-reports')}
+        </Link>
+      </Box>
+    )
+  }
+
   return (
     <FullHeightPageLayout bgcolor={theme.palette.grey[100]} pb={3}>
       <Helmet>
@@ -127,6 +169,9 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <Typography variant="h1" sx={{ padding: '32px 10px 10px 0px' }}>
                   {org?.name}
                 </Typography>
+                {org?.external_dashboard_url && showExternalDashboardUrl ? (
+                  <ExternalUrlLink />
+                ) : null}
                 {acl.isOrgAdmin(org?.id) && org?.main_organisation
                   ? affiliatedOrgAsPlainText(org.main_organisation.name)
                   : null}
@@ -146,6 +191,10 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                         {org?.main_organisation
                           ? affiliatedOrgBasedOnRole(org.main_organisation)
                           : null}
+                        {org?.external_dashboard_url &&
+                        showExternalDashboardUrl ? (
+                          <ExternalUrlLink />
+                        ) : null}
                       </Sticky>
                     </Box>
                   </Box>

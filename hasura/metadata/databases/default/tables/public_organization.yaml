@@ -373,6 +373,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -455,6 +456,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -483,6 +485,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -534,6 +537,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id

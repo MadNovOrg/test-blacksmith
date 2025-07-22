@@ -33,6 +33,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $withAggregateData: Boolean = false
     $withDfEEstablishment: Boolean = false
     $withMainOrganisation: Boolean = false
+    $withExternalDashboardUrl: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -43,6 +44,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
       dfeEstablishmentId
+      external_dashboard_url @include(if: $withExternalDashboardUrl)
       dfeEstablishment: organization_dfe_establishment
         @include(if: $withDfEEstablishment) {
         ...Establishment
@@ -78,6 +80,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
       ...ShallowOrganization @include(if: $shallow)
       ...Organization @include(if: $detailed)
       dfeEstablishmentId
+      external_dashboard_url @include(if: $withExternalDashboardUrl)
       dfeEstablishment: organization_dfe_establishment
         @include(if: $withDfEEstablishment) {
         ...Establishment
@@ -132,6 +135,7 @@ type UseOrgV2Input = {
   withSpecificOrganisation?: boolean
   withDfEEstablishment?: boolean
   withMainOrganisation?: boolean
+  withExternalDashboardUrl?: boolean
 }
 
 export default function useOrgV2({
@@ -151,6 +155,7 @@ export default function useOrgV2({
   withSpecificOrganisation,
   withDfEEstablishment = false,
   withMainOrganisation = true,
+  withExternalDashboardUrl,
 }: UseOrgV2Input) {
   let conditions: Organization_Bool_Exp = {}
   if (orgId !== ALL_ORGS) {
@@ -241,6 +246,7 @@ export default function useOrgV2({
       withMainOrganisation,
       withMembers,
       withSpecificOrganisation,
+      withExternalDashboardUrl,
     },
   })
 

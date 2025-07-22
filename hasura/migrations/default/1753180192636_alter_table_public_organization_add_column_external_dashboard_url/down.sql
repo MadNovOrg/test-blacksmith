@@ -1,0 +1,1 @@
+ALTER TABLE "public"."organization" DROP COLUMN IF EXISTS "external_dashboard_url";

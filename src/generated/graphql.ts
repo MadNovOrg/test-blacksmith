@@ -49520,6 +49520,7 @@ export type Organization = {
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
+  external_dashboard_url?: Maybe<Scalars['String']>;
   geoCoordinates?: Maybe<Scalars['point']>;
   go1Licenses?: Maybe<Scalars['Int']>;
   /** An array relationship */
@@ -49907,6 +49908,7 @@ export type Organization_Bool_Exp = {
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dfeEstablishmentId?: InputMaybe<Uuid_Comparison_Exp>;
+  external_dashboard_url?: InputMaybe<String_Comparison_Exp>;
   geoCoordinates?: InputMaybe<Point_Comparison_Exp>;
   go1Licenses?: InputMaybe<Int_Comparison_Exp>;
   go1LicensesHistory?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
@@ -49948,7 +49950,9 @@ export enum Organization_Constraint {
   /** unique or primary key constraint on columns "dfe_establishment_id" */
   OrganizationDfeEstablishmentIdKey = 'organization_dfe_establishment_id_key',
   /** unique or primary key constraint on columns "id" */
-  OrganizationPkey = 'organization_pkey'
+  OrganizationPkey = 'organization_pkey',
+  /** unique or primary key constraint on columns "urn" */
+  OrganizationUrnKey = 'organization_urn_key'
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
@@ -49996,6 +50000,7 @@ export type Organization_Insert_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
+  external_dashboard_url?: InputMaybe<Scalars['String']>;
   geoCoordinates?: InputMaybe<Scalars['point']>;
   go1Licenses?: InputMaybe<Scalars['Int']>;
   go1LicensesHistory?: InputMaybe<Go1_Licenses_History_Arr_Rel_Insert_Input>;
@@ -50321,6 +50326,7 @@ export type Organization_Max_Fields = {
   addressEachText?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
+  external_dashboard_url?: Maybe<Scalars['String']>;
   go1Licenses?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   main_organisation_id?: Maybe<Scalars['uuid']>;
@@ -50340,6 +50346,7 @@ export type Organization_Max_Fields = {
 export type Organization_Max_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
+  external_dashboard_url?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   main_organisation_id?: InputMaybe<Order_By>;
@@ -50665,6 +50672,7 @@ export type Organization_Min_Fields = {
   addressEachText?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: Maybe<Scalars['uuid']>;
+  external_dashboard_url?: Maybe<Scalars['String']>;
   go1Licenses?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   main_organisation_id?: Maybe<Scalars['uuid']>;
@@ -50684,6 +50692,7 @@ export type Organization_Min_Fields = {
 export type Organization_Min_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
+  external_dashboard_url?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   main_organisation_id?: InputMaybe<Order_By>;
@@ -50730,6 +50739,7 @@ export type Organization_Order_By = {
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dfeEstablishmentId?: InputMaybe<Order_By>;
+  external_dashboard_url?: InputMaybe<Order_By>;
   geoCoordinates?: InputMaybe<Order_By>;
   go1Licenses?: InputMaybe<Order_By>;
   go1LicensesHistory_aggregate?: InputMaybe<Go1_Licenses_History_Aggregate_Order_By>;
@@ -51146,6 +51156,8 @@ export enum Organization_Select_Column {
   /** column name */
   DfeEstablishmentId = 'dfeEstablishmentId',
   /** column name */
+  ExternalDashboardUrl = 'external_dashboard_url',
+  /** column name */
   GeoCoordinates = 'geoCoordinates',
   /** column name */
   Go1Licenses = 'go1Licenses',
@@ -51197,6 +51209,7 @@ export type Organization_Set_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
+  external_dashboard_url?: InputMaybe<Scalars['String']>;
   geoCoordinates?: InputMaybe<Scalars['point']>;
   go1Licenses?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -51269,6 +51282,7 @@ export type Organization_Stream_Cursor_Value_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dfeEstablishmentId?: InputMaybe<Scalars['uuid']>;
+  external_dashboard_url?: InputMaybe<Scalars['String']>;
   geoCoordinates?: InputMaybe<Scalars['point']>;
   go1Licenses?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -51472,6 +51486,8 @@ export enum Organization_Update_Column {
   CreatedAt = 'createdAt',
   /** column name */
   DfeEstablishmentId = 'dfeEstablishmentId',
+  /** column name */
+  ExternalDashboardUrl = 'external_dashboard_url',
   /** column name */
   GeoCoordinates = 'geoCoordinates',
   /** column name */
@@ -70743,10 +70759,11 @@ export type GetOrganisationDetailsQueryVariables = Exact<{
   withAggregateData?: InputMaybe<Scalars['Boolean']>;
   withDfEEstablishment?: InputMaybe<Scalars['Boolean']>;
   withMainOrganisation?: InputMaybe<Scalars['Boolean']>;
+  withExternalDashboardUrl?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', dfeEstablishmentId?: any | null, region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, dfeEstablishment?: { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, specificOrg: Array<{ __typename?: 'organization', dfeEstablishmentId?: any | null, region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, dfeEstablishment?: { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type GetOrganisationDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', dfeEstablishmentId?: any | null, external_dashboard_url?: string | null, region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, dfeEstablishment?: { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, specificOrg: Array<{ __typename?: 'organization', dfeEstablishmentId?: any | null, external_dashboard_url?: string | null, region?: string | null, id: any, name: string, address: any, tags?: any | null, contactDetails: any, attributes: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, dfeEstablishment?: { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null, members?: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity?: any | null } }>, members_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organization_courses_aggregate?: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null }, organization_orders_aggregate?: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } }>, orgsCount: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type AllOrganizationProfilesQueryVariables = Exact<{
   org_id: Scalars['uuid'];
