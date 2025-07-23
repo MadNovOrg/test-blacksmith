@@ -1,5 +1,11 @@
 # @teamteach/hub
 
+## 5.7.1
+
+### Patch Changes
+
+- 02e6c02: Fix orgs external links
+
 ## 5.7.0
 
 ### Minor Changes
