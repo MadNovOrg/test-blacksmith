@@ -1,5 +1,30 @@
 # @teamteach/hub
 
+## 5.7.0
+
+### Minor Changes
+
+- a443741: Prevent organization reserved licenses from dropping below zero when canceling a participant from a course whose exception has not yet been approved.
+- 9dd7af9: chore (TTHP-5257): urn unique constraint
+- e0cdc91: feat (TTHP-5325): organization external dashboard url
+
+### Patch Changes
+
+- 19c6cbf: Allow attendance status to be modified for 'not-attended' participants in non-blended learning courses on the UK app version, even after the course has been completed.
+- bfc3b9b: fix TTHP-5222 summary evaluation text overlap
+- d175901: fix (TTHP-5328): organisations navigation
+- ca78112: Correct the font size for the delete organization button.
+- e99fdfc: Shows the correct currencies in order filters for ANZ.
+- dcf7978: Correct the background on the account verification page.
+- 808db00: Correct the 'Completed' status chip for attendees' course.
+- 0b0094a: fix (TTHP-5221): connect anz wrong course level filters
+- 46fd848: Verify the approval status of exceptions pending for a course whenever the course is edited.
+- 59919a6: Informing users to correctly select an organization from the dropdown during the onboarding form process.
+- 1f37f93: Maintain a minimal time commitment on the course builder regardless of the estimated duration of selected modules.
+- 63b79fa: fix (TTHP-5062): back navigation while on organisations page
+- c52e86f: Remove special-agreement-aol trainer type
+- 9f2c551: Update the validation error message for the course form's price field.
+
 ## 5.6.0
 
 ### Minor Changes
