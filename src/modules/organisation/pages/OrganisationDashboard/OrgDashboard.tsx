@@ -121,7 +121,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
           }}
         />
         <Link
-          href="https://google.com"
+          href={org?.external_dashboard_url ?? ''}
           variant="h5"
           rel="noopener"
           target="_blank"
