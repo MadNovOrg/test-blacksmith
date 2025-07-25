@@ -100,7 +100,7 @@
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^5.10.0",
     "@swc/helpers": "~0.5.17",
-    "@types/chance": "1.1.6",
+    "@types/chance": "1.1.7",
     "@types/jest": "^29.5.14",
     "@types/react-select-country-list": "^2.2.3",
     "@urql/core": "3.1.1",
