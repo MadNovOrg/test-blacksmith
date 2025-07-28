@@ -519,6 +519,7 @@ enum Go1ChangeError {
   GENERIC_ERROR
   INVOICE_NOT_AUTHORIZED
   INVOICE_PAID
+  INVALID_INVOICE
 }
 
 enum ConfirmCreditCardPaymentError {

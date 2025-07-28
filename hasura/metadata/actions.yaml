@@ -828,6 +828,9 @@ custom_types:
         - description: null
           is_deprecated: null
           value: INVOICE_PAID
+        - description: null
+          is_deprecated: null
+          value: INVALID_INVOICE
     - name: ConfirmCreditCardPaymentError
       values:
         - description: null

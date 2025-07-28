@@ -1592,6 +1592,7 @@
         "error-LICENSES_ADDED-licenses": "There was an error adding licences, please try again later.",
         "error-LICENSES_REMOVED-licenses": "There was an error removing licences, please try again later.",
         "error-invoice-not-authorized": "Invoice must be authorised in Xero before issuing a refund.",
+        "error-invalid-invoice": "The entered invoice is invalid or does not exist.",
         "error-invoice-paid": "Unable to issue a credit note, the invoice has already been paid.",
         "form": {
           "add-radio-button-label": "Add",

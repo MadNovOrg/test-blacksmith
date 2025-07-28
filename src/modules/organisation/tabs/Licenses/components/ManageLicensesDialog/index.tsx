@@ -69,6 +69,10 @@ export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
           setErrorMessageLabel(`error-invoice-not-authorized`)
           break
         }
+        case Go1ChangeError.InvalidInvoice: {
+          setErrorMessageLabel(`error-invalid-invoice`)
+          break
+        }
 
         case Go1ChangeError.InvoicePaid: {
           setErrorMessageLabel(`error-invoice-paid`)

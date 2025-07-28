@@ -3141,6 +3141,7 @@ export type GetUserGo1EnrollmentsOutput = {
 
 export enum Go1ChangeError {
   GenericError = 'GENERIC_ERROR',
+  InvalidInvoice = 'INVALID_INVOICE',
   InvoiceNotAuthorized = 'INVOICE_NOT_AUTHORIZED',
   InvoicePaid = 'INVOICE_PAID'
 }
