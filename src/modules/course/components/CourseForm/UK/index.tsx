@@ -12,6 +12,7 @@ import useWorldCountries, {
 import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
+  Certificate_Status_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -196,6 +197,25 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     [isBild, isClosedCourse, isOpenCourse],
   )
 
+  const hasBildCertificates = useMemo(
+    () =>
+      (profile?.certificates ?? [])
+        .filter(
+          certificate =>
+            certificate.status === Certificate_Status_Enum.Active ||
+            Certificate_Status_Enum.ExpiringSoon,
+        )
+        .map(certificate => certificate.courseLevel)
+        .some(status =>
+          [
+            Course_Level_Enum.BildAdvancedTrainer,
+            Course_Level_Enum.BildIntermediateTrainer,
+            Course_Level_Enum.BildRegular,
+          ].includes(status),
+        ),
+    [profile?.certificates],
+  )
+
   const coursePrice = useCoursePrice({
     accreditedBy: values.accreditedBy,
     startDateTime: values.startDateTime ?? null,
@@ -365,6 +385,12 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           <GeneralDetailsSection
             disabledFields={disabledFields}
             isCreation={isCreation}
+            withBILD={
+              hasBildCertificates ||
+              acl.isTTAdmin() ||
+              acl.isTTOps() ||
+              acl.isSalesAdmin()
+            }
           />
           <AttendeesSection
             disabledFields={disabledFields}

@@ -277,6 +277,7 @@ export type Profile = {
     GetProfileByIdQuery['profile']
   >['certificates'][number] & {
     courseLevel: Course_Level_Enum
+    status: Certificate_Status_Enum
   })[]
   courses?: {
     grade?: Grade_Enum | null

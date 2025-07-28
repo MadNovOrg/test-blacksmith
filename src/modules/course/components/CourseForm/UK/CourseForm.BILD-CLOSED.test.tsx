@@ -335,7 +335,7 @@ describe('UkCourseForm - closed BILD', () => {
   )
 
   it("doesn't allow changing residing country", async () => {
-    renderForm({ type: Course_Type_Enum.Closed })
+    renderForm({ type: Course_Type_Enum.Closed, role: RoleName.TT_ADMIN })
     await selectBildCategory()
 
     expect(

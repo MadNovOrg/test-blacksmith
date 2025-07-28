@@ -26,6 +26,7 @@ export const GET_USER_PROFILE = gql`
         expiryDate
         grade
         isRevoked
+        status
       }
       courses {
         grade

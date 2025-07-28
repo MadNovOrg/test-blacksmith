@@ -1,6 +1,7 @@
 import { t } from 'i18next'
 
 import {
+  Certificate_Status_Enum,
   Course_Level_Enum,
   Course_Type_Enum,
   Grade_Enum,
@@ -75,6 +76,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -97,6 +107,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -119,6 +138,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -157,6 +185,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -179,6 +216,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -201,6 +247,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -230,6 +285,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -256,6 +320,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -286,6 +359,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -313,6 +395,15 @@ describe('UkCourseForm - indirect BILD', () => {
             },
           ],
           activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
         },
       })
     })
@@ -324,7 +415,7 @@ describe('UkCourseForm - indirect BILD', () => {
   })
 
   it("doesn't allow changing residing country", async () => {
-    renderForm({ type: Course_Type_Enum.Closed })
+    renderForm({ type: Course_Type_Enum.Closed, role: RoleName.TT_ADMIN })
     await selectBildCategory()
 
     expect(
