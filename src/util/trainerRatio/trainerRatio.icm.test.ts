@@ -378,11 +378,11 @@ describe('getRequiredTrainersV2', () => {
       criteria.type = Course_Type_Enum.Closed
     },
     {
-      below: 17,
-      equal: 18,
-      above: 19,
-      nextEqual: 36,
-      nextAbove: 37,
+      below: 11,
+      equal: 12,
+      above: 13,
+      nextEqual: 24,
+      nextAbove: 25,
     },
     {
       below: { min: 0, max: 0 },

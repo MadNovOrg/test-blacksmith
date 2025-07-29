@@ -126,7 +126,7 @@ const getTrainerRatio = (criteria: TrainerRatioCriteria): TrainerRatio => {
     if (type === Closed) return ratio(1, 24, 12)
   }
 
-  if (courseLevel === Level_1Bs) return ratio(0, 18, 18)
+  if (courseLevel === Level_1Bs) return ratio(0, 12, 12)
 
   return ratio(1, 24, 12)
 }
