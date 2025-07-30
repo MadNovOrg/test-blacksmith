@@ -6,19 +6,37 @@ ALTER TABLE "public"."org_resource_packs_pricing_changelog"
   ADD COLUMN "resource_packs_pricing_id" UUID NULL;
 
 -- Backfill org_id and resource_packs_pricing_id from updated_columns
+-- Update org_id only if organization ID exists
 UPDATE "public"."org_resource_packs_pricing_changelog"
-SET
-  org_id = COALESCE(
+SET org_id = COALESCE(
     (updated_columns->'new'->>'organisation_id')::uuid,
     (updated_columns->'old'->>'organisation_id')::uuid
-  ),
-  resource_packs_pricing_id = COALESCE(
+)
+WHERE org_id IS NULL
+  AND EXISTS (
+    SELECT 1
+    FROM organization o
+    WHERE o.id = COALESCE(
+      (updated_columns->'new'->>'organisation_id')::uuid,
+      (updated_columns->'old'->>'organisation_id')::uuid
+    )
+);
+
+-- Update resource_packs_pricing_id only if it exists in referenced table
+UPDATE "public"."org_resource_packs_pricing_changelog"
+SET resource_packs_pricing_id = COALESCE(
     (updated_columns->'new'->>'resource_packs_pricing_id')::uuid,
     (updated_columns->'old'->>'resource_packs_pricing_id')::uuid
-  )
-WHERE
-  org_id IS NULL
-  OR resource_packs_pricing_id IS NULL;
+)
+WHERE resource_packs_pricing_id IS NULL
+  AND EXISTS (
+    SELECT 1
+    FROM resource_packs_pricing rpp
+    WHERE rpp.id = COALESCE(
+      (updated_columns->'new'->>'resource_packs_pricing_id')::uuid,
+      (updated_columns->'old'->>'resource_packs_pricing_id')::uuid
+    )
+);
 
 -- Create index on org_id and resource_packs_pricing_id
 CREATE INDEX "org_resource_packs_pricing_idx"
