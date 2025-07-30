@@ -401,11 +401,11 @@ describe('getRequiredTrainersV2', () => {
       criteria.type = Course_Type_Enum.Indirect
     },
     {
-      below: 17,
-      equal: 18,
-      above: 19,
-      nextEqual: 30,
-      nextAbove: 31,
+      below: 11,
+      equal: 12,
+      above: 13,
+      nextEqual: 24,
+      nextAbove: 25,
     },
     {
       below: { min: 1, max: 1 },
