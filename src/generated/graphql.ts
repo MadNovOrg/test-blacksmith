@@ -2375,6 +2375,7 @@ export type DeleteUserOutput = {
   __typename?: 'DeleteUserOutput';
   courseIds?: Maybe<Scalars['String']>;
   error?: Maybe<DeleteUserError>;
+  hasGo1Account?: Maybe<Scalars['Boolean']>;
   success: Scalars['Boolean'];
 };
 
@@ -48529,6 +48530,7 @@ export type Org_Resource_Packs_Pricing = {
   /** An object relationship */
   resource_packs_pricing: Resource_Packs_Pricing;
   resource_packs_pricing_id: Scalars['uuid'];
+  synced_from_main: Scalars['Boolean'];
 };
 
 /** aggregated selection of "org_resource_packs_pricing" */
@@ -48539,7 +48541,23 @@ export type Org_Resource_Packs_Pricing_Aggregate = {
 };
 
 export type Org_Resource_Packs_Pricing_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_Or>;
   count?: InputMaybe<Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Count>;
+};
+
+export type Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Org_Resource_Packs_Pricing_Select_Column_Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Org_Resource_Packs_Pricing_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Org_Resource_Packs_Pricing_Select_Column_Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Org_Resource_Packs_Pricing_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
 };
 
 export type Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Count = {
@@ -48619,6 +48637,7 @@ export type Org_Resource_Packs_Pricing_Bool_Exp = {
   organization?: InputMaybe<Organization_Bool_Exp>;
   resource_packs_pricing?: InputMaybe<Resource_Packs_Pricing_Bool_Exp>;
   resource_packs_pricing_id?: InputMaybe<Uuid_Comparison_Exp>;
+  synced_from_main?: InputMaybe<Boolean_Comparison_Exp>;
 };
 
 /** Hold information regarding the changes for RP pricings for specific organisations */
@@ -48626,9 +48645,17 @@ export type Org_Resource_Packs_Pricing_Changelog = {
   __typename?: 'org_resource_packs_pricing_changelog';
   actioned_at: Scalars['timestamptz'];
   actioned_by?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  actioned_by_profile?: Maybe<Profile>;
   id: Scalars['uuid'];
   operation: Cud_Operation_Enum;
+  org_id?: Maybe<Scalars['uuid']>;
   org_resource_packs_pricing_id: Scalars['uuid'];
+  /** An object relationship */
+  organization?: Maybe<Organization>;
+  /** An object relationship */
+  resource_packs_pricing?: Maybe<Resource_Packs_Pricing>;
+  resource_packs_pricing_id?: Maybe<Scalars['uuid']>;
   updated_columns?: Maybe<Scalars['jsonb']>;
 };
 
@@ -48672,9 +48699,14 @@ export type Org_Resource_Packs_Pricing_Changelog_Bool_Exp = {
   _or?: InputMaybe<Array<Org_Resource_Packs_Pricing_Changelog_Bool_Exp>>;
   actioned_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   actioned_by?: InputMaybe<Uuid_Comparison_Exp>;
+  actioned_by_profile?: InputMaybe<Profile_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   operation?: InputMaybe<Cud_Operation_Enum_Comparison_Exp>;
+  org_id?: InputMaybe<Uuid_Comparison_Exp>;
   org_resource_packs_pricing_id?: InputMaybe<Uuid_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
+  resource_packs_pricing?: InputMaybe<Resource_Packs_Pricing_Bool_Exp>;
+  resource_packs_pricing_id?: InputMaybe<Uuid_Comparison_Exp>;
   updated_columns?: InputMaybe<Jsonb_Comparison_Exp>;
 };
 
@@ -48703,9 +48735,14 @@ export type Org_Resource_Packs_Pricing_Changelog_Delete_Key_Input = {
 export type Org_Resource_Packs_Pricing_Changelog_Insert_Input = {
   actioned_at?: InputMaybe<Scalars['timestamptz']>;
   actioned_by?: InputMaybe<Scalars['uuid']>;
+  actioned_by_profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['uuid']>;
   operation?: InputMaybe<Cud_Operation_Enum>;
+  org_id?: InputMaybe<Scalars['uuid']>;
   org_resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
+  resource_packs_pricing?: InputMaybe<Resource_Packs_Pricing_Obj_Rel_Insert_Input>;
+  resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
   updated_columns?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -48715,7 +48752,9 @@ export type Org_Resource_Packs_Pricing_Changelog_Max_Fields = {
   actioned_at?: Maybe<Scalars['timestamptz']>;
   actioned_by?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
   org_resource_packs_pricing_id?: Maybe<Scalars['uuid']>;
+  resource_packs_pricing_id?: Maybe<Scalars['uuid']>;
 };
 
 /** aggregate min on columns */
@@ -48724,7 +48763,9 @@ export type Org_Resource_Packs_Pricing_Changelog_Min_Fields = {
   actioned_at?: Maybe<Scalars['timestamptz']>;
   actioned_by?: Maybe<Scalars['uuid']>;
   id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
   org_resource_packs_pricing_id?: Maybe<Scalars['uuid']>;
+  resource_packs_pricing_id?: Maybe<Scalars['uuid']>;
 };
 
 /** response of any mutation on the table "org_resource_packs_pricing_changelog" */
@@ -48747,9 +48788,14 @@ export type Org_Resource_Packs_Pricing_Changelog_On_Conflict = {
 export type Org_Resource_Packs_Pricing_Changelog_Order_By = {
   actioned_at?: InputMaybe<Order_By>;
   actioned_by?: InputMaybe<Order_By>;
+  actioned_by_profile?: InputMaybe<Profile_Order_By>;
   id?: InputMaybe<Order_By>;
   operation?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
   org_resource_packs_pricing_id?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
+  resource_packs_pricing?: InputMaybe<Resource_Packs_Pricing_Order_By>;
+  resource_packs_pricing_id?: InputMaybe<Order_By>;
   updated_columns?: InputMaybe<Order_By>;
 };
 
@@ -48774,7 +48820,11 @@ export enum Org_Resource_Packs_Pricing_Changelog_Select_Column {
   /** column name */
   Operation = 'operation',
   /** column name */
+  OrgId = 'org_id',
+  /** column name */
   OrgResourcePacksPricingId = 'org_resource_packs_pricing_id',
+  /** column name */
+  ResourcePacksPricingId = 'resource_packs_pricing_id',
   /** column name */
   UpdatedColumns = 'updated_columns'
 }
@@ -48785,7 +48835,9 @@ export type Org_Resource_Packs_Pricing_Changelog_Set_Input = {
   actioned_by?: InputMaybe<Scalars['uuid']>;
   id?: InputMaybe<Scalars['uuid']>;
   operation?: InputMaybe<Cud_Operation_Enum>;
+  org_id?: InputMaybe<Scalars['uuid']>;
   org_resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
+  resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
   updated_columns?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -48803,7 +48855,9 @@ export type Org_Resource_Packs_Pricing_Changelog_Stream_Cursor_Value_Input = {
   actioned_by?: InputMaybe<Scalars['uuid']>;
   id?: InputMaybe<Scalars['uuid']>;
   operation?: InputMaybe<Cud_Operation_Enum>;
+  org_id?: InputMaybe<Scalars['uuid']>;
   org_resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
+  resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
   updated_columns?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -48818,7 +48872,11 @@ export enum Org_Resource_Packs_Pricing_Changelog_Update_Column {
   /** column name */
   Operation = 'operation',
   /** column name */
+  OrgId = 'org_id',
+  /** column name */
   OrgResourcePacksPricingId = 'org_resource_packs_pricing_id',
+  /** column name */
+  ResourcePacksPricingId = 'resource_packs_pricing_id',
   /** column name */
   UpdatedColumns = 'updated_columns'
 }
@@ -48863,6 +48921,7 @@ export type Org_Resource_Packs_Pricing_Insert_Input = {
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   resource_packs_pricing?: InputMaybe<Resource_Packs_Pricing_Obj_Rel_Insert_Input>;
   resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
+  synced_from_main?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** aggregate max on columns */
@@ -48928,6 +48987,7 @@ export type Org_Resource_Packs_Pricing_Order_By = {
   organization?: InputMaybe<Organization_Order_By>;
   resource_packs_pricing?: InputMaybe<Resource_Packs_Pricing_Order_By>;
   resource_packs_pricing_id?: InputMaybe<Order_By>;
+  synced_from_main?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: org_resource_packs_pricing */
@@ -48946,7 +49006,21 @@ export enum Org_Resource_Packs_Pricing_Select_Column {
   /** column name */
   OrganisationId = 'organisation_id',
   /** column name */
-  ResourcePacksPricingId = 'resource_packs_pricing_id'
+  ResourcePacksPricingId = 'resource_packs_pricing_id',
+  /** column name */
+  SyncedFromMain = 'synced_from_main'
+}
+
+/** select "org_resource_packs_pricing_aggregate_bool_exp_bool_and_arguments_columns" columns of table "org_resource_packs_pricing" */
+export enum Org_Resource_Packs_Pricing_Select_Column_Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  SyncedFromMain = 'synced_from_main'
+}
+
+/** select "org_resource_packs_pricing_aggregate_bool_exp_bool_or_arguments_columns" columns of table "org_resource_packs_pricing" */
+export enum Org_Resource_Packs_Pricing_Select_Column_Org_Resource_Packs_Pricing_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  SyncedFromMain = 'synced_from_main'
 }
 
 /** input type for updating data in table "org_resource_packs_pricing" */
@@ -48956,6 +49030,7 @@ export type Org_Resource_Packs_Pricing_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   organisation_id?: InputMaybe<Scalars['uuid']>;
   resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
+  synced_from_main?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** aggregate stddev on columns */
@@ -49012,6 +49087,7 @@ export type Org_Resource_Packs_Pricing_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   organisation_id?: InputMaybe<Scalars['uuid']>;
   resource_packs_pricing_id?: InputMaybe<Scalars['uuid']>;
+  synced_from_main?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** aggregate sum on columns */
@@ -49038,7 +49114,9 @@ export enum Org_Resource_Packs_Pricing_Update_Column {
   /** column name */
   OrganisationId = 'organisation_id',
   /** column name */
-  ResourcePacksPricingId = 'resource_packs_pricing_id'
+  ResourcePacksPricingId = 'resource_packs_pricing_id',
+  /** column name */
+  SyncedFromMain = 'synced_from_main'
 }
 
 export type Org_Resource_Packs_Pricing_Updates = {
@@ -70782,8 +70860,9 @@ export type GetAllResourcePacksPricingsForCourseTypeQueryVariables = Exact<{
 export type GetAllResourcePacksPricingsForCourseTypeQuery = { __typename?: 'query_root', resource_packs_pricing: Array<{ __typename?: 'resource_packs_pricing', id: any, course_type: Course_Type_Enum, course_level: Course_Level_Enum, resource_packs_type: Resource_Packs_Type_Enum, resource_packs_delivery_type?: Resource_Packs_Delivery_Type_Enum | null, reaccred: boolean, AUD_price: any, NZD_price: any, org_resource_packs_pricings: Array<{ __typename?: 'org_resource_packs_pricing', id: any, AUD_price: any, NZD_price: any }> }> };
 
 export type ApplyMainOrgResourcePacksPricingsToAffiliatesMutationVariables = Exact<{
-  pricings: Array<Org_Resource_Packs_Pricing_Insert_Input> | Org_Resource_Packs_Pricing_Insert_Input;
   affiliatesIds: Array<Scalars['uuid']> | Scalars['uuid'];
+  pricings: Array<Org_Resource_Packs_Pricing_Insert_Input> | Org_Resource_Packs_Pricing_Insert_Input;
+  resourcePackPricingIdsForDefaultReset: Array<Scalars['uuid']> | Scalars['uuid'];
 }>;
 
 
@@ -70840,21 +70919,12 @@ export type OrgMembersQueryVariables = Exact<{
 
 export type OrgMembersQuery = { __typename?: 'query_root', members: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, lastActivity?: any | null, createdAt: any, go1Licenses: Array<{ __typename?: 'go1_licenses', expireDate: any }>, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: Certificate_Status_Enum | null, participant?: { __typename?: 'course_participant', certificateChanges: Array<{ __typename?: 'course_certificate_changelog', payload?: any | null }> } | null }> } }>, organization_member_aggregate?: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, single_organization_members_count: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
-export type SaveNewOrgResourcePacksPricingMutationVariables = Exact<{
+export type UpsertOrgResourcePacksPricingMutationVariables = Exact<{
   input: Org_Resource_Packs_Pricing_Insert_Input;
 }>;
 
 
-export type SaveNewOrgResourcePacksPricingMutation = { __typename?: 'mutation_root', insert_org_resource_packs_pricing_one?: { __typename?: 'org_resource_packs_pricing', id: any } | null };
-
-export type UpdateOrgResourcePacksPricingMutationVariables = Exact<{
-  orgResourcePacksPricingId: Scalars['uuid'];
-  aud_price: Scalars['numeric'];
-  nzd_price: Scalars['numeric'];
-}>;
-
-
-export type UpdateOrgResourcePacksPricingMutation = { __typename?: 'mutation_root', update_org_resource_packs_pricing_by_pk?: { __typename?: 'org_resource_packs_pricing', id: any, NZD_price: any, AUD_price: any } | null };
+export type UpsertOrgResourcePacksPricingMutation = { __typename?: 'mutation_root', insert_org_resource_packs_pricing_one?: { __typename?: 'org_resource_packs_pricing', id: any } | null };
 
 export type GetOrgResourcePacksPricingsByOrgIdQueryVariables = Exact<{
   organisation_id: Scalars['uuid'];
@@ -70994,6 +71064,16 @@ export type GetAllOrgResourcePacksHistoryQueryVariables = Exact<{
 
 
 export type GetAllOrgResourcePacksHistoryQuery = { __typename?: 'query_root', history: Array<{ __typename?: 'org_resource_packs_history', id: any, change: number, courseId?: number | null, created_at: any, event: Resource_Packs_Events_Enum, payload?: any | null, reservedBalance: number, resourcePacksType: Resource_Packs_Type_Enum, totalBalance: number, course?: { __typename?: 'course', id: number, code?: string | null, createdBy?: { __typename?: 'profile', id: any, fullName?: string | null } | null, schedule: Array<{ __typename?: 'course_schedule', start: any }> } | null }> };
+
+export type GetOrgResourcePacksPricingChangelogsQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+  resourcePacksPricingIds: Array<Scalars['uuid']> | Scalars['uuid'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetOrgResourcePacksPricingChangelogsQuery = { __typename?: 'query_root', changelogs: Array<{ __typename?: 'org_resource_packs_pricing_changelog', id: any, actioned_at: any, operation: Cud_Operation_Enum, updated_columns?: any | null, actioned_by_profile?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, fullName?: string | null } | null, resource_packs_pricing?: { __typename?: 'resource_packs_pricing', id: any, course_level: Course_Level_Enum, course_type: Course_Type_Enum, reaccred: boolean, resource_packs_delivery_type?: Resource_Packs_Delivery_Type_Enum | null, resource_packs_type: Resource_Packs_Type_Enum } | null }>, resourcePacksPricings: Array<{ __typename?: 'resource_packs_pricing', id: any, course_level: Course_Level_Enum, course_type: Course_Type_Enum, reaccred: boolean }>, totalChangelogs: { __typename?: 'org_resource_packs_pricing_changelog_aggregate', aggregate?: { __typename?: 'org_resource_packs_pricing_changelog_aggregate_fields', count: number } | null } };
 
 export type GetOrgResourcePacksHistoryQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;

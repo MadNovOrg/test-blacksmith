@@ -23,18 +23,19 @@ export type MinimalOrgResourcePacksPricing = {
 }
 
 export type ContextValue = {
-  main_organisation_id: string | null
-  fetching: boolean
-  refetch: () => void
-  groupedData: GroupedResourcePacksPricing[]
-  pricing: GroupedResourcePacksPricing | null
-  setSelectedPricing: (pricing: GroupedResourcePacksPricing | null) => void
-  error: CombinedError | undefined
-  orgResourcePacksPricings: MinimalOrgResourcePacksPricing[]
   affiliatesIds: string[]
-  fetchingAffiliatesIds: boolean
-  refetchAffiliatesIds: () => void
   differentPricesFromMain?: boolean
+  error: CombinedError | undefined
+  fetching: boolean
+  fetchingAffiliatesIds: boolean
+  groupedData: GroupedResourcePacksPricing[]
+  main_organisation_id: string | null
+  orgId: string
+  orgResourcePacksPricings: MinimalOrgResourcePacksPricing[]
+  pricing: GroupedResourcePacksPricing | null
+  refetch: () => void
+  refetchAffiliatesIds: () => void
+  setSelectedPricing: (pricing: GroupedResourcePacksPricing | null) => void
 }
 
 export const ResourcePacksPricingContext = React.createContext<
@@ -152,32 +153,34 @@ export const ResourcePacksPricingProvider: React.FC<
 
   const value = useMemo<ContextValue>(
     () => ({
-      main_organisation_id,
-      fetching,
-      refetch: refetchPricings,
-      groupedData: groupedPricings,
-      pricing,
-      setSelectedPricing,
-      error,
-      orgResourcePacksPricings: orgResourcePacksPricings ?? [],
-      differentPricesFromMain,
       affiliatesIds: affiliatesIds ?? [],
+      differentPricesFromMain,
+      error,
+      fetching,
       fetchingAffiliatesIds,
+      groupedData: groupedPricings,
+      main_organisation_id,
+      orgId: orgId ?? '',
+      orgResourcePacksPricings: orgResourcePacksPricings ?? [],
+      pricing,
+      refetch: refetchPricings,
       refetchAffiliatesIds,
+      setSelectedPricing,
     }),
     [
-      main_organisation_id,
-      fetching,
-      refetchPricings,
-      groupedPricings,
-      pricing,
-      setSelectedPricing,
-      error,
-      orgResourcePacksPricings,
-      differentPricesFromMain,
       affiliatesIds,
+      differentPricesFromMain,
+      error,
+      fetching,
       fetchingAffiliatesIds,
+      groupedPricings,
+      main_organisation_id,
+      orgId,
+      orgResourcePacksPricings,
+      pricing,
+      refetchPricings,
       refetchAffiliatesIds,
+      setSelectedPricing,
     ],
   )
 

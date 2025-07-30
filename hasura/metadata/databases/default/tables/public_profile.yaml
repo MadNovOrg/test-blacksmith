@@ -135,7 +135,7 @@ computed_fields:
       function:
         name: profile_full_name
         schema: public
-    comment: ""
+    comment: ''
   - name: givenName
     definition:
       function:

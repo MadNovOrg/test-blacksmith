@@ -146,19 +146,19 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
       refetch: vi.fn(),
     })
     useResourcePacksPricingContextMock.mockReturnValue({
-      orgResourcePacksPricings: pricings,
-      fetching: false,
-      refetch: vi.fn(),
-      main_organisation_id: null,
-      differentPricesFromMain: false,
-      groupedData: [],
-      pricing: null,
-      setSelectedPricing: vi.fn(),
-      error: undefined,
       affiliatesIds: affiliatesIds,
-      refetchAffiliatesIds: vi.fn(),
+      differentPricesFromMain: false,
+      error: undefined,
+      fetching: false,
       fetchingAffiliatesIds: false,
-    })
+      groupedData: [],
+      main_organisation_id: null,
+      orgResourcePacksPricings: pricings,
+      pricing: null,
+      refetch: vi.fn(),
+      refetchAffiliatesIds: vi.fn(),
+      setSelectedPricing: vi.fn(),
+    } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
     mockGetAllAffiliatedOrgIdsMock.mockReturnValue({
       data: affiliatesIds.map(id => ({
         id,
@@ -207,6 +207,7 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
             resourcePackPricings[0].org_resource_packs_pricings[0].AUD_price,
           NZD_price:
             resourcePackPricings[0].org_resource_packs_pricings[0].NZD_price,
+          synced_from_main: true,
         },
         {
           organisation_id: affiliatesIds[1],
@@ -215,8 +216,10 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
             resourcePackPricings[0].org_resource_packs_pricings[0].AUD_price,
           NZD_price:
             resourcePackPricings[0].org_resource_packs_pricings[0].NZD_price,
+          synced_from_main: true,
         },
       ],
+      resourcePackPricingIdsForDefaultReset: [resourcePackPricings[0].id],
     })
   })
 })

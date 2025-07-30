@@ -95,7 +95,7 @@ describe('component: OrgResourcePacksPricingCourseDetailsSection', () => {
         affiliatesIds: [],
         refetchAffiliatesIds: vi.fn(),
         fetchingAffiliatesIds: false,
-      })
+      } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
       const {
         result: {
           current: { t, _t },

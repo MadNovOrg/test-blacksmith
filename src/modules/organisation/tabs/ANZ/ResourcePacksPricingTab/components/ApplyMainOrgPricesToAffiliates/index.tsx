@@ -42,17 +42,21 @@ export const ApplyMainOrgRPPricingToAffiliates: React.FC = () => {
         orgResourcePacksPricings.map(
           pricing =>
             ({
-              organisation_id: affiliateId,
-              resource_packs_pricing_id: pricing.resource_packs_pricing_id,
               AUD_price: pricing.AUD_price,
               NZD_price: pricing.NZD_price,
+              organisation_id: affiliateId,
+              resource_packs_pricing_id: pricing.resource_packs_pricing_id,
+              synced_from_main: true,
             } as Org_Resource_Packs_Pricing_Insert_Input),
         ),
       )
 
       applyMainOrgRPPricingToAffiliates({
-        pricings: pricingsToInsert.flat(),
         affiliatesIds,
+        pricings: pricingsToInsert.flat(),
+        resourcePackPricingIdsForDefaultReset: orgResourcePacksPricings.map(
+          pricing => pricing.resource_packs_pricing_id,
+        ),
       }).then(() => {
         refetch()
       })

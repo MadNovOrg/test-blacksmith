@@ -27,10 +27,7 @@ import {
   Resource_Packs_Type_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import {
-  useSaveNewOrgResourcePacksPricing,
-  useUpdateOrgResourcePacksPricing,
-} from '@app/modules/organisation/hooks/useOrgResourcePacksPricing'
+import { useUpsertOrgResourcePacksPricing } from '@app/modules/organisation/hooks/useOrgResourcePacksPricing'
 import { CurrencySymbol } from '@app/util'
 
 import { useResourcePacksPricingContext } from '../../ResourcePacksPricingProvider/useResourcePacksPricingContext'
@@ -66,8 +63,7 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
   const { refetch, pricing, setSelectedPricing } =
     useResourcePacksPricingContext()
 
-  const [, updateOrgResourcePacksPricing] = useUpdateOrgResourcePacksPricing()
-  const [, saveNewOrgResourcePacksPricing] = useSaveNewOrgResourcePacksPricing()
+  const [, upsertOrgResourcePacksPricing] = useUpsertOrgResourcePacksPricing()
 
   const cols = useMemo(() => {
     return [
@@ -159,27 +155,13 @@ export const OrgResourcePacksPricingTable: React.FC = () => {
         label: validationErrors.map(error => error),
       })
     } else {
-      // check if the pricing already exists for the organisation
-      const existingOrgResourcePackPricingId = pricing?.values.find(
-        p => p.id === id,
-      )?.org_resource_packs_pricings[0]?.id
+      await upsertOrgResourcePacksPricing({
+        AUD_price: Number(tempResourcePackPricing.audPrice),
+        NZD_price: Number(tempResourcePackPricing.nzdPrice),
+        organisation_id: orgId,
+        resource_packs_pricing_id: id,
+      })
 
-      if (existingOrgResourcePackPricingId) {
-        await updateOrgResourcePacksPricing({
-          orgResourcePacksPricingId: existingOrgResourcePackPricingId,
-          aud_price: tempResourcePackPricing.audPrice,
-          nzd_price: tempResourcePackPricing.nzdPrice,
-        })
-      } else {
-        await saveNewOrgResourcePacksPricing({
-          input: {
-            organisation_id: orgId,
-            resource_packs_pricing_id: id,
-            AUD_price: tempResourcePackPricing.audPrice,
-            NZD_price: tempResourcePackPricing.nzdPrice,
-          },
-        })
-      }
       refetch()
       setSelectedPricing({
         ...pricing,

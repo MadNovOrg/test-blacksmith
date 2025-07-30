@@ -1,49 +1,42 @@
 import { gql, useMutation } from 'urql'
 
 import {
-  SaveNewOrgResourcePacksPricingMutation,
-  SaveNewOrgResourcePacksPricingMutationVariables,
-  UpdateOrgResourcePacksPricingMutation,
-  UpdateOrgResourcePacksPricingMutationVariables,
+  UpsertOrgResourcePacksPricingMutation,
+  UpsertOrgResourcePacksPricingMutationVariables,
 } from '@app/generated/graphql'
 
-export const SAVE_NEW_ORG_RESOURCE_PACKS_PRICING = gql`
-  mutation SaveNewOrgResourcePacksPricing(
+export const UPSERT_ORG_RESOURCE_PACKS_PRICING = gql`
+  mutation UpsertOrgResourcePacksPricing(
     $input: org_resource_packs_pricing_insert_input!
   ) {
-    insert_org_resource_packs_pricing_one(object: $input) {
-      id
-    }
-  }
-`
-
-export const UPDATE_ORG_RESOURCE_PACKS_PRICING = gql`
-  mutation UpdateOrgResourcePacksPricing(
-    $orgResourcePacksPricingId: uuid!
-    $aud_price: numeric!
-    $nzd_price: numeric!
-  ) {
-    update_org_resource_packs_pricing_by_pk(
-      pk_columns: { id: $orgResourcePacksPricingId }
-      _set: { AUD_price: $aud_price, NZD_price: $nzd_price }
+    insert_org_resource_packs_pricing_one(
+      object: $input
+      on_conflict: {
+        constraint: org_resource_packs_pricing_resource_packs_pricing_id_organi_key
+        update_columns: [AUD_price, NZD_price, synced_from_main]
+      }
     ) {
       id
-      NZD_price
-      AUD_price
     }
   }
 `
 
-export const useSaveNewOrgResourcePacksPricing = () => {
-  return useMutation<
-    SaveNewOrgResourcePacksPricingMutation,
-    SaveNewOrgResourcePacksPricingMutationVariables
-  >(SAVE_NEW_ORG_RESOURCE_PACKS_PRICING)
-}
+export const useUpsertOrgResourcePacksPricing = () => {
+  const [result, mutationFn] = useMutation<
+    UpsertOrgResourcePacksPricingMutation,
+    UpsertOrgResourcePacksPricingMutationVariables
+  >(UPSERT_ORG_RESOURCE_PACKS_PRICING)
 
-export const useUpdateOrgResourcePacksPricing = () => {
-  return useMutation<
-    UpdateOrgResourcePacksPricingMutation,
-    UpdateOrgResourcePacksPricingMutationVariables
-  >(UPDATE_ORG_RESOURCE_PACKS_PRICING)
+  const wrappedMutationFn = (
+    variables: UpsertOrgResourcePacksPricingMutationVariables['input'],
+  ) => {
+    return mutationFn({
+      input: {
+        ...variables,
+        synced_from_main: false,
+      },
+    })
+  }
+
+  return [result, wrappedMutationFn] as const
 }

@@ -38,19 +38,10 @@ const useResourcePacksPricingContextMock = vi.mocked(
   useResourcePacksPricingContext,
 )
 
-const saveNewOrgResourcePacksPricingMock = vi.fn().mockResolvedValue({
-  data: {
-    insert_org_resource_packs_pricing_one: {
-      id: chance.guid(),
-    },
-  },
-})
-const updateOrgResourcePacksPricingMock = vi.fn().mockResolvedValue({
+const upsertOrgResourcePacksPricingMock = vi.fn().mockResolvedValue({
   data: {
     update_org_resource_packs_pricing_by_pk: {
       id: chance.guid(),
-      NZD_price: 100,
-      AUD_price: 100,
     },
   },
 })
@@ -65,7 +56,7 @@ vi.mock(
     )
     return {
       ...actual,
-      useUpdateOrgResourcePacksPricing: () => [
+      useUpsertOrgResourcePacksPricing: () => [
         {
           fetching: false,
           data: {
@@ -75,21 +66,7 @@ vi.mock(
           },
           error: undefined,
         },
-        updateOrgResourcePacksPricingMock,
-      ],
-      useSaveNewOrgResourcePacksPricing: () => [
-        {
-          fetching: false,
-          data: {
-            update_org_resource_packs_pricing_by_pk: {
-              id: chance.guid(),
-              NZD_price: 100,
-              AUD_price: 100,
-            },
-          },
-          error: undefined,
-        },
-        saveNewOrgResourcePacksPricingMock,
+        upsertOrgResourcePacksPricingMock,
       ],
     }
   },
@@ -236,7 +213,7 @@ describe('component: OrgResourcePacksPricingsTable', () => {
       affiliatesIds: [],
       refetchAffiliatesIds: vi.fn(),
       fetchingAffiliatesIds: false,
-    })
+    } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
   })
 
   it('should render the OrgResourcePacksPricingsTable with the pricings', () => {
@@ -336,40 +313,6 @@ describe('component: OrgResourcePacksPricingsTable', () => {
     })
   })
 
-  it('should call saveNewOrgResourcePacksPricing if the org pricing did not exist', async () => {
-    setup()
-    const pricingToEdit = pricings[2] // This pricing has no org_resource_packs_pricings
-    const editButton = screen.getByTestId(`edit-pricing-${pricingToEdit.id}`)
-    expect(editButton).toBeInTheDocument()
-    await userEvent.click(editButton)
-
-    const saveButton = screen.getByTestId(`save-pricing-${pricingToEdit.id}`)
-    expect(saveButton).toBeInTheDocument()
-
-    const priceNZDInput = screen.getByTestId(
-      `edit-nzd-price-${pricingToEdit.id}`,
-    )
-    waitFor(() => {
-      expect(priceNZDInput).toBeVisible()
-    })
-    await userEvent.clear(priceNZDInput)
-    await userEvent.type(priceNZDInput, '100')
-    await userEvent.click(saveButton)
-
-    await waitFor(() => {
-      expect(saveNewOrgResourcePacksPricingMock).toHaveBeenCalled()
-      expect(saveNewOrgResourcePacksPricingMock).toHaveBeenCalledWith({
-        input: {
-          organisation_id: orgId,
-          resource_packs_pricing_id: pricingToEdit.id,
-          NZD_price: '100',
-          AUD_price: pricingToEdit.AUD_price.toFixed(2),
-        },
-      })
-      expect(refetchMock).toHaveBeenCalled()
-    })
-  })
-
   it('should call updateOrgResourcePacksPricing if the org pricing did exist', async () => {
     setup()
     const pricingToEdit = pricings[1] // This pricing has org_resource_packs_pricings
@@ -390,12 +333,13 @@ describe('component: OrgResourcePacksPricingsTable', () => {
     await userEvent.type(priceNZDInput, '100')
     await userEvent.click(saveButton)
 
-    waitFor(() => {
-      expect(updateOrgResourcePacksPricingMock).toHaveBeenCalledTimes(1)
-      expect(updateOrgResourcePacksPricingMock).toHaveBeenCalledWith({
-        id: pricingToEdit.org_resource_packs_pricings[0].id,
-        AUD_price: pricingToEdit.AUD_price,
+    await waitFor(() => {
+      expect(upsertOrgResourcePacksPricingMock).toHaveBeenCalledTimes(1)
+      expect(upsertOrgResourcePacksPricingMock).toHaveBeenCalledWith({
+        AUD_price: pricingToEdit.org_resource_packs_pricings[0].AUD_price,
         NZD_price: 100,
+        organisation_id: orgId,
+        resource_packs_pricing_id: pricingToEdit.id,
       })
       expect(refetchMock).toHaveBeenCalled()
     })

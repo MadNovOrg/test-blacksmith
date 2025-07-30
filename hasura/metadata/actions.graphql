@@ -1415,9 +1415,10 @@ type MergeUserOutput {
 }
 
 type DeleteUserOutput {
-  success: Boolean!
-  error: DeleteUserError
   courseIds: String
+  error: DeleteUserError
+  hasGo1Account: Boolean
+  success: Boolean!
 }
 
 type NotifyCourseEditOutput {

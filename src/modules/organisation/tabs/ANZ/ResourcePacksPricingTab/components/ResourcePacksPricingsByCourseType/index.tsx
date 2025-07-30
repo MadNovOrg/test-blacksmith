@@ -1,4 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit'
+import HistoryIcon from '@mui/icons-material/History'
 import {
   Button,
   CircularProgress,
@@ -23,6 +24,8 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { useResourcePacksPricingContext } from '../../ResourcePacksPricingProvider/useResourcePacksPricingContext'
 import { EditOrgResourcePacksPricingModal } from '../EditOrgResourcePacksPricingModal'
+import { ResourcePacksPricingChangelogs } from '../ResourcePacksPricingChangelogs'
+import { useResourcePacksPricingAttributes } from '../ResourcePacksPricingChangelogs/hooks/use-resource-packs-pricing-attributes'
 
 type Props = {
   courseType: Course_Type_Enum
@@ -48,8 +51,12 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
 
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
+  const [
+    resourcePacksPricingIdsForChangelogsOpen,
+    setResourcePacksPricingIdsForChangelogsOpen,
+  ] = useState<string[]>([])
 
-  const { groupedData, fetching, setSelectedPricing, error, pricing } =
+  const { error, fetching, groupedData, orgId, pricing, setSelectedPricing } =
     useResourcePacksPricingContext()
 
   const rpPricingsByCourseType = groupedData.filter(
@@ -94,20 +101,7 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
     setSelectedPricing(pricing)
   }
 
-  const attributesColumn = (
-    reaccred: boolean,
-    courseType: Course_Type_Enum,
-  ) => {
-    if (courseType === Course_Type_Enum.Indirect)
-      return (
-        t('table.alias.non-reaccreditation') +
-        ', ' +
-        t('table.alias.reaccreditation')
-      )
-    return t(
-      `table.alias.${reaccred ? 'reaccreditation' : 'non-reaccreditation'}`,
-    )
-  }
+  const getResourcePacksPricingAttributes = useResourcePacksPricingAttributes()
 
   return (
     <>
@@ -144,7 +138,10 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
                     </TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>
                       <Typography>
-                        {attributesColumn(pricing.reaccred, pricing.courseType)}
+                        {getResourcePacksPricingAttributes({
+                          courseType: pricing.courseType,
+                          reaccred: pricing.reaccred,
+                        })}
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ textAlign: 'center' }}>
@@ -155,6 +152,20 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
                         data-testid={`edit-button-${pricing.key}`}
                       >
                         <Typography>{t('table.edit')}</Typography>
+                      </Button>
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          setResourcePacksPricingIdsForChangelogsOpen(
+                            pricing.values.map(p => p.id),
+                          )
+                        }}
+                        size="small"
+                        startIcon={<HistoryIcon />}
+                        sx={{ whiteSpace: 'nowrap', ml: 1 }}
+                        variant="text"
+                      >
+                        {_t('pages.course-pricing.view-history')}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -171,6 +182,15 @@ export const ResourcePacksPricingByCourseType: React.FC<Props> = ({
             rowsPerPage={perPage}
             rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
             data-testid="resource-packs-pricing-table-pagination"
+          />
+
+          <ResourcePacksPricingChangelogs
+            orgId={orgId}
+            resourcePacksPricingIds={resourcePacksPricingIdsForChangelogsOpen}
+            open={resourcePacksPricingIdsForChangelogsOpen.length > 0}
+            onClose={() => {
+              setResourcePacksPricingIdsForChangelogsOpen([])
+            }}
           />
         </>
       ) : null}

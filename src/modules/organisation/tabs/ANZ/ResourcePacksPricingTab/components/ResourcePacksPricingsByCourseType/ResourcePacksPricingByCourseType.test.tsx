@@ -130,7 +130,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         affiliatesIds: [],
         refetchAffiliatesIds: vi.fn(),
         fetchingAffiliatesIds: false,
-      })
+      } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
       const mockClient = {
         executeQuery: vi.fn(),
         executeMutation: vi.fn(),
@@ -166,7 +166,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         affiliatesIds: [],
         refetchAffiliatesIds: vi.fn(),
         fetchingAffiliatesIds: false,
-      })
+      } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
       const mockClient = {
         executeQuery: vi.fn(),
         executeMutation: vi.fn(),
@@ -213,7 +213,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         affiliatesIds: [],
         refetchAffiliatesIds: vi.fn(),
         fetchingAffiliatesIds: false,
-      })
+      } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
       const mockClient = {
         executeQuery: vi.fn(),
         executeMutation: vi.fn(),
