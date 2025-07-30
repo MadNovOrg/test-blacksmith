@@ -81,7 +81,7 @@ const getUKIndirectCourseRatio = ({
   }
 
   if (courseLevel === Level_1Bs) {
-    return ratio(1, 12, 12)
+    return ratio(0, 12, 12)
   }
 
   return null

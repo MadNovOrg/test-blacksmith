@@ -408,11 +408,11 @@ describe('getRequiredTrainersV2', () => {
       nextAbove: 25,
     },
     {
-      below: { min: 1, max: 1 },
-      equal: { min: 1, max: 2 },
-      above: { min: 2, max: 2 },
-      nextEqual: { min: 2, max: 3 },
-      nextAbove: { min: 3, max: 3 },
+      below: { min: 0, max: 0 },
+      equal: { min: 0, max: 1 },
+      above: { min: 1, max: 1 },
+      nextEqual: { min: 1, max: 2 },
+      nextAbove: { min: 2, max: 2 },
     },
   )
 
