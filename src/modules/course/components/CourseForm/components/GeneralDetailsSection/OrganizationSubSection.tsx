@@ -231,6 +231,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
               sx={{ marginBottom: 2 }}
               disabled={disabledFields.has('organization')}
               createdFrom={Org_Created_From_Enum.CreateCoursePage}
+              disableOrganisationEnquiryOrCreation={acl.isTrainer()}
             />
           ) : (
             <ANZOrgSelector

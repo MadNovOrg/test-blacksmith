@@ -69,6 +69,7 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
     canSearchByAddress = true,
     label,
     createdFrom,
+    disableOrganisationEnquiryOrCreation = false,
     ...props
   }) {
     const { t } = useTranslation()
@@ -230,31 +231,35 @@ export const OrgSelector: React.FC<React.PropsWithChildren<OrgSelectorProps>> =
             : []),
           ...(showHubResults ? hubOrgs?.orgs ?? [] : []),
           ...(showDfeResults ? dfeOrgs?.establishments ?? [] : []),
-          ...(allowAdding && !autocompleteMode && debouncedQuery
+          ...(!disableOrganisationEnquiryOrCreation &&
+          allowAdding &&
+          !autocompleteMode &&
+          debouncedQuery
             ? [{ name: debouncedQuery }]
             : []),
-          ...(!allowAdding
+          ...(!disableOrganisationEnquiryOrCreation && !allowAdding
             ? [{ name: t('components.org-selector.request-creation-sub') }]
             : []),
         ],
         'id',
       )
     }, [
+      showTrainerNonAOLOrgs,
+      debouncedQuery,
+      orgsFetching,
+      dfeFetching,
+      localSavedOrgToBeCreated,
+      showHubResults,
+      hubOrgs?.orgs,
+      showDfeResults,
+      dfeOrgs?.establishments,
+      disableOrganisationEnquiryOrCreation,
       allowAdding,
       autocompleteMode,
-      debouncedQuery,
-      defaultOrg,
-      dfeFetching,
-      dfeOrgs?.establishments,
-      hubOrgs?.orgs,
-      myOrg,
-      onChange,
-      orgsFetching,
-      showDfeResults,
-      showHubResults,
-      showTrainerNonAOLOrgs,
       t,
-      localSavedOrgToBeCreated,
+      defaultOrg,
+      onChange,
+      myOrg,
     ])
 
     const noOptionsText = useMemo(() => {

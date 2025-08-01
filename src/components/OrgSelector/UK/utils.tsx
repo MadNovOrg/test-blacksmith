@@ -45,14 +45,17 @@ export const isHubOrg = (o: CallbackOption): o is Organization =>
   !!o && 'id' in o && !isDfeSuggestion(o)
 
 export type OrgSelectorProps = {
-  label?: string
   allowAdding?: boolean
   autocompleteMode?: boolean
+  canSearchByAddress?: boolean
   countryCode?: string
+  createdFrom?: Org_Created_From_Enum
   disabled?: boolean
+  disableOrganisationEnquiryOrCreation?: boolean
   error?: string
   isEditProfile?: boolean
   isShallowRetrieval?: boolean
+  label?: string
   onChange: (org: CallbackOption) => void
   onInputChange?: (value: string) => void
   placeholder?: string
@@ -65,8 +68,6 @@ export type OrgSelectorProps = {
   textFieldProps?: TextFieldProps
   userOrgIds?: string[]
   value?: Pick<Organization, 'name' | 'id'> | null
-  canSearchByAddress?: boolean
-  createdFrom?: Org_Created_From_Enum
 }
 
 export type SuggestionOption = {
