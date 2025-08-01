@@ -47,6 +47,8 @@ import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndivid
 import { yup } from '@app/schemas'
 import { getFieldError, requiredMsg } from '@app/util'
 
+import { useAutocompleteEmailsHandler } from '../hooks/useAutocompleteEmailsHandler'
+
 export const InviteUserToOrganization = () => {
   const theme = useTheme()
   const { acl, profile } = useAuth()
@@ -183,6 +185,12 @@ export const InviteUserToOrganization = () => {
     }
   }, [organisationsData, id, selectedOrg])
 
+  const onEmailsChange = useAutocompleteEmailsHandler(
+    setValue as Parameters<typeof useAutocompleteEmailsHandler>[0],
+    values.emails,
+    true,
+  )
+
   if (loadingOrgs) {
     return (
       <Stack
@@ -284,9 +292,7 @@ export const InviteUserToOrganization = () => {
                       value={values.emails}
                       freeSolo
                       autoSelect
-                      onChange={(_, v) =>
-                        setValue('emails', v, { shouldValidate: true })
-                      }
+                      onChange={onEmailsChange}
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => (
                           // disable key rule because getTagProps already sets correct key
