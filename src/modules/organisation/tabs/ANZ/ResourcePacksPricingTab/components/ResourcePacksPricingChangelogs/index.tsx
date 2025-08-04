@@ -12,7 +12,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/dialogs'
@@ -45,6 +45,12 @@ export const ResourcePacksPricingChangelogs = ({
 
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
+
+  useEffect(() => {
+    if (open) return
+    setCurrentPage(0)
+    setPerPage(PER_PAGE)
+  }, [open])
 
   const { changelogs, loading, resourcePacksPricingCommonDetails, totalCount } =
     useOrgResourcePacksPricingChangelogs({
