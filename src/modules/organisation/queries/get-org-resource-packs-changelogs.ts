@@ -1,4 +1,4 @@
-import { gql, useQuery } from 'urql'
+import { gql, RequestPolicy, useQuery } from 'urql'
 
 type ChangelogUpdateColumns = {
   id: string
@@ -85,12 +85,14 @@ export function useGetOrgResourcePacksPricingChangelogs({
   orgId,
   pause,
   resourcePacksPricingIds,
+  requestPolicy,
 }: {
   limit?: number
   offset?: number
   orgId: string
   pause: boolean
   resourcePacksPricingIds: string[]
+  requestPolicy?: RequestPolicy
 }) {
   const [{ data, error, fetching }, refetch] = useQuery<
     GetOrgResourcePacksPricingChangelogsQuery,
@@ -104,6 +106,7 @@ export function useGetOrgResourcePacksPricingChangelogs({
       resourcePacksPricingIds,
     },
     pause,
+    requestPolicy,
   })
   return {
     data,

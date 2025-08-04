@@ -33,6 +33,7 @@ export const useOrgResourcePacksPricingChangelogs = ({
     orgId,
     pause: !orgId || resourcePacksPricingIds.length === 0,
     resourcePacksPricingIds,
+    requestPolicy: 'cache-and-network',
   })
 
   const changelogs: (Omit<

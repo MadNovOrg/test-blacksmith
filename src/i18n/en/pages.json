@@ -1734,9 +1734,8 @@
         },
         "changelogs": {
           "changeEvents": {
-            "priceChangeAud": "Changed AUD price from {{oldPrice}} to {{newPrice}}",
+            "priceChange": "Changed price from {{oldPrice}} to {{newPrice}}",
             "priceChangeBoth": "Changed price from {{oldAudPrice}} / {{oldNzdPrice}} to {{newAudPrice}} / {{newNzdPrice}}",
-            "priceChangeNzd": "Changed NZD price from {{oldPrice}} to {{newPrice}}",
             "priceSet": "Changed price to {{audPrice}} / {{nzdPrice}}"
           }
         },

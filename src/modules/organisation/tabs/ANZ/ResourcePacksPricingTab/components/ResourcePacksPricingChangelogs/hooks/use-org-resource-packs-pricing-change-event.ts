@@ -39,14 +39,14 @@ const formatChangeEventPrices = (
   }
 
   if (audPriceHasChanged) {
-    return t('priceChangeAud', {
+    return t('priceChange', {
       oldPrice: formatPrice(oldColumns.AUD_price as number, Currency.Aud),
       newPrice: formatPrice(newColumns.AUD_price as number, Currency.Aud),
     })
   }
 
   if (nzdPriceHasChanged) {
-    return t('priceChangeNzd', {
+    return t('priceChange', {
       oldPrice: formatPrice(oldColumns.NZD_price as number, Currency.Nzd),
       newPrice: formatPrice(newColumns.NZD_price as number, Currency.Nzd),
     })

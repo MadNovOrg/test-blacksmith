@@ -144,7 +144,7 @@ describe('useOrgResourcePacksPricingGetChangeEvent', () => {
 
       const changeEvent = result.current(event)
 
-      expect(mockT).toHaveBeenCalledWith('priceChangeAud', {
+      expect(mockT).toHaveBeenCalledWith('priceChange', {
         oldPrice: '$5.00',
         newPrice: '$10.50',
       })
@@ -171,7 +171,7 @@ describe('useOrgResourcePacksPricingGetChangeEvent', () => {
 
       const changeEvent = result.current(event)
 
-      expect(mockT).toHaveBeenCalledWith('priceChangeNzd', {
+      expect(mockT).toHaveBeenCalledWith('priceChange', {
         oldPrice: 'NZ$7.50',
         newPrice: 'NZ$15.75',
       })
