@@ -1,5 +1,17 @@
 # @teamteach/hub
 
+## 5.8.0
+
+### Minor Changes
+
+- 517e19e: Validate emails and split them on commas and whitespace, similar to how it's done in the course invite email autocomplete.
+- d667e3d: feat (TTHP-4203): allow bild creation to users that have bild certificates
+- cfa0542: feat (TTHP-5357): update posthog host link to point at cloudfront reverse proxy
+- 23e9590: feat (TTHP-5261): update L1BS ratios
+- 8ba0c25: feat (TTHP-4913): invalid invoice error code on blended learning refund
+- 150fcdf: Disallow organization creation by trainers.
+- bd02e4b: Org resource packs' prices history
+
 ## 5.7.1
 
 ### Patch Changes
