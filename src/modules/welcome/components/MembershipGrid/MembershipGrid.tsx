@@ -23,27 +23,40 @@ const GridItem: React.FC<
 > = ({ image, title, description, children, icon, url }) => {
   return (
     <Box
-      borderRadius={3}
       bgcolor="white"
       border={1}
       borderColor={theme.colors.lime[400]}
-      sx={{ overflow: 'hidden', display: 'block', height: '100%' }}
+      borderRadius={3}
       component={Link}
       href={url}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+        height: '100%',
+        textDecoration: 'none',
+      }}
       underline="none"
     >
       <Box>
         <img alt={title} src={image} style={{ maxWidth: '100%' }} />
       </Box>
 
-      <Box p={3}>
+      <Box
+        p={3}
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Typography
-          variant="h4"
           color="primary"
+          display="flex"
           fontFamily="Poppins"
           fontWeight={500}
           mb={2}
-          display="flex"
+          variant="h4"
         >
           <Box component="span" mr={1} sx={{ color: 'grey' }}>
             {icon}
@@ -53,7 +66,7 @@ const GridItem: React.FC<
         </Typography>
 
         <Typography mb={2}>{description}</Typography>
-        {children}
+        <Box mt="auto">{children}</Box>
       </Box>
     </Box>
   )
@@ -67,6 +80,7 @@ export const AccountOrFamilyEngagementCard = () => {
   const { t } = useTranslation('pages', {
     keyPrefix: 'welcome.membership-grid',
   })
+
   if (!isUK()) {
     return (
       <GridItem
