@@ -181,6 +181,63 @@ describe('useMergeOrgsLogs', () => {
     })
   })
 
+  it('should handle search with dfe urn', async () => {
+    const searchText = '100000'
+    mockUseQuery
+      .mockReturnValueOnce([
+        { data: mockMergeLogsData, fetching: false, stale: false },
+        vi.fn(),
+      ])
+      .mockReturnValueOnce([
+        { data: mockOrgsByIdsData, fetching: false, stale: false },
+        vi.fn(),
+      ])
+
+    renderHook(() =>
+      useMergeOrgsLogs({ limit: 10, offset: 0, search: searchText }),
+    )
+
+    await waitFor(() => {
+      expect(mockUseQuery).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({
+          variables: {
+            limit: 10,
+            offset: 0,
+            where: {
+              _or: [
+                {
+                  primaryOrganizationName: {
+                    _ilike: `%100000%`,
+                  },
+                },
+                {
+                  mergedOrganizations: {
+                    _or: [
+                      {
+                        organizationName: {
+                          _ilike: `%100000%`,
+                        },
+                      },
+                    ],
+                  },
+                },
+                { primaryOrganizationUrn: { _eq: '100000' } },
+                {
+                  mergedOrganizations: {
+                    dfeUrn: {
+                      _eq: '100000',
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        }),
+      )
+    })
+  })
+
   it('should handle loading states', async () => {
     mockUseQuery
       .mockReturnValueOnce([

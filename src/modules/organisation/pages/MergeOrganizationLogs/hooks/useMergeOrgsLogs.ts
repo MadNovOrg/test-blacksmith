@@ -10,6 +10,7 @@ import {
   Merge_Organizations_Logs_Bool_Exp,
 } from '@app/generated/graphql'
 import { NonNullish } from '@app/types'
+import { isDfeUrn } from '@app/util'
 
 const MERGE_ORGS_LOGS = gql`
   query GetMergeOrgsLogs(
@@ -28,6 +29,7 @@ const MERGE_ORGS_LOGS = gql`
       createdAt
       primaryOrganizationId
       primaryOrganizationName
+      primaryOrganizationUrn
 
       actionedBy {
         fullName
@@ -35,6 +37,7 @@ const MERGE_ORGS_LOGS = gql`
 
       mergedOrganizations {
         id
+        dfeUrn
         organizationId
         organizationName
       }
@@ -125,8 +128,10 @@ export const useMergeOrgsLogs = ({
       }
     }
 
-    return {
-      _or: [
+    const orClause: Merge_Organizations_Logs_Bool_Exp['_or'] = []
+
+    orClause.push(
+      ...[
         {
           primaryOrganizationName: {
             _ilike: `%${words.join('%')}%`,
@@ -144,7 +149,24 @@ export const useMergeOrgsLogs = ({
           },
         },
       ],
+    )
+
+    if (isDfeUrn(debouncedSearch)) {
+      orClause.push(
+        ...[
+          { primaryOrganizationUrn: { _eq: debouncedSearch } },
+          {
+            mergedOrganizations: {
+              dfeUrn: {
+                _eq: debouncedSearch,
+              },
+            },
+          },
+        ],
+      )
     }
+
+    return { _or: orClause }
   }, [debouncedSearch])
 
   const [{ data: logsData, fetching: logsFetching }] = useGetMergeOrgsLogsQuery(

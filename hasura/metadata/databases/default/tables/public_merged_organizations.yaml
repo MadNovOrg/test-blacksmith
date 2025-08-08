@@ -3,6 +3,8 @@ table:
   schema: public
 configuration:
   column_config:
+    dfe_urn:
+      custom_name: dfeUrn
     organization_data:
       custom_name: organizationData
     organization_id:
@@ -10,6 +12,7 @@ configuration:
     organization_name:
       custom_name: organizationName
   custom_column_names:
+    dfe_urn: dfeUrn
     organization_data: organizationData
     organization_id: organizationId
     organization_name: organizationName
@@ -23,6 +26,7 @@ select_permissions:
     permission:
       columns:
         - organization_data
+        - dfe_urn
         - organization_name
         - id
         - merge_organizations_log_id
@@ -33,11 +37,12 @@ select_permissions:
   - role: tt-admin
     permission:
       columns:
-        - organization_data
-        - organization_name
+        - dfe_urn
         - id
         - merge_organizations_log_id
+        - organization_data
         - organization_id
+        - organization_name
       filter: {}
       allow_aggregations: true
     comment: ""
@@ -45,6 +50,7 @@ select_permissions:
     permission:
       columns:
         - organization_data
+        - dfe_urn
         - organization_name
         - id
         - merge_organizations_log_id

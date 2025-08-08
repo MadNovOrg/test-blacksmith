@@ -34354,6 +34354,7 @@ export type Merge_Organizations_Logs = {
   mergedOrganizations_aggregate: Merged_Organizations_Aggregate;
   primaryOrganizationId: Scalars['uuid'];
   primaryOrganizationName: Scalars['String'];
+  primaryOrganizationUrn?: Maybe<Scalars['String']>;
   updated_at: Scalars['timestamptz'];
 };
 
@@ -34412,6 +34413,7 @@ export type Merge_Organizations_Logs_Bool_Exp = {
   mergedOrganizations_aggregate?: InputMaybe<Merged_Organizations_Aggregate_Bool_Exp>;
   primaryOrganizationId?: InputMaybe<Uuid_Comparison_Exp>;
   primaryOrganizationName?: InputMaybe<String_Comparison_Exp>;
+  primaryOrganizationUrn?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -34430,6 +34432,7 @@ export type Merge_Organizations_Logs_Insert_Input = {
   mergedOrganizations?: InputMaybe<Merged_Organizations_Arr_Rel_Insert_Input>;
   primaryOrganizationId?: InputMaybe<Scalars['uuid']>;
   primaryOrganizationName?: InputMaybe<Scalars['String']>;
+  primaryOrganizationUrn?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -34441,6 +34444,7 @@ export type Merge_Organizations_Logs_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   primaryOrganizationId?: Maybe<Scalars['uuid']>;
   primaryOrganizationName?: Maybe<Scalars['String']>;
+  primaryOrganizationUrn?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -34452,6 +34456,7 @@ export type Merge_Organizations_Logs_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   primaryOrganizationId?: Maybe<Scalars['uuid']>;
   primaryOrganizationName?: Maybe<Scalars['String']>;
+  primaryOrganizationUrn?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -34487,6 +34492,7 @@ export type Merge_Organizations_Logs_Order_By = {
   mergedOrganizations_aggregate?: InputMaybe<Merged_Organizations_Aggregate_Order_By>;
   primaryOrganizationId?: InputMaybe<Order_By>;
   primaryOrganizationName?: InputMaybe<Order_By>;
+  primaryOrganizationUrn?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
 
@@ -34508,6 +34514,8 @@ export enum Merge_Organizations_Logs_Select_Column {
   /** column name */
   PrimaryOrganizationName = 'primaryOrganizationName',
   /** column name */
+  PrimaryOrganizationUrn = 'primaryOrganizationUrn',
+  /** column name */
   UpdatedAt = 'updated_at'
 }
 
@@ -34518,6 +34526,7 @@ export type Merge_Organizations_Logs_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   primaryOrganizationId?: InputMaybe<Scalars['uuid']>;
   primaryOrganizationName?: InputMaybe<Scalars['String']>;
+  primaryOrganizationUrn?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -34536,6 +34545,7 @@ export type Merge_Organizations_Logs_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   primaryOrganizationId?: InputMaybe<Scalars['uuid']>;
   primaryOrganizationName?: InputMaybe<Scalars['String']>;
+  primaryOrganizationUrn?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -34552,6 +34562,8 @@ export enum Merge_Organizations_Logs_Update_Column {
   /** column name */
   PrimaryOrganizationName = 'primaryOrganizationName',
   /** column name */
+  PrimaryOrganizationUrn = 'primaryOrganizationUrn',
+  /** column name */
   UpdatedAt = 'updated_at'
 }
 
@@ -34565,6 +34577,7 @@ export type Merge_Organizations_Logs_Updates = {
 /** This table contains records of all organizations that have been merged, each associated with a specific merge event. */
 export type Merged_Organizations = {
   __typename?: 'merged_organizations';
+  dfeUrn?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   /** An object relationship */
   mergeOrganizationsLog: Merge_Organizations_Logs;
@@ -34637,6 +34650,7 @@ export type Merged_Organizations_Bool_Exp = {
   _and?: InputMaybe<Array<Merged_Organizations_Bool_Exp>>;
   _not?: InputMaybe<Merged_Organizations_Bool_Exp>;
   _or?: InputMaybe<Array<Merged_Organizations_Bool_Exp>>;
+  dfeUrn?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   mergeOrganizationsLog?: InputMaybe<Merge_Organizations_Logs_Bool_Exp>;
   merge_organizations_log_id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -34670,6 +34684,7 @@ export type Merged_Organizations_Delete_Key_Input = {
 
 /** input type for inserting data into table "merged_organizations" */
 export type Merged_Organizations_Insert_Input = {
+  dfeUrn?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
   mergeOrganizationsLog?: InputMaybe<Merge_Organizations_Logs_Obj_Rel_Insert_Input>;
   merge_organizations_log_id?: InputMaybe<Scalars['uuid']>;
@@ -34681,6 +34696,7 @@ export type Merged_Organizations_Insert_Input = {
 /** aggregate max on columns */
 export type Merged_Organizations_Max_Fields = {
   __typename?: 'merged_organizations_max_fields';
+  dfeUrn?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   merge_organizations_log_id?: Maybe<Scalars['uuid']>;
   organizationId?: Maybe<Scalars['uuid']>;
@@ -34689,6 +34705,7 @@ export type Merged_Organizations_Max_Fields = {
 
 /** order by max() on columns of table "merged_organizations" */
 export type Merged_Organizations_Max_Order_By = {
+  dfeUrn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   merge_organizations_log_id?: InputMaybe<Order_By>;
   organizationId?: InputMaybe<Order_By>;
@@ -34698,6 +34715,7 @@ export type Merged_Organizations_Max_Order_By = {
 /** aggregate min on columns */
 export type Merged_Organizations_Min_Fields = {
   __typename?: 'merged_organizations_min_fields';
+  dfeUrn?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   merge_organizations_log_id?: Maybe<Scalars['uuid']>;
   organizationId?: Maybe<Scalars['uuid']>;
@@ -34706,6 +34724,7 @@ export type Merged_Organizations_Min_Fields = {
 
 /** order by min() on columns of table "merged_organizations" */
 export type Merged_Organizations_Min_Order_By = {
+  dfeUrn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   merge_organizations_log_id?: InputMaybe<Order_By>;
   organizationId?: InputMaybe<Order_By>;
@@ -34730,6 +34749,7 @@ export type Merged_Organizations_On_Conflict = {
 
 /** Ordering options when selecting data from "merged_organizations". */
 export type Merged_Organizations_Order_By = {
+  dfeUrn?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   mergeOrganizationsLog?: InputMaybe<Merge_Organizations_Logs_Order_By>;
   merge_organizations_log_id?: InputMaybe<Order_By>;
@@ -34751,6 +34771,8 @@ export type Merged_Organizations_Prepend_Input = {
 /** select columns of table "merged_organizations" */
 export enum Merged_Organizations_Select_Column {
   /** column name */
+  DfeUrn = 'dfeUrn',
+  /** column name */
   Id = 'id',
   /** column name */
   MergeOrganizationsLogId = 'merge_organizations_log_id',
@@ -34764,6 +34786,7 @@ export enum Merged_Organizations_Select_Column {
 
 /** input type for updating data in table "merged_organizations" */
 export type Merged_Organizations_Set_Input = {
+  dfeUrn?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
   merge_organizations_log_id?: InputMaybe<Scalars['uuid']>;
   organizationData?: InputMaybe<Scalars['jsonb']>;
@@ -34781,6 +34804,7 @@ export type Merged_Organizations_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Merged_Organizations_Stream_Cursor_Value_Input = {
+  dfeUrn?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
   merge_organizations_log_id?: InputMaybe<Scalars['uuid']>;
   organizationData?: InputMaybe<Scalars['jsonb']>;
@@ -34790,6 +34814,8 @@ export type Merged_Organizations_Stream_Cursor_Value_Input = {
 
 /** update columns of table "merged_organizations" */
 export enum Merged_Organizations_Update_Column {
+  /** column name */
+  DfeUrn = 'dfeUrn',
   /** column name */
   Id = 'id',
   /** column name */
@@ -71042,7 +71068,7 @@ export type GetMergeOrgsLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetMergeOrgsLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'merge_organizations_logs', id: any, actionedById: any, createdAt: any, primaryOrganizationId: any, primaryOrganizationName: string, actionedBy: { __typename?: 'profile', fullName?: string | null }, mergedOrganizations: Array<{ __typename?: 'merged_organizations', id: any, organizationId: any, organizationName: string }> }>, aggregate: { __typename?: 'merge_organizations_logs_aggregate', aggregate?: { __typename?: 'merge_organizations_logs_aggregate_fields', count: number } | null } };
+export type GetMergeOrgsLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'merge_organizations_logs', id: any, actionedById: any, createdAt: any, primaryOrganizationId: any, primaryOrganizationName: string, primaryOrganizationUrn?: string | null, actionedBy: { __typename?: 'profile', fullName?: string | null }, mergedOrganizations: Array<{ __typename?: 'merged_organizations', id: any, dfeUrn?: string | null, organizationId: any, organizationName: string }> }>, aggregate: { __typename?: 'merge_organizations_logs_aggregate', aggregate?: { __typename?: 'merge_organizations_logs_aggregate_fields', count: number } | null } };
 
 export type GetOrgsByIdsQueryVariables = Exact<{
   ids: Array<Scalars['uuid']> | Scalars['uuid'];

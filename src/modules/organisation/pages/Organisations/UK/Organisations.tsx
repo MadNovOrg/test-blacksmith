@@ -40,7 +40,10 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
+import {
+  GetOrganisationDetailsQuery,
+  Organization_Bool_Exp,
+} from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout/FullHeightPageLayout'
 import { MergeOrganisations } from '@app/modules/organisation/components/MergeOrganisations'
@@ -50,6 +53,7 @@ import theme from '@app/theme'
 import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
+  isDfeUrn,
 } from '@app/util'
 
 export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
@@ -65,6 +69,8 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [organisationsForMerging, setOrganisationsForMerging] = useState<
     GetOrganisationDetailsQuery['orgs'][0][]
   >([])
+
+  const displayDfeUrnColumn = acl.isInternalUser()
 
   const cols = useMemo(
     () => [
@@ -82,6 +88,15 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
         label: t('pages.admin.organizations.columns.name'),
         sorting: true,
       },
+      ...(displayDfeUrnColumn
+        ? [
+            {
+              id: 'dfeURN',
+              label: t('pages.admin.organizations.columns.dfeURN'),
+              sorting: false,
+            },
+          ]
+        : []),
       {
         id: 'country',
         label: t('pages.admin.organizations.columns.country'),
@@ -107,7 +122,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
         sorting: true,
       },
     ],
-    [merging, t],
+    [displayDfeUrnColumn, merging, t],
   )
   const [query, setQuery] = useQueryParam('query', withDefault(StringParam, ''))
   const [debouncedQuery] = useDebounce(query, 300)
@@ -120,35 +135,55 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [where, filtered] = useMemo(() => {
     let isFiltered = false
 
-    const obj: Record<string, object> = {}
+    const obj: { _and: Array<Organization_Bool_Exp> } = { _and: [] }
 
     if (filterSector.length) {
-      obj.sector = { _in: filterSector }
+      obj._and.push({
+        sector: { _in: filterSector.filter(Boolean) as string[] },
+      })
       isFiltered = true
     }
 
     if (debouncedQuery.trim().length) {
-      obj.name = { _ilike: `%${debouncedQuery}%` }
+      obj._and.push({
+        _or: [
+          { name: { _ilike: `%${debouncedQuery}%` } },
+          ...(acl.isInternalUser() && isDfeUrn(debouncedQuery)
+            ? [
+                {
+                  organization_dfe_establishment: {
+                    urn: { _eq: debouncedQuery },
+                  },
+                },
+              ]
+            : []),
+        ],
+      })
+
       isFiltered = true
     }
 
     if (!acl.canViewAllOrganizations()) {
-      obj.members = {
-        _and: [
-          {
-            profile_id: {
-              _eq: profile?.id,
+      obj._and.push({
+        members: {
+          _and: [
+            {
+              profile_id: {
+                _eq: profile?.id,
+              },
             },
-          },
-          { isAdmin: { _eq: true } },
-        ],
-      }
+            { isAdmin: { _eq: true } },
+          ],
+        },
+      })
     }
 
     if (filterOrgCountries?.length) {
-      obj._or = filterOrgCountries.map(countryCode => ({
-        address: { _contains: { countryCode: countryCode } },
-      }))
+      obj._and.push({
+        _or: filterOrgCountries.map(countryCode => ({
+          address: { _contains: { countryCode: countryCode } },
+        })),
+      })
     }
 
     return [obj, isFiltered]
@@ -160,6 +195,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     limit: perPage,
     offset: perPage * currentPage,
     withMembers: true,
+    withDfEEstablishment: displayDfeUrnColumn,
   })
 
   const count = data?.orgsCount.aggregate?.count
@@ -379,6 +415,9 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                         {org?.name}
                       </Link>
                     </TableCell>
+                    {displayDfeUrnColumn ? (
+                      <TableCell>{org?.dfeEstablishment?.urn || ''}</TableCell>
+                    ) : null}
                     <TableCell>{org?.address.country}</TableCell>
                     {!showRegionCol.isEmpty ? (
                       <TableCell>{org?.address.region}</TableCell>

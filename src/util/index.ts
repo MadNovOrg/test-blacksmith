@@ -1244,3 +1244,11 @@ export const PROFILE_TABLE_ROW_SX = {
     backgroundColor: 'common.white',
   },
 }
+
+export function isDfeUrn(str: string) {
+  const trimmed = str.trim()
+
+  const regex = /^\d{6}$/
+
+  return regex.test(trimmed)
+}

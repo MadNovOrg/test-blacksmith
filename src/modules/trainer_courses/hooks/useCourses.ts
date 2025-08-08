@@ -11,6 +11,7 @@ import {
   Course_Level_Enum,
   Course_Order_By,
   Course_Status_Enum,
+  Course_Trainer_Bool_Exp,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Order_Bool_Exp,
@@ -26,7 +27,12 @@ import {
   CourseState,
   RoleName,
 } from '@app/types'
-import { ALL_ORGS, getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import {
+  ALL_ORGS,
+  getSWRLoadingStatus,
+  isDfeUrn,
+  LoadingStatus,
+} from '@app/util'
 
 export type OrgAdminCourseStatuses =
   | AdminOnlyCourseStatus.CancellationRequested
@@ -204,136 +210,198 @@ export const getIndividualsCourseStatusesConditions = (
   }
 }
 
-export const filtersToWhereClause = (
-  where: Course_Bool_Exp,
-  isInternalUser: boolean,
-  filters?: CoursesFilters,
-) => {
-  if (filters?.levels?.length) {
+const applyBasicFilters = (where: Course_Bool_Exp, filters: CoursesFilters) => {
+  if (filters.levels?.length) {
     where.level = { _in: filters.levels }
   }
 
-  if (filters?.courseResidingCountries?.length) {
-    where._or = [
-      ...(where._or ?? []),
-      { residingCountry: { _in: filters.courseResidingCountries } },
-      {
-        _and: [
-          { residingCountry: { _is_null: true } },
-          {
-            schedule: {
-              venue: {
-                countryCode: { _in: filters.courseResidingCountries },
-              },
-            },
-          },
-        ],
-      },
-    ]
-  }
-
-  if (filters?.types?.length) {
+  if (filters.types?.length) {
     where.type = { _in: filters.types }
   }
 
-  if (filters?.excludedCourses?.length) {
-    where.id = {
-      _nin: filters.excludedCourses,
-    }
+  if (filters.excludedCourses?.length) {
+    where.id = { _nin: filters.excludedCourses }
   }
 
-  if (filters?.go1Integration) {
-    where.go1Integration = { _eq: filters?.go1Integration }
+  if (filters.go1Integration) {
+    where.go1Integration = { _eq: filters.go1Integration }
   }
 
-  if (filters?.reaccreditation) {
-    where.reaccreditation = { _eq: filters?.reaccreditation }
+  if (filters.reaccreditation) {
+    where.reaccreditation = { _eq: filters.reaccreditation }
   }
 
-  if (filters?.creation?.start) {
-    where.createdAt = {
-      _gte: filters.creation.start,
-    }
+  if (filters.accreditedBy?.length) {
+    where.accreditedBy = { _in: filters.accreditedBy }
   }
 
-  if (filters?.creation?.end) {
+  if (filters.deliveryTypes?.length) {
+    where.deliveryType = { _in: filters.deliveryTypes }
+  }
+
+  if (filters.states?.length) {
+    where.state = { _in: filters.states }
+  }
+}
+
+const applyCountryFilters = (
+  where: Course_Bool_Exp,
+  filters: CoursesFilters,
+) => {
+  if (!filters.courseResidingCountries?.length) return
+
+  where._or = [
+    ...(where._or ?? []),
+    { residingCountry: { _in: filters.courseResidingCountries } },
+    {
+      _and: [
+        { residingCountry: { _is_null: true } },
+        {
+          schedule: {
+            venue: {
+              countryCode: { _in: filters.courseResidingCountries },
+            },
+          },
+        },
+      ],
+    },
+  ]
+}
+
+const applyDateFilters = (where: Course_Bool_Exp, filters: CoursesFilters) => {
+  if (filters.creation?.start) {
+    where.createdAt = { _gte: filters.creation.start }
+  }
+
+  if (filters.creation?.end) {
     where.createdAt = {
       ...where.createdAt,
       _lte: filters.creation.end,
     }
   }
 
-  if (filters?.schedule?.start || filters?.schedule?.end) {
-    where.schedule = {
-      _and: [],
-    }
-    if (filters?.schedule?.start) {
+  if (filters.schedule?.start || filters.schedule?.end) {
+    where.schedule = { _and: [] }
+
+    if (filters.schedule.start) {
       where.schedule._and?.push({ start: { _gte: filters.schedule.start } })
     }
-    if (filters?.schedule?.end) {
+
+    if (filters.schedule.end) {
       where.schedule._and?.push({ end: { _lte: filters.schedule.end } })
     }
   }
+}
 
-  if (filters?.accreditedBy?.length) {
-    where.accreditedBy = { _in: filters.accreditedBy }
-  }
-
-  if (filters?.deliveryTypes?.length) {
-    where.deliveryType = { _in: filters.deliveryTypes }
-  }
-
-  if (filters?.states?.length) {
-    where.state = { _in: filters.states }
-  }
-
-  const query = filters?.keyword?.trim()
-
-  const keywords = query?.split(' ').filter(word => Boolean(word))
-
-  if (query?.length) {
-    const orClauses = [
-      keywords && keywords?.length > 1
-        ? {
-            _and: keywords.map(w => ({ search_fields: { _ilike: `%${w}%` } })),
-          }
-        : { search_fields: { _ilike: `%${query}%` } },
-    ]
-
-    if (where._or) {
-      where._and = [{ _or: where._or }, { _or: orClauses.filter(Boolean) }]
-    } else {
-      where._or = orClauses.filter(Boolean)
-    }
-  }
-
-  if (
-    filters?.courseTrainerTypes?.length &&
-    (!isInternalUser || (isInternalUser && query?.length))
-  ) {
-    where.trainers = {
-      _and: [
-        ...(isInternalUser
-          ? keywords && keywords?.length > 1
-            ? [
-                {
-                  _and: keywords.map(w => ({
-                    profile: { fullName: { _ilike: `%${w}%` } },
-                  })),
-                },
-              ]
-            : [
-                {
-                  profile: { fullName: { _ilike: `%${query}%` } },
-                },
-              ]
-          : []),
-        {
-          type: { _in: filters.courseTrainerTypes },
+const createDfeUrnClauses = (query: string): Course_Bool_Exp[] => [
+  {
+    type: {
+      _in: [Course_Type_Enum.Closed, Course_Type_Enum.Indirect],
+    },
+    organization: {
+      organization_dfe_establishment: {
+        urn: { _eq: query },
+      },
+    },
+  },
+  {
+    type: { _eq: Course_Type_Enum.Open },
+    participants: {
+      profile: {
+        organizations: {
+          organization: {
+            organization_dfe_establishment: {
+              urn: { _eq: query },
+            },
+          },
         },
-      ],
+      },
+    },
+  },
+]
+
+const createKeywordOrClauses = (
+  query: string,
+  keywords: string[],
+  isInternalUser: boolean,
+): Course_Bool_Exp[] => {
+  const orClauses: Course_Bool_Exp[] = []
+
+  if (keywords.length > 1) {
+    orClauses.push({
+      _and: keywords.map(w => ({ search_fields: { _ilike: `%${w}%` } })),
+    })
+  } else {
+    orClauses.push({ search_fields: { _ilike: `%${query}%` } })
+
+    if (isInternalUser && isDfeUrn(query)) {
+      orClauses.push({ _or: createDfeUrnClauses(query) })
     }
   }
+
+  return orClauses
+}
+
+const applyKeywordFilters = (
+  where: Course_Bool_Exp,
+  filters: CoursesFilters,
+  isInternalUser: boolean,
+) => {
+  const query = filters.keyword?.trim()
+  if (!query?.length) return
+
+  const keywords = query.split(' ').filter(Boolean)
+  const orClauses = createKeywordOrClauses(query, keywords, isInternalUser)
+
+  if (where._or) {
+    where._and = [{ _or: where._or }, { _or: orClauses }]
+  } else {
+    where._or = orClauses
+  }
+}
+
+const applyTrainerFilters = (
+  where: Course_Bool_Exp,
+  filters: CoursesFilters,
+  isInternalUser: boolean,
+) => {
+  if (!filters.courseTrainerTypes?.length) return
+  if (!isInternalUser && !filters.keyword?.trim()?.length) return
+
+  const query = filters.keyword?.trim()
+  const keywords = query?.split(' ').filter(Boolean) || []
+  const trainerConditions: Course_Trainer_Bool_Exp[] = []
+
+  if (isInternalUser && query) {
+    const nameCondition: Course_Trainer_Bool_Exp =
+      keywords.length > 1
+        ? {
+            _and: keywords.map(w => ({
+              profile: { fullName: { _ilike: `%${w}%` } },
+            })),
+          }
+        : { profile: { fullName: { _ilike: `%${query}%` } } }
+
+    trainerConditions.push(nameCondition)
+  }
+
+  trainerConditions.push({ type: { _in: filters.courseTrainerTypes } })
+
+  where.trainers = { _and: trainerConditions }
+}
+
+export const filtersToWhereClause = (
+  where: Course_Bool_Exp,
+  isInternalUser: boolean,
+  filters?: CoursesFilters,
+) => {
+  if (!filters) return where
+
+  applyBasicFilters(where, filters)
+  applyCountryFilters(where, filters)
+  applyDateFilters(where, filters)
+  applyKeywordFilters(where, filters, isInternalUser)
+  applyTrainerFilters(where, filters, isInternalUser)
 
   return where
 }

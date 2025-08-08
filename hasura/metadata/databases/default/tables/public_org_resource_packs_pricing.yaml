@@ -19,7 +19,7 @@ insert_permissions:
         - id
         - organisation_id
         - resource_packs_pricing_id
-    comment: ''
+    comment: ""
   - role: tt-admin
     permission:
       check: {}
@@ -30,7 +30,7 @@ insert_permissions:
         - id
         - organisation_id
         - resource_packs_pricing_id
-    comment: ''
+    comment: ""
   - role: tt-ops
     permission:
       check: {}
@@ -41,7 +41,7 @@ insert_permissions:
         - id
         - organisation_id
         - resource_packs_pricing_id
-    comment: ''
+    comment: ""
 select_permissions:
   - role: anonymous
     permission:
@@ -52,7 +52,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: booking-contact
     permission:
       columns:
@@ -62,7 +62,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: finance
     permission:
       columns:
@@ -72,7 +72,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: ld
     permission:
       columns:
@@ -82,7 +82,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: organization-key-contact
     permission:
       columns:
@@ -92,7 +92,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: sales-admin
     permission:
       columns:
@@ -102,7 +102,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: sales-representative
     permission:
       columns:
@@ -112,7 +112,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: trainer
     permission:
       columns:
@@ -122,7 +122,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: tt-admin
     permission:
       columns:
@@ -132,7 +132,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: tt-ops
     permission:
       columns:
@@ -142,7 +142,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: unverified
     permission:
       columns:
@@ -152,7 +152,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
   - role: user
     permission:
       columns:
@@ -162,7 +162,7 @@ select_permissions:
         - organisation_id
         - resource_packs_pricing_id
       filter: {}
-    comment: ''
+    comment: ""
 update_permissions:
   - role: finance
     permission:
@@ -175,7 +175,7 @@ update_permissions:
         - resource_packs_pricing_id
       filter: {}
       check: {}
-    comment: ''
+    comment: ""
   - role: tt-admin
     permission:
       columns:
@@ -187,7 +187,7 @@ update_permissions:
         - resource_packs_pricing_id
       filter: {}
       check: {}
-    comment: ''
+    comment: ""
   - role: tt-ops
     permission:
       columns:
@@ -199,24 +199,24 @@ update_permissions:
         - resource_packs_pricing_id
       filter: {}
       check: {}
-    comment: ''
+    comment: ""
 delete_permissions:
   - role: finance
     permission:
       filter: {}
-    comment: ''
+    comment: ""
   - role: sales-admin
     permission:
       filter: {}
-    comment: ''
+    comment: ""
   - role: tt-admin
     permission:
       filter: {}
-    comment: ''
+    comment: ""
   - role: tt-ops
     permission:
       filter: {}
-    comment: ''
+    comment: ""
 event_triggers:
   - name: org_resource_packs_pricing_delete
     definition:

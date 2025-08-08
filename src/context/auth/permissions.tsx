@@ -89,12 +89,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isInternalUser: () =>
       anyPass([
-        acl.isTTAdmin,
-        acl.isTTOps,
+        acl.isFinance,
         acl.isLD,
         acl.isSalesAdmin,
         acl.isSalesRepresentative,
-        acl.isFinance,
+        acl.isTTAdmin,
+        acl.isTTOps,
       ])(),
 
     canDeleteCourse: (

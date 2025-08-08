@@ -1183,7 +1183,8 @@
         "last-activity": "Last activity",
         "created-on": "Created on",
         "group": "Group",
-        "affiliates-count": "Affiliates Count"
+        "affiliates-count": "Affiliates Count",
+        "dfeURN": "DfE URN"
       },
       "add-new-organization": "Add new organisation",
       "merge": {
@@ -1215,6 +1216,7 @@
     "organisations-merge-logs": {
       "actioned-by": "Actioned by",
       "created-at": "Event date",
+      "dfe-urn": "DfE URN",
       "info": "Please note that all merged organisations cannot be unmerged, and all data associated with the merged organisations has been permanently deleted.",
       "logs": "logs",
       "merged-orgs-id": "Merged organisation ID",

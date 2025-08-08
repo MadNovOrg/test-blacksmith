@@ -66,8 +66,18 @@ export const MergeOrganizationLogs = () => {
         label: t('pages.admin.organisations-merge-logs.merged-orgs'),
       },
       {
+        id: 'dfeUrn1',
+        label: t('pages.admin.organisations-merge-logs.dfe-urn') + ' 1',
+        sorting: false,
+      },
+      {
         id: 'mergedOrgsId',
         label: t('pages.admin.organisations-merge-logs.merged-orgs-id'),
+        sorting: false,
+      },
+      {
+        id: 'dfeUrn2',
+        label: t('pages.admin.organisations-merge-logs.dfe-urn') + ' 2',
         sorting: false,
       },
       {
@@ -170,6 +180,7 @@ export const MergeOrganizationLogs = () => {
                         .map(o => o.organizationName)
                         .join('\n')}
                     </TableCell>
+                    <TableCell>{log.primaryOrganizationUrn || ''}</TableCell>
                     <TableCell>
                       {log.mergedOrganizations.map(o => (
                         <React.Fragment key={o.id}>
@@ -177,6 +188,14 @@ export const MergeOrganizationLogs = () => {
                             {o.organizationId}
                           </Tooltip>
                           <br />
+                        </React.Fragment>
+                      ))}
+                    </TableCell>
+                    <TableCell>
+                      {log.mergedOrganizations.map((o, idx) => (
+                        <React.Fragment key={o.id}>
+                          {o.dfeUrn}
+                          {idx < log.mergedOrganizations.length - 1 && <br />}
                         </React.Fragment>
                       ))}
                     </TableCell>

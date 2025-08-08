@@ -11,11 +11,14 @@ configuration:
       custom_name: primaryOrganizationId
     primary_organization_name:
       custom_name: primaryOrganizationName
+    primary_organization_urn:
+      custom_name: primaryOrganizationUrn
   custom_column_names:
     actioned_by_id: actionedById
     created_at: createdAt
     primary_organization_id: primaryOrganizationId
     primary_organization_name: primaryOrganizationName
+    primary_organization_urn: primaryOrganizationUrn
   custom_root_fields: {}
 object_relationships:
   - name: actionedBy
@@ -33,36 +36,39 @@ select_permissions:
   - role: ld
     permission:
       columns:
-        - actioned_by_id
+        - primary_organization_name
+        - primary_organization_urn
         - created_at
+        - updated_at
+        - actioned_by_id
         - id
         - primary_organization_id
-        - primary_organization_name
-        - updated_at
       filter: {}
       allow_aggregations: true
     comment: ""
   - role: tt-admin
     permission:
       columns:
-        - actioned_by_id
+        - primary_organization_name
+        - primary_organization_urn
         - created_at
+        - updated_at
+        - actioned_by_id
         - id
         - primary_organization_id
-        - primary_organization_name
-        - updated_at
       filter: {}
       allow_aggregations: true
     comment: ""
   - role: tt-ops
     permission:
       columns:
-        - actioned_by_id
+        - primary_organization_name
+        - primary_organization_urn
         - created_at
+        - updated_at
+        - actioned_by_id
         - id
         - primary_organization_id
-        - primary_organization_name
-        - updated_at
       filter: {}
       allow_aggregations: true
     comment: ""
