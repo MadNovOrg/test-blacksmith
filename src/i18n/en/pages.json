@@ -2177,9 +2177,11 @@
       "courses-button": "View Courses",
       "account-title": "Account",
       "account-description": "Manage your personal account or organisation, including certificates.",
-      "fet-title": "Self Service Online Training",
-      "fet-description": "Empower your learning with our self-service online training — accessible anytime, anywhere, at your own pace.",
-      "fet-button": "Learn More",
+      "fet-behaviour-and-the-brain": "Behaviour and the Brain",
+      "fet-button": "Book Now",
+      "fet-description": "Continue your professional development with two new virtual, on-demand courses.",
+      "fet-family-engagement-training": "Family Engagement Training",
+      "fet-title": "New On-demand Training Courses",
       "account-button": "Manage account"
     },
     "resource-card": {

@@ -38,8 +38,16 @@ const GridItem: React.FC<
       }}
       underline="none"
     >
-      <Box>
-        <img alt={title} src={image} style={{ maxWidth: '100%' }} />
+      <Box sx={{ aspectRatio: '79 / 50' }}>
+        <img
+          alt={title}
+          src={image}
+          style={{
+            height: '100%',
+            maxWidth: '100%',
+            objectFit: 'cover',
+          }}
+        />
       </Box>
 
       <Box
@@ -104,6 +112,25 @@ export const AccountOrFamilyEngagementCard = () => {
       icon={<SchoolOutlinedIcon />}
       url={import.meta.env.VITE_FAMILY_ENGAGEMENT_TRAINING}
     >
+      <ul style={{ marginTop: '0px', marginBottom: '12px' }}>
+        <li>
+          <Link
+            color="blue"
+            href={import.meta.env.VITE_BEHAVIOUR_AND_THE_BRAIN_URL}
+          >
+            {t('fet-behaviour-and-the-brain')}
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            color="blue"
+            href={import.meta.env.VITE_FAMILY_ENGAGEMENT_TRAINING_URL}
+          >
+            {t('fet-family-engagement-training')}
+          </Link>
+        </li>
+      </ul>
       <Button variant="contained" color="lime" fullWidth>
         {t('fet-button')}
       </Button>
