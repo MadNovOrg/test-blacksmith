@@ -1,7 +1,12 @@
+import {
+  Certificate_Status_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
+
 import { chance } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
-import { getBookingContact, getOrgKeyContact } from '.'
+import { getBookingContact, getCertificatesChain, getOrgKeyContact } from '.'
 
 describe('getBookingContact', () => {
   it('returns contact info from bookingContact if present', () => {
@@ -115,5 +120,331 @@ describe('getOrgKeyContact', () => {
     }
 
     expect(getOrgKeyContact(course)).toBeNull()
+  })
+})
+
+describe('getCertificatesChain', () => {
+  it('filters out revoked and inactive', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Revoked,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Inactive,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ]
+    const output = getCertificatesChain(input)
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('deduplicates by level and keeps best status', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Expired,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.OnHold,
+      },
+    ]
+    const output = getCertificatesChain(input)
+
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.OnHold,
+      },
+    ])
+  })
+
+  it('includes Advanced certs if no active BildAdvancedTrainer or AdvancedTrainer', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.BildAdvancedTrainer,
+        status: Certificate_Status_Enum.Expired,
+      },
+      {
+        level: Course_Level_Enum.AdvancedTrainer,
+        status: Certificate_Status_Enum.Expired,
+      },
+    ]
+    const output = getCertificatesChain(input)
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('does NOT include Advanced if active AdvancedTrainer or BildAdvancedTrainer exists', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.BildAdvancedTrainer,
+        status: Certificate_Status_Enum.Expired,
+      },
+      {
+        level: Course_Level_Enum.AdvancedTrainer,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ]
+    const output = getCertificatesChain(input)
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.AdvancedTrainer,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('includes Advanced if only ExpiredRecently AdvancedTrainer or BildAdvancedTrainer exists', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.AdvancedTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.BildAdvancedTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ]
+    const output = getCertificatesChain(input)
+
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('chains multiple ExpiredRecently certificates and includes next active-ish cert', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.BildAdvancedTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.AdvancedTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+    ]
+
+    const output = getCertificatesChain(input)
+
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('chains ExpiredRecently certificates and stops on active', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.IntermediateTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+    ]
+    const output = getCertificatesChain(input)
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('returns empty array if input empty or all revoked/inactive', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Inactive,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Revoked,
+      },
+    ]
+    const output = getCertificatesChain(input)
+    expect(output).toEqual([])
+  })
+
+  it('complex scenario: deduplication, expiredRecently chaining, advanced special rule, filtering revoked/inactive', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Expired,
+      },
+
+      {
+        level: Course_Level_Enum.IntermediateTrainer,
+        status: Certificate_Status_Enum.Revoked,
+      },
+      {
+        level: Course_Level_Enum.IntermediateTrainer,
+        status: Certificate_Status_Enum.OnHold,
+      },
+      {
+        level: Course_Level_Enum.BildAdvancedTrainer,
+        status: Certificate_Status_Enum.Revoked,
+      },
+      {
+        level: Course_Level_Enum.AdvancedTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+    ]
+
+    const output = getCertificatesChain(input)
+
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Advanced,
+        status: Certificate_Status_Enum.Active,
+      },
+      {
+        level: Course_Level_Enum.IntermediateTrainer,
+        status: Certificate_Status_Enum.OnHold,
+      },
+    ])
+  })
+
+  it('continues searching for active certificates through ExpiredRecently chain until an expired active is encountered', () => {
+    const input = [
+      {
+        level: Course_Level_Enum.IntermediateTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.Expired,
+      },
+      {
+        level: Course_Level_Enum.Level_2,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ]
+
+    const output = getCertificatesChain(input)
+
+    expect(output).toEqual([
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.Active,
+      },
+    ])
+  })
+
+  it('should NOT return higher level ExpiredRecently certificate when chaining', () => {
+    const certificates = [
+      {
+        level: Course_Level_Enum.Level_1,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+      {
+        level: Course_Level_Enum.FoundationTrainer,
+        status: Certificate_Status_Enum.ExpiredRecently,
+      },
+    ]
+
+    const result = getCertificatesChain(certificates)
+
+    expect(result).toHaveLength(1)
+    expect(result[0].status).toBe(Certificate_Status_Enum.ExpiredRecently)
+    expect(result[0].level).toBe(Course_Level_Enum.FoundationTrainer)
   })
 })

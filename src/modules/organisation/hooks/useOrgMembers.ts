@@ -48,6 +48,12 @@ export const MEMBERS_QUERY = gql`
               {
                 _or: [{ grade: { _is_null: true } }, { grade: { _neq: "${Grade_Enum.Fail}" } }]
               }
+              {
+              _or: [
+                { participant: { completed_evaluation: { _eq: true } } },
+                { legacyCourseCode: { _is_null: false, _neq: "" } },
+              ],
+            },
             ]
           }
         ) {

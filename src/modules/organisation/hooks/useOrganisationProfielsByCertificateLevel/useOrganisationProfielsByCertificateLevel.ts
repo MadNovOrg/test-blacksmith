@@ -10,7 +10,7 @@ import {
   GetProfilesWithCertificationsQuery,
   GetProfilesWithCertificationsQueryVariables,
 } from '@app/generated/graphql'
-import { getProfileCertificationLevels } from '@app/util'
+import { getCertificatesChain } from '@app/util'
 
 export const GET_PROFILES_WITH_CERTIFICATIONS = gql`
   query GetProfilesWithCertifications(
@@ -33,6 +33,7 @@ export const GET_PROFILES_WITH_CERTIFICATIONS = gql`
       avatar
       archived
       certificates(where: $whereProfileCertificates) {
+        id
         courseLevel
         status
         expiryDate
@@ -144,13 +145,17 @@ export const useOrganisationProfilesByCertificateLevel = () => {
     >()
     if (profiles) {
       for (const profile of profiles) {
-        const levels = getProfileCertificationLevels(
-          profile.certificates as {
-            courseLevel: string
-            status: Certificate_Status_Enum
-          }[],
+        const certificatesChain = getCertificatesChain(
+          profile.certificates.map(cert => ({
+            id: cert.id,
+            level: cert.courseLevel as Course_Level_Enum,
+            status: cert.status as Certificate_Status_Enum,
+          })),
         )
-        for (const level of levels) {
+
+        const levelsSet = new Set(certificatesChain.map(cert => cert.level))
+
+        for (const level of levelsSet) {
           const profiles = map.get(level) ?? []
           profiles?.push(profile)
           map.set(level, profiles)

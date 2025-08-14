@@ -72,6 +72,7 @@ describe(useOrganisationProfilesByCertificateLevel.name, () => {
         id: profileId,
         certificates: [
           {
+            id: chance.guid(),
             courseLevel: certificateLevel,
             expiryDate: '2021-01-01',
             status: Certificate_Status_Enum.Active,

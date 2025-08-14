@@ -33,7 +33,7 @@ import { CertificateStatusChip } from '@app/modules/certifications/components/Ce
 import { EditOrgUserModal } from '@app/modules/organisation/components/EditOrgUserModal'
 import { useOrgMembers } from '@app/modules/organisation/hooks/useOrgMembers'
 import theme from '@app/theme'
-import { getProfileCertificationLevels } from '@app/util'
+import { getCertificatesChain } from '@app/util'
 
 type OrgUsersTableParams = {
   orgId: string
@@ -147,18 +147,17 @@ export const OrgUsersTable: React.FC<
             />
 
             {members?.map((member, index) => {
-              const certificateLevelsToDisplay = getProfileCertificationLevels(
-                member.profile.certificates as {
-                  courseLevel: string
-                  status: Certificate_Status_Enum
-                }[],
+              const certificateLevelsToDisplay = getCertificatesChain(
+                member.profile.certificates.map(cert => ({
+                  id: cert.id,
+                  level: cert.courseLevel as Course_Level_Enum,
+                  note:
+                    cert.participant?.certificateChanges[0]?.payload?.note ||
+                    '',
+                  status: cert.status as Certificate_Status_Enum,
+                })),
               )
-              const filteredCerts = member.profile.certificates.filter(
-                cert =>
-                  certificateLevelsToDisplay.indexOf(
-                    cert.courseLevel as Course_Level_Enum,
-                  ) >= 0,
-              )
+
               return (
                 <TableRow
                   key={member.profile.id}
@@ -194,12 +193,7 @@ export const OrgUsersTable: React.FC<
                     </Box>
                   </TableCell>
                   <TableCell data-testid="member-certificates">
-                    {filteredCerts.map(cert => {
-                      const certificationStatus =
-                        cert?.status as Certificate_Status_Enum
-                      const statusTooltip =
-                        cert.participant?.certificateChanges[0]?.payload?.note
-
+                    {certificateLevelsToDisplay.map(cert => {
                       return (
                         <Box
                           key={cert.id}
@@ -208,12 +202,12 @@ export const OrgUsersTable: React.FC<
                           py={1}
                         >
                           <CertificateStatusChip
-                            status={certificationStatus}
-                            tooltip={statusTooltip}
+                            status={cert.status}
+                            tooltip={cert.note}
                           />
                           <Typography variant="body2" ml={1}>
                             {t(
-                              `common.certificates.${cert.courseLevel.toLowerCase()}`,
+                              `common.certificates.${cert.level.toLowerCase()}`,
                             )}
                           </Typography>
                         </Box>

@@ -65,6 +65,7 @@ describe(IndividualsByLevelList.name, () => {
               fullName: userFullName,
               certificates: [
                 {
+                  id: chance.guid(),
                   courseLevel: Course_Level_Enum.Advanced,
                   expiryDate: date,
                 },
@@ -108,6 +109,7 @@ describe(IndividualsByLevelList.name, () => {
               fullName: userFullName,
               certificates: [
                 {
+                  id: chance.guid(),
                   courseLevel: Course_Level_Enum.Advanced,
                   expiryDate: date,
                 },
@@ -189,6 +191,7 @@ describe(IndividualsByLevelList.name, () => {
               fullName: 'John Doe',
               certificates: [
                 {
+                  id: chance.guid(),
                   courseLevel: Course_Level_Enum.Advanced,
                   expiryDate: '',
                 },

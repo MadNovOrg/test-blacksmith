@@ -70996,7 +70996,7 @@ export type GetProfilesWithCertificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesWithCertificationsQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, status?: Certificate_Status_Enum | null, expiryDate: any }> }>, profiles_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfilesWithCertificationsQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, status?: Certificate_Status_Enum | null, expiryDate: any }> }>, profiles_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type GetAllOrganisationsStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 

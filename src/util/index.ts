@@ -32,7 +32,6 @@ import {
   Submodule,
   Submodule_Aggregate,
   Certificate_Status_Enum,
-  CourseLevel,
   InsertOrgLeadMutationVariables,
   Course as GeneratedCourseType,
   Course_Delivery_Type_Enum,
@@ -714,104 +713,173 @@ export const INVOICE_STATUS_COLOR: Record<
   [Xero_Invoice_Status_Enum.Voided]: 'default',
 }
 
-function getAdvancedTrainerLevel(
-  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
-): Course_Level_Enum | null {
-  const advancedTrainer = certificates?.find(
-    c =>
-      c.courseLevel === Course_Level_Enum.AdvancedTrainer &&
-      c.status !== Certificate_Status_Enum.ExpiredRecently,
-  )
-
-  return advancedTrainer ? Course_Level_Enum.AdvancedTrainer : null
-}
-
-function getAdvancedLevel(
-  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
-): Course_Level_Enum | null {
-  if (certificates?.find(c => c.courseLevel === Course_Level_Enum.Advanced)) {
-    return Course_Level_Enum.Advanced
+const getCertificateStatusHierarchy = (): Record<
+  Certificate_Status_Enum,
+  number
+> => {
+  const certificateStatusHierarchy: Record<Certificate_Status_Enum, number> = {
+    [Certificate_Status_Enum.Active]: 0,
+    [Certificate_Status_Enum.OnHold]: 0,
+    [Certificate_Status_Enum.ExpiringSoon]: 0,
+    [Certificate_Status_Enum.ExpiredRecently]: 0,
+    [Certificate_Status_Enum.Expired]: 0,
+    [Certificate_Status_Enum.Revoked]: 0,
+    [Certificate_Status_Enum.Inactive]: 0,
   }
-  return null
+
+  Object.keys(certificateStatusHierarchy).forEach((key, index) => {
+    certificateStatusHierarchy[key as Certificate_Status_Enum] = index + 1
+  })
+
+  return certificateStatusHierarchy
 }
 
-function getBildLevel(
-  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
-): Course_Level_Enum | null {
-  return certificates?.find(
-    c => c.courseLevel === Course_Level_Enum.BildAdvancedTrainer,
-  )
-    ? Course_Level_Enum.BildAdvancedTrainer
-    : null
+const getCertificateLevelHierarchy = () => {
+  const certificateLevelHierarchy: Record<Course_Level_Enum, number> = {
+    [Course_Level_Enum.BildAdvancedTrainer]: 0,
+    [Course_Level_Enum.AdvancedTrainer]: 0,
+    [Course_Level_Enum.Advanced]: 0,
+    [Course_Level_Enum.BildIntermediateTrainer]: 0,
+    [Course_Level_Enum.IntermediateTrainer]: 0,
+    [Course_Level_Enum.FoundationTrainerPlus]: 0,
+    [Course_Level_Enum.FoundationTrainer]: 0,
+    [Course_Level_Enum.BildRegular]: 0,
+    [Course_Level_Enum.Level_2]: 0,
+    [Course_Level_Enum.Level_1]: 0,
+    [Course_Level_Enum.Level_1Bs]: 0,
+    [Course_Level_Enum.Level_1Np]: 0,
+  }
+
+  Object.keys(certificateLevelHierarchy).forEach((key, index) => {
+    certificateLevelHierarchy[key as Course_Level_Enum] = index + 1
+  })
+
+  return certificateLevelHierarchy
 }
 
-function addBildHierarchyLevels(
-  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
-  levels: (Course_Level_Enum | CourseLevel)[],
+export function getCertificatesChain(
+  certificates: {
+    id?: string
+    level: Course_Level_Enum
+    note?: string
+    status: Certificate_Status_Enum
+  }[],
 ) {
-  const bildHierarchy = [
-    Course_Level_Enum.BildIntermediateTrainer,
-    Course_Level_Enum.BildRegular,
-  ]
+  const isActiveStatus = (status: Certificate_Status_Enum) =>
+    ![
+      Certificate_Status_Enum.Expired,
+      Certificate_Status_Enum.Inactive,
+      Certificate_Status_Enum.Revoked,
+    ].includes(status)
 
-  for (const level of bildHierarchy) {
-    const certificate = certificates?.find(c => c.courseLevel === level)
-    if (certificate) {
-      levels.push(level)
-      if (certificate.status !== Certificate_Status_Enum.ExpiredRecently) {
-        break
-      }
+  const isTrulyActiveStatus = (status: Certificate_Status_Enum) =>
+    [
+      Certificate_Status_Enum.Active,
+      Certificate_Status_Enum.OnHold,
+      Certificate_Status_Enum.ExpiringSoon,
+    ].includes(status)
+
+  const filtered = certificates.filter(cert => isActiveStatus(cert.status))
+
+  if (!filtered.length) return []
+
+  const certificateStatusHierarchy = getCertificateStatusHierarchy()
+  const hierarchy = getCertificateLevelHierarchy()
+
+  const bestByLevel = new Map<Course_Level_Enum, (typeof certificates)[0]>()
+  for (const cert of filtered) {
+    const current = bestByLevel.get(cert.level)
+    if (
+      !current ||
+      certificateStatusHierarchy[cert.status] <
+        certificateStatusHierarchy[current.status]
+    ) {
+      bestByLevel.set(cert.level, cert)
     }
   }
-}
+  const deduped = Array.from(bestByLevel.values())
 
-function addHierarchyLevels(
-  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
-  levels: (Course_Level_Enum | CourseLevel)[],
-) {
-  const hierarchy = [
-    Course_Level_Enum.IntermediateTrainer,
-    Course_Level_Enum.Level_2,
-    Course_Level_Enum.Level_1,
-  ]
-  for (const level of hierarchy) {
-    const certificate = certificates?.find(c => c.courseLevel === level)
-    if (certificate) {
-      levels.push(level)
-      if (certificate.status !== Certificate_Status_Enum.ExpiredRecently) {
-        return
+  const hasActiveAdvancedTrainer = deduped.some(
+    cert =>
+      (cert.level === Course_Level_Enum.BildAdvancedTrainer ||
+        cert.level === Course_Level_Enum.AdvancedTrainer) &&
+      isTrulyActiveStatus(cert.status),
+  )
+
+  const sorted = [...deduped].sort((a, b) => {
+    const levelDiff = hierarchy[a.level] - hierarchy[b.level]
+    if (levelDiff !== 0) return levelDiff
+    return (
+      certificateStatusHierarchy[a.status] -
+      certificateStatusHierarchy[b.status]
+    )
+  })
+
+  const result: typeof certificates = []
+
+  let advancedCerts: typeof certificates = []
+  if (!hasActiveAdvancedTrainer) {
+    advancedCerts = sorted.filter(
+      cert => cert.level === Course_Level_Enum.Advanced,
+    )
+  }
+
+  function chainCertificates(sortedCerts: typeof certificates) {
+    const chainResult: typeof certificates = []
+
+    const highestTrulyActive = sortedCerts.find(cert =>
+      isTrulyActiveStatus(cert.status),
+    )
+
+    if (highestTrulyActive) {
+      chainResult.push(highestTrulyActive)
+    } else {
+      const highestExpiredRecently = sortedCerts.find(
+        cert => cert.status === Certificate_Status_Enum.ExpiredRecently,
+      )
+
+      if (highestExpiredRecently) {
+        chainResult.push(highestExpiredRecently)
+
+        const currentLevelHierarchy = hierarchy[highestExpiredRecently.level]
+        const nextHigherActive = sortedCerts.find(
+          cert =>
+            hierarchy[cert.level] < currentLevelHierarchy &&
+            isTrulyActiveStatus(cert.status),
+        )
+
+        if (nextHigherActive) {
+          chainResult.push(nextHigherActive)
+        }
       }
     }
-  }
-}
 
-// more on this logic [here](https://github.com/TeamTeach/hub/wiki/Organisations)
-export function getProfileCertificationLevels(
-  certificates: { courseLevel: string; status: Certificate_Status_Enum }[],
-): (Course_Level_Enum | CourseLevel | null)[] {
-  const levels = []
-
-  const advancedTrainerLevel = getAdvancedTrainerLevel(certificates)
-  if (advancedTrainerLevel) {
-    levels.push(advancedTrainerLevel)
-    return levels
+    return chainResult
   }
 
-  const advancedLevel = getAdvancedLevel(certificates)
-  if (advancedLevel) {
-    levels.push(advancedLevel)
+  if (advancedCerts.length > 0) {
+    const chainedAdvanced = chainCertificates(advancedCerts)
+    result.push(...chainedAdvanced)
   }
 
-  const bildLevel = getBildLevel(certificates)
-  if (bildLevel) {
-    levels.push(bildLevel)
-  } else {
-    addBildHierarchyLevels(certificates, levels)
-  }
+  const otherCerts =
+    advancedCerts.length > 0
+      ? sorted.filter(cert => cert.level !== Course_Level_Enum.Advanced)
+      : sorted
 
-  addHierarchyLevels(certificates, levels)
+  const chainedOthers = chainCertificates(otherCerts)
 
-  return levels.length > 0 ? levels : [null]
+  chainedOthers.forEach(cert => {
+    if (!result.some(r => r.level === cert.level && r.status === cert.status)) {
+      result.push(cert)
+    }
+  })
+
+  return result.sort(
+    (a, b) =>
+      certificateStatusHierarchy[a.status] -
+      certificateStatusHierarchy[b.status],
+  )
 }
 
 export const getTimeDifferenceAndContext = (
