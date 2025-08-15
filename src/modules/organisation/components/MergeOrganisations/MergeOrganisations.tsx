@@ -48,7 +48,7 @@ export const MergeOrganisations: FC<Props> = ({ selectedOrgs }) => {
         <Button
           variant="contained"
           data-testid="merge-organizations-button"
-          onClick={() => navigate('../merge')}
+          onClick={() => navigate('../merge', { state: location.state })}
         >
           {t('title')}
         </Button>

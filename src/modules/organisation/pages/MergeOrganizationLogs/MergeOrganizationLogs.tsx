@@ -18,7 +18,6 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
-import { BackButton } from '@app/components/BackButton'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -31,6 +30,7 @@ import {
 } from '@app/util'
 
 import { OrganisationsTabs } from '../../components/OrganisationsTabs/OrganisationsTabs'
+import { OrganisationsBackButton } from '../Organisations/components/BackButton'
 
 import { useMergeOrgsLogs } from './hooks/useMergeOrgsLogs'
 
@@ -101,10 +101,7 @@ export const MergeOrganizationLogs = () => {
     <FullHeightPageLayout>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
-          <BackButton
-            label={t('pages.admin.back-to-settings')}
-            to="/organisations/all"
-          />
+          <OrganisationsBackButton />
 
           <Typography variant="h1" py={2} fontWeight={600}>
             {t('pages.admin.organizations.title')}

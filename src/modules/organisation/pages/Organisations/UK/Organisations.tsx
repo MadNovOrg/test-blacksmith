@@ -32,7 +32,6 @@ import {
   withDefault,
 } from 'use-query-params'
 
-import { BackButton } from '@app/components/BackButton'
 import { ExportBlendedDialog } from '@app/components/dialogs'
 import { FilterByOrgResidingCountry } from '@app/components/filters/FilterByOrgResidingCountry'
 import { FilterByOrgSector } from '@app/components/filters/FilterByOrgSector'
@@ -55,6 +54,8 @@ import {
   DEFAULT_PAGINATION_ROW_OPTIONS,
   isDfeUrn,
 } from '@app/util'
+
+import { OrganisationsBackButton } from '../components/BackButton'
 
 export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
@@ -282,10 +283,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Helmet>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
-          <BackButton
-            label={t('pages.admin.back-to-settings')}
-            to="/organisations/all"
-          />
+          <OrganisationsBackButton />
 
           <Typography variant="h1" py={2} fontWeight={600}>
             {t('pages.admin.organizations.title')}

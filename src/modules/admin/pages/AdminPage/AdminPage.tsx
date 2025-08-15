@@ -1,7 +1,8 @@
-import { Box, Link, List, ListItem, Typography } from '@mui/material'
+import { Box, List, ListItem, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { Tile } from '@app/components/Tile'
 import { useAuth } from '@app/context/auth'
@@ -15,7 +16,11 @@ export const AdminPage: React.FC<React.PropsWithChildren> = () => {
   const hubSettings = useMemo(() => {
     const hubSettings = [
       { name: 'users', link: '/admin/users' },
-      { name: 'organisations', link: '/organisations/list' },
+      {
+        name: 'organisations',
+        link: '/organisations/list',
+        state: { backTo: '/admin' },
+      },
       {
         name: 'course-exceptions-log',
         link: '/admin/course-exceptions-log',
@@ -50,10 +55,26 @@ export const AdminPage: React.FC<React.PropsWithChildren> = () => {
           {t(`pages.admin.connect-settings.title`)}
         </Typography>
         <List>
-          {hubSettings.map(({ name, link }) => (
+          {hubSettings.map(({ name, link, state }) => (
             <ListItem sx={{ padding: 0, marginBottom: 2 }} key={name}>
-              <Link href={link} sx={{ width: '100%' }}>
-                <Tile sx={{ display: 'block' }}>
+              <Link
+                to={link}
+                state={state}
+                style={{
+                  textDecoration: 'none',
+                  width: '100%',
+                  color: theme.palette.text.primary,
+                }}
+              >
+                <Tile
+                  sx={{
+                    display: 'block',
+                    '&:hover': {
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                    },
+                  }}
+                >
                   <Typography variant="subtitle2" mb={1}>
                     {t(`pages.admin.connect-settings.${name}.title`)}
                   </Typography>

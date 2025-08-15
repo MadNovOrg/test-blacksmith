@@ -1,10 +1,13 @@
-import { Box, Container, Link, Toolbar } from '@mui/material'
+import { Box, Container, Toolbar } from '@mui/material'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link, useLocation } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 
 export const OrganisationsTabs = ({ activeTab }: { activeTab: 0 | 1 }) => {
+  const location = useLocation()
+
   const { acl } = useAuth()
 
   const { t } = useTranslation()
@@ -40,7 +43,11 @@ export const OrganisationsTabs = ({ activeTab }: { activeTab: 0 | 1 }) => {
               lineHeight={2}
               overflow="hidden"
             >
-              <Link href={tab.href} underline="none">
+              <Link
+                to={tab.href}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+                state={location.state}
+              >
                 {tab.label}
               </Link>
             </Box>

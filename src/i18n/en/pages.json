@@ -1211,7 +1211,8 @@
         "blended-learning": "Export blended learning license summary"
       },
       "affiliates": "{{filteredCount}} / {{totalCount}}",
-      "no-affiliated-organizations": "No affiliated organisations"
+      "no-affiliated-organizations": "No affiliated organisations",
+      "back-to-all-organisations": "Back to all organisations"
     },
     "organisations-merge-logs": {
       "actioned-by": "Actioned by",
