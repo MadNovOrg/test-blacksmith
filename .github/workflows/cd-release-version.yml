@@ -28,7 +28,7 @@ jobs:
             echo "CHECKOUT_REF=${{ github.head_ref }}" >> $GITHUB_ENV
           fi
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         # with:
         #   ref: ${{ env.CHECKOUT_REF }}
       - name: Fetch Version
@@ -60,7 +60,7 @@ jobs:
       region: ${{ steps.label-check.outputs.region }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check Labels for Region
         id: label-check
@@ -87,7 +87,7 @@ jobs:
     if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'changeset-release/') }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Delete Existing hotfix_release_branch
         run: |
           git push origin --delete hotfix_release_branch || true

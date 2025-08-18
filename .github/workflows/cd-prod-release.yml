@@ -37,7 +37,7 @@ jobs:
     if: ${{ github.event.inputs.hotfix == 'false' }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -92,7 +92,7 @@ jobs:
     if: ${{ github.event.inputs.hotfix == 'true' }}
     steps:
       - name: Checkout to Current Branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.ref }}
 
