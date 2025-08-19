@@ -255,6 +255,9 @@ export const TransferReview: React.FC<
                 loading={fetching}
                 onClick={handleParticipantTransfer}
                 data-testid="confirm-transfer"
+                sx={{
+                  mb: 3,
+                }}
               >
                 {t('review-transfer.submit-btn-text')}
               </LoadingButton>
