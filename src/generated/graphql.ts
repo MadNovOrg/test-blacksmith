@@ -37412,6 +37412,14 @@ export type Mutation_Root = {
   delete_role_by_pk?: Maybe<Role>;
   /** delete data from the table: "scheduled_events_view" */
   delete_scheduled_events_view?: Maybe<Scheduled_Events_View_Mutation_Response>;
+  /** delete data from the table: "splash_screens" */
+  delete_splash_screens?: Maybe<Splash_Screens_Mutation_Response>;
+  /** delete single row from the table: "splash_screens" */
+  delete_splash_screens_by_pk?: Maybe<Splash_Screens>;
+  /** delete data from the table: "submission_of_splash_screens" */
+  delete_submission_of_splash_screens?: Maybe<Submission_Of_Splash_Screens_Mutation_Response>;
+  /** delete single row from the table: "submission_of_splash_screens" */
+  delete_submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
   /** delete data from the table: "submodule" */
   delete_submodule?: Maybe<Submodule_Mutation_Response>;
   /** delete single row from the table: "submodule" */
@@ -37956,6 +37964,14 @@ export type Mutation_Root = {
   insert_scheduled_events_view?: Maybe<Scheduled_Events_View_Mutation_Response>;
   /** insert a single row into the table: "scheduled_events_view" */
   insert_scheduled_events_view_one?: Maybe<Scheduled_Events_View>;
+  /** insert data into the table: "splash_screens" */
+  insert_splash_screens?: Maybe<Splash_Screens_Mutation_Response>;
+  /** insert a single row into the table: "splash_screens" */
+  insert_splash_screens_one?: Maybe<Splash_Screens>;
+  /** insert data into the table: "submission_of_splash_screens" */
+  insert_submission_of_splash_screens?: Maybe<Submission_Of_Splash_Screens_Mutation_Response>;
+  /** insert a single row into the table: "submission_of_splash_screens" */
+  insert_submission_of_splash_screens_one?: Maybe<Submission_Of_Splash_Screens>;
   /** insert data into the table: "submodule" */
   insert_submodule?: Maybe<Submodule_Mutation_Response>;
   /** insert a single row into the table: "submodule" */
@@ -38756,6 +38772,18 @@ export type Mutation_Root = {
   update_scheduled_events_view?: Maybe<Scheduled_Events_View_Mutation_Response>;
   /** update multiples rows of table: "scheduled_events_view" */
   update_scheduled_events_view_many?: Maybe<Array<Maybe<Scheduled_Events_View_Mutation_Response>>>;
+  /** update data of the table: "splash_screens" */
+  update_splash_screens?: Maybe<Splash_Screens_Mutation_Response>;
+  /** update single row of the table: "splash_screens" */
+  update_splash_screens_by_pk?: Maybe<Splash_Screens>;
+  /** update multiples rows of table: "splash_screens" */
+  update_splash_screens_many?: Maybe<Array<Maybe<Splash_Screens_Mutation_Response>>>;
+  /** update data of the table: "submission_of_splash_screens" */
+  update_submission_of_splash_screens?: Maybe<Submission_Of_Splash_Screens_Mutation_Response>;
+  /** update single row of the table: "submission_of_splash_screens" */
+  update_submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
+  /** update multiples rows of table: "submission_of_splash_screens" */
+  update_submission_of_splash_screens_many?: Maybe<Array<Maybe<Submission_Of_Splash_Screens_Mutation_Response>>>;
   /** update data of the table: "submodule" */
   update_submodule?: Maybe<Submodule_Mutation_Response>;
   /** update single row of the table: "submodule" */
@@ -40360,6 +40388,30 @@ export type Mutation_RootDelete_Role_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Scheduled_Events_ViewArgs = {
   where: Scheduled_Events_View_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Splash_ScreensArgs = {
+  where: Splash_Screens_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Splash_Screens_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Submission_Of_Splash_ScreensArgs = {
+  where: Submission_Of_Splash_Screens_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Submission_Of_Splash_Screens_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -42235,6 +42287,34 @@ export type Mutation_RootInsert_Scheduled_Events_ViewArgs = {
 /** mutation root */
 export type Mutation_RootInsert_Scheduled_Events_View_OneArgs = {
   object: Scheduled_Events_View_Insert_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Splash_ScreensArgs = {
+  objects: Array<Splash_Screens_Insert_Input>;
+  on_conflict?: InputMaybe<Splash_Screens_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Splash_Screens_OneArgs = {
+  object: Splash_Screens_Insert_Input;
+  on_conflict?: InputMaybe<Splash_Screens_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Submission_Of_Splash_ScreensArgs = {
+  objects: Array<Submission_Of_Splash_Screens_Insert_Input>;
+  on_conflict?: InputMaybe<Submission_Of_Splash_Screens_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Submission_Of_Splash_Screens_OneArgs = {
+  object: Submission_Of_Splash_Screens_Insert_Input;
+  on_conflict?: InputMaybe<Submission_Of_Splash_Screens_On_Conflict>;
 };
 
 
@@ -45284,6 +45364,46 @@ export type Mutation_RootUpdate_Scheduled_Events_ViewArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Scheduled_Events_View_ManyArgs = {
   updates: Array<Scheduled_Events_View_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Splash_ScreensArgs = {
+  _set?: InputMaybe<Splash_Screens_Set_Input>;
+  where: Splash_Screens_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Splash_Screens_By_PkArgs = {
+  _set?: InputMaybe<Splash_Screens_Set_Input>;
+  pk_columns: Splash_Screens_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Splash_Screens_ManyArgs = {
+  updates: Array<Splash_Screens_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Submission_Of_Splash_ScreensArgs = {
+  _set?: InputMaybe<Submission_Of_Splash_Screens_Set_Input>;
+  where: Submission_Of_Splash_Screens_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Submission_Of_Splash_Screens_By_PkArgs = {
+  _set?: InputMaybe<Submission_Of_Splash_Screens_Set_Input>;
+  pk_columns: Submission_Of_Splash_Screens_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Submission_Of_Splash_Screens_ManyArgs = {
+  updates: Array<Submission_Of_Splash_Screens_Updates>;
 };
 
 
@@ -52863,6 +52983,10 @@ export type Profile = {
   /** An aggregate relationship */
   roles_aggregate: Profile_Role_Aggregate;
   stripe_customer_id?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
+  /** An aggregate relationship */
+  submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   tags?: Maybe<Scalars['jsonb']>;
   title?: Maybe<Scalars['String']>;
   /** An array relationship */
@@ -53120,6 +53244,26 @@ export type ProfileRoles_AggregateArgs = {
 
 
 /** columns and relationships of "profile" */
+export type ProfileSubmission_Of_Splash_ScreensArgs = {
+  distinct_on?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submission_Of_Splash_Screens_Order_By>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileSubmission_Of_Splash_Screens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submission_Of_Splash_Screens_Order_By>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
 export type ProfileTagsArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
@@ -53268,6 +53412,8 @@ export type Profile_Bool_Exp = {
   roles?: InputMaybe<Profile_Role_Bool_Exp>;
   roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Bool_Exp>;
   stripe_customer_id?: InputMaybe<String_Comparison_Exp>;
+  submission_of_splash_screens?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+  submission_of_splash_screens_aggregate?: InputMaybe<Submission_Of_Splash_Screens_Aggregate_Bool_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   title?: InputMaybe<String_Comparison_Exp>;
   trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
@@ -53366,6 +53512,7 @@ export type Profile_Insert_Input = {
   profile_trainer_agreement_types?: InputMaybe<Profile_Trainer_Agreement_Type_Arr_Rel_Insert_Input>;
   roles?: InputMaybe<Profile_Role_Arr_Rel_Insert_Input>;
   stripe_customer_id?: InputMaybe<Scalars['String']>;
+  submission_of_splash_screens?: InputMaybe<Submission_Of_Splash_Screens_Arr_Rel_Insert_Input>;
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
   trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Arr_Rel_Insert_Input>;
@@ -53520,6 +53667,7 @@ export type Profile_Order_By = {
   profile_trainer_agreement_types_aggregate?: InputMaybe<Profile_Trainer_Agreement_Type_Aggregate_Order_By>;
   roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Order_By>;
   stripe_customer_id?: InputMaybe<Order_By>;
+  submission_of_splash_screens_aggregate?: InputMaybe<Submission_Of_Splash_Screens_Aggregate_Order_By>;
   tags?: InputMaybe<Order_By>;
   title?: InputMaybe<Order_By>;
   trainer_role_types_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Order_By>;
@@ -56193,6 +56341,18 @@ export type Query_Root = {
   /** fetch aggregated fields from the table: "scheduled_events_view" */
   scheduled_events_view_aggregate: Scheduled_Events_View_Aggregate;
   searchTrainers?: Maybe<Array<Maybe<SearchTrainer>>>;
+  /** fetch data from the table: "splash_screens" */
+  splash_screens: Array<Splash_Screens>;
+  /** fetch aggregated fields from the table: "splash_screens" */
+  splash_screens_aggregate: Splash_Screens_Aggregate;
+  /** fetch data from the table: "splash_screens" using primary key columns */
+  splash_screens_by_pk?: Maybe<Splash_Screens>;
+  /** An array relationship */
+  submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
+  /** An aggregate relationship */
+  submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
+  /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
+  submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
   /** fetch data from the table: "submodule" */
   submodule: Array<Submodule>;
   /** fetch aggregated fields from the table: "submodule" */
@@ -59093,6 +59253,52 @@ export type Query_RootSearchTrainersArgs = {
 };
 
 
+export type Query_RootSplash_ScreensArgs = {
+  distinct_on?: InputMaybe<Array<Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Splash_Screens_Order_By>>;
+  where?: InputMaybe<Splash_Screens_Bool_Exp>;
+};
+
+
+export type Query_RootSplash_Screens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Splash_Screens_Order_By>>;
+  where?: InputMaybe<Splash_Screens_Bool_Exp>;
+};
+
+
+export type Query_RootSplash_Screens_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Query_RootSubmission_Of_Splash_ScreensArgs = {
+  distinct_on?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submission_Of_Splash_Screens_Order_By>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+
+export type Query_RootSubmission_Of_Splash_Screens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submission_Of_Splash_Screens_Order_By>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+
+export type Query_RootSubmission_Of_Splash_Screens_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootSubmoduleArgs = {
   distinct_on?: InputMaybe<Array<Submodule_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -60740,6 +60946,352 @@ export type Scheduled_Events_View_Variance_Fields = {
   tries?: Maybe<Scalars['Float']>;
 };
 
+/** Stores the enum representing splash screens used to highlight specific features to the user */
+export type Splash_Screens = {
+  __typename?: 'splash_screens';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "splash_screens" */
+export type Splash_Screens_Aggregate = {
+  __typename?: 'splash_screens_aggregate';
+  aggregate?: Maybe<Splash_Screens_Aggregate_Fields>;
+  nodes: Array<Splash_Screens>;
+};
+
+/** aggregate fields of "splash_screens" */
+export type Splash_Screens_Aggregate_Fields = {
+  __typename?: 'splash_screens_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Splash_Screens_Max_Fields>;
+  min?: Maybe<Splash_Screens_Min_Fields>;
+};
+
+
+/** aggregate fields of "splash_screens" */
+export type Splash_Screens_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Splash_Screens_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "splash_screens". All fields are combined with a logical 'AND'. */
+export type Splash_Screens_Bool_Exp = {
+  _and?: InputMaybe<Array<Splash_Screens_Bool_Exp>>;
+  _not?: InputMaybe<Splash_Screens_Bool_Exp>;
+  _or?: InputMaybe<Array<Splash_Screens_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "splash_screens" */
+export enum Splash_Screens_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  SplashScreensPkey = 'splash_screens_pkey'
+}
+
+export enum Splash_Screens_Enum {
+  OrganisationsInsightReports = 'ORGANISATIONS_INSIGHT_REPORTS'
+}
+
+/** Boolean expression to compare columns of type "splash_screens_enum". All fields are combined with logical 'AND'. */
+export type Splash_Screens_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Splash_Screens_Enum>;
+  _in?: InputMaybe<Array<Splash_Screens_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Splash_Screens_Enum>;
+  _nin?: InputMaybe<Array<Splash_Screens_Enum>>;
+};
+
+/** input type for inserting data into table "splash_screens" */
+export type Splash_Screens_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Splash_Screens_Max_Fields = {
+  __typename?: 'splash_screens_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Splash_Screens_Min_Fields = {
+  __typename?: 'splash_screens_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "splash_screens" */
+export type Splash_Screens_Mutation_Response = {
+  __typename?: 'splash_screens_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Splash_Screens>;
+};
+
+/** on_conflict condition type for table "splash_screens" */
+export type Splash_Screens_On_Conflict = {
+  constraint: Splash_Screens_Constraint;
+  update_columns?: Array<Splash_Screens_Update_Column>;
+  where?: InputMaybe<Splash_Screens_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "splash_screens". */
+export type Splash_Screens_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: splash_screens */
+export type Splash_Screens_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "splash_screens" */
+export enum Splash_Screens_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "splash_screens" */
+export type Splash_Screens_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "splash_screens" */
+export type Splash_Screens_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Splash_Screens_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Splash_Screens_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "splash_screens" */
+export enum Splash_Screens_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+export type Splash_Screens_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Splash_Screens_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Splash_Screens_Bool_Exp;
+};
+
+/** This table is used to store the user submissions of a splash screen. */
+export type Submission_Of_Splash_Screens = {
+  __typename?: 'submission_of_splash_screens';
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  profile_id: Scalars['uuid'];
+  splash_screen: Splash_Screens_Enum;
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Aggregate = {
+  __typename?: 'submission_of_splash_screens_aggregate';
+  aggregate?: Maybe<Submission_Of_Splash_Screens_Aggregate_Fields>;
+  nodes: Array<Submission_Of_Splash_Screens>;
+};
+
+export type Submission_Of_Splash_Screens_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Submission_Of_Splash_Screens_Aggregate_Bool_Exp_Count>;
+};
+
+export type Submission_Of_Splash_Screens_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+  filter?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Aggregate_Fields = {
+  __typename?: 'submission_of_splash_screens_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Submission_Of_Splash_Screens_Max_Fields>;
+  min?: Maybe<Submission_Of_Splash_Screens_Min_Fields>;
+};
+
+
+/** aggregate fields of "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Submission_Of_Splash_Screens_Max_Order_By>;
+  min?: InputMaybe<Submission_Of_Splash_Screens_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Arr_Rel_Insert_Input = {
+  data: Array<Submission_Of_Splash_Screens_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Submission_Of_Splash_Screens_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "submission_of_splash_screens". All fields are combined with a logical 'AND'. */
+export type Submission_Of_Splash_Screens_Bool_Exp = {
+  _and?: InputMaybe<Array<Submission_Of_Splash_Screens_Bool_Exp>>;
+  _not?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+  _or?: InputMaybe<Array<Submission_Of_Splash_Screens_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  splash_screen?: InputMaybe<Splash_Screens_Enum_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "submission_of_splash_screens" */
+export enum Submission_Of_Splash_Screens_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  SubmissionOfSplashScreensPkey = 'submission_of_splash_screens_pkey',
+  /** unique or primary key constraint on columns "profile_id", "splash_screen" */
+  SubmissionOfSplashScreensSplashScreenProfileIdKey = 'submission_of_splash_screens_splash_screen_profile_id_key'
+}
+
+/** input type for inserting data into table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  splash_screen?: InputMaybe<Splash_Screens_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Submission_Of_Splash_Screens_Max_Fields = {
+  __typename?: 'submission_of_splash_screens_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Submission_Of_Splash_Screens_Min_Fields = {
+  __typename?: 'submission_of_splash_screens_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Mutation_Response = {
+  __typename?: 'submission_of_splash_screens_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Submission_Of_Splash_Screens>;
+};
+
+/** on_conflict condition type for table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_On_Conflict = {
+  constraint: Submission_Of_Splash_Screens_Constraint;
+  update_columns?: Array<Submission_Of_Splash_Screens_Update_Column>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "submission_of_splash_screens". */
+export type Submission_Of_Splash_Screens_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  splash_screen?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: submission_of_splash_screens */
+export type Submission_Of_Splash_Screens_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "submission_of_splash_screens" */
+export enum Submission_Of_Splash_Screens_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  SplashScreen = 'splash_screen',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  splash_screen?: InputMaybe<Splash_Screens_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** Streaming cursor of the table "submission_of_splash_screens" */
+export type Submission_Of_Splash_Screens_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Submission_Of_Splash_Screens_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Submission_Of_Splash_Screens_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  splash_screen?: InputMaybe<Splash_Screens_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "submission_of_splash_screens" */
+export enum Submission_Of_Splash_Screens_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  SplashScreen = 'splash_screen',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Submission_Of_Splash_Screens_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Submission_Of_Splash_Screens_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Submission_Of_Splash_Screens_Bool_Exp;
+};
+
 /** columns and relationships of "submodule" */
 export type Submodule = {
   __typename?: 'submodule';
@@ -61947,6 +62499,22 @@ export type Subscription_Root = {
   scheduled_events_view_aggregate: Scheduled_Events_View_Aggregate;
   /** fetch data from the table in a streaming manner: "scheduled_events_view" */
   scheduled_events_view_stream: Array<Scheduled_Events_View>;
+  /** fetch data from the table: "splash_screens" */
+  splash_screens: Array<Splash_Screens>;
+  /** fetch aggregated fields from the table: "splash_screens" */
+  splash_screens_aggregate: Splash_Screens_Aggregate;
+  /** fetch data from the table: "splash_screens" using primary key columns */
+  splash_screens_by_pk?: Maybe<Splash_Screens>;
+  /** fetch data from the table in a streaming manner: "splash_screens" */
+  splash_screens_stream: Array<Splash_Screens>;
+  /** An array relationship */
+  submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
+  /** An aggregate relationship */
+  submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
+  /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
+  submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
+  /** fetch data from the table in a streaming manner: "submission_of_splash_screens" */
+  submission_of_splash_screens_stream: Array<Submission_Of_Splash_Screens>;
   /** fetch data from the table: "submodule" */
   submodule: Array<Submodule>;
   /** fetch aggregated fields from the table: "submodule" */
@@ -65651,6 +66219,66 @@ export type Subscription_RootScheduled_Events_View_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Scheduled_Events_View_Stream_Cursor_Input>>;
   where?: InputMaybe<Scheduled_Events_View_Bool_Exp>;
+};
+
+
+export type Subscription_RootSplash_ScreensArgs = {
+  distinct_on?: InputMaybe<Array<Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Splash_Screens_Order_By>>;
+  where?: InputMaybe<Splash_Screens_Bool_Exp>;
+};
+
+
+export type Subscription_RootSplash_Screens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Splash_Screens_Order_By>>;
+  where?: InputMaybe<Splash_Screens_Bool_Exp>;
+};
+
+
+export type Subscription_RootSplash_Screens_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootSplash_Screens_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Splash_Screens_Stream_Cursor_Input>>;
+  where?: InputMaybe<Splash_Screens_Bool_Exp>;
+};
+
+
+export type Subscription_RootSubmission_Of_Splash_ScreensArgs = {
+  distinct_on?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submission_Of_Splash_Screens_Order_By>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+
+export type Subscription_RootSubmission_Of_Splash_Screens_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Submission_Of_Splash_Screens_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Submission_Of_Splash_Screens_Order_By>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
+};
+
+
+export type Subscription_RootSubmission_Of_Splash_Screens_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootSubmission_Of_Splash_Screens_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Submission_Of_Splash_Screens_Stream_Cursor_Input>>;
+  where?: InputMaybe<Submission_Of_Splash_Screens_Bool_Exp>;
 };
 
 
@@ -71638,6 +72266,13 @@ export type GetOrgWithKeyContactsQueryVariables = Exact<{
 
 export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName?: string | null, country?: string | null, countryCode?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, archived?: boolean | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, phoneCountryCode?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity?: any | null, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, affiliated_organisations: Array<{ __typename?: 'organization', id: any, name: string, address: any }>, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }>, profile_trainer_agreement_types: Array<{ __typename?: 'profile_trainer_agreement_type', agreement_type: Trainer_Agreement_Type_Enum, id: any }> } }>, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null };
 
+export type ProfileManagedOrganizationsQueryVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type ProfileManagedOrganizationsQuery = { __typename?: 'query_root', organization_member: Array<{ __typename?: 'organization_member', id: any, organization: { __typename?: 'organization', id: any, external_dashboard_url?: string | null, name: string } }> };
+
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;
   where?: InputMaybe<Promo_Code_Bool_Exp>;
@@ -71647,6 +72282,14 @@ export type GetPromoCodesQueryVariables = Exact<{
 
 
 export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, disabled: boolean, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
+
+export type InsertSubmissionOfSplashScreenMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+  splashScreen: Splash_Screens_Enum;
+}>;
+
+
+export type InsertSubmissionOfSplashScreenMutation = { __typename?: 'mutation_root', insert_submission_of_splash_screens_one?: { __typename?: 'submission_of_splash_screens', id: any } | null };
 
 export type GetXeroInvoicesForOrdersQueryVariables = Exact<{
   invoiceNumbers: Array<Scalars['String']> | Scalars['String'];

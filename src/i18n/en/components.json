@@ -636,5 +636,13 @@
     "title": "Important Update Required",
     "content": "A new and improved version of Team Teach Connect is now available!",
     "update": "Update now"
+  },
+  "insights-report-splash-screen": {
+    "multiple-managed-orgs-body": "Compare progress, spot trends, and make informed decisions.<br/>Choose a school to start exploring.",
+    "multiple-managed-orgs-subtitle": "If you have Headteachers or SLT in your schools, you can invite them as an Organisation Admins from your organisation dashboards under the <strong>'Individuals'</strong> tab to benefit from these Insights.",
+    "multiple-managed-orgs-title": "Your schools' stories are ready.",
+    "one-managed-org-body": "Explore progress, trends, and opportunities in your Insights Report.",
+    "one-managed-org-subtitle": "If you have Headteachers or SLT in your school, you can invite them as Organisation Admins from your organisation dashboards under the <strong>'Individuals'</strong> tab to benefit from these Insights.",
+    "one-managed-org-title": "How is your school performing?"
   }
 }

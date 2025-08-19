@@ -292,6 +292,12 @@ export type Profile = {
   archived?: boolean
   country?: string
   countryCode?: string
+  splashScreens?:
+    | {
+        id: string
+        splash_screen: string
+      }[]
+    | null
 } & Base
 
 export type Role = {

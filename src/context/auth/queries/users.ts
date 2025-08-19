@@ -48,6 +48,11 @@ export const GET_USER_PROFILE = gql`
           }
         }
       }
+
+      splashScreens: submission_of_splash_screens {
+        id
+        splash_screen
+      }
     }
   }
 `

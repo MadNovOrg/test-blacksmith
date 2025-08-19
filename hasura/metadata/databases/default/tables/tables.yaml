@@ -118,6 +118,8 @@
 - "!include public_resource_packs_type.yaml"
 - "!include public_role.yaml"
 - "!include public_scheduled_events_view.yaml"
+- "!include public_splash_screens.yaml"
+- "!include public_submission_of_splash_screens.yaml"
 - "!include public_submodule.yaml"
 - "!include public_trainer_agreement_type.yaml"
 - "!include public_trainer_role_type.yaml"

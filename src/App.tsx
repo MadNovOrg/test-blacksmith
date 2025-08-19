@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 
 import { GQLProvider } from './components/GQLProvider'
+import { InsightsReportSplashScreen } from './components/InsightsReportSplashScreen'
 import { ScrollToTop } from './components/ScrollToTop'
 import { SnackbarProvider } from './context/snackbar'
 import { useConfigureSentryTags } from './hooks/useConfigureSentryTags'
@@ -27,6 +28,7 @@ function App() {
           />
           <GTMPageTracker />
           <AppRoutes />
+          <InsightsReportSplashScreen />
         </SnackbarProvider>
       </>
     </GQLProvider>

@@ -302,10 +302,11 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - id
-        - dfe_establishment_id
-        - name
         - address
+        - dfe_establishment_id
+        - external_dashboard_url
+        - id
+        - name
       computed_fields:
         - addressEachText
         - postCode
@@ -319,6 +320,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -346,6 +348,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -401,6 +404,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -428,6 +432,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - go1_licenses
         - id
@@ -513,6 +518,7 @@ select_permissions:
         - contact_details
         - created_at
         - dfe_establishment_id
+        - external_dashboard_url
         - geo_coordinates
         - id
         - main_organisation_id

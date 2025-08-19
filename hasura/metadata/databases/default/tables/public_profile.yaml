@@ -102,6 +102,13 @@ array_relationships:
         table:
           name: profile_role
           schema: public
+  - name: submission_of_splash_screens
+    using:
+      foreign_key_constraint_on:
+        column: profile_id
+        table:
+          name: submission_of_splash_screens
+          schema: public
   - name: trainer_role_types
     using:
       foreign_key_constraint_on:
