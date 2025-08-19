@@ -208,6 +208,7 @@ export const Certifications: React.FC<
                       Course_Level_Enum.BildIntermediateTrainer,
                       Course_Level_Enum.BildRegular,
                       Course_Level_Enum.Advanced,
+                      Course_Level_Enum.AdvancedTrainer,
                     ])
                   : new Set([
                       Course_Level_Enum.FoundationTrainer,
