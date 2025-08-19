@@ -8,10 +8,10 @@ describe(FilterByCourseLevel.name, () => {
     render(<FilterByCourseLevel onChange={onChange} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Course level')).toBeVisible()
+      expect(screen.getByText('Course Level')).toBeVisible()
     })
 
-    await userEvent.click(screen.getByText('Course level'))
+    await userEvent.click(screen.getByText('Course Level'))
     await userEvent.click(screen.getByText('Advanced Trainer'))
 
     expect(onChange).toHaveBeenCalledWith(['ADVANCED_TRAINER'])

@@ -12,7 +12,7 @@ describe(PricingFilters.name, () => {
   } = renderHook(() => useTranslation())
   const onChangeMock = vi.fn()
   it.each([
-    t('level'),
+    t('course-level'),
     t('course-type'),
     t('common.blended-learning'),
     t('common.reaccreditation'),
@@ -23,7 +23,7 @@ describe(PricingFilters.name, () => {
   it.each([
     t('common.blended-learning'),
     t('common.reaccreditation'),
-    t('level'),
+    t('course-level'),
     t('course-type'),
   ])('should filter by %s filter', filter => {
     render(<PricingFilters onChange={onChangeMock} />)
