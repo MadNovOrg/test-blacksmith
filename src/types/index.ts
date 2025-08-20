@@ -223,6 +223,7 @@ export type Organization = {
   reservedGo1Licenses?: number
   sector: string
   tags: string[]
+  tt_connect_id?: string
 } & Base
 
 export type OrganizationMember = {

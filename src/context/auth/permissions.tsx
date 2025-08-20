@@ -988,6 +988,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canEditRoles: () => acl.isTTAdmin() || acl.isTTOps(),
     canInviteClientsToIndirectCourses: () =>
       acl.isAdmin() || acl.isSalesAdmin(),
+    canViewTTConnectId: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isFinance,
+        acl.isOrgAdmin,
+        acl.isLD,
+      ])(),
   })
 
   return acl

@@ -1,4 +1,5 @@
 import { format } from 'date-fns'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import {
   GetMainOrganisationDetailsQuery,
@@ -19,6 +20,9 @@ import { OrgDetailsTab } from '.'
 
 vi.mock('@app/modules/organisation/hooks/ANZ/useOrgV2')
 vi.mock('@app/modules/organisation/hooks/UK/useOrgV2')
+
+vi.mock('posthog-js/react')
+const useFeatureFlagEnabledMock = vi.mocked(useFeatureFlagEnabled)
 
 const useOrganisationMockANZ = vi.mocked(ANZhook)
 const useOrganisationMockUK = vi.mocked(UKhook)
@@ -234,6 +238,7 @@ describe('component: OrgDetailsTab UK', () => {
       id: orgId,
       name: orgName,
       affiliated_organisations: [],
+      tt_connect_id: chance.guid(),
     },
   })
 
@@ -254,6 +259,9 @@ describe('component: OrgDetailsTab UK', () => {
         activeRole: role,
         isOrgAdmin: role === RoleName.USER,
         managedOrgIds: [role === RoleName.USER ? orgId : ''],
+        acl: {
+          canViewTTConnectId: () => true,
+        },
       },
     })
     return getByTestId
@@ -354,5 +362,18 @@ describe('component: OrgDetailsTab UK', () => {
       expect(deleteOrgButton).toBeInTheDocument()
       deleteOrgButton.click()
     })
+  })
+  it.each([
+    RoleName.SALES_REPRESENTATIVE,
+    RoleName.SALES_ADMIN,
+    RoleName.TT_OPS,
+    RoleName.FINANCE,
+    RoleName.TT_ADMIN,
+    RoleName.LD,
+  ])('can view Connect id as %s', role => {
+    useFeatureFlagEnabledMock.mockReturnValue(true)
+    const getByTestId = setup(role)
+    expect(getByTestId('org-connect-id-section')).toBeInTheDocument()
+    expect(getByTestId('org-connect-id-row')).toBeInTheDocument()
   })
 })

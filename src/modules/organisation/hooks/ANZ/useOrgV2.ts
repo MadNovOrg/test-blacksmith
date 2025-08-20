@@ -35,6 +35,7 @@ export const GET_MAIN_ORGANISATION_DETAILS_QUERY = gql`
     $withMainOrganisation: Boolean = false
     $withAffiliatedOrganisationsCount: Boolean = false
     $withAffiliatedOrganisations: Boolean = false
+    $withTTConnectId: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -49,6 +50,7 @@ export const GET_MAIN_ORGANISATION_DETAILS_QUERY = gql`
         id
         name
       }
+      tt_connect_id @include(if: $withTTConnectId)
       affiliated_organisations(where: $affiliatedOrgWhere)
         @include(if: $withAffiliatedOrganisations) {
         id
@@ -165,6 +167,7 @@ type UseOrgV2Input = {
   withMainOrganisation?: boolean
   withAffiliatedOrganisationsCount?: boolean
   withAffiliatedOrganisations?: boolean
+  withTTConnectId?: boolean
 }
 
 export default function useOrgV2({
@@ -186,6 +189,7 @@ export default function useOrgV2({
   withMainOrganisation = true,
   withAffiliatedOrganisationsCount = false,
   withAffiliatedOrganisations = false,
+  withTTConnectId = false,
 }: UseOrgV2Input) {
   let conditions: Organization_Bool_Exp = {}
   if (orgId !== ALL_ORGS) {
@@ -278,6 +282,7 @@ export default function useOrgV2({
       withMainOrganisation,
       withAffiliatedOrganisationsCount,
       withAffiliatedOrganisations,
+      withTTConnectId,
     },
   })
 

@@ -34,6 +34,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
     $withDfEEstablishment: Boolean = false
     $withMainOrganisation: Boolean = false
     $withExternalDashboardUrl: Boolean = false
+    $withTTConnectId: Boolean = false
   ) {
     orgs: organization(
       where: $where
@@ -49,6 +50,7 @@ export const GET_ORGANISATION_DETAILS_QUERY = gql`
         @include(if: $withDfEEstablishment) {
         ...Establishment
       }
+      tt_connect_id @include(if: $withTTConnectId)
       region
       main_organisation @include(if: $withMainOrganisation) {
         id
@@ -136,6 +138,7 @@ type UseOrgV2Input = {
   withDfEEstablishment?: boolean
   withMainOrganisation?: boolean
   withExternalDashboardUrl?: boolean
+  withTTConnectId?: boolean
 }
 
 export default function useOrgV2({
@@ -156,6 +159,7 @@ export default function useOrgV2({
   withDfEEstablishment = false,
   withMainOrganisation = true,
   withExternalDashboardUrl,
+  withTTConnectId,
 }: UseOrgV2Input) {
   let conditions: Organization_Bool_Exp = {}
   if (orgId !== ALL_ORGS) {
@@ -247,6 +251,7 @@ export default function useOrgV2({
       withMembers,
       withSpecificOrganisation,
       withExternalDashboardUrl,
+      withTTConnectId,
     },
   })
 

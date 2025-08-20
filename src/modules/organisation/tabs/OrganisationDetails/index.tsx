@@ -1,4 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete'
+import InfoIcon from '@mui/icons-material/Info'
 import {
   Box,
   Button,
@@ -6,12 +7,14 @@ import {
   CircularProgress,
   Grid,
   Stack,
+  Tooltip,
 } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { isValid } from 'date-fns'
 import { format } from 'date-fns-tz'
 import { TFunction } from 'i18next'
-import React, { useState } from 'react'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWindowSize } from 'react-use'
 
@@ -83,12 +86,22 @@ export const OrgDetailsTab: React.FC<
   const { checkUKsCountryName } = useWorldCountries()
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
 
+  const viewConnectIdEnabled = useFeatureFlagEnabled(
+    'view-organization-connect-id-enabled',
+  )
+
+  const canViewConnectId = useMemo(
+    () => acl.isUK() && viewConnectIdEnabled && acl.canViewTTConnectId(),
+    [acl, viewConnectIdEnabled],
+  )
+
   const { data, fetching, error } = acl.isUK()
     ? UKhook({
         orgId,
         profileId: profile?.id,
         showAll: acl.canViewAllOrganizations(),
         withAggregateData: acl.canDeleteOrgs(),
+        withTTConnectId: canViewConnectId,
       })
     : ANZhook({
         orgId,
@@ -105,6 +118,7 @@ export const OrgDetailsTab: React.FC<
     Object.entries(sectors).find(
       ([key, value]) => key === org?.sector && value,
     ) || []
+
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
       {fetching ? (
@@ -119,6 +133,42 @@ export const OrgDetailsTab: React.FC<
 
       {!fetching && !error && org ? (
         <Box>
+          {canViewConnectId && Boolean(org.tt_connect_id) ? (
+            <Box
+              bgcolor="common.white"
+              p={responsiveCSSProps(isMobile).padding}
+              mb={4}
+              borderRadius={1}
+              data-testid="org-connect-id-section"
+            >
+              <Grid container>
+                <Grid item xs={8}>
+                  <DetailsRow
+                    data-testid="org-connect-id-row"
+                    label={
+                      <Box display={'flex'} gap={1}>
+                        <Typography>
+                          {t('organization-details-section.connect-id')}
+                        </Typography>
+                        <Tooltip
+                          title={t(
+                            'organization-details-section.connect-id-tooltip',
+                          )}
+                        >
+                          <InfoIcon />
+                        </Tooltip>
+                      </Box>
+                    }
+                    labelProps={{
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                    }}
+                    value={org.tt_connect_id}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          ) : null}
           <Typography
             variant="subtitle1"
             mb={2}
@@ -167,7 +217,7 @@ export const OrgDetailsTab: React.FC<
                 />
               </Grid>
 
-              {acl.canEditOrgs() ? (
+              {acl.canEditOrgs() && (
                 <Grid item xs={4}>
                   <Box
                     display="flex"
@@ -188,7 +238,7 @@ export const OrgDetailsTab: React.FC<
                     >
                       {_t('pages.org-details.edit-organization')}
                     </Button>
-                    {acl.canDeleteOrgs() ? (
+                    {acl.canDeleteOrgs() && (
                       <>
                         <Button
                           variant="contained"
@@ -214,10 +264,10 @@ export const OrgDetailsTab: React.FC<
                           />
                         ) : null}
                       </>
-                    ) : null}
+                    )}
                   </Box>
                 </Grid>
-              ) : null}
+              )}
             </Grid>
           </Box>
 

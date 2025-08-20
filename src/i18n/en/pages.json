@@ -1447,6 +1447,8 @@
         "cannot-be-deleted-with-main-org": "{{name}} cannot be deleted as there are still individual(s), order(s), course(s) or affiliated organisations associated to this organisation.",
         "delete-organisation": "Delete Organisation",
         "organization-details-section": {
+          "connect-id": "Connect Organisation id",
+          "connect-id-tooltip": "This is your organisation’s unique Connect ID. Please use it when communicating with Team Teach.",
           "title": "Organisation details",
           "organization-name": "Organisation name",
           "organization-sector": "Sector",

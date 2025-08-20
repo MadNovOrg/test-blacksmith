@@ -205,6 +205,7 @@ export const buildOrganization = build<Organization>({
     preferences: {},
     go1Licenses: 0,
     region: '',
+    tt_connect_id: perBuild(() => chance.guid()),
   },
 })
 

@@ -333,6 +333,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
@@ -361,6 +362,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
@@ -389,6 +391,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
@@ -417,6 +420,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
@@ -474,6 +478,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
@@ -503,6 +508,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
@@ -556,6 +562,7 @@ select_permissions:
         - reserved_go1_licenses
         - sector
         - tags
+        - tt_connect_id
         - updated_at
         - xero_contact_id
       computed_fields:
