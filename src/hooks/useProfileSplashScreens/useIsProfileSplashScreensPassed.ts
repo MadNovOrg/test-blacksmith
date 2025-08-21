@@ -6,6 +6,8 @@ import { Splash_Screens_Enum } from '@app/generated/graphql'
 const SPLASH_SCREEN_FEATURE_FLAGS: Record<Splash_Screens_Enum, string> = {
   [Splash_Screens_Enum.OrganisationsInsightReports]:
     'insights-report-splash-screen',
+  [Splash_Screens_Enum.OrganisationAdminNomination]:
+    'organisation-admin-nomination-splash-screen',
 }
 
 export const useIsProfileSplashScreenPassed = (

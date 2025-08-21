@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import teamsImg from '@app/assets/teams.png'
 import trainersImg from '@app/assets/trainers.png'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { OrganisationAdminNominationSplashScreen } from '@app/components/OrganisationAdminNominationSplashScreen'
 import { useAuth } from '@app/context/auth'
 import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 
@@ -62,6 +63,7 @@ export const Welcome = () => {
           </SplitImage>
         </Stack>
       </Container>
+      <OrganisationAdminNominationSplashScreen />
     </FullHeightPageLayout>
   )
 }

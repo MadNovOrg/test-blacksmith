@@ -644,5 +644,9 @@
     "one-managed-org-body": "Explore progress, trends, and opportunities in your Insights Report.",
     "one-managed-org-subtitle": "If you have Headteachers or SLT in your school, you can invite them as Organisation Admins from your organisation dashboards under the <strong>'Individuals'</strong> tab to benefit from these Insights.",
     "one-managed-org-title": "How is your school performing?"
+  },
+  "organisation-admin-nomination-splash-screen": {
+    "title": "Insights Report for your Organisation - For Headteachers & SLT",
+    "body": "See trends, track progress, and turn data into action — available exclusively to Organisation Admins only.<br/>If you're a Headteacher or part of the SLT, speak to your Organisation Admin or contact Team Teach to request access using link <linkToNominate>here</linkToNominate>."
   }
 }

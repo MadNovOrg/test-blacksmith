@@ -56363,9 +56363,9 @@ export type Query_Root = {
   splash_screens_aggregate: Splash_Screens_Aggregate;
   /** fetch data from the table: "splash_screens" using primary key columns */
   splash_screens_by_pk?: Maybe<Splash_Screens>;
-  /** An array relationship */
+  /** fetch data from the table: "submission_of_splash_screens" */
   submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
-  /** An aggregate relationship */
+  /** fetch aggregated fields from the table: "submission_of_splash_screens" */
   submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
   submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
@@ -61005,7 +61005,8 @@ export enum Splash_Screens_Constraint {
 }
 
 export enum Splash_Screens_Enum {
-  OrganisationsInsightReports = 'ORGANISATIONS_INSIGHT_REPORTS'
+  OrganisationsInsightReports = 'ORGANISATIONS_INSIGHT_REPORTS',
+  OrganisationAdminNomination = 'ORGANISATION_ADMIN_NOMINATION'
 }
 
 /** Boolean expression to compare columns of type "splash_screens_enum". All fields are combined with logical 'AND'. */
@@ -62523,9 +62524,9 @@ export type Subscription_Root = {
   splash_screens_by_pk?: Maybe<Splash_Screens>;
   /** fetch data from the table in a streaming manner: "splash_screens" */
   splash_screens_stream: Array<Splash_Screens>;
-  /** An array relationship */
+  /** fetch data from the table: "submission_of_splash_screens" */
   submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
-  /** An aggregate relationship */
+  /** fetch aggregated fields from the table: "submission_of_splash_screens" */
   submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
   submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
@@ -72290,6 +72291,13 @@ export type ProfileManagedOrganizationsQueryVariables = Exact<{
 
 
 export type ProfileManagedOrganizationsQuery = { __typename?: 'query_root', organization_member: Array<{ __typename?: 'organization_member', id: any, organization: { __typename?: 'organization', id: any, external_dashboard_url?: string | null, name: string } }> };
+
+export type GetProfileOrgsWithDashboardLinkQueryVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type GetProfileOrgsWithDashboardLinkQuery = { __typename?: 'query_root', organization_member: Array<{ __typename?: 'organization_member', id: any, organization: { __typename?: 'organization', id: any, external_dashboard_url?: string | null, name: string } }> };
 
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;
