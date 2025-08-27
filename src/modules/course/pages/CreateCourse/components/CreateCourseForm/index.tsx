@@ -476,6 +476,8 @@ export const CreateCourseForm = () => {
           onSubmit={submit}
           exceptions={courseExceptions}
           courseType={courseType}
+          courseData={courseData as ValidCourseInput}
+          setCourseData={setCourseData}
         />
       )}
     </Box>

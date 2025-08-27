@@ -27,6 +27,7 @@ insert_permissions:
       columns:
         - course_id
         - exception
+        - reason
   - role: tt-admin
     permission:
       check: {}
@@ -52,6 +53,7 @@ select_permissions:
       columns:
         - course_id
         - exception
+        - reason
       filter: {}
       allow_aggregations: true
   - role: ld
@@ -59,6 +61,7 @@ select_permissions:
       columns:
         - course_id
         - exception
+        - reason
       filter: {}
       allow_aggregations: true
   - role: organization-key-contact
@@ -73,6 +76,7 @@ select_permissions:
       columns:
         - course_id
         - exception
+        - reason
       filter: {}
       allow_aggregations: true
   - role: sales-representative
@@ -80,6 +84,7 @@ select_permissions:
       columns:
         - course_id
         - exception
+        - reason
       filter: {}
       allow_aggregations: true
   - role: trainer
@@ -94,6 +99,7 @@ select_permissions:
       columns:
         - course_id
         - exception
+        - reason
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -101,6 +107,7 @@ select_permissions:
       columns:
         - course_id
         - exception
+        - reason
       filter: {}
       allow_aggregations: true
   - role: unverified

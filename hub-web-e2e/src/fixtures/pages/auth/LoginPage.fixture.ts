@@ -44,6 +44,10 @@ export class LoginPage extends BasePage {
     await expect(this.emailInput).toBeVisible()
   }
 
+  async waitForUpdateBannerToBeInvisible() {
+    await expect(this.updateVersionbannerAccept).toBeHidden()
+  }
+
   async logIn(email: string, password: string): Promise<MyCoursesPage> {
     await this.emailInput.fill(email)
     await this.passwordInput.fill(password)

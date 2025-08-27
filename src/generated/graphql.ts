@@ -21390,6 +21390,7 @@ export type Course_Exceptions = {
   __typename?: 'course_exceptions';
   courseId: Scalars['Int'];
   exception: Course_Exception_Enum;
+  reason?: Maybe<Scalars['String']>;
 };
 
 /** aggregated selection of "course_exceptions" */
@@ -21473,6 +21474,7 @@ export type Course_Exceptions_Bool_Exp = {
   _or?: InputMaybe<Array<Course_Exceptions_Bool_Exp>>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   exception?: InputMaybe<Course_Exception_Enum_Comparison_Exp>;
+  reason?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_exceptions" */
@@ -21490,28 +21492,33 @@ export type Course_Exceptions_Inc_Input = {
 export type Course_Exceptions_Insert_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
   exception?: InputMaybe<Course_Exception_Enum>;
+  reason?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Course_Exceptions_Max_Fields = {
   __typename?: 'course_exceptions_max_fields';
   courseId?: Maybe<Scalars['Int']>;
+  reason?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "course_exceptions" */
 export type Course_Exceptions_Max_Order_By = {
   courseId?: InputMaybe<Order_By>;
+  reason?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Course_Exceptions_Min_Fields = {
   __typename?: 'course_exceptions_min_fields';
   courseId?: Maybe<Scalars['Int']>;
+  reason?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "course_exceptions" */
 export type Course_Exceptions_Min_Order_By = {
   courseId?: InputMaybe<Order_By>;
+  reason?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_exceptions" */
@@ -21534,6 +21541,7 @@ export type Course_Exceptions_On_Conflict = {
 export type Course_Exceptions_Order_By = {
   courseId?: InputMaybe<Order_By>;
   exception?: InputMaybe<Order_By>;
+  reason?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_exceptions */
@@ -21547,13 +21555,16 @@ export enum Course_Exceptions_Select_Column {
   /** column name */
   CourseId = 'courseId',
   /** column name */
-  Exception = 'exception'
+  Exception = 'exception',
+  /** column name */
+  Reason = 'reason'
 }
 
 /** input type for updating data in table "course_exceptions" */
 export type Course_Exceptions_Set_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
   exception?: InputMaybe<Course_Exception_Enum>;
+  reason?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -21601,6 +21612,7 @@ export type Course_Exceptions_Stream_Cursor_Input = {
 export type Course_Exceptions_Stream_Cursor_Value_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
   exception?: InputMaybe<Course_Exception_Enum>;
+  reason?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate sum on columns */
@@ -21619,7 +21631,9 @@ export enum Course_Exceptions_Update_Column {
   /** column name */
   CourseId = 'courseId',
   /** column name */
-  Exception = 'exception'
+  Exception = 'exception',
+  /** column name */
+  Reason = 'reason'
 }
 
 export type Course_Exceptions_Updates = {
@@ -56363,9 +56377,9 @@ export type Query_Root = {
   splash_screens_aggregate: Splash_Screens_Aggregate;
   /** fetch data from the table: "splash_screens" using primary key columns */
   splash_screens_by_pk?: Maybe<Splash_Screens>;
-  /** fetch data from the table: "submission_of_splash_screens" */
+  /** An array relationship */
   submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
-  /** fetch aggregated fields from the table: "submission_of_splash_screens" */
+  /** An aggregate relationship */
   submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
   submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
@@ -62524,9 +62538,9 @@ export type Subscription_Root = {
   splash_screens_by_pk?: Maybe<Splash_Screens>;
   /** fetch data from the table in a streaming manner: "splash_screens" */
   splash_screens_stream: Array<Splash_Screens>;
-  /** fetch data from the table: "submission_of_splash_screens" */
+  /** An array relationship */
   submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
-  /** fetch aggregated fields from the table: "submission_of_splash_screens" */
+  /** An aggregate relationship */
   submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
   submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
@@ -72195,10 +72209,11 @@ export type GetCourseByIdQueryVariables = Exact<{
   withParticipants?: InputMaybe<Scalars['Boolean']>;
   withParticipantsPendingInvitesCount?: InputMaybe<Scalars['Boolean']>;
   withResourcePacks?: InputMaybe<Scalars['Boolean']>;
+  withExceptionsReason?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, free_course_materials?: number | null, reservedResourcePacks?: number | null, resourcePacksDeliveryType?: Resource_Packs_Delivery_Type_Enum | null, resourcePacksType?: Resource_Packs_Type_Enum | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, is_tender: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, coursesReservedLicenses?: number | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, levels: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, go1Licenses?: number | null, reservedGo1Licenses?: number | null, mainOrganizationLicenses?: { __typename?: 'organization', go1Licenses?: number | null, reservedGo1Licenses?: number | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null, bookingContact?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, country?: string | null, countryCode?: string | null, email?: string | null, familyName?: string | null, fullName?: string | null, givenName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, country?: string | null, countryCode?: string | null, email?: string | null, familyName?: string | null, fullName?: string | null, givenName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum }>, participantsPendingInvites: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', isDraft?: boolean | null, arloReferenceId?: string | null, displayOnWebsite?: boolean | null, curriculum?: any | null, accreditedBy: Accreditors_Enum, conversion?: boolean | null, freeSpaces?: number | null, accountCode?: string | null, level: Course_Level_Enum, special_instructions?: string | null, parking_instructions?: string | null, price?: any | null, exceptionsPending: boolean, renewalCycle?: Course_Renewal_Cycle_Enum | null, priceCurrency?: string | null, includeVAT?: boolean | null, free_course_materials?: number | null, reservedResourcePacks?: number | null, resourcePacksDeliveryType?: Resource_Packs_Delivery_Type_Enum | null, resourcePacksType?: Resource_Packs_Type_Enum | null, bookingContactInviteData?: any | null, organizationKeyContactInviteData?: any | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, is_tender: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, residingCountry?: string | null, coursesReservedLicenses?: number | null, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }>, bildStrategies: Array<{ __typename?: 'course_bild_strategy', strategyName: string }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, course_id: number, profile: { __typename?: 'profile', id: any, givenName?: string | null, familyName?: string | null, fullName?: string | null, avatar?: string | null, archived?: boolean | null, levels: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } }>, schedule: Array<{ __typename?: 'course_schedule', virtualAccountId?: string | null, timeZone: string, id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne?: string | null, addressLineTwo?: string | null, postCode?: string | null, country?: string | null, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, go1Licenses?: number | null, reservedGo1Licenses?: number | null, mainOrganizationLicenses?: { __typename?: 'organization', go1Licenses?: number | null, reservedGo1Licenses?: number | null } | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null } | null, bookingContact?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, country?: string | null, countryCode?: string | null, email?: string | null, familyName?: string | null, fullName?: string | null, givenName?: string | null } | null, organizationKeyContact?: { __typename?: 'profile', id: any, archived?: boolean | null, avatar?: string | null, country?: string | null, countryCode?: string | null, email?: string | null, familyName?: string | null, fullName?: string | null, givenName?: string | null } | null, orders?: Array<{ __typename?: 'course_order', order?: { __typename?: 'order', id: any, xeroInvoiceNumber?: string | null, source?: string | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, modules?: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, courseParticipants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, participantSubmittedEvaluationCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, courseExceptions: Array<{ __typename?: 'course_exceptions', exception: Course_Exception_Enum, reason?: string | null }>, participantsPendingInvites: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } } | null };
 
 export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, xeroContactId?: string | null, sector?: string | null, geoCoordinates?: any | null, organisationType?: string | null, main_organisation?: { __typename?: 'organization', id: any, name: string } | null };
 

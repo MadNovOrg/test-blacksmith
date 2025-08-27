@@ -12,6 +12,7 @@ credentials.forEach(cred => {
     await loginPage.goto()
     await loginPage.cookieConsentDeclinedButton.click()
     await loginPage.updateVersionbannerAccept.click()
+    await loginPage.waitForUpdateBannerToBeInvisible()
     const myCoursesPage = await loginPage.logIn(
       users[cred.name].email,
       users[cred.name].password,

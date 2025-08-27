@@ -482,6 +482,7 @@ export function useSaveCourse(): {
                 courseExceptions: {
                   data: exceptions.map(exception => ({
                     exception,
+                    reason: courseData.exceptionsReason,
                   })),
                 },
               }

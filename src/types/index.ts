@@ -64,6 +64,7 @@ export type Course = {
   course_code: string
   courseExceptions: {
     exception: Course_Exception_Enum
+    reason?: string
   }[]
   courseParticipants?: {
     attended?: boolean | null
@@ -706,6 +707,7 @@ export type CourseInput = {
   zoomProfileId: string | null
   gradingStarted?: boolean
   closedCoursePricingType?: ClosedCoursePricingType
+  exceptionsReason?: string
 }
 
 export type ValidCourseInput = DeepNonNullable<

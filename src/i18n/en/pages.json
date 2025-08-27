@@ -577,7 +577,10 @@
       "type_TRAINER_RATIO_NOT_MET": "Insufficient amount of trainers per participants",
       "proceed": "Proceed",
       "no-exceptions-message": "This course does not follow Team Teach training protocols, please review and amend the course date and/or trainer ratios before resubmitting.",
-      "no-exceptions-title": "No exceptions allowed"
+      "no-exceptions-title": "No exceptions allowed",
+      "exception-reason-placeholder": "What is the reason you are creating this course with an exception",
+      "exception-reason-error": "The reason is mandatory",
+      "exception-reason-max-length": "300"
     }
   },
   "edit-course": {

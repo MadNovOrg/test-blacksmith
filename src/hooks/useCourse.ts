@@ -53,6 +53,7 @@ export default function useCourse(
         acl.isInternalUser() || acl.isOrgAdmin() || acl.isTrainer(),
       withParticipantsPendingInvitesCount: options.includePendingInvitesCount,
       withResourcePacks: options.includeResourcePacks,
+      withExceptionsReason: acl.isInternalUser(),
     },
   })
 

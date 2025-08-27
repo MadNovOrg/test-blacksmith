@@ -1,0 +1,1 @@
+alter table "public"."course_exceptions" drop column "reason";

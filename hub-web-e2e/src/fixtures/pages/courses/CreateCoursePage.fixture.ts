@@ -76,6 +76,7 @@ export class CreateCoursePage extends BasePage {
   readonly proceedButton: Locator
   readonly autocompleteLoading: Locator
   readonly priceInput: Locator
+  readonly reasonText: Locator
 
   constructor(page: Page) {
     super(page)
@@ -204,6 +205,9 @@ export class CreateCoursePage extends BasePage {
       '[data-testid="proceed-button"]',
     )
     this.proceedButton = this.page.locator('[data-testid="proceed-button"]')
+    this.reasonText = this.page.locator(
+      '[data-testid="exception-reason-input"]',
+    )
   }
 
   async goto(courseType: string) {
@@ -359,6 +363,7 @@ export class CreateCoursePage extends BasePage {
     courseCode: string
   }> {
     await this.nextPageButton.click()
+    await this.fillInExceptionsReason()
     await this.proceedOnExceptions()
 
     await this.page.waitForURL(/.*\/courses\/new\/modules/)
@@ -366,6 +371,15 @@ export class CreateCoursePage extends BasePage {
     return {
       id: 0,
       courseCode: 'code',
+    }
+  }
+
+  async fillInExceptionsReason() {
+    if (await this.reasonText.isVisible()) {
+      await this.reasonText
+        .locator('textarea')
+        .first()
+        .fill('Test exception reason')
     }
   }
 

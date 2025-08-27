@@ -46,6 +46,8 @@ export const ExceptionsApprovalAlert: FC = () => {
       ?.map(({ exception }) => exception)
       ?.filter(exception => !ignoreExceptions.includes(exception)) ?? []
 
+  const exceptionsReason = course?.courseExceptions[0]?.reason
+
   const handleModal: (
     action: Course_Audit_Type_Enum.Approved | Course_Audit_Type_Enum.Rejected,
   ) => void = action => {
@@ -93,6 +95,14 @@ export const ExceptionsApprovalAlert: FC = () => {
               ))}
             </ul>
           )}
+          {exceptionsReason ? (
+            <Box mb={2}>
+              <Typography variant="body1" fontWeight={600}>
+                {`${t('reason')}:`}
+              </Typography>
+              <Typography variant="body1">{exceptionsReason}</Typography>
+            </Box>
+          ) : null}
           <Typography variant="body1" fontWeight={600}>
             {t('pages.create-course.exceptions.approval-footer')}
           </Typography>

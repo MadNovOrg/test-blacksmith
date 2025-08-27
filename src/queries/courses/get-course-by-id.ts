@@ -7,18 +7,6 @@ import { COURSE, COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 
 export type ResponseType = { course: Maybe<Course> }
 
-// TODO: Scrap this and use GetCourseByIdQuery and GetCourseByIdQueryVariables
-export type ParamsType = {
-  id: string
-  withArloRefId: boolean
-  withFreeCourseCourseMaterials?: boolean
-  withInternationalFinance?: boolean
-  withOrders?: boolean
-  withOrgLicenses?: boolean
-  withParticipants?: boolean
-  withParticipantsPendingInvitesCount?: boolean
-}
-
 export const QUERY = gql`
   ${COURSE}
   ${COURSE_SCHEDULE}
@@ -35,6 +23,7 @@ export const QUERY = gql`
     $withParticipants: Boolean = false
     $withParticipantsPendingInvitesCount: Boolean = false
     $withResourcePacks: Boolean = false
+    $withExceptionsReason: Boolean = false
   ) {
     course: course_by_pk(id: $id) {
       ...Course
@@ -216,6 +205,7 @@ export const QUERY = gql`
       }
       courseExceptions {
         exception
+        reason @include(if: $withExceptionsReason)
       }
 
       participantsPendingInvites: course_invites_aggregate(
