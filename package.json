@@ -177,7 +177,7 @@
     "@nx/eslint-plugin": "^16.10.0",
     "@nx/jest": "16.7.4",
     "@nx/js": "16.7.4",
-    "@nx/node": "^16.7.4",
+    "@nx/node": "^21.4.1",
     "@nx/playwright": "16.7.4",
     "@nx/react": "^16.7.4",
     "@nx/vite": "16.7.4",
