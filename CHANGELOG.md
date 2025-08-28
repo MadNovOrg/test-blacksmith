@@ -1,5 +1,38 @@
 # @teamteach/hub
 
+## 5.9.0
+
+### Minor Changes
+
+- fcb2eab: The urn column appears in the organizations merge logs table, the organizations table, and in both the search and courses search contexts.
+- 9e3d1cc: Org admin nomination splash screen
+- 9b7e646: Add comprehensive GitHub Copilot instructions and improve changeset workflow
+
+  This PR adds detailed development instructions in `.github/copilot-instructions.md` that enable AI coding agents to work effectively in the TeamTeach Hub codebase from a fresh clone. The instructions include:
+
+  - Environment setup (Node.js 18.14.2, pnpm 9.15.5)
+  - Docker infrastructure with multi-region support (UK/EU, ANZ)
+  - Build system requirements including critical memory flags
+  - Database operations with Hasura migrations and metadata
+  - Testing and linting workflows with accurate timing
+  - Troubleshooting guide for common issues
+
+  Additionally implements proper changeset workflow using `pnpm release:add` instead of manual changeset creation, ensuring consistent version management and change tracking.
+
+  All commands and workflows have been exhaustively tested and validated with measured execution times.
+
+- 6b5ba1a: Self Service Online Training link
+- d2cc55b: feat (TTHP-5386): organization connect id
+- 66c9a3e: Insights report splash screen
+- 0228848: Self service inline training links
+
+### Patch Changes
+
+- 09c00f5: fix (TTHP-5389): confirm transfer button spacing
+- d93cf5d: Repair the ‘Back to Settings’ button on the Organizations page
+- 7fae22c: Fix organization members' certificate hierarchy
+- 9417368: fix (TTHP-5380): course filters not representing actual course level
+
 ## 5.8.0
 
 ### Minor Changes
