@@ -140,6 +140,12 @@ const FinanceRoute = () => {
           <Route index element={<Navigate replace to="details" />} />
           <Route path="details" element={<TrainerCourseDetails />} />
           <Route path="grading/:participantId" element={<ParticipantGrade />} />
+
+          <Route path="evaluation">
+            <Route path="submit" element={<TrainerFeedback />} />
+            <Route path="summary" element={<EvaluationSummary />} />
+            <Route path="view" element={<CourseEvaluation />} />
+          </Route>
         </Route>
       </Route>
 

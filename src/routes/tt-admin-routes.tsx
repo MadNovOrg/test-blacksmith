@@ -119,6 +119,12 @@ const TTAdminRoutes = () => {
             />
           </Route>
 
+          <Route path="evaluation">
+            <Route path="submit" element={<TrainerFeedback />} />
+            <Route path="summary" element={<EvaluationSummary />} />
+            <Route path="view" element={<CourseEvaluation />} />
+          </Route>
+
           <Route path="blended-learning-sync/:participantId">
             <Route index element={<CourseParticipantBlendedLearningSync />} />
           </Route>
