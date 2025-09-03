@@ -1279,7 +1279,9 @@
         "trainer": "Trainer",
         "organisation": "Organisation",
         "course-code": "Course",
-        "reason": "Reason",
+        "approval-reason": "Approval reason by Team Teach",
+        "rejection-reason": "Rejection reason by Team Teach",
+        "exception-reason": "Exception reason by Org Trainer",
         "authorised-by": "Authorised by",
         "authorised-at": "Authorised at"
       },

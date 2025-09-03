@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
+import { Course_Audit_Type_Enum } from '@app/generated/graphql'
+
 import { render, renderHook, screen } from '@test/index'
 
 import { CourseExceptionsLogTable } from '.'
@@ -16,6 +18,7 @@ describe(CourseExceptionsLogTable.name, () => {
         loading={loading ?? false}
         logs={[]}
         sorting={{ by: 'created_at', dir: 'desc', onSort: () => null }}
+        activeTab={Course_Audit_Type_Enum.Approved}
       />,
     )
   it('should render the component', () => {
@@ -39,8 +42,13 @@ describe(CourseExceptionsLogTable.name, () => {
     //Assert
     cols
       .filter(
-        col => col !== t('pages.admin.course-exceptions-log.table-cols.reason'),
+        col =>
+          ![
+            t('pages.admin.course-exceptions-log.table-cols.reason'),
+            t('pages.admin.course-exceptions-log.table-cols.rejection-reason'),
+          ].includes(col),
       )
-      .map(col => expect(screen.getByText(col)).toBeInTheDocument())
+
+      .forEach(col => expect(screen.getByText(col)).toBeInTheDocument())
   })
 })

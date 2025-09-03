@@ -73,6 +73,14 @@ export const TableBody: FC<PropsWithChildren<Props>> = ({
             </TableCell>
           ) : null}
           <TableCell sx={{ maxWidth: 200 }}>
+            <Tooltip
+              data-testid="exception-tooltip"
+              title={log.payload.trainerExceptionReason}
+            >
+              <InfoIcon />
+            </Tooltip>
+          </TableCell>
+          <TableCell sx={{ maxWidth: 200 }}>
             <Tooltip data-testid="reason-tooltip" title={log.payload.reason}>
               <InfoIcon />
             </Tooltip>
