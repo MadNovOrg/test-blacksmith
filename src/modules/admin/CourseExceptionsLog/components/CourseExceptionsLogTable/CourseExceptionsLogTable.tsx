@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import {
   Course_Audit_Type_Enum,
   GetCourseAuditLogsQuery,
@@ -25,7 +26,11 @@ export const CourseExceptionsLogTable: FC<Props> = ({
   sorting,
   activeTab,
 }) => {
+  const { acl } = useAuth()
+
   const { t } = useTranslation()
+
+  const displayExceptionsReason = acl.isUK()
 
   const cols = useMemo(
     () => [
@@ -49,13 +54,18 @@ export const CourseExceptionsLogTable: FC<Props> = ({
         label: t('pages.admin.course-exceptions-log.table-cols.course-code'),
         sorting: true,
       },
-      {
-        id: 'exception-reason',
-        label: t(
-          'pages.admin.course-exceptions-log.table-cols.exception-reason',
-        ),
-        sorting: false,
-      },
+      ...(displayExceptionsReason
+        ? [
+            {
+              id: 'exception-reason',
+              label: t(
+                'pages.admin.course-exceptions-log.table-cols.exception-reason',
+              ),
+              sorting: false,
+            },
+          ]
+        : []),
+
       {
         id: 'reason',
         label:
@@ -77,7 +87,7 @@ export const CourseExceptionsLogTable: FC<Props> = ({
         sorting: true,
       },
     ],
-    [t, activeTab],
+    [t, displayExceptionsReason, activeTab],
   )
 
   return (

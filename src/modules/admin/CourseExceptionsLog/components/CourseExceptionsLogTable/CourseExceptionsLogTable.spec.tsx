@@ -1,12 +1,23 @@
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 
 import { render, renderHook, screen } from '@test/index'
 
 import { CourseExceptionsLogTable } from '.'
 
+vi.mock('@app/context/auth')
+
+const mockedUseAuth = vi.mocked(useAuth)
+
 describe(CourseExceptionsLogTable.name, () => {
+  beforeEach(() => {
+    mockedUseAuth.mockReturnValue({
+      acl: { isUK: () => true },
+    } as unknown as ReturnType<typeof useAuth>)
+  })
+
   const {
     result: {
       current: { t },

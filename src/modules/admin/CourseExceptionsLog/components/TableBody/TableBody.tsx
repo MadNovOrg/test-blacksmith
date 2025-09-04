@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { useAuth } from '@app/context/auth'
 import { GetCourseAuditLogsQuery } from '@app/generated/graphql'
 import { CourseTrainer } from '@app/types'
 import { getCourseLeadTrainer } from '@app/util'
@@ -28,10 +29,15 @@ export const TableBody: FC<PropsWithChildren<Props>> = ({
   colSpan,
   loading,
 }) => {
+  const { acl } = useAuth()
+
   const { t } = useTranslation()
+
   const leadTrainer = (trainers: CourseTrainer[]) => {
     return getCourseLeadTrainer(trainers ?? [])?.profile ?? { id: '' }
   }
+
+  const displayExceptionsReason = acl.isUK()
 
   if (loading) return <TableLoading colSpan={colSpan} />
 
@@ -72,14 +78,16 @@ export const TableBody: FC<PropsWithChildren<Props>> = ({
               </Link>
             </TableCell>
           ) : null}
-          <TableCell sx={{ maxWidth: 200 }}>
-            <Tooltip
-              data-testid="exception-tooltip"
-              title={log.payload.trainerExceptionReason}
-            >
-              <InfoIcon />
-            </Tooltip>
-          </TableCell>
+          {displayExceptionsReason ? (
+            <TableCell sx={{ maxWidth: 200 }}>
+              <Tooltip
+                data-testid="exception-tooltip"
+                title={log.payload.trainerExceptionReason}
+              >
+                <InfoIcon />
+              </Tooltip>
+            </TableCell>
+          ) : null}
           <TableCell sx={{ maxWidth: 200 }}>
             <Tooltip data-testid="reason-tooltip" title={log.payload.reason}>
               <InfoIcon />
