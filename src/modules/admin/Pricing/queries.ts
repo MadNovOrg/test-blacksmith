@@ -13,7 +13,7 @@ export const INSERT_COURSE_PRICING = gql`
     $coursePricingId: uuid!
     $priceAmount: numeric!
     $effectiveFrom: date!
-    $effectiveTo: date!
+    $effectiveTo: date
     $priceCurrency: String!
   ) {
     course_pricing_schedule: insert_course_pricing_schedule_one(
@@ -36,7 +36,7 @@ export const UPDATE_COURSE_PRICING = gql`
     $id: uuid!
     $priceAmount: numeric!
     $effectiveFrom: date!
-    $effectiveTo: date!
+    $effectiveTo: date
   ) {
     update_course_pricing_schedule_by_pk(
       pk_columns: { id: $id }

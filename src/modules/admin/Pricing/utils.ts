@@ -33,7 +33,6 @@ type PricingDates = {
 }
 
 export enum DatesValidation {
-  SET_EFFECTIVE_TO_FOR_EXISTING_SCHEDULE = 'SET_EFFECTIVE_TO_FOR_EXISTING_SCHEDULE',
   EFFECTIVE_FROM_EARLIER_THAN_TODAY = 'EFFECTIVE_FROM_EARLIER_THAN_TODAY',
   INTERVALS_OVERLAP = 'INTERVALS_OVERLAP',
   EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM = 'EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM',
@@ -76,16 +75,17 @@ export const validatePricingDates = ({
   isNewPricing,
   isAgainstSelf,
 }: PricingDates) => {
-  datesValidationMap.clear()
+  let isValid = false
+
   if (isNewPricing) {
-    validateDatesForNewPricings({
+    isValid = validateDatesForNewPricings({
       selectedEffectiveFrom,
       selectedEffectiveTo,
       pricingScheduleEffectiveFrom,
       pricingScheduleEffectiveTo,
     })
   } else {
-    validateEditingExistingPrices({
+    isValid = validateEditingExistingPrices({
       selectedEffectiveFrom,
       selectedEffectiveTo,
       pricingScheduleEffectiveFrom,
@@ -93,7 +93,12 @@ export const validatePricingDates = ({
       isAgainstSelf,
     })
   }
-  mapValidationToMessage()
+
+  if (!isValid) {
+    mapValidationToMessage()
+  }
+
+  return isValid
 }
 
 // Validates new pricing
@@ -105,30 +110,19 @@ function validateDatesForNewPricings({
   selectedEffectiveTo,
 }: PricingDates) {
   if (!isNotNullish(selectedEffectiveFrom)) {
-    return
+    return false
   }
 
   if (
     isEffectiveDateValidInterval(selectedEffectiveFrom, selectedEffectiveTo)
   ) {
-    return setValidationError(
-      DatesValidation.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM,
-    )
+    setValidationError(DatesValidation.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM)
+    return false
   }
 
   if (!isEffectiveDateGreaterThanToday(selectedEffectiveFrom)) {
-    return setValidationError(DatesValidation.EFFECTIVE_FROM_EARLIER_THAN_TODAY)
-  }
-
-  if (
-    shouldSetEffectiveToForExistingSchedule(
-      pricingScheduleEffectiveFrom,
-      pricingScheduleEffectiveTo,
-    )
-  ) {
-    return setValidationError(
-      DatesValidation.SET_EFFECTIVE_TO_FOR_EXISTING_SCHEDULE,
-    )
+    setValidationError(DatesValidation.EFFECTIVE_FROM_EARLIER_THAN_TODAY)
+    return false
   }
 
   if (
@@ -139,7 +133,8 @@ function validateDatesForNewPricings({
       pricingScheduleEffectiveTo,
     )
   ) {
-    return setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
   }
 
   if (
@@ -150,7 +145,8 @@ function validateDatesForNewPricings({
       false,
     )
   ) {
-    return setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
   }
 
   if (
@@ -160,8 +156,11 @@ function validateDatesForNewPricings({
       pricingScheduleEffectiveFrom,
     )
   ) {
-    return setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
   }
+
+  return true
 }
 
 // Validates Editing
@@ -171,38 +170,28 @@ function validateEditingExistingPrices({
   pricingScheduleEffectiveTo,
   isAgainstSelf,
   selectedEffectiveTo,
-}: PricingDates) {
+}: PricingDates): boolean {
   if (!isNotNullish(selectedEffectiveFrom)) {
-    return
-  }
-
-  if (
-    !isAgainstSelf &&
-    shouldSetEffectiveToForExistingSchedule(
-      pricingScheduleEffectiveFrom,
-      pricingScheduleEffectiveTo,
-    )
-  ) {
-    return setValidationError(
-      DatesValidation.SET_EFFECTIVE_TO_FOR_EXISTING_SCHEDULE,
-    )
+    return false
   }
 
   if (
     isEffectiveFromEarlierThanToday(
       selectedEffectiveFrom,
       pricingScheduleEffectiveFrom,
+      isAgainstSelf,
     )
   ) {
-    return setValidationError(DatesValidation.EFFECTIVE_FROM_EARLIER_THAN_TODAY)
+    setValidationError(DatesValidation.EFFECTIVE_FROM_EARLIER_THAN_TODAY)
+    return false
   }
 
   if (
     isEffectiveDateValidInterval(selectedEffectiveFrom, selectedEffectiveTo)
   ) {
-    return setValidationError(
-      DatesValidation.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM,
-    )
+    setValidationError(DatesValidation.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM)
+
+    return false
   }
 
   if (
@@ -213,7 +202,8 @@ function validateEditingExistingPrices({
       isAgainstSelf,
     )
   ) {
-    return setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
   }
 
   if (
@@ -225,8 +215,11 @@ function validateEditingExistingPrices({
       isAgainstSelf,
     )
   ) {
-    return setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
   }
+
+  return true
 }
 
 // Helper functions for validation
@@ -265,23 +258,19 @@ function includesDatesFromOtherInterval(
   )
 }
 
-function shouldSetEffectiveToForExistingSchedule(
-  pricingScheduleEffectiveFrom: Date | null,
-  pricingScheduleEffectiveTo: Date | null,
-) {
-  return !pricingScheduleEffectiveTo && pricingScheduleEffectiveFrom
-}
-
 function isEffectiveFromEarlierThanToday(
   selectedEffectiveFrom: Date,
   pricingScheduleEffectiveFrom: Date | null,
+  isAgainstSelf: boolean | undefined,
 ) {
-  return (
+  if (!isAgainstSelf) return false
+
+  return Boolean(
     selectedEffectiveFrom &&
-    pricingScheduleEffectiveFrom &&
-    yyyyMMddDateFormat(selectedEffectiveFrom) !==
-      yyyyMMddDateFormat(pricingScheduleEffectiveFrom) &&
-    !isEffectiveDateGreaterThanToday(selectedEffectiveFrom)
+      pricingScheduleEffectiveFrom &&
+      yyyyMMddDateFormat(selectedEffectiveFrom) !==
+        yyyyMMddDateFormat(pricingScheduleEffectiveFrom) &&
+      !isEffectiveDateGreaterThanToday(selectedEffectiveFrom),
   )
 }
 
@@ -413,6 +402,9 @@ export const getSchema = ({
         const effectiveFrom = value
         const effectiveTo = context.parent.effectiveTo
         resetValidationErrors()
+
+        datesValidationMap.clear()
+
         if (!pricings?.length) {
           validatePricingDates({
             pricingScheduleEffectiveFrom: null,
@@ -443,6 +435,9 @@ export const getSchema = ({
         const effectiveTo = value
         const effectiveFrom = context.parent.effectiveFrom
         resetValidationErrors()
+
+        datesValidationMap.clear()
+
         if (!pricings?.length && effectiveTo) {
           validatePricingDates({
             pricingScheduleEffectiveFrom: null,

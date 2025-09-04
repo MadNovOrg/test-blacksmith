@@ -21,9 +21,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { useClient } from 'urql'
 import { ValidationError } from 'yup'
 
+import { UKsCountriesCodes } from '@app/components/CountriesSelector/hooks/useWorldCountries'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Level_Enum,
   Course_Pricing,
+  Course_Type_Enum,
   GetCoursesWithPricingQuery,
   GetCoursesWithPricingQueryVariables,
 } from '@app/generated/graphql'
@@ -46,6 +49,46 @@ import {
 import { EditPriceToolbar } from '..'
 import { DeletePricingNoCourseModal } from '../DeletePricingNoCourseModal'
 
+export const getUpdatedRowModesModel = (
+  rowModesModel: GridRowModesModel,
+  id: GridRowId,
+): GridRowModesModel => {
+  return {
+    ...Object.fromEntries(
+      Object.entries(rowModesModel).map(([key, value]) => [
+        key,
+        { ...value, ignoreModifications: true, mode: GridRowModes.View },
+      ]),
+    ),
+    [id]: { mode: GridRowModes.Edit },
+  }
+}
+
+export const getPricingFilter = (params: {
+  blendedLearning?: boolean
+  level?: Course_Level_Enum
+  reaccreditation?: boolean
+  type?: Course_Type_Enum
+  isUK: boolean
+}) => {
+  const { blendedLearning, isUK, level, reaccreditation, type } = params
+
+  return {
+    _and: [
+      { go1Integration: { _eq: blendedLearning } },
+      { level: { _eq: level } },
+      { reaccreditation: { _eq: reaccreditation } },
+      { type: { _eq: type } },
+      ...(isUK
+        ? [{ residingCountry: { _in: Object.keys(UKsCountriesCodes) } }]
+        : [{ residingCountry: { _eq: 'AU' } }]),
+      ...(type === Course_Type_Enum.Closed
+        ? [{ price: { _is_null: true } }]
+        : []),
+    ],
+  }
+}
+
 export const CoursePricingDataGrid = ({
   onSave,
   pricing,
@@ -54,7 +97,7 @@ export const CoursePricingDataGrid = ({
   pricing: Course_Pricing | null
 }) => {
   const client = useClient()
-  const { profile } = useAuth()
+  const { acl, profile } = useAuth()
   const { defaultCurrency } = useCurrencies()
   const [{ error: deleteCoursePricingError }, deleteCoursePricingSchedule] =
     useDeleteCoursePricing()
@@ -104,7 +147,7 @@ export const CoursePricingDataGrid = ({
   }
   const handleEditClick = (id: GridRowId) => () => {
     setShowCTA(true)
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
+    setRowModesModel(prev => getUpdatedRowModesModel(prev, id))
   }
 
   const handleSaveClick = (id: GridRowId) => () => {
@@ -123,12 +166,13 @@ export const CoursePricingDataGrid = ({
           pricingStartAfterChange: pricingToDelete?.effectiveTo,
           pricingEndBeforeChange: pricingToDelete?.effectiveFrom,
           pricingEndAfterChange: pricingToDelete?.effectiveTo,
-          where: {
-            type: { _eq: pricing?.type },
-            level: { _eq: pricing?.level },
-            go1Integration: { _eq: pricing?.blended },
-            reaccreditation: { _eq: pricing?.reaccreditation },
-          },
+          where: getPricingFilter({
+            blendedLearning: pricing?.blended,
+            isUK: acl.isUK(),
+            level: pricing?.level,
+            reaccreditation: pricing?.reaccreditation,
+            type: pricing?.type,
+          }),
         },
       )
       .toPromise()
@@ -231,12 +275,13 @@ export const CoursePricingDataGrid = ({
               yyyyMMddDateFormat(new Date(2199, 11, 31)),
             pricingEndAfterChange: rowAfterChange.effectiveTo,
             pricingStartAfterChange: rowAfterChange.effectiveFrom,
-            where: {
-              type: { _eq: pricing?.type },
-              level: { _eq: pricing?.level },
-              go1Integration: { _eq: pricing?.blended },
-              reaccreditation: { _eq: pricing?.reaccreditation },
-            },
+            where: getPricingFilter({
+              blendedLearning: pricing?.blended,
+              isUK: acl.isUK(),
+              level: pricing?.level,
+              reaccreditation: pricing?.reaccreditation,
+              type: pricing?.type,
+            }),
           })
           .toPromise()
           .then(async ({ data }) => {
@@ -363,6 +408,7 @@ export const CoursePricingDataGrid = ({
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
+            data-testid="edit-icon"
           />,
           <GridActionsCellItem
             key="delete"
@@ -370,6 +416,7 @@ export const CoursePricingDataGrid = ({
             label={t('pages.course-pricing.modal-delete')}
             onClick={handleDeleteClick(id)}
             color="inherit"
+            data-testid="delete-icon"
           />,
         ]
       },
@@ -421,6 +468,7 @@ export const CoursePricingDataGrid = ({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        disableVirtualization
       />
       {errors.length ? (
         <Snackbar

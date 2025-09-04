@@ -70289,7 +70289,7 @@ export type InsertCoursePricingScheduleMutationVariables = Exact<{
   coursePricingId: Scalars['uuid'];
   priceAmount: Scalars['numeric'];
   effectiveFrom: Scalars['date'];
-  effectiveTo: Scalars['date'];
+  effectiveTo?: InputMaybe<Scalars['date']>;
   priceCurrency: Scalars['String'];
 }>;
 
@@ -70300,7 +70300,7 @@ export type SetCoursePricingScheduleMutationVariables = Exact<{
   id: Scalars['uuid'];
   priceAmount: Scalars['numeric'];
   effectiveFrom: Scalars['date'];
-  effectiveTo: Scalars['date'];
+  effectiveTo?: InputMaybe<Scalars['date']>;
 }>;
 
 
