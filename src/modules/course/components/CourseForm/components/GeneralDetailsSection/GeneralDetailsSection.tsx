@@ -196,6 +196,7 @@ export const GeneralDetailsSection = ({
   }
 
   const handleAOLCountryChange = (code: string) => {
+    setValue('aolRegion', '')
     setValue('aolCountry', code, { shouldValidate: true })
     if (code) {
       setValue('residingCountry', code, {

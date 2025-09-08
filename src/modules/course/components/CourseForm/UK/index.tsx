@@ -3,7 +3,7 @@ import { isDate, isValid as isValidDate } from 'date-fns'
 import React, { useEffect, useImperativeHandle, useMemo } from 'react'
 import { Controller, FormProvider, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useUpdateEffect, useEffectOnce } from 'react-use'
+import { useEffectOnce } from 'react-use'
 import { noop } from 'ts-essentials'
 
 import useWorldCountries, {
@@ -373,10 +373,6 @@ export const UkCourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('conversion', false)
     }
   }, [values.courseLevel, setValue])
-
-  useUpdateEffect(() => {
-    setValue('aolRegion', '')
-  }, [setValue, values.aolCountry])
 
   return (
     <form>
