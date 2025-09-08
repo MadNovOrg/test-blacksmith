@@ -475,7 +475,7 @@ export const CourseBookingDetails: React.FC<
                   ? { name: values.orgName, id: values.orgId }
                   : undefined
               }
-              allowAdding
+              allowAdding={acl.isInternalUser()}
               onChange={org => {
                 if (org && !isHubOrg(org)) return
                 setValue('orgId', org?.id ?? '', { shouldValidate: true })

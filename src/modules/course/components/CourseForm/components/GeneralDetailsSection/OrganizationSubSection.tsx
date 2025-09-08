@@ -222,7 +222,7 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
               autocompleteMode={showTrainerOrgOnly}
               showTrainerOrgOnly={showTrainerOrgOnly}
               error={errors.organization?.message}
-              allowAdding
+              allowAdding={acl.isInternalUser()}
               value={organization ?? undefined}
               onChange={handleOrgSelectorChange}
               textFieldProps={{
@@ -231,7 +231,6 @@ export const OrganizationSubSection = ({ disabledFields }: Props) => {
               sx={{ marginBottom: 2 }}
               disabled={disabledFields.has('organization')}
               createdFrom={Org_Created_From_Enum.CreateCoursePage}
-              disableOrganisationEnquiryOrCreation={acl.isTrainer()}
             />
           ) : (
             <ANZOrgSelector

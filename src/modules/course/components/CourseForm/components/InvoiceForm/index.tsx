@@ -76,7 +76,7 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
                 }
               : undefined
           }
-          allowAdding
+          allowAdding={!acl.isUK() || acl.isInternalUser()}
           textFieldProps={{ variant: 'filled' }}
           onChange={org => {
             if (org && !isHubOrg(org)) return
