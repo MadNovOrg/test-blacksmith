@@ -8,7 +8,10 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Certificate_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
 import { Course, CourseParticipant, Profile } from '@app/types'
 import { courseEnded, getParticipantOrgIds } from '@app/util'
 
@@ -35,7 +38,7 @@ type ManageAttendanceMenuProps<T> = {
 export const ManageAttendanceMenu = <
   T extends Pick<
     CourseParticipant,
-    'attended' | 'course' | 'grade' | 'profile'
+    'attended' | 'certificate' | 'course' | 'grade' | 'profile'
   > & {
     course: Pick<Course, 'accreditedBy'>
     profile: Pick<Profile, 'organizations'>
@@ -164,7 +167,9 @@ export const ManageAttendanceMenu = <
             action: CourseAction.Transfer,
           }),
           constant(
-            !courseParticipant.grade &&
+            (!courseParticipant.certificate ||
+              courseParticipant.certificate.status ===
+                Certificate_Status_Enum.Revoked) &&
               acl.canTransferParticipant(participantOrgIds, course),
           ),
         ],
@@ -188,7 +193,7 @@ export const ManageAttendanceMenu = <
       acl,
       course,
       courseParticipant.attended,
-      courseParticipant.grade,
+      courseParticipant.certificate,
       participantOrgIds,
     ],
   )
