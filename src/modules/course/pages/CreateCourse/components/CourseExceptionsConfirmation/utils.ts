@@ -142,7 +142,12 @@ export const isTrainersRatioNotMet = (
   courseData: RatioCourseData,
   trainers: RatioTrainerData,
 ) => {
-  const { min } = getRequiredAssistants(courseData)
+  const { min } = getRequiredAssistants({
+    ...courseData,
+    leadTrainerRoleTypes: trainers.find(
+      t => t.type === Course_Trainer_Type_Enum.Leader,
+    ),
+  })
   const { min: minLead } = getRequiredLeads(
     courseData.type,
     courseData.isTrainer,

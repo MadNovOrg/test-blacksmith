@@ -337,14 +337,20 @@ export const CreateCourseForm = () => {
           isUKCountry: isUKCountry(courseData.residingCountry),
           isAustraliaRegion: acl.isAustralia(),
         },
-        assistants.map(assistant => ({
-          type: Course_Trainer_Type_Enum.Assistant,
-          trainer_role_types: assistant.trainer_role_types,
-          levels: assistant.levels,
-        })),
+        [
+          {
+            type: Course_Trainer_Type_Enum.Leader,
+            trainer_role_types: profile?.trainer_role_types ?? [],
+          },
+          ...assistants.map(assistant => ({
+            type: Course_Trainer_Type_Enum.Assistant,
+            trainer_role_types: assistant.trainer_role_types,
+            levels: assistant.levels,
+          })),
+        ],
       )
     )
-  }, [acl, assistants, courseData, isUKCountry])
+  }, [acl, assistants, courseData, isUKCountry, profile?.trainer_role_types])
 
   if (displayNoCoursePriceError) {
     return (

@@ -4,7 +4,7 @@ import {
   Course_Type_Enum,
   Course,
 } from '@app/generated/graphql'
-import { TrainerInput } from '@app/types'
+import { TrainerInput, TrainerRoleTypeName } from '@app/types'
 
 import { getRequiredAssistantsBild } from './trainerRatio.bild'
 import { getRequiredAssistants as getRequiredAssistantsIcm } from './trainerRatio.icm'
@@ -31,18 +31,25 @@ export type RatioTrainerData = Pick<
 >[]
 
 export function getRequiredAssistants(
-  courseData: RatioCourseData & Pick<Course, 'type' | 'residingCountry'>,
+  courseData: RatioCourseData &
+    Pick<Course, 'type' | 'residingCountry'> & {
+      leadTrainerRoleTypes?: Pick<TrainerInput, 'trainer_role_types'>
+    },
 ): RequiredTrainers {
   if (courseData.accreditedBy === Accreditors_Enum.Icm) {
     return getRequiredAssistantsIcm({
       courseLevel: courseData.level,
       deliveryType: courseData.deliveryType,
+      isAustraliaRegion: courseData.isAustraliaRegion,
       isUKCountry: courseData.isUKCountry,
       maxParticipants: courseData.max_participants,
       reaccreditation: courseData.reaccreditation ?? false,
       type: courseData.type,
+      leadTrainerRoleTypes:
+        courseData.leadTrainerRoleTypes?.trainer_role_types.map(
+          roleType => roleType.trainer_role_type?.name as TrainerRoleTypeName,
+        ) || [],
       usesAOL: courseData.usesAOL ?? false,
-      isAustraliaRegion: courseData.isAustraliaRegion,
     })
   } else if (courseData.accreditedBy === Accreditors_Enum.Bild) {
     return getRequiredAssistantsBild({

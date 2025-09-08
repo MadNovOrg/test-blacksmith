@@ -498,6 +498,7 @@ describe('component: OrderDetailsReview', () => {
                 trainer_role_types: [
                   {
                     trainer_role_type: {
+                      id: chance.guid(),
                       name: TrainerRoleTypeName.PRINCIPAL,
                     },
                   },
@@ -610,6 +611,7 @@ describe('component: OrderDetailsReview', () => {
                 trainer_role_types: [
                   {
                     trainer_role_type: {
+                      id: chance.guid(),
                       name: TrainerRoleTypeName.PRINCIPAL,
                     },
                   },

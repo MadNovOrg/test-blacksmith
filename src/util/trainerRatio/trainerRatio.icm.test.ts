@@ -6,6 +6,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import { TrainerRoleTypeName } from '@app/types'
 import {
   getRequiredAssistants,
   TrainerRatioCriteria,
@@ -442,6 +443,174 @@ describe('getRequiredTrainersV2', () => {
       above: { min: 1, max: 1 },
       nextEqual: { min: 1, max: 2 },
       nextAbove: { min: 2, max: 2 },
+    },
+  )
+})
+
+describe('AOL Tagged Trainer Roles', () => {
+  const aolTrainerRoleTypes = [
+    TrainerRoleTypeName.EMPLOYER_AOL,
+    TrainerRoleTypeName.PRINCIPAL,
+    TrainerRoleTypeName.SENIOR,
+  ]
+
+  test.each(aolTrainerRoleTypes)(
+    'assist ratio value for Advanced Indirect course with %s trainer role',
+    trainerRoleType => {
+      criteria.courseLevel = Course_Level_Enum.Advanced
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.leadTrainerRoleTypes = [trainerRoleType]
+
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 7 })),
+      ).toEqual({ min: 0, max: 0 })
+
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 8 })),
+      ).toEqual({ min: 0, max: 1 })
+
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 9 })),
+      ).toEqual({ min: 1, max: 1 })
+
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 16 })),
+      ).toEqual({ min: 1, max: 2 })
+
+      expect(
+        getRequiredAssistants(extend({}, criteria, { maxParticipants: 17 })),
+      ).toEqual({ min: 2, max: 2 })
+    },
+  )
+
+  testMultipleLevels(
+    [
+      Course_Level_Enum.Level_1,
+      Course_Level_Enum.Level_2,
+      Course_Level_Enum.Level_1Bs,
+      Course_Level_Enum.IntermediateTrainer,
+      Course_Level_Enum.FoundationTrainerPlus,
+    ],
+    'assist ratio value for %s Indirect course with AOL trainer roles',
+    (criteria, courseLevel) => {
+      criteria.courseLevel = courseLevel
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.leadTrainerRoleTypes = [TrainerRoleTypeName.EMPLOYER_AOL]
+    },
+    {
+      below: 11,
+      equal: 12,
+      above: 13,
+      nextEqual: 24,
+      nextAbove: 25,
+    },
+    {
+      below: { min: 0, max: 0 },
+      equal: { min: 0, max: 1 },
+      above: { min: 1, max: 1 },
+      nextEqual: { min: 1, max: 2 },
+      nextAbove: { min: 2, max: 2 },
+    },
+  )
+
+  testThresholdScenarios(
+    'assist ratio value for Advanced Indirect course with mixed trainer roles including AOL',
+    criteria => {
+      criteria.courseLevel = Course_Level_Enum.Advanced
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.leadTrainerRoleTypes = [
+        TrainerRoleTypeName.EMPLOYER_AOL,
+        TrainerRoleTypeName.BILD_SENIOR,
+      ]
+    },
+    {
+      below: 7,
+      equal: 8,
+      above: 9,
+      nextEqual: 16,
+      nextAbove: 17,
+    },
+    {
+      below: { min: 0, max: 0 },
+      equal: { min: 0, max: 1 },
+      above: { min: 1, max: 1 },
+      nextEqual: { min: 1, max: 2 },
+      nextAbove: { min: 2, max: 2 },
+    },
+  )
+
+  testThresholdScenarios(
+    'assist ratio value for Level_1 Indirect course with non-AOL trainer roles',
+    criteria => {
+      criteria.courseLevel = Course_Level_Enum.Level_1
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.reaccreditation = false
+      criteria.usesAOL = false
+      criteria.leadTrainerRoleTypes = [TrainerRoleTypeName.BILD_SENIOR]
+    },
+    {
+      below: 23,
+      equal: 24,
+      above: 25,
+      nextEqual: 36,
+      nextAbove: 37,
+    },
+    {
+      below: { min: 1, max: 1 },
+      equal: { min: 1, max: 2 },
+      above: { min: 2, max: 2 },
+      nextEqual: { min: 2, max: 3 },
+      nextAbove: { min: 3, max: 3 },
+    },
+  )
+
+  testThresholdScenarios(
+    'assist ratio value for Level_1 Indirect course with empty trainer roles',
+    criteria => {
+      criteria.courseLevel = Course_Level_Enum.Level_1
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.reaccreditation = false
+      criteria.usesAOL = false
+      criteria.leadTrainerRoleTypes = []
+    },
+    {
+      below: 23,
+      equal: 24,
+      above: 25,
+      nextEqual: 36,
+      nextAbove: 37,
+    },
+    {
+      below: { min: 1, max: 1 },
+      equal: { min: 1, max: 2 },
+      above: { min: 2, max: 2 },
+      nextEqual: { min: 2, max: 3 },
+      nextAbove: { min: 3, max: 3 },
+    },
+  )
+
+  testThresholdScenarios(
+    'assist ratio value for Level_1 Indirect course with undefined trainer roles',
+    criteria => {
+      criteria.courseLevel = Course_Level_Enum.Level_1
+      criteria.type = Course_Type_Enum.Indirect
+      criteria.reaccreditation = false
+      criteria.usesAOL = false
+      criteria.leadTrainerRoleTypes = undefined
+    },
+    {
+      below: 23,
+      equal: 24,
+      above: 25,
+      nextEqual: 36,
+      nextAbove: 37,
+    },
+    {
+      below: { min: 1, max: 1 },
+      equal: { min: 1, max: 2 },
+      above: { min: 2, max: 2 },
+      nextEqual: { min: 2, max: 3 },
+      nextAbove: { min: 3, max: 3 },
     },
   )
 })

@@ -273,7 +273,12 @@ describe('component: ReviewLicenseOrder', () => {
     const trainer: TrainerInput = {
       profile_id: chance.guid(),
       trainer_role_types: [
-        { trainer_role_type: { name: TrainerRoleTypeName.PRINCIPAL } },
+        {
+          trainer_role_type: {
+            id: chance.guid(),
+            name: TrainerRoleTypeName.PRINCIPAL,
+          },
+        },
       ],
       type: Course_Trainer_Type_Enum.Leader,
       levels: [

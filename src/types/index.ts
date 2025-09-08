@@ -795,7 +795,9 @@ export type TrainerInput = {
   type: Course_Trainer_Type_Enum
   fullName?: string
   status?: InviteStatus
-  trainer_role_types: { trainer_role_type?: { name?: string } | null }[]
+  trainer_role_types: {
+    trainer_role_type?: { id: string; name?: string } | null
+  }[]
   levels: {
     courseLevel: Course_Level
     expiryDate: string

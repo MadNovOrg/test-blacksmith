@@ -3,6 +3,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
+import { TrainerRoleTypeName } from '@app/types'
 
 import { RequiredTrainers } from './types'
 
@@ -19,6 +20,12 @@ const {
   Level_1Np,
 } = Course_Level_Enum
 
+const AOL_TAGGED_TRAINER_ROLE_TYPES = [
+  TrainerRoleTypeName.EMPLOYER_AOL,
+  TrainerRoleTypeName.PRINCIPAL,
+  TrainerRoleTypeName.SENIOR,
+]
+
 export type TrainerRatio = {
   initialAssistants: number
   threshold: number
@@ -28,12 +35,13 @@ export type TrainerRatio = {
 export type TrainerRatioCriteria = {
   courseLevel: Course_Level_Enum
   deliveryType: Course_Delivery_Type_Enum
+  isAustraliaRegion: boolean
   isUKCountry: boolean
+  leadTrainerRoleTypes?: TrainerRoleTypeName[]
   maxParticipants: number
   reaccreditation: boolean
   type: Course_Type_Enum
   usesAOL?: boolean
-  isAustraliaRegion: boolean
 }
 
 export const ratio = (
@@ -70,7 +78,20 @@ const getUKIndirectCourseRatio = ({
   courseLevel,
   reaccreditation,
   usesAOL,
+  leadTrainerRoleTypes,
 }: TrainerRatioCriteria) => {
+  if (
+    leadTrainerRoleTypes?.some(roleType =>
+      AOL_TAGGED_TRAINER_ROLE_TYPES.includes(roleType),
+    )
+  ) {
+    if (courseLevel === Advanced) {
+      return ratio(0, 8, 8)
+    }
+
+    return ratio(0, 12, 12)
+  }
+
   if (courseLevel === Level_1 || courseLevel === Level_2) {
     if (!reaccreditation && !usesAOL) return ratio(1, 24, 12)
     return ratio(0, 12, 12)
