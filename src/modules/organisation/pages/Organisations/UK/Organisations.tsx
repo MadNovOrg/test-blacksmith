@@ -53,6 +53,7 @@ import {
   DEFAULT_PAGINATION_LIMIT,
   DEFAULT_PAGINATION_ROW_OPTIONS,
   isDfeUrn,
+  isValidConnectID,
 } from '@app/util'
 
 import { OrganisationsBackButton } from '../components/BackButton'
@@ -72,6 +73,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
   >([])
 
   const displayDfeUrnColumn = acl.isInternalUser()
+  const displayConnectIdColumn = acl.isInternalUser()
 
   const cols = useMemo(
     () => [
@@ -89,6 +91,15 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
         label: t('pages.admin.organizations.columns.name'),
         sorting: true,
       },
+      ...(displayConnectIdColumn
+        ? [
+            {
+              id: 'connectId',
+              label: t('pages.admin.organizations.columns.connectId'),
+              sorting: false,
+            },
+          ]
+        : []),
       ...(displayDfeUrnColumn
         ? [
             {
@@ -98,6 +109,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
             },
           ]
         : []),
+
       {
         id: 'country',
         label: t('pages.admin.organizations.columns.country'),
@@ -123,7 +135,7 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
         sorting: true,
       },
     ],
-    [displayDfeUrnColumn, merging, t],
+    [displayConnectIdColumn, displayDfeUrnColumn, merging, t],
   )
   const [query, setQuery] = useQueryParam('query', withDefault(StringParam, ''))
   const [debouncedQuery] = useDebounce(query, 300)
@@ -149,12 +161,19 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
       obj._and.push({
         _or: [
           { name: { _ilike: `%${debouncedQuery}%` } },
-          ...(acl.isInternalUser() && isDfeUrn(debouncedQuery)
+          ...(displayDfeUrnColumn && isDfeUrn(debouncedQuery)
             ? [
                 {
                   organization_dfe_establishment: {
                     urn: { _eq: debouncedQuery },
                   },
+                },
+              ]
+            : []),
+          ...(displayConnectIdColumn && isValidConnectID(debouncedQuery)
+            ? [
+                {
+                  tt_connect_id: { _ilike: `%${debouncedQuery}%` },
                 },
               ]
             : []),
@@ -188,15 +207,24 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
 
     return [obj, isFiltered]
-  }, [acl, debouncedQuery, filterOrgCountries, filterSector, profile?.id])
+  }, [
+    acl,
+    debouncedQuery,
+    displayConnectIdColumn,
+    displayDfeUrnColumn,
+    filterOrgCountries,
+    filterSector,
+    profile?.id,
+  ])
 
   const { data, fetching } = useOrgV2({
     sorting,
     where,
     limit: perPage,
     offset: perPage * currentPage,
-    withMembers: true,
     withDfEEstablishment: displayDfeUrnColumn,
+    withMembers: true,
+    withTTConnectId: displayConnectIdColumn,
   })
 
   const count = data?.orgsCount.aggregate?.count
@@ -413,6 +441,9 @@ export const Organizations: React.FC<React.PropsWithChildren<unknown>> = () => {
                         {org?.name}
                       </Link>
                     </TableCell>
+                    {displayConnectIdColumn ? (
+                      <TableCell>{org?.tt_connect_id || ''}</TableCell>
+                    ) : null}
                     {displayDfeUrnColumn ? (
                       <TableCell>{org?.dfeEstablishment?.urn || ''}</TableCell>
                     ) : null}

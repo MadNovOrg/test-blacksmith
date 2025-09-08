@@ -1320,3 +1320,7 @@ export function isDfeUrn(str: string) {
 
   return regex.test(trimmed)
 }
+
+export function isValidConnectID(str: string) {
+  return /^(?:TTID-)?\d{7,}$/i.test(str)
+}
