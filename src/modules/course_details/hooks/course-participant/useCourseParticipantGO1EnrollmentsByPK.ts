@@ -37,9 +37,9 @@ export default function useCourseParticipantGO1EnrollmentsByPK(id: string) {
       query: GET_USER_GO1_ENROLLMENTS,
       requestPolicy: 'network-only',
       variables: {
-        profileId: courseParticipantData?.courseParticipant?.profile?.id ?? '',
+        email: courseParticipantData?.courseParticipant?.profile?.email ?? '',
       },
-      pause: !courseParticipantData?.courseParticipant?.profile?.id,
+      pause: !courseParticipantData?.courseParticipant?.profile?.email,
     },
   )
 

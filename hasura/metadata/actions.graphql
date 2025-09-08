@@ -149,7 +149,7 @@ type Query {
 
 type Query {
   getUserGO1Enrollments(
-    profileId: String!
+    email: String!
   ): GetUserGO1EnrollmentsOutput!
 }
 

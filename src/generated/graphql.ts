@@ -58017,7 +58017,7 @@ export type Query_RootGetCoursePricingArgs = {
 
 
 export type Query_RootGetUserGo1EnrollmentsArgs = {
-  profileId: Scalars['String'];
+  email: Scalars['String'];
 };
 
 
@@ -70990,7 +70990,7 @@ export type GetDietaryAndDisabilitiesCountQueryVariables = Exact<{
 export type GetDietaryAndDisabilitiesCountQuery = { __typename?: 'query_root', participantDietaryRestrictionsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, trainerDietaryRestrictionsCount: { __typename?: 'course_trainer_aggregate', aggregate?: { __typename?: 'course_trainer_aggregate_fields', count: number } | null }, participantDisabilitiesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, trainerDisabilitiesCount: { __typename?: 'course_trainer_aggregate', aggregate?: { __typename?: 'course_trainer_aggregate_fields', count: number } | null } };
 
 export type GetUserGo1EnrollmentsQueryVariables = Exact<{
-  profileId: Scalars['String'];
+  email: Scalars['String'];
 }>;
 
 
