@@ -1,9 +1,10 @@
 import {
   Grid,
-  Box,
-  FormControlLabel,
-  Checkbox,
   useMediaQuery,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +22,7 @@ import {
   getAttendeeTabWhereCondition,
   getGradingTabWhereCondition,
   getWhereCondition,
+  HAndSFilterValues,
 } from './utils'
 
 type Props = {
@@ -43,9 +45,11 @@ export const CourseDetailsFilters: React.FC<Props> = (props: Props) => {
   const [keyword, setKeyword] = useState('')
   const [keywordDebounced] = useDebounce(keyword, 300)
   const [selectedOrganization, setSelectedOrganization] = useState<string>('')
-  const [filterByHandS, setFilterByHandS] = useState(false)
+  const [filterByHandS, setFilterByHandS] = useState<HAndSFilterValues>(
+    HAndSFilterValues.ALL,
+  )
   const [filterByCourseEvaluation, setFilterByCourseEvaluation] =
-    useState(false)
+    useState<HAndSFilterValues>(HAndSFilterValues.ALL)
 
   const selectedTab = useQueryParam('tab')
   const isAttendeesTab =
@@ -112,18 +116,17 @@ export const CourseDetailsFilters: React.FC<Props> = (props: Props) => {
     setSelectedOrganization(value)
   }, [])
 
-  const handleHandSChange = useCallback(
-    (checked: boolean) => {
-      setFilterByHandS(checked)
-    },
-    [setFilterByHandS],
-  )
-
-  const handleCourseEvaluationChange = useCallback(
-    (checked: boolean) => {
-      setFilterByCourseEvaluation(checked)
-    },
-    [setFilterByCourseEvaluation],
+  const attendeeSubmissionOptions: Record<HAndSFilterValues, string> = useMemo(
+    () => ({
+      [HAndSFilterValues.ALL]: t(
+        'common.filters.attendee-submission-option-all',
+      ),
+      [HAndSFilterValues.YES]: t(
+        'common.filters.attendee-submission-option-yes',
+      ),
+      [HAndSFilterValues.NO]: t('common.filters.attendee-submission-option-no'),
+    }),
+    [t],
   )
 
   return (
@@ -153,36 +156,61 @@ export const CourseDetailsFilters: React.FC<Props> = (props: Props) => {
       </Grid>
       {isAttendeesTab ? (
         <Grid item xs={12} sm={12} md={4}>
-          <Grid container justifyContent={'space-around'}>
-            <Box>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={filterByHandS}
-                    data-testid="h-and-s-checkbox"
-                    onChange={(event, checked) => handleHandSChange(checked)}
-                  />
-                }
+          <Grid
+            container
+            alignItems="start"
+            gap={1}
+            justifyContent="space-around"
+          >
+            <FormControl sx={{ flex: 1 }} variant="filled">
+              <InputLabel id="attendee-h-and-s-label">
+                {t('common.filters.h-and-s')}
+              </InputLabel>
+              <Select
+                id="attendee-h-and-s-select"
+                data-testid="attendee-h-and-s-select"
                 label={t('common.filters.h-and-s')}
-              />
-            </Box>
+                labelId="attendee-h-and-s-label"
+                value={filterByHandS}
+                onChange={e =>
+                  setFilterByHandS(e.target.value as HAndSFilterValues)
+                }
+              >
+                {Object.entries(attendeeSubmissionOptions).map(
+                  ([value, label]) => (
+                    <MenuItem key={value} value={value}>
+                      {label}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+            </FormControl>
             {canViewEvaluationSubmittedColumn ? (
-              <Box>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      size="small"
-                      checked={filterByCourseEvaluation}
-                      data-testid="course-evaluation-checkbox"
-                      onChange={(event, checked) =>
-                        handleCourseEvaluationChange(checked)
-                      }
-                    />
-                  }
+              <FormControl sx={{ flex: 1 }} variant="filled">
+                <InputLabel id="attendee-course-evaluation-label">
+                  {t('common.filters.course-evaluation')}
+                </InputLabel>
+                <Select
+                  id="attendee-course-evaluation-select"
+                  data-testid="attendee-course-evaluation-select"
                   label={t('common.filters.course-evaluation')}
-                />
-              </Box>
+                  labelId="attendee-course-evaluation-label"
+                  value={filterByCourseEvaluation}
+                  onChange={e =>
+                    setFilterByCourseEvaluation(
+                      e.target.value as HAndSFilterValues,
+                    )
+                  }
+                >
+                  {Object.entries(attendeeSubmissionOptions).map(
+                    ([value, label]) => (
+                      <MenuItem key={value} value={value}>
+                        {label}
+                      </MenuItem>
+                    ),
+                  )}
+                </Select>
+              </FormControl>
             ) : null}
           </Grid>
         </Grid>

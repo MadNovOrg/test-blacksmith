@@ -313,14 +313,14 @@ describe(CourseAttendeesTab.name, () => {
       })
     })
 
-    it('should display H&S checbox', () => {
+    it('should display H&S filter', () => {
       setup()
-      const handsChecbox = screen.getByTestId('h-and-s-checkbox')
+      const handsChecbox = screen.getByTestId('attendee-h-and-s-select')
 
       expect(handsChecbox).toBeInTheDocument()
     })
 
-    it('should display Course Evaluation checbox', () => {
+    it('should display Course Evaluation filter', () => {
       setup(RoleName.TT_ADMIN)
       const handsChecbox = screen.getByLabelText(
         t('common.filters.course-evaluation'),

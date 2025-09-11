@@ -1,5 +1,11 @@
 import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 
+export enum HAndSFilterValues {
+  ALL = 'all',
+  YES = 'yes',
+  NO = 'no',
+}
+
 export type OrgAndName = {
   selectedOrganization: string
   keywordArray: string[]
@@ -76,8 +82,8 @@ const getOrganizationFilterCondition = (
 export const getAttendeeTabWhereCondition = (
   keywordArray: string[],
   selectedOrganization: string,
-  filterByHandS: boolean,
-  filterByCourseEvaluation: boolean,
+  filterByHandS: HAndSFilterValues,
+  filterByCourseEvaluation: HAndSFilterValues,
 ) => {
   const filterConditions: Record<string, object> = {}
   Object.assign(
@@ -90,12 +96,25 @@ export const getAttendeeTabWhereCondition = (
     getNameFilterCondition(filterConditions, keywordArray),
   )
 
-  if (filterByHandS) {
+  if (filterByHandS === HAndSFilterValues.YES) {
     Object.assign(filterConditions, {
       healthSafetyConsent: { _eq: true },
     })
   }
-  if (filterByCourseEvaluation) {
+
+  if (filterByHandS === HAndSFilterValues.NO) {
+    Object.assign(filterConditions, {
+      healthSafetyConsent: { _eq: false },
+    })
+  }
+
+  if (filterByCourseEvaluation === HAndSFilterValues.NO) {
+    Object.assign(filterConditions, {
+      completed_evaluation: { _eq: false },
+    })
+  }
+
+  if (filterByCourseEvaluation === HAndSFilterValues.YES) {
     Object.assign(filterConditions, {
       completed_evaluation: { _eq: true },
     })

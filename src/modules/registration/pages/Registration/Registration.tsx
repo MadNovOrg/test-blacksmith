@@ -70,6 +70,7 @@ export const RegistrationPage: React.FC<
     // which re-mounts this same components because our address is still /registration
     // Hence, before auto-login, we replace the /registration with /registraion?success=true
     // and check the same here and skip the further steps
+
     if (success) return
 
     if (!profile || !courseId || !quantity) return

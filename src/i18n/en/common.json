@@ -586,8 +586,11 @@
     "NZD": "NZD $",
     "USD": "$",
     "archived": "Archived",
-    "h-and-s": "H&S",
-    "course-evaluation": "Course Evaluation"
+    "h-and-s": "H&S Submitted",
+    "course-evaluation": "Course Evaluation Submitted",
+    "attendee-submission-option-all": "All",
+    "attendee-submission-option-yes": "Yes",
+    "attendee-submission-option-no": "No"
   },
   "pagination": {
     "rows-per-page": "Rows per page"
