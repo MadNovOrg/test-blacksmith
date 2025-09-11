@@ -501,6 +501,19 @@ update_permissions:
           _eq: X-Hasura-User-Id
       check: null
 event_triggers:
+  - name: duplicate_account_email_notification
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - dob
+    retry_conf:
+      interval_sec: 15
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/duplicate-account'
   - name: profile_archived
     definition:
       enable_manual: false
