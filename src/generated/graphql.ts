@@ -7259,6 +7259,7 @@ export type ResourceCategory_Resourcearea = AcfFieldGroup & {
 /** Field Group */
 export type ResourceCategory_Resourcepermissions = AcfFieldGroup & {
   __typename?: 'ResourceCategory_Resourcepermissions';
+  allowAccessDayBeforeCourseStart?: Maybe<Scalars['Boolean']>;
   certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
   courseInProgress?: Maybe<Scalars['Boolean']>;
   etaTrainer?: Maybe<Scalars['Boolean']>;
@@ -7504,6 +7505,7 @@ export type Resource_Resourceattachment = AcfFieldGroup & {
 /** Field Group */
 export type Resource_Resourcepermissions = AcfFieldGroup & {
   __typename?: 'Resource_Resourcepermissions';
+  allowAccessDayBeforeCourseStart?: Maybe<Scalars['Boolean']>;
   certificateLevels?: Maybe<Array<Maybe<Scalars['String']>>>;
   courseInProgress?: Maybe<Scalars['Boolean']>;
   etaTrainer?: Maybe<Scalars['Boolean']>;
@@ -56377,9 +56379,9 @@ export type Query_Root = {
   splash_screens_aggregate: Splash_Screens_Aggregate;
   /** fetch data from the table: "splash_screens" using primary key columns */
   splash_screens_by_pk?: Maybe<Splash_Screens>;
-  /** An array relationship */
+  /** fetch data from the table: "submission_of_splash_screens" */
   submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
-  /** An aggregate relationship */
+  /** fetch aggregated fields from the table: "submission_of_splash_screens" */
   submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
   submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
@@ -62538,9 +62540,9 @@ export type Subscription_Root = {
   splash_screens_by_pk?: Maybe<Splash_Screens>;
   /** fetch data from the table in a streaming manner: "splash_screens" */
   splash_screens_stream: Array<Splash_Screens>;
-  /** An array relationship */
+  /** fetch data from the table: "submission_of_splash_screens" */
   submission_of_splash_screens: Array<Submission_Of_Splash_Screens>;
-  /** An aggregate relationship */
+  /** fetch aggregated fields from the table: "submission_of_splash_screens" */
   submission_of_splash_screens_aggregate: Submission_Of_Splash_Screens_Aggregate;
   /** fetch data from the table: "submission_of_splash_screens" using primary key columns */
   submission_of_splash_screens_by_pk?: Maybe<Submission_Of_Splash_Screens>;
@@ -72050,7 +72052,7 @@ export type GetResourcePackPricingsQuery = { __typename?: 'query_root', resource
 export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null } | null };
+export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null } | null };
 
 export type ResourceDetailsQueryVariables = Exact<{
   id: Scalars['ID'];

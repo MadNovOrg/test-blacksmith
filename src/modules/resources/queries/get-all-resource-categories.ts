@@ -15,6 +15,7 @@ export const ALL_RESOURCE_CATEGORIES_QUERY = gql`
             resourcearea
           }
           resourcePermissions {
+            allowAccessDayBeforeCourseStart
             certificateLevels
             principalTrainer
             courseInProgress

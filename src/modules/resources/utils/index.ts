@@ -1,4 +1,12 @@
-import { isPast, isFuture, parseISO } from 'date-fns'
+import {
+  isPast,
+  isFuture,
+  parseISO,
+  isValid,
+  subDays,
+  isAfter,
+  isBefore,
+} from 'date-fns'
 
 import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
 
@@ -110,17 +118,36 @@ const onGoingTrainerCourseLevelsUserAttends = (
 
 const hasCourseInProgress = (
   participantCourses?: ICourseCategoryUserAttends[],
+  allowAccessDayBeforeCourseStart = false,
 ): boolean => {
   return (
     participantCourses?.some(participantCourse => {
-      const courseStart = parseISO(
-        participantCourse?.course?.start?.aggregate?.date?.start ?? '',
-      )
-      const courseEnd = parseISO(
-        participantCourse?.course?.end?.aggregate?.date?.end ?? '',
-      )
+      const courseStartStr =
+        participantCourse?.course?.start?.aggregate?.date?.start
+      const courseEndStr = participantCourse?.course?.end?.aggregate?.date?.end
 
-      return isPast(courseStart) && isFuture(courseEnd)
+      // Handle missing date strings
+      if (!courseStartStr || !courseEndStr) {
+        return false
+      }
+
+      const courseStart = parseISO(courseStartStr)
+      const courseEnd = parseISO(courseEndStr)
+
+      // Handle invalid dates
+      if (!isValid(courseStart) || !isValid(courseEnd)) {
+        return false
+      }
+
+      const now = new Date()
+
+      // If allowAccessDayBeforeCourseStart is true, allow access from day before course start
+      // Otherwise, only allow access from course start date
+      const accessStartDate = allowAccessDayBeforeCourseStart
+        ? subDays(courseStart, 1)
+        : courseStart
+
+      return isAfter(now, accessStartDate) && isBefore(now, courseEnd)
     }) ?? false
   )
 }

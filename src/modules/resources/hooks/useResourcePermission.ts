@@ -38,14 +38,12 @@ export function useResourcePermission() {
   const onGoingCoursesUserAttends = onGoingTrainerCourseLevelsUserAttends(
     profile?.courses as ICourseCategoryUserAttends[],
   )
-  const courseInProgress = hasCourseInProgress(
-    profile?.courses as ICourseCategoryUserAttends[],
-  )
 
   const canAccessResource = useCallback(
     (
       resourcePermissions: Pick<
         Resource_Resourcepermissions,
+        | 'allowAccessDayBeforeCourseStart'
         | 'certificateLevels'
         | 'courseInProgress'
         | 'etaTrainer'
@@ -100,6 +98,11 @@ export function useResourcePermission() {
        * @summary we set the Workbook and Manuals resource permission to allow access
        * to the Workbooks and Manuals resource category, and make it easier to control access to it
        */
+      const courseInProgress = hasCourseInProgress(
+        profile?.courses as ICourseCategoryUserAttends[],
+        Boolean(resourcePermissions.allowAccessDayBeforeCourseStart),
+      )
+
       if (resourcePermissions.courseInProgress && courseInProgress) {
         return true
       }
@@ -135,7 +138,7 @@ export function useResourcePermission() {
     [
       acl,
       trainerRoles,
-      courseInProgress,
+      profile?.courses,
       attendedCourse?.attendsTrainer,
       currentUserCertificates,
       onGoingCoursesUserAttends,
