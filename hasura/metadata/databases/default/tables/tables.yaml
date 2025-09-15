@@ -59,6 +59,7 @@
 - "!include public_course_trainer_type.yaml"
 - "!include public_course_type.yaml"
 - "!include public_course_type_prefix.yaml"
+- "!include public_cqc_establishment.yaml"
 - "!include public_cud_operation.yaml"
 - "!include public_deleted_organizations_backup.yaml"
 - "!include public_dfe_establishment.yaml"

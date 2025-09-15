@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS "public"."cqc_establishment" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "name" text NOT NULL, "known_as" text, "address" text NOT NULL, "postcode" text NOT NULL, "phone_number" text, "website" text, "service_type" text NOT NULL, "last_check_date" text, "specialisms" text, "provider_name" text NOT NULL, "local_authority" text, "region" text, "location_url" text NOT NULL, "location_id" text NOT NULL, "provider_id" text NOT NULL, PRIMARY KEY ("id") , UNIQUE ("id"));
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
