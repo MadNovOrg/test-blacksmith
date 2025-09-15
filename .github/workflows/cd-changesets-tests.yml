@@ -32,7 +32,7 @@ jobs:
           version: '9.15.5'
 
       - name: Build
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '18.14.2'
           cache: 'pnpm'
@@ -65,7 +65,7 @@ jobs:
           version: '9.15.5'
 
       - name: Build
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '18.14.2'
           cache: 'pnpm'
