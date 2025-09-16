@@ -1,4 +1,3 @@
-import { isFuture, parseISO } from 'date-fns'
 import { anyPass } from 'lodash/fp'
 import { MarkOptional } from 'ts-essentials'
 
@@ -16,13 +15,6 @@ import {
   getANZLevels,
   getLevels,
 } from '@app/modules/course/components/CourseForm/helpers'
-import { isCertificateOutsideGracePeriod } from '@app/modules/course_details/course_certification_tab/pages/CourseCertification/utils'
-import {
-  courseCategoryUserAttends,
-  hasCourseInProgress,
-  hasGotPassForTrainerCourse,
-  ICourseCategoryUserAttends,
-} from '@app/modules/resources/utils'
 import { AwsRegions, Course, CourseInput, RoleName } from '@app/types'
 import {
   getCourseAssistants,
@@ -532,51 +524,6 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           return anyPass([acl.isTTOps, acl.isSalesAdmin])()
         }
       }
-    },
-
-    canViewResources: () => {
-      const attendedCourse = courseCategoryUserAttends(
-        auth.profile?.courses as ICourseCategoryUserAttends[],
-      )
-      const hasPassed = hasGotPassForTrainerCourse(
-        auth.profile?.courses as ICourseCategoryUserAttends[],
-      )
-
-      const attendedTrainerCourse = attendedCourse?.attendsTrainer
-      const courseIsOngoing = hasCourseInProgress(
-        auth.profile?.courses as ICourseCategoryUserAttends[],
-      )
-      const hasPassedTrainerCourse = hasPassed
-
-      const currentUserCertificates = auth.certificates
-        ?.filter(certificate => {
-          const expirationDate = parseISO(certificate.expiryDate)
-          return acl.isTrainer()
-            ? !isCertificateOutsideGracePeriod(
-                certificate.expiryDate,
-                certificate.courseLevel,
-              )
-            : isFuture(expirationDate)
-        })
-        .map(certificate => certificate.courseLevel)
-
-      if (
-        anyPass([
-          acl.isBookingContact,
-          acl.isOrgKeyContact,
-          acl.isTrainer,
-          acl.isUser,
-          () => Boolean(attendedTrainerCourse),
-        ])()
-      ) {
-        return Boolean(
-          currentUserCertificates?.length ||
-            courseIsOngoing ||
-            hasPassedTrainerCourse,
-        )
-      }
-
-      return acl.isInternalUser()
     },
 
     canViewCourseHistory: () =>

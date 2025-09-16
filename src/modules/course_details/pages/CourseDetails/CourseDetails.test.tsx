@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { Course_Level_Enum, ResourceCategory } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
-import { useResourceAreas } from '@app/modules/resources/hooks/use-resource-areas'
+import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas-context'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -14,7 +14,7 @@ import { CourseDetails, preCourseMaterialLevels } from '.'
 const mockNavigate = vi.fn()
 
 vi.mock('@app/hooks/useCourse')
-vi.mock('@app/modules/resources/hooks/use-resource-areas')
+vi.mock('@app/modules/resources/contexts/resource-areas-context')
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
@@ -39,6 +39,7 @@ describe('page: CourseDetails', () => {
       allResourcesByArea: {
         basic: [],
       },
+      hasAnyResourceAccess: false,
     })
 
     // Act
@@ -82,6 +83,7 @@ describe('page: CourseDetails', () => {
             } as ResourceCategory,
           ],
         },
+        hasAnyResourceAccess: true,
       })
 
       render(
@@ -119,6 +121,7 @@ describe('page: CourseDetails', () => {
           } as ResourceCategory,
         ],
       },
+      hasAnyResourceAccess: true,
     })
 
     render(
@@ -161,6 +164,7 @@ describe('page: CourseDetails', () => {
           } as ResourceCategory,
         ],
       },
+      hasAnyResourceAccess: true,
     })
 
     render(
@@ -197,6 +201,7 @@ describe('page: CourseDetails', () => {
           } as ResourceCategory,
         ],
       },
+      hasAnyResourceAccess: true,
     })
 
     render(
@@ -227,6 +232,7 @@ describe('page: CourseDetails', () => {
       allResourcesByArea: {
         basic: [],
       },
+      hasAnyResourceAccess: true,
     })
 
     render(
@@ -269,6 +275,7 @@ describe('page: CourseDetails', () => {
       allResourcesByArea: {
         basic: [],
       },
+      hasAnyResourceAccess: false,
     })
 
     render(
@@ -313,6 +320,7 @@ describe('page: CourseDetails', () => {
       allResourcesByArea: {
         basic: [],
       },
+      hasAnyResourceAccess: false,
     })
 
     render(
@@ -357,6 +365,7 @@ describe('page: CourseDetails', () => {
       allResourcesByArea: {
         basic: [],
       },
+      hasAnyResourceAccess: false,
     })
 
     render(

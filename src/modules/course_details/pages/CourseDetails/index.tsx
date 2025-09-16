@@ -44,7 +44,7 @@ import { CourseCertifications } from '@app/modules/course_details/course_certifi
 import { EvaluationSummaryTab } from '@app/modules/course_details/course_evaluation_tab/components/EvaluationSummaryTab'
 import { GET_DIETARY_AND_DISABILITIES_COUNT } from '@app/modules/course_details/hooks/course-participant/get-participant-dietary-restrictions-by-course-id'
 import { CourseCancellationRequestFeature } from '@app/modules/course_details/pages/CourseDetails/CourseCancellationRequestFeature'
-import { useResourceAreas } from '@app/modules/resources/hooks/use-resource-areas'
+import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas-context'
 import { ResidingCountryDialog } from '@app/modules/welcome/components/ResidingCountryDialog/ResidingCountryDialog'
 import { getIndividualCourseStatuses } from '@app/rules/course-status'
 import { courseEnded, LoadingStatus } from '@app/util'

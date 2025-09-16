@@ -11,6 +11,8 @@ import { RoleName } from '@app/types'
 import { render, screen } from '@test/index'
 import { buildResourceCategory } from '@test/mock-data-utils'
 
+import { ResourceAreasProvider } from '../../contexts/resource-areas-context'
+
 import { ResourceAreas } from './ResourceAreas'
 
 describe('page: ResourcesList', () => {
@@ -19,9 +21,11 @@ describe('page: ResourcesList', () => {
       executeQuery: () => never,
     }
     render(
-      <Provider value={client as unknown as Client}>
-        <ResourceAreas />
-      </Provider>,
+      <ResourceAreasProvider>
+        <Provider value={client as unknown as Client}>
+          <ResourceAreas />
+        </Provider>
+      </ResourceAreasProvider>,
       {
         auth: {
           activeRole: RoleName.USER,
@@ -88,7 +92,9 @@ describe('page: ResourcesList', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <ResourceAreas />
+        <ResourceAreasProvider>
+          <ResourceAreas />
+        </ResourceAreasProvider>
       </Provider>,
       {
         auth: {
@@ -144,7 +150,9 @@ describe('page: ResourcesList', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <ResourceAreas />
+        <ResourceAreasProvider>
+          <ResourceAreas />
+        </ResourceAreasProvider>
       </Provider>,
       {
         auth: {
@@ -231,7 +239,9 @@ describe('page: ResourcesList', () => {
 
       render(
         <Provider value={client as unknown as Client}>
-          <ResourceAreas />
+          <ResourceAreasProvider>
+            <ResourceAreas />
+          </ResourceAreasProvider>
         </Provider>,
         {
           auth: {

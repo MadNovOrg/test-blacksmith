@@ -16,7 +16,7 @@ import { FullHeightPageLayout } from '@app/layouts/FullHeightPageLayout'
 import { ResourceAreaIcon } from '../../components/resourceAreaIcon'
 import { ResourceListSkeleton } from '../../components/ResourceAreasSkeleton'
 import { ResourceCard } from '../../components/ResourceCard'
-import { useResourceAreas } from '../../hooks/use-resource-areas'
+import { useResourceAreas } from '../../contexts/resource-areas-context'
 
 export const ResourceAreas = () => {
   const { t } = useTranslation()

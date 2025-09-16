@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
+import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas-context'
 
 import { StyledNavLink } from '../StyledNavLink'
 
@@ -14,6 +15,8 @@ interface INavLinksProps {
 export const NavLinks: FC<INavLinksProps> = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
+
+  const { hasAnyResourceAccess } = useResourceAreas()
 
   return (
     <Box
@@ -31,7 +34,7 @@ export const NavLinks: FC<INavLinksProps> = () => {
         {t('home')}
       </Link>
 
-      {acl.canViewResources() ? (
+      {hasAnyResourceAccess ? (
         <Link
           component={StyledNavLink}
           to="/resources"

@@ -2,11 +2,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
+import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas-context'
 import { RoleName } from '@app/types'
 
 import { render, renderHook, screen } from '@test/index'
 
 import { NavLinks } from './NavLinks'
+
+vi.mock('@app/modules/resources/contexts/resource-areas-context')
+const useResourcesMocked = vi.mocked(useResourceAreas)
 
 describe('component: NavLinks', () => {
   const { result } = renderHook(() => useTranslation())
@@ -15,6 +19,14 @@ describe('component: NavLinks', () => {
   } = result
 
   it('renders USER role links', async () => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: true,
+    })
+
     render(<NavLinks />, {
       auth: {
         profile: {
@@ -74,6 +86,14 @@ describe('component: NavLinks', () => {
   })
 
   it("does not render resource and membership if user doesn't have a valid certificate", async () => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: false,
+    })
+
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.USER,
@@ -113,6 +133,14 @@ describe('component: NavLinks', () => {
   })
 
   it("doesn't render resources link if a trainer doesn't have a valid certificate", () => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: false,
+    })
+
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TRAINER,
@@ -126,6 +154,14 @@ describe('component: NavLinks', () => {
   })
 
   it('renders resources link if a trainer has a valid certificate', () => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: true,
+    })
+
     render(<NavLinks />, {
       auth: {
         profile: {
@@ -175,6 +211,14 @@ describe('component: NavLinks', () => {
   })
 
   it("doesn't render resources link if a user is organisation admin and doesn't have a valid certificate", () => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: false,
+    })
+
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.USER,
@@ -217,6 +261,14 @@ describe('component: NavLinks', () => {
   })
 
   it('renders TT ADMIN role links', async () => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: true,
+    })
+
     render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,

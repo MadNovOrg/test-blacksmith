@@ -1274,6 +1274,16 @@ export const getTruthyObjectProps = <T>(obj: Record<string, unknown>) => {
   return props
 }
 
+export const hasAtLeastOneItem = (obj: Record<string, unknown[]>): boolean => {
+  if (!obj || typeof obj !== 'object') {
+    return false
+  }
+
+  const values = Object.values(obj)
+
+  return values.some(value => Array.isArray(value) && value.length > 0)
+}
+
 export const blendedLearningLicensePrice = {
   AUD: 78,
   NZD: 88,

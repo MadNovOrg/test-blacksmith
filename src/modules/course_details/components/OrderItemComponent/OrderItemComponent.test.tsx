@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
+import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas-context'
 import { Course } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -11,10 +12,21 @@ import { buildCourse } from '@test/mock-data-utils'
 import { CourseDetails } from '../../pages/CourseDetails'
 
 vi.mock('@app/hooks/useCourse')
+vi.mock('@app/modules/resources/contexts/resource-areas-context')
 
 const useCourseMocked = vi.mocked(useCourse)
+const useResourcesMocked = vi.mocked(useResourceAreas)
 
 describe('OrderItem', () => {
+  beforeAll(() => {
+    useResourcesMocked.mockReturnValue({
+      fetching: false,
+      allResourcesByArea: {
+        basic: [],
+      },
+      hasAnyResourceAccess: false,
+    })
+  })
   const testProps = {
     id: 'b2715e60-752c-41f5-b38e-b2984f8f02a3',
     xeroInvoiceNumber: 'TT-123456',

@@ -27,6 +27,7 @@ import { Onboarding as ANZOnboarding } from '@app/modules/onboarding/pages/ANZ/O
 import { Onboarding as UKOnboarding } from '@app/modules/onboarding/pages/UK/Onboarding'
 import { RegistrationPage } from '@app/modules/registration/pages/Registration'
 import { ResetPasswordPage } from '@app/modules/reset_password/pages/ResetPassword'
+import { ResourceAreasProvider } from '@app/modules/resources/contexts/resource-areas-context'
 import { WaitlistRoutes } from '@app/modules/waitlist/routes'
 import { Welcome } from '@app/modules/welcome/pages/Welcome/Welcome'
 import { RoleName } from '@app/types'
@@ -156,76 +157,78 @@ function LoggedInRoutes() {
   const RouteComp = roleRoutesMap[activeRole]
 
   return (
-    <Routes>
-      <Route
-        index
-        element={
-          <AppShell>
-            <Welcome />
-          </AppShell>
-        }
-      />
+    <ResourceAreasProvider>
+      <Routes>
+        <Route
+          index
+          element={
+            <AppShell>
+              <Welcome />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="profile/*"
-        element={
-          <AppShell>
-            {isUKRegion ? <UKProfileRoutes /> : <ANZProfileRoutes />}
-          </AppShell>
-        }
-      />
-      <Route
-        path="booking/*"
-        element={
-          <AppShell>
-            <CourseBookingPage />
-          </AppShell>
-        }
-      />
-      <Route
-        path="booking/done"
-        element={
-          <AppShell>
-            <CourseBookingDone />
-          </AppShell>
-        }
-      />
-      <Route
-        path="onboarding"
-        element={
-          <AppLayoutMinimal width={628}>
-            <Suspense fallback={<AppLoading />}>
-              {isUKRegion ? <UKOnboarding /> : <ANZOnboarding />}
-            </Suspense>
-          </AppLayoutMinimal>
-        }
-      />
+        <Route
+          path="profile/*"
+          element={
+            <AppShell>
+              {isUKRegion ? <UKProfileRoutes /> : <ANZProfileRoutes />}
+            </AppShell>
+          }
+        />
+        <Route
+          path="booking/*"
+          element={
+            <AppShell>
+              <CourseBookingPage />
+            </AppShell>
+          }
+        />
+        <Route
+          path="booking/done"
+          element={
+            <AppShell>
+              <CourseBookingDone />
+            </AppShell>
+          }
+        />
+        <Route
+          path="onboarding"
+          element={
+            <AppLayoutMinimal width={628}>
+              <Suspense fallback={<AppLoading />}>
+                {isUKRegion ? <UKOnboarding /> : <ANZOnboarding />}
+              </Suspense>
+            </AppLayoutMinimal>
+          }
+        />
 
-      {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
-      <Route
-        path="registration"
-        element={
-          <AppShell>
-            <RegistrationPage />
-          </AppShell>
-        }
-      />
+        {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
+        <Route
+          path="registration"
+          element={
+            <AppShell>
+              <RegistrationPage />
+            </AppShell>
+          }
+        />
 
-      <Route
-        path="*"
-        element={
-          <AppShell>
-            <RouteComp />
-          </AppShell>
-        }
-      />
+        <Route
+          path="*"
+          element={
+            <AppShell>
+              <RouteComp />
+            </AppShell>
+          }
+        />
 
-      {!redirectFromLogin ? (
-        <Route path="login/*" element={<Navigate replace to="/" />} />
-      ) : null}
+        {!redirectFromLogin ? (
+          <Route path="login/*" element={<Navigate replace to="/" />} />
+        ) : null}
 
-      <Route path="logout" element={<LogoutPage />} />
-    </Routes>
+        <Route path="logout" element={<LogoutPage />} />
+      </Routes>
+    </ResourceAreasProvider>
   )
 }
 
