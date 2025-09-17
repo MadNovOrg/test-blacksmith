@@ -10,11 +10,12 @@ export const RESOURCE_CATEGORY_SUMMARY = gql`
     name
     description
     resourcePermissions {
+      allowAccessDayBeforeCourseStart
       certificateLevels
-      principalTrainer
       courseInProgress
-      seniorTrainer
       etaTrainer
+      principalTrainer
+      seniorTrainer
     }
     resources(first: 100, where: { orderby: { field: SLUG, order: ASC } }) {
       nodes {

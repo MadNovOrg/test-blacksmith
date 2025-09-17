@@ -15,11 +15,12 @@ export const RESOURCE_SUMMARY = gql`
       }
     }
     resourcePermissions {
+      allowAccessDayBeforeCourseStart
       certificateLevels
-      principalTrainer
       courseInProgress
-      seniorTrainer
       etaTrainer
+      principalTrainer
+      seniorTrainer
     }
   }
 `

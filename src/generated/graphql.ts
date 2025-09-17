@@ -29951,6 +29951,308 @@ export type Course_Variance_Order_By = {
   price?: InputMaybe<Order_By>;
 };
 
+/** columns and relationships of "cqc_establishment" */
+export type Cqc_Establishment = {
+  __typename?: 'cqc_establishment';
+  address: Scalars['String'];
+  id: Scalars['uuid'];
+  known_as?: Maybe<Scalars['String']>;
+  last_check_date?: Maybe<Scalars['String']>;
+  local_authority?: Maybe<Scalars['String']>;
+  location_id: Scalars['String'];
+  location_url: Scalars['String'];
+  name: Scalars['String'];
+  phone_number?: Maybe<Scalars['String']>;
+  postcode: Scalars['String'];
+  provider_id: Scalars['String'];
+  provider_name: Scalars['String'];
+  region?: Maybe<Scalars['String']>;
+  service_type: Scalars['String'];
+  specialisms?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "cqc_establishment" */
+export type Cqc_Establishment_Aggregate = {
+  __typename?: 'cqc_establishment_aggregate';
+  aggregate?: Maybe<Cqc_Establishment_Aggregate_Fields>;
+  nodes: Array<Cqc_Establishment>;
+};
+
+/** aggregate fields of "cqc_establishment" */
+export type Cqc_Establishment_Aggregate_Fields = {
+  __typename?: 'cqc_establishment_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Cqc_Establishment_Max_Fields>;
+  min?: Maybe<Cqc_Establishment_Min_Fields>;
+};
+
+
+/** aggregate fields of "cqc_establishment" */
+export type Cqc_Establishment_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Cqc_Establishment_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "cqc_establishment". All fields are combined with a logical 'AND'. */
+export type Cqc_Establishment_Bool_Exp = {
+  _and?: InputMaybe<Array<Cqc_Establishment_Bool_Exp>>;
+  _not?: InputMaybe<Cqc_Establishment_Bool_Exp>;
+  _or?: InputMaybe<Array<Cqc_Establishment_Bool_Exp>>;
+  address?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  known_as?: InputMaybe<String_Comparison_Exp>;
+  last_check_date?: InputMaybe<String_Comparison_Exp>;
+  local_authority?: InputMaybe<String_Comparison_Exp>;
+  location_id?: InputMaybe<String_Comparison_Exp>;
+  location_url?: InputMaybe<String_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  phone_number?: InputMaybe<String_Comparison_Exp>;
+  postcode?: InputMaybe<String_Comparison_Exp>;
+  provider_id?: InputMaybe<String_Comparison_Exp>;
+  provider_name?: InputMaybe<String_Comparison_Exp>;
+  region?: InputMaybe<String_Comparison_Exp>;
+  service_type?: InputMaybe<String_Comparison_Exp>;
+  specialisms?: InputMaybe<String_Comparison_Exp>;
+  website?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "cqc_establishment" */
+export enum Cqc_Establishment_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  CqcEstablishmentPkey = 'cqc_establishment_pkey'
+}
+
+/** input type for inserting data into table "cqc_establishment" */
+export type Cqc_Establishment_Insert_Input = {
+  address?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  known_as?: InputMaybe<Scalars['String']>;
+  last_check_date?: InputMaybe<Scalars['String']>;
+  local_authority?: InputMaybe<Scalars['String']>;
+  location_id?: InputMaybe<Scalars['String']>;
+  location_url?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone_number?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  provider_id?: InputMaybe<Scalars['String']>;
+  provider_name?: InputMaybe<Scalars['String']>;
+  region?: InputMaybe<Scalars['String']>;
+  service_type?: InputMaybe<Scalars['String']>;
+  specialisms?: InputMaybe<Scalars['String']>;
+  website?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Cqc_Establishment_Max_Fields = {
+  __typename?: 'cqc_establishment_max_fields';
+  address?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  known_as?: Maybe<Scalars['String']>;
+  last_check_date?: Maybe<Scalars['String']>;
+  local_authority?: Maybe<Scalars['String']>;
+  location_id?: Maybe<Scalars['String']>;
+  location_url?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  phone_number?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  provider_id?: Maybe<Scalars['String']>;
+  provider_name?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  service_type?: Maybe<Scalars['String']>;
+  specialisms?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Cqc_Establishment_Min_Fields = {
+  __typename?: 'cqc_establishment_min_fields';
+  address?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  known_as?: Maybe<Scalars['String']>;
+  last_check_date?: Maybe<Scalars['String']>;
+  local_authority?: Maybe<Scalars['String']>;
+  location_id?: Maybe<Scalars['String']>;
+  location_url?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  phone_number?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  provider_id?: Maybe<Scalars['String']>;
+  provider_name?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  service_type?: Maybe<Scalars['String']>;
+  specialisms?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "cqc_establishment" */
+export type Cqc_Establishment_Mutation_Response = {
+  __typename?: 'cqc_establishment_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Cqc_Establishment>;
+};
+
+/** on_conflict condition type for table "cqc_establishment" */
+export type Cqc_Establishment_On_Conflict = {
+  constraint: Cqc_Establishment_Constraint;
+  update_columns?: Array<Cqc_Establishment_Update_Column>;
+  where?: InputMaybe<Cqc_Establishment_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "cqc_establishment". */
+export type Cqc_Establishment_Order_By = {
+  address?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  known_as?: InputMaybe<Order_By>;
+  last_check_date?: InputMaybe<Order_By>;
+  local_authority?: InputMaybe<Order_By>;
+  location_id?: InputMaybe<Order_By>;
+  location_url?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  phone_number?: InputMaybe<Order_By>;
+  postcode?: InputMaybe<Order_By>;
+  provider_id?: InputMaybe<Order_By>;
+  provider_name?: InputMaybe<Order_By>;
+  region?: InputMaybe<Order_By>;
+  service_type?: InputMaybe<Order_By>;
+  specialisms?: InputMaybe<Order_By>;
+  website?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: cqc_establishment */
+export type Cqc_Establishment_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "cqc_establishment" */
+export enum Cqc_Establishment_Select_Column {
+  /** column name */
+  Address = 'address',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  KnownAs = 'known_as',
+  /** column name */
+  LastCheckDate = 'last_check_date',
+  /** column name */
+  LocalAuthority = 'local_authority',
+  /** column name */
+  LocationId = 'location_id',
+  /** column name */
+  LocationUrl = 'location_url',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  PhoneNumber = 'phone_number',
+  /** column name */
+  Postcode = 'postcode',
+  /** column name */
+  ProviderId = 'provider_id',
+  /** column name */
+  ProviderName = 'provider_name',
+  /** column name */
+  Region = 'region',
+  /** column name */
+  ServiceType = 'service_type',
+  /** column name */
+  Specialisms = 'specialisms',
+  /** column name */
+  Website = 'website'
+}
+
+/** input type for updating data in table "cqc_establishment" */
+export type Cqc_Establishment_Set_Input = {
+  address?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  known_as?: InputMaybe<Scalars['String']>;
+  last_check_date?: InputMaybe<Scalars['String']>;
+  local_authority?: InputMaybe<Scalars['String']>;
+  location_id?: InputMaybe<Scalars['String']>;
+  location_url?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone_number?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  provider_id?: InputMaybe<Scalars['String']>;
+  provider_name?: InputMaybe<Scalars['String']>;
+  region?: InputMaybe<Scalars['String']>;
+  service_type?: InputMaybe<Scalars['String']>;
+  specialisms?: InputMaybe<Scalars['String']>;
+  website?: InputMaybe<Scalars['String']>;
+};
+
+/** Streaming cursor of the table "cqc_establishment" */
+export type Cqc_Establishment_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Cqc_Establishment_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Cqc_Establishment_Stream_Cursor_Value_Input = {
+  address?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  known_as?: InputMaybe<Scalars['String']>;
+  last_check_date?: InputMaybe<Scalars['String']>;
+  local_authority?: InputMaybe<Scalars['String']>;
+  location_id?: InputMaybe<Scalars['String']>;
+  location_url?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone_number?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  provider_id?: InputMaybe<Scalars['String']>;
+  provider_name?: InputMaybe<Scalars['String']>;
+  region?: InputMaybe<Scalars['String']>;
+  service_type?: InputMaybe<Scalars['String']>;
+  specialisms?: InputMaybe<Scalars['String']>;
+  website?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "cqc_establishment" */
+export enum Cqc_Establishment_Update_Column {
+  /** column name */
+  Address = 'address',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  KnownAs = 'known_as',
+  /** column name */
+  LastCheckDate = 'last_check_date',
+  /** column name */
+  LocalAuthority = 'local_authority',
+  /** column name */
+  LocationId = 'location_id',
+  /** column name */
+  LocationUrl = 'location_url',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  PhoneNumber = 'phone_number',
+  /** column name */
+  Postcode = 'postcode',
+  /** column name */
+  ProviderId = 'provider_id',
+  /** column name */
+  ProviderName = 'provider_name',
+  /** column name */
+  Region = 'region',
+  /** column name */
+  ServiceType = 'service_type',
+  /** column name */
+  Specialisms = 'specialisms',
+  /** column name */
+  Website = 'website'
+}
+
+export type Cqc_Establishment_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Cqc_Establishment_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Cqc_Establishment_Bool_Exp;
+};
+
 export type CreateSubscriptionOutput = {
   __typename?: 'createSubscriptionOutput';
   clientSecret: Scalars['String'];
@@ -37200,6 +37502,10 @@ export type Mutation_Root = {
   delete_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
   /** delete single row from the table: "course_type_prefix" */
   delete_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
+  /** delete data from the table: "cqc_establishment" */
+  delete_cqc_establishment?: Maybe<Cqc_Establishment_Mutation_Response>;
+  /** delete single row from the table: "cqc_establishment" */
+  delete_cqc_establishment_by_pk?: Maybe<Cqc_Establishment>;
   /** delete data from the table: "cud_operation" */
   delete_cud_operation?: Maybe<Cud_Operation_Mutation_Response>;
   /** delete single row from the table: "cud_operation" */
@@ -37748,6 +38054,10 @@ export type Mutation_Root = {
   insert_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
   /** insert a single row into the table: "course_type_prefix" */
   insert_course_type_prefix_one?: Maybe<Course_Type_Prefix>;
+  /** insert data into the table: "cqc_establishment" */
+  insert_cqc_establishment?: Maybe<Cqc_Establishment_Mutation_Response>;
+  /** insert a single row into the table: "cqc_establishment" */
+  insert_cqc_establishment_one?: Maybe<Cqc_Establishment>;
   /** insert data into the table: "cud_operation" */
   insert_cud_operation?: Maybe<Cud_Operation_Mutation_Response>;
   /** insert a single row into the table: "cud_operation" */
@@ -38444,6 +38754,12 @@ export type Mutation_Root = {
   update_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
   /** update multiples rows of table: "course_type_prefix" */
   update_course_type_prefix_many?: Maybe<Array<Maybe<Course_Type_Prefix_Mutation_Response>>>;
+  /** update data of the table: "cqc_establishment" */
+  update_cqc_establishment?: Maybe<Cqc_Establishment_Mutation_Response>;
+  /** update single row of the table: "cqc_establishment" */
+  update_cqc_establishment_by_pk?: Maybe<Cqc_Establishment>;
+  /** update multiples rows of table: "cqc_establishment" */
+  update_cqc_establishment_many?: Maybe<Array<Maybe<Cqc_Establishment_Mutation_Response>>>;
   /** update data of the table: "cud_operation" */
   update_cud_operation?: Maybe<Cud_Operation_Mutation_Response>;
   /** update single row of the table: "cud_operation" */
@@ -39719,6 +40035,18 @@ export type Mutation_RootDelete_Course_Type_PrefixArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Course_Type_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Cqc_EstablishmentArgs = {
+  where: Cqc_Establishment_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Cqc_Establishment_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -41495,6 +41823,20 @@ export type Mutation_RootInsert_Course_Type_PrefixArgs = {
 export type Mutation_RootInsert_Course_Type_Prefix_OneArgs = {
   object: Course_Type_Prefix_Insert_Input;
   on_conflict?: InputMaybe<Course_Type_Prefix_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Cqc_EstablishmentArgs = {
+  objects: Array<Cqc_Establishment_Insert_Input>;
+  on_conflict?: InputMaybe<Cqc_Establishment_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Cqc_Establishment_OneArgs = {
+  object: Cqc_Establishment_Insert_Input;
+  on_conflict?: InputMaybe<Cqc_Establishment_On_Conflict>;
 };
 
 
@@ -44017,6 +44359,26 @@ export type Mutation_RootUpdate_Course_Type_Prefix_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Course_Type_Prefix_ManyArgs = {
   updates: Array<Course_Type_Prefix_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Cqc_EstablishmentArgs = {
+  _set?: InputMaybe<Cqc_Establishment_Set_Input>;
+  where: Cqc_Establishment_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Cqc_Establishment_By_PkArgs = {
+  _set?: InputMaybe<Cqc_Establishment_Set_Input>;
+  pk_columns: Cqc_Establishment_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Cqc_Establishment_ManyArgs = {
+  updates: Array<Cqc_Establishment_Updates>;
 };
 
 
@@ -55999,6 +56361,12 @@ export type Query_Root = {
   course_type_prefix_aggregate: Course_Type_Prefix_Aggregate;
   /** fetch data from the table: "course_type_prefix" using primary key columns */
   course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
+  /** fetch data from the table: "cqc_establishment" */
+  cqc_establishment: Array<Cqc_Establishment>;
+  /** fetch aggregated fields from the table: "cqc_establishment" */
+  cqc_establishment_aggregate: Cqc_Establishment_Aggregate;
+  /** fetch data from the table: "cqc_establishment" using primary key columns */
+  cqc_establishment_by_pk?: Maybe<Cqc_Establishment>;
   /** fetch data from the table: "cud_operation" */
   cud_operation: Array<Cud_Operation>;
   /** fetch aggregated fields from the table: "cud_operation" */
@@ -57888,6 +58256,29 @@ export type Query_RootCourse_Type_Prefix_AggregateArgs = {
 
 
 export type Query_RootCourse_Type_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootCqc_EstablishmentArgs = {
+  distinct_on?: InputMaybe<Array<Cqc_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Cqc_Establishment_Order_By>>;
+  where?: InputMaybe<Cqc_Establishment_Bool_Exp>;
+};
+
+
+export type Query_RootCqc_Establishment_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Cqc_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Cqc_Establishment_Order_By>>;
+  where?: InputMaybe<Cqc_Establishment_Bool_Exp>;
+};
+
+
+export type Query_RootCqc_Establishment_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -62065,6 +62456,14 @@ export type Subscription_Root = {
   course_type_prefix_stream: Array<Course_Type_Prefix>;
   /** fetch data from the table in a streaming manner: "course_type" */
   course_type_stream: Array<Course_Type>;
+  /** fetch data from the table: "cqc_establishment" */
+  cqc_establishment: Array<Cqc_Establishment>;
+  /** fetch aggregated fields from the table: "cqc_establishment" */
+  cqc_establishment_aggregate: Cqc_Establishment_Aggregate;
+  /** fetch data from the table: "cqc_establishment" using primary key columns */
+  cqc_establishment_by_pk?: Maybe<Cqc_Establishment>;
+  /** fetch data from the table in a streaming manner: "cqc_establishment" */
+  cqc_establishment_stream: Array<Cqc_Establishment>;
   /** fetch data from the table: "cud_operation" */
   cud_operation: Array<Cud_Operation>;
   /** fetch aggregated fields from the table: "cud_operation" */
@@ -64492,6 +64891,36 @@ export type Subscription_RootCourse_Type_StreamArgs = {
   batch_size: Scalars['Int'];
   cursor: Array<InputMaybe<Course_Type_Stream_Cursor_Input>>;
   where?: InputMaybe<Course_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootCqc_EstablishmentArgs = {
+  distinct_on?: InputMaybe<Array<Cqc_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Cqc_Establishment_Order_By>>;
+  where?: InputMaybe<Cqc_Establishment_Bool_Exp>;
+};
+
+
+export type Subscription_RootCqc_Establishment_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Cqc_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Cqc_Establishment_Order_By>>;
+  where?: InputMaybe<Cqc_Establishment_Bool_Exp>;
+};
+
+
+export type Subscription_RootCqc_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCqc_Establishment_StreamArgs = {
+  batch_size: Scalars['Int'];
+  cursor: Array<InputMaybe<Cqc_Establishment_Stream_Cursor_Input>>;
+  where?: InputMaybe<Cqc_Establishment_Bool_Exp>;
 };
 
 
@@ -71034,7 +71463,7 @@ export type GetResourcesQueryVariables = Exact<{
 }>;
 
 
-export type GetResourcesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
+export type GetResourcesQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
 
 export type CancelMyselfFromCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -72060,11 +72489,11 @@ export type ResourceDetailsQueryVariables = Exact<{
 }>;
 
 
-export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
+export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'contentRootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null } | null> | null } | null } | null> | null } | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null } | null> | null } | null } | null } | null };
 
-export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null } | null> | null } | null };
+export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resourcePermissions?: { __typename?: 'ResourceCategory_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null } | null> | null } | null };
 
-export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', certificateLevels?: Array<string | null> | null, principalTrainer?: boolean | null, courseInProgress?: boolean | null, seniorTrainer?: boolean | null, etaTrainer?: boolean | null } | null };
+export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceAttachment?: { __typename?: 'Resource_Resourceattachment', resourcetype?: string | null, videourl?: string | null, file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null, link?: { __typename?: 'AcfLink', url?: string | null } | null } | null, resourcePermissions?: { __typename?: 'Resource_Resourcepermissions', allowAccessDayBeforeCourseStart?: boolean | null, certificateLevels?: Array<string | null> | null, courseInProgress?: boolean | null, etaTrainer?: boolean | null, principalTrainer?: boolean | null, seniorTrainer?: boolean | null } | null };
 
 export type GetCourseDraftsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Draft_Order_By> | Course_Draft_Order_By>;
