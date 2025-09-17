@@ -9,7 +9,7 @@ import useCourseParticipants from '@app/modules/course_details/hooks/course-part
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, within } from '@test/index'
+import { chance, _render, screen, within } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -46,7 +46,7 @@ it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
       mutate: vi.fn(),
     })
 
-    render(
+    _render(
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}
         onSendingCourseInformation={vitest.fn()}
@@ -89,7 +89,7 @@ it('displays the attendance column if user is a lead trainer on the course', () 
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -133,7 +133,7 @@ it('displays the attendance column if user is an assist trainer on the course', 
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -177,7 +177,7 @@ it("doesn't display the attendance column if user is a moderator on the course",
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -215,7 +215,7 @@ it('displays the attendance column if course has ended', () => {
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -258,7 +258,7 @@ it('marks attendance chip disabled if participant has been graded', () => {
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -304,7 +304,7 @@ it('marks attendance chip disabled if participant did not attend, course ended a
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -357,7 +357,7 @@ it.each([
       mutate: vi.fn(),
     })
 
-    render(
+    _render(
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}
         onSendingCourseInformation={vitest.fn()}

@@ -10,7 +10,7 @@ import { RoleName } from '@app/types'
 
 import {
   chance,
-  render,
+  _render,
   screen,
   userEvent,
   within,
@@ -56,7 +56,7 @@ describe('InviteUserToOrganisation', () => {
 
     useOrganisationMock.mockReturnValue(organisations)
 
-    return render(
+    return _render(
       <Provider value={client}>
         <InviteUserToOrganisation
           onClose={onCloseMock}

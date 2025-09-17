@@ -1,6 +1,6 @@
 import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import type { CourseDiff } from '../../utils/shared'
 
@@ -8,7 +8,7 @@ import { ReviewChangesModal } from '.'
 
 describe('component: ReviewChangesModal', () => {
   it('validates the reason field', async () => {
-    render(
+    _render(
       <ReviewChangesModal
         diff={[]}
         open
@@ -37,7 +37,7 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(
+    _render(
       <ReviewChangesModal
         diff={[dateDiff]}
         open
@@ -71,7 +71,7 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(
+    _render(
       <ReviewChangesModal
         diff={[dateDiff]}
         open
@@ -108,7 +108,7 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(
+    _render(
       <ReviewChangesModal
         diff={[dateDiff]}
         open
@@ -135,7 +135,7 @@ describe('component: ReviewChangesModal', () => {
   it('cancels review when clicked on cancel button', async () => {
     const onCancelMock = vi.fn()
 
-    render(
+    _render(
       <ReviewChangesModal
         diff={[]}
         open
@@ -159,7 +159,7 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(
+    _render(
       <ReviewChangesModal
         level={Course_Level_Enum.Level_1}
         diff={[dateDiff]}

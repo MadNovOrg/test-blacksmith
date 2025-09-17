@@ -6,7 +6,7 @@ import {
   ToggleSelectedParticipantsAttendanceMutationVariables,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import {
   BulkAttendanceButton,
@@ -18,7 +18,7 @@ it('disables button if prop is passed', () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <BulkAttendanceButton
         courseId={1}
@@ -38,7 +38,7 @@ it('disables button if no participants are selected', () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <BulkAttendanceButton courseId={1} participantIds={[]} />
     </Provider>,
@@ -54,7 +54,7 @@ it('renders correct menu items', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <BulkAttendanceButton courseId={1} participantIds={[chance.guid()]} />
     </Provider>,
@@ -97,7 +97,7 @@ it('marks selected participants as attended when option is selected', async () =
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <BulkAttendanceButton
         courseId={courseId}
@@ -144,7 +144,7 @@ it('marks selected participants as did not attend when option is selected', asyn
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <BulkAttendanceButton
         courseId={courseId}

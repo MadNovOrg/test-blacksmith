@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { fillForm } from '../../test-utils'
 
@@ -8,7 +8,7 @@ import { ManageLicensesForm, Type } from '.'
 
 describe('component: ManageLicencesForm', () => {
   it('validates amount field to be a positive number', async () => {
-    render(<ManageLicensesForm currentBalance={100} />)
+    _render(<ManageLicensesForm currentBalance={100} />)
 
     await fillForm({ amount: -1 })
 
@@ -20,7 +20,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('displays number of remaining licences', async () => {
-    render(<ManageLicensesForm currentBalance={100} />)
+    _render(<ManageLicensesForm currentBalance={100} />)
 
     await fillForm({ amount: 50, type: Type.ADD })
 
@@ -32,7 +32,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('validates invoice field', async () => {
-    render(<ManageLicensesForm currentBalance={100} />)
+    _render(<ManageLicensesForm currentBalance={100} />)
 
     const invoiceField = screen.getByLabelText('Invoice number *')
 
@@ -51,7 +51,7 @@ describe('component: ManageLicencesForm', () => {
     const invoiceId = 'INV.1234'
     const note = 'Note'
 
-    render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
+    _render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
     await fillForm({ amount: 50, invoiceId, note, type: Type.ADD })
 
@@ -75,7 +75,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('makes an invoice id a required field when issue refund is checked and type is REMOVE', async () => {
-    render(<ManageLicensesForm currentBalance={100} />)
+    _render(<ManageLicensesForm currentBalance={100} />)
 
     await fillForm({
       type: Type.REMOVE,
@@ -95,7 +95,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('makes a license price a required field when issue refund is checked and type is REMOVE', async () => {
-    render(<ManageLicensesForm currentBalance={100} />)
+    _render(<ManageLicensesForm currentBalance={100} />)
 
     await fillForm({
       type: Type.REMOVE,
@@ -116,7 +116,7 @@ describe('component: ManageLicencesForm', () => {
     const onSaveMock = vi.fn()
     const note = 'Note'
 
-    render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
+    _render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
     await fillForm({ type: Type.REMOVE, amount: 50, note })
 
@@ -144,7 +144,7 @@ describe('component: ManageLicencesForm', () => {
     const note = 'Note'
     const invoiceId = 'INV-0001'
 
-    render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
+    _render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
     await fillForm({
       type: Type.REMOVE,
@@ -175,7 +175,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('constrains number of licences field to the number of organization licences when removing', async () => {
-    render(<ManageLicensesForm currentBalance={1} />)
+    _render(<ManageLicensesForm currentBalance={1} />)
 
     await fillForm({ amount: 2, type: Type.REMOVE })
 
@@ -187,7 +187,7 @@ describe('component: ManageLicencesForm', () => {
   })
 
   it('enables save button when issue refund is toggled', async () => {
-    render(<ManageLicensesForm currentBalance={10} />)
+    _render(<ManageLicensesForm currentBalance={10} />)
 
     await fillForm({ amount: 2, type: Type.REMOVE })
 

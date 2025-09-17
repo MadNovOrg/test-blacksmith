@@ -7,7 +7,7 @@ import { useOrgResourcePacks } from '@app/modules/course/hooks/useOrgResourcePac
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -49,7 +49,7 @@ describe('ManageResourcePacksForm', () => {
       refetch: vi.fn(),
     })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageResourcePacksForm
           onCancel={onCancel}
@@ -124,7 +124,7 @@ describe('ManageResourcePacksForm', () => {
       refetch: vi.fn(),
     })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageResourcePacksForm
           onCancel={onCancel}
@@ -189,7 +189,7 @@ describe('ManageResourcePacksForm', () => {
       refetch: vi.fn(),
     })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageResourcePacksForm
           onCancel={onCancel}

@@ -6,7 +6,14 @@ import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { MergeUsersDialog } from './MergeUsersDialog'
 
@@ -96,7 +103,7 @@ describe(MergeUsersDialog.name, () => {
         data: mockClientValue as MergeUserMutation,
       }),
     )
-    return render(
+    return _render(
       <Provider value={client as unknown as Client}>
         <MergeUsersDialog
           onClose={onCloseMock}

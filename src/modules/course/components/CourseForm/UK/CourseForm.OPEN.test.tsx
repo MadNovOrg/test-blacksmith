@@ -12,7 +12,7 @@ import { AwsRegions, RoleName } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import {
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -70,7 +70,7 @@ describe('component: UkCourseForm - OPEN', () => {
 
   it('restricts OPEN+ADVANCED_TRAINER to be F2F', async () => {
     await waitFor(() =>
-      render(<UkCourseForm type={type} />, {
+      _render(<UkCourseForm type={type} />, {
         auth: {
           activeCertificates: [
             {
@@ -125,7 +125,7 @@ describe('component: UkCourseForm - OPEN', () => {
 
   it('restricts OPEN+ADVANCED_TRAINER+F2F to Non-blended', async () => {
     await waitFor(() =>
-      render(<UkCourseForm type={type} />, {
+      _render(<UkCourseForm type={type} />, {
         auth: {
           activeCertificates: [
             {
@@ -184,7 +184,7 @@ describe('component: UkCourseForm - OPEN', () => {
 
   it('allows OPEN+ADVANCED_TRAINER+F2F to New Certificate and Reaccreditation', async () => {
     await waitFor(() =>
-      render(<UkCourseForm type={type} />, {
+      _render(<UkCourseForm type={type} />, {
         auth: {
           activeCertificates: [
             {
@@ -212,7 +212,7 @@ describe('component: UkCourseForm - OPEN', () => {
       overrides: { accreditedBy: Accreditors_Enum.Icm, type },
     })
     await waitFor(() =>
-      render(
+      _render(
         <UkCourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {
@@ -255,7 +255,7 @@ describe('component: UkCourseForm - OPEN', () => {
       },
     })
     await waitFor(() =>
-      render(
+      _render(
         <UkCourseForm
           courseInput={courseToCourseInput(course)}
           type={type}

@@ -1,4 +1,3 @@
-import { render, waitFor } from '@testing-library/react'
 import { useTranslation } from 'react-i18next'
 
 import { CountriesSelectorProps } from '@app/components/CountriesSelector'
@@ -13,7 +12,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 
-import { fireEvent, renderHook, screen } from '@test/index'
+import { fireEvent, renderHook, screen, render, waitFor } from '@test/index'
 
 import { useBooking } from '../BookingContext'
 import { FormInputs } from '../CourseBookingDetails/utils'

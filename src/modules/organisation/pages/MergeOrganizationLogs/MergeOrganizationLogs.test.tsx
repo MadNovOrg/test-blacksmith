@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -70,7 +70,7 @@ describe('MergeOrganizationLogs', () => {
   })
 
   it('renders the component with header and tabs', () => {
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
 
     expect(
       screen.getByText(t('pages.admin.organizations.title')),
@@ -87,7 +87,7 @@ describe('MergeOrganizationLogs', () => {
       total: undefined,
     })
 
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
 
@@ -98,7 +98,7 @@ describe('MergeOrganizationLogs', () => {
       total: 0,
     })
 
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
 
     await waitFor(() => {
       expect(
@@ -112,7 +112,7 @@ describe('MergeOrganizationLogs', () => {
   })
 
   it('renders log data correctly', () => {
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
 
     expect(screen.getByText('1 January 2023, 12:00 AM')).toBeInTheDocument()
     expect(screen.getByText('Primary Org')).toBeInTheDocument()
@@ -123,7 +123,7 @@ describe('MergeOrganizationLogs', () => {
   })
 
   it('renders links for primary organization and actioned by user', () => {
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
 
     const primaryOrgLink = screen.getByText('Primary Org').closest('a')
     expect(primaryOrgLink).toHaveAttribute('href', '/organisations/org1')
@@ -133,7 +133,7 @@ describe('MergeOrganizationLogs', () => {
   })
 
   it('displays tooltips for merged organization IDs', async () => {
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
 
     const org2Cell = screen.getByText('org2')
     await userEvent.hover(org2Cell)
@@ -144,7 +144,7 @@ describe('MergeOrganizationLogs', () => {
   })
 
   it('displays the correct column headers', () => {
-    render(<MergeOrganizationLogs />)
+    _render(<MergeOrganizationLogs />)
 
     expect(
       screen.getByText(t('pages.admin.organisations-merge-logs.created-at')),

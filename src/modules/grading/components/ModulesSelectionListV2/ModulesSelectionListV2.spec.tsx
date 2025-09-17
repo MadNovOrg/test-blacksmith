@@ -1,4 +1,4 @@
-import { render, screen, userEvent, within } from '@test/index'
+import { _render, screen, userEvent, within } from '@test/index'
 
 import { buildModule, buildLesson } from '../../utils'
 
@@ -11,7 +11,7 @@ it('renders module and lessons within modules', () => {
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
     screen.getByTestId(`module-group-${module.id}`),
@@ -31,7 +31,7 @@ it('toggles lesson selection within module when lesson is clicked', async () => 
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const lessonCheckbox = screen.getByLabelText(module.lessons.items[0].name)
 
@@ -53,7 +53,7 @@ it('toggles whole module when module is clicked', async () => {
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
     screen.getByTestId(`module-group-${module.id}`),
@@ -91,7 +91,7 @@ it('marks module as indeterminate if only some lessons are checked within the mo
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
     screen.getByTestId(`module-group-${module.id}`),
@@ -118,7 +118,7 @@ it('disables whole module if module is mandatory', () => {
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const moduleAccordion = within(
     screen.getByTestId(`module-group-${module.id}`),
@@ -150,7 +150,7 @@ it('toggles lesson group when clicked', async () => {
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const parentLessonCheckbox = screen.getByLabelText(parentLesson.name)
   const childLessonCheckbox = screen.getByLabelText(childLesson.name)
@@ -188,7 +188,7 @@ it('marks lesson group as indeterminate if some child lessons are selected', asy
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const parentLessonCheckbox = screen.getByLabelText(parentLesson.name)
   const childLessonOneCheckbox = screen.getByLabelText(childLessonOne.name)
@@ -223,7 +223,7 @@ it('toggles child lesson within lesson group', async () => {
 
   const curriculum = [module]
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} />)
+  _render(<ModulesSelectionListV2 curriculum={curriculum} />)
 
   const childLessonOneCheckbox = screen.getByLabelText(childLessonOne.name)
 
@@ -243,7 +243,9 @@ it('calls onChange whenever a module is toggled', async () => {
   const curriculum = [module]
   const onChange = vitest.fn()
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} onChange={onChange} />)
+  _render(
+    <ModulesSelectionListV2 curriculum={curriculum} onChange={onChange} />,
+  )
 
   expect(onChange).toHaveBeenCalledWith([
     {
@@ -288,7 +290,9 @@ it('calls onChange whenever a lesson is toggled', async () => {
   const curriculum = [module]
   const onChange = vitest.fn()
 
-  render(<ModulesSelectionListV2 curriculum={curriculum} onChange={onChange} />)
+  _render(
+    <ModulesSelectionListV2 curriculum={curriculum} onChange={onChange} />,
+  )
 
   expect(onChange).toHaveBeenCalledWith([
     {

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { RoleName } from '@app/types'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import { ManageCertificateMenu } from './ManageCertificateMenu'
 
@@ -15,7 +15,7 @@ describe('ManageCertificateMenu', () => {
   const onUpdateCertificateMock = vi.fn()
 
   it('when role is admin', async () => {
-    render(
+    _render(
       <ManageCertificateMenu
         isRevoked={false}
         certificateChangeLength={1}
@@ -45,7 +45,7 @@ describe('ManageCertificateMenu', () => {
   })
 
   it('when role is not admin', async () => {
-    render(
+    _render(
       <ManageCertificateMenu
         isRevoked={false}
         certificateChangeLength={1}
@@ -73,7 +73,7 @@ describe('ManageCertificateMenu', () => {
   })
 
   it('when cert is revoked', async () => {
-    render(
+    _render(
       <ManageCertificateMenu
         isRevoked={true}
         certificateChangeLength={1}
@@ -99,8 +99,8 @@ describe('ManageCertificateMenu', () => {
     )
   })
 
-  it('does not render change log menu when not applicable', async () => {
-    render(
+  it('does not _render change log menu when not applicable', async () => {
+    _render(
       <ManageCertificateMenu
         isRevoked={true}
         certificateChangeLength={0}

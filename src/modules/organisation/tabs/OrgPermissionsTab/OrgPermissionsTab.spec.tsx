@@ -4,7 +4,7 @@ import { fromValue } from 'wonka'
 import { GetOrganisationPermissionsQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import { GET_ORGANISATION_ACCESS_TO_KNOWLEDGE_HUB } from '../../hooks/useOrganisationPermissions'
 
@@ -36,7 +36,7 @@ describe(OrgPermissionsTab.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgPermissionsTab orgId={chance.guid()} />
       </Provider>,
@@ -69,7 +69,7 @@ describe(OrgPermissionsTab.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgPermissionsTab orgId={chance.guid()} />
       </Provider>,
@@ -104,7 +104,7 @@ describe(OrgPermissionsTab.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgPermissionsTab orgId={orgId} />
       </Provider>,
@@ -143,7 +143,7 @@ describe(OrgPermissionsTab.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgPermissionsTab orgId={orgId} />
       </Provider>,

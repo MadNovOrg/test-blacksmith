@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AwsRegions } from '@app/types'
 
 import {
-  render,
+  _render,
   providers,
   waitForCalls,
   fireEvent,
@@ -25,7 +25,7 @@ vi.mock('react-router-dom', async () => ({
 
 describe('Login', () => {
   it('shows error when email is empty', async () => {
-    render(<LoginPage />)
+    _render(<LoginPage />)
 
     const email = screen.getByTestId('input-email')
     expect(email).toHaveValue('')
@@ -42,7 +42,7 @@ describe('Login', () => {
   })
 
   it('shows error when email is invalid', async () => {
-    render(<LoginPage />)
+    _render(<LoginPage />)
 
     const email = screen.getByTestId('input-email')
 
@@ -58,7 +58,7 @@ describe('Login', () => {
   it('attempts login when email is valid', async () => {
     providers.auth.login.mockResolvedValue({ error: { code: 'OnPurpose' } })
 
-    render(<LoginPage />)
+    _render(<LoginPage />)
 
     fireEvent.change(screen.getByTestId('input-email'), {
       target: { value: chance.email() },
@@ -76,7 +76,7 @@ describe('Login', () => {
       error: { code: 'NotAuthorizedException' },
     })
 
-    render(<LoginPage />)
+    _render(<LoginPage />)
 
     const email = screen.getByTestId('input-email')
     fireEvent.change(email, { target: { value: chance.email() } })
@@ -94,7 +94,7 @@ describe('Login', () => {
   it('navigates away when login succeeds', async () => {
     providers.auth.login.mockResolvedValue({}) // no error
 
-    render(<LoginPage />)
+    _render(<LoginPage />)
 
     const email = screen.getByTestId('input-email')
     fireEvent.change(email, { target: { value: chance.email() } })
@@ -121,7 +121,7 @@ describe('Login ANZ', () => {
   })
 
   it('shows ANZ login wording', async () => {
-    render(<LoginPage />)
+    _render(<LoginPage />)
 
     expect(
       screen.queryByText(t('pages.login.login-in-tt-ANZ')),

@@ -1,7 +1,7 @@
 import { Title } from './Title'
 
 describe(Title.name, () => {
-  it('should render component', () => {
+  it('should _render component', () => {
     // Assert
     expect(true).toBeTruthy()
   })

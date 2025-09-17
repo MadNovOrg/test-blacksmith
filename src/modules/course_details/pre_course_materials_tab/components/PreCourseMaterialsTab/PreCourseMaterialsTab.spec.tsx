@@ -9,7 +9,7 @@ import {
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { PreCourseMaterialsTab } from './PreCourseMaterialsTab'
@@ -39,7 +39,7 @@ describe.skip(`component: ${PreCourseMaterialsTab.name}`, () => {
       })
 
       // Act
-      render(
+      _render(
         <Routes>
           <Route path={`/courses/:id/details`} element={<CourseDetails />} />
         </Routes>,
@@ -71,7 +71,7 @@ describe.skip(`component: ${PreCourseMaterialsTab.name}`, () => {
     })
 
     // Act
-    render(
+    _render(
       <Routes>
         <Route path={`/courses/:id/details`} element={<CourseDetails />} />
       </Routes>,

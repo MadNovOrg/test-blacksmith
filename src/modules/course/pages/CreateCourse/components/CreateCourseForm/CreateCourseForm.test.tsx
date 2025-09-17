@@ -1,4 +1,3 @@
-import { fireEvent, renderHook, within } from '@testing-library/react'
 import { addDays, addHours } from 'date-fns'
 import { print, DocumentNode } from 'graphql'
 import { useTranslation } from 'react-i18next'
@@ -32,9 +31,10 @@ import {
 } from '@app/types'
 import { courseToCourseInput, LoadingStatus } from '@app/util'
 
+import { fireEvent, renderHook, within } from '@test/index'
 import {
   chance,
-  render,
+  _render,
   screen,
   userEvent,
   waitFor,
@@ -125,7 +125,7 @@ describe('component: CreateCourseForm', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -180,7 +180,7 @@ describe('component: CreateCourseForm', () => {
     ]
     mockTrainerSearch.mockResolvedValue({ trainers: availableTrainers })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -258,7 +258,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -334,7 +334,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -440,7 +440,7 @@ describe('component: CreateCourseForm', () => {
       status: LoadingStatus.SUCCESS,
     } as unknown as ReturnType<typeof useProfile>)
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -534,7 +534,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -609,7 +609,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -693,7 +693,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -776,7 +776,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -850,7 +850,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -908,7 +908,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -1003,7 +1003,7 @@ describe('component: CreateCourseForm', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1074,7 +1074,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"
@@ -1166,7 +1166,7 @@ describe('component: CreateCourseForm', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1277,7 +1277,7 @@ describe('component: CreateCourseForm', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1388,7 +1388,7 @@ describe('component: CreateCourseForm', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1494,7 +1494,7 @@ describe('component: CreateCourseForm', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1605,7 +1605,7 @@ describe('component: CreateCourseForm', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1693,7 +1693,7 @@ describe('component: CreateCourseForm', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1802,7 +1802,7 @@ describe('component: CreateCourseForm', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1911,7 +1911,7 @@ describe('component: CreateCourseForm', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -1984,7 +1984,7 @@ describe('component: CreateCourseForm', () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/"

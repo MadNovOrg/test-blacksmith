@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom'
 
 import { RoleName } from '@app/types'
 
-import { chance, render } from '@test/index'
+import { chance, _render } from '@test/index'
 
 import { RedirectToLogin } from '.'
 
@@ -26,7 +26,7 @@ describe('RedirectToLogin', () => {
       state: null,
     })
 
-    render(<RedirectToLogin />, {
+    _render(<RedirectToLogin />, {
       auth: { loggedOut: true, autoLoggedOut: false },
     })
 
@@ -56,7 +56,7 @@ describe('RedirectToLogin', () => {
       state: { email: mockedEmail },
     })
 
-    render(<RedirectToLogin />)
+    _render(<RedirectToLogin />)
 
     expect(Navigate).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -91,7 +91,7 @@ describe('RedirectToLogin', () => {
       state: { email: mockedEmail },
     })
 
-    render(<RedirectToLogin />)
+    _render(<RedirectToLogin />)
 
     expect(Navigate).toHaveBeenCalledWith(
       expect.objectContaining({

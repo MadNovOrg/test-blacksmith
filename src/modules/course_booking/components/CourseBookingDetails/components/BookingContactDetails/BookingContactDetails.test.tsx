@@ -1,10 +1,10 @@
-import { render, renderHook, waitFor } from '@testing-library/react'
 import { useTranslation } from 'react-i18next'
 import { MockedFunction } from 'vitest'
 
 import { useAuth } from '@app/context/auth'
 import { AuthContextType } from '@app/context/auth/types'
 
+import { _render, renderHook, waitFor } from '@test/index'
 import { chance, screen } from '@test/index'
 
 import { FormInputs } from '../../utils'
@@ -52,7 +52,7 @@ describe('BookingContactDetails', () => {
   } as FormInputs
 
   it('renders correctly', () => {
-    render(
+    _render(
       <BookingContactDetails
         errors={mockErrors}
         register={mockRegister}
@@ -77,7 +77,7 @@ describe('BookingContactDetails', () => {
   })
 
   it('pre-fills form with user profile data when not internal user booking', async () => {
-    render(
+    _render(
       <BookingContactDetails
         register={mockRegister}
         errors={mockErrors}
@@ -106,7 +106,7 @@ describe('BookingContactDetails', () => {
       profile: mockProfile,
     } as unknown as AuthContextType)
 
-    render(
+    _render(
       <BookingContactDetails
         register={mockRegister}
         errors={mockErrors}

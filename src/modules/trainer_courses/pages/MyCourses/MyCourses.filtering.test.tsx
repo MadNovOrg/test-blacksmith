@@ -5,7 +5,6 @@
 /* eslint-disable vitest/expect-expect */
 import { addHours } from 'date-fns/esm'
 import { setMedia } from 'mock-match-media'
-import React from 'react'
 import { getI18n } from 'react-i18next'
 import { Client, Provider } from 'urql'
 import { beforeAll, describe } from 'vitest'
@@ -26,7 +25,14 @@ import {
   RoleName,
 } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
 
 import {
@@ -75,7 +81,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -162,7 +168,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -227,7 +233,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -286,7 +292,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -353,7 +359,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -404,7 +410,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -454,7 +460,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -505,7 +511,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -555,7 +561,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -603,7 +609,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -655,7 +661,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -699,7 +705,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -751,7 +757,7 @@ describe('trainers-pages/MyCourses', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -786,7 +792,7 @@ describe('trainers-pages/MyCourses', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -821,7 +827,7 @@ describe('trainers-pages/MyCourses', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -846,7 +852,7 @@ describe('trainers-pages/MyCourses', () => {
     Course_Status_Enum.Completed,
     Course_Status_Enum.Scheduled,
   ])('display status filter %s for org admin', async status => {
-    render(<TrainerCourses />, {
+    _render(<TrainerCourses />, {
       auth: {
         activeRole: RoleName.USER,
         isOrgAdmin: true,
@@ -892,7 +898,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -953,7 +959,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -1047,7 +1053,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -1123,7 +1129,7 @@ describe('trainers-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,

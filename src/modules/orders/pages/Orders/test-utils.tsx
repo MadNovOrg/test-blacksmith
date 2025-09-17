@@ -10,7 +10,7 @@ import {
 } from '@app/generated/graphql'
 import { buildInvoice } from '@app/modules/order_details/pages/OrderDetails/mock-utils'
 
-import { chance, render } from '@test/index'
+import { chance, _render } from '@test/index'
 
 export function buildOrder(
   overrides?: Partial<OrderInfoFragment>,
@@ -52,5 +52,5 @@ export const renderWithOrders = (
     },
   } as unknown as Client
 
-  return render(<Provider value={client}>{ui}</Provider>)
+  return _render(<Provider value={client}>{ui}</Provider>)
 }

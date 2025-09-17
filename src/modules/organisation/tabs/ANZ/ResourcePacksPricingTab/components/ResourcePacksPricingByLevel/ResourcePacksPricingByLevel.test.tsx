@@ -9,7 +9,7 @@ import {
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
 import { CourseTypeOrgRPPricings } from '@app/util'
 
-import { screen, render, chance } from '@test/index'
+import { screen, _render, chance } from '@test/index'
 
 import { ResourcePacksPricingProvider } from '../../ResourcePacksPricingProvider'
 
@@ -67,14 +67,14 @@ describe('component: ResourcePacksPricingByLevel', () => {
     })
   })
   it.each(CourseTypeOrgRPPricings)(
-    'should render the correct tab for %s',
+    'should _render the correct tab for %s',
     courseType => {
       const mockClient = {
         executeQuery: vi.fn(),
         executeMutation: vi.fn(),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={mockClient}>
           <ResourcePacksPricingProvider>
             <ResourcePacksPricingByLevel />

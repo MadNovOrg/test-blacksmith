@@ -5,7 +5,7 @@ import {
 } from '@app/generated/graphql'
 import { useCoursePricing } from '@app/modules/admin/Pricing/hooks'
 
-import { chance, render, screen } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { PricingList } from './PricingList'
 
@@ -40,7 +40,7 @@ describe(PricingList.name, () => {
       isLoading: false,
       mutate: vi.fn(),
     })
-    render(<PricingList />)
+    _render(<PricingList />)
   }
 
   it('renders the component', () => {

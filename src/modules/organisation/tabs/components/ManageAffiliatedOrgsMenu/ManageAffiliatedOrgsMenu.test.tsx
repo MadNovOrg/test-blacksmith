@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { RoleName } from '@app/types'
 
-import { chance, render, renderHook, screen, userEvent } from '@test/index'
+import { chance, _render, renderHook, screen, userEvent } from '@test/index'
 
 import { ManageAffiliatedOrgsMenu } from './ManageAffiliatedOrgsMenu'
 
@@ -34,7 +34,7 @@ describe(ManageAffiliatedOrgsMenu.name, () => {
     RoleName.SALES_REPRESENTATIVE,
   ].forEach(role => {
     it(`displays unlink option for ${role}`, async () => {
-      render(
+      _render(
         <ManageAffiliatedOrgsMenu
           affiliatedOrg={mainOrg.organization.affiliated_organisations[0]}
           onUnlinkClick={vi.fn()}

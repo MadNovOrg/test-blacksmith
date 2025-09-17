@@ -5,7 +5,7 @@ import { Routes, Route, useSearchParams } from 'react-router-dom'
 import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, userEvent, screen, within, waitFor } from '@test/index'
+import { _render, userEvent, screen, within, waitFor } from '@test/index'
 import { generateRolesUpTo } from '@test/utils'
 
 import { CreateCourseMenu } from '.'
@@ -18,7 +18,7 @@ const CourseTypeMock = () => {
 
 describe('components: CreateCourseMenu', () => {
   it('given the user is TT admin, it redirects to the course creation page for the open course', async () => {
-    render(
+    _render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
         <Route path="/courses/new" element={<CourseTypeMock />} />
@@ -45,7 +45,7 @@ describe('components: CreateCourseMenu', () => {
   })
 
   it('given the user is TT admin, it redirects to the course creation page for the closed course', async () => {
-    render(
+    _render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
         <Route path="/courses/new" element={<CourseTypeMock />} />
@@ -73,7 +73,7 @@ describe('components: CreateCourseMenu', () => {
   })
 
   it('given the user is TT admin, it redirects to the course creation page for the indirect course', async () => {
-    render(
+    _render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
         <Route path="/courses/new" element={<CourseTypeMock />} />
@@ -100,7 +100,7 @@ describe('components: CreateCourseMenu', () => {
   })
 
   it('given the user is TT ops, it does display the indirect course creation option', async () => {
-    render(
+    _render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
         <Route path="/courses/new" element={<CourseTypeMock />} />
@@ -123,7 +123,7 @@ describe('components: CreateCourseMenu', () => {
   })
 
   it("given the user is a trainer it doesn't display options and navigates to the create course page for indirect course", async () => {
-    render(
+    _render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
         <Route path="/courses/new" element={<CourseTypeMock />} />
@@ -151,7 +151,7 @@ describe('components: CreateCourseMenu', () => {
   })
 
   it('given a user is sales admin, it displays correct options', async () => {
-    render(
+    _render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
         <Route path="/courses/new" element={<CourseTypeMock />} />
@@ -180,7 +180,7 @@ describe('components: CreateCourseMenu', () => {
   })
 
   it('disables the button if a user is a trainer without trainer level certificates', async () => {
-    render(<CreateCourseMenu />, {
+    _render(<CreateCourseMenu />, {
       auth: {
         activeRole: RoleName.TRAINER,
         activeCertificates: [

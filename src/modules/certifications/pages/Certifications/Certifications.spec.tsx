@@ -1,4 +1,4 @@
-import { screen, render } from '@test/index'
+import { screen, _render } from '@test/index'
 
 import { Certifications } from './Certifications'
 
@@ -10,7 +10,7 @@ vi.mock('react-router-dom', async () => ({
 
 describe(Certifications.name, () => {
   it('renders empty page with filters', async () => {
-    render(<Certifications />)
+    _render(<Certifications />)
     expect(screen.getByText('Certifications')).toBeInTheDocument()
     expect(screen.getByText('Filter by date obtained')).toBeInTheDocument()
     expect(screen.getByTestId('FilterSearch-Input')).toBeInTheDocument()

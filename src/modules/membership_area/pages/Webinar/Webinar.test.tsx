@@ -5,7 +5,7 @@ import { never, fromValue } from 'wonka'
 
 import { WebinarQuery } from '@app/generated/graphql'
 
-import { screen, render, within } from '@test/index'
+import { screen, _render, within } from '@test/index'
 import { buildEntities, buildWebinar } from '@test/mock-data-utils'
 
 import Webinar from '.'
@@ -18,7 +18,7 @@ describe('page: Webinar', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars/:id" element={<Webinar />} />
@@ -51,7 +51,7 @@ describe('page: Webinar', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars/:id" element={<Webinar />} />
@@ -82,7 +82,7 @@ describe('page: Webinar', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars/:id" element={<Webinar />} />
@@ -120,7 +120,7 @@ describe('page: Webinar', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars/:id" element={<Webinar />} />

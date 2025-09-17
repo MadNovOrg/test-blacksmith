@@ -9,7 +9,7 @@ import {
 import useCourseModules from '@app/modules/grading/hooks/useCourseModules'
 
 import {
-  render,
+  _render,
   screen,
   within,
   userEvent,
@@ -35,7 +35,7 @@ describe('page: ModulesSelection', () => {
     const COURSE_ID = 'course-id'
     useCourseModulesMock.mockReturnValue({ fetching: true })
 
-    render(
+    _render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
           <Route
@@ -65,7 +65,7 @@ describe('page: ModulesSelection', () => {
       fetching: false,
     })
 
-    render(
+    _render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
           <Route
@@ -107,7 +107,7 @@ describe('page: ModulesSelection', () => {
       fetching: false,
     })
 
-    render(
+    _render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
           <Route
@@ -149,7 +149,7 @@ describe('page: ModulesSelection', () => {
       data: courseModules,
     })
 
-    render(
+    _render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
           <Route
@@ -198,7 +198,7 @@ describe('page: ModulesSelection', () => {
       }),
     )
 
-    render(
+    _render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
           <Route
@@ -241,7 +241,7 @@ describe('page: ModulesSelection', () => {
       data: courseModules,
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
           <Routes>
@@ -269,7 +269,7 @@ describe('page: ModulesSelection', () => {
       data: [buildCourseModule(), buildCourseModule(), buildCourseModule()],
     })
 
-    render(
+    _render(
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
           <Route path="/details">

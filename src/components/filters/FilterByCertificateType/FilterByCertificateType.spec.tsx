@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import { FilterByCertificateType } from './index'
 
 describe(FilterByCertificateType.name, () => {
   it('triggers onChange when certificate type = Legacy is selected', async () => {
     const onChange = vi.fn()
-    render(<FilterByCertificateType onChange={onChange} />)
+    _render(<FilterByCertificateType onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Certificate Type'))
     await userEvent.click(screen.getByText('Legacy'))
@@ -17,7 +17,7 @@ describe(FilterByCertificateType.name, () => {
 
   it('triggers onChange when certificate type = Connect is selected', async () => {
     const onChange = vi.fn()
-    render(<FilterByCertificateType onChange={onChange} />)
+    _render(<FilterByCertificateType onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Certificate Type'))
     await userEvent.click(screen.getByText('Connect'))
@@ -27,7 +27,7 @@ describe(FilterByCertificateType.name, () => {
 
   it('triggers onChange without certificate type when both Connect and Legacy are selected', async () => {
     const onChange = vi.fn()
-    render(<FilterByCertificateType onChange={onChange} />)
+    _render(<FilterByCertificateType onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Certificate Type'))
     await userEvent.click(screen.getByText('Connect'))

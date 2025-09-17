@@ -1,5 +1,6 @@
-import { renderHook } from '@testing-library/react'
 import { useTranslation } from 'react-i18next'
+
+import { renderHook } from '@test/index'
 
 import {
   DietaryRestrictionRadioValues,

@@ -4,7 +4,7 @@ import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { AwsRegions, RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { renderForm, selectBildCategory, selectLevel } from '../test-utils'
 
@@ -39,7 +39,7 @@ describe('UkCourseForm - open BILD', () => {
   ;[RoleName.TT_ADMIN, RoleName.SALES_ADMIN, RoleName.TT_OPS].forEach(role => {
     it(`allows ${role} to create open BILD course`, async () => {
       await waitFor(() => {
-        render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+        _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
           auth: { activeRole: role },
         })
       })
@@ -50,7 +50,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it('displays BILD Intermediate Trainer and BILD Advanced trainer course levels', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -79,7 +79,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it('allows face to face and mixed delivery types if BILD Intermediate trainer course', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -94,7 +94,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it('allows only face to face delivery type if BILD Advanced trainer course', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -109,7 +109,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it("doesn't allow blended learning on open BILD courses", async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -121,7 +121,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it("disables reaccreditation if it's a conversion open BILD course", async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -134,7 +134,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it("disables conversion if it's a reaccreditation course", async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -147,7 +147,7 @@ describe('UkCourseForm - open BILD', () => {
 
   it('displays price field for open BILD course', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Open} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Open} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
     })
@@ -167,7 +167,7 @@ describe('UkCourseForm - open BILD', () => {
     'enables Virtual and Mixed delivery for %s when conversion course is selected',
     async level => {
       await waitFor(() => {
-        render(<UkCourseForm type={Course_Type_Enum.Closed} />, {
+        _render(<UkCourseForm type={Course_Type_Enum.Closed} />, {
           auth: { activeRole: RoleName.TT_ADMIN },
         })
       })

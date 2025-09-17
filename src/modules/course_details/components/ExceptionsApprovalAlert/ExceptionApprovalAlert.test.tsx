@@ -10,7 +10,7 @@ import useCourse from '@app/hooks/useCourse'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, renderHook, screen, userEvent } from '@test/index'
+import { _render, renderHook, screen, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { ExceptionsApprovalAlert } from '.'
@@ -53,7 +53,7 @@ describe('component: ExceptionsApprovalAlert', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    return render(
+    return _render(
       <Provider value={urqlMockClient}>
         <ExceptionsApprovalAlert />
       </Provider>,
@@ -63,16 +63,16 @@ describe('component: ExceptionsApprovalAlert', () => {
     )
   }
 
-  it('should render the ExceptionsApprovalAlert component', () => {
+  it('should _render the ExceptionsApprovalAlert component', () => {
     setup()
     expect(screen.getByTestId('exceptions-approval')).toBeInTheDocument()
   })
-  it('should render the Approve / Reject button', () => {
+  it('should _render the Approve / Reject button', () => {
     setup()
     expect(screen.getByText(t('common.reject'))).toBeInTheDocument()
     expect(screen.getByText(t('common.approve'))).toBeInTheDocument()
   })
-  it('should not render the Approve / Reject button if role is different than ADMIN or L&D', () => {
+  it('should not _render the Approve / Reject button if role is different than ADMIN or L&D', () => {
     setup(RoleName.USER)
     expect(screen.queryByText(t('common.reject'))).not.toBeInTheDocument()
     expect(screen.queryByText(t('common.approve'))).not.toBeInTheDocument()

@@ -25,7 +25,7 @@ import { AwsRegions } from '@app/types'
 import {
   chance,
   formatCurrency,
-  render,
+  _render,
   renderHook,
   screen,
   within,
@@ -116,7 +116,7 @@ describe('page: OrderDetails', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -135,7 +135,7 @@ describe('page: OrderDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -170,7 +170,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -255,7 +255,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -366,7 +366,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -504,7 +504,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -633,7 +633,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -692,7 +692,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -756,7 +756,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -820,7 +820,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -875,7 +875,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -945,7 +945,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1001,7 +1001,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1067,7 +1067,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1127,7 +1127,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1176,7 +1176,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1256,7 +1256,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1334,7 +1334,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1412,7 +1412,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1473,7 +1473,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,
@@ -1514,7 +1514,7 @@ describe('page: OrderDetails', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrderDetails />
       </Provider>,

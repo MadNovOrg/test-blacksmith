@@ -14,7 +14,7 @@ import {
 import { AwsRegions } from '@app/types'
 
 import {
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -45,7 +45,7 @@ describe('page: Orders filtering', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -95,7 +95,7 @@ describe('page: Orders filtering', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -128,7 +128,7 @@ describe('page: Orders filtering', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -161,7 +161,7 @@ describe('page: Orders filtering', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -224,7 +224,7 @@ describe('page: Orders filtering', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,

@@ -10,7 +10,7 @@ import {
 import useCourse from '@app/hooks/useCourse'
 import { LoadingStatus } from '@app/util'
 
-import { fireEvent, render, renderHook, screen, userEvent } from '@test/index'
+import { fireEvent, _render, renderHook, screen, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { ExceptionsApprovalModalContent } from '.'
@@ -38,7 +38,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
       executeMutation: ({ mutation }: { mutation: TypedDocumentNode }) => void
     }
   }) =>
-    render(
+    _render(
       <Provider value={(client ?? urqlMockClient) as unknown as Client}>
         <ExceptionsApprovalModalContent
           action={action ?? Course_Audit_Type_Enum.Approved}
@@ -54,7 +54,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
       mutate: vi.fn(),
     })
   })
-  it('should render the ExceptionsApprovalModalContent component', () => {
+  it('should _render the ExceptionsApprovalModalContent component', () => {
     setup({})
     expect(
       screen.getByTestId('exceptions-approval-modal-content'),
@@ -67,7 +67,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
     fireEvent.change(input, { target: { value: testValue } })
     expect((input as HTMLInputElement).value).toBe(testValue)
   })
-  it('should render the cancel / submit buttons', () => {
+  it('should _render the cancel / submit buttons', () => {
     setup({})
     expect(screen.getByText(t('common.cancel'))).toBeInTheDocument()
     expect(screen.getByText(t('common.submit'))).toBeInTheDocument()
@@ -78,7 +78,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
     fireEvent.click(cancelButton)
     expect(closeModalMock).toHaveBeenCalled()
   })
-  it('should render an warning on the rejection modal', () => {
+  it('should _render an warning on the rejection modal', () => {
     setup({ action: Course_Audit_Type_Enum.Rejected })
     expect(
       screen.getByText(
@@ -99,7 +99,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
         },
       })
     })
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ExceptionsApprovalModalContent
           action={Course_Audit_Type_Enum.Approved}
@@ -129,7 +129,7 @@ describe('component: ExceptionsApprovalModalContent', () => {
         },
       })
     })
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ExceptionsApprovalModalContent
           action={Course_Audit_Type_Enum.Rejected}

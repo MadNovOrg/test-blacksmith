@@ -1,4 +1,3 @@
-import { renderHook } from '@testing-library/react'
 import { useTranslation } from 'react-i18next'
 import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
@@ -6,7 +5,8 @@ import { fromValue } from 'wonka'
 import { GetUserKnowledgeHubAccessQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen } from '@test/index'
+import { renderHook } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { useUpdateProfileAccess } from '../../hooks/useUpdateProfileAccess'
 import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '../../queries/get-user-knowledge-hub-access'
@@ -46,7 +46,7 @@ describe(ProfilePermissions.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ProfilePermissions
           checked={false}
@@ -88,7 +88,7 @@ describe(ProfilePermissions.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ProfilePermissions
           checked={false}

@@ -7,7 +7,7 @@ import {
   ImportLegacyCertificateMutationVariables,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import { ImportCertificateModal, MUTATION } from '.'
 
@@ -18,7 +18,7 @@ it('disables submit button when code not entered', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -41,7 +41,7 @@ it('calls a function when clicked on cancel button', async () => {
 
   const onCancel = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -80,7 +80,7 @@ it('imports legacy certificate', async () => {
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -124,7 +124,7 @@ it('imports certificate for other user if profile id is passed', async () => {
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -153,7 +153,7 @@ it('shows an alert when there is a generic error', async () => {
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -191,7 +191,7 @@ it('shows an alert when the certificate has already been imported', async () => 
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -229,7 +229,7 @@ it("shows an alert when the certificate data doesn't match the profile", async (
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -267,7 +267,7 @@ it("shows an alert when the certificate level isn't supported", async () => {
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}
@@ -305,7 +305,7 @@ it("shows an alert when the certificate isn't found", async () => {
 
   const onSubmit = vi.fn()
 
-  render(
+  _render(
     <Provider value={client}>
       <ImportCertificateModal
         open={true}

@@ -1,7 +1,7 @@
-import { fireEvent, renderHook } from '@testing-library/react'
 import { useTranslation } from 'react-i18next'
 
-import { render, screen } from '@test/index'
+import { fireEvent, renderHook } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { DeletePricingNoCourseModal } from './DeletePricingNoCourseModal'
 
@@ -27,7 +27,7 @@ describe(DeletePricingNoCourseModal.name, () => {
     handleApprove = handleApproveMock,
     handleCancel = handleCancelMock,
   }) => {
-    return render(
+    return _render(
       <DeletePricingNoCourseModal
         isOpen={isOpen}
         handleApprove={handleApprove}
@@ -36,7 +36,7 @@ describe(DeletePricingNoCourseModal.name, () => {
     )
   }
 
-  it('render the component', () => {
+  it('_render the component', () => {
     setup({})
     expect(
       screen.getByTestId('delete-pricing-no-course-modal'),

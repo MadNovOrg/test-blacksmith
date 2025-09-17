@@ -1,13 +1,13 @@
 import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined'
 import React from 'react'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { ResourceCard } from './ResourceCard'
 
 describe('component: ResourceCard', () => {
   it('renders ResourceCard', async () => {
-    render(
+    _render(
       <ResourceCard
         title="foo"
         description="bar"

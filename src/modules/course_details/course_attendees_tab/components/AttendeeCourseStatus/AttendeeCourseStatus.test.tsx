@@ -2,14 +2,14 @@ import { addDays, subDays } from 'date-fns'
 
 import { Course_Status_Enum, Grade_Enum } from '@app/generated/graphql'
 
-import { chance, render, screen } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { AttendeeCourse, AttendeeCourseStatus } from './AttendeeCourseStatus'
 
 it('shows cancelled status if course was cancelled', () => {
   const course = buildAttendeeCourse({ status: Course_Status_Enum.Cancelled })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/cancelled/i)).toBeInTheDocument()
 })
@@ -29,7 +29,7 @@ it("shows not attended if a participant didn't attend the course", () => {
     ],
   })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/unattended/i)).toBeInTheDocument()
 })
@@ -47,7 +47,7 @@ it("shows info required if a participant didn't fill health and safety form", ()
     ],
   })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/info required/i)).toBeInTheDocument()
 })
@@ -72,7 +72,7 @@ it("shows evaluation missing if course has ended and a participant didn't evalua
     ],
   })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/missing evaluation/i)).toBeInTheDocument()
 })
@@ -95,7 +95,7 @@ it("shows grade missing if course has ended and participant has provided evaluat
     ],
   })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/awaiting grade/i)).toBeInTheDocument()
 })
@@ -120,7 +120,7 @@ it('shows completed if course has ended, participant evaluation the course and h
     ],
   })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/completed/i)).toBeInTheDocument()
 })
@@ -143,7 +143,7 @@ it("shows scheduled if course hasn't started and participant has provided health
     ],
   })
 
-  render(<AttendeeCourseStatus course={course} />)
+  _render(<AttendeeCourseStatus course={course} />)
 
   expect(screen.getByText(/scheduled/i)).toBeInTheDocument()
 })

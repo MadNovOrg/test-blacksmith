@@ -15,7 +15,7 @@ import { CurrencySymbol } from '@app/util'
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -176,7 +176,7 @@ describe('component: OrgResourcePacksPricingsTable', () => {
   } as unknown as Client
 
   const setup = () => {
-    return render(
+    return _render(
       <Provider value={mockClient}>
         <ResourcePacksPricingProvider>
           <OrgResourcePacksPricingTable />
@@ -216,7 +216,7 @@ describe('component: OrgResourcePacksPricingsTable', () => {
     } as unknown as ReturnType<typeof useResourcePacksPricingContext>)
   })
 
-  it('should render the OrgResourcePacksPricingsTable with the pricings', () => {
+  it('should _render the OrgResourcePacksPricingsTable with the pricings', () => {
     setup()
     const table = screen.getByTestId(`resource-packs-pricing-table-${orgId}`)
     expect(table).toBeInTheDocument()

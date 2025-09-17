@@ -10,7 +10,7 @@ import { RoleName, Organization } from '@app/types'
 
 import {
   chance,
-  render,
+  _render,
   screen,
   within,
   renderHook,
@@ -86,7 +86,7 @@ describe('component: AffiliatedOrgsTab', () => {
       loading: false,
     })
 
-    render(<AffiliatedOrgsTab orgId={mainOrgId} />, {
+    _render(<AffiliatedOrgsTab orgId={mainOrgId} />, {
       auth: {
         activeRole: role,
         isOrgAdmin: role === RoleName.USER,

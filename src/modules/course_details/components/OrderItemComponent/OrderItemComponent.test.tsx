@@ -6,7 +6,7 @@ import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas
 import { Course } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseDetails } from '../../pages/CourseDetails'
@@ -54,7 +54,7 @@ describe('OrderItem', () => {
     })
 
     // Act
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -63,7 +63,7 @@ describe('OrderItem', () => {
     )
   }
 
-  it('should render order item when it has an order and is of CLOSED type', () => {
+  it('should _render order item when it has an order and is of CLOSED type', () => {
     setup({
       type: Course_Type_Enum.Closed,
       go1Integration: false,
@@ -79,7 +79,7 @@ describe('OrderItem', () => {
     expect(orderItemLink).toHaveAttribute('href', `/orders/${testProps.id}`)
   })
 
-  it('should render order item when it has an order and is of INDIRECT type with blended learning', () => {
+  it('should _render order item when it has an order and is of INDIRECT type with blended learning', () => {
     setup({
       type: Course_Type_Enum.Indirect,
       go1Integration: true,
@@ -95,7 +95,7 @@ describe('OrderItem', () => {
     expect(orderItemLink).toHaveAttribute('href', `/orders/${testProps.id}`)
   })
 
-  it('should not render order item when it has an order and is of OPEN type', () => {
+  it('should not _render order item when it has an order and is of OPEN type', () => {
     setup({
       type: Course_Type_Enum.Open,
       go1Integration: false,
@@ -105,7 +105,7 @@ describe('OrderItem', () => {
     expect(screen.queryByTestId('order-item')).toBeNull()
   })
 
-  it('should not render order item when it does not have a linked order', () => {
+  it('should not _render order item when it does not have a linked order', () => {
     setup({
       orders: [],
     })

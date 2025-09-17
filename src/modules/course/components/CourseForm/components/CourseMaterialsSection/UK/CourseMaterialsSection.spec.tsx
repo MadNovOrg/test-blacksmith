@@ -1,5 +1,3 @@
-import { renderHook, waitFor, within } from '@testing-library/react'
-
 import {
   Accreditors_Enum,
   Course_Level_Enum,
@@ -12,7 +10,8 @@ import { renderForm } from '@app/modules/course/components/CourseForm/test-utils
 import { AwsRegions, RoleName } from '@app/types'
 import { CurrencySymbol, MCMAmount, VAT, courseToCourseInput } from '@app/util'
 
-import { render, screen, userEvent } from '@test/index'
+import { renderHook, waitFor, within } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseMaterialsSection } from './CourseMaterialsSection'
@@ -109,7 +108,7 @@ describe(`component: ${CourseMaterialsSection.name}`, () => {
         },
       })
       await waitFor(() =>
-        render(
+        _render(
           <CourseForm courseInput={courseToCourseInput(course)} type={type} />,
           {
             auth: {

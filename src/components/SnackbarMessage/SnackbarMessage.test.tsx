@@ -2,7 +2,7 @@ import React from 'react'
 
 import { SnackbarProvider, SnackbarState } from '@app/context/snackbar'
 
-import { render, screen, waitFor, act } from '@test/index'
+import { _render, screen, waitFor, act } from '@test/index'
 
 import { SnackbarMessage } from '.'
 
@@ -11,9 +11,9 @@ describe('component: SnackbarMessage', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
   })
 
-  it("doesn't render anything if message by key is not found", () => {
+  it("doesn't _render anything if message by key is not found", () => {
     act(() => {
-      render(
+      _render(
         <SnackbarProvider>
           <SnackbarMessage messageKey="course-created" />
         </SnackbarProvider>,
@@ -29,7 +29,7 @@ describe('component: SnackbarMessage', () => {
     initialMessages.set('course-created', { label: 'course created' })
 
     act(() => {
-      render(
+      _render(
         <SnackbarProvider initialMessages={initialMessages}>
           <SnackbarMessage messageKey="course-created" />
         </SnackbarProvider>,
@@ -46,7 +46,7 @@ describe('component: SnackbarMessage', () => {
       label: 'course created',
     })
 
-    render(
+    _render(
       <SnackbarProvider initialMessages={initialMessages}>
         <SnackbarMessage messageKey="course-created" />
       </SnackbarProvider>,

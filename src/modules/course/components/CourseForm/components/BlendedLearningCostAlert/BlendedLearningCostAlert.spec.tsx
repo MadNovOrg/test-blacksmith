@@ -1,7 +1,7 @@
 import { AwsRegions } from '@app/types'
 import { blendedLearningLicensePrice } from '@app/util'
 
-import { render } from '@test/index'
+import { _render } from '@test/index'
 
 import { BlendedLearningCostAlert } from './BlendedLearningCostAlert'
 
@@ -25,19 +25,19 @@ describe(BlendedLearningCostAlert.name, () => {
   }
 
   const mockResidingCountry = 'AU'
-  it.each(Object.values(AwsRegions))('should render on %s', region => {
+  it.each(Object.values(AwsRegions))('should _render on %s', region => {
     vi.stubEnv('VITE_AWS_REGION', region)
-    const { baseElement } = render(
+    const { baseElement } = _render(
       <BlendedLearningCostAlert residingCountry={mockResidingCountry} />,
     )
     expect(baseElement).toBeTruthy()
   })
-  it('should render ANZ AU country specific alert', () => {
+  it('should _render ANZ AU country specific alert', () => {
     const mockAUCountry = 'AU'
     const mockInfoEmailAddress = 'info@domain.com.au'
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
     vi.stubEnv('VITE_TT_INFO_EMAIL_ADDRESS_ANZ', mockInfoEmailAddress)
-    const { getByText, getByRole } = render(
+    const { getByText, getByRole } = _render(
       <BlendedLearningCostAlert residingCountry={mockAUCountry} />,
     )
 
@@ -53,12 +53,12 @@ describe(BlendedLearningCostAlert.name, () => {
     const emailLink = getByRole('link', { name: mockInfoEmailAddress })
     expect(emailLink).toHaveAttribute('href', `mailto:${mockInfoEmailAddress}`)
   })
-  it('should render ANZ NZ country specific alert', () => {
+  it('should _render ANZ NZ country specific alert', () => {
     const mockAUCountry = 'NZ'
     const mockInfoEmailAddress = 'info@domain.com.au'
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
     vi.stubEnv('VITE_TT_INFO_EMAIL_ADDRESS_ANZ', mockInfoEmailAddress)
-    const { getByText, getByRole } = render(
+    const { getByText, getByRole } = _render(
       <BlendedLearningCostAlert residingCountry={mockAUCountry} />,
     )
 
@@ -74,10 +74,10 @@ describe(BlendedLearningCostAlert.name, () => {
     const emailLink = getByRole('link', { name: mockInfoEmailAddress })
     expect(emailLink).toHaveAttribute('href', `mailto:${mockInfoEmailAddress}`)
   })
-  it('should render UK region specific alert', () => {
+  it('should _render UK region specific alert', () => {
     const mockAUCountry = 'GB-ENG'
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
-    const { getByText } = render(
+    const { getByText } = _render(
       <BlendedLearningCostAlert residingCountry={mockAUCountry} />,
     )
 

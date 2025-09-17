@@ -5,7 +5,7 @@ import useOrgV2 from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 import { Organizations } from '@app/modules/organisation/pages/Organisations/ANZ/Organisations'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, renderHook, userEvent } from '@test/index'
+import { chance, _render, screen, renderHook, userEvent } from '@test/index'
 import {
   buildANZAffiliatedOrganisation,
   buildANZMainOrganisation,
@@ -81,7 +81,7 @@ describe('page: Organisations', () => {
       },
     })
 
-    render(<Organizations />, {
+    _render(<Organizations />, {
       auth: {
         activeRole: role,
         isOrgAdmin: isOrgAdmin(role),
@@ -173,7 +173,7 @@ describe('page: Organisations', () => {
     })
   })
   it('it displays checkbox next to each organisation while merging', () => {
-    render(
+    _render(
       <Organizations />,
       {
         auth: {
@@ -190,7 +190,7 @@ describe('page: Organisations', () => {
     expect(checkboxes.length).toBe(mainOrgs.length)
   })
   it('displays checkboxes for affiliated organisations while merging', async () => {
-    render(
+    _render(
       <Organizations />,
       {
         auth: {

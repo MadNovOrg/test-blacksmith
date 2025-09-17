@@ -10,7 +10,7 @@ import { AuthContextType } from '@app/context/auth/types'
 import { RemoveUnverifiedRoleMutation } from '@app/generated/graphql'
 
 import {
-  render,
+  _render,
   screen,
   userEvent,
   waitForCalls,
@@ -53,7 +53,7 @@ describe('page: VerifyEmailPage', () => {
   } as unknown as Client
 
   const setup = () => {
-    return render(
+    return _render(
       <Provider value={client}>
         <Routes>
           <Route path="/" element={<VerifyEmailPage />} />
@@ -66,7 +66,7 @@ describe('page: VerifyEmailPage', () => {
   }
 
   it('sends verification email when verify now is clicked', async () => {
-    render(<VerifyEmailPage />)
+    _render(<VerifyEmailPage />)
 
     expect(screen.queryByTestId('signup-verify-btn')).not.toBeInTheDocument()
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
@@ -82,7 +82,7 @@ describe('page: VerifyEmailPage', () => {
   })
 
   it('does not submit when code is empty', async () => {
-    render(<VerifyEmailPage />)
+    _render(<VerifyEmailPage />)
 
     await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>

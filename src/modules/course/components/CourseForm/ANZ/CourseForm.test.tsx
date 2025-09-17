@@ -14,7 +14,7 @@ import {
   INPUT_TIME_FORMAT,
 } from '@app/util'
 
-import { act, render, screen, userEvent, waitFor } from '@test/index'
+import { act, _render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { renderForm } from '../test-utils'
@@ -97,7 +97,7 @@ describe('component: ANZCourseForm', () => {
     const [schedule] = course.schedule
 
     await waitFor(() => {
-      render(
+      _render(
         <AnzCourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {

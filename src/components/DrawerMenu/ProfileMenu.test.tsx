@@ -2,7 +2,7 @@ import React from 'react'
 
 import { RoleName } from '@app/types'
 
-import { render, screen, userEvent, within } from '@test/index'
+import { _render, screen, userEvent, within } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { ProfileMenu } from './ProfileMenu'
@@ -10,7 +10,7 @@ import { ProfileMenu } from './ProfileMenu'
 describe('component: ProfileMenu', () => {
   it('renders verified USER role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
@@ -33,7 +33,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified USER role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
@@ -55,7 +55,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified TT ADMIN role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
         allowedRoles: new Set([RoleName.TT_ADMIN]),
@@ -86,7 +86,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified TT ADMIN role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
         allowedRoles: new Set([RoleName.TT_ADMIN]),
@@ -118,7 +118,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified TT OPS role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.TT_OPS,
         allowedRoles: new Set([RoleName.TT_OPS]),
@@ -149,7 +149,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified TT OPS role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.TT_OPS,
         allowedRoles: new Set([RoleName.TT_OPS]),
@@ -181,7 +181,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified TRAINER role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.TRAINER,
         allowedRoles: new Set([RoleName.TRAINER]),
@@ -204,7 +204,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified TRAINER role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.TRAINER,
         allowedRoles: new Set([RoleName.TRAINER]),
@@ -227,7 +227,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified SALES REPRESENTATIVE role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.SALES_REPRESENTATIVE,
         allowedRoles: new Set([RoleName.SALES_REPRESENTATIVE]),
@@ -258,7 +258,7 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified SALES REPRESENTATIVE role items', async () => {
     const profile = buildProfile()
-    render(<ProfileMenu profile={profile} />, {
+    _render(<ProfileMenu profile={profile} />, {
       auth: {
         activeRole: RoleName.SALES_REPRESENTATIVE,
         allowedRoles: new Set([RoleName.SALES_REPRESENTATIVE]),

@@ -7,7 +7,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import DeleteOrgModal from '@app/modules/organisation/components/DeleteOrgModal/DeleteOrgModal'
 import { AwsRegions } from '@app/types'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 import { chance } from '@test/index'
 
 const mockNavigate = vi.fn()
@@ -27,7 +27,7 @@ describe(`${DeleteOrgModal.name} on ANZ`, () => {
     },
   } = renderHook(() => useScopedTranslation('pages.org-details.tabs.details'))
 
-  it('should render the modal with correct content if delete is allowed', () => {
+  it('should _render the modal with correct content if delete is allowed', () => {
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
@@ -47,7 +47,7 @@ describe(`${DeleteOrgModal.name} on ANZ`, () => {
       name: chance.name(),
     }
 
-    const { getByText } = render(
+    const { getByText } = _render(
       <Provider value={client}>
         <DeleteOrgModal
           onClose={() => {
@@ -72,7 +72,7 @@ describe(`${DeleteOrgModal.name} on ANZ`, () => {
     expect(screen.getByTestId('delete-org-btn')).toBeInTheDocument()
   })
 
-  it('should render the modal with correct content if delete is NOT allowed', () => {
+  it('should _render the modal with correct content if delete is NOT allowed', () => {
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
@@ -92,7 +92,7 @@ describe(`${DeleteOrgModal.name} on ANZ`, () => {
       name: chance.name(),
     }
 
-    const { getByText } = render(
+    const { getByText } = _render(
       <Provider value={client}>
         <DeleteOrgModal
           onClose={() => {
@@ -127,7 +127,7 @@ describe(`${DeleteOrgModal.name} on ANZ`, () => {
     expect(screen.queryByTestId('delete-org-btn')).not.toBeInTheDocument()
   })
 
-  it('should render the modal with correct organisation linked entities', () => {
+  it('should _render the modal with correct organisation linked entities', () => {
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
@@ -147,7 +147,7 @@ describe(`${DeleteOrgModal.name} on ANZ`, () => {
       name: chance.name(),
     }
 
-    const { getByText } = render(
+    const { getByText } = _render(
       <Provider value={client}>
         <DeleteOrgModal
           onClose={() => {
@@ -199,7 +199,7 @@ describe(`${DeleteOrgModal.name} on UK`, () => {
     },
   } = renderHook(() => useScopedTranslation('pages.org-details.tabs.details'))
 
-  it('should render the modal with correct content if delete is allowed', () => {
+  it('should _render the modal with correct content if delete is allowed', () => {
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
@@ -219,7 +219,7 @@ describe(`${DeleteOrgModal.name} on UK`, () => {
       name: chance.name(),
     }
 
-    const { getByText } = render(
+    const { getByText } = _render(
       <Provider value={client}>
         <DeleteOrgModal
           onClose={() => {
@@ -244,7 +244,7 @@ describe(`${DeleteOrgModal.name} on UK`, () => {
     expect(screen.getByTestId('delete-org-btn')).toBeInTheDocument()
   })
 
-  it('should render the modal with correct content if delete is NOT allowed', () => {
+  it('should _render the modal with correct content if delete is NOT allowed', () => {
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
@@ -264,7 +264,7 @@ describe(`${DeleteOrgModal.name} on UK`, () => {
       name: chance.name(),
     }
 
-    const { getByText } = render(
+    const { getByText } = _render(
       <Provider value={client}>
         <DeleteOrgModal
           onClose={() => {
@@ -299,7 +299,7 @@ describe(`${DeleteOrgModal.name} on UK`, () => {
     expect(screen.queryByTestId('delete-org-btn')).not.toBeInTheDocument()
   })
 
-  it('should render the modal with correct organisation linked entities', () => {
+  it('should _render the modal with correct organisation linked entities', () => {
     const client = {
       executeQuery: () =>
         fromValue<{ data: GetOrganisationDetailsForDeleteQuery }>({
@@ -319,7 +319,7 @@ describe(`${DeleteOrgModal.name} on UK`, () => {
       name: chance.name(),
     }
 
-    const { getByText } = render(
+    const { getByText } = _render(
       <Provider value={client}>
         <DeleteOrgModal
           onClose={() => {

@@ -7,7 +7,7 @@ import {
 } from '@app/generated/graphql'
 import { useAllOrgResourcePacksHistory } from '@app/modules/organisation/queries/get-all-org-resource-packs-history'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import { ExportResourcePacksHistoryButton } from '.'
 
@@ -56,7 +56,7 @@ describe('ExportHistoryButton', () => {
     })
   })
   it('should call saveAs when clicking the button', async () => {
-    render(
+    _render(
       <ExportResourcePacksHistoryButton
         orgId={chance.guid()}
         disabled={false}

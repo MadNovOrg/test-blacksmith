@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react'
-
 import {
   Course_Level_Enum,
   Course_Type_Enum,
   Resource_Packs_Delivery_Type_Enum,
   Resource_Packs_Type_Enum,
 } from '@app/generated/graphql'
+
+import { _render, screen } from '@test/index'
 
 import { useOrgResourcePacksPricingGetChangeEvent } from './hooks/use-org-resource-packs-pricing-change-event'
 import { useOrgResourcePacksPricingChangelogs } from './hooks/use-org-resource-packs-pricing-changelogs'
@@ -50,7 +50,7 @@ describe('ResourcePacksPricingChangelogs', () => {
       totalCount: 0,
     })
 
-    render(<ResourcePacksPricingChangelogs {...baseProps} />)
+    _render(<ResourcePacksPricingChangelogs {...baseProps} />)
 
     expect(
       screen.getByTestId('list-orders-circular-progress'),
@@ -73,10 +73,10 @@ describe('ResourcePacksPricingChangelogs', () => {
       () => 'Mocked Attributes',
     )
 
-    render(<ResourcePacksPricingChangelogs {...baseProps} />)
+    _render(<ResourcePacksPricingChangelogs {...baseProps} />)
 
     expect(screen.getByTestId('table-body')).toHaveTextContent(
-      'components.table-no-rows.noRecords-first',
+      'No pricing history at this time',
     )
   })
 
@@ -114,7 +114,7 @@ describe('ResourcePacksPricingChangelogs', () => {
       () => 'Price updated',
     )
 
-    render(<ResourcePacksPricingChangelogs {...baseProps} />)
+    _render(<ResourcePacksPricingChangelogs {...baseProps} />)
 
     expect(screen.getByText('Price updated')).toBeInTheDocument()
   })

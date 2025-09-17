@@ -1,6 +1,6 @@
 import { AwsRegions } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { FilterByOrgSector } from './FilterByOrgSector'
 
@@ -11,7 +11,7 @@ describe('FilterOrgSector', () => {
 
   it('onChange FilterOrgSector', async () => {
     const onChange = vi.fn()
-    render(<FilterByOrgSector onChange={onChange} />)
+    _render(<FilterByOrgSector onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Adults Health and Social Care'))
 

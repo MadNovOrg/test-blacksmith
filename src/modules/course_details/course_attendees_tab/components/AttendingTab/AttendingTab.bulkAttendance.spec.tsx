@@ -12,7 +12,7 @@ import useCourseParticipants from '@app/modules/course_details/hooks/course-part
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent, within } from '@test/index'
+import { chance, _render, screen, userEvent, within } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -48,7 +48,7 @@ const useCourseParticipantsMocked = vi.mocked(useCourseParticipants)
       mutate: vi.fn(),
     })
 
-    render(
+    _render(
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}
         onSendingCourseInformation={vitest.fn()}
@@ -91,7 +91,7 @@ it('displays the mark attendance button if user is a lead trainer on the course'
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -135,7 +135,7 @@ it('displays the mark attendance button if user is an assist trainer on the cour
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -179,7 +179,7 @@ it("doesn't display the mark attendance button if user is a moderator on the cou
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -221,7 +221,7 @@ it('displays the mark attendance button if course has ended', () => {
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <AttendingTab
       updateAttendeesHandler={vitest.fn()}
       onSendingCourseInformation={vitest.fn()}
@@ -296,7 +296,7 @@ it('marks the mark attendance button disabled if course ended and course status 
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}
@@ -363,7 +363,7 @@ it('toggles selected participant when main checkbox is clicked', async () => {
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}
@@ -451,7 +451,7 @@ it('toggles the main checkbox as indeterminate when some participants are toggle
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}
@@ -529,7 +529,7 @@ it("disables participant's checkbox when participant has been graded", () => {
     mutate: vi.fn(),
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingTab
         updateAttendeesHandler={vitest.fn()}

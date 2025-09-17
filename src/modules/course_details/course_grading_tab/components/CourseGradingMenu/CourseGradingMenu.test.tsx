@@ -6,7 +6,7 @@ import {
   Course_Level_Enum,
 } from '@app/generated/graphql'
 
-import { render, renderHook, screen, userEvent, within } from '@test/index'
+import { _render, renderHook, screen, userEvent, within } from '@test/index'
 
 import { CourseGradingMenu } from './CourseGradingMenu'
 
@@ -17,7 +17,7 @@ describe('component: CourseGradingMenu', () => {
     },
   } = renderHook(() => useTranslation())
   it('displays correct option for virtual L1 course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.Level_1}
         courseDeliveryType={Course_Delivery_Type_Enum.Virtual}
@@ -43,7 +43,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it('displays correct options for F2F L1 course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.Level_1}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -69,7 +69,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it('displays correct options for F2F L2 course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.Level_2}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -95,7 +95,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it('displays correct options for the advanced modules course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.Advanced}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -121,7 +121,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it('displays correct options for advanced trainer F2F course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.AdvancedTrainer}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -147,7 +147,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it('displays correct options for intermediate trainer F2F course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.IntermediateTrainer}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -173,7 +173,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it('displays correct options for blended course', async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.Level_1}
         courseDeliveryType={Course_Delivery_Type_Enum.Mixed}
@@ -199,7 +199,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it(`displays correct options for ${Course_Level_Enum.BildRegular}`, async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.BildRegular}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -225,7 +225,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it(`displays correct options for ${Course_Level_Enum.BildIntermediateTrainer}`, async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.BildIntermediateTrainer}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}
@@ -251,7 +251,7 @@ describe('component: CourseGradingMenu', () => {
   })
 
   it(`displays correct options for ${Course_Level_Enum.BildAdvancedTrainer}`, async () => {
-    render(
+    _render(
       <CourseGradingMenu
         courseLevel={Course_Level_Enum.BildAdvancedTrainer}
         courseDeliveryType={Course_Delivery_Type_Enum.F2F}

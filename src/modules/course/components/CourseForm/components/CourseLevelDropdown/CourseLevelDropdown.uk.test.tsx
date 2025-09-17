@@ -10,7 +10,7 @@ import {
 } from '@app/generated/graphql'
 import { AwsRegions, RoleName } from '@app/types'
 
-import { render, renderHook, screen, userEvent, within } from '@test/index'
+import { _render, renderHook, screen, userEvent, within } from '@test/index'
 
 import { CourseLevelDropdown } from './index'
 vi.mock('posthog-js/react', () => ({
@@ -39,7 +39,7 @@ describe('component: CourseLevelDropdown [UK]', () => {
   } = renderHook(() => useTranslation())
 
   it('renders correctly when type is OPEN', async () => {
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}
@@ -69,7 +69,7 @@ describe('component: CourseLevelDropdown [UK]', () => {
   it('renders correctly when type is CLOSED', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
 
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}
@@ -98,7 +98,7 @@ describe('component: CourseLevelDropdown [UK]', () => {
   })
 
   it('renders correctly when type is INDIRECT', async () => {
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}
@@ -118,8 +118,8 @@ describe('component: CourseLevelDropdown [UK]', () => {
     expect(getOption(t('common.course-levels.LEVEL_1_BS'))).toBeInTheDocument()
   })
 
-  it("doesn't render Advanced modules if a trainer isn't Advanced Trainer or BILD Advanced trainer certified", async () => {
-    render(
+  it("doesn't _render Advanced modules if a trainer isn't Advanced Trainer or BILD Advanced trainer certified", async () => {
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}
@@ -157,7 +157,7 @@ describe('component: CourseLevelDropdown [UK]', () => {
   })
 
   it('renders Advanced modules if a trainer has an Advanced trainer certificate', async () => {
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}
@@ -187,7 +187,7 @@ describe('component: CourseLevelDropdown [UK]', () => {
   })
 
   it('renders Advanced modules if a trainer has a BILD Advanced trainer certificate', async () => {
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}

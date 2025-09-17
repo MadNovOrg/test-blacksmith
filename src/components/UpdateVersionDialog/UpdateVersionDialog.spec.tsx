@@ -1,8 +1,7 @@
-import { render, renderHook, screen, waitFor } from '@testing-library/react'
-
 import { SnackbarProvider } from '@app/context/snackbar'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
+import { _render, renderHook, screen, waitFor } from '@test/index'
 import { chance } from '@test/index'
 
 import { UpdateVersionDialog } from './UpdateVersionDialog'
@@ -13,18 +12,18 @@ describe(UpdateVersionDialog.name, () => {
       current: { t },
     },
   } = renderHook(() => useScopedTranslation('components.update-version-dialog'))
-  it('should render if local version is different than app version', () => {
+  it('should _render if local version is different than app version', () => {
     localStorage.setItem('appVersion', PACKAGE_JSON_VERSION + chance.word())
-    render(
+    _render(
       <SnackbarProvider>
         <UpdateVersionDialog />
       </SnackbarProvider>,
     )
     expect(screen.getByText(t('title'))).toBeInTheDocument()
   })
-  it('should not render if local version is the same as app version', () => {
+  it('should not _render if local version is the same as app version', () => {
     localStorage.setItem('appVersion', PACKAGE_JSON_VERSION)
-    render(
+    _render(
       <SnackbarProvider>
         <UpdateVersionDialog />
       </SnackbarProvider>,
@@ -33,7 +32,7 @@ describe(UpdateVersionDialog.name, () => {
   })
   it('should set version  update button is clicked', () => {
     localStorage.setItem('appVersion', PACKAGE_JSON_VERSION + chance.word())
-    render(
+    _render(
       <SnackbarProvider>
         <UpdateVersionDialog />
       </SnackbarProvider>,
@@ -58,7 +57,7 @@ describe(UpdateVersionDialog.name, () => {
       writable: true,
     })
 
-    render(
+    _render(
       <SnackbarProvider>
         <UpdateVersionDialog />
       </SnackbarProvider>,

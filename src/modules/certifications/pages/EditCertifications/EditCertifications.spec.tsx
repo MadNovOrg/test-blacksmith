@@ -1,4 +1,3 @@
-import { fireEvent, render, renderHook, screen } from '@testing-library/react'
 import { useTranslation } from 'react-i18next'
 import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -9,6 +8,7 @@ import {
 } from '@app/generated/graphql'
 import { MODULE_SETTINGS_QUERY } from '@app/modules/course/pages/CourseBuilder/components/ICMCourseBuilderV2/hooks/useModuleSettings'
 
+import { fireEvent, _render, renderHook, screen } from '@test/index'
 import { chance, userEvent } from '@test/index'
 
 import { GET_PARTICIPANT_DETAILS } from '../../hooks/useParticipantDetails'
@@ -56,7 +56,7 @@ describe(EditCertifications.name, () => {
       current: { t },
     },
   } = renderHook(() => useTranslation())
-  it('should render the component ', () => {
+  it('should _render the component ', () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
         if (query === GET_PARTICIPANT_DETAILS) {
@@ -92,7 +92,7 @@ describe(EditCertifications.name, () => {
         }
       },
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <EditCertifications />
       </Provider>,
@@ -140,7 +140,7 @@ describe(EditCertifications.name, () => {
         }
       },
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <EditCertifications />
       </Provider>,
@@ -149,11 +149,11 @@ describe(EditCertifications.name, () => {
     backButton.click()
     expect(mockNavigate).toHaveBeenCalled()
   })
-  it('should render a loading spinner when fetching data', () => {
+  it('should _render a loading spinner when fetching data', () => {
     const client = {
       executeQuery: () => never,
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <EditCertifications />
       </Provider>,
@@ -238,7 +238,7 @@ describe(EditCertifications.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <EditCertifications />
       </Provider>,
@@ -319,7 +319,7 @@ describe(EditCertifications.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <EditCertifications />
       </Provider>,
@@ -402,7 +402,7 @@ describe(EditCertifications.name, () => {
       executeMutation: vi.fn(),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <EditCertifications />
       </Provider>,
@@ -410,7 +410,7 @@ describe(EditCertifications.name, () => {
     expect(screen.getByText(pName1)).toBeInTheDocument()
     expect(screen.getByText(pName2)).toBeInTheDocument()
   })
-  it('should render no modules message when there are no modules', () => {
+  it('should _render no modules message when there are no modules', () => {
     const client = {
       executeQuery: ({ query }: { query: TypedDocumentNode }) => {
         if (query === GET_PARTICIPANT_DETAILS) {
@@ -438,7 +438,7 @@ describe(EditCertifications.name, () => {
         }
       },
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <EditCertifications />
       </Provider>,

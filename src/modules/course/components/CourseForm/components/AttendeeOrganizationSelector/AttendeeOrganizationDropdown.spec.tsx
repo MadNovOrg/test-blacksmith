@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { useTranslation } from 'react-i18next'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 
 import { AttendeeOrganizationDropdown } from './AtendeeOrganizationDropdown'
 
@@ -14,7 +14,7 @@ describe(AttendeeOrganizationDropdown.name, () => {
     },
   } = renderHook(() => useTranslation())
   it('renders the component', () => {
-    render(
+    _render(
       <AttendeeOrganizationDropdown
         options={options}
         selectedOrganization={''}
@@ -28,7 +28,7 @@ describe(AttendeeOrganizationDropdown.name, () => {
     ).toBeInTheDocument()
   })
   it.each(options)('renders %s option', async option => {
-    render(
+    _render(
       <AttendeeOrganizationDropdown
         options={options}
         selectedOrganization={''}

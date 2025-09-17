@@ -12,7 +12,7 @@ import {
 import { gqlRequest } from '@app/lib/gql-request'
 import { AwsRegions } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 import { profile } from '@test/providers'
 
 import { Form } from './Form'
@@ -168,7 +168,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -192,7 +192,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -215,7 +215,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -240,7 +240,7 @@ describe('Form', () => {
     region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const passwordHintMessage = screen.getByTestId('password-hint-message')
       expect(passwordHintMessage).toBeInTheDocument()
@@ -252,7 +252,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       await userEvent.type(screen.getByTestId('input-first-name'), 'testName')
       await userEvent.type(screen.getByTestId('input-surname'), 'testSurname')
@@ -275,7 +275,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -303,7 +303,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -330,7 +330,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -357,7 +357,7 @@ describe('Form', () => {
     'displays error message if recaptcha is not verified %s',
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
-      render(<Form {...defaultProps} />)
+      _render(<Form {...defaultProps} />)
 
       await userEvent.click(
         screen.getByRole('button', { name: /create account/i }),
@@ -376,7 +376,7 @@ describe('Form', () => {
       })
 
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -431,7 +431,7 @@ describe('Form', () => {
       })
 
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -478,7 +478,7 @@ describe('Form', () => {
     async region => {
       vi.stubEnv('VITE_AWS_REGION', region)
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -514,7 +514,7 @@ describe('Form', () => {
       })
 
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()
@@ -580,7 +580,7 @@ describe('Form', () => {
       })
 
       const props = { ...defaultProps }
-      render(<Form {...props} />)
+      _render(<Form {...props} />)
 
       const form = screen.getByTestId('signup-form')
       expect(form).toBeInTheDocument()

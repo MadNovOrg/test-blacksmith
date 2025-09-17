@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, chance, screen, within, userEvent } from '@test/index'
+import { _render, chance, screen, within, userEvent } from '@test/index'
 
 import { ModulesSelectionList, Props } from '.'
 
@@ -47,7 +47,7 @@ describe('component: ModulesSelectionList', () => {
       },
     ]
 
-    render(<ModulesSelectionList moduleGroups={moduleGroups} />)
+    _render(<ModulesSelectionList moduleGroups={moduleGroups} />)
 
     moduleGroups.forEach(moduleGroup => {
       const groupElement = screen.getByTestId(`module-group-${moduleGroup.id}`)
@@ -110,7 +110,7 @@ describe('component: ModulesSelectionList', () => {
 
     const onChangeMock = vi.fn()
 
-    render(
+    _render(
       <ModulesSelectionList
         moduleGroups={moduleGroups}
         onChange={onChangeMock}
@@ -192,7 +192,7 @@ describe('component: ModulesSelectionList', () => {
 
     const onChangeMock = vi.fn()
 
-    render(
+    _render(
       <ModulesSelectionList
         moduleGroups={moduleGroups}
         onChange={onChangeMock}
@@ -264,7 +264,7 @@ describe('component: ModulesSelectionList', () => {
       },
     ]
 
-    render(<ModulesSelectionList moduleGroups={moduleGroups} />)
+    _render(<ModulesSelectionList moduleGroups={moduleGroups} />)
 
     expect(screen.getByLabelText(moduleGroups[1].name)).not.toBeChecked()
     expect(screen.getByLabelText(moduleGroups[1].name)).toHaveAttribute(

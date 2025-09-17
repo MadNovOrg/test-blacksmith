@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { render, screen, chance, within } from '@test/index'
+import { _render, screen, chance, within } from '@test/index'
 
 import { TableNoRows } from './TableNoRows'
 
-const _render = (tr: React.ReactElement<unknown>) => {
-  render(
+const setup = (tr: React.ReactElement<unknown>) => {
+  _render(
     <table>
       <tbody>{tr}</tbody>
     </table>,
@@ -13,15 +13,15 @@ const _render = (tr: React.ReactElement<unknown>) => {
 }
 
 describe('component: TableNoRows', () => {
-  it('does not render when noRecords is false', async () => {
-    _render(<TableNoRows noRecords={false} />)
+  it('does not _render when noRecords is false', async () => {
+    setup(<TableNoRows noRecords={false} />)
 
     const tr = screen.queryByTestId('TableNoRows')
     expect(tr).toBeNull()
   })
 
   it('renders when noRecords is true', async () => {
-    _render(<TableNoRows noRecords={true} filtered={false} />)
+    setup(<TableNoRows noRecords={true} filtered={false} />)
 
     const tr = screen.getByTestId('TableNoRows')
     expect(tr).toBeInTheDocument()
@@ -33,14 +33,14 @@ describe('component: TableNoRows', () => {
   it('allows custom records name', async () => {
     const itemsName = chance.first()
 
-    _render(<TableNoRows noRecords={true} itemsName={itemsName} />)
+    setup(<TableNoRows noRecords={true} itemsName={itemsName} />)
 
     const msg = screen.getByText(new RegExp(itemsName))
     expect(msg).toBeInTheDocument()
   })
 
   it('renders extra info when filtered is true', async () => {
-    _render(<TableNoRows noRecords={true} filtered={true} />)
+    setup(<TableNoRows noRecords={true} filtered={true} />)
 
     const tr = screen.getByTestId('TableNoRows')
     expect(tr).toBeInTheDocument()
@@ -51,7 +51,7 @@ describe('component: TableNoRows', () => {
 
   it('has correct table cell attribute when noRecords is true', async () => {
     const colSpan = chance.integer()
-    _render(<TableNoRows noRecords={true} colSpan={colSpan} />)
+    setup(<TableNoRows noRecords={true} colSpan={colSpan} />)
 
     const tr = screen.getByTestId('TableNoRows')
     const td = within(tr).getByRole('cell')

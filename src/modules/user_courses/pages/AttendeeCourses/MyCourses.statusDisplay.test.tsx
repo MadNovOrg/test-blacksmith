@@ -5,7 +5,7 @@ import { fromValue } from 'wonka'
 
 import { Grade_Enum, UserCoursesQuery } from '@app/generated/graphql'
 
-import { render, screen, within } from '@test/index'
+import { _render, screen, within } from '@test/index'
 
 import { buildUserCourse } from '../../utils/test-utils'
 
@@ -34,7 +34,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -85,7 +85,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -134,7 +134,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -184,7 +184,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -234,7 +234,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -290,7 +290,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,

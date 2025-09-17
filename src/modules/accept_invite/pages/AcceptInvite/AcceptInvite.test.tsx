@@ -5,7 +5,7 @@ import { fromValue } from 'wonka'
 
 import { InviteStatus } from '@app/types'
 
-import { render, waitForText } from '@test/index'
+import { _render, waitForText } from '@test/index'
 
 import { AcceptInvite } from '.'
 
@@ -31,7 +31,7 @@ describe('page: AcceptInvite', () => {
     const INVITE_ID = 'invite-id'
     const COURSE_ID = 'course-id'
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/accept-invite/:id" element={<AcceptInvite />} />
@@ -58,7 +58,7 @@ describe('page: AcceptInvite', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/accept-invite/:id" element={<AcceptInvite />} />

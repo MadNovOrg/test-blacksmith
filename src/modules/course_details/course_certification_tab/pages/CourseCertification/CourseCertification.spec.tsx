@@ -1,10 +1,10 @@
-import { render } from '@test/index'
+import { _render } from '@test/index'
 
 import { CourseCertification } from './CourseCertification'
 
 describe(CourseCertification.name, () => {
-  it('should render', () => {
-    const { container } = render(<CourseCertification certificateId={''} />)
+  it('should _render', () => {
+    const { container } = _render(<CourseCertification certificateId={''} />)
     expect(container).toBeInTheDocument()
   })
 })

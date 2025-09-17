@@ -1,6 +1,6 @@
 import { setMedia } from 'mock-match-media'
 
-import { screen, render, userEvent, waitFor } from '@test/index'
+import { screen, _render, userEvent, waitFor } from '@test/index'
 
 import { ExportBlendedDialog } from './index'
 
@@ -13,9 +13,9 @@ vi.mock('react-router-dom', async () => ({
 describe('component: DialogExportBlended', () => {
   setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
-  it('render export dialog with filters', async () => {
+  it('_render export dialog with filters', async () => {
     const onClose = vi.fn()
-    render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
+    _render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
     expect(
       screen.getByText('Export blended learning license summary'),
     ).toBeInTheDocument()
@@ -24,9 +24,9 @@ describe('component: DialogExportBlended', () => {
     expect(screen.getByTestId('date-range')).toBeInTheDocument()
   })
 
-  it('render export dialog to show dates error if one is missing', async () => {
+  it('_render export dialog to show dates error if one is missing', async () => {
     const onClose = vi.fn()
-    render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
+    _render(<ExportBlendedDialog isOpen={true} closeModal={onClose} />)
 
     await waitFor(
       async () => {

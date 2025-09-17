@@ -6,7 +6,7 @@ import {
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 
-import { chance, render, screen } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { TrainerAvatar, TrainerAvatarGroup } from '.'
 
@@ -71,7 +71,7 @@ describe('component: TrainerAvatarGroup', () => {
       leadTrainer1,
     ]
 
-    render(<TrainerAvatarGroup trainers={trainers} />)
+    _render(<TrainerAvatarGroup trainers={trainers} />)
 
     const leadTrainer1Node = screen.getByTestId(
       `trainer-avatar-${leadTrainer1.id}`,

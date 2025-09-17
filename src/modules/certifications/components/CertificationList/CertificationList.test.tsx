@@ -11,7 +11,7 @@ import {
 import { RoleName, SortOrder } from '@app/types'
 
 import {
-  render,
+  _render,
   screen,
   within,
   userEvent,
@@ -67,7 +67,7 @@ describe('component: CertificationList', () => {
       onSort: vi.fn(),
     }
 
-    render(<CertificationList participants={participants} sorting={sorting} />)
+    _render(<CertificationList participants={participants} sorting={sorting} />)
 
     const table = screen.getByRole('table')
     expect(table).toBeInTheDocument()
@@ -84,13 +84,13 @@ describe('component: CertificationList', () => {
     expect(within(columnHeaders[5]).getByText('Status')).toBeInTheDocument()
   })
 
-  it('can render admin columns and fields', async () => {
+  it('can _render admin columns and fields', async () => {
     const participant = buildParticipant()
     participant.certificate = buildCertificate()
     participant.grade = Grade_Enum.Pass
     const participants = [participant]
 
-    render(
+    _render(
       <CertificationList
         participants={participants}
         sorting={sorting}
@@ -142,7 +142,7 @@ describe('component: CertificationList', () => {
       onSort: vi.fn(),
     }
 
-    render(<CertificationList participants={participants} sorting={sorting} />)
+    _render(<CertificationList participants={participants} sorting={sorting} />)
 
     expect(
       screen.getByTestId('download-all-certifications'),
@@ -160,7 +160,7 @@ describe('component: CertificationList', () => {
     participant.grade = Grade_Enum.Pass
     const participants = [participant]
 
-    render(
+    _render(
       <CertificationList
         participants={participants}
         sorting={sorting}
@@ -178,7 +178,7 @@ describe('component: CertificationList', () => {
     participant.grade = Grade_Enum.Pass
     const participants = [participant]
 
-    render(
+    _render(
       <CertificationList
         participants={participants}
         sorting={sorting}
@@ -285,7 +285,7 @@ describe('component: CertificationList', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CertificationList
           participants={participants}
@@ -326,7 +326,7 @@ describe('component: CertificationList', () => {
       participant.grade = Grade_Enum.Pass
       const participants = [participant]
 
-      render(
+      _render(
         <CertificationList
           participants={participants}
           sorting={sorting}
@@ -380,7 +380,7 @@ describe('component: CertificationList', () => {
     participant.grade = Grade_Enum.Pass
     const participants = [participant]
 
-    render(
+    _render(
       <CertificationList
         participants={participants}
         sorting={sorting}

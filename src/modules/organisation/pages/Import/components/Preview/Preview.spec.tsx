@@ -5,7 +5,7 @@ import { fromValue } from 'wonka'
 import { ImportProvider } from '@app/components/ImportSteps/context'
 import { ImportOrganisationsMutation } from '@app/generated/graphql'
 
-import { render, renderHook, userEvent, waitFor } from '@test/index'
+import { _render, renderHook, userEvent, waitFor } from '@test/index'
 
 import { Preview } from '.'
 
@@ -50,7 +50,7 @@ describe(Preview.name, () => {
         executeMutation: vi.fn(),
       } as unknown as Client)
 
-    return render(
+    return _render(
       <ImportProvider>
         <Provider value={client}>
           <Preview />
@@ -58,12 +58,12 @@ describe(Preview.name, () => {
       </ImportProvider>,
     )
   }
-  it('should render the preview page', () => {
+  it('should _render the preview page', () => {
     const { getByText, baseElement } = renderPreview()
     expect(baseElement).toBeInTheDocument()
     expect(getByText(t('steps.preview.title'))).toBeInTheDocument()
   })
-  it('should render all preview table headers', () => {
+  it('should _render all preview table headers', () => {
     const { getByText } = renderPreview()
     Object.keys(
       t('steps.preview.table-cells', { returnObjects: true }),

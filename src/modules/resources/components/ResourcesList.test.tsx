@@ -1,6 +1,6 @@
 import { ResourceSummaryFragment } from '@app/generated/graphql'
 
-import { chance, render, screen } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import ResourcesList from './ResourcesList'
 
@@ -24,12 +24,12 @@ describe('ResourcesList', () => {
   ]
 
   it('renders nothing when no resources are provided', () => {
-    const { container } = render(<ResourcesList resources={[]} />)
+    const { container } = _render(<ResourcesList resources={[]} />)
     expect(container).toBeEmptyDOMElement()
   })
 
   it('sorts resources correctly by numbered titles', () => {
-    render(<ResourcesList resources={mockResources} />)
+    _render(<ResourcesList resources={mockResources} />)
 
     const renderedTitles = screen
       .getAllByRole('heading')
@@ -53,7 +53,7 @@ describe('ResourcesList', () => {
       { id: chance.guid(), title: '2. Cherry' },
     ]
 
-    render(<ResourcesList resources={mockResourcesWithSameNumber} />)
+    _render(<ResourcesList resources={mockResourcesWithSameNumber} />)
 
     const renderedTitles = screen
       .getAllByRole('heading')

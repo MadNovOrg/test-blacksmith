@@ -1,7 +1,7 @@
 import { setMedia } from 'mock-match-media'
 import { getI18n } from 'react-i18next'
 
-import { act, render, screen, userEvent, waitFor, within } from '@test/index'
+import { act, _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { FilterByDates } from './FilterByDates'
 
@@ -21,7 +21,7 @@ describe(FilterByDates.name, () => {
 
   it('calls onChange as expected when from changes', async () => {
     const onChange = vi.fn()
-    render(<FilterByDates onChange={onChange} title={'Filter by Date'} />)
+    _render(<FilterByDates onChange={onChange} title={'Filter by Date'} />)
 
     const from = screen.getByLabelText('From')
 
@@ -41,7 +41,7 @@ describe(FilterByDates.name, () => {
 
   it('calls onChange as expected when to changes', async () => {
     const onChange = vi.fn()
-    render(<FilterByDates onChange={onChange} title={'Filter by Date'} />)
+    _render(<FilterByDates onChange={onChange} title={'Filter by Date'} />)
 
     const to = screen.getByLabelText('To')
 
@@ -61,7 +61,7 @@ describe(FilterByDates.name, () => {
 
   it('shows an error if the "to" date is before the "from" date or vice-versa', async () => {
     const onChange = vi.fn()
-    render(<FilterByDates onChange={onChange} title={'Filter by Date'} />)
+    _render(<FilterByDates onChange={onChange} title={'Filter by Date'} />)
 
     const from = screen.getByLabelText('From')
 

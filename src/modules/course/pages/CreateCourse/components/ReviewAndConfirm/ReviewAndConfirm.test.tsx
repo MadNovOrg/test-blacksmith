@@ -21,7 +21,7 @@ import {
   getTrainerCarCostPerMile,
 } from '@app/util'
 
-import { formatCurrency, render, screen, waitFor, within } from '@test/index'
+import { formatCurrency, _render, screen, waitFor, within } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -59,7 +59,7 @@ describe('component: ReviewAndConfirm', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider courseType={Course_Type_Enum.Closed}>
           <ReviewAndConfirm />
@@ -119,7 +119,7 @@ describe('component: ReviewAndConfirm', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           initialValue={{ courseData, expenses, trainers }}
@@ -244,7 +244,7 @@ describe('component: ReviewAndConfirm', () => {
       trainerExpenses + coursePricing + mandatoryCourseCost - freeSpacesDiscount
     const vat = 1.2
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           initialValue={{

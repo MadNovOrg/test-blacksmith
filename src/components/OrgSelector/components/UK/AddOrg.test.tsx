@@ -14,7 +14,7 @@ import { GET_ORG_TYPES } from '@app/modules/organisation/queries/get-org-types'
 import { AwsRegions, RoleName } from '@app/types'
 
 import {
-  render,
+  _render,
   screen,
   fireEvent,
   renderHook,
@@ -123,7 +123,7 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.organisation-phone'),
     ),
   ])('renders % field', async field => {
-    render(
+    _render(
       <AddOrg
         option={option}
         countryCode={'GB-ENG'}
@@ -150,7 +150,7 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.organisation-phone'),
     ),
   ])('renders % field', async field => {
-    render(
+    _render(
       <AddOrg
         option={option}
         countryCode={'RO'}
@@ -162,7 +162,7 @@ describe('AddOrg component', () => {
   })
 
   it('should display the Postcode tooltip message on hover', async () => {
-    render(
+    _render(
       <AddOrg
         option={option}
         countryCode={'GB-ENG'}
@@ -199,7 +199,7 @@ describe('AddOrg component', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <AddOrg
             option={{ name: option.name }}
@@ -356,7 +356,7 @@ describe('AddOrg component', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <AddOrg
             option={option}

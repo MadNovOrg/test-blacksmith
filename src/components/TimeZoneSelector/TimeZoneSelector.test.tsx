@@ -1,4 +1,3 @@
-import { waitFor } from '@testing-library/react'
 import { noop } from 'ts-essentials'
 
 import TimeZoneSelector, {
@@ -7,7 +6,8 @@ import TimeZoneSelector, {
 import useTimeZones from '@app/hooks/useTimeZones'
 import { Venue } from '@app/types'
 
-import { chance, render, screen } from '@test/index'
+import { waitFor } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 vi.mock('@app/hooks/useTimeZones')
 
@@ -32,7 +32,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       formatGMTDateTimeByTimeZone: vi.fn(),
     })
 
-    render(
+    _render(
       <TimeZoneSelector
         date={new Date(Date.now())}
         onChange={noop}
@@ -61,7 +61,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       formatGMTDateTimeByTimeZone: vi.fn(),
     })
 
-    render(
+    _render(
       <TimeZoneSelector
         date={new Date(Date.now())}
         onChange={noop}
@@ -96,7 +96,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       postCode: chance.postcode(),
     }
 
-    render(
+    _render(
       <TimeZoneSelector
         date={new Date(Date.now())}
         onChange={noop}
@@ -137,7 +137,7 @@ describe(`${TimeZoneSelector.name}`, () => {
       postCode: chance.postcode(),
     }
 
-    render(
+    _render(
       <TimeZoneSelector
         date={new Date(Date.now())}
         onChange={noop}

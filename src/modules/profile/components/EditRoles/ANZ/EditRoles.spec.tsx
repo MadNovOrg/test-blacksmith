@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 import { capitalize } from '@app/util'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { EditRoles, RolesFields } from '.'
 
@@ -39,7 +39,7 @@ describe('component: EditRoles', () => {
         },
       ],
     }
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -77,7 +77,7 @@ describe('component: EditRoles', () => {
         },
       ],
     }
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -101,7 +101,7 @@ describe('component: EditRoles', () => {
         },
       ],
     }
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -125,7 +125,7 @@ describe('component: EditRoles', () => {
         },
       ],
     }
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -153,7 +153,7 @@ describe('component: EditRoles', () => {
       ],
     }
     // Act
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -185,7 +185,7 @@ describe('component: EditRoles', () => {
       ],
     }
     // Act
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -238,7 +238,7 @@ describe('component: EditRoles', () => {
         },
       ],
     }
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,
@@ -271,7 +271,7 @@ describe('component: EditRoles', () => {
         },
       ],
     }
-    render(
+    _render(
       <FormWrapper mockRoles={mockRoles}>
         <EditRoles />
       </FormWrapper>,

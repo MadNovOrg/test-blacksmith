@@ -1,7 +1,7 @@
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen, waitFor } from '@test/index'
+import { _render, screen, waitFor } from '@test/index'
 
 import { MergeOrganisations } from './MergeOrganisations'
 
@@ -11,8 +11,8 @@ const forbiddenRoles = Object.values(RoleName).filter(
 )
 
 describe(MergeOrganisations.name, () => {
-  it.each(allowedRoles)('should render for allowed %s role', activeRole => {
-    render(<MergeOrganisations selectedOrgs={[]} />, {
+  it.each(allowedRoles)('should _render for allowed %s role', activeRole => {
+    _render(<MergeOrganisations selectedOrgs={[]} />, {
       auth: {
         activeRole,
       },
@@ -20,9 +20,9 @@ describe(MergeOrganisations.name, () => {
     expect(screen.getByTestId('merge-organizations-button')).toBeInTheDocument()
   })
   it.each(forbiddenRoles)(
-    'should not render for forbidden %s role',
+    'should not _render for forbidden %s role',
     activeRole => {
-      render(<MergeOrganisations selectedOrgs={[]} />, {
+      _render(<MergeOrganisations selectedOrgs={[]} />, {
         auth: {
           activeRole,
         },
@@ -32,8 +32,8 @@ describe(MergeOrganisations.name, () => {
       ).not.toBeInTheDocument()
     },
   )
-  it('should render the merge selected as disabled button when merging', () => {
-    render(
+  it('should _render the merge selected as disabled button when merging', () => {
+    _render(
       <MergeOrganisations selectedOrgs={[]} />,
       {
         auth: {
@@ -55,7 +55,7 @@ describe(MergeOrganisations.name, () => {
       },
     ] as GetOrganisationDetailsQuery['orgs'][0][]
 
-    render(
+    _render(
       <MergeOrganisations selectedOrgs={selectedOrgs} />,
       {
         auth: {

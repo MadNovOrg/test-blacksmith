@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react'
 import { t } from 'i18next'
 
 import {
@@ -6,6 +5,8 @@ import {
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 import i18n from '@app/i18n/config'
+
+import { _render } from '@test/index'
 
 import { CourseTrainerRow, trainerTypeLabelMap } from './CourseTrainerRow'
 
@@ -26,7 +27,7 @@ describe('CourseTrainerRow', () => {
   })
 
   it('renders course trainer row with correct information', () => {
-    const { getByText, getByTestId } = render(
+    const { getByText, getByTestId } = _render(
       <CourseTrainerRow
         courseCode={courseCode}
         courseId={courseId}

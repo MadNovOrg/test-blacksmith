@@ -1,10 +1,10 @@
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { AppFooter } from './index'
 
 describe(AppFooter.name, () => {
   it('displays Footer links', async () => {
-    render(<AppFooter />)
+    _render(<AppFooter />)
     expect(screen.getByText('Follow Team Teach')).toBeVisible()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(8)

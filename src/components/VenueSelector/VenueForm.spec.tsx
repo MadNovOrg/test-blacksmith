@@ -3,7 +3,7 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { RoleName, Venue } from '@app/types'
 
-import { chance, render } from '@test/index'
+import { chance, _render } from '@test/index'
 
 import VenueForm, { VenueFormProps } from './VenueForm'
 
@@ -26,7 +26,7 @@ const setup = (
   overrides: Partial<VenueFormProps> = {},
   data?: Omit<Venue, 'id'>,
 ) =>
-  render(
+  _render(
     <VenueForm
       data={data}
       onSubmit={onSubmit}
@@ -96,7 +96,7 @@ describe('component: VenueForm', () => {
       countryCode: 'GB-ENG',
     })
 
-    const { getByLabelText } = render(
+    const { getByLabelText } = _render(
       <VenueForm
         data={venueDetails}
         onSubmit={onSubmit}
@@ -115,7 +115,7 @@ describe('component: VenueForm', () => {
   })
 
   it('should make the venue country pre-selected with England and the field editable for BILD course', () => {
-    const { getByLabelText } = render(
+    const { getByLabelText } = _render(
       <VenueForm
         data={undefined}
         onSubmit={onSubmit}
@@ -134,7 +134,7 @@ describe('component: VenueForm', () => {
   })
 
   it('should make the venue country pre-selected with England and the field editable for INDIRECT course', () => {
-    const { getByLabelText } = render(
+    const { getByLabelText } = _render(
       <VenueForm
         data={undefined}
         onSubmit={onSubmit}

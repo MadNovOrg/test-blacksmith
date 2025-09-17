@@ -22,7 +22,7 @@ import {
 import { useUpdateCourseParticipantGO1Data } from '@app/modules/course_details/hooks/course-participant/update-course-participant-go1-data'
 import useCourseParticipantByPK from '@app/modules/course_details/hooks/course-participant/useCourseParticipantGO1EnrollmentsByPK'
 
-import { chance, fireEvent, render, screen, waitFor } from '@test/index'
+import { chance, fireEvent, _render, screen, waitFor } from '@test/index'
 
 import { CourseParticipantBlendedLearningSync } from './CourseParticipantBlendedLearningSync'
 
@@ -79,7 +79,7 @@ describe('CourseParticipantBlendedLearningSync', () => {
   })
 
   function renderComponent() {
-    return render(
+    return _render(
       <Routes>
         <Route
           path="/participant/:participantId/sync"

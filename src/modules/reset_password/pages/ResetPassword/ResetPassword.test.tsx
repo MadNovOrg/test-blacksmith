@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { render, screen, userEvent, waitForText } from '@test/index'
+import { _render, screen, userEvent, waitForText } from '@test/index'
 
 import { ResetPasswordPage } from './ResetPassword'
 
 describe('page: ResetPasswordPage', () => {
   // eslint-disable-next-line vitest/expect-expect
   it('error when both password fields are empty', async () => {
-    render(<ResetPasswordPage />)
+    _render(<ResetPasswordPage />)
 
     const code = '123456'
     await fillCode(code)
@@ -18,7 +18,7 @@ describe('page: ResetPasswordPage', () => {
   })
 
   it('error when OTP is empty', async () => {
-    render(<ResetPasswordPage />)
+    _render(<ResetPasswordPage />)
     const passwordInput = screen.getByTestId('first-passsword-input')
     const confirmPasswordInput = screen.getByTestId('second-passsword-input')
     const password = 'Test1234!'
@@ -35,7 +35,7 @@ describe('page: ResetPasswordPage', () => {
   })
 
   it('should correctly display the Password Hint Message', () => {
-    render(<ResetPasswordPage />)
+    _render(<ResetPasswordPage />)
 
     expect(screen.getByTestId('password-hint-message')).toBeInTheDocument()
   })

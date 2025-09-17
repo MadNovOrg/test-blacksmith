@@ -16,7 +16,7 @@ import { GET_COURSE_PRICING_QUERY } from '@app/modules/course_booking/queries/ge
 import { GET_TEMP_PROFILE } from '@app/modules/course_booking/queries/get-temp-profile'
 import { AwsRegions } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { BookingProvider } from '../../BookingContext'
 
@@ -148,7 +148,7 @@ describe('component: BookingDetailsReview', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <BookingProvider>
           <CourseBookingReview />

@@ -1,4 +1,3 @@
-import { renderHook, waitFor } from '@testing-library/react'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -10,7 +9,8 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import { render, screen } from '@test/index'
+import { renderHook, waitFor } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { MergeOrganisationsWarning } from './MergeOrganisationsWarning'
 
@@ -27,8 +27,8 @@ describe(MergeOrganisationsWarning.name, () => {
     },
   } = renderHook(() => useScopedTranslation('pages.admin.organizations.merge'))
   const onClose = vi.fn()
-  it('should render', () => {
-    render(
+  it('should _render', () => {
+    _render(
       <MergeOrganisationsWarning
         open={true}
         onClose={onClose}
@@ -39,7 +39,7 @@ describe(MergeOrganisationsWarning.name, () => {
     expect(screen.getByText(t('warning.title'))).toBeInTheDocument()
   })
   it('should call onClose when cancel button is clicked', () => {
-    render(
+    _render(
       <MergeOrganisationsWarning
         open={true}
         onClose={onClose}
@@ -64,7 +64,7 @@ describe(MergeOrganisationsWarning.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <MergeOrganisationsWarning
           open={true}
@@ -96,7 +96,7 @@ describe(MergeOrganisationsWarning.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <MergeOrganisationsWarning
           open={true}

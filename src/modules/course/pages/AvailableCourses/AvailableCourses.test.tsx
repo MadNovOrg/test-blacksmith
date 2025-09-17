@@ -4,7 +4,7 @@ import useUpcomingCourses from '@app/modules/admin/hooks/useUpcomingCourses'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { RoleName } from '@app/types'
 
-import { render, screen, act, renderHook, userEvent } from '@test/index'
+import { _render, screen, act, renderHook, userEvent } from '@test/index'
 
 import { AvailableCourses } from './AvailableCourses'
 
@@ -20,7 +20,7 @@ describe('AvailableCourse', () => {
       vi.mocked(useUpcomingCourses, { partial: true }).mockReturnValue({
         fetching: true,
       })
-      render(<AvailableCourses />, { auth: { activeRole: RoleName.TT_ADMIN } })
+      _render(<AvailableCourses />, { auth: { activeRole: RoleName.TT_ADMIN } })
     })
     it('should handle the loading state', () => {
       expect(screen.getByTestId('courses-fetching')).toBeInTheDocument()
@@ -34,9 +34,9 @@ describe('AvailableCourse', () => {
       vi.mocked(useUpcomingCourses, { partial: true }).mockReturnValue({
         fetching: false,
       })
-      render(<AvailableCourses />, { auth: { activeRole: RoleName.TT_ADMIN } })
+      _render(<AvailableCourses />, { auth: { activeRole: RoleName.TT_ADMIN } })
     })
-    it('should render the AvailableCourses component', async () => {
+    it('should _render the AvailableCourses component', async () => {
       const { result } = renderHook(() => useTranslation())
       await act(async () => {
         expect(
@@ -44,14 +44,14 @@ describe('AvailableCourse', () => {
         ).toBeInTheDocument()
       })
     })
-    it('should render the course level dropdown', async () => {
+    it('should _render the course level dropdown', async () => {
       const { result } = renderHook(() => useTranslation())
       const componentTitle = screen.getByText(
         result.current.t('pages.available-courses.title'),
       )
       expect(componentTitle).toBeInTheDocument()
     })
-    it('should render course delivery type dropdown', () => {
+    it('should _render course delivery type dropdown', () => {
       const { result } = renderHook(() => useTranslation())
       expect(screen.getByText(result.current.t('delivery'))).toBeInTheDocument()
     })

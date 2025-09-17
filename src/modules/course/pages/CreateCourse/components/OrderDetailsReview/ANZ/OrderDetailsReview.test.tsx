@@ -19,7 +19,7 @@ import {
   ValidCourseInput,
 } from '@app/types'
 
-import { chance, render, screen, waitFor } from '@test/index'
+import { chance, _render, screen, waitFor } from '@test/index'
 
 import { CreateCourseProvider } from '../../CreateCourseProvider'
 
@@ -75,7 +75,7 @@ describe('component: OrderDetailsReview', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -168,7 +168,7 @@ describe('component: OrderDetailsReview', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -262,7 +262,7 @@ describe('component: OrderDetailsReview', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -356,7 +356,7 @@ describe('component: OrderDetailsReview', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -452,7 +452,7 @@ describe('component: OrderDetailsReview', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -565,7 +565,7 @@ describe('component: OrderDetailsReview', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}

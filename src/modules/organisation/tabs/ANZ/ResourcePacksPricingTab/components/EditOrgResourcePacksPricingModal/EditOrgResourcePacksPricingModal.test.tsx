@@ -9,7 +9,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
 
-import { screen, render, renderHook, chance } from '@test/index'
+import { screen, _render, renderHook, chance } from '@test/index'
 
 import { ResourcePacksPricingProvider } from '../../ResourcePacksPricingProvider'
 
@@ -67,8 +67,8 @@ describe('component: EditOrgResourcePacksPricingModal', () => {
     executeQuery: vi.fn(),
     executeMutation: vi.fn(),
   } as unknown as Client
-  it('should render the component', () => {
-    render(
+  it('should _render the component', () => {
+    _render(
       <Provider value={mockClient}>
         <ResourcePacksPricingProvider>
           <EditOrgResourcePacksPricingModal onClose={vi.fn()} />

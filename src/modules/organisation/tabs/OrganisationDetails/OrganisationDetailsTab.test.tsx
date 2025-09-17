@@ -9,7 +9,7 @@ import ANZhook from '@app/modules/organisation/hooks/ANZ/useOrgV2'
 import UKhook from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { AwsRegions, RoleName } from '@app/types'
 
-import { chance, render } from '@test/index'
+import { chance, _render } from '@test/index'
 import {
   buildANZAffiliatedOrganisation,
   buildANZMainOrganisation,
@@ -75,7 +75,7 @@ describe('component: OrgDetailsTab ANZ', () => {
       error: undefined,
     })
 
-    const { getByTestId } = render(<OrgDetailsTab orgId={mainOrgId} />, {
+    const { getByTestId } = _render(<OrgDetailsTab orgId={mainOrgId} />, {
       auth: {
         activeRole: role,
         isOrgAdmin: role === RoleName.USER,
@@ -254,7 +254,7 @@ describe('component: OrgDetailsTab UK', () => {
       error: undefined,
     })
 
-    const { getByTestId } = render(<OrgDetailsTab orgId={orgId} />, {
+    const { getByTestId } = _render(<OrgDetailsTab orgId={orgId} />, {
       auth: {
         activeRole: role,
         isOrgAdmin: role === RoleName.USER,

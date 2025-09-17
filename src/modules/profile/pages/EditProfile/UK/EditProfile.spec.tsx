@@ -9,7 +9,7 @@ import useTrainerAgreementTypes from '@app/modules/profile/hooks/useTrainerAgree
 import { GET_USER_KNOWLEDGE_HUB_ACCESS } from '@app/modules/profile/queries/get-user-knowledge-hub-access'
 import { RoleName } from '@app/types'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { EditProfilePage } from './EditProfile'
@@ -69,7 +69,7 @@ describe(EditProfilePage.name, () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <EditProfilePage />
         </Provider>,
@@ -121,7 +121,7 @@ describe(EditProfilePage.name, () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <EditProfilePage />
         </Provider>,
@@ -151,7 +151,7 @@ describe(EditProfilePage.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <EditProfilePage />
       </Provider>,
@@ -179,7 +179,7 @@ describe(EditProfilePage.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <EditProfilePage />
       </Provider>,
@@ -198,7 +198,7 @@ describe(EditProfilePage.name, () => {
       const client = {
         executeQuery: () => never,
       } as unknown as Client
-      render(
+      _render(
         <Provider value={client}>
           <EditProfilePage />
         </Provider>,
@@ -217,7 +217,7 @@ describe(EditProfilePage.name, () => {
       const client = {
         executeQuery: () => never,
       } as unknown as Client
-      render(
+      _render(
         <Provider value={client}>
           <EditProfilePage />
         </Provider>,

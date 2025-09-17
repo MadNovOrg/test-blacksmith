@@ -12,7 +12,7 @@ import {
 } from '@app/generated/graphql'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
 import Term from '.'
@@ -23,7 +23,7 @@ describe('page: Term - WebinarsCategory', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/term/:id" element={<Term />} />
@@ -60,7 +60,7 @@ describe('page: Term - WebinarsCategory', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="term/:id" element={<Term />} />
@@ -105,7 +105,7 @@ describe('page: Term - WebinarsCategory', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="term/:id" element={<Term />} />
@@ -165,7 +165,7 @@ describe('page: Term - WebinarsCategory', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="term/:id" element={<Term />} />
@@ -216,7 +216,7 @@ describe('page: Term - WebinarsCategory', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="term/:id" element={<Term />} />
@@ -292,7 +292,7 @@ describe('page: Term - WebinarsCategory', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="term/:id" element={<Term />} />

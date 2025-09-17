@@ -3,7 +3,7 @@ import { fromValue } from 'wonka'
 
 import { GetDistinctOrgResidingCountriesQuery } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { GET_DISTINCT_ORG_RESIDING_COUNTRIES_QUERY } from './queries/get-distinct-org-countries'
 
@@ -31,7 +31,7 @@ const urqlMockClient = {
 describe(FilterByOrgResidingCountry.name, () => {
   it('Triggers onChange when residing country = England is selected', async () => {
     const onChange = vi.fn()
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByOrgResidingCountry onChange={onChange} />
       </Provider>,
@@ -49,7 +49,7 @@ describe(FilterByOrgResidingCountry.name, () => {
 
   it('Does not display duplicate countries', async () => {
     const onChange = vi.fn()
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByOrgResidingCountry onChange={onChange} />
       </Provider>,
@@ -66,7 +66,7 @@ describe(FilterByOrgResidingCountry.name, () => {
   it('All countries should be visible in dropdown', async () => {
     const onChange = vi.fn()
     const countries = ['England', 'Romania', 'Moldova, Republic of']
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByOrgResidingCountry onChange={onChange} />
       </Provider>,

@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { render, screen, userEvent, waitFor, fireEvent } from '@test/index'
+import { _render, screen, userEvent, waitFor, fireEvent } from '@test/index'
 
 import { DrawerMenu } from './DrawerMenu'
 
 describe('component: DrawerMenu', () => {
   it('toggles menu', async () => {
-    render(<DrawerMenu />)
+    _render(<DrawerMenu />)
 
     const openButton = screen.getByLabelText('Open menu')
     expect(openButton).toBeInTheDocument()

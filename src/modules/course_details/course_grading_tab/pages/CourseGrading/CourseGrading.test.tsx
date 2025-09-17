@@ -12,7 +12,7 @@ import { RoleName } from '@app/types'
 import { LoadingStatus, noop } from '@app/util'
 
 import {
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -48,7 +48,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseGrading course={course} refreshCourse={noop} />)
+    _render(<CourseGrading course={course} refreshCourse={noop} />)
 
     expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
   })
@@ -67,7 +67,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseGrading course={course} refreshCourse={noop} />)
+    _render(<CourseGrading course={course} refreshCourse={noop} />)
 
     const table = screen.getByRole('table')
     expect(table).toBeInTheDocument()
@@ -141,7 +141,7 @@ describe('component: CourseGrading', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"
@@ -203,7 +203,7 @@ describe('component: CourseGrading', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"
@@ -320,7 +320,7 @@ describe('component: CourseGrading', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"
@@ -368,7 +368,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"
@@ -407,7 +407,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseGrading course={course} refreshCourse={noop} />, {
+    _render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
     const button = screen.getByRole('button', {
@@ -432,7 +432,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseGrading course={course} refreshCourse={noop} />, {
+    _render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 
@@ -454,7 +454,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseGrading course={course} refreshCourse={noop} />, {
+    _render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 
@@ -485,7 +485,7 @@ describe('component: CourseGrading', () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseGrading course={course} refreshCourse={noop} />, {
+    _render(<CourseGrading course={course} refreshCourse={noop} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 

@@ -1,7 +1,7 @@
 import { Actions } from './Actions'
 
 describe(Actions.name, () => {
-  it('should render component', () => {
+  it('should _render component', () => {
     // Assert
     expect(true).toBeTruthy()
   })

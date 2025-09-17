@@ -5,7 +5,7 @@ import { UnlinkMultipleAffiliatedOrganisationsMutation } from '@app/generated/gr
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, renderHook, userEvent } from '@test/index'
+import { chance, _render, screen, renderHook, userEvent } from '@test/index'
 
 import { RemoveAffiliatedOrgModal } from './RemoveAffiliatedOrgModal'
 
@@ -40,7 +40,7 @@ describe('RemoveAffiliatedOrgModal', () => {
       })
     })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <RemoveAffiliatedOrgModal
           affiliatedOrgsIds={[affiliatedOrgId]}

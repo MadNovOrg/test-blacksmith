@@ -16,7 +16,7 @@ import { RoleName } from '@app/types'
 import {
   chance,
   fireEvent,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -51,11 +51,11 @@ describe(OrganizationForm.name, () => {
   })
 
   it('renders the component', () => {
-    render(<OrganizationForm onSubmit={submitMock} />)
+    _render(<OrganizationForm onSubmit={submitMock} />)
     expect(screen.getByText(t('fields.organization-name'))).toBeInTheDocument()
   })
   it('does not submit if form isnt filled', async () => {
-    render(<OrganizationForm onSubmit={submitMock} />)
+    _render(<OrganizationForm onSubmit={submitMock} />)
     expect(screen.getByText(t('add-new-organization'))).toBeInTheDocument()
     await userEvent.click(screen.getByTestId('create-org-form-submit-btn'))
     expect(submitMock).not.toHaveBeenCalled()
@@ -64,7 +64,7 @@ describe(OrganizationForm.name, () => {
     const editOrgData = {
       name: 'Test org',
     } as Partial<Organization>
-    render(
+    _render(
       <OrganizationForm
         onSubmit={submitMock}
         isEditMode={true}
@@ -74,7 +74,7 @@ describe(OrganizationForm.name, () => {
     expect(screen.getByTestId('name')).toHaveValue(editOrgData.name)
   })
   it('renders field errors', async () => {
-    render(<OrganizationForm onSubmit={submitMock} />)
+    _render(<OrganizationForm onSubmit={submitMock} />)
     await userEvent.click(screen.getByTestId('create-org-form-submit-btn'))
     expect(
       screen.getByText(
@@ -86,7 +86,7 @@ describe(OrganizationForm.name, () => {
   })
 
   it('renders post code for AU', async () => {
-    render(<OrganizationForm onSubmit={submitMock} />)
+    _render(<OrganizationForm onSubmit={submitMock} />)
 
     const countriesSelector = screen.getByTestId(
       'countries-selector-autocomplete',
@@ -126,7 +126,7 @@ describe(OrganizationForm.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrganizationForm onSubmit={submitMock} />
       </Provider>,
@@ -277,7 +277,7 @@ describe(OrganizationForm.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrganizationForm onSubmit={submitMock} />
       </Provider>,
@@ -403,7 +403,7 @@ describe(OrganizationForm.name, () => {
   })
 
   it('disables country selector and link to main org checkbox on edit if org is main', () => {
-    render(
+    _render(
       <OrganizationForm
         onSubmit={submitMock}
         isEditMode={true}
@@ -455,7 +455,7 @@ describe(OrganizationForm.name, () => {
   it('disables country selector, renders main org and disables main org selector on edit if org is affiliate', () => {
     const mainOrgId = chance.guid()
     const mainOrgName = chance.name()
-    render(
+    _render(
       <OrganizationForm
         onSubmit={submitMock}
         isEditMode={true}
@@ -527,7 +527,7 @@ describe(OrganizationForm.name, () => {
         executeQuery: () => never,
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <OrganizationForm
             onSubmit={submitMock}

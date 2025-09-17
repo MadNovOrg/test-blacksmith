@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { screen, render, renderHook, userEvent } from '@test/index'
+import { screen, _render, renderHook, userEvent } from '@test/index'
 
 import { CourseExceptionsLog } from '.'
 
@@ -16,11 +16,11 @@ describe('page: CourseExceptionsLog', () => {
       current: { t },
     },
   } = renderHook(() => useTranslation())
-  beforeEach(() => render(<CourseExceptionsLog />))
-  it('should render the page', () => {
+  beforeEach(() => _render(<CourseExceptionsLog />))
+  it('should _render the page', () => {
     expect(screen.getByTestId('course-exceptions-log')).toBeInTheDocument()
   })
-  it('should render the back button and the header', () => {
+  it('should _render the back button and the header', () => {
     expect(
       screen.getByText(t('pages.admin.back-to-settings')),
     ).toBeInTheDocument()

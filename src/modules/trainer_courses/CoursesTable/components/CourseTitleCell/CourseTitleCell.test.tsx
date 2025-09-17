@@ -1,10 +1,11 @@
-import { render } from '@testing-library/react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 import { useAuth } from '@app/context/auth'
 import { Course_Invite_Status_Enum } from '@app/generated/graphql'
 import { TableCourse } from '@app/modules/trainer_courses/utils'
 import { RoleName } from '@app/types'
+
+import { render } from '@test/index'
 
 import { CourseTitleCell } from './CourseTitleCell'
 

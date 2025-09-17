@@ -4,7 +4,7 @@ import React from 'react'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { OrderYourWorkbookAlert } from '.'
@@ -38,7 +38,7 @@ describe('OrderYourWorkbookAlert', () => {
       startDate: add(new Date(), { days: 8 }),
     })
 
-    render(<OrderYourWorkbookAlert course={course} />, {
+    _render(<OrderYourWorkbookAlert course={course} />, {
       auth: { activeRole: RoleName.TRAINER },
     })
 
@@ -55,7 +55,7 @@ describe('OrderYourWorkbookAlert', () => {
       startDate: add(new Date(), { days: 7 }),
     })
 
-    render(<OrderYourWorkbookAlert course={course} />, {
+    _render(<OrderYourWorkbookAlert course={course} />, {
       auth: { activeRole: RoleName.TRAINER },
     })
     expect(screen.queryByText(ALERT_MESSAGE)).not.toBeInTheDocument()
@@ -67,7 +67,7 @@ describe('OrderYourWorkbookAlert', () => {
       startDate: add(new Date(), { days: 6 }),
     })
 
-    render(<OrderYourWorkbookAlert course={course} />, {
+    _render(<OrderYourWorkbookAlert course={course} />, {
       auth: { activeRole: RoleName.TRAINER },
     })
 
@@ -84,7 +84,7 @@ describe('OrderYourWorkbookAlert', () => {
         startDate: add(new Date(), { months: 6 }),
       })
 
-      render(<OrderYourWorkbookAlert course={course} />, {
+      _render(<OrderYourWorkbookAlert course={course} />, {
         auth: { activeRole: role },
       })
 
@@ -102,7 +102,7 @@ describe('OrderYourWorkbookAlert', () => {
         startDate: add(new Date(), { months: 6 }),
       })
 
-      render(<OrderYourWorkbookAlert course={course} />, {
+      _render(<OrderYourWorkbookAlert course={course} />, {
         auth: { activeRole: RoleName.TRAINER },
       })
 

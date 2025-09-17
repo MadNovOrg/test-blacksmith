@@ -5,7 +5,7 @@ import { never, fromValue } from 'wonka'
 
 import { PostQuery } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitForText, within } from '@test/index'
+import { _render, screen, userEvent, waitForText, within } from '@test/index'
 import { buildEntities, buildPost } from '@test/mock-data-utils'
 
 import Post from '.'
@@ -16,7 +16,7 @@ describe('page: Post', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />
@@ -48,7 +48,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route index element={<p>Blog page</p>} />
@@ -76,7 +76,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />
@@ -111,7 +111,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />
@@ -155,7 +155,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />
@@ -204,7 +204,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />
@@ -243,7 +243,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />
@@ -283,7 +283,7 @@ describe('page: Post', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="blog/:id" element={<Post />} />

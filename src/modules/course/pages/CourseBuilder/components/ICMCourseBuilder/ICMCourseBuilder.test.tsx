@@ -21,7 +21,7 @@ import { SAVE_COURSE_MODULES } from '@app/modules/course/queries/save-course-mod
 
 import {
   fireEvent,
-  render,
+  _render,
   screen,
   userEvent,
   waitFor,
@@ -65,7 +65,7 @@ describe('component: CourseBuilder', () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/:id/modules" element={<ICMCourseBuilder />} />
@@ -104,7 +104,7 @@ describe('component: CourseBuilder', () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/:id/modules" element={<ICMCourseBuilder />} />
@@ -125,7 +125,7 @@ describe('component: CourseBuilder', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -156,7 +156,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -184,7 +184,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -234,7 +234,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id/modules" element={<ICMCourseBuilder />} />
@@ -325,7 +325,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -412,7 +412,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="courses/:id">
@@ -480,7 +480,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -542,7 +542,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -612,7 +612,7 @@ describe('component: CourseBuilder', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilder />
       </Provider>,
@@ -736,7 +736,7 @@ describe('component: CourseBuilder', () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="courses/:id">

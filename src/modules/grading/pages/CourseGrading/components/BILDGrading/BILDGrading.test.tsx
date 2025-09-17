@@ -13,7 +13,14 @@ import {
 } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
 import { buildGradingCourse, selectGradingOption } from '../../test-utils'
@@ -43,7 +50,7 @@ describe('page: BILDGrading', () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDGrading course={course} />
       </Provider>,
@@ -108,7 +115,7 @@ describe('page: BILDGrading', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id">
@@ -173,7 +180,7 @@ describe('page: BILDGrading', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id">
@@ -237,7 +244,7 @@ describe('page: BILDGrading', () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDGrading course={course} />
       </Provider>,
@@ -287,7 +294,7 @@ describe('page: BILDGrading', () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDGrading course={course} />
       </Provider>,
@@ -333,7 +340,7 @@ describe('page: BILDGrading', () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDGrading course={course} />
       </Provider>,
@@ -379,7 +386,7 @@ describe('page: BILDGrading', () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDGrading course={course} />
       </Provider>,

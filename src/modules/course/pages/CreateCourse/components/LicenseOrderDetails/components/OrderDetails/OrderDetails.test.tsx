@@ -6,7 +6,7 @@ import {
 import { calculateGo1LicenseCost } from '@app/modules/course/pages/CreateCourse/utils'
 import { AwsRegions, Organization } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { OrderDetails } from '.'
 
@@ -32,7 +32,7 @@ describe('component: OrderDetails', () => {
       licenseBalance: 4,
     })
 
-    render(
+    _render(
       <OrderDetails
         courseData={mockCourseData}
         go1LicensesCost={costs}
@@ -54,7 +54,7 @@ describe('component: OrderDetails', () => {
       licenseBalance: 1,
     })
 
-    render(
+    _render(
       <OrderDetails
         courseData={mockCourseData}
         go1LicensesCost={costs}
@@ -73,7 +73,7 @@ describe('component: OrderDetails', () => {
       numberOfLicenses: 2,
       licenseBalance: 0,
     })
-    render(
+    _render(
       <OrderDetails
         courseData={mockCourseData}
         go1LicensesCost={costs}

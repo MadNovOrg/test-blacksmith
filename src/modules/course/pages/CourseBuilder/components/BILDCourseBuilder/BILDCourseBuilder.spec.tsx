@@ -15,7 +15,7 @@ import { LoadingStatus } from '@app/util'
 import {
   chance,
   fireEvent,
-  render,
+  _render,
   screen,
   userEvent,
   within,
@@ -106,7 +106,7 @@ describe('component: BILDCourseBuilder', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id/modules" element={<BILDCourseBuilder />} />
@@ -217,7 +217,7 @@ describe('component: BILDCourseBuilder', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDCourseBuilder
           data={{
@@ -367,7 +367,7 @@ describe('component: BILDCourseBuilder', () => {
           }),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route
@@ -473,7 +473,7 @@ describe('component: BILDCourseBuilder', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id/modules" element={<BILDCourseBuilder />} />
@@ -552,7 +552,7 @@ describe('component: BILDCourseBuilder', () => {
     const onSubmit = vitest.fn()
     const onBildModuleChange = vitest.fn()
 
-    render(
+    _render(
       <Provider value={client}>
         <BILDCourseBuilder
           data={{

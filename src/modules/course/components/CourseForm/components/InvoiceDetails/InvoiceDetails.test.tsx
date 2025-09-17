@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { InvoiceDetails } from './index'
 
@@ -17,7 +17,7 @@ describe('InvoiceDetails component', () => {
       purchaseOrder: 'PO1231',
     }
 
-    render(<InvoiceDetails details={details} />)
+    _render(<InvoiceDetails details={details} />)
     expect(screen.getByText('Test Organisation')).toBeInTheDocument()
     expect(screen.getByText('11 Baker Street')).toBeInTheDocument()
     expect(screen.getByText('Jill')).toBeInTheDocument()

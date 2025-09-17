@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { RoleName } from '@app/types'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 
 import { AdminPage } from './AdminPage'
 
@@ -27,7 +27,7 @@ describe(`${AdminPage.name}`, () => {
       )
 
     // Act
-    render(<AdminPage />, {
+    _render(<AdminPage />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -44,7 +44,7 @@ describe(`${AdminPage.name}`, () => {
 
   it(`should display Users, Organisations settings and Course exceptions log only for ${RoleName.LD}`, async () => {
     // Act
-    render(<AdminPage />, {
+    _render(<AdminPage />, {
       auth: {
         activeRole: RoleName.LD,
       },

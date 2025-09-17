@@ -1,6 +1,6 @@
-import { act, renderHook } from '@testing-library/react'
-
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
+
+import { act, renderHook } from '@test/index'
 
 import { useSortedCoursesTableData } from './useSortedCoursesTableData'
 describe('useSortedCoursesTableData', () => {

@@ -26,7 +26,7 @@ import {
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -63,7 +63,7 @@ describe('component: ReviewLicenseOrder', () => {
   } = renderHook(() => useTimeZones())
 
   it('displays an alert if there is no course or pricing data in the context', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
           <ReviewLicenseOrder />
@@ -110,7 +110,7 @@ describe('component: ReviewLicenseOrder', () => {
 
     const invoiceDetails = go1Licensing.invoiceDetails
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
@@ -210,7 +210,7 @@ describe('component: ReviewLicenseOrder', () => {
     const invoiceDetails = go1Licensing.invoiceDetails
     const workbookDeliveryAddress = go1Licensing.workbookDeliveryAddress
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
@@ -340,7 +340,7 @@ describe('component: ReviewLicenseOrder', () => {
         },
       })
     })
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}

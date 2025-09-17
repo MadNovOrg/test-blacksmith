@@ -1,6 +1,6 @@
 import { AwsRegions } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { BlendedLearningCourseAlert } from './BlendedLearningCourseAlert'
 
@@ -15,7 +15,7 @@ describe('BlendedLearningCourseAlert', () => {
   })
 
   it('renders the alert with the correct translation key', () => {
-    render(<BlendedLearningCourseAlert />)
+    _render(<BlendedLearningCourseAlert />)
 
     expect(
       screen.getByText('To receive your certificate', { exact: false }),
@@ -23,7 +23,7 @@ describe('BlendedLearningCourseAlert', () => {
   })
 
   it('renders the correct login link for UK users', () => {
-    render(<BlendedLearningCourseAlert />)
+    _render(<BlendedLearningCourseAlert />)
 
     const link = screen.getByRole('link')
     expect(link).toHaveAttribute(
@@ -35,7 +35,7 @@ describe('BlendedLearningCourseAlert', () => {
   it('renders the correct login link for ANZ users', () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
 
-    render(<BlendedLearningCourseAlert />)
+    _render(<BlendedLearningCourseAlert />)
 
     const link = screen.getByRole('link')
     expect(link).toHaveAttribute(

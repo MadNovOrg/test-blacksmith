@@ -11,7 +11,7 @@ import useZoomMeetingUrl from '@app/modules/course/components/CourseForm/hooks/u
 import { Profile, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { AnzCourseForm } from './ANZ'
 import { UkCourseForm } from './UK'
@@ -86,7 +86,7 @@ export const renderForm = ({
     }
     return <UkCourseForm {...props} />
   }
-  return render(<FormToRender {...props} type={type} isCreation={true} />, {
+  return _render(<FormToRender {...props} type={type} isCreation={true} />, {
     auth: {
       activeCertificates: [{ level: certificateLevel, grade: Grade_Enum.Pass }],
       activeRole: role,

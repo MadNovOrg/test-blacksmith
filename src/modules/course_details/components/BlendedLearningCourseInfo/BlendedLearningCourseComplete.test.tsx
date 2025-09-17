@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AwsRegions, BlendedLearningStatus } from '@app/types'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 
 import { BlendedLearningCourseComplete } from './BlendedLearningCourseComplete'
 
@@ -21,7 +21,7 @@ describe('BlendedLearningCourseComplete', () => {
   })
 
   it('renders the component with the "COMPLETED" status', () => {
-    render(
+    _render(
       <BlendedLearningCourseComplete
         blendedLearningStatus={BlendedLearningStatus.COMPLETED}
       />,
@@ -41,7 +41,7 @@ describe('BlendedLearningCourseComplete', () => {
   })
 
   it('renders the component with an "IN_PROGRESS" status and shows the complete button', () => {
-    render(
+    _render(
       <BlendedLearningCourseComplete
         blendedLearningStatus={BlendedLearningStatus.IN_PROGRESS}
       />,
@@ -58,7 +58,7 @@ describe('BlendedLearningCourseComplete', () => {
   })
 
   it('renders the correct go1 login link for UK users', () => {
-    render(
+    _render(
       <BlendedLearningCourseComplete
         blendedLearningStatus={BlendedLearningStatus.IN_PROGRESS}
       />,
@@ -74,7 +74,7 @@ describe('BlendedLearningCourseComplete', () => {
   it('renders the correct go1 login link for ANZ users', () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
 
-    render(
+    _render(
       <BlendedLearningCourseComplete
         blendedLearningStatus={BlendedLearningStatus.IN_PROGRESS}
       />,
@@ -90,7 +90,7 @@ describe('BlendedLearningCourseComplete', () => {
   it('button is clickable when the status is not "COMPLETED"', async () => {
     const user = userEvent.setup()
 
-    render(
+    _render(
       <BlendedLearningCourseComplete
         blendedLearningStatus={BlendedLearningStatus.IN_PROGRESS}
       />,

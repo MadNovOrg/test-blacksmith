@@ -1,5 +1,3 @@
-import { renderHook, waitFor } from '@testing-library/react'
-
 import {
   GetOrgResourcePacksHistoryQuery,
   Resource_Packs_Events_Enum,
@@ -8,7 +6,8 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useOrgResourcePacksHistory } from '@app/modules/organisation/queries/get-org-resource-packs-history'
 
-import { chance, render, screen } from '@test/index'
+import { renderHook, waitFor } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { ResourcePacksHistoryTable } from '.'
 
@@ -35,7 +34,7 @@ describe('ResourcePacksHistoryTable', () => {
       vi.fn(),
     ])
 
-    render(<ResourcePacksHistoryTable orgId={chance.guid()} />)
+    _render(<ResourcePacksHistoryTable orgId={chance.guid()} />)
 
     expect(screen.getByText(t('col-date'))).toBeInTheDocument()
     expect(screen.getByText(t('col-event'))).toBeInTheDocument()
@@ -79,7 +78,7 @@ describe('ResourcePacksHistoryTable', () => {
       vi.fn(),
     ])
 
-    render(<ResourcePacksHistoryTable orgId={chance.guid()} />)
+    _render(<ResourcePacksHistoryTable orgId={chance.guid()} />)
 
     await waitFor(() => {
       expect(

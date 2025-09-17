@@ -7,7 +7,7 @@ import {
 import { CreateCourseProvider } from '@app/modules/course/pages/CreateCourse/components/CreateCourseProvider'
 import { AwsRegions, TrainerInput, TransportMethod } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within, act } from '@test/index'
+import { _render, screen, userEvent, waitFor, within, act } from '@test/index'
 
 import TrainerExpensesForm from '.'
 
@@ -219,7 +219,7 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
 
 const setup = (trainers: TrainerInput[]) =>
   waitFor(() =>
-    render(
+    _render(
       <CreateCourseProvider courseType={Course_Type_Enum.Closed}>
         <TrainerExpensesForm trainers={trainers} />
       </CreateCourseProvider>,

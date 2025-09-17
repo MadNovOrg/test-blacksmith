@@ -1,6 +1,6 @@
 import { noop } from 'ts-essentials'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { getAOLCountries, getAOLRegions } from './utils'
 
@@ -15,7 +15,7 @@ const countries = getAOLCountries()
 describe(RegionDropdown.name, () => {
   beforeAll(() => {
     countries.forEach(async (country: string) => {
-      render(
+      _render(
         <RegionDropdown
           value=""
           onChange={noop}

@@ -1,7 +1,7 @@
 import { FullHeightPageLayout } from './FullHeightPageLayout'
 
 describe(FullHeightPageLayout.name, () => {
-  it('should render component', () => {
+  it('should _render component', () => {
     // Assert
     expect(true).toBeTruthy()
   })

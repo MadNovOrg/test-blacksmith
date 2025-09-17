@@ -7,7 +7,7 @@ import { Course_Type_Enum } from '@app/generated/graphql'
 import { useCourseDraft } from '@app/modules/course/hooks/useCourseDraft'
 import { RoleName } from '@app/types'
 
-import { render, within, screen } from '@test/index'
+import { _render, within, screen } from '@test/index'
 
 import { StepsEnum } from './types'
 
@@ -36,7 +36,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't mark any step as done if on course details page", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -61,7 +61,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't mark course details page as done if on assign trainers page but course details page wasn't marked as complete", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -86,7 +86,7 @@ describe('page: CreateCourse', () => {
   })
 
   it('marks course details page as done if on assign trainers page and details page was marked as complete', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route
@@ -122,7 +122,7 @@ describe('page: CreateCourse', () => {
   })
 
   it('renders correct title when creating open course', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -142,7 +142,7 @@ describe('page: CreateCourse', () => {
   })
 
   it('renders correct title when creating closed course', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -162,7 +162,7 @@ describe('page: CreateCourse', () => {
   })
 
   it('renders correct title when creating indirect course', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -182,7 +182,7 @@ describe('page: CreateCourse', () => {
   })
 
   it('displays correct steps for the indirect course', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -204,7 +204,7 @@ describe('page: CreateCourse', () => {
   })
 
   it('displays correct steps for the indirect course with TT-OPS', () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -226,7 +226,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't allow trainer to create open course", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -246,7 +246,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't allow attendee user to create open course", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -266,7 +266,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't allow trainer to create closed course", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -286,7 +286,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't allow attendee user to create closed course", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -306,7 +306,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't allow sales admin role to create indirect course", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
@@ -326,7 +326,7 @@ describe('page: CreateCourse', () => {
   })
 
   it("doesn't allow attendee user to create indirect course", () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>

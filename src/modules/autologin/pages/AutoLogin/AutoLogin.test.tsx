@@ -3,7 +3,7 @@ import { MockedFunction } from 'vitest'
 import { gqlRequest } from '@app/lib/gql-request'
 import { RoleName } from '@app/types'
 
-import { chance, render, waitFor, waitForCalls } from '@test/index'
+import { chance, _render, waitFor, waitForCalls } from '@test/index'
 
 import { AutoLogin } from './AutoLogin'
 
@@ -39,7 +39,7 @@ describe('AutoLogin', () => {
       initAuth: { authChallenge: chance.string(), email },
     })
 
-    render(<AutoLogin />, { auth: { profile: { email }, logout: mockLogout } })
+    _render(<AutoLogin />, { auth: { profile: { email }, logout: mockLogout } })
 
     await waitFor(async () => {
       await waitForCalls(
@@ -65,7 +65,7 @@ describe('AutoLogin', () => {
       initAuth: { authChallenge: chance.string(), email },
     })
 
-    render(<AutoLogin />, { auth: { logout: mockLogout } })
+    _render(<AutoLogin />, { auth: { logout: mockLogout } })
 
     await waitFor(async () => {
       await waitForCalls(
@@ -97,7 +97,7 @@ describe('AutoLogin', () => {
       initAuth: { authChallenge: chance.string(), email },
     })
 
-    render(<AutoLogin />)
+    _render(<AutoLogin />)
 
     await waitFor(async () => {
       await waitForCalls(
@@ -125,7 +125,7 @@ describe('AutoLogin', () => {
       initAuth: { authChallenge: chance.string(), email },
     })
 
-    render(<AutoLogin />)
+    _render(<AutoLogin />)
 
     await waitFor(async () => {
       await waitForCalls(

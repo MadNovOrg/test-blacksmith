@@ -10,7 +10,7 @@ import {
   WpPageInfo,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildWebinar } from '@test/mock-data-utils'
 
 import Webinars from '.'
@@ -21,7 +21,7 @@ describe('page: Webinars', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars" element={<Webinars />} />
@@ -51,7 +51,7 @@ describe('page: Webinars', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars" element={<Webinars />} />
@@ -100,7 +100,7 @@ describe('page: Webinars', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars" element={<Webinars />} />
@@ -136,7 +136,7 @@ describe('page: Webinars', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars" element={<Webinars />} />
@@ -185,7 +185,7 @@ describe('page: Webinars', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars" element={<Webinars />} />
@@ -243,7 +243,7 @@ describe('page: Webinars', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/webinars" element={<Webinars />} />

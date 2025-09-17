@@ -1,7 +1,7 @@
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import UndoRevokeModal from './UndoRevokeModal'
 
@@ -20,7 +20,7 @@ describe('UndoRevokeModal', () => {
   const participantId = chance.guid()
 
   it('renders as expected', async () => {
-    render(
+    _render(
       <Provider value={client}>
         <UndoRevokeModal
           onClose={onCloseMock}
@@ -43,7 +43,7 @@ describe('UndoRevokeModal', () => {
   })
 
   it('calls revoke mutation as expected', async () => {
-    render(
+    _render(
       <Provider value={client}>
         <UndoRevokeModal
           onClose={onCloseMock}

@@ -17,7 +17,7 @@ import { Course, RoleName } from '@app/types'
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -97,7 +97,7 @@ describe(CourseInvites.name, () => {
   it('renders as expected', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -106,7 +106,7 @@ describe(CourseInvites.name, () => {
     expect(screen.getByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
-  it('does render after course started but not ended', async () => {
+  it('does _render after course started but not ended', async () => {
     course = buildCourse({
       overrides: {
         schedule: [
@@ -121,13 +121,13 @@ describe(CourseInvites.name, () => {
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
     expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
-  it('does render after course ended for admin', async () => {
+  it('does _render after course ended for admin', async () => {
     useFeatureFlagEnabledMock.mockReturnValue(true)
     course = buildCourse({
       overrides: {
@@ -143,13 +143,13 @@ describe(CourseInvites.name, () => {
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
     expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
-  it('does not render after course ended', async () => {
+  it('does not _render after course ended', async () => {
     course = buildCourse({
       overrides: {
         schedule: [
@@ -164,20 +164,20 @@ describe(CourseInvites.name, () => {
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.FINANCE },
     })
     expect(screen.queryByTestId('course-invite-btn')).not.toBeInTheDocument()
   })
 
-  it('does not render if it is an open course', async () => {
+  it('does not _render if it is an open course', async () => {
     course = buildCourse({
       overrides: {
         type: Course_Type_Enum.Open,
       },
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
-    render(<CourseInvites course={course} />)
+    _render(<CourseInvites course={course} />)
 
     expect(screen.queryByTestId('course-invite-btn')).not.toBeInTheDocument()
   })
@@ -185,7 +185,7 @@ describe(CourseInvites.name, () => {
   it('shows modal when clicked', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -207,7 +207,7 @@ describe(CourseInvites.name, () => {
       data: [buildInvite(), buildInvite(), buildInvite()],
     })
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -234,7 +234,7 @@ describe(CourseInvites.name, () => {
       ],
     })
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -266,7 +266,7 @@ describe(CourseInvites.name, () => {
 
     const participants = chance.integer({ min: 1, max: 3 })
 
-    render(<CourseInvites course={course} attendeesCount={participants} />, {
+    _render(<CourseInvites course={course} attendeesCount={participants} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -285,7 +285,7 @@ describe(CourseInvites.name, () => {
   it('does not accept invalid emails', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -310,7 +310,7 @@ describe(CourseInvites.name, () => {
   it('calls invites.send with a single valid email address', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -340,7 +340,7 @@ describe(CourseInvites.name, () => {
   it('calls invites.send with a csv email addresses', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -370,7 +370,7 @@ describe(CourseInvites.name, () => {
   it('calls invites.send when all emails are valid', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
     await userEvent.click(screen.getByTestId('course-invite-btn'))
@@ -402,7 +402,7 @@ describe(CourseInvites.name, () => {
   it('calls invites.send with left overs (not tagged)', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -435,7 +435,7 @@ describe(CourseInvites.name, () => {
   it('should accept emails with whitespace paddings', async () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -479,7 +479,7 @@ describe(CourseInvites.name, () => {
 
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: { activeRole: RoleName.TRAINER },
     })
 
@@ -503,7 +503,7 @@ describe(CourseInvites.name, () => {
 
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: {
         activeRole: RoleName.TRAINER,
         allowedRoles: new Set([RoleName.TRAINER, RoleName.BOOKING_CONTACT]),
@@ -535,7 +535,7 @@ describe(CourseInvites.name, () => {
 
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} />, {
+    _render(<CourseInvites course={course} />, {
       auth: {
         activeRole: RoleName.TRAINER,
         allowedRoles: new Set([RoleName.TRAINER, RoleName.BOOKING_CONTACT]),
@@ -545,7 +545,7 @@ describe(CourseInvites.name, () => {
     expect(screen.queryByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
-  it('should render progress export button for blended learning', () => {
+  it('should _render progress export button for blended learning', () => {
     const course = buildCourse({
       overrides: {
         go1Integration: true,
@@ -555,7 +555,7 @@ describe(CourseInvites.name, () => {
 
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} attendeesCount={1} />, {
+    _render(<CourseInvites course={course} attendeesCount={1} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
         allowedRoles: new Set([RoleName.TT_ADMIN]),
@@ -570,7 +570,7 @@ describe(CourseInvites.name, () => {
       },
     })
 
-    render(<CourseInvites course={course2} attendeesCount={1} />, {
+    _render(<CourseInvites course={course2} attendeesCount={1} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
         allowedRoles: new Set([RoleName.TT_ADMIN]),
@@ -580,7 +580,7 @@ describe(CourseInvites.name, () => {
     expect(screen.queryByTestId('progress-export')).toBeInTheDocument()
   })
 
-  it('should not render progress export button for non blended learning course', () => {
+  it('should not _render progress export button for non blended learning course', () => {
     const course = buildCourse({
       overrides: {
         type: Course_Type_Enum.Indirect,
@@ -589,7 +589,7 @@ describe(CourseInvites.name, () => {
 
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(<CourseInvites course={course} attendeesCount={1} />, {
+    _render(<CourseInvites course={course} attendeesCount={1} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
         allowedRoles: new Set([RoleName.TT_ADMIN]),
@@ -599,14 +599,14 @@ describe(CourseInvites.name, () => {
     expect(screen.queryByTestId('progress-export')).not.toBeInTheDocument()
   })
 
-  it('should not render progress export button if number of attendances is 0', () => {
+  it('should not _render progress export button if number of attendances is 0', () => {
     const course = buildCourse({
       overrides: {
         type: Course_Type_Enum.Indirect,
       },
     })
 
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <CourseInvites course={course} attendeesCount={0} />
       </Provider>,
@@ -630,7 +630,7 @@ describe(CourseInvites.name, () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <CourseInvites
           course={course}
@@ -673,7 +673,7 @@ describe(CourseInvites.name, () => {
 
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
-    render(
+    _render(
       <CourseInvites course={{ ...course, type: Course_Type_Enum.Indirect }} />,
       {
         auth: {

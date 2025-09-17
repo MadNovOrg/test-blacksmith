@@ -8,7 +8,7 @@ import {
   Order_By,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { buildOrder } from './test-utils'
 
@@ -37,7 +37,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -74,7 +74,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -113,7 +113,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -152,7 +152,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -189,7 +189,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -228,7 +228,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -265,7 +265,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,
@@ -304,7 +304,7 @@ describe('page: Orders sorting', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,

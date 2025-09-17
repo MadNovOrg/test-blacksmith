@@ -10,7 +10,7 @@ import {
   UserCoursesQueryVariables,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { buildUserCourse } from '../../utils/test-utils'
 
@@ -48,7 +48,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -100,7 +100,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -155,7 +155,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -197,7 +197,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -255,7 +255,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -331,7 +331,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -388,7 +388,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -449,7 +449,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -508,7 +508,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -583,7 +583,7 @@ describe('user-pages/MyCourses', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <AttendeeCourses />
       </Provider>,
@@ -697,7 +697,7 @@ describe('user-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <AttendeeCourses />
         </Provider>,
@@ -782,7 +782,7 @@ describe('user-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <AttendeeCourses />
         </Provider>,
@@ -861,7 +861,7 @@ describe('user-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <AttendeeCourses />
         </Provider>,

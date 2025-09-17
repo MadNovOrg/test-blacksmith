@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { renderHook } from '@test/index'
-import { render, screen, TestMemoryRouter, userEvent } from '@test/index'
+import { _render, screen, TestMemoryRouter, userEvent } from '@test/index'
 
 import { useTablePagination } from '.'
 
@@ -61,7 +61,7 @@ describe('useTablePagination', () => {
   })
 
   it('updates correctly on next page', async () => {
-    render(<Wrapper />)
+    _render(<Wrapper />)
 
     const displayed = screen.getByText('1–12 of 36')
     expect(displayed).toBeInTheDocument()
@@ -94,7 +94,7 @@ describe('useTablePagination', () => {
   })
 
   it('updates correctly on prev page', async () => {
-    render(<Wrapper />)
+    _render(<Wrapper />)
 
     const displayed = screen.getByText('1–12 of 36')
     expect(displayed).toBeInTheDocument()
@@ -129,7 +129,7 @@ describe('useTablePagination', () => {
   })
 
   it('resets the current page if the total changes', async () => {
-    render(<Wrapper total={48} />)
+    _render(<Wrapper total={48} />)
 
     // Go to last page
     await clickNext()

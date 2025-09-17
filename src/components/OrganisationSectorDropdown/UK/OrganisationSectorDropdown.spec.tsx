@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 
-import { render, renderHook, screen, userEvent } from '@test/index'
+import { _render, renderHook, screen, userEvent } from '@test/index'
 
 import {
   OrganisationSectorDropdown,
@@ -15,7 +15,7 @@ describe(OrganisationSectorDropdown.name, () => {
   } = renderHook(() => useForm())
   it('renders the component', () => {
     const testLabel = 'TEST'
-    render(
+    _render(
       <OrganisationSectorDropdown
         register={{ ...register('sector') }}
         label={testLabel}
@@ -26,7 +26,7 @@ describe(OrganisationSectorDropdown.name, () => {
   })
   it.each([...Object.keys(sectors)])('renders %s option', async option => {
     const sectorOption = sectors[option as keyof typeof sectors]
-    render(
+    _render(
       <OrganisationSectorDropdown
         register={{ ...register('sector') }}
         value={''}

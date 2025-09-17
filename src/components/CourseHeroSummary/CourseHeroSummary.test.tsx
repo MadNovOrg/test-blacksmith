@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Course_Delivery_Type_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { chance, render, renderHook, screen } from '@test/index'
+import { chance, _render, renderHook, screen } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -29,7 +29,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays basic course information', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -50,7 +50,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -72,7 +72,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -94,7 +94,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    _render(<CourseHeroSummary course={course} />)
 
     expect(
       screen.getByText(
@@ -114,7 +114,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -140,7 +140,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -165,7 +165,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -194,7 +194,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
     })
 
@@ -211,7 +211,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
     })
 
@@ -223,7 +223,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays course venue information', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />)
+    _render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByTestId('course-venue')).toHaveTextContent(
       `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.addressLineOne}, ${course.schedule[0].venue?.city}, ${course.schedule[0].venue?.postCode}, ${course.schedule[0].venue?.country}`,
@@ -241,7 +241,7 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    _render(<CourseHeroSummary course={course} />)
 
     expect(
       screen.getByText(
@@ -259,7 +259,7 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    render(<CourseHeroSummary course={course} />)
+    _render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Virtual')).toBeInTheDocument()
   })
@@ -267,7 +267,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays booking contact data in case of exisitng user for external user', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { activeRole: RoleName.TRAINER },
     })
 
@@ -289,7 +289,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays booking contact data in case of exisitng user for internal user', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -322,7 +322,7 @@ describe('component: CourseHeroSummary', () => {
     })
     course.bookingContact = undefined
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -342,7 +342,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays orgnisation key contact data in case of exisitng user for internal user', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -373,7 +373,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays orgnisation key contact data in case of exisitng user for external user', () => {
     const course = buildCourse()
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { activeRole: RoleName.TRAINER },
     })
 
@@ -409,7 +409,7 @@ describe('component: CourseHeroSummary', () => {
     })
     course.organizationKeyContact = undefined
 
-    render(<CourseHeroSummary course={course} />, {
+    _render(<CourseHeroSummary course={course} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -430,12 +430,12 @@ describe('component: CourseHeroSummary', () => {
   })
 
   describe('Slots', () => {
-    it('should render BackButton slot', () => {
+    it('should _render BackButton slot', () => {
       const course = buildCourse({
         overrides: {},
       })
 
-      render(
+      _render(
         <CourseHeroSummary
           course={course}
           slots={{
@@ -449,12 +449,12 @@ describe('component: CourseHeroSummary', () => {
       expect(screen.getByTestId('back-button')).toBeInTheDocument()
     })
 
-    it('should render EditButton slot', () => {
+    it('should _render EditButton slot', () => {
       const course = buildCourse({
         overrides: {},
       })
 
-      render(
+      _render(
         <CourseHeroSummary
           course={course}
           slots={{
@@ -468,12 +468,12 @@ describe('component: CourseHeroSummary', () => {
       expect(screen.getByTestId('edit-button')).toBeInTheDocument()
     })
 
-    it('should render OrderItem slot', () => {
+    it('should _render OrderItem slot', () => {
       const course = buildCourse({
         overrides: {},
       })
 
-      render(
+      _render(
         <CourseHeroSummary
           course={course}
           slots={{

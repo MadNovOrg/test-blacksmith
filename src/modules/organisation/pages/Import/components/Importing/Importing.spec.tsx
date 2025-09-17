@@ -5,7 +5,7 @@ import { interval, map, pipe } from 'wonka'
 import { ImportProvider } from '@app/components/ImportSteps'
 import { Import_Job_Status_Enum } from '@app/generated/graphql'
 
-import { render, renderHook, userEvent, waitFor } from '@test/index'
+import { _render, renderHook, userEvent, waitFor } from '@test/index'
 
 import { CHUNK_RESULT_ERROR } from '../../utils'
 
@@ -41,7 +41,7 @@ describe(Importing.name, () => {
         executeMutation: vi.fn(),
         executeSubscription: vi.fn(),
       } as unknown as Client)
-    return render(
+    return _render(
       <Provider value={mockClient}>
         <ImportProvider>
           <Importing />
@@ -49,12 +49,12 @@ describe(Importing.name, () => {
       </Provider>,
     )
   }
-  it('should render the Importing component', () => {
+  it('should _render the Importing component', () => {
     const { getByText, baseElement } = renderComponent()
     expect(baseElement).toBeTruthy()
     expect(getByText(t('steps.importing.title'))).toBeInTheDocument()
   })
-  it('should render the starting import step', () => {
+  it('should _render the starting import step', () => {
     const { getByText } = renderComponent()
     expect(getByText(t('steps.importing.starting'))).toBeInTheDocument()
   })

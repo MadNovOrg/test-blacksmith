@@ -10,7 +10,7 @@ import { GET_COURSE_QUERY } from '@app/modules/course_details/queries/get-course
 import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-participant-by-profile-id'
 import { Course, CourseParticipant, RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -96,7 +96,7 @@ describe(CourseDetails.name, () => {
     })
     const user = userEvent.setup()
 
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -118,7 +118,7 @@ describe(CourseDetails.name, () => {
 
   it('displays course hero info', () => {
     const course = buildCourse()
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -135,7 +135,7 @@ describe(CourseDetails.name, () => {
 
   it('displays an alert if user has been redirected from accepting the invite', () => {
     const course = buildCourse()
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -155,7 +155,7 @@ describe(CourseDetails.name, () => {
 
   it('displays tabs with course checklist and resources', () => {
     const course = buildCourse()
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -173,7 +173,7 @@ describe(CourseDetails.name, () => {
   it('has course evaluation button disabled if course has not started yet', () => {
     const course = buildNotStartedCourse()
 
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -205,7 +205,7 @@ describe(CourseDetails.name, () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -237,7 +237,7 @@ describe(CourseDetails.name, () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -276,7 +276,7 @@ describe(CourseDetails.name, () => {
       },
     })
 
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -301,7 +301,7 @@ describe(CourseDetails.name, () => {
 
   it("disables evaluation button if course has ended but the participant didn't attend the course", () => {
     const course = buildEndedCourse()
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -326,7 +326,7 @@ describe(CourseDetails.name, () => {
     const PROFILE_ID = chance.guid()
     const course = buildCourse()
 
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}
@@ -365,7 +365,7 @@ describe(CourseDetails.name, () => {
 
   it('disables the evaluation button and shows helper text if the participant has not submitted the health and safety form', async () => {
     const course = buildEndedCourse()
-    render(
+    _render(
       <Routes>
         <Route
           path={`/courses/:id/details`}

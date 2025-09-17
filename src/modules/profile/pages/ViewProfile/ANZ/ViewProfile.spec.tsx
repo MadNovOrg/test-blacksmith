@@ -7,7 +7,7 @@ import { ViewProfilePage } from '@app/modules/profile/pages/ViewProfile/ANZ'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildCertificate, buildProfile } from '@test/mock-data-utils'
 
 vi.mock('@app/modules/profile/hooks/useProfile/useProfile')
@@ -30,7 +30,7 @@ describe('page: ViewProfile', () => {
         executeQuery: () => never,
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <ViewProfilePage />
         </Provider>,
@@ -59,7 +59,7 @@ describe('page: ViewProfile', () => {
         executeQuery: () => never,
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <ViewProfilePage />
         </Provider>,
@@ -88,7 +88,7 @@ describe('page: ViewProfile', () => {
         executeQuery: () => never,
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <ViewProfilePage />
         </Provider>,
@@ -117,7 +117,7 @@ describe('page: ViewProfile', () => {
         executeQuery: () => never,
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <ViewProfilePage />
         </Provider>,

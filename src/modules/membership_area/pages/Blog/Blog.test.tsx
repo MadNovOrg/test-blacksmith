@@ -12,7 +12,7 @@ import {
 } from '@app/generated/graphql'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildPost } from '@test/mock-data-utils'
 
 import Blog from '.'
@@ -23,7 +23,7 @@ describe('page: Blog', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -51,7 +51,7 @@ describe('page: Blog', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -80,7 +80,7 @@ describe('page: Blog', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -126,7 +126,7 @@ describe('page: Blog', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -162,7 +162,7 @@ describe('page: Blog', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -211,7 +211,7 @@ describe('page: Blog', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -253,7 +253,7 @@ describe('page: Blog', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -287,7 +287,7 @@ describe('page: Blog', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -353,7 +353,7 @@ describe('page: Blog', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog" element={<Blog />} />

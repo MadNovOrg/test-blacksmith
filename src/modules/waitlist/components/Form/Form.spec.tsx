@@ -5,7 +5,7 @@ import { Recaptcha } from '@app/components/Recaptcha'
 import { createRecaptchaComp } from '@app/components/Recaptcha/test-utils'
 import { GetCourseResidingCountryQuery } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 
 import { Form, FormInputs } from './Form'
 
@@ -38,7 +38,7 @@ describe(`Waitlist: ${Form.name}`, () => {
   })
 
   it('validates form', async () => {
-    render(
+    _render(
       <Provider value={client}>
         <Form onSuccess={vi.fn()} saving={false} courseId={chance.integer()} />
       </Provider>,
@@ -78,7 +78,7 @@ describe(`Waitlist: ${Form.name}`, () => {
     }
     const onSuccessMock = vi.fn(() => never)
 
-    render(
+    _render(
       <Provider value={client}>
         <Form
           onSuccess={onSuccessMock}
@@ -127,7 +127,7 @@ describe(`Waitlist: ${Form.name}`, () => {
       recaptchaToken: 'token',
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <Form onSuccess={vi.fn()} saving={false} courseId={chance.integer()} />
       </Provider>,

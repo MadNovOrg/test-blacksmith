@@ -1,8 +1,8 @@
-import { renderHook } from '@testing-library/react'
 import { AnyVariables, useQuery, UseQueryResponse } from 'urql'
 
 import { Go1EnrollmentStatus } from '@app/generated/graphql'
 
+import { renderHook } from '@test/index'
 import { chance } from '@test/index'
 
 import useCourseParticipantGO1EnrollmentsByPK from './useCourseParticipantGO1EnrollmentsByPK'

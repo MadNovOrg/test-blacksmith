@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react'
-
 import { Course_Status_Enum } from '@app/generated/graphql'
+
+import { _render } from '@test/index'
 
 import { CourseParticipantRow } from './CourseParticipantRow'
 
@@ -14,7 +14,7 @@ describe('CourseParticipantRow', () => {
   }
 
   it('renders course name as link if showLink is true', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseParticipantRow courseInfo={courseInfo} isInternalUser={true} />,
     )
     const courseNameLink = getByTestId('course-name').querySelector('a')
@@ -23,7 +23,7 @@ describe('CourseParticipantRow', () => {
   })
 
   it('renders course name as text if showLink is false', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseParticipantRow
         courseInfo={{
           ...courseInfo,
@@ -37,7 +37,7 @@ describe('CourseParticipantRow', () => {
   })
 
   it('renders correct course action label', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseParticipantRow courseInfo={courseInfo} />,
     )
     const courseAction = getByTestId('course-action')
@@ -45,15 +45,15 @@ describe('CourseParticipantRow', () => {
   })
 
   it('renders correct course start date', () => {
-    const { getByText } = render(
+    const { getByText } = _render(
       <CourseParticipantRow courseInfo={courseInfo} />,
     )
     const courseStartDate = getByText('15 May 2024')
     expect(courseStartDate).toBeInTheDocument()
   })
 
-  it('does not render if shouldShowTheRow is false', () => {
-    const { container } = render(
+  it('does not _render if shouldShowTheRow is false', () => {
+    const { container } = _render(
       <CourseParticipantRow
         courseInfo={{
           ...courseInfo,

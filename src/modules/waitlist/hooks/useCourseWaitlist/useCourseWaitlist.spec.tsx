@@ -1,7 +1,8 @@
-import { renderHook } from '@testing-library/react'
 import { useQuery } from 'urql'
 
 import { Course_Delivery_Type_Enum } from '@app/generated/graphql'
+
+import { renderHook } from '@test/index'
 
 import { useCourseWaitlist, WAITLIST_COURSE } from './useCourseWaitlist'
 

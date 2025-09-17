@@ -3,7 +3,7 @@ import { fromValue } from 'wonka'
 
 import { GetOrgTypesQuery } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 import { buildOrgType } from '@test/mock-data-utils'
 
 import { OrgTypeSelector } from './OrgTypeSelector'
@@ -18,7 +18,7 @@ const urqlMockClient = {
 
 describe(OrgTypeSelector.name, () => {
   it("doesn't display options initially", async () => {
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <OrgTypeSelector value={''} disabled={false} sector="edu" />
       </Provider>,
@@ -32,7 +32,7 @@ describe(OrgTypeSelector.name, () => {
   })
 
   it('loads options', async () => {
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <OrgTypeSelector value={''} disabled={false} sector="edu" />
       </Provider>,

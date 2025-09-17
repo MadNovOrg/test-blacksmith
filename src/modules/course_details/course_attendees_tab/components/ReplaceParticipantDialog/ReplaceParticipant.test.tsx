@@ -1,4 +1,3 @@
-import { render, renderHook, within } from '@testing-library/react'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { useTranslation } from 'react-i18next'
 import { Client, Provider } from 'urql'
@@ -11,6 +10,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 
+import { _render, renderHook, within } from '@test/index'
 import { screen, chance, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
@@ -58,7 +58,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       fullName: chance.name(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
       </Provider>,
@@ -128,7 +128,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       fullName: chance.name(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
       </Provider>,
@@ -198,7 +198,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       fullName: chance.name(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
       </Provider>,
@@ -268,7 +268,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       fullName: chance.name(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
       </Provider>,
@@ -321,7 +321,7 @@ describe('page: ReplaceParticipantDialog.', () => {
       fullName: chance.name(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog course={course} participant={participant} />
       </Provider>,

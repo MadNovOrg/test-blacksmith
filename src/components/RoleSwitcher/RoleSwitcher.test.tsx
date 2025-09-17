@@ -3,7 +3,7 @@ import { getI18n } from 'react-i18next'
 
 import { RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import { RoleSwitcher } from './RoleSwitcher'
 
@@ -22,7 +22,7 @@ describe('component: RoleSwitcher', () => {
     const activeRole = RoleName.TRAINER
     const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
-    render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
+    _render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
 
     const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
 
@@ -33,7 +33,7 @@ describe('component: RoleSwitcher', () => {
     const activeRole = RoleName.TRAINER
     const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
-    render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
+    _render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
 
     expect(screen.queryByTestId('RoleSwitcher-list')).toBeNull() // list not shown
 
@@ -49,7 +49,7 @@ describe('component: RoleSwitcher', () => {
     const activeRole = RoleName.TRAINER
     const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
-    const { context } = render(<RoleSwitcher />, {
+    const { context } = _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -76,7 +76,7 @@ describe('component: RoleSwitcher', () => {
     const activeRole = RoleName.USER
     const allowedRoles = new Set([RoleName.USER])
 
-    render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
+    _render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
 
     expect(screen.queryByTestId('RoleSwitcher-btn')).not.toBeInTheDocument()
   })
@@ -94,7 +94,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -128,7 +128,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -157,7 +157,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -185,7 +185,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -214,7 +214,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -259,7 +259,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,
@@ -306,7 +306,7 @@ describe('component: RoleSwitcher', () => {
       RoleName.USER,
     ])
 
-    render(<RoleSwitcher />, {
+    _render(<RoleSwitcher />, {
       auth: {
         allowedRoles,
         activeRole,

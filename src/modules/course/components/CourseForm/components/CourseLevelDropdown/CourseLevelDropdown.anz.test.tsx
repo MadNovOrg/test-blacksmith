@@ -5,7 +5,7 @@ import { noop } from 'ts-essentials'
 import { Accreditors_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { AwsRegions, RoleName } from '@app/types'
 
-import { render, renderHook, screen, userEvent, within } from '@test/index'
+import { _render, renderHook, screen, userEvent, within } from '@test/index'
 
 import { CourseLevelDropdown } from './index'
 vi.mock('posthog-js/react', () => ({
@@ -36,7 +36,7 @@ describe('component: CourseLevelDropdown [ANZ]', () => {
   it('renders correctly when type is CLOSED', async () => {
     useFeatureFlagEnabledMock.mockResolvedValue(true)
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}
@@ -65,7 +65,7 @@ describe('component: CourseLevelDropdown [ANZ]', () => {
 
   it('renders correctly when type is INDIRECT', async () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
-    render(
+    _render(
       <CourseLevelDropdown
         value=""
         onChange={noop}

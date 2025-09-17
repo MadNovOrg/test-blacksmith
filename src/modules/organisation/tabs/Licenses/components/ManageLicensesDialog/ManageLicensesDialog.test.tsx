@@ -6,7 +6,7 @@ import {
   Go1LicensesChangeMutation,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 
 import { fillForm } from '../../test-utils'
 import { Type } from '../ManageLicensesForm'
@@ -36,7 +36,7 @@ describe('ManageLicensesDialog', () => {
       }),
     )
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageLicensesDialog
           orgId={orgId}
@@ -84,7 +84,7 @@ describe('ManageLicensesDialog', () => {
       }),
     )
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageLicensesDialog
           orgId={orgId}
@@ -136,7 +136,7 @@ describe('ManageLicensesDialog', () => {
         },
       }),
     )
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageLicensesDialog
           orgId={orgId}
@@ -196,7 +196,7 @@ describe('ManageLicensesDialog', () => {
       }),
     )
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageLicensesDialog
           orgId={orgId}
@@ -257,7 +257,7 @@ describe('ManageLicensesDialog', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ManageLicensesDialog
           orgId={orgId}

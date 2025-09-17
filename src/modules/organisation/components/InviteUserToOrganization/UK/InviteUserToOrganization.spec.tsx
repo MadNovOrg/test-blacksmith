@@ -15,7 +15,7 @@ import { SAVE_ORGANISATION_INVITES_MUTATION } from '@app/modules/organisation/qu
 import { OrgIndividualsSubtabs } from '@app/modules/organisation/tabs/OrgIndividualsTab'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
 import { InviteUserToOrganization } from './InviteUserToOrganization'
@@ -36,7 +36,7 @@ it('validates that at least one email has been entered', async () => {
     error: undefined,
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <InviteUserToOrganization />
     </Provider>,
@@ -59,7 +59,7 @@ it('validates that entered email is valid', async () => {
     error: undefined,
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <InviteUserToOrganization />
     </Provider>,
@@ -102,7 +102,7 @@ it('displays an error message that user already exist within organization', asyn
     error: undefined,
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route
@@ -173,7 +173,7 @@ it('saves org invites and redirects back to the organization individuals tab', a
     error: undefined,
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="organisations/:id">
@@ -217,7 +217,7 @@ it('allows an org admin to invite another org admin', async () => {
     error: undefined,
   })
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="organisations/:id">

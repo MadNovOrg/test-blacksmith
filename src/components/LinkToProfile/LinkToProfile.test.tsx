@@ -2,7 +2,7 @@ import React from 'react'
 
 import { RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { LinkToProfile } from './index'
 
@@ -11,7 +11,7 @@ describe('component: LinkToProfile', () => {
   const label = 'John Doe'
 
   it('displays the label', async () => {
-    render(
+    _render(
       <LinkToProfile profileId={profileId} isProfileArchived={false}>
         {label}
       </LinkToProfile>,
@@ -35,7 +35,7 @@ describe('component: LinkToProfile', () => {
 
   canViewProfileRoles.forEach(role => {
     it(`does display a link if the logged user is ${role} `, async () => {
-      render(
+      _render(
         <LinkToProfile profileId={profileId} isProfileArchived={false}>
           {label}
         </LinkToProfile>,
@@ -55,7 +55,7 @@ describe('component: LinkToProfile', () => {
 
   cannotViewProfileRoles.forEach(role => {
     it(`does not display a link if the logged user is ${role} `, async () => {
-      render(
+      _render(
         <LinkToProfile profileId={profileId} isProfileArchived={false}>
           {label}
         </LinkToProfile>,
@@ -87,7 +87,7 @@ describe('component: LinkToProfile', () => {
 
   canViewArchivedProfileRoles.forEach(role => {
     it(`does display a link if the attendee is archived and the logged user is ${role} `, async () => {
-      render(
+      _render(
         <LinkToProfile profileId={profileId} isProfileArchived={true}>
           {label}
         </LinkToProfile>,
@@ -107,7 +107,7 @@ describe('component: LinkToProfile', () => {
 
   cannotViewArchivedProfileRoles.forEach(role => {
     it(`does not display a link if the attendee is archived and the logged user is ${role} `, async () => {
-      render(
+      _render(
         <LinkToProfile profileId={profileId} isProfileArchived={true}>
           {label}
         </LinkToProfile>,

@@ -2,7 +2,7 @@ import { GetMainOrganisationDetailsQuery } from '@app/generated/graphql'
 import useOrgV2 from '@app/modules/organisation/hooks/UK/useOrgV2'
 import { RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
 import Organizations from './Organisations'
@@ -28,7 +28,7 @@ describe(Organizations.name, () => {
   })
 
   it('it displays checkbox next to each organisation while merging', () => {
-    render(
+    _render(
       <Organizations />,
       {
         auth: {

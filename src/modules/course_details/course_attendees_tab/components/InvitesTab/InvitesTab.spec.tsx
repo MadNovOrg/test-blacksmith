@@ -13,7 +13,7 @@ import {
 import { buildCourse } from '@app/modules/course/pages/CourseBuilder/test-utils'
 import { AwsRegions, Course, RoleName } from '@app/types'
 
-import { chance, render, renderHook, screen, userEvent } from '@test/index'
+import { chance, _render, renderHook, screen, userEvent } from '@test/index'
 import { buildOrganization, buildProfile } from '@test/mock-data-utils'
 
 import {
@@ -38,9 +38,9 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
       RoleName.SALES_ADMIN,
       RoleName.SALES_REPRESENTATIVE,
     ]
-    it('should render component with invites in it', () => {
+    it('should _render component with invites in it', () => {
       const inviteeEmail = chance.email()
-      render(
+      _render(
         <InvitesTab
           course={{} as Course}
           inviteStatus={Course_Invite_Status_Enum.Accepted}
@@ -57,7 +57,7 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
       )
       expect(screen.getByText(inviteeEmail)).toBeInTheDocument()
     })
-    it.each(allowedRoles)('should render action buttons for %s', role => {
+    it.each(allowedRoles)('should _render action buttons for %s', role => {
       const invites = [
         {
           id: chance.guid(),
@@ -87,7 +87,7 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
       const course = buildCourse({
         organization,
       })
-      render(
+      _render(
         <Provider value={client}>
           <InvitesTab
             course={course as unknown as Course}
@@ -127,7 +127,7 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
           },
         })
       })
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <InvitesTab
             course={buildCourse() as unknown as Course}
@@ -172,7 +172,7 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
           },
         })
       })
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <InvitesTab
             course={buildCourse() as unknown as Course}
@@ -274,7 +274,7 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
         type: Course_Type_Enum.Indirect,
       }) as unknown as Course
       course.organizationKeyContactProfileId = currentUser.id
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <InvitesTab
             course={course as unknown as Course}
@@ -391,7 +391,7 @@ describe.each([AwsRegions.Australia, AwsRegions.UK])(
       }) as unknown as Course
       course.bookingContactProfileId = currentUser.id
       course.status = Course_Status_Enum.Scheduled
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <InvitesTab
             course={course as unknown as Course}

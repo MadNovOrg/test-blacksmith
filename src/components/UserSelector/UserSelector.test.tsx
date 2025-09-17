@@ -4,7 +4,14 @@ import { fromValue } from 'wonka'
 
 import { GetOrgMembersQuery } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { UserSelector } from '.'
 
@@ -19,7 +26,7 @@ describe('component: UserSelector', () => {
   })
 
   it("doesn't display options initially", async () => {
-    render(
+    _render(
       <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />,
     )
 
@@ -49,7 +56,7 @@ describe('component: UserSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <UserSelector onChange={noop} onEmailChange={noop} organisationId="1" />
       </Provider>,
@@ -90,7 +97,7 @@ describe('component: UserSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <UserSelector
           onChange={onChangeMock}

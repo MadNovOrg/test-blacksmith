@@ -10,7 +10,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
 import { CourseTypeOrgRPPricings } from '@app/util'
 
-import { chance, render, renderHook, screen } from '@test/index'
+import { chance, _render, renderHook, screen } from '@test/index'
 
 import { ResourcePacksPricingProvider } from '../../ResourcePacksPricingProvider'
 import { useResourcePacksPricingContext } from '../../ResourcePacksPricingProvider/useResourcePacksPricingContext'
@@ -115,7 +115,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
   })
 
   CourseTypeOrgRPPricings.forEach(courseType => {
-    it(`should not render pricings table if there was an error fetching prices for course type: ${courseType}`, () => {
+    it(`should not _render pricings table if there was an error fetching prices for course type: ${courseType}`, () => {
       useResourcePacksPricingContextMock.mockReturnValueOnce({
         groupedData: groupedResourcePacksPricings,
         fetching: false,
@@ -136,7 +136,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         executeMutation: vi.fn(),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={mockClient}>
           <ResourcePacksPricingProvider>
             <ResourcePacksPricingByCourseType courseType={courseType} />
@@ -149,7 +149,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
       ).not.toBeInTheDocument()
     })
 
-    it(`should render resource packs pricings table for course type: ${courseType}`, async () => {
+    it(`should _render resource packs pricings table for course type: ${courseType}`, async () => {
       const pricingToCheck = groupedResourcePacksPricings.find(
         pricing => pricing.courseType === courseType,
       ) as GroupedResourcePacksPricing
@@ -172,7 +172,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         executeMutation: vi.fn(),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={mockClient}>
           <ResourcePacksPricingProvider>
             <ResourcePacksPricingByCourseType courseType={courseType} />
@@ -197,7 +197,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
       ).toBeInTheDocument()
     })
 
-    it(`should render EditOrgResourcePacksPricingsModal if there is a selected pricing for course type: ${courseType}`, () => {
+    it(`should _render EditOrgResourcePacksPricingsModal if there is a selected pricing for course type: ${courseType}`, () => {
       const pricingToCheck = groupedResourcePacksPricings.find(
         pricing => pricing.courseType === courseType,
       ) as GroupedResourcePacksPricing
@@ -219,7 +219,7 @@ describe('component: ResourcePacksPricingByCourseType', () => {
         executeMutation: vi.fn(),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={mockClient}>
           <ResourcePacksPricingProvider>
             <ResourcePacksPricingByCourseType courseType={courseType} />

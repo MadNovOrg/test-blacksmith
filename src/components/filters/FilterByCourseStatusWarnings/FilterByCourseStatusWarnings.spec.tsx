@@ -2,16 +2,16 @@ import React from 'react'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import { FilterByCourseStatusWarnings } from './index'
 
 describe(FilterByCourseStatusWarnings.name, () => {
   it('triggers onChange when filtering by show all warning statuses', async () => {
     const onChange = vi.fn()
-    render(<FilterByCourseStatusWarnings onChange={onChange} />)
+    _render(<FilterByCourseStatusWarnings onChange={onChange} />)
 
-    //Initial render with call of URL value
+    //Initial _render with call of URL value
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onChange).toHaveBeenCalledWith([])
 

@@ -1,4 +1,3 @@
-import { renderHook } from '@testing-library/react'
 import { useParams } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 
@@ -11,7 +10,8 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
 import { useGetAllAffiliatedOrgIds } from '@app/modules/organisation/hooks/useGetAllAffiliatedOrgIds'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { renderHook } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import { ResourcePacksPricingProvider } from '../../ResourcePacksPricingProvider'
 import { useResourcePacksPricingContext } from '../../ResourcePacksPricingProvider/useResourcePacksPricingContext'
@@ -124,7 +124,7 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
   } as unknown as Client
 
   const setup = () => {
-    return render(
+    return _render(
       <Provider value={mockClient}>
         <ResourcePacksPricingProvider>
           <ApplyMainOrgRPPricingToAffiliates />
@@ -169,14 +169,14 @@ describe('component: ApplyMainOrgPricesToAffiliates', () => {
     })
   })
 
-  it('should render the button', () => {
+  it('should _render the button', () => {
     setup()
     expect(
       screen.getByTestId('apply-main-org-prices-to-affiliates'),
     ).toBeInTheDocument()
   })
 
-  it('should render the modal when the button is clicked', async () => {
+  it('should _render the modal when the button is clicked', async () => {
     setup()
     const button = screen.getByTestId('apply-main-org-prices-to-affiliates')
     await userEvent.click(button)

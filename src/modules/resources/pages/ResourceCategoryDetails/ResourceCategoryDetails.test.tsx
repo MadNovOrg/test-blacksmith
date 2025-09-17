@@ -9,7 +9,7 @@ import {
 } from '@app/generated/graphql'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
-import { chance, render, screen } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { ResourceCategory } from '../../hooks/useResourceCategory'
 
@@ -21,7 +21,7 @@ describe('page: ResourceCategoryDetails', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -49,7 +49,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -124,7 +124,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -188,7 +188,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -230,7 +230,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -289,7 +289,7 @@ describe('page: ResourceCategoryDetails', () => {
           }),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <ResourceCategoryDetails />
         </Provider>,
@@ -367,7 +367,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -433,7 +433,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,
@@ -487,7 +487,7 @@ describe('page: ResourceCategoryDetails', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ResourceCategoryDetails />
       </Provider>,

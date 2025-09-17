@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { cleanup, render, renderHook, screen, waitFor } from '@test/index'
+import { cleanup, _render, renderHook, screen, waitFor } from '@test/index'
 
 import { EditProfileInputs } from '../../pages/EditProfile/utils'
 import { DietaryRestrictionRadioValues } from '../../utils'
@@ -14,8 +14,8 @@ describe(DietaryRestrictionsSection.name, () => {
       current: { t },
     },
   } = renderHook(() => useTranslation())
-  it('should render the DietaryRestrictionsSection component', () => {
-    render(
+  it('should _render the DietaryRestrictionsSection component', () => {
+    _render(
       <DietaryRestrictionsSection
         setValue={vi.fn()}
         profileDietaryRestrictions=""
@@ -26,8 +26,8 @@ describe(DietaryRestrictionsSection.name, () => {
       screen.getByText(t('dietary-restrictions-question')),
     ).toBeInTheDocument()
   })
-  it(`should render a text field if disabilities radio is set to ${DietaryRestrictionRadioValues.YES} `, async () => {
-    render(
+  it(`should _render a text field if disabilities radio is set to ${DietaryRestrictionRadioValues.YES} `, async () => {
+    _render(
       <DietaryRestrictionsSection
         setValue={vi.fn()}
         profileDietaryRestrictions=""
@@ -48,9 +48,9 @@ describe(DietaryRestrictionsSection.name, () => {
       v => v !== DietaryRestrictionRadioValues.YES,
     ),
   ])(
-    `should render the available radio options for dietary restrictions`,
+    `should _render the available radio options for dietary restrictions`,
     async disabilityRadioValue => {
-      render(
+      _render(
         <DietaryRestrictionsSection
           setValue={vi.fn()}
           profileDietaryRestrictions=""
@@ -71,7 +71,7 @@ describe(DietaryRestrictionsSection.name, () => {
   )
   it('updates value when radio button is clicked', async () => {
     const setValue = vi.fn()
-    render(
+    _render(
       <DietaryRestrictionsSection
         setValue={setValue}
         profileDietaryRestrictions=""

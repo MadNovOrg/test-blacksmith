@@ -2,7 +2,7 @@ import { useFeatureFlagEnabled } from 'posthog-js/react'
 
 import { AwsRegions, RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
 import { Tabs } from './Tabs'
@@ -21,41 +21,41 @@ describe(Tabs.name, () => {
   useFeatureFlagEnabledMock.mockReturnValue(true)
   const commonTest = (tab: string, region: AwsRegions) => {
     vi.stubEnv('VITE_AWS_REGION', region)
-    render(<Tabs organization={buildOrganization()} />)
+    _render(<Tabs organization={buildOrganization()} />)
     expect(screen.getByTestId(tab)).toBeInTheDocument()
   }
 
-  it('should render the component', () => {
-    render(<Tabs organization={buildOrganization()} />)
+  it('should _render the component', () => {
+    _render(<Tabs organization={buildOrganization()} />)
     expect(screen.getByTestId('org-overview')).toBeInTheDocument()
   })
-  it.each(commonTabsTestIds)('should render coomon tabs on anz %s', tab => {
+  it.each(commonTabsTestIds)('should _render coomon tabs on anz %s', tab => {
     commonTest(tab, AwsRegions.Australia)
   })
-  it.each(commonTabsTestIds)('should render coomon tabs on uk %s', tab => {
+  it.each(commonTabsTestIds)('should _render coomon tabs on uk %s', tab => {
     commonTest(tab, AwsRegions.UK)
   })
-  it('should not render the affiliated tab on UK', () => {
-    render(<Tabs organization={buildOrganization()} />)
+  it('should not _render the affiliated tab on UK', () => {
+    _render(<Tabs organization={buildOrganization()} />)
     expect(screen.queryByTestId('affiliated-orgs')).not.toBeInTheDocument()
   })
-  it('should render the affiliated tab on AU', () => {
+  it('should _render the affiliated tab on AU', () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
-    render(<Tabs organization={buildOrganization()} />)
+    _render(<Tabs organization={buildOrganization()} />)
     expect(screen.getByTestId('affiliated-orgs')).toBeInTheDocument()
   })
-  it('should render the resource packs tab on AU', () => {
+  it('should _render the resource packs tab on AU', () => {
     commonTest('org-resource-packs', AwsRegions.Australia)
   })
-  it('should not render the resource packs tab on UK', () => {
+  it('should not _render the resource packs tab on UK', () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
-    render(<Tabs organization={buildOrganization()} />)
+    _render(<Tabs organization={buildOrganization()} />)
     expect(screen.queryByTestId('org-resource-packs')).not.toBeInTheDocument()
   })
   it.each([RoleName.TT_ADMIN, RoleName.TT_OPS])(
-    'should render the permissions tab for allowed roles -- %s role',
+    'should _render the permissions tab for allowed roles -- %s role',
     role => {
-      render(<Tabs organization={buildOrganization()} />, {
+      _render(<Tabs organization={buildOrganization()} />, {
         auth: {
           activeRole: role,
         },
@@ -68,9 +68,9 @@ describe(Tabs.name, () => {
       role => role !== RoleName.TT_ADMIN && role !== RoleName.TT_OPS,
     ),
   ])(
-    'should not render the permissions tab for roles without permissions -- %s role',
+    'should not _render the permissions tab for roles without permissions -- %s role',
     role => {
-      render(<Tabs organization={buildOrganization()} />, {
+      _render(<Tabs organization={buildOrganization()} />, {
         auth: {
           activeRole: role,
         },
@@ -79,7 +79,7 @@ describe(Tabs.name, () => {
     },
   )
   it('should switch tabs on tab click', () => {
-    render(<Tabs organization={buildOrganization()} />)
+    _render(<Tabs organization={buildOrganization()} />)
     expect(screen.getByTestId('org-overview')).toBeInTheDocument()
     screen.getByTestId('org-details').click()
     expect(screen.getByTestId('org-details')).toBeInTheDocument()
@@ -92,10 +92,10 @@ describe(Tabs.name, () => {
   ]
 
   it.each(resourcePacksPricingAllowedRoles)(
-    'should render org resource packs pricing tab for role --%s',
+    'should _render org resource packs pricing tab for role --%s',
     role => {
       vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
-      render(<Tabs organization={buildOrganization()} />, {
+      _render(<Tabs organization={buildOrganization()} />, {
         auth: {
           activeRole: role,
         },
@@ -110,16 +110,19 @@ describe(Tabs.name, () => {
     Object.values(RoleName).filter(
       role => !resourcePacksPricingAllowedRoles.includes(role),
     ),
-  )('should not render org resource packs pricing tab for role -- %s', role => {
-    vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
+  )(
+    'should not _render org resource packs pricing tab for role -- %s',
+    role => {
+      vi.stubEnv('VITE_AWS_REGION', AwsRegions.Australia)
 
-    render(<Tabs organization={buildOrganization()} />, {
-      auth: {
-        activeRole: role,
-      },
-    })
-    expect(
-      screen.queryByTestId('org-resource-packs-pricing'),
-    ).not.toBeInTheDocument()
-  })
+      _render(<Tabs organization={buildOrganization()} />, {
+        auth: {
+          activeRole: role,
+        },
+      })
+      expect(
+        screen.queryByTestId('org-resource-packs-pricing'),
+      ).not.toBeInTheDocument()
+    },
+  )
 })

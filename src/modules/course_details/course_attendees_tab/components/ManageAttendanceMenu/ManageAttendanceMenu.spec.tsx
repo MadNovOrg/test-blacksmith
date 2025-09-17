@@ -6,7 +6,7 @@ import { CourseParticipant, RoleName } from '@app/types'
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -49,7 +49,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -87,7 +87,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({ overrides: { type: Course_Type_Enum.Closed } })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -134,7 +134,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -181,7 +181,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -228,7 +228,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -275,7 +275,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -322,7 +322,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -369,7 +369,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -416,7 +416,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -463,7 +463,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -501,7 +501,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse({ overrides: { type: Course_Type_Enum.Closed } })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -548,7 +548,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -582,7 +582,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse()
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -612,7 +612,7 @@ describe(ManageAttendanceMenu.name, () => {
     ).toBeInTheDocument()
   })
 
-  it('does not render correct options for an org admin of another org', async () => {
+  it('does not _render correct options for an org admin of another org', async () => {
     const actionableItem = {
       id: chance.guid(),
       course: { accreditedBy: Accreditors_Enum.Icm },
@@ -622,7 +622,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse()
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -655,7 +655,7 @@ describe(ManageAttendanceMenu.name, () => {
     } as CourseParticipant
     const course = buildCourse()
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -708,7 +708,7 @@ describe(ManageAttendanceMenu.name, () => {
     const onTransferMock = vi.fn()
     const onResendCourseInformationMock = vi.fn()
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -781,7 +781,7 @@ describe(ManageAttendanceMenu.name, () => {
       },
     })
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}
@@ -835,7 +835,7 @@ describe(ManageAttendanceMenu.name, () => {
     const onReplaceMock = vi.fn()
     const onTransferMock = vi.fn()
 
-    render(
+    _render(
       <ManageAttendanceMenu
         course={course}
         courseParticipant={actionableItem}

@@ -1,10 +1,9 @@
-import { renderHook, waitFor } from '@testing-library/react'
-
 import { Resource_Packs_Events_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { renderHook, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import {
   ResourcePacksEventCol,
@@ -30,7 +29,7 @@ describe('ResourcePacksEventCol', () => {
       },
     }
 
-    render(<ResourcePacksEventCol event={event} />)
+    _render(<ResourcePacksEventCol event={event} />)
 
     expect(screen.getByText(event.payload.invoiceNumber)).toBeInTheDocument()
 
@@ -52,7 +51,7 @@ describe('ResourcePacksEventCol', () => {
       },
     }
 
-    render(<ResourcePacksEventCol event={event} />, {
+    _render(<ResourcePacksEventCol event={event} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -81,7 +80,7 @@ describe('ResourcePacksEventCol', () => {
       },
     }
 
-    render(<ResourcePacksEventCol event={event} />, {
+    _render(<ResourcePacksEventCol event={event} />, {
       auth: { activeRole: RoleName.USER },
     })
 
@@ -106,7 +105,7 @@ describe('ResourcePacksEventCol', () => {
       },
     }
 
-    render(<ResourcePacksEventCol event={event} />)
+    _render(<ResourcePacksEventCol event={event} />)
 
     expect(screen.getByText('SomeOtherEvent')).toBeInTheDocument()
   })

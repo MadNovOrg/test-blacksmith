@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { cleanup, render, renderHook, screen, waitFor } from '@test/index'
+import { cleanup, _render, renderHook, screen, waitFor } from '@test/index'
 
 import {
   EditProfileInputs,
@@ -17,8 +17,8 @@ describe(DisabilitiesSection.name, () => {
       current: { t },
     },
   } = renderHook(() => useTranslation())
-  it('should render the DisabilitiesSection component', () => {
-    render(
+  it('should _render the DisabilitiesSection component', () => {
+    _render(
       <DisabilitiesSection
         setValue={vi.fn()}
         profileDisabilities=""
@@ -32,9 +32,9 @@ describe(DisabilitiesSection.name, () => {
       v => v !== DisabilitiesRadioValues.YES,
     ),
   ])(
-    `should NOT render a text field if disabilities radio is set to %s`,
+    `should NOT _render a text field if disabilities radio is set to %s`,
     async disabilityRadioValue => {
-      render(
+      _render(
         <DisabilitiesSection
           setValue={vi.fn()}
           profileDisabilities=""
@@ -55,8 +55,8 @@ describe(DisabilitiesSection.name, () => {
       })
     },
   )
-  it(`should render a text field if disabilities radio is set to ${DisabilitiesRadioValues.YES} `, async () => {
-    render(
+  it(`should _render a text field if disabilities radio is set to ${DisabilitiesRadioValues.YES} `, async () => {
+    _render(
       <DisabilitiesSection
         setValue={vi.fn()}
         profileDisabilities=""
@@ -72,7 +72,7 @@ describe(DisabilitiesSection.name, () => {
   })
   it('updates value when radio button is clicked', async () => {
     const setValue = vi.fn()
-    render(
+    _render(
       <DisabilitiesSection
         setValue={setValue}
         profileDisabilities=""
@@ -95,7 +95,7 @@ describe(DisabilitiesSection.name, () => {
   })
   it('sets value to rather not say when radio button is clicked', async () => {
     const setValue = vi.fn()
-    render(
+    _render(
       <DisabilitiesSection
         setValue={setValue}
         profileDisabilities=""

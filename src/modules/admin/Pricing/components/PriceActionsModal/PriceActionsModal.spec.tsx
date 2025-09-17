@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Course_Pricing } from '@app/generated/graphql'
 
-import { render, renderHook, screen, userEvent } from '@test/index'
+import { _render, renderHook, screen, userEvent } from '@test/index'
 
 import { PriceActionsModal } from '.'
 // not much to test other than rendering some text
@@ -16,7 +16,7 @@ describe(PriceActionsModal.name, () => {
   const onSaveMock = vi.fn()
   const pricingMock = {} as Course_Pricing
   it('renders the component', () => {
-    render(
+    _render(
       <PriceActionsModal
         onClose={onCloseMock}
         onSave={onSaveMock}
@@ -28,7 +28,7 @@ describe(PriceActionsModal.name, () => {
     ).toBeInTheDocument()
   })
   it('closes the modal on close button click', async () => {
-    render(
+    _render(
       <PriceActionsModal
         onClose={onCloseMock}
         onSave={onSaveMock}

@@ -12,7 +12,7 @@ import {
 } from '@app/generated/graphql'
 import { buildLesson, buildModule } from '@app/modules/grading/utils'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
 
@@ -39,7 +39,7 @@ it('shows a spinner while loading course', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
@@ -87,7 +87,7 @@ it('stores curriculum selection to local storage when selection changes', async 
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
@@ -166,7 +166,7 @@ it('displays selection from the local storage if previous selection was saved', 
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
@@ -214,7 +214,7 @@ it('navigates to the grading clearance step when clicked on the back button', as
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
@@ -301,7 +301,7 @@ it('saves modules selection when clicked on the submit button', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
@@ -364,7 +364,7 @@ it('displays an alert if there is an error saving the selection', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>
@@ -428,7 +428,7 @@ it('pre-selects all of the modules when starting grading', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
         <Routes>

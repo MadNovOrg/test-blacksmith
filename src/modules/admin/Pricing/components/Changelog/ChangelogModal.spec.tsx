@@ -11,7 +11,7 @@ import {
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -36,13 +36,13 @@ describe(ChangelogModal.name, () => {
     executeQuery: vi.fn(() => never),
   } as unknown as Client
   const setup = (client = clientMock, coursePricing = coursePricingMock) => {
-    return render(
+    return _render(
       <Provider value={client}>
         <ChangelogModal onClose={onCloseMock} coursePricing={coursePricing} />
       </Provider>,
     )
   }
-  it('should render the component', () => {
+  it('should _render the component', () => {
     setup()
     expect(
       screen.getByText(t('pages.course-pricing.modal-changelog-title')),
@@ -624,7 +624,7 @@ describe(`${ChangelogModal.name} Australia`, () => {
     executeQuery: vi.fn(() => never),
   } as unknown as Client
   const setup = (client = clientMock, coursePricing = coursePricingMock) => {
-    return render(
+    return _render(
       <Provider value={client}>
         <ChangelogModal onClose={onCloseMock} coursePricing={coursePricing} />
       </Provider>,

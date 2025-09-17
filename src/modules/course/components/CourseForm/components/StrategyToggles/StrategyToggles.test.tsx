@@ -8,7 +8,7 @@ import { InferType } from 'yup'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import {
   StrategyToggles,
@@ -43,7 +43,7 @@ const FormWrapper: React.FC<PropsWithChildren> = ({ children }) => {
 }
 
 it('validates at least one strategy is selected', async () => {
-  render(
+  _render(
     <FormWrapper>
       <StrategyToggles courseLevel={Course_Level_Enum.BildRegular} />
     </FormWrapper>,
@@ -57,7 +57,7 @@ it('validates at least one strategy is selected', async () => {
 })
 
 it('deselects all strategies and disables toggles if course is trainer conversion', async () => {
-  const { rerender } = render(
+  const { rerender } = _render(
     <FormWrapper>
       <StrategyToggles
         courseLevel={Course_Level_Enum.BildIntermediateTrainer}

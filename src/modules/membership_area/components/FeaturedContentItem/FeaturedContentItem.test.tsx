@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 import { buildWebinar } from '@test/mock-data-utils'
 
 import { FeaturedContentItem } from '.'
@@ -22,7 +22,7 @@ describe('component: FeaturedContentItem', () => {
       },
     }
 
-    render(
+    _render(
       <Routes>
         <Route element={<p>Webinar page</p>} path="webinars/:id" />
         <Route

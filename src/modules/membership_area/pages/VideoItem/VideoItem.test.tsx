@@ -5,7 +5,7 @@ import { never, fromValue } from 'wonka'
 
 import { VideoItemQuery } from '@app/generated/graphql'
 
-import { screen, render, within, chance } from '@test/index'
+import { screen, _render, within, chance } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
 import VideoItem from '.'
@@ -18,7 +18,7 @@ describe('page: VideoItem', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series/:id" element={<VideoItem />} />
@@ -53,7 +53,7 @@ describe('page: VideoItem', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series/:id" element={<VideoItem />} />
@@ -84,7 +84,7 @@ describe('page: VideoItem', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series/:id" element={<VideoItem />} />
@@ -122,7 +122,7 @@ describe('page: VideoItem', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series/:id" element={<VideoItem />} />
@@ -170,7 +170,7 @@ describe('page: VideoItem', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series/:id" element={<VideoItem />} />

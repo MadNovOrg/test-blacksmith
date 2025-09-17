@@ -6,7 +6,7 @@ import { fromValue } from 'wonka'
 
 import { GradedParticipantQuery, Grade_Enum } from '@app/generated/graphql'
 
-import { render, screen, within, userEvent, waitFor } from '@test/index'
+import { _render, screen, within, userEvent, waitFor } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
 import { buildLesson, buildModule as buildModuleV2 } from '../../utils'
@@ -45,7 +45,7 @@ describe('page: ParticipantGrade', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ParticipantGrade />
       </Provider>,
@@ -90,7 +90,7 @@ describe('page: ParticipantGrade', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ParticipantGrade />
       </Provider>,
@@ -144,7 +144,7 @@ describe('page: ParticipantGrade', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route

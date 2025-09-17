@@ -12,7 +12,7 @@ import {
 } from '@app/generated/graphql'
 import { Grade, RoleName } from '@app/types'
 
-import { render, screen, within, userEvent, chance } from '@test/index'
+import { _render, screen, within, userEvent, chance } from '@test/index'
 import { buildCourseModule, buildParticipant } from '@test/mock-data-utils'
 
 import { SAVE_COURSE_GRADING_MUTATION } from '../../queries/save-course-grading'
@@ -48,7 +48,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/:id/grading" element={<ICMGrading course={course} />} />
@@ -111,7 +111,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/:id/grading" element={<ICMGrading course={course} />} />
@@ -174,7 +174,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/:id/grading" element={<ICMGrading course={course} />} />
@@ -227,7 +227,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/:id/grading" element={<ICMGrading course={course} />} />
@@ -269,7 +269,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/:id/grading" element={<ICMGrading course={course} />} />
@@ -312,7 +312,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -398,7 +398,7 @@ describe('page: CourseGrading', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -446,7 +446,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -499,7 +499,7 @@ describe('page: CourseGrading', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -547,7 +547,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -594,7 +594,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -640,7 +640,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />
@@ -686,7 +686,7 @@ describe('page: CourseGrading', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id/grading" element={<ICMGrading course={course} />} />

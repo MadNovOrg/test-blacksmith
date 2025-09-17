@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { renderHook, act } from '@test/index'
-import { render, screen, userEvent, chance } from '@test/index'
+import { _render, screen, userEvent, chance } from '@test/index'
 
 import { useTableChecks } from '.'
 
@@ -87,7 +87,7 @@ describe('useTableChecks', () => {
     const obj1 = { id: chance.guid(), name: chance.name() }
     const obj2 = { id: chance.guid(), name: chance.name() }
 
-    render(<Table entries={[obj1, obj2]} />)
+    _render(<Table entries={[obj1, obj2]} />)
 
     const headCheck = screen.getByTestId('TableChecks-Head')
     const rowChecks = screen.getAllByTestId('TableChecks-Row')
@@ -101,7 +101,7 @@ describe('useTableChecks', () => {
     const obj1 = { id: chance.guid(), name: chance.name() }
     const obj2 = { id: chance.guid(), name: chance.name() }
 
-    render(<Table entries={[obj1, obj2]} />)
+    _render(<Table entries={[obj1, obj2]} />)
 
     const headCheck = screen.getByTestId('TableChecks-Head')
     const rowChecks = screen.getAllByTestId('TableChecks-Row')
@@ -120,7 +120,7 @@ describe('useTableChecks', () => {
     const obj1 = { id: chance.guid(), name: chance.name() }
     const obj2 = { id: chance.guid(), name: chance.name() }
 
-    render(<Table entries={[obj1, obj2]} />)
+    _render(<Table entries={[obj1, obj2]} />)
 
     const headCheck = screen.getByTestId('TableChecks-Head')
     const rowChecks = screen.getAllByTestId('TableChecks-Row')

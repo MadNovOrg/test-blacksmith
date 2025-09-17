@@ -1,7 +1,7 @@
-import { renderHook } from '@testing-library/react'
-
 import { Currency } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+
+import { renderHook } from '@test/index'
 
 import { useOrgResourcePacksPricingGetChangeEvent } from './use-org-resource-packs-pricing-change-event'
 

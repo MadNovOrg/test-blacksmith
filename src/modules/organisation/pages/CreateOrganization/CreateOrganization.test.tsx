@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AwsRegions, RoleName } from '@app/types'
 
-import { render, renderHook, waitFor, findByTestId } from '@test/index'
+import { _render, renderHook, waitFor, findByTestId } from '@test/index'
 
 import { CreateOrganization } from './CreateOrganization'
 
@@ -23,7 +23,7 @@ describe('Page: CreateOrganization UK', () => {
   } = renderHook(() => useTranslation())
 
   const setup = (role: RoleName) => {
-    render(<CreateOrganization />, {
+    _render(<CreateOrganization />, {
       auth: {
         activeRole: role,
         acl: {
@@ -68,7 +68,7 @@ describe('Page: CreateOrganization ANZ', () => {
   } = renderHook(() => useTranslation())
 
   const setup = (role: RoleName) => {
-    render(<CreateOrganization />, {
+    _render(<CreateOrganization />, {
       auth: {
         activeRole: role,
       },

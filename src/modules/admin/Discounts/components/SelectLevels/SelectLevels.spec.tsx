@@ -5,7 +5,7 @@ import { ComponentProps } from 'react'
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { AwsRegions } from '@app/types'
 
-import { fireEvent, render, screen } from '@test/index'
+import { fireEvent, _render, screen } from '@test/index'
 
 import { getAvailableCourseLevels } from '../../utils'
 
@@ -14,7 +14,7 @@ import { SelectLevels } from './SelectLevels'
 const onChangeMock = vi.fn()
 
 const setup = (props: Partial<ComponentProps<typeof SelectLevels>> = {}) => {
-  render(<SelectLevels value={[]} onChange={onChangeMock} {...props} />)
+  _render(<SelectLevels value={[]} onChange={onChangeMock} {...props} />)
 }
 
 describe(`${SelectLevels.name} [UK]`, () => {

@@ -6,7 +6,7 @@ import { Accreditors_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, within } from '@test/index'
+import { _render, screen, within } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseGradingDetails } from './CourseGradingDetails'
@@ -25,7 +25,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.FETCHING,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
@@ -45,7 +45,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.ERROR,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
@@ -67,7 +67,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
@@ -87,7 +87,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
         <Route
@@ -113,7 +113,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
@@ -142,7 +142,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
       </Routes>,
@@ -171,7 +171,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />}>
           <Route path="modules" element={<h1>Modules</h1>} />
@@ -191,7 +191,7 @@ describe('page: CourseGradingDetails', () => {
     expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
   })
 
-  it("doesn't render steps for BILD course", () => {
+  it("doesn't _render steps for BILD course", () => {
     const course = buildCourse({
       overrides: {
         accreditedBy: Accreditors_Enum.Bild,
@@ -204,7 +204,7 @@ describe('page: CourseGradingDetails', () => {
       status: LoadingStatus.SUCCESS,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/:id/grading-details" element={<CourseGradingDetails />}>
           <Route path="modules" element={<h1>Modules</h1>} />

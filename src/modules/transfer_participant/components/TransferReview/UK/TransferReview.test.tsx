@@ -27,7 +27,7 @@ import { TRANSFER_PARTICIPANT } from '@app/modules/transfer_participant/queries/
 import { getTransferTermsFee } from '@app/modules/transfer_participant/utils'
 import { EligibleCourse } from '@app/modules/transfer_participant/utils/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { TransferReview } from '.'
 
@@ -59,7 +59,7 @@ describe('page: TransferReview', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant }}
@@ -123,7 +123,7 @@ describe('page: TransferReview', () => {
       type: TransferFeeType.ApplyTerms,
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant, toCourse, fees }}
@@ -194,7 +194,7 @@ describe('page: TransferReview', () => {
       customFee: 50,
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant, toCourse, fees }}
@@ -258,7 +258,7 @@ describe('page: TransferReview', () => {
       type: TransferFeeType.Free,
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant, toCourse, fees }}
@@ -329,7 +329,7 @@ describe('page: TransferReview', () => {
       type: TransferFeeType.ApplyTerms,
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant, toCourse, fees }}
@@ -447,7 +447,7 @@ describe('page: TransferReview', () => {
       return <p>{message?.label}</p>
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant, toCourse, fees }}

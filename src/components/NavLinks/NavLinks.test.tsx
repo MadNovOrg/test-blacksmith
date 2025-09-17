@@ -5,7 +5,7 @@ import { Course_Level_Enum, Grade_Enum } from '@app/generated/graphql'
 import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas-context'
 import { RoleName } from '@app/types'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 
 import { NavLinks } from './NavLinks'
 
@@ -27,7 +27,7 @@ describe('component: NavLinks', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         profile: {
           courses: [
@@ -85,7 +85,7 @@ describe('component: NavLinks', () => {
     expect(supportLink).toBeInTheDocument()
   })
 
-  it("does not render resource and membership if user doesn't have a valid certificate", async () => {
+  it("does not _render resource and membership if user doesn't have a valid certificate", async () => {
     useResourcesMocked.mockReturnValue({
       fetching: false,
       allResourcesByArea: {
@@ -94,7 +94,7 @@ describe('component: NavLinks', () => {
       hasAnyResourceAccess: false,
     })
 
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.USER,
         allowedRoles: new Set([RoleName.USER]),
@@ -132,7 +132,7 @@ describe('component: NavLinks', () => {
     expect(supportLink).toBeInTheDocument()
   })
 
-  it("doesn't render resources link if a trainer doesn't have a valid certificate", () => {
+  it("doesn't _render resources link if a trainer doesn't have a valid certificate", () => {
     useResourcesMocked.mockReturnValue({
       fetching: false,
       allResourcesByArea: {
@@ -141,7 +141,7 @@ describe('component: NavLinks', () => {
       hasAnyResourceAccess: false,
     })
 
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TRAINER,
         activeCertificates: [],
@@ -162,7 +162,7 @@ describe('component: NavLinks', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         profile: {
           courses: [
@@ -210,7 +210,7 @@ describe('component: NavLinks', () => {
     expect(supportLink).toBeInTheDocument()
   })
 
-  it("doesn't render resources link if a user is organisation admin and doesn't have a valid certificate", () => {
+  it("doesn't _render resources link if a user is organisation admin and doesn't have a valid certificate", () => {
     useResourcesMocked.mockReturnValue({
       fetching: false,
       allResourcesByArea: {
@@ -219,7 +219,7 @@ describe('component: NavLinks', () => {
       hasAnyResourceAccess: false,
     })
 
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.USER,
         isOrgAdmin: true,
@@ -233,7 +233,7 @@ describe('component: NavLinks', () => {
   })
 
   it('renders SALES ADMIN role links', async () => {
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.SALES_ADMIN,
         allowedRoles: new Set([RoleName.SALES_ADMIN]),
@@ -269,7 +269,7 @@ describe('component: NavLinks', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
         allowedRoles: new Set([RoleName.TT_ADMIN]),
@@ -314,7 +314,7 @@ describe('component: NavLinks', () => {
   })
 
   it('renders TT OPS role links', async () => {
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TT_OPS,
         allowedRoles: new Set([RoleName.TT_OPS]),
@@ -354,7 +354,7 @@ describe('component: NavLinks', () => {
   })
 
   it('renders TRAINER role links', async () => {
-    render(<NavLinks />, {
+    _render(<NavLinks />, {
       auth: {
         activeRole: RoleName.TRAINER,
         allowedRoles: new Set([RoleName.TRAINER]),

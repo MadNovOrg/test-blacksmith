@@ -11,7 +11,7 @@ import {
 } from '@app/generated/graphql'
 
 import {
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -54,7 +54,7 @@ describe('component: OrgSelector', () => {
   })
 
   it("doesn't display options initially", async () => {
-    render(<OrgSelector onChange={noop} />, { auth: { profile } })
+    _render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
     await userEvent.click(
       screen.getByPlaceholderText('Start typing organisation', {
@@ -81,7 +81,7 @@ describe('component: OrgSelector', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <OrgSelector onChange={noop} />
       </Provider>,
@@ -129,7 +129,7 @@ describe('component: OrgSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgSelector onChange={noop} />
       </Provider>,
@@ -177,7 +177,7 @@ describe('component: OrgSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgSelector onChange={onChangeMock} />
       </Provider>,
@@ -227,7 +227,7 @@ describe('component: OrgSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgSelector
           onChange={onChangeMock}
@@ -276,7 +276,7 @@ describe('component: OrgSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgSelector
           onChange={onChangeMock}
@@ -329,7 +329,7 @@ describe('component: OrgSelector', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgSelector onChange={() => vi.fn()} allowAdding={true} />
       </Provider>,

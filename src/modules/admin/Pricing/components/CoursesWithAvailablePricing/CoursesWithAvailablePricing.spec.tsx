@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { GetCoursesWithPricingQuery } from '@app/generated/graphql'
 
-import { chance, fireEvent, render, renderHook, screen } from '@test/index'
+import { chance, fireEvent, _render, renderHook, screen } from '@test/index'
 
 import { CoursesWithAvailablePricing } from './CoursesWithAvailablePricing'
 
@@ -30,7 +30,7 @@ describe(CoursesWithAvailablePricing.name, () => {
     showCTA = showCTAMock,
     setCTAOption = setCTAOptionMock,
   }) => {
-    return render(
+    return _render(
       <CoursesWithAvailablePricing
         courses={courses}
         showCTA={showCTA}
@@ -39,7 +39,7 @@ describe(CoursesWithAvailablePricing.name, () => {
       />,
     )
   }
-  it('render the component', () => {
+  it('_render the component', () => {
     setup({})
     expect(screen.getByTestId('courses-with-price-dialog')).toBeInTheDocument()
   })

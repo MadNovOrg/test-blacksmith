@@ -19,7 +19,7 @@ import {
 import useTimeZones from '@app/hooks/useTimeZones'
 
 import {
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -78,7 +78,7 @@ describe('page: TransferDetails', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant }}
@@ -138,7 +138,7 @@ describe('page: TransferDetails', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{ fromCourse, participant, toCourse }}
@@ -221,7 +221,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           participantId={participant.id}
@@ -312,7 +312,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           participantId={participant.id}
@@ -397,7 +397,7 @@ describe('page: TransferDetails', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           participantId={participant.id}
@@ -467,7 +467,7 @@ describe('page: TransferDetails', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           participantId={participant.id}
@@ -564,7 +564,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           participantId={participant.id}
@@ -656,7 +656,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           participantId={participant.id}
@@ -748,7 +748,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           courseId={fromCourse.id}
@@ -840,7 +840,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           courseId={fromCourse.id}
@@ -960,7 +960,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           courseId={fromCourse.id}
@@ -1053,7 +1053,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           courseId={fromCourse.id}
@@ -1165,7 +1165,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           courseId={fromCourse.id}
@@ -1251,7 +1251,7 @@ describe('page: TransferDetails', () => {
       )
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           courseId={fromCourse.id}

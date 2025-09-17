@@ -7,7 +7,7 @@ import { ReInviteTrainerMutation } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { InviteStatus, RoleName } from '@app/types'
 
-import { providers, render, renderHook, screen } from '@test/index'
+import { providers, _render, renderHook, screen } from '@test/index'
 import {
   buildCourseAssistant,
   buildCourseLeader,
@@ -42,7 +42,7 @@ describe('component: CourseTrainersInfo', () => {
       buildCourseAssistant(),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
 
     expect(screen.getByText(t('show-more'))).toBeInTheDocument()
   })
@@ -54,7 +54,7 @@ describe('component: CourseTrainersInfo', () => {
       buildCourseAssistant(),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
 
     expect(screen.queryByText(t('show-more'))).toBeNull()
   })
@@ -75,7 +75,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
 
     providers.auth.activeRole = providers.auth.defaultRole
     const linkToProfile = screen.queryAllByTestId('link-to-profile')
@@ -100,7 +100,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
 
     providers.auth.activeRole = providers.auth.defaultRole
     const linkToProfile = screen.queryAllByTestId('link-to-profile')
@@ -127,7 +127,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
     expect(screen.getByText(t('trainer'))).toBeInTheDocument()
   })
 
@@ -149,7 +149,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
 
     expect(screen.getByText(leaderName)).toBeInTheDocument()
     expect(screen.getByText(assistantName)).toBeInTheDocument()
@@ -173,7 +173,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(<CourseTrainersInfo trainers={trainers} />)
+    _render(<CourseTrainersInfo trainers={trainers} />)
     expect(screen.getByText(t('assistant'))).toBeInTheDocument()
   })
 
@@ -187,7 +187,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(
+    _render(
       <Provider value={client}>
         <CourseTrainersInfo canReInviteTrainer={true} trainers={trainers} />
       </Provider>,

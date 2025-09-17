@@ -9,7 +9,7 @@ import { AuthContextType } from '@app/context/auth/types'
 import { GetOrgByIdQuery } from '@app/generated/graphql'
 import { GET_ORG_BY_ID } from '@app/modules/autoregister/queries/get-org-by-id'
 
-import { render, screen, chance } from '@test/index'
+import { _render, screen, chance } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { AutoRegisterPage } from './AutoRegister'
@@ -48,7 +48,7 @@ describe('page: AutoRegister', () => {
       },
     } as unknown as AuthContextType)
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/auto-register" element={<AutoRegisterPage />} />
@@ -92,7 +92,7 @@ describe('page: AutoRegister', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/auto-register" element={<AutoRegisterPage />} />
@@ -128,7 +128,7 @@ describe('page: AutoRegister', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/auto-register" element={<AutoRegisterPage />} />
@@ -162,7 +162,7 @@ describe('page: AutoRegister', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/auto-register" element={<AutoRegisterPage />} />
@@ -215,7 +215,7 @@ describe('page: AutoRegister', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/auto-register" element={<AutoRegisterPage />} />
@@ -251,7 +251,7 @@ describe('page: AutoRegister ANZ', () => {
       },
     } as unknown as AuthContextType)
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <Routes>
           <Route path="/auto-register" element={<AutoRegisterPage />} />

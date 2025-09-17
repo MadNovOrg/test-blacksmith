@@ -1,13 +1,13 @@
 import { DataGrid } from '@mui/x-data-grid'
 
-import { fireEvent, render, screen } from '@test/index'
+import { fireEvent, _render, screen } from '@test/index'
 
 import { EditPriceToolbar } from './EditPriceToolbar'
 describe(EditPriceToolbar.name, () => {
   const setRowsMock = vi.fn()
   const setRowsModelMock = vi.fn()
-  it('should render the component', () => {
-    render(
+  it('should _render the component', () => {
+    _render(
       <DataGrid
         rows={[]}
         columns={[]}
@@ -20,7 +20,7 @@ describe(EditPriceToolbar.name, () => {
     expect(screen.getByTestId('AddIcon')).toBeInTheDocument()
   })
   it('should add an additional pricing row', () => {
-    render(
+    _render(
       <DataGrid
         rows={[]}
         columns={[]}

@@ -1,5 +1,3 @@
-import { renderHook } from '@testing-library/react'
-
 import {
   Course_Level_Enum,
   Course_Type_Enum,
@@ -10,6 +8,7 @@ import { renderForm } from '@app/modules/course/components/CourseForm/test-utils
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { AwsRegions, RoleName } from '@app/types'
 
+import { renderHook } from '@test/index'
 import { chance, screen, userEvent } from '@test/index'
 
 import { CourseMaterialsSection } from './CourseMaterialsSection'

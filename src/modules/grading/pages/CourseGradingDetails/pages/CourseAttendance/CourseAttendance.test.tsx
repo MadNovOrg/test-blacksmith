@@ -14,7 +14,7 @@ import useCourseParticipants from '@app/modules/course_details/hooks/course-part
 import { CourseDetailsTabs } from '@app/modules/course_details/pages/CourseDetails'
 import { LoadingStatus } from '@app/util'
 
-import { render, renderHook, screen, waitForText, within } from '@test/index'
+import { _render, renderHook, screen, waitForText, within } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
 import { GradingDetailsProvider } from '../../components/GradingDetailsProvider'
@@ -49,7 +49,7 @@ describe('component: CourseAttendance', () => {
       executeMutation: never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -87,7 +87,7 @@ describe('component: CourseAttendance', () => {
       executeMutation: never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -133,7 +133,7 @@ describe('component: CourseAttendance', () => {
       executeMutation: never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -185,7 +185,7 @@ describe('component: CourseAttendance', () => {
       executeMutation: never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -244,7 +244,7 @@ describe('component: CourseAttendance', () => {
       executeMutation: never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -304,7 +304,7 @@ describe('component: CourseAttendance', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id">
@@ -375,7 +375,7 @@ describe('component: CourseAttendance', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path=":id">

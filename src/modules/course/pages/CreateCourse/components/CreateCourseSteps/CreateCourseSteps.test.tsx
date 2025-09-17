@@ -1,12 +1,12 @@
 import { Course_Type_Enum } from '@app/generated/graphql'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { CreateCourseSteps } from '.'
 
 describe('component: CreateCourseSteps', () => {
   it('displays correct steps for OPEN course type', () => {
-    render(
+    _render(
       <CreateCourseSteps type={Course_Type_Enum.Open} completedSteps={[]} />,
     )
 
@@ -20,7 +20,7 @@ describe('component: CreateCourseSteps', () => {
   })
 
   it('displays correct steps for CLOSED course type', () => {
-    render(
+    _render(
       <CreateCourseSteps type={Course_Type_Enum.Closed} completedSteps={[]} />,
     )
 
@@ -34,7 +34,7 @@ describe('component: CreateCourseSteps', () => {
   })
 
   it('displays correct steps for INDIRECT course type', () => {
-    render(
+    _render(
       <CreateCourseSteps
         type={Course_Type_Enum.Indirect}
         completedSteps={[]}
@@ -51,7 +51,7 @@ describe('component: CreateCourseSteps', () => {
   })
 
   it('adds correct steps when a course has Go1 integration', () => {
-    render(
+    _render(
       <CreateCourseSteps
         type={Course_Type_Enum.Indirect}
         completedSteps={[]}

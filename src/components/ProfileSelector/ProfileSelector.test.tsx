@@ -4,7 +4,7 @@ import { fromValue } from 'wonka'
 
 import { FindProfilesQuery } from '@app/generated/graphql'
 
-import { render, screen, userEvent, within, waitFor } from '@test/index'
+import { _render, screen, userEvent, within, waitFor } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { ProfileSelector } from '.'
@@ -20,7 +20,7 @@ describe('component: ProfileSelector', () => {
   })
 
   it("doesn't display options initially", async () => {
-    render(<ProfileSelector onChange={noop} />)
+    _render(<ProfileSelector onChange={noop} />)
 
     await userEvent.click(screen.getByPlaceholderText('Search for a profile'))
 
@@ -48,7 +48,7 @@ describe('component: ProfileSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ProfileSelector onChange={noop} orgId={ORG_ID} />
       </Provider>,
@@ -86,7 +86,7 @@ describe('component: ProfileSelector', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ProfileSelector onChange={onChangeMock} orgId={ORG_ID} />
       </Provider>,

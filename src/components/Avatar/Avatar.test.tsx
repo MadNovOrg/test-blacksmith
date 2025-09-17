@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { render, screen, within, chance } from '@test/index'
+import { _render, screen, within, chance } from '@test/index'
 
 import { Avatar } from './Avatar'
 
 describe('component: Avatar', () => {
   it('renders as expected without props', async () => {
-    const { container } = render(<Avatar />)
+    const { container } = _render(<Avatar />)
 
     const avatar = container.querySelector('.MuiAvatar-root')
     expect(avatar).toBeInTheDocument()
@@ -18,7 +18,7 @@ describe('component: Avatar', () => {
   it('renders image from src provided', async () => {
     const img = chance.url()
 
-    const { container } = render(<Avatar src={img} />)
+    const { container } = _render(<Avatar src={img} />)
 
     const avatarImg = container.querySelector(`[src="${img}"]`)
     expect(avatarImg).toBeInTheDocument()
@@ -29,7 +29,7 @@ describe('component: Avatar', () => {
     const [firstName, lastName] = ['John', 'Doe']
     const initials = `${firstName[0]}${lastName[0]}`
 
-    const { container } = render(<Avatar src={img} />)
+    const { container } = _render(<Avatar src={img} />)
 
     const avatarImg = container.querySelector(`[src="${img}"]`)
     expect(avatarImg).toBeInTheDocument()
@@ -41,7 +41,7 @@ describe('component: Avatar', () => {
       const [firstName, lastName] = ['John', 'Doe']
       const initials = `${firstName[0]}${lastName[0]}`
 
-      render(<Avatar name={`${firstName} ${lastName}`} />)
+      _render(<Avatar name={`${firstName} ${lastName}`} />)
 
       expect(screen.getByText(initials)).toBeInTheDocument()
     })
@@ -50,7 +50,7 @@ describe('component: Avatar', () => {
       const [firstName, lastName] = ['John', 'Doe']
       const initials = `${firstName[0]}${lastName[0]}`
 
-      render(<Avatar name={`${firstName} ${lastName}`} />)
+      _render(<Avatar name={`${firstName} ${lastName}`} />)
 
       expect(screen.getByText(initials)).toBeInTheDocument()
     })
@@ -59,7 +59,7 @@ describe('component: Avatar', () => {
       const [firstName] = ['John', 'Doe']
       const initials = firstName[0]
 
-      render(<Avatar name={firstName} />)
+      _render(<Avatar name={firstName} />)
 
       expect(screen.getByText(initials)).toBeInTheDocument()
     })

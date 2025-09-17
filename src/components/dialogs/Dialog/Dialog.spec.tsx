@@ -1,13 +1,13 @@
 import { Button } from '@mui/material'
 
-import { render, fireEvent, waitForCalls } from '@test/index'
+import { _render, fireEvent, waitForCalls } from '@test/index'
 
 import { Dialog } from './Dialog'
 
 describe(Dialog.name, () => {
-  it('should not render children when open is false', async () => {
+  it('should not _render children when open is false', async () => {
     // Act
-    const { queryByTestId } = render(
+    const { queryByTestId } = _render(
       <Dialog open={false} onClose={vi.fn()}>
         <p data-testid="dialog-children">test</p>
       </Dialog>,
@@ -17,9 +17,9 @@ describe(Dialog.name, () => {
     expect(queryByTestId('dialog-children')).not.toBeInTheDocument()
   })
 
-  it('should render children when open is true', async () => {
+  it('should _render children when open is true', async () => {
     // Act
-    const { queryByTestId } = render(
+    const { queryByTestId } = _render(
       <Dialog open={true} onClose={vi.fn()}>
         <p data-testid="dialog-children">test</p>
       </Dialog>,
@@ -29,9 +29,9 @@ describe(Dialog.name, () => {
     expect(queryByTestId('dialog-children')).toBeInTheDocument()
   })
 
-  it('should render title when provided', async () => {
+  it('should _render title when provided', async () => {
     // Act
-    const { queryByTestId } = render(
+    const { queryByTestId } = _render(
       <Dialog
         open={true}
         title={<p data-testid="dialog-title">my title</p>}
@@ -45,9 +45,9 @@ describe(Dialog.name, () => {
     expect(queryByTestId('dialog-title')).toBeInTheDocument()
   })
 
-  it('should render close button by default', async () => {
+  it('should _render close button by default', async () => {
     // Act
-    const { queryByTestId } = render(
+    const { queryByTestId } = _render(
       <Dialog open={true} onClose={vi.fn()}></Dialog>,
     )
 
@@ -60,7 +60,7 @@ describe(Dialog.name, () => {
     const onClose = vi.fn()
 
     // Act
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <Dialog open={true} onClose={onClose}></Dialog>,
     )
 
@@ -71,9 +71,9 @@ describe(Dialog.name, () => {
     await waitForCalls(onClose)
   })
 
-  it('should not render close button when showClose is false', async () => {
+  it('should not _render close button when showClose is false', async () => {
     // Act
-    const { queryByTestId } = render(
+    const { queryByTestId } = _render(
       <Dialog open={true} showClose={false} onClose={vi.fn()}></Dialog>,
     )
 
@@ -82,11 +82,11 @@ describe(Dialog.name, () => {
   })
 
   describe('Slots', () => {
-    it('should render Title slot', () => {
+    it('should _render Title slot', () => {
       // Arrange
       const TitleSlot = () => <>TitleSlot</>
       // Act
-      const { queryByText } = render(
+      const { queryByText } = _render(
         <Dialog
           open={true}
           showClose={false}
@@ -101,11 +101,11 @@ describe(Dialog.name, () => {
       expect(queryByText('TitleSlot')).toBeInTheDocument()
     })
 
-    it('should render Subtitle slot', () => {
+    it('should _render Subtitle slot', () => {
       // Arrange
       const SubtitleSlot = () => <>SubtitleSlot</>
       // Act
-      const { queryByText } = render(
+      const { queryByText } = _render(
         <Dialog
           open={true}
           showClose={false}
@@ -120,11 +120,11 @@ describe(Dialog.name, () => {
       expect(queryByText('SubtitleSlot')).toBeInTheDocument()
     })
 
-    it('should render Content slot', () => {
+    it('should _render Content slot', () => {
       // Arrange
       const ContentSlot = () => <>ContentSlot</>
       // Act
-      const { queryByText } = render(
+      const { queryByText } = _render(
         <Dialog
           open={true}
           showClose={false}
@@ -139,7 +139,7 @@ describe(Dialog.name, () => {
       expect(queryByText('ContentSlot')).toBeInTheDocument()
     })
 
-    it('should render Actions slot', () => {
+    it('should _render Actions slot', () => {
       // Arrange
       const ActionsSlot = () => (
         <>
@@ -148,7 +148,7 @@ describe(Dialog.name, () => {
         </>
       )
       // Act
-      const { queryAllByRole, queryByText } = render(
+      const { queryAllByRole, queryByText } = _render(
         <Dialog
           open={true}
           showClose={false}

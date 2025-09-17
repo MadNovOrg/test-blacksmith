@@ -1,14 +1,14 @@
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { ConfirmDialog } from './ConfirmDialog'
 
 describe(ConfirmDialog.name, () => {
-  it('should render dialog as expected', async () => {
+  it('should _render dialog as expected', async () => {
     const title = 'Dialog title'
     const okLabel = 'OK'
     const cancelLabel = 'Never mind'
     const message = 'Message'
-    render(
+    _render(
       <ConfirmDialog
         open={true}
         title={title}

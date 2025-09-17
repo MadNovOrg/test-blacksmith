@@ -6,7 +6,7 @@ import { fromValue } from 'wonka'
 import { TrainerCoursesQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen, within } from '@test/index'
+import { _render, screen, within } from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
 
 import { buildTrainerCourse } from '../../utils/test-utils'
@@ -33,7 +33,7 @@ describe('trainers-pages/MyCourses', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -68,7 +68,7 @@ describe('trainers-pages/MyCourses', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,
@@ -103,7 +103,7 @@ describe('trainers-pages/MyCourses', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,

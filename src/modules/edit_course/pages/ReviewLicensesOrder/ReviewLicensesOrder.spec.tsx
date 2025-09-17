@@ -17,7 +17,14 @@ import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course
 import { AwsRegions, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, cleanup, render, screen, userEvent, within } from '@test/index'
+import {
+  chance,
+  cleanup,
+  _render,
+  screen,
+  userEvent,
+  within,
+} from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -50,7 +57,7 @@ describe(ReviewLicensesOrder.name, () => {
     cleanup()
   })
 
-  it('should render', async () => {
+  it('should _render', async () => {
     const startDate = addDays(new Date(), 2)
     const endDate = addHours(startDate, 8)
 
@@ -114,7 +121,7 @@ describe(ReviewLicensesOrder.name, () => {
       executeMutation: () => () => vi.fn(() => never),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -226,7 +233,7 @@ describe(ReviewLicensesOrder.name, () => {
       executeMutation: () => () => vi.fn(() => never),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>

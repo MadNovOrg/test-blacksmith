@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { AttendeeMenu } from './AttendeeMenu'
 
@@ -20,7 +20,7 @@ describe('component: AttendeeMenu', () => {
     ]
     const placeholder = 'Placeholder text for attendee menu'
     const value = 'value'
-    render(
+    _render(
       <AttendeeMenu
         options={options}
         placeholder={placeholder}

@@ -7,7 +7,7 @@ import {
   CancelMyselfFromCourseWaitlistMutation,
 } from '@app/generated/graphql'
 
-import { render, screen, chance, waitFor } from '@test/index'
+import { _render, screen, chance, waitFor } from '@test/index'
 
 import { CourseWaitlistCancellation } from './CourseWaitlistCancellation'
 
@@ -24,7 +24,7 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
     } as unknown as Client
 
     // Act
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -54,7 +54,7 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
     } as unknown as Client
 
     // Act
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -90,7 +90,7 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
     } as unknown as Client
 
     // Act
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -133,7 +133,7 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
     } as unknown as Client
 
     // Act
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -179,7 +179,7 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
     } as unknown as Client
 
     // Act
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -220,7 +220,7 @@ describe(`page: ${CourseWaitlistCancellation.name}`, () => {
         }),
     } as unknown as Client
     // Act
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route

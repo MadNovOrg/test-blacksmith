@@ -12,7 +12,14 @@ import {
   ReplaceParticipantMutationVariables,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import {
@@ -38,7 +45,7 @@ describe(ReplaceParticipantDialog.name, () => {
       avatar: chance.url(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog participant={participant} />
       </Provider>,
@@ -61,7 +68,7 @@ describe(ReplaceParticipantDialog.name, () => {
 
     const onCloseMock = vi.fn()
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog
           participant={participant}
@@ -110,7 +117,7 @@ describe(ReplaceParticipantDialog.name, () => {
 
     const onSuccessMock = vi.fn()
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog
           participant={participant}
@@ -155,7 +162,7 @@ describe(ReplaceParticipantDialog.name, () => {
 
     const onSuccessMock = vi.fn()
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog
           participant={participant}
@@ -195,7 +202,7 @@ describe(ReplaceParticipantDialog.name, () => {
       avatar: chance.url(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog
           participant={participant}
@@ -242,7 +249,7 @@ describe(ReplaceParticipantDialog.name, () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog participant={participant} course={course} />
       </Provider>,
@@ -293,7 +300,7 @@ describe(ReplaceParticipantDialog.name, () => {
       avatar: chance.url(),
     }
 
-    render(
+    _render(
       <Provider value={client}>
         <ReplaceParticipantDialog participant={participant} />
       </Provider>,

@@ -9,7 +9,7 @@ import {
 } from '@app/generated/graphql'
 import { SET_COURSE_TRAINER_STATUS } from '@app/modules/trainer_courses/queries/set-course-trainer-status'
 
-import { chance, render, screen, userEvent, within } from '@test/index'
+import { chance, _render, screen, userEvent, within } from '@test/index'
 
 import { AcceptDeclineCourse } from '.'
 
@@ -25,7 +25,7 @@ describe('AcceptDeclineCourse', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse
           onUpdate={vi.fn()}
@@ -54,7 +54,7 @@ describe('AcceptDeclineCourse', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse
           onUpdate={vi.fn()}
@@ -83,7 +83,7 @@ describe('AcceptDeclineCourse', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse
           onUpdate={vi.fn()}
@@ -140,7 +140,7 @@ describe('AcceptDeclineCourse', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse onUpdate={onUpdateMock} trainer={trainer} />
       </Provider>,
@@ -200,7 +200,7 @@ describe('AcceptDeclineCourse', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse onUpdate={onUpdateMock} trainer={trainer} />
       </Provider>,
@@ -236,7 +236,7 @@ describe('AcceptDeclineCourse', () => {
       executeMutation: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse
           onUpdate={onUpdateMock}
@@ -275,7 +275,7 @@ describe('AcceptDeclineCourse', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <AcceptDeclineCourse
           onUpdate={onUpdateMock}

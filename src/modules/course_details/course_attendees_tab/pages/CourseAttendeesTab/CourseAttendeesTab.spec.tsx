@@ -18,7 +18,7 @@ import { buildOrder } from '@app/modules/order_details/pages/OrderDetails/mock-u
 import { Course, CourseParticipant, RoleName } from '@app/types'
 import { DEFAULT_PAGINATION_LIMIT, LoadingStatus } from '@app/util'
 
-import { render, renderHook, screen, within } from '@test/index'
+import { _render, renderHook, screen, within } from '@test/index'
 import {
   buildCourse,
   buildInvite,
@@ -97,7 +97,7 @@ describe(CourseAttendeesTab.name, () => {
       mutate: vi.fn(),
     })
 
-    render(<CourseAttendeesTab course={course} />)
+    _render(<CourseAttendeesTab course={course} />)
 
     expect(
       screen.getByTestId('course-participants-fetching'),
@@ -236,7 +236,7 @@ describe(CourseAttendeesTab.name, () => {
         executeMutation: vi.fn(() => never),
       } as unknown as Client
       // Act
-      render(
+      _render(
         <Provider value={urqlMockClient}>
           <CourseAttendeesTab course={tableCourse} />
         </Provider>,
@@ -437,7 +437,7 @@ describe(CourseAttendeesTab.name, () => {
       data: { course },
     })
 
-    render(<CourseAttendeesTab course={course} />)
+    _render(<CourseAttendeesTab course={course} />)
 
     const noAttendeesMesage = screen.getByTestId(
       'course-participants-zero-message',
@@ -469,7 +469,7 @@ describe(CourseAttendeesTab.name, () => {
       data: { course },
     })
 
-    render(<CourseAttendeesTab course={course} />)
+    _render(<CourseAttendeesTab course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -512,7 +512,7 @@ describe(CourseAttendeesTab.name, () => {
       data: { course },
     })
 
-    render(<CourseAttendeesTab course={course} />)
+    _render(<CourseAttendeesTab course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -575,7 +575,7 @@ describe(CourseAttendeesTab.name, () => {
       },
     })
 
-    render(<CourseAttendeesTab course={openCourse} />, {
+    _render(<CourseAttendeesTab course={openCourse} />, {
       auth: { activeRole: RoleName.TT_ADMIN },
     })
 
@@ -650,7 +650,7 @@ describe(CourseAttendeesTab.name, () => {
       },
     })
 
-    render(<CourseAttendeesTab course={openCourse} />, {
+    _render(<CourseAttendeesTab course={openCourse} />, {
       auth: { activeRole: RoleName.SALES_ADMIN },
     })
 
@@ -679,7 +679,7 @@ describe(CourseAttendeesTab.name, () => {
     })
 
     it('shows no invites pending message if list is empty', async () => {
-      render(<CourseAttendeesTab course={course} />)
+      _render(<CourseAttendeesTab course={course} />)
 
       await userEvent.click(screen.getByText('Pending (0)', { exact: false }))
 
@@ -710,7 +710,7 @@ describe(CourseAttendeesTab.name, () => {
         total: 3,
       })
 
-      render(<CourseAttendeesTab course={course} />, {
+      _render(<CourseAttendeesTab course={course} />, {
         auth: { activeRole: RoleName.TT_ADMIN },
       })
 

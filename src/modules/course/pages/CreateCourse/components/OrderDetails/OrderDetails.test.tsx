@@ -19,7 +19,7 @@ import { QUERY as BILD_STRATEGIES_QUERY } from '@app/modules/course/queries/get-
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { AwsRegions, BildStrategies, ValidCourseInput } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 
 import { CreateCourseProvider, useCreateCourse } from '../CreateCourseProvider'
 
@@ -101,7 +101,7 @@ describe('component: OrderDetails UK', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -195,7 +195,7 @@ describe('component: OrderDetails UK', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -281,7 +281,7 @@ describe('component: OrderDetails UK', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -375,7 +375,7 @@ describe('component: OrderDetails UK', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -460,7 +460,7 @@ describe('component: OrderDetails UK', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -540,7 +540,7 @@ describe('component: OrderDetails UK', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Open}
@@ -614,7 +614,7 @@ describe('component: OrderDetails ANZ', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -696,7 +696,7 @@ describe('component: OrderDetails ANZ', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -769,7 +769,7 @@ describe('component: OrderDetails ANZ', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}
@@ -850,7 +850,7 @@ describe('component: OrderDetails ANZ', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Open}

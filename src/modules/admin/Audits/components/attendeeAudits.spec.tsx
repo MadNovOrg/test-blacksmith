@@ -3,7 +3,7 @@ import {
   GetAttendeeAuditLogsQuery,
 } from '@app/generated/graphql'
 
-import { render, screen, waitFor } from '@test/index'
+import { _render, screen, waitFor } from '@test/index'
 
 import useAttendeeAuditLogs from '../hooks/useAttendeeAuditLogs'
 
@@ -62,7 +62,7 @@ const exampleLogs: GetAttendeeAuditLogsQuery['logs'] = [
 // TODO: Add file download test using playwright after merging TTHP-3752
 describe('Attendee Audit Logs', () => {
   describe(AttendeeCancellationTable.name, () => {
-    it('should render the table', async () => {
+    it('should _render the table', async () => {
       // Arrange
       useAttendeeAuditLogsMock.mockReturnValue({
         logs: exampleLogs,
@@ -72,7 +72,7 @@ describe('Attendee Audit Logs', () => {
       })
 
       // Act
-      render(<AttendeeCancellationTable />)
+      _render(<AttendeeCancellationTable />)
 
       // Assert
       expect(screen.getAllByRole('row')).toHaveLength(2)
@@ -101,7 +101,7 @@ describe('Attendee Audit Logs', () => {
         getUnpagedLogs: () => resolveDelayed(logs),
       })
 
-      render(<AttendeeCancellationTable />)
+      _render(<AttendeeCancellationTable />)
 
       // Act
       const exportButton = screen.getByTestId('export-audits-button')
@@ -183,7 +183,7 @@ describe('Attendee Audit Logs', () => {
         __typename: 'course_participant_audit',
       },
     ]
-    it('should render the table', async () => {
+    it('should _render the table', async () => {
       // Arrange
       useAttendeeAuditLogsMock.mockReturnValue({
         logs: transferLogs,
@@ -193,7 +193,7 @@ describe('Attendee Audit Logs', () => {
       })
 
       // Act
-      render(<AttendeeTransferTable />)
+      _render(<AttendeeTransferTable />)
 
       // Assert
       expect(screen.getAllByRole('row')).toHaveLength(2)
@@ -204,7 +204,7 @@ describe('Attendee Audit Logs', () => {
   })
 
   describe(AttendeeReplacementTable.name, () => {
-    it('should render the table', async () => {
+    it('should _render the table', async () => {
       // Arrange
       useAttendeeAuditLogsMock.mockReturnValue({
         logs: exampleLogs,
@@ -214,7 +214,7 @@ describe('Attendee Audit Logs', () => {
       })
 
       // Act
-      render(<AttendeeReplacementTable />)
+      _render(<AttendeeReplacementTable />)
 
       // Assert
       expect(screen.getAllByRole('row')).toHaveLength(2)

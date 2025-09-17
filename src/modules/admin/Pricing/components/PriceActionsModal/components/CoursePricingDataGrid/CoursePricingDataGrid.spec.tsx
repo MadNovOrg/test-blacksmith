@@ -1,5 +1,4 @@
 import { GridRowModes } from '@mui/x-data-grid'
-import { waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import format from 'date-fns/format'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +13,8 @@ import {
 } from '@app/generated/graphql'
 import { GET_COURSES_WITH_AVAILABLE_PRICING_QUERY } from '@app/modules/admin/Pricing/queries'
 
-import { render, renderHook, screen } from '@test/index'
+import { waitFor } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 import { buildCoursePricing } from '@test/mock-data-utils'
 
 import {
@@ -188,7 +188,7 @@ describe(CoursePricingDataGrid.name, () => {
     pricingMock?: Course_Pricing | null
   } = {}) => {
     const defaultClient = createMockClient()
-    return render(
+    return _render(
       <Provider value={client ?? defaultClient}>
         <CoursePricingDataGrid
           onSave={onSaveMock}

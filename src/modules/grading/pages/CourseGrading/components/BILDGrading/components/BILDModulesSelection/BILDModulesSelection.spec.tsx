@@ -1,7 +1,7 @@
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { Strategy } from '@app/types'
 
-import { render, screen, userEvent, within } from '@test/index'
+import { _render, screen, userEvent, within } from '@test/index'
 
 import { BILDModulesSelection } from '.'
 
@@ -19,7 +19,7 @@ describe(BILDModulesSelection.name, () => {
       },
     }
 
-    render(
+    _render(
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={vi.fn()}
@@ -84,7 +84,7 @@ describe(BILDModulesSelection.name, () => {
       },
     }
 
-    render(
+    _render(
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={vi.fn()}
@@ -107,7 +107,7 @@ describe(BILDModulesSelection.name, () => {
       },
     }
 
-    render(
+    _render(
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={vi.fn()}
@@ -138,7 +138,7 @@ describe(BILDModulesSelection.name, () => {
       },
     }
 
-    render(
+    _render(
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={vi.fn()}
@@ -168,7 +168,7 @@ describe(BILDModulesSelection.name, () => {
       },
     }
 
-    render(
+    _render(
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={vi.fn()}
@@ -206,7 +206,7 @@ describe(BILDModulesSelection.name, () => {
       },
     }
 
-    render(
+    _render(
       <BILDModulesSelection
         strategyModules={strategyModules}
         onChange={onChangeMock}
@@ -253,7 +253,7 @@ describe(BILDModulesSelection.name, () => {
         },
       }
 
-      render(
+      _render(
         <BILDModulesSelection
           strategyModules={strategyModules}
           onChange={vi.fn()}

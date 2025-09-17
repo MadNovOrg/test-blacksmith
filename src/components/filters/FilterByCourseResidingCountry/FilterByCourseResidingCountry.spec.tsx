@@ -9,7 +9,7 @@ import {
 } from '@app/generated/graphql'
 import { AwsRegions } from '@app/types'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import {
   GET_ANZ_DISTINCT_COURSE_RESIDING_COUNTRIES_QUERY,
@@ -106,7 +106,7 @@ describe(FilterByCourseResidingCountry.name, () => {
   })
   it('Triggers onChange when residing country = England is selected', async () => {
     const onChange = vi.fn()
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
       </Provider>,
@@ -124,7 +124,7 @@ describe(FilterByCourseResidingCountry.name, () => {
 
   it('Does not display duplicate countries', async () => {
     const onChange = vi.fn()
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
       </Provider>,
@@ -147,7 +147,7 @@ describe(FilterByCourseResidingCountry.name, () => {
       'Moldova, Republic of',
       'United States',
     ]
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
       </Provider>,
@@ -206,7 +206,7 @@ describe(FilterByCourseResidingCountry.name, () => {
   it('All countries should be visible in dropdown', async () => {
     const onChange = vi.fn()
     const countries = ['Australia', 'Fiji', 'New Zealand']
-    render(
+    _render(
       <Provider value={urqlMockClient}>
         <FilterByCourseResidingCountry onChange={onChange} />
       </Provider>,

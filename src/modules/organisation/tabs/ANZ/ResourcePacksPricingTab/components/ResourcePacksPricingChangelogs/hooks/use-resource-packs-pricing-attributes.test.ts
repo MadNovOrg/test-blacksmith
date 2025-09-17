@@ -1,8 +1,9 @@
-import { renderHook } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+
+import { renderHook } from '@test/index'
 
 import { useResourcePacksPricingAttributes } from './use-resource-packs-pricing-attributes'
 

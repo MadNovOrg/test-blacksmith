@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@app/context/auth'
 import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 
 import { CourseExceptionsLogTable } from '.'
 
@@ -24,7 +24,7 @@ describe(CourseExceptionsLogTable.name, () => {
     },
   } = renderHook(() => useTranslation())
   const setup = (loading?: boolean) =>
-    render(
+    _render(
       <CourseExceptionsLogTable
         loading={loading ?? false}
         logs={[]}
@@ -32,7 +32,7 @@ describe(CourseExceptionsLogTable.name, () => {
         activeTab={Course_Audit_Type_Enum.Approved}
       />,
     )
-  it('should render the component', () => {
+  it('should _render the component', () => {
     // Act
     setup()
 
@@ -41,7 +41,7 @@ describe(CourseExceptionsLogTable.name, () => {
       screen.getByTestId('course-exceptions-log-table'),
     ).toBeInTheDocument()
   })
-  it('should render all the required table columns', () => {
+  it('should _render all the required table columns', () => {
     // Arrange
     const cols = Object.values(
       t('pages.admin.course-exceptions-log.table-cols', {

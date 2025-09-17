@@ -9,7 +9,7 @@ import {
   GetEvaluationsQuery,
 } from '@app/generated/graphql'
 
-import { render, renderHook, screen, userEvent } from '@test/index'
+import { _render, renderHook, screen, userEvent } from '@test/index'
 import { buildProfile, buildCourse } from '@test/mock-data-utils'
 
 import { EvaluationSummaryTab } from './EvaluationSummaryTab'
@@ -48,7 +48,7 @@ describe('component: EvaluationSummaryTab', () => {
     },
   } = renderHook(() => useTranslation())
   it('displays a spinner while data is loading', () => {
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"
@@ -63,7 +63,7 @@ describe('component: EvaluationSummaryTab', () => {
 
   describe(`doesn't display an alert message if course status is different from ${Course_Status_Enum.GradeMissing} or ${Course_Status_Enum.EvaluationMissing}`, () => {
     it(`lead trainer and course status is ${Course_Status_Enum.Scheduled}`, () => {
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -91,7 +91,7 @@ describe('component: EvaluationSummaryTab', () => {
             },
           }),
       } as unknown as Client
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -119,7 +119,7 @@ describe('component: EvaluationSummaryTab', () => {
             },
           }),
       } as unknown as Client
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -153,7 +153,7 @@ describe('component: EvaluationSummaryTab', () => {
             },
           }),
       } as unknown as Client
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -187,7 +187,7 @@ describe('component: EvaluationSummaryTab', () => {
             },
           }),
       } as unknown as Client
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -209,7 +209,7 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     it('assistant trainer', () => {
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -227,7 +227,7 @@ describe('component: EvaluationSummaryTab', () => {
 
   describe("doesn't display an alert message for the trainer to submit the course evaluation if they have already done so", () => {
     it('leader trainer', () => {
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -243,7 +243,7 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     it('assistant trainer', () => {
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -271,7 +271,7 @@ describe('component: EvaluationSummaryTab', () => {
             },
           }),
       } as unknown as Client
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -310,7 +310,7 @@ describe('component: EvaluationSummaryTab', () => {
             },
           }),
       } as unknown as Client
-      render(
+      _render(
         <Routes>
           <Route
             path="/courses/:id/details"
@@ -350,7 +350,7 @@ describe('component: EvaluationSummaryTab', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"
@@ -381,7 +381,7 @@ describe('component: EvaluationSummaryTab', () => {
           },
         }),
     } as unknown as Client
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"

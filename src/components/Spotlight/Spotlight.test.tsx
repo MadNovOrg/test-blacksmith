@@ -1,6 +1,6 @@
-import { cleanup, render } from '@testing-library/react'
 import { describe, it, expect, beforeEach } from 'vitest'
 
+import { cleanup, _render } from '@test/index'
 import { screen } from '@test/index'
 
 import Spotlight from './Spotlight'
@@ -13,7 +13,7 @@ describe('Spotlight', () => {
   })
 
   it('renders nothing if open is false', () => {
-    const { container } = render(
+    const { container } = _render(
       <Spotlight open={false} positionTargetId="target">
         <div>Child</div>
       </Spotlight>,
@@ -27,7 +27,7 @@ describe('Spotlight', () => {
     target.id = 'target'
     document.body.appendChild(target)
 
-    const { unmount } = render(
+    const { unmount } = _render(
       <Spotlight open={true} positionTargetId="target">
         <div>Child</div>
       </Spotlight>,
@@ -47,7 +47,7 @@ describe('Spotlight', () => {
     target.id = 'target'
     document.body.appendChild(target)
 
-    render(
+    _render(
       <Spotlight open={true} positionTargetId="target">
         <div data-testid="child">Child</div>
       </Spotlight>,

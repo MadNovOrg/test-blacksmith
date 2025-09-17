@@ -11,7 +11,7 @@ import { useOrganisationProfilesByCertificateLevel } from '@app/modules/organisa
 import { useProfilesWithOrganisations } from '@app/modules/organisation/hooks/useProfilesWithOrganisations/useProfilesWithOrganisations'
 import { GET_PROFILES_WITH_UPCOMING_ENROLLMENTS } from '@app/modules/organisation/hooks/useProfilesWithUpcomingEnrollments/useProfilesWithUpcomingEnrollments'
 
-import { chance, render, renderHook, screen } from '@test/index'
+import { chance, _render, renderHook, screen } from '@test/index'
 
 import { IndividualsByLevelList } from './IndividualsByLevelList'
 
@@ -41,13 +41,13 @@ const useOrganisationProfilesByCertificateLevelMock = vi.mocked(
 const useOrganisationsForProfilesMock = vi.mocked(useProfilesWithOrganisations)
 
 describe(IndividualsByLevelList.name, () => {
-  it('should render', () => {
-    const { container } = render(
+  it('should _render', () => {
+    const { container } = _render(
       <IndividualsByLevelList orgId={''} courseLevel={null} />,
     )
     expect(container).toBeInTheDocument()
   })
-  it('should render profiles in table', () => {
+  it('should _render profiles in table', () => {
     const {
       result: {
         current: { t },
@@ -77,7 +77,7 @@ describe(IndividualsByLevelList.name, () => {
       fetching: false,
     })
 
-    render(
+    _render(
       <IndividualsByLevelList
         orgId={''}
         courseLevel={Course_Level_Enum.Advanced}
@@ -93,7 +93,7 @@ describe(IndividualsByLevelList.name, () => {
       ),
     ).toBeInTheDocument()
   })
-  it("should render profile's organisations", () => {
+  it("should _render profile's organisations", () => {
     const userFullName = chance.name()
     const date = '2021-12-12'
     const orgName1 = chance.name()
@@ -156,7 +156,7 @@ describe(IndividualsByLevelList.name, () => {
       fetching: false,
     })
 
-    render(
+    _render(
       <IndividualsByLevelList
         orgId={''}
         courseLevel={Course_Level_Enum.Advanced}
@@ -166,7 +166,7 @@ describe(IndividualsByLevelList.name, () => {
       expect(screen.getByText(orgName)).toBeInTheDocument()
     })
   })
-  it("should render profile's enrollments", () => {
+  it("should _render profile's enrollments", () => {
     const {
       result: {
         current: { t },
@@ -240,7 +240,7 @@ describe(IndividualsByLevelList.name, () => {
         }
       },
     } as unknown as Client
-    render(
+    _render(
       <Provider value={client}>
         <IndividualsByLevelList
           orgId={''}

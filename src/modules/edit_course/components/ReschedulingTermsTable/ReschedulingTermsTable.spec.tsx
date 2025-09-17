@@ -2,7 +2,7 @@ import { addDays, addWeeks } from 'date-fns'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 
-import { screen, within, render } from '@test/index'
+import { screen, within, _render } from '@test/index'
 
 import { ReschedulingTermsTable } from '.'
 
@@ -15,7 +15,7 @@ describe('component: ReschedulingTermsTable', () => {
     ] as const
   ).forEach(level => {
     it(`displays correct rows for ${level}`, () => {
-      render(<ReschedulingTermsTable startDate={new Date()} level={level} />)
+      _render(<ReschedulingTermsTable startDate={new Date()} level={level} />)
 
       const free = screen.getByTestId('fee-row-0-fee')
       const fiftheen = screen.getByTestId('fee-row-15-fee')
@@ -38,7 +38,7 @@ describe('component: ReschedulingTermsTable', () => {
     })
 
     it(`marks fee as free if start date is more than 4 weeks ahaid for ${level}`, () => {
-      render(
+      _render(
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 5)}
           level={level}
@@ -51,7 +51,7 @@ describe('component: ReschedulingTermsTable', () => {
     })
 
     it(`marks fee as 2-4 weeks if start date is within 2-4 weeks range for ${level}`, () => {
-      render(
+      _render(
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 3)}
           level={level}
@@ -64,7 +64,7 @@ describe('component: ReschedulingTermsTable', () => {
     })
 
     it(`marks fee as less then two weeks if start date is less then 2 weeks ahaid for ${level}`, () => {
-      render(
+      _render(
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 1)}
           level={level}
@@ -83,7 +83,7 @@ describe('component: ReschedulingTermsTable', () => {
     ] as const
   ).forEach(trainerLevel => {
     it(`displays correct rows for ${trainerLevel} course level`, async () => {
-      render(
+      _render(
         <ReschedulingTermsTable startDate={new Date()} level={trainerLevel} />,
       )
 
@@ -104,7 +104,7 @@ describe('component: ReschedulingTermsTable', () => {
     })
 
     it(`marks fee as free if start is more then 4 weeks ahaid for ${trainerLevel}`, () => {
-      render(
+      _render(
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 5)}
           level={trainerLevel}
@@ -117,7 +117,7 @@ describe('component: ReschedulingTermsTable', () => {
     })
 
     it(`marks 25% fee if start date is 1-4 weeks range for ${trainerLevel}`, () => {
-      render(
+      _render(
         <ReschedulingTermsTable
           startDate={addWeeks(new Date(), 3)}
           level={trainerLevel}
@@ -130,7 +130,7 @@ describe('component: ReschedulingTermsTable', () => {
     })
 
     it(`marks 50% fee if start date is 0-1 weeks range for ${trainerLevel}`, () => {
-      render(
+      _render(
         <ReschedulingTermsTable
           startDate={addDays(new Date(), 4)}
           level={trainerLevel}

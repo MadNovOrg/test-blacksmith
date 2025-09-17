@@ -18,7 +18,7 @@ import {
   RoleName,
 } from '@app/types'
 
-import { render, renderHook, screen, within } from '@test/index'
+import { _render, renderHook, screen, within } from '@test/index'
 
 import { buildUserCourse } from '../../utils/test-utils'
 
@@ -38,7 +38,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
   ])(
     'display status filter %s for booking contact and org key contact',
     async status => {
-      render(<ManageContactRoleCourses />, {
+      _render(<ManageContactRoleCourses />, {
         auth: { activeRole: RoleName.BOOKING_CONTACT },
       })
 
@@ -82,7 +82,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses />
       </Provider>,
@@ -147,7 +147,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses />
       </Provider>,
@@ -229,7 +229,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses isBookingContact={true} />
       </Provider>,
@@ -304,7 +304,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses isBookingContact={true} />
       </Provider>,
@@ -351,7 +351,7 @@ describe('Booking contact and Org key contact manage courses page', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ManageContactRoleCourses />
       </Provider>,

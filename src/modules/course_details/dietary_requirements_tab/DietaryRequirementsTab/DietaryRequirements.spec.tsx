@@ -6,7 +6,7 @@ import { GetCourseParticipantDietOrDisabilitiesDataQuery } from '@app/generated/
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { RoleName } from '@app/types'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 import { buildProfile, buildCourse } from '@test/mock-data-utils'
 
 import { DietaryRequirementsTab } from './DietaryRequirements'
@@ -42,7 +42,7 @@ describe(DietaryRequirementsTab.name, () => {
     useScopedTranslation('pages.course-details.tabs.dietary-requirements'),
   )
   beforeEach(() => {
-    render(
+    _render(
       <Routes>
         <Route
           path="/courses/:id/details"

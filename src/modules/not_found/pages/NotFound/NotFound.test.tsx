@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { NotFound } from './index'
 const mockNavigate = vi.fn()
@@ -11,12 +11,12 @@ vi.mock('react-router-dom', async () => ({
 
 describe('NotFound page', () => {
   it('renders NotFound with default title', async () => {
-    render(<NotFound showTitle={true} />)
+    _render(<NotFound showTitle={true} />)
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
   it('renders NotFound with custom title', async () => {
     const title = '404'
-    render(<NotFound showTitle={true} title={title} />)
+    _render(<NotFound showTitle={true} title={title} />)
     expect(screen.getByText('404')).toBeInTheDocument()
   })
 })

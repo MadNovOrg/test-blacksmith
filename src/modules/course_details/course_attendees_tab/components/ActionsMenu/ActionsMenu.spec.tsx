@@ -1,7 +1,7 @@
 import { ActionsMenu } from './ActionsMenu'
 
 describe(ActionsMenu.name, () => {
-  it('should render component', () => {
+  it('should _render component', () => {
     // Assert
     expect(true).toBeTruthy()
   })

@@ -7,7 +7,7 @@ import {
   ToggleAttendanceMutationVariables,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import { AttendingToggle, toggleAttendanceMutation } from './AttendingToggle'
 
@@ -16,7 +16,7 @@ it('displays N/A if there is no information if participant attended a course or 
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingToggle
         participant={{
@@ -37,7 +37,7 @@ it('marks the chip as disabled', () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingToggle
         participant={{
@@ -62,7 +62,7 @@ it('displays Attended chip if a participant attended a course', () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingToggle
         participant={{
@@ -83,7 +83,7 @@ it("displays Did not attend chip if a participant didn't attend a course", () =>
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingToggle
         participant={{
@@ -126,7 +126,7 @@ it('toggles attendance when chip is clicked', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <AttendingToggle
         participant={{
@@ -173,7 +173,7 @@ it('updates attendance chip after toggling', async () => {
     },
   } as unknown as Client
 
-  const { rerender } = render(
+  const { rerender } = _render(
     <Provider value={client}>
       <AttendingToggle
         participant={{

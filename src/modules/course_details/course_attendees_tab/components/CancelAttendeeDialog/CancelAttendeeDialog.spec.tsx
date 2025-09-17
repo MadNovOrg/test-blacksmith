@@ -1,17 +1,17 @@
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
 
 import { CancelAttendeeDialog } from './CancelAttendeeDialog'
 
 describe(CancelAttendeeDialog.name, () => {
-  it('should render component', () => {
+  it('should _render component', () => {
     const mockParticipant = buildParticipant()
     const mockCourse = buildCourse()
 
-    render(
+    _render(
       <CancelAttendeeDialog
         participant={mockParticipant}
         course={mockCourse}
@@ -33,7 +33,7 @@ describe(CancelAttendeeDialog.name, () => {
         },
       })
 
-      render(
+      _render(
         <CancelAttendeeDialog
           participant={mockParticipant}
           course={mockCourse}

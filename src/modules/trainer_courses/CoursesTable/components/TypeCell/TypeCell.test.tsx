@@ -1,9 +1,10 @@
-import { render } from '@testing-library/react'
 import { t } from 'i18next'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
 import i18n from '@app/i18n/config'
 import { TableCourse } from '@app/modules/trainer_courses/utils'
+
+import { _render } from '@test/index'
 
 import { TypeCell } from './TypeCell'
 
@@ -22,7 +23,7 @@ describe('TypeCell', () => {
   })
 
   it('renders the correct course type', () => {
-    const { getByText } = render(
+    const { getByText } = _render(
       <TypeCell course={course as unknown as TableCourse} />,
     )
     const courseTypeElement = getByText(t(`course-types.${course.type}`))
@@ -30,19 +31,19 @@ describe('TypeCell', () => {
   })
 
   it('renders the blended learning indicator if go1Integration is true', () => {
-    const { getByText } = render(
+    const { getByText } = _render(
       <TypeCell course={course as unknown as TableCourse} />,
     )
     const blendedLearningElement = getByText(t('common.blended-learning'))
     expect(blendedLearningElement).toBeInTheDocument()
   })
 
-  it('does not render the blended learning indicator if go1Integration is false', () => {
+  it('does not _render the blended learning indicator if go1Integration is false', () => {
     const courseWithoutBlendedLearning = {
       ...course,
       go1Integration: false,
     }
-    const { queryByText } = render(
+    const { queryByText } = _render(
       <TypeCell
         course={courseWithoutBlendedLearning as unknown as TableCourse}
       />,

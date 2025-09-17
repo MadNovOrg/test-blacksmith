@@ -10,7 +10,7 @@ import {
   WpPageInfo,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildResearchSummary } from '@test/mock-data-utils'
 
 import ResearchSummaries from '.'
@@ -21,7 +21,7 @@ describe('page: ResearchSummaries', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/research-summaries" element={<ResearchSummaries />} />
@@ -55,7 +55,7 @@ describe('page: ResearchSummaries', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/research-summaries" element={<ResearchSummaries />} />
@@ -119,7 +119,7 @@ describe('page: ResearchSummaries', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/research-summaries" element={<ResearchSummaries />} />
@@ -179,7 +179,7 @@ describe('page: ResearchSummaries', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/research-summaries" element={<ResearchSummaries />} />
@@ -241,7 +241,7 @@ describe('page: ResearchSummaries', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/research-summaries" element={<ResearchSummaries />} />

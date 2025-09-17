@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 
 import { TableCourse } from '@app/modules/trainer_courses/utils'
+
+import { _render } from '@test/index'
 
 import { VenueCell } from './VenueCell'
 
@@ -19,7 +20,7 @@ describe('VenueCell', () => {
         },
       ],
     }
-    const { getByText } = render(
+    const { getByText } = _render(
       <VenueCell course={course as unknown as TableCourse} />,
     )
 
@@ -43,7 +44,7 @@ describe('VenueCell', () => {
         },
       ],
     }
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <VenueCell course={course as unknown as TableCourse} />,
     )
 

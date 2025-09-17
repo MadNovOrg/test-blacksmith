@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@mui/material/styles'
-import { render as _render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import Chance from 'chance'
 import { deepmerge } from 'deepmerge-ts'
 import React, { PropsWithChildren } from 'react'
@@ -29,7 +29,7 @@ export const TestMemoryRouter: React.FC<PropsWithChildren<TestRouterProps>> = ({
   initialEntries,
 }) => {
   return (
-    <MemoryRouter initialEntries={initialEntries}>
+    <MemoryRouter initialEntries={initialEntries ?? ['/']}>
       <QueryParamProvider
         adapter={ReactRouter6Adapter}
         options={{ updateType: 'replaceIn' }}
@@ -40,7 +40,7 @@ export const TestMemoryRouter: React.FC<PropsWithChildren<TestRouterProps>> = ({
   )
 }
 
-function render(
+function _render(
   ui: React.ReactElement,
   providers: DeepPartial<Providers> = {},
   router: TestRouterProps = {},
@@ -60,7 +60,7 @@ function render(
   }
 
   return {
-    ..._render(ui, { wrapper }),
+    ...render(ui, { wrapper }),
     context,
   }
 }
@@ -95,7 +95,7 @@ export * from '@testing-library/react'
 export { default as userEvent } from '@testing-library/user-event'
 export * from './mockCognitoToProfile'
 export {
-  render,
+  _render,
   defaultProviders as providers,
   waitForCalls,
   chance,

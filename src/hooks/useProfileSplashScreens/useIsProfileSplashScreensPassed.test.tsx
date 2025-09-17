@@ -1,10 +1,10 @@
-import { renderHook } from '@testing-library/react'
 import { useFeatureFlagEnabled } from 'posthog-js/react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 import { useAuth } from '@app/context/auth'
 import { Splash_Screens_Enum } from '@app/generated/graphql'
 
+import { renderHook } from '@test/index'
 import { chance } from '@test/index'
 
 import { useIsProfileSplashScreenPassed } from './useIsProfileSplashScreensPassed'

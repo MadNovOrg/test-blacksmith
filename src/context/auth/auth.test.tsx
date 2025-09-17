@@ -1,8 +1,8 @@
-import { act, renderHook, waitFor } from '@testing-library/react'
 import { Auth } from 'aws-amplify'
 
 import { RoleName } from '@app/types'
 
+import { act, renderHook, waitFor } from '@test/index'
 import {
   chance,
   defaultCognitoProfile,
@@ -41,7 +41,7 @@ describe.skip('context: Auth', () => {
       'acl',
     ]
 
-    // On first render we haven't loaded the user yet
+    // On first renderwe haven't loaded the user yet
     expect(Object.keys(result.current)).toStrictEqual(expectedKeys)
     await waitFor(() => {
       // After auto-signin we should have the user data

@@ -12,7 +12,7 @@ import { AwsRegions, RoleName } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import {
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -239,7 +239,7 @@ describe('component: AnzCourseForm - OPEN', () => {
       },
     })
     await waitFor(() =>
-      render(
+      _render(
         <AnzCourseForm courseInput={courseToCourseInput(course)} type={type} />,
         {
           auth: {
@@ -282,7 +282,7 @@ describe('component: AnzCourseForm - OPEN', () => {
       },
     })
     await waitFor(() =>
-      render(
+      _render(
         <AnzCourseForm
           courseInput={courseToCourseInput(course)}
           type={type}

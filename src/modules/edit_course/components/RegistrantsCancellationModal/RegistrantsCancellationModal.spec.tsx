@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
+import { _render, renderHook, screen, userEvent, waitFor } from '@test/index'
 
 import { RegistrantsCancellationModal } from '.'
 
@@ -21,19 +21,19 @@ describe(RegistrantsCancellationModal.name, () => {
   const onProceed = vi.fn()
   const onTransfer = vi.fn()
   beforeEach(() =>
-    render(
+    _render(
       <RegistrantsCancellationModal
         onProceed={onProceed}
         onTransfer={onTransfer}
       />,
     ),
   )
-  it('should render the component', () => {
+  it('should _render the component', () => {
     expect(
       screen.getByTestId('registrants-cancellation-modal'),
     ).toBeInTheDocument()
   })
-  it.each(pageButtons)('should render the %s button', button => {
+  it.each(pageButtons)('should _render the %s button', button => {
     expect(screen.getByText(button)).toBeInTheDocument()
   })
   it.each(pageButtons)('should click the %s button', async button => {

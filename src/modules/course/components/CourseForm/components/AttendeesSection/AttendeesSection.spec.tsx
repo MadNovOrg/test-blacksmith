@@ -55,7 +55,7 @@ describe(`component: ${AttendeesSection.name}`, () => {
   )
 
   it.each(Object.values(AwsRegions))(
-    'does not render minimum participants for closed course type %s',
+    'does not _render minimum participants for closed course type %s',
     async appRegion => {
       vi.stubEnv('VITE_AWS_REGION', appRegion)
       renderForm({ type: Course_Type_Enum.Closed })
@@ -67,7 +67,7 @@ describe(`component: ${AttendeesSection.name}`, () => {
   )
 
   it.each(Object.values(AwsRegions))(
-    'does not render minimum participants for indirect course type %s',
+    'does not _render minimum participants for indirect course type %s',
     async appRegion => {
       vi.stubEnv('VITE_AWS_REGION', appRegion)
       renderForm({ type: Course_Type_Enum.Indirect })

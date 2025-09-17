@@ -1,4 +1,4 @@
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { Welcome } from './Welcome'
@@ -23,7 +23,7 @@ describe('/', () => {
     const profile = buildProfile({
       overrides: { country: undefined, countryCode: undefined },
     })
-    render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
+    _render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
 
     vi.runAllTimers()
 
@@ -37,14 +37,14 @@ describe('/', () => {
     })
   })
 
-  it('does not render dialog if user has residing country', async () => {
+  it('does not _render dialog if user has residing country', async () => {
     const profile = buildProfile({
       overrides: {
         country: 'Romania',
       },
     })
 
-    render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
+    _render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
 
     vi.runAllTimers()
 
@@ -59,7 +59,7 @@ describe('/', () => {
     const profile = buildProfile({
       overrides: { country: undefined, countryCode: undefined },
     })
-    render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
+    _render(<Welcome />, { auth: { profile } }, { initialEntries: ['/'] })
 
     vi.runAllTimers()
 

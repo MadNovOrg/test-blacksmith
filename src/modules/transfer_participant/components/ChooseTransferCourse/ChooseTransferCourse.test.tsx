@@ -14,7 +14,7 @@ import {
   TransferEligibleCoursesQueryVariables,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 
 import {
   ChosenParticipant,
@@ -52,7 +52,7 @@ describe('page: ChooseTransferCourse', () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{
@@ -133,7 +133,7 @@ describe('page: ChooseTransferCourse', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <TransferParticipantProvider
           initialValue={{

@@ -24,7 +24,7 @@ import { LoadingStatus } from '@app/util'
 
 import {
   cleanup,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -131,7 +131,7 @@ describe(EditCourse.name, () => {
       executeMutation: () => () => vi.fn(() => never),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -216,7 +216,7 @@ describe(EditCourse.name, () => {
       executeMutation: () => () => vi.fn(() => never),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -301,7 +301,7 @@ describe(EditCourse.name, () => {
       executeMutation: () => () => vi.fn(() => never),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -385,7 +385,7 @@ describe(EditCourse.name, () => {
       executeMutation: () => () => vi.fn(() => never),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -423,7 +423,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -449,7 +449,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -476,7 +476,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -513,7 +513,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -547,7 +547,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -581,7 +581,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -615,7 +615,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -649,7 +649,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -683,7 +683,7 @@ describe(EditCourse.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -724,7 +724,7 @@ describe(EditCourse.name, () => {
     } as unknown as Client
 
     await waitFor(() => {
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -791,7 +791,7 @@ describe(EditCourse.name, () => {
     } as unknown as Client
 
     await waitFor(() => {
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -839,7 +839,7 @@ describe(EditCourse.name, () => {
     } as unknown as Client
 
     await waitFor(() => {
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -888,7 +888,7 @@ describe(EditCourse.name, () => {
     } as unknown as Client
 
     await waitFor(() => {
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -934,7 +934,7 @@ describe(EditCourse.name, () => {
     } as unknown as Client
 
     await waitFor(() => {
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1002,7 +1002,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1089,7 +1089,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1173,7 +1173,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1277,7 +1277,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1361,7 +1361,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1448,7 +1448,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1554,7 +1554,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1663,7 +1663,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1745,7 +1745,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1846,7 +1846,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -1950,7 +1950,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -2045,7 +2045,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -2153,7 +2153,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -2270,7 +2270,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>
@@ -2392,7 +2392,7 @@ describe(EditCourse.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/edit/:id" element={<EditCourseWithContext />}>

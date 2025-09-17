@@ -5,7 +5,7 @@ import {
   Course_Type_Enum,
 } from '@app/generated/graphql'
 
-import { render, renderHook, screen, userEvent, waitFor } from '@test/index'
+import { _render, renderHook, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseCancellationModal } from '.'
@@ -23,16 +23,16 @@ describe(CourseCancellationModal.name, () => {
         type: courseType, // buildCourse uses @app/types 😢 hence the type casting as I'm trying to not use types from @app/types unles strictly necessary
       },
     })
-    render(<CourseCancellationModal course={courseMock} onClose={onClose} />)
+    _render(<CourseCancellationModal course={courseMock} onClose={onClose} />)
   }
 
-  it('should render the component', () => {
+  it('should _render the component', () => {
     // Act
     setup()
     // Assert
     expect(screen.getByTestId('course-cancellation-modal')).toBeInTheDocument()
   })
-  it('should render correct messages for indirect courses', () => {
+  it('should _render correct messages for indirect courses', () => {
     //Act
     setup(Course_Type_Enum.Indirect)
     //Assert
@@ -48,7 +48,7 @@ describe(CourseCancellationModal.name, () => {
       ),
     ).not.toBeInTheDocument()
   })
-  it('should render the radio group if course type is CLOSED', () => {
+  it('should _render the radio group if course type is CLOSED', () => {
     // Act
     setup(Course_Type_Enum.Closed)
     const radioGroup = screen.getAllByRole('radio')
@@ -57,7 +57,7 @@ describe(CourseCancellationModal.name, () => {
     expect(radioGroup).toHaveLength(3)
   })
   it.each(Object.values(Course_Cancellation_Fee_Type_Enum))(
-    'should render radio box message for %s',
+    'should _render radio box message for %s',
     radioValue => {
       setup(Course_Type_Enum.Closed)
       expect(
@@ -80,7 +80,7 @@ describe(CourseCancellationModal.name, () => {
       )
     })
   })
-  it('should render the cancel course dropdown', () => {
+  it('should _render the cancel course dropdown', () => {
     setup(Course_Type_Enum.Open)
     expect(screen.getByTestId('cancel-course-dropdown')).toBeInTheDocument()
   })

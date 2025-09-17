@@ -14,7 +14,14 @@ import { dateFormats } from '@app/i18n/config'
 import { MEMBERS_QUERY } from '@app/modules/organisation/hooks/useOrgMembers'
 import { RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { OrgUsersTable } from './OrgUsersTable'
 
@@ -26,7 +33,7 @@ describe(OrgUsersTable.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -55,7 +62,7 @@ describe(OrgUsersTable.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -117,7 +124,7 @@ describe(OrgUsersTable.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -204,7 +211,7 @@ describe(OrgUsersTable.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -261,7 +268,7 @@ describe(OrgUsersTable.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -322,7 +329,7 @@ describe(OrgUsersTable.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -370,7 +377,7 @@ describe(OrgUsersTable.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={chance.guid()} />
       </Provider>,
@@ -408,7 +415,7 @@ describe(OrgUsersTable.name, () => {
             }),
         } as unknown as Client
 
-        render(
+        _render(
           <Provider value={client}>
             <OrgUsersTable orgId={chance.guid()} />
           </Provider>,
@@ -448,7 +455,7 @@ describe(OrgUsersTable.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,
@@ -488,7 +495,7 @@ describe(OrgUsersTable.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <OrgUsersTable orgId={orgId} />
       </Provider>,

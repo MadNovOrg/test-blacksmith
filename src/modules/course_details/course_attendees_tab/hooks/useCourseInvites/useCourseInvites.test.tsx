@@ -1,5 +1,4 @@
 // TODO: update tests to reflect the actual useCourseInvites functionality
-import { renderHook } from '@testing-library/react'
 import { DocumentNode } from 'graphql'
 import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider, TypedDocumentNode } from 'urql'
@@ -12,6 +11,7 @@ import {
   ValidateAndDispatchInvitesForIndirectCourseMutation,
 } from '@app/generated/graphql'
 
+import { renderHook } from '@test/index'
 import { chance } from '@test/index'
 
 import useCourseInvites, {

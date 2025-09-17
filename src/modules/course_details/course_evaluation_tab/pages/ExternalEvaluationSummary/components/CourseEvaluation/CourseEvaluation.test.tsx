@@ -16,7 +16,7 @@ import { GET_PARTICIPANT } from '@app/modules/course_details/queries/get-course-
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import {
   buildAttendeeCourseEvaluationAnswers,
   buildCourse,
@@ -66,7 +66,7 @@ describe('CourseEvaluation page', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route
@@ -102,7 +102,7 @@ describe('CourseEvaluation page', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route

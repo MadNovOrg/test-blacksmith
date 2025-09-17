@@ -6,7 +6,7 @@ import { never, fromValue } from 'wonka'
 
 import { PodcastQuery } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitForText } from '@test/index'
+import { _render, screen, userEvent, waitForText } from '@test/index'
 import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 
 import Podcast from '.'
@@ -19,7 +19,7 @@ describe('page: Podcast', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/:id" element={<Podcast />} />
@@ -49,7 +49,7 @@ describe('page: Podcast', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/:id" element={<Podcast />} />
@@ -72,7 +72,7 @@ describe('page: Podcast', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<>Podcasts page</>} />
@@ -103,7 +103,7 @@ describe('page: Podcast', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<>Podcasts page</>} />
@@ -137,7 +137,7 @@ describe('page: Podcast', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<>Podcasts page</>} />
@@ -172,7 +172,7 @@ describe('page: Podcast', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<>Podcasts page</>} />

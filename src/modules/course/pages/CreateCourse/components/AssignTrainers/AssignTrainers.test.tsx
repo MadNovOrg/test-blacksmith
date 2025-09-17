@@ -6,7 +6,7 @@ import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { AwsRegions, RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
-import { render, screen, within, waitFor, chance } from '@test/index'
+import { _render, screen, within, waitFor, chance } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
@@ -30,7 +30,7 @@ function createFetchingClient() {
 
 describe('component: AssignTrainers', () => {
   it('renders alert if course is not found', async () => {
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider courseType={Course_Type_Enum.Open}>
           <AssignTrainers />
@@ -51,7 +51,7 @@ describe('component: AssignTrainers', () => {
     const overrides = { max_participants: 11, trainers: [] }
     const course = buildCourse({ overrides })
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           initialValue={{
@@ -77,7 +77,7 @@ describe('component: AssignTrainers', () => {
     const overrides = { max_participants: 12, trainers: [] }
     const course = buildCourse({ overrides })
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           initialValue={{
@@ -125,7 +125,7 @@ describe('component: AssignTrainers', () => {
     }
     const course = buildCourse({ overrides })
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           initialValue={{
@@ -157,7 +157,7 @@ describe('component: AssignTrainers', () => {
     }
     const course = buildCourse({ overrides })
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           initialValue={{
@@ -190,7 +190,7 @@ describe('component: AssignTrainers', () => {
       },
     })
 
-    render(
+    _render(
       <Provider value={createFetchingClient()}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Closed}

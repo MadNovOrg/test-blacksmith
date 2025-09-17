@@ -14,7 +14,7 @@ import { COURSE_PRICE_QUERY } from '@app/modules/course/hooks/useCoursePrice/use
 import { GET_COURSE_SOURCES_QUERY } from '@app/modules/course/queries/get-course-sources'
 import { AwsRegions, CourseInput, RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 
 import { renderForm, selectDelivery, selectLevel } from '../test-utils'
 
@@ -353,7 +353,7 @@ describe('component: UkCourseForm - CLOSED', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <UkCourseForm courseInput={{} as CourseInput} type={type} />
       </Provider>,

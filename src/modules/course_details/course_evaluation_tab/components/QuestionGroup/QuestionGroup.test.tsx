@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 
 import { QuestionGroup } from './index'
 
@@ -9,7 +9,7 @@ describe('QuestionGroup component', () => {
     const title = 'my title'
     const description = 'my description'
     const error = 'test error'
-    render(
+    _render(
       <QuestionGroup title={title} description={description} error={error} />,
     )
     expect(screen.getByText('my title')).toBeInTheDocument()

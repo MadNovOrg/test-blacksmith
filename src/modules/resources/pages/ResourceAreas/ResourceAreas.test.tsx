@@ -1,4 +1,3 @@
-import React from 'react'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -8,7 +7,7 @@ import {
 } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildResourceCategory } from '@test/mock-data-utils'
 
 import { ResourceAreasProvider } from '../../contexts/resource-areas-context'
@@ -20,7 +19,7 @@ describe('page: ResourcesList', () => {
     const client = {
       executeQuery: () => never,
     }
-    render(
+    _render(
       <ResourceAreasProvider>
         <Provider value={client as unknown as Client}>
           <ResourceAreas />
@@ -90,7 +89,7 @@ describe('page: ResourcesList', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ResourceAreasProvider>
           <ResourceAreas />
@@ -148,7 +147,7 @@ describe('page: ResourcesList', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <ResourceAreasProvider>
           <ResourceAreas />
@@ -237,7 +236,7 @@ describe('page: ResourcesList', () => {
           }),
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <ResourceAreasProvider>
             <ResourceAreas />

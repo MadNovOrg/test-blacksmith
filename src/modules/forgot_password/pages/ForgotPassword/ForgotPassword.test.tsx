@@ -6,7 +6,7 @@ import { gqlRequest } from '@app/lib/gql-request'
 
 import {
   chance,
-  render,
+  _render,
   screen,
   userEvent,
   waitFor,
@@ -43,7 +43,7 @@ async function submitForm(email: string) {
 
 describe('page: ForgotPassword', () => {
   it('renders as expected', async () => {
-    render(<ForgotPasswordPage />)
+    _render(<ForgotPasswordPage />)
 
     expect(screen.getByTestId('forgot-pass-submit')).toBeInTheDocument()
     expect(AuthMock).not.toHaveBeenCalled()
@@ -51,7 +51,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('does not submit if email is empty', async () => {
-    render(<ForgotPasswordPage />)
+    _render(<ForgotPasswordPage />)
 
     await submitForm('')
 
@@ -62,7 +62,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('does not submit if email is invalid format', async () => {
-    render(<ForgotPasswordPage />)
+    _render(<ForgotPasswordPage />)
 
     await submitForm('invalid email')
 
@@ -73,7 +73,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('submits when email is valid', async () => {
-    render(<ForgotPasswordPage />)
+    _render(<ForgotPasswordPage />)
 
     const email = chance.email()
 
@@ -93,7 +93,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('should call backend API for temporary password reset', async () => {
-    render(<ForgotPasswordPage />)
+    _render(<ForgotPasswordPage />)
 
     AuthMock.mockImplementation(() => {
       throw new Error()

@@ -2,7 +2,7 @@ import { addDays, addWeeks } from 'date-fns'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 
-import { render, screen, within } from '@test/index'
+import { _render, screen, within } from '@test/index'
 
 import { TransferTermsTable } from '.'
 
@@ -13,7 +13,7 @@ describe('component: TransferTermsTable', () => {
     Course_Level_Enum.Advanced,
   ].forEach(level => {
     it(`renders correct terms for ${level} course`, () => {
-      render(<TransferTermsTable startDate={new Date()} courseLevel={level} />)
+      _render(<TransferTermsTable startDate={new Date()} courseLevel={level} />)
 
       const zeroFee = screen.getByTestId('term-row-0-fee')
       const fifteenFee = screen.getByTestId(`term-row-15-fee`)
@@ -38,7 +38,7 @@ describe('component: TransferTermsTable', () => {
     Course_Level_Enum.AdvancedTrainer,
   ].forEach(level => {
     it(`renders correct terms for ${level} course`, () => {
-      render(<TransferTermsTable startDate={new Date()} courseLevel={level} />)
+      _render(<TransferTermsTable startDate={new Date()} courseLevel={level} />)
 
       const zeroFee = screen.getByTestId('term-row-0-fee-trainer')
       const twentyfiveFee = screen.getByTestId(`term-row-25-fee-trainer`)
@@ -60,7 +60,7 @@ describe('component: TransferTermsTable', () => {
   })
 
   it('highlights fees as free if course is starting more then 4 weeks from now', () => {
-    render(
+    _render(
       <TransferTermsTable
         courseLevel={Course_Level_Enum.Level_1}
         startDate={addWeeks(new Date(), 5)}
@@ -74,7 +74,7 @@ describe('component: TransferTermsTable', () => {
   })
 
   it('highlights 15% of payment due if a course start date is between 2-4 weeks', () => {
-    render(
+    _render(
       <TransferTermsTable
         courseLevel={Course_Level_Enum.Level_1}
         startDate={addWeeks(new Date(), 4)}
@@ -88,7 +88,7 @@ describe('component: TransferTermsTable', () => {
   })
 
   it('highlights 25% of payment due if a course start date is less then 2 weeks from now', () => {
-    render(
+    _render(
       <TransferTermsTable
         courseLevel={Course_Level_Enum.Level_1}
         startDate={addWeeks(new Date(), 1)}
@@ -102,7 +102,7 @@ describe('component: TransferTermsTable', () => {
   })
 
   it('highlights 25% of payment due if a course start date is between 1-4 weeks from now for train the trainer course level', () => {
-    render(
+    _render(
       <TransferTermsTable
         courseLevel={Course_Level_Enum.IntermediateTrainer}
         startDate={addWeeks(new Date(), 4)}
@@ -116,7 +116,7 @@ describe('component: TransferTermsTable', () => {
   })
 
   it('highlights 50% of payment due if a course start date is less then a week from now for train the trainer course level', () => {
-    render(
+    _render(
       <TransferTermsTable
         courseLevel={Course_Level_Enum.IntermediateTrainer}
         startDate={addDays(new Date(), 6)}

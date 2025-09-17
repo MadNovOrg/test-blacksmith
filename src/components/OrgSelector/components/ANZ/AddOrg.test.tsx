@@ -12,7 +12,7 @@ import { GET_ORG_TYPES } from '@app/modules/organisation/queries/get-org-types'
 import { AwsRegions, RoleName } from '@app/types'
 
 import {
-  render,
+  _render,
   screen,
   renderHook,
   fireEvent,
@@ -91,7 +91,7 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.organisation-phone'),
     ),
   ])('renders % field', async field => {
-    render(
+    _render(
       <AddOrg
         orgName={option.name}
         countryCode={'AU'}
@@ -117,7 +117,7 @@ describe('AddOrg component', () => {
         label !== t('components.add-organisation.fields.organisation-phone'),
     ),
   ])('renders % field', async field => {
-    render(
+    _render(
       <AddOrg
         orgName={option.name}
         countryCode={'NZ'}
@@ -145,7 +145,7 @@ describe('AddOrg component', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <AddOrg
             orgName={option.name}

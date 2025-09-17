@@ -16,7 +16,7 @@ import {
   userEvent,
   waitFor,
   within,
-  render,
+  _render,
 } from '@test/index'
 
 import { buildOrder, renderWithOrders } from './test-utils'
@@ -86,7 +86,7 @@ describe('page: Orders', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Orders />
       </Provider>,

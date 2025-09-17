@@ -7,7 +7,7 @@ import { InferType } from 'yup'
 import { Course_Evaluation_Question_Type_Enum } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 
-import { render, screen, userEvent } from '@test/index'
+import { _render, screen, userEvent } from '@test/index'
 
 import { BooleanQuestion } from './index'
 
@@ -44,7 +44,7 @@ describe('BooleanQuestion component', () => {
     const value = 'YES'
     const reason = 'my reason'
     const infoText = 'info text'
-    render(
+    _render(
       <FormWrapper>
         <BooleanQuestion
           type={type}
@@ -63,7 +63,7 @@ describe('BooleanQuestion component', () => {
     const value = 'NO'
     const reason = 'reason'
     const infoText = 'information text'
-    render(
+    _render(
       <FormWrapper>
         <BooleanQuestion
           type={type}

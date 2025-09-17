@@ -1,7 +1,7 @@
 import Table from '@mui/material/Table'
 import { useTranslation } from 'react-i18next'
 
-import { screen, render, renderHook } from '@test/index'
+import { screen, _render, renderHook } from '@test/index'
 import { buildLogs } from '@test/mock-data-utils'
 
 import { TableBody } from '.'
@@ -15,19 +15,19 @@ describe('component: TableBody', () => {
     },
   } = renderHook(() => useTranslation())
   const setup = async (loading = false, logs = logsMock) =>
-    render(
+    _render(
       <Table>
         <TableBody colSpan={7} loading={loading} logs={logs} />
       </Table>,
     )
 
-  it('should render the component', () => {
+  it('should _render the component', () => {
     setup()
     expect(
       screen.getByTestId('course-exceptions-log-table-body'),
     ).toBeInTheDocument()
   })
-  it('should render logs', () => {
+  it('should _render logs', () => {
     setup()
     logsMock.forEach(log =>
       expect(
@@ -35,11 +35,11 @@ describe('component: TableBody', () => {
       ).toBeInTheDocument(),
     )
   })
-  it('should render the loading spinner if in loading state', () => {
+  it('should _render the loading spinner if in loading state', () => {
     setup(true)
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
-  it('should render the no records message if no logs were found', () => {
+  it('should _render the no records message if no logs were found', () => {
     setup(false, [])
     expect(
       screen.getByText(
@@ -49,7 +49,7 @@ describe('component: TableBody', () => {
       ),
     ).toBeInTheDocument()
   })
-  it('should render valid anchor elements', () => {
+  it('should _render valid anchor elements', () => {
     // Arrange
     const courseDetails = logsMock.map(log => ({
       name: log.course.course_code as string,

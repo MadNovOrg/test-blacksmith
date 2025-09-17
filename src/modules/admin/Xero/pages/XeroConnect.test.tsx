@@ -4,7 +4,7 @@ import { fromValue } from 'wonka'
 
 import { XeroCallbackMutation, XeroConnectQuery } from '@app/generated/graphql'
 
-import { render, screen, chance, waitFor } from '@test/index'
+import { _render, screen, chance, waitFor } from '@test/index'
 
 import { XeroConnect } from './XeroConnect'
 
@@ -42,7 +42,7 @@ describe('page: XeroConnect', () => {
       executeMutation: vi.fn(),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <XeroConnect />
       </Provider>,
@@ -72,7 +72,7 @@ describe('page: XeroConnect', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <XeroConnect />
       </Provider>,

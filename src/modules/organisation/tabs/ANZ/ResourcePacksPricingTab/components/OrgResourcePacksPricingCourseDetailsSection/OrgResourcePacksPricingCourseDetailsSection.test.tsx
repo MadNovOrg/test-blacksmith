@@ -1,4 +1,3 @@
-import { renderHook } from '@testing-library/react'
 import { Client, Provider } from 'urql'
 
 import {
@@ -10,7 +9,8 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useAllResourcePacksPricing'
 
-import { chance, screen, render } from '@test/index'
+import { renderHook } from '@test/index'
+import { chance, screen, _render } from '@test/index'
 
 import { ResourcePacksPricingProvider } from '../../ResourcePacksPricingProvider'
 import { useResourcePacksPricingContext } from '../../ResourcePacksPricingProvider/useResourcePacksPricingContext'
@@ -76,7 +76,7 @@ describe('component: OrgResourcePacksPricingCourseDetailsSection', () => {
     })
   })
   pricings.forEach(pricing => {
-    it(`should render the component for course type: ${pricing.course_type}`, async () => {
+    it(`should _render the component for course type: ${pricing.course_type}`, async () => {
       useResourcePacksPricingContextMock.mockReturnValueOnce({
         pricing: {
           key: `${pricing.course_type}-${pricing.course_level}-${pricing.reaccred}`,
@@ -111,7 +111,7 @@ describe('component: OrgResourcePacksPricingCourseDetailsSection', () => {
         executeMutation: vi.fn(),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={mockClient}>
           <ResourcePacksPricingProvider>
             <OrgResourcePacksPricingCourseDetailsSection />

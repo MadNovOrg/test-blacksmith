@@ -16,7 +16,7 @@ import { GET_TEMP_PROFILE } from '@app/modules/course_booking/queries/get-temp-p
 import { useResourcePackPricing } from '@app/modules/resource_packs/hooks/useResourcePackPricing'
 import { AwsRegions } from '@app/types'
 
-import { chance, render, screen } from '@test/index'
+import { chance, _render, screen } from '@test/index'
 
 import { BookingProvider } from '../../BookingContext'
 
@@ -174,7 +174,7 @@ describe('component: BookingDetailsReview', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <BookingProvider>
           <CourseBookingReview />

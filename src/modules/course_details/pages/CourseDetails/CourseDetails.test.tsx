@@ -6,7 +6,7 @@ import { useResourceAreas } from '@app/modules/resources/contexts/resource-areas
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseDetails, preCourseMaterialLevels } from '.'
@@ -24,7 +24,7 @@ const useCourseMocked = vi.mocked(useCourse)
 const useResourcesMocked = vi.mocked(useResourceAreas)
 
 describe('page: CourseDetails', () => {
-  it('should render CourseHeroSummary component', () => {
+  it('should _render CourseHeroSummary component', () => {
     // Arrange
     const course = buildCourse()
 
@@ -43,7 +43,7 @@ describe('page: CourseDetails', () => {
     })
 
     // Act
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -86,7 +86,7 @@ describe('page: CourseDetails', () => {
         hasAnyResourceAccess: true,
       })
 
-      render(
+      _render(
         <Routes>
           <Route path="/course/:id/details" element={<CourseDetails />} />
         </Routes>,
@@ -124,7 +124,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -167,7 +167,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -204,7 +204,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -235,7 +235,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: true,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -278,7 +278,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: false,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -292,7 +292,7 @@ describe('page: CourseDetails', () => {
 
     expect(screen.getByTestId('certifications-tab')).toBeInTheDocument()
   })
-  it('should not render the certifications tab if there are certificates but role is different than admin', () => {
+  it('should not _render the certifications tab if there are certificates but role is different than admin', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
@@ -323,7 +323,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: false,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,
@@ -337,7 +337,7 @@ describe('page: CourseDetails', () => {
 
     expect(screen.queryByTestId('certifications-tab')).not.toBeInTheDocument()
   })
-  it('should render the certifications tab if there are certificates and evaluations and role is different than admin', () => {
+  it('should _render the certifications tab if there are certificates and evaluations and role is different than admin', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
@@ -368,7 +368,7 @@ describe('page: CourseDetails', () => {
       hasAnyResourceAccess: false,
     })
 
-    render(
+    _render(
       <Routes>
         <Route path="/course/:id/details" element={<CourseDetails />} />
       </Routes>,

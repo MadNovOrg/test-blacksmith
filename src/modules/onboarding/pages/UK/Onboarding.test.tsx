@@ -14,7 +14,7 @@ import {
 
 import {
   chance,
-  render,
+  _render,
   renderHook,
   screen,
   userEvent,
@@ -61,7 +61,7 @@ describe('page: Onboarding', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Onboarding />
       </Provider>,
@@ -117,7 +117,7 @@ describe('page: Onboarding', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Onboarding />
       </Provider>,
@@ -174,7 +174,7 @@ describe('page: Onboarding', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Onboarding />
       </Provider>,
@@ -219,7 +219,7 @@ describe('page: Onboarding', () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/" element={<p>home</p>} />

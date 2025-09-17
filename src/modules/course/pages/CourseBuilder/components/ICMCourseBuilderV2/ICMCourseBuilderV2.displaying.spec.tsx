@@ -10,7 +10,7 @@ import {
   ModuleSettingsQuery,
 } from '@app/generated/graphql'
 
-import { fireEvent, render, screen, within } from '@test/index'
+import { fireEvent, _render, screen, within } from '@test/index'
 
 import { COURSE_TO_BUILD_QUERY } from '../../hooks/useCourseToBuild'
 import { buildCourse, buildModuleSetting } from '../../test-utils'
@@ -35,7 +35,7 @@ it('displays loading spinner while loading for course', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -61,7 +61,7 @@ it('displays loading spinner while loading for module settings', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -87,7 +87,7 @@ it('displays not found page if course is not found', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -118,7 +118,7 @@ it('displays an alert if there is an error fetching course', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -148,7 +148,7 @@ it('displays an alert if there is an error fetching module settings', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -203,7 +203,7 @@ it.each([
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
       </Provider>,
@@ -245,7 +245,7 @@ it.each([
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
       </Provider>,
@@ -293,7 +293,7 @@ it('displays course information properly', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/courses/:id/modules" element={<ICMCourseBuilderV2 />} />
@@ -350,7 +350,7 @@ it('displays mandatory modules as pre-selected and disabled', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -405,7 +405,7 @@ it('displays already saved modules as preselected', () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -465,7 +465,7 @@ it.each([
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
       </Provider>,
@@ -509,7 +509,7 @@ it.each([true, false])(
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
       </Provider>,
@@ -560,7 +560,7 @@ it.each([true, false])(
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <ICMCourseBuilderV2 />
       </Provider>,
@@ -607,7 +607,7 @@ it.each([
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,

@@ -1,6 +1,6 @@
 import { t } from 'i18next'
 
-import { screen, render } from '@test/index'
+import { screen, _render } from '@test/index'
 
 import { CourseFormCheckboxes } from '.'
 
@@ -13,9 +13,9 @@ describe(CourseFormCheckboxes.name, () => {
     t('pages.create-course.form.connect-fee-notification'),
   ]
   it.each(confirmations)(
-    'should render component with confirmation %s',
+    'should _render component with confirmation %s',
     confirmation => {
-      render(
+      _render(
         <CourseFormCheckboxes
           formSubmitted={false}
           courseResidingCountry={'AU'}

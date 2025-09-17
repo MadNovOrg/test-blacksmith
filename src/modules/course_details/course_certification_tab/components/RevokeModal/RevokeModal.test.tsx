@@ -1,4 +1,4 @@
-import { chance, render, screen, userEvent } from '@test/index'
+import { chance, _render, screen, userEvent } from '@test/index'
 
 import RevokeCertModal from './RevokeModal'
 
@@ -9,7 +9,7 @@ describe('RevokeCertModal', () => {
   const setup = (
     props: { certificateId?: string; participantId?: string } = {},
   ) => {
-    return render(
+    return _render(
       <RevokeCertModal
         onClose={onCloseMock}
         onSuccess={onSuccessMock}

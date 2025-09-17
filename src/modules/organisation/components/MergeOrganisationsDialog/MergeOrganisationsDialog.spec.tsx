@@ -1,7 +1,7 @@
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import { chance, render, renderHook, screen, waitFor } from '@test/index'
+import { chance, _render, renderHook, screen, waitFor } from '@test/index'
 
 import { MergeOrganisationsDialog } from './MergeOrganisationsDialog'
 
@@ -12,8 +12,8 @@ describe(MergeOrganisationsDialog.name, () => {
     },
   } = renderHook(() => useScopedTranslation('pages.admin.organizations.merge'))
   const onClose = vi.fn()
-  it('should render', () => {
-    render(
+  it('should _render', () => {
+    _render(
       <MergeOrganisationsDialog
         open={true}
         onClose={onClose}
@@ -22,11 +22,11 @@ describe(MergeOrganisationsDialog.name, () => {
     )
     expect(screen.getByText(t('select-main'))).toBeInTheDocument()
   })
-  it('should render with selectedOrgs', () => {
+  it('should _render with selectedOrgs', () => {
     const orgname = chance.name()
     const orgaddress = chance.address().slice(0, 20)
     const randomAttribute = chance.syllable()
-    render(
+    _render(
       <MergeOrganisationsDialog
         open={true}
         onClose={onClose}
@@ -51,7 +51,7 @@ describe(MergeOrganisationsDialog.name, () => {
     const orgname = chance.name()
     const orgaddress = chance.address().slice(0, 20)
     const randomAttribute = chance.syllable()
-    render(
+    _render(
       <MergeOrganisationsDialog
         open={true}
         onClose={onClose}
@@ -73,7 +73,7 @@ describe(MergeOrganisationsDialog.name, () => {
     const orgname = chance.name()
     const orgaddress = chance.address().slice(0, 20)
     const randomAttribute = chance.syllable()
-    render(
+    _render(
       <MergeOrganisationsDialog
         open={true}
         onClose={onClose}
@@ -96,7 +96,7 @@ describe(MergeOrganisationsDialog.name, () => {
     const orgname = chance.name()
     const orgaddress = chance.address().slice(0, 20)
     const randomAttribute = chance.syllable()
-    render(
+    _render(
       <MergeOrganisationsDialog
         open={true}
         onClose={onClose}
@@ -119,7 +119,7 @@ describe(MergeOrganisationsDialog.name, () => {
     const orgname = chance.name()
     const orgaddress = chance.address().slice(0, 20)
     const randomAttribute = chance.syllable()
-    render(
+    _render(
       <MergeOrganisationsDialog
         open={true}
         onClose={onClose}

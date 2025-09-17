@@ -1,6 +1,6 @@
-import { renderHook } from '@testing-library/react'
-
 import { useAuth } from '@app/context/auth'
+
+import { renderHook } from '@test/index'
 
 import {
   anzAvailableCurrencies,

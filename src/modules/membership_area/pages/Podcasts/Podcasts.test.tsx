@@ -11,7 +11,7 @@ import {
 } from '@app/generated/graphql'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
-import { render, screen, within, userEvent, waitFor } from '@test/index'
+import { _render, screen, within, userEvent, waitFor } from '@test/index'
 import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 
 import Podcasts from '.'
@@ -22,7 +22,7 @@ describe('page: Podcasts', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Podcasts />
       </Provider>,
@@ -47,7 +47,7 @@ describe('page: Podcasts', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Podcasts />
       </Provider>,
@@ -73,7 +73,7 @@ describe('page: Podcasts', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Podcasts />
       </Provider>,
@@ -108,7 +108,7 @@ describe('page: Podcasts', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<Podcasts />} />
@@ -141,7 +141,7 @@ describe('page: Podcasts', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<Podcasts />} />
@@ -191,7 +191,7 @@ describe('page: Podcasts', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<Podcasts />} />
@@ -236,7 +236,7 @@ describe('page: Podcasts', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<Podcasts />} />
@@ -287,7 +287,7 @@ describe('page: Podcasts', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<Podcasts />} />
@@ -348,7 +348,7 @@ describe('page: Podcasts', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/" element={<Podcasts />} />

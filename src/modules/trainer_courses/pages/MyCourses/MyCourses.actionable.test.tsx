@@ -25,7 +25,14 @@ import {
 } from '@app/generated/graphql'
 import { AwsRegions, RoleName } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import {
   buildTrainerCourse,
@@ -68,7 +75,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <TrainerCourses />
         </Provider>,
@@ -103,7 +110,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <TrainerCourses />
         </Provider>,
@@ -160,7 +167,7 @@ describe('trainers-pages/MyCourses', () => {
           }),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="courses" element={<TrainerCourses />} />
@@ -220,7 +227,7 @@ describe('trainers-pages/MyCourses', () => {
           }),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="courses" element={<TrainerCourses />} />
@@ -287,7 +294,7 @@ describe('trainers-pages/MyCourses', () => {
           }),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="courses" element={<TrainerCourses />} />
@@ -354,7 +361,7 @@ describe('trainers-pages/MyCourses', () => {
           }),
       } as unknown as Client
 
-      render(
+      _render(
         <Provider value={client}>
           <Routes>
             <Route path="courses" element={<TrainerCourses />} />
@@ -426,7 +433,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -497,7 +504,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -585,7 +592,7 @@ describe('trainers-pages/MyCourses', () => {
           },
         }
 
-        render(
+        _render(
           <Provider value={client as unknown as Client}>
             <TrainerCourses />
           </Provider>,
@@ -651,7 +658,7 @@ describe('trainers-pages/MyCourses', () => {
           },
         }
 
-        render(
+        _render(
           <Provider value={client as unknown as Client}>
             <TrainerCourses />
           </Provider>,
@@ -711,7 +718,7 @@ describe('trainers-pages/MyCourses', () => {
           },
         }
 
-        render(
+        _render(
           <Provider value={client as unknown as Client}>
             <TrainerCourses />
           </Provider>,
@@ -779,7 +786,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -834,7 +841,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -898,7 +905,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -954,7 +961,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -1001,7 +1008,7 @@ describe('trainers-pages/MyCourses', () => {
         },
       }
 
-      render(
+      _render(
         <Provider value={client as unknown as Client}>
           <TrainerCourses />
         </Provider>,
@@ -1067,7 +1074,7 @@ describe('trainers-pages/MyCourses Australia', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <TrainerCourses />
       </Provider>,

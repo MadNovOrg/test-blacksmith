@@ -1,6 +1,6 @@
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
-import { render, renderHook, screen } from '@test/index'
+import { _render, renderHook, screen } from '@test/index'
 
 import { CourseDiffTable } from '.'
 
@@ -15,7 +15,7 @@ describe(CourseDiffTable.name, () => {
   const newValue = new Date()
   const oldValue = new Date()
   beforeEach(() => {
-    render(
+    _render(
       <CourseDiffTable
         diff={[
           {
@@ -27,10 +27,10 @@ describe(CourseDiffTable.name, () => {
       />,
     )
   })
-  it('should render the component', () => {
+  it('should _render the component', () => {
     expect(screen.getByTestId('course-diff-table'))
   })
-  it('should render course head cells correclty, cell', () =>
+  it('should _render course head cells correclty, cell', () =>
     [t('col-property'), t('col-old-value'), t('col-new-value')].forEach(
       cell => {
         expect(screen.queryAllByText(cell)[0]).toBeInTheDocument()

@@ -12,7 +12,7 @@ import {
 } from '@app/generated/graphql'
 import { DEFAULT_PAGINATION_LIMIT } from '@app/util'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildPost, buildTag } from '@test/mock-data-utils'
 
 import Tag from '.'
@@ -23,7 +23,7 @@ describe('page: Tag', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/blog/tag/:id" element={<Tag />} />
@@ -56,7 +56,7 @@ describe('page: Tag', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="tag/:id" element={<Tag />} />
@@ -93,7 +93,7 @@ describe('page: Tag', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="tag/:id" element={<Tag />} />
@@ -146,7 +146,7 @@ describe('page: Tag', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="tag/:id" element={<Tag />} />
@@ -193,7 +193,7 @@ describe('page: Tag', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="tag/:id" element={<Tag />} />
@@ -263,7 +263,7 @@ describe('page: Tag', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="tag/:id" element={<Tag />} />

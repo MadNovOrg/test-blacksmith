@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AwsRegions } from '@app/types'
 
-import { render, screen, waitFor, userEvent, renderHook } from '@test/index'
+import { _render, screen, waitFor, userEvent, renderHook } from '@test/index'
 
 import { FilterByCurrencies } from './index'
 
@@ -16,7 +16,7 @@ describe(FilterByCurrencies.name, () => {
   it('triggers onChange when currency = GBP is selected', async () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     const onChange = vi.fn()
-    render(<FilterByCurrencies onChange={onChange} />)
+    _render(<FilterByCurrencies onChange={onChange} />)
 
     await userEvent.click(screen.getByText('Currency'))
     await userEvent.click(screen.getByText(t('filters.GBP')))

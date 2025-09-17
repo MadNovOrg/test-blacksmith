@@ -2,7 +2,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { render, screen, chance, within, renderHook } from '@test/index'
+import { _render, screen, chance, within, renderHook } from '@test/index'
 
 import { CourseAttendanceList } from './index'
 
@@ -20,7 +20,7 @@ describe('component: CourseAttendanceList', () => {
 
     const onChangeMock = vi.fn()
 
-    render(
+    _render(
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}
@@ -51,7 +51,7 @@ describe('component: CourseAttendanceList', () => {
 
     const onChangeMock = vi.fn()
 
-    render(
+    _render(
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}
@@ -78,7 +78,7 @@ describe('component: CourseAttendanceList', () => {
 
     const onChangeMock = vi.fn()
 
-    render(
+    _render(
       <CourseAttendanceList
         participants={participants}
         onChange={onChangeMock}

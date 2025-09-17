@@ -16,7 +16,7 @@ import { AwsRegions, ValidCourseInput } from '@app/types'
 import {
   chance,
   fireEvent,
-  render,
+  _render,
   screen,
   userEvent,
   waitFor,
@@ -98,7 +98,7 @@ describe('component: LicenseOrderDetails', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider courseType={Course_Type_Enum.Indirect}>
           <LicenseOrderDetails />
@@ -121,7 +121,7 @@ describe('component: LicenseOrderDetails', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
@@ -153,7 +153,7 @@ describe('component: LicenseOrderDetails', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
@@ -184,7 +184,7 @@ describe('component: LicenseOrderDetails', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
@@ -232,7 +232,7 @@ describe('component: LicenseOrderDetails', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}
@@ -321,7 +321,7 @@ describe('component: LicenseOrderDetails', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <CreateCourseProvider
           courseType={Course_Type_Enum.Indirect}

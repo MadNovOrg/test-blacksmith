@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Course_Exception_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { fireEvent, render, renderHook, screen, userEvent } from '@test/index'
+import { fireEvent, _render, renderHook, screen, userEvent } from '@test/index'
 
 import { CourseExceptionsConfirmation } from '.'
 
@@ -14,7 +14,7 @@ describe(CourseExceptionsConfirmation.name, () => {
   vi.stubEnv('VITE_AWS_REGION', 'eu-west-2')
 
   const setup = () =>
-    render(
+    _render(
       <CourseExceptionsConfirmation
         onCancel={onCancel}
         onSubmit={onSubmit}

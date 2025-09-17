@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { render, screen, chance, waitForCalls, userEvent } from '@test/index'
+import { _render, screen, chance, waitForCalls, userEvent } from '@test/index'
 
 import { FilterSearch } from './FilterSearch'
 
 describe(FilterSearch.name, () => {
   it('renders as expected', async () => {
     const onChange = vi.fn()
-    render(<FilterSearch onChange={onChange} />)
+    _render(<FilterSearch onChange={onChange} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
     expect(input).toBeInTheDocument()
@@ -21,7 +21,7 @@ describe(FilterSearch.name, () => {
   it('takes in a value', async () => {
     const value = chance.first()
     const onChange = vi.fn()
-    render(<FilterSearch value={value} onChange={onChange} />)
+    _render(<FilterSearch value={value} onChange={onChange} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
 
@@ -35,7 +35,7 @@ describe(FilterSearch.name, () => {
   it('calls onChange debounced when user types', async () => {
     const value = chance.first()
     const onChange = vi.fn()
-    render(<FilterSearch value="" onChange={onChange} />)
+    _render(<FilterSearch value="" onChange={onChange} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
 
@@ -49,7 +49,7 @@ describe(FilterSearch.name, () => {
   it('calls onChange not debounced when user types', async () => {
     const value = chance.first()
     const onChange = vi.fn()
-    render(<FilterSearch value="" onChange={onChange} debounce={0} />)
+    _render(<FilterSearch value="" onChange={onChange} debounce={0} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
 
@@ -67,7 +67,7 @@ describe(FilterSearch.name, () => {
   it('clears text', async () => {
     const value = chance.first()
     const onChange = vi.fn()
-    render(<FilterSearch value={value} onChange={onChange} debounce={0} />)
+    _render(<FilterSearch value={value} onChange={onChange} debounce={0} />)
 
     const input = screen.getByTestId('FilterSearch-Input')
     const clear = screen.getByTestId('FilterSearch-Clear')

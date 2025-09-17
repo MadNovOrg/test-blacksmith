@@ -1,7 +1,7 @@
 import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 import useCourseAuditLogs from '@app/modules/admin/Audits/hooks/useCourseAuditLogs'
 
-import { screen, render, userEvent } from '@test/index'
+import { screen, _render, userEvent } from '@test/index'
 import { buildLogs } from '@test/mock-data-utils'
 
 import { CourseExceptionsLogTabs } from '.'
@@ -19,9 +19,9 @@ describe('component: CourseExceptionsLogsTabs', () => {
     getUnpagedLogs: () => Promise.resolve(logsMock),
   })
   beforeEach(() => {
-    render(<CourseExceptionsLogTabs />)
+    _render(<CourseExceptionsLogTabs />)
   })
-  it('should render the component', () => {
+  it('should _render the component', () => {
     expect(screen.getByTestId('course-exceptions-log-tabs')).toBeInTheDocument()
   })
   it(`should display ${Course_Audit_Type_Enum.Approved} and ${Course_Audit_Type_Enum.Rejected} tabs`, () => {

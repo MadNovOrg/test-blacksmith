@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react'
+import { _render } from '@test/index'
 
 import { CourseTitle } from './CourseTitle'
 
 describe('CourseTitle', () => {
   it('renders the course name', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseTitle name="Test Course" code="12345" />,
     )
     const courseTitle = getByTestId('course-title')
@@ -13,7 +13,7 @@ describe('CourseTitle', () => {
   })
 
   it('renders the course code when provided', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseTitle name="Test Course" code="12345" />,
     )
     const courseCode = getByTestId('course-code')
@@ -22,7 +22,7 @@ describe('CourseTitle', () => {
   })
 
   it('renders empty course code when null', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseTitle name="Test Course" code={null} />,
     )
     const courseCode = getByTestId('course-code')
@@ -31,7 +31,7 @@ describe('CourseTitle', () => {
   })
 
   it('renders empty course code when undefined', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = _render(
       <CourseTitle name="Test Course" code={undefined} />,
     )
     const courseCode = getByTestId('course-code')

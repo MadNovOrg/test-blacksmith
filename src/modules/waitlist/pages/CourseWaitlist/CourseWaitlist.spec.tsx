@@ -18,7 +18,7 @@ import {
   GET_COURSE_RESIDING_COUNTRY,
 } from '@app/modules/waitlist/hooks'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { _render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CourseWaitlist } from './CourseWaitlist'
@@ -39,7 +39,7 @@ describe(CourseWaitlist.name, () => {
       executeQuery: () => never,
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CourseWaitlist />
       </Provider>,
@@ -58,7 +58,7 @@ describe(CourseWaitlist.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <CourseWaitlist />
       </Provider>,
@@ -101,7 +101,7 @@ describe(CourseWaitlist.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/waitlist" element={<CourseWaitlist />} />
@@ -187,7 +187,7 @@ describe(CourseWaitlist.name, () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/waitlist" element={<CourseWaitlist />} />

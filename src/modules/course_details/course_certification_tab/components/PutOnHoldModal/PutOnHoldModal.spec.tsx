@@ -9,7 +9,7 @@ import {
 } from '@app/generated/graphql'
 import { NonNullish } from '@app/types'
 
-import { render, renderHook, screen, userEvent } from '@test/index'
+import { _render, renderHook, screen, userEvent } from '@test/index'
 
 import { CertificateChangelog } from '../../pages/CourseCertification/types'
 
@@ -22,8 +22,8 @@ describe(PutOnHoldModal.name, () => {
     },
   } = renderHook(() => useTranslation())
 
-  it('should render', () => {
-    render(
+  it('should _render', () => {
+    _render(
       <PutOnHoldModal
         participantId={''}
         certificateId={''}
@@ -36,8 +36,8 @@ describe(PutOnHoldModal.name, () => {
     )
     expect(screen.getByText(t('common.reason')))
   })
-  it('should render all fields and buttons', () => {
-    render(
+  it('should _render all fields and buttons', () => {
+    _render(
       <PutOnHoldModal
         participantId={''}
         certificateId={''}
@@ -56,7 +56,7 @@ describe(PutOnHoldModal.name, () => {
     expect(screen.getByText(t('common.to'))).toBeInTheDocument()
   })
   it('should validate fields upon submission', async () => {
-    render(
+    _render(
       <PutOnHoldModal
         participantId={''}
         certificateId={''}
@@ -85,7 +85,7 @@ describe(PutOnHoldModal.name, () => {
   })
   it('should close modal', async () => {
     const onClose = vi.fn()
-    render(
+    _render(
       <PutOnHoldModal
         participantId={''}
         certificateId={''}
@@ -123,7 +123,7 @@ describe(PutOnHoldModal.name, () => {
       },
     ] as unknown as NonNullish<CertificateChangelog['certificateChanges']>
 
-    render(
+    _render(
       <PutOnHoldModal
         participantId={''}
         certificateId={''}
@@ -167,7 +167,7 @@ describe(PutOnHoldModal.name, () => {
       },
     ] as unknown as NonNullish<CertificateChangelog['certificateChanges']>
 
-    render(
+    _render(
       <PutOnHoldModal
         participantId={''}
         certificateId={''}
@@ -221,7 +221,7 @@ describe(PutOnHoldModal.name, () => {
       })
     })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <PutOnHoldModal
           participantId={''}

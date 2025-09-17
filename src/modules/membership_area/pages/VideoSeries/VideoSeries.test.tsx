@@ -10,7 +10,7 @@ import {
   WpPageInfo,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
 import VideoSeries from '.'
@@ -21,7 +21,7 @@ describe('page: VideoSeries', () => {
       executeQuery: () => never,
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series" element={<VideoSeries />} />
@@ -51,7 +51,7 @@ describe('page: VideoSeries', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series" element={<VideoSeries />} />
@@ -100,7 +100,7 @@ describe('page: VideoSeries', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series" element={<VideoSeries />} />
@@ -136,7 +136,7 @@ describe('page: VideoSeries', () => {
         }),
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series" element={<VideoSeries />} />
@@ -192,7 +192,7 @@ describe('page: VideoSeries', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series" element={<VideoSeries />} />
@@ -254,7 +254,7 @@ describe('page: VideoSeries', () => {
       },
     }
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <Routes>
           <Route path="/video-series" element={<VideoSeries />} />

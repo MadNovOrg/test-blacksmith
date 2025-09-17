@@ -13,7 +13,7 @@ import {
 import { buildLesson, buildModule } from '@app/modules/grading/utils'
 import { Grade, RoleName } from '@app/types'
 
-import { render, screen, within, userEvent, chance } from '@test/index'
+import { _render, screen, within, userEvent, chance } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
 
 import { buildGradingCourse, selectGradingOption } from '../../test-utils'
@@ -54,7 +54,7 @@ it('displays course name, course participants who attended and covered course mo
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />
@@ -110,7 +110,7 @@ it("doesn't display already graded participants", () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />
@@ -154,7 +154,7 @@ it('displays selected participants from query param', () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />
@@ -216,7 +216,7 @@ it('displays confirmation modal when clicked on submit button', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />
@@ -273,7 +273,7 @@ it('closes modal when saving is not confirmed', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />
@@ -328,7 +328,7 @@ it("disables save button if a grading option isn't selected", () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -406,7 +406,7 @@ it('saves grades for participants when an intent for saving is confirmed', async
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -474,7 +474,7 @@ it('displays loading state while saving grades', async () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -530,7 +530,7 @@ it('displays an alert if there was an error saving grades', async () => {
       }),
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -572,7 +572,7 @@ it('displays module notes field when grading an individual participant as an adm
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -613,7 +613,7 @@ it('displays module notes field when grading an individual participant as a lead
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -661,7 +661,7 @@ it("doesn't display module notes field when grading in bulk", () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -700,7 +700,7 @@ it("doesn't display module notes field when grading as an assistant trainer", ()
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -747,7 +747,7 @@ it("doesn't display modules that don't have any covered lessons", () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path=":id/grading" element={<ICMGradingV2 course={course} />} />
@@ -790,7 +790,7 @@ it("displays proper message when course doesn't have modules", () => {
     executeMutation: () => never,
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/:id/grading" element={<ICMGradingV2 course={course} />} />

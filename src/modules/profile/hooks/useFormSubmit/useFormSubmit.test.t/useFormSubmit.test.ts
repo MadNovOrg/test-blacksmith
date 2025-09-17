@@ -1,9 +1,9 @@
-import { renderHook } from '@testing-library/react'
 import { useSearchParams } from 'react-router-dom'
 
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 import { TrainerAgreementTypeName, TrainerRoleTypeName } from '@app/types'
 
+import { renderHook } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { EditProfileInputs } from '../../../pages/EditProfile/utils'

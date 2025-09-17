@@ -7,7 +7,7 @@ import { fromValue } from 'wonka'
 import { GetOrganisationDetailsQuery } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { chance, render, renderHook, screen } from '@test/index'
+import { chance, _render, renderHook, screen } from '@test/index'
 
 import { useAllOrganizationProfiles } from '../../hooks/useAllOrgMembersProfiles'
 import { useIndividualOrganizationStatistics } from '../../hooks/useIndividualOrganizationStatistics'
@@ -105,7 +105,7 @@ describe(OrgDashboard.name, () => {
         }),
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="organisations/:id" element={<OrgDashboard />} />

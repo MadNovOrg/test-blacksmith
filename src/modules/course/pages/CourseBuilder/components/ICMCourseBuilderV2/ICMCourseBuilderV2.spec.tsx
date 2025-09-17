@@ -15,7 +15,7 @@ import {
   SubmitIcmModulesMutationVariables,
 } from '@app/generated/graphql'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { COURSE_TO_BUILD_QUERY } from '../../hooks/useCourseToBuild'
 import { buildCourse, buildModuleSetting } from '../../test-utils'
@@ -61,7 +61,7 @@ it('override onSubmit method', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2
         data={{ course }}
@@ -121,7 +121,7 @@ it('toggles a module selection', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -179,7 +179,7 @@ it('resets the selection to the saved curriculum if a course has one when the cl
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -237,7 +237,7 @@ it("resets the selection to mandatory modules if a course doesn't have curriculu
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,
@@ -319,7 +319,7 @@ it('saves modules and marks a course as draft when a module is selected', async 
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/courses/:id/modules" element={<ICMCourseBuilderV2 />} />
@@ -379,7 +379,7 @@ it.each([
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id/modules" element={<ICMCourseBuilderV2 />} />
@@ -437,7 +437,7 @@ it.each([[Course_Level_Enum.AdvancedTrainer, true]])(
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <Routes>
           <Route path="/courses/:id/modules" element={<ICMCourseBuilderV2 />} />
@@ -492,7 +492,7 @@ it('validates that LEVEL_2 course has at least one purple module selected', asyn
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="/courses/:id/modules" element={<ICMCourseBuilderV2 />} />
@@ -567,7 +567,7 @@ it('submits the modules and redirects to the course details page', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <Routes>
         <Route path="courses/:id">
@@ -627,7 +627,7 @@ it('handles the selection of module groups that require others', async () => {
     },
   } as unknown as Client
 
-  render(
+  _render(
     <Provider value={client}>
       <ICMCourseBuilderV2 />
     </Provider>,

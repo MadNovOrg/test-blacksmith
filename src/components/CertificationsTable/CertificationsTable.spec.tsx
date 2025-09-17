@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 import { capitalize } from '@app/util'
 
-import { render, renderHook, screen, userEvent } from '@test/index'
+import { _render, renderHook, screen, userEvent } from '@test/index'
 import { buildCertificate } from '@test/mock-data-utils'
 
 import { CertificationsTable } from './CertificationsTable'
@@ -24,15 +24,15 @@ describe(CertificationsTable.name, () => {
     buildCertificate(),
   ] as GetProfileDetailsQuery['certificates']
   beforeEach(() =>
-    render(
+    _render(
       <CertificationsTable certifications={certifications} verified={true} />,
     ),
   )
-  it('should render the component', () => {
+  it('should _render the component', () => {
     expect(screen.getByText(t('certifications'))).toBeInTheDocument()
   })
   it.each([t('course-name'), t('certificate'), t('status'), t('certificate')])(
-    'should render table head cells: %s',
+    'should _render table head cells: %s',
     cell => {
       screen
         .getAllByText(cell)
@@ -40,13 +40,13 @@ describe(CertificationsTable.name, () => {
     },
   )
   describe.each(certifications)(
-    'should render all certificate details',
+    'should _render all certificate details',
     certificate => {
       it.each([
         certificate.courseName,
         certificate.number,
         capitalize(certificate.status as string),
-      ])('should render: %s', value => {
+      ])('should _render: %s', value => {
         expect(screen.getByText(value)).toBeInTheDocument()
       })
       it('should navigate to certificate details', async () => {

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { screen, render } from '@test/index'
+import { screen, _render } from '@test/index'
 
 import { CourseHealthAndSafetyForm } from './index'
 
@@ -12,7 +12,7 @@ vi.mock('react-router-dom', async () => ({
 
 describe('page: CourseHealthAndSafetyForm', () => {
   it('renders form', async () => {
-    render(<CourseHealthAndSafetyForm />)
+    _render(<CourseHealthAndSafetyForm />)
     expect(
       screen.getByText('Health Guidance & Training Information'),
     ).toBeInTheDocument()

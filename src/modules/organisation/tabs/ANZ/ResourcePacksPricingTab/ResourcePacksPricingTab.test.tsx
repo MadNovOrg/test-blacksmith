@@ -12,7 +12,7 @@ import { useAllResourcePacksPricing } from '@app/modules/organisation/hooks/useA
 import { AwsRegions, RoleName } from '@app/types'
 import { CourseTypeOrgRPPricings } from '@app/util'
 
-import { screen, chance, render, userEvent } from '@test/index'
+import { screen, chance, _render, userEvent } from '@test/index'
 
 import { ResourcePacksPricingTab } from './ResourcePacksPricingTab'
 
@@ -64,14 +64,14 @@ describe('component: ResourcePacksPricingTab', () => {
     })
   })
 
-  it('should render the component', () => {
-    render(<ResourcePacksPricingTab />)
+  it('should _render the component', () => {
+    _render(<ResourcePacksPricingTab />)
     expect(
       screen.getByTestId('resource-packs-pricing-title'),
     ).toBeInTheDocument()
   })
 
-  it('should not render the table if pricings are still loading', () => {
+  it('should not _render the table if pricings are still loading', () => {
     useAllResourcePacksPricingMock.mockReturnValue({
       data: {
         resource_packs_pricing: pricings,
@@ -80,13 +80,13 @@ describe('component: ResourcePacksPricingTab', () => {
       fetching: true,
       refetch: vi.fn(),
     })
-    render(<ResourcePacksPricingTab />)
+    _render(<ResourcePacksPricingTab />)
     expect(
       screen.queryByTestId('resource-packs-pricing-table'),
     ).not.toBeInTheDocument()
   })
 
-  it('should not render the table if there was an error loading prices', () => {
+  it('should not _render the table if there was an error loading prices', () => {
     useAllResourcePacksPricingMock.mockReturnValue({
       data: {
         resource_packs_pricing: pricings,
@@ -95,14 +95,14 @@ describe('component: ResourcePacksPricingTab', () => {
       fetching: false,
       refetch: vi.fn(),
     })
-    render(<ResourcePacksPricingTab />)
+    _render(<ResourcePacksPricingTab />)
     expect(
       screen.queryByTestId('resource-packs-pricing-table'),
     ).not.toBeInTheDocument()
   })
 
-  it('Should render the button, tabs and prices table', () => {
-    render(<ResourcePacksPricingTab />, {
+  it('Should _render the button, tabs and prices table', () => {
+    _render(<ResourcePacksPricingTab />, {
       auth: {
         activeRole: chance.pickone([
           RoleName.TT_ADMIN,
@@ -127,9 +127,9 @@ describe('component: ResourcePacksPricingTab', () => {
   })
 
   it.each(CourseTypeOrgRPPricings)(
-    'Should render only the prices for the %s course type',
+    'Should _render only the prices for the %s course type',
     async courseType => {
-      render(<ResourcePacksPricingTab />, {
+      _render(<ResourcePacksPricingTab />, {
         auth: {
           activeRole: chance.pickone([
             RoleName.TT_ADMIN,

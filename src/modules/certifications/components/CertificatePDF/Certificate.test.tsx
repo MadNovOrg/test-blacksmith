@@ -7,7 +7,7 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 
-import { chance, render, renderHook, screen, waitFor } from '@test/index'
+import { chance, _render, renderHook, screen, waitFor } from '@test/index'
 
 import { CertificateDocument } from './Certificate'
 
@@ -31,7 +31,7 @@ describe('CertificateDocument', () => {
   }
 
   it("should display UK's content for non-Australian certificates", async () => {
-    render(<CertificateDocument {...defaultProps} />)
+    _render(<CertificateDocument {...defaultProps} />)
 
     await waitFor(() => {
       expect(
@@ -48,7 +48,7 @@ describe('CertificateDocument', () => {
 
   it("should display ANZ's content for Australian certificates", async () => {
     const props = { ...defaultProps, isAustralia: true }
-    render(<CertificateDocument {...props} />)
+    _render(<CertificateDocument {...props} />)
 
     await waitFor(() => {
       expect(
@@ -79,7 +79,7 @@ describe('CertificateDocument', () => {
   ])('should apply %s for %s name', async (script, name) => {
     const props = { ...defaultProps, participantName: name }
 
-    render(<CertificateDocument {...props} />)
+    _render(<CertificateDocument {...props} />)
 
     await waitFor(() => {
       expect(screen.getByText(name)).toHaveStyle({
@@ -94,7 +94,7 @@ describe('CertificateDocument', () => {
     async name => {
       const props = { ...defaultProps, participantName: name }
 
-      render(<CertificateDocument {...props} />)
+      _render(<CertificateDocument {...props} />)
 
       await waitFor(() => {
         expect(screen.getByText(name)).toHaveStyle({

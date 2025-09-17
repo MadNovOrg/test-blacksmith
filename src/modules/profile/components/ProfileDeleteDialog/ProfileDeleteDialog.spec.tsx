@@ -5,7 +5,14 @@ import { DeleteProfileMutation, DeleteUserError } from '@app/generated/graphql'
 import useProfile from '@app/modules/profile/hooks/useProfile/useProfile'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 
 import { ProfileDeleteDialog } from '.'
 
@@ -37,7 +44,7 @@ describe('DeleteUsersDialog', () => {
 
     useProfileMock.mockReturnValue(profile)
 
-    return render(
+    return _render(
       <Provider value={(client ?? mockClient) as unknown as Client}>
         <ProfileDeleteDialog
           onClose={onCloseMock}

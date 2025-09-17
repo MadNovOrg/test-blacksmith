@@ -1,6 +1,6 @@
 import { GetProfileDetailsQuery } from '@app/generated/graphql'
 
-import { render, screen } from '@test/index'
+import { _render, screen } from '@test/index'
 import { buildCertificate } from '@test/mock-data-utils'
 
 import { CertificationsAlerts } from '.'
@@ -8,7 +8,7 @@ import { CertificationsAlerts } from '.'
 describe(CertificationsAlerts.name, () => {
   const certificateMock = buildCertificate()
   const setup = (certificate = certificateMock, index = 0) =>
-    render(
+    _render(
       <CertificationsAlerts
         index={index}
         certificate={
@@ -16,18 +16,18 @@ describe(CertificationsAlerts.name, () => {
         }
       />,
     )
-  it('should render the component', () => {
+  it('should _render the component', () => {
     setup()
     expect(screen.getByText(certificateMock.courseName)).toBeInTheDocument()
   })
   it.each([certificateMock.courseName, certificateMock.number])(
-    'should render certificate details correctly: %s',
+    'should _render certificate details correctly: %s',
     detail => {
       setup()
       expect(screen.getByText(detail)).toBeInTheDocument()
     },
   )
-  it('should render exired certificate correctly', () => {
+  it('should _render exired certificate correctly', () => {
     // Arrange
     const certificate = buildCertificate({
       overrides: {
@@ -40,7 +40,7 @@ describe(CertificationsAlerts.name, () => {
     // Assert
     expect(screen.getByTestId('expired-certificate-alert')).toBeInTheDocument()
   })
-  it('should render valid certificate correctly', () => {
+  it('should _render valid certificate correctly', () => {
     // Arrange
     const certificate = buildCertificate({
       overrides: {

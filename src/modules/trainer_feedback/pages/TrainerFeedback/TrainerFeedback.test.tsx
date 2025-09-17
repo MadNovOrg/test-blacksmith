@@ -9,7 +9,7 @@ import {
 import { GET_ANSWERS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-answers'
 import { GET_COURSE_EVALUATION_QUESTIONS_QUERY } from '@app/modules/course_details/course_evaluation_tab/queries/get-questions'
 
-import { render, screen, chance } from '@test/index'
+import { _render, screen, chance } from '@test/index'
 
 import { TrainerFeedback } from './index'
 
@@ -114,7 +114,7 @@ describe('TrainerFeedback component', () => {
       },
     } as unknown as Client
 
-    render(
+    _render(
       <Provider value={client}>
         <TrainerFeedback />
       </Provider>,

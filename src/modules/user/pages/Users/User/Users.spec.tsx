@@ -13,7 +13,7 @@ import { useProfilesOrganisations } from '@app/modules/profile/hooks/useProfiles
 import { AwsRegions, RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
-  render,
+  _render,
   screen,
   within,
   chance,
@@ -81,7 +81,7 @@ describe('page: Users', () => {
       fetching: false,
     })
 
-    render(<Users />)
+    _render(<Users />)
 
     expect(screen.getByTestId('users-fetching')).toBeInTheDocument()
   })
@@ -95,7 +95,7 @@ describe('page: Users', () => {
       mutate: vi.fn(),
     })
 
-    render(<Users />)
+    _render(<Users />)
 
     expect(screen.getByText('No users at this time')).toBeInTheDocument()
   })
@@ -155,7 +155,7 @@ describe('page: Users', () => {
       },
     })
 
-    render(<Users />)
+    _render(<Users />)
 
     const table = screen.getByRole('table')
     const tableHead = within(table).getByTestId('table-head')
@@ -210,7 +210,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     const search = screen.getByTestId('FilterSearch-Input')
     await userEvent.type(search, keyword)
@@ -245,7 +245,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     await userEvent.click(
       within(screen.getByTestId('FilterUserRole')).getByText('Trainer'),
@@ -296,7 +296,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     await userEvent.click(
       within(screen.getByTestId('FilterUserRole')).getByText('Trainer'),
@@ -340,7 +340,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     await userEvent.click(
       within(screen.getByTestId('FilterUserRole')).getByText('Trainer'),
@@ -380,7 +380,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     await userEvent.click(screen.getByLabelText('Moderator'))
 
@@ -410,7 +410,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     await userEvent.click(screen.getByLabelText('Archived'))
 
@@ -448,7 +448,7 @@ describe('page: Users', () => {
       },
     )
 
-    render(<Users />)
+    _render(<Users />)
 
     const search = screen.getByTestId('FilterSearch-Input')
     await userEvent.type(search, keyword)
@@ -470,7 +470,7 @@ describe('page: Users', () => {
       mutate: vi.fn(),
     })
 
-    render(<Users />, {
+    _render(<Users />, {
       auth: {
         activeRole: RoleName.TT_ADMIN,
       },
@@ -495,7 +495,7 @@ describe('page: Users', () => {
         mutate: vi.fn(),
       })
 
-      render(<Users />, {
+      _render(<Users />, {
         auth: {
           activeRole: role,
         },
@@ -519,7 +519,7 @@ describe('page: Users', () => {
       mutate: vi.fn(),
     })
 
-    render(
+    _render(
       <Users />,
       {
         auth: {
@@ -554,7 +554,7 @@ describe('page: Users', () => {
       mutate: vi.fn(),
     })
 
-    render(<Users />, {}, { initialEntries: ['/users/merge'] })
+    _render(<Users />, {}, { initialEntries: ['/users/merge'] })
 
     const table = screen.getByRole('table')
     const tableBody = within(table).getByTestId('table-body')
@@ -588,7 +588,7 @@ describe('page: Users', () => {
       profiles: [],
     })
 
-    render(<Users />)
+    _render(<Users />)
 
     expect(
       screen.getByTestId('FilterAgreementTypeAccordion'),
@@ -606,7 +606,7 @@ describe('page: Users', () => {
       profiles: [],
     })
 
-    render(<Users />)
+    _render(<Users />)
 
     expect(
       screen.queryByTestId('FilterAgreementTypeAccordion'),

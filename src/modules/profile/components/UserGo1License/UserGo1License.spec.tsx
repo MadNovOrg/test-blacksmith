@@ -5,7 +5,7 @@ import { fromValue } from 'wonka'
 import { DeleteGo1LicenseMutation } from '@app/generated/graphql'
 import { dateFormats } from '@app/i18n/config'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { chance, _render, screen, userEvent, waitFor } from '@test/index'
 
 import { Go1LicenseInfo, UserGo1License } from '.'
 
@@ -30,7 +30,7 @@ describe('component: UserGo1License', () => {
       expireDate: expiresDate,
     })
 
-    render(<UserGo1License license={go1License} editable={false} />)
+    _render(<UserGo1License license={go1License} editable={false} />)
 
     expect(screen.getByTestId('enrolled-on')).toHaveTextContent(
       `Enrolled on ${format(enrolledDate, dateFormats.date_defaultShort)}`,
@@ -67,7 +67,7 @@ describe('component: UserGo1License', () => {
 
     const go1License = buildGo1License({ id: LICENSE_ID })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <UserGo1License
           license={go1License}
@@ -102,7 +102,7 @@ describe('component: UserGo1License', () => {
 
     const go1License = buildGo1License({ id: LICENSE_ID })
 
-    render(
+    _render(
       <Provider value={client as unknown as Client}>
         <UserGo1License
           license={go1License}

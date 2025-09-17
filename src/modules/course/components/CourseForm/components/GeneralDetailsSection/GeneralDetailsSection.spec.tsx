@@ -197,7 +197,7 @@ describe(`component: ${GeneralDetailsSection.name}`, () => {
     expect(screen.getByLabelText('Tender course')).toBeInTheDocument()
   })
 
-  it('does not render Tender course component for closed course type on UK region', () => {
+  it('does not _render Tender course component for closed course type on UK region', () => {
     vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
     renderForm({ type: Course_Type_Enum.Closed })
 

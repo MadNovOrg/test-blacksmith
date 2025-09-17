@@ -12,7 +12,14 @@ import {
   TrainerRoleTypeName,
 } from '@app/types'
 
-import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
+import {
+  chance,
+  _render,
+  screen,
+  userEvent,
+  waitFor,
+  within,
+} from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { SearchTrainers } from './SearchTrainers'
@@ -26,7 +33,7 @@ describe(SearchTrainers.name, () => {
     const course = buildCourse()
 
     // Act
-    const { container } = render(
+    const { container } = _render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
         courseLevel={Course_Level_Enum.Level_1}
@@ -55,7 +62,7 @@ describe(SearchTrainers.name, () => {
     const placeholder = chance.sentence()
 
     // Act
-    render(
+    _render(
       <SearchTrainers
         trainerType={CourseTrainerType.Leader}
         courseLevel={Course_Level_Enum.Level_1}
@@ -100,7 +107,7 @@ describe(SearchTrainers.name, () => {
     )
 
     // Act
-    render(
+    _render(
       <Provider value={urqlMockClient as unknown as Client}>
         <SearchTrainers
           trainerType={CourseTrainerType.Leader}
@@ -165,7 +172,7 @@ describe(SearchTrainers.name, () => {
     )
 
     // Act
-    render(
+    _render(
       <Provider value={urqlMockClient as unknown as Client}>
         <SearchTrainers
           trainerType={CourseTrainerType.Leader}
@@ -238,7 +245,7 @@ describe(SearchTrainers.name, () => {
     )
 
     // Act
-    render(
+    _render(
       <Provider value={urqlMockClient as unknown as Client}>
         <SearchTrainers
           trainerType={CourseTrainerType.Leader}
@@ -279,7 +286,7 @@ describe(SearchTrainers.name, () => {
     )
 
     const onChange = vi.fn()
-    render(
+    _render(
       <Provider value={urqlMockClient as unknown as Client}>
         <SearchTrainers
           trainerType={CourseTrainerType.Leader}
@@ -324,7 +331,7 @@ describe(SearchTrainers.name, () => {
     )
 
     // Act
-    render(
+    _render(
       <Provider value={urqlMockClient as unknown as Client}>
         <SearchTrainers
           trainerType={CourseTrainerType.Leader}

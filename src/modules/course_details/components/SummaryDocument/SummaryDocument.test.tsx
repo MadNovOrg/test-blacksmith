@@ -13,7 +13,7 @@ import {
 } from '@app/generated/graphql'
 import { CourseEvaluationGroupedQuestion } from '@app/types'
 
-import { chance, Matcher, render, screen, waitFor } from '@test/index'
+import { chance, Matcher, _render, screen, waitFor } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { SummaryDocument } from './SummaryDocument'
@@ -210,7 +210,7 @@ describe('SummaryDocument', () => {
       ungrouped: {},
     }
 
-    render(<SummaryDocument {...props} />)
+    _render(<SummaryDocument {...props} />)
 
     await waitFor(() => {
       expect(screen.getByText('Արամ Գրիգորյան')).toHaveStyle({
@@ -290,7 +290,7 @@ describe('SummaryDocument', () => {
       ungrouped: {},
     }
 
-    render(<SummaryDocument {...props} />)
+    _render(<SummaryDocument {...props} />)
 
     await waitFor(() => {
       const style = window.getComputedStyle(screen.getByText('John Smith'))
@@ -411,7 +411,7 @@ describe('SummaryDocument', () => {
       ungrouped: {},
     }
 
-    render(<SummaryDocument {...props} />)
+    _render(<SummaryDocument {...props} />)
 
     await waitFor(() => {
       expect(screen.getByText('محمد أحمد')).toHaveStyle({
@@ -542,7 +542,7 @@ describe('SummaryDocument', () => {
       ungrouped: {},
     }
 
-    render(<SummaryDocument {...props} />)
+    _render(<SummaryDocument {...props} />)
 
     // Theory should be in the document
     await waitFor(() => {

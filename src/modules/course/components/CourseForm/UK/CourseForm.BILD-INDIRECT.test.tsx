@@ -9,7 +9,7 @@ import {
 import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
 import { AwsRegions, RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { renderForm, selectBildCategory, selectLevel } from '../test-utils'
 
@@ -44,7 +44,7 @@ describe('UkCourseForm - indirect BILD', () => {
   ;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
     it(`allows ${role} to create a BILD course`, async () => {
       await waitFor(() => {
-        render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
           auth: {
             activeCertificates: [
               {
@@ -67,7 +67,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('allows a trainer with a BILD Intermediate trainer certificate to create a BILD course', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -98,7 +98,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('allows a trainer with an BILD Advanced trainer certificate to create a BILD course', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -129,7 +129,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it(`displays only ${Course_Level_Enum.BildRegular} course level`, async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -176,7 +176,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it("doesn't allow a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Intermediate trainer certified", async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -207,7 +207,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('allows a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Advanced trainer certified', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -238,7 +238,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('enables Blended learning toggle if Primary strategy is selected', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -276,7 +276,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('enables Virtual delivery type if Primary srategy is the only one selected', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -311,7 +311,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('allows both blended learning and reaccreditation toggles to be selected', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -350,7 +350,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it('allows mixed delivery only if primary strategy is selected', async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
@@ -386,7 +386,7 @@ describe('UkCourseForm - indirect BILD', () => {
 
   it("doesn't show AOL checkbox", async () => {
     await waitFor(() => {
-      render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
         auth: {
           activeCertificates: [
             {
