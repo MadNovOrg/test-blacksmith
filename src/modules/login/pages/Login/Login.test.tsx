@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AwsRegions } from '@app/types'
@@ -19,7 +18,7 @@ import { LoginPage } from './Login'
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', async () => ({
-  ...((await vi.importActual('react-router-dom')) as object),
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }))
 
@@ -92,8 +91,7 @@ describe('Login', () => {
   })
 
   it('navigates away when login succeeds', async () => {
-    providers.auth.login.mockResolvedValue({}) // no error
-
+    providers.auth.login.mockResolvedValue({})
     _render(<LoginPage />)
 
     const email = screen.getByTestId('input-email')
@@ -106,6 +104,53 @@ describe('Login', () => {
     await waitForCalls(providers.auth.login, 1)
 
     expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true })
+  })
+  it('should redirect to callbackUrl after login', async () => {
+    providers.auth.login.mockResolvedValue({})
+
+    _render(
+      <LoginPage />,
+      {},
+      { initialEntries: ['/login?callbackUrl=/dashboard'] },
+    )
+
+    const email = screen.getByTestId('input-email')
+    fireEvent.change(email, { target: { value: chance.email() } })
+
+    const pass = screen.getByTestId('input-password')
+    fireEvent.change(pass, { target: { value: chance.word() } })
+
+    fireEvent.click(screen.getByTestId('login-submit'))
+    await waitForCalls(providers.auth.login, 1)
+
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboard', {
+      replace: true,
+    })
+  })
+  it('should redirect to callback url if its full url', async () => {
+    providers.auth.login.mockResolvedValue({})
+
+    delete (window as { location?: Location }).location
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.location = { href: '' } as Location
+
+    _render(
+      <LoginPage />,
+      {},
+      { initialEntries: ['/login?callbackUrl=https://example.com/dashboard'] },
+    )
+
+    const email = screen.getByTestId('input-email')
+    fireEvent.change(email, { target: { value: chance.email() } })
+
+    const pass = screen.getByTestId('input-password')
+    fireEvent.change(pass, { target: { value: chance.word() } })
+
+    fireEvent.click(screen.getByTestId('login-submit'))
+    await waitForCalls(providers.auth.login, 1)
+
+    expect(window.location.href).toBe('https://example.com/dashboard')
   })
 })
 

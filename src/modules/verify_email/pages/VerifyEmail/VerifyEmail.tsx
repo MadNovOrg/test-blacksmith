@@ -12,7 +12,7 @@ import {
   RemoveUnverifiedRoleMutationVariables,
 } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
-import { requiredMsg } from '@app/util'
+import { isFullUrl, requiredMsg } from '@app/util'
 
 import { Form } from '../../components/Form/Form'
 import { REMOVE_UNVERIFIED_ROLE } from '../../queries'
@@ -20,6 +20,7 @@ import { REMOVE_UNVERIFIED_ROLE } from '../../queries'
 type LocationState = {
   from: { pathname: string; search: string }
   send: boolean
+  callbackUrl?: string
 }
 
 export type Props = unknown
@@ -44,10 +45,12 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
   const [success, setSuccess] = useState(false)
   const locationState = (location.state || {}) as LocationState
   const from = locationState.from || defaultNextPath
-  const nextUrl = `${from.pathname || '/'}${from.search || ''}`
+  const callbackUrl = locationState.callbackUrl
+  const nextUrl = callbackUrl ?? `${from.pathname || '/'}${from.search || ''}`
 
-  const continueToNextPage = async () => {
-    return navigate(nextUrl, { replace: true })
+  const continueToNextPage = () => {
+    if (isFullUrl(nextUrl)) window.location.href = nextUrl
+    else navigate(nextUrl, { replace: true })
   }
 
   const displayVerifyLater = nextUrl === '/booking/details'
@@ -65,13 +68,8 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
     RemoveUnverifiedRoleMutationVariables
   >(REMOVE_UNVERIFIED_ROLE)
 
-  console.log('profile', profile)
-
   const onSuccess = useCallback(async () => {
-    console.log('useCallback', profile)
-
     if (profile?.id) {
-      console.log('Removing unverified role for profile', profile.id)
       await removeUnverifiedRole({ profileId: profile.id })
     }
     setSuccess(true)

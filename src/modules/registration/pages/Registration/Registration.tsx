@@ -15,15 +15,19 @@ import {
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
 import { MUTATION as INSERT_PROFILE_TEMP } from '@app/modules/profile/queries/insert-profile-temp'
 import { Form } from '@app/modules/registration/components/Form/Form'
+import { isFullUrl } from '@app/util'
 
-type LocationState = { from: { pathname: string; search: string } }
+type LocationState = {
+  from: { pathname: string; search: string }
+  callbackUrl?: string
+}
 
 const bookingState = { pathname: '/booking/details' }
 
 export const RegistrationPage: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
-  const { login, profile, acl } = useAuth()
+  const { login, profile, acl, verified, reloadCurrentProfile } = useAuth()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -38,6 +42,8 @@ export const RegistrationPage: React.FC<
   const internalBooking = searchParams.get('internal') === 'true'
   const locationState = (location.state || {}) as LocationState
   const from = courseId ? bookingState : locationState.from
+  const callbackUrl =
+    searchParams.get('callbackUrl') || locationState.callbackUrl
 
   const onSignUp = async (email: string, password: string) => {
     navigate('?success=true', { replace: true, state: { from } })
@@ -53,10 +59,30 @@ export const RegistrationPage: React.FC<
   // router sets in the available routes and we navigate to verify
   useEffect(() => {
     if (!profile) return
-    if (profile && !courseId && !quantity) {
-      navigate('/verify', { replace: true, state: { from } })
+
+    // if we have profile but not verified, we need to verify first
+    if (profile && !verified && !courseId && !quantity) {
+      navigate('/verify', { replace: true, state: { from, callbackUrl } })
     }
-  }, [profile, navigate, from, courseId, quantity])
+    // if we have profile and verified user, we should navigate to the callbackUrl or home page
+    if (profile && verified && !courseId && !quantity) {
+      const nextUrl = callbackUrl ?? `${from?.pathname || '/'}`
+
+      if (isFullUrl(nextUrl)) {
+        reloadCurrentProfile()
+        window.location.href = nextUrl
+      } else navigate(nextUrl, { replace: true })
+    }
+  }, [
+    profile,
+    navigate,
+    from,
+    courseId,
+    quantity,
+    callbackUrl,
+    reloadCurrentProfile,
+    verified,
+  ])
 
   // This page loads for logged in as well as logged out users. When it loads
   // for logged in user, it will have a profile for sure, in which case we need to

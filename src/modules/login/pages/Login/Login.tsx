@@ -25,6 +25,7 @@ import * as yup from 'yup'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
+import { isFullUrl } from '@app/util'
 
 type LocationState = {
   email?: string
@@ -57,7 +58,17 @@ export const LoginPage = () => {
   const invitationDeclined = searchParams.get('invitationDeclined')
   const callbackUrl = searchParams.get('callbackUrl')
 
-  const from = (location.state as LocationState)?.from || {}
+  const from = useMemo(
+    () => (location.state as LocationState)?.from || {},
+    [location.state],
+  )
+
+  const routerState = useMemo(() => {
+    const state = {}
+    if (from) Object.assign(state, { from })
+    if (callbackUrl) Object.assign(state, { callbackUrl })
+    return state
+  }, [callbackUrl, from])
 
   const schema = useMemo(
     () =>
@@ -96,32 +107,32 @@ export const LoginPage = () => {
 
     const { user, error } = await auth.login(data.email, data.password)
 
-    if (!error) {
-      const to = `${from.pathname || '/'}${from.search || ''}`
-      // https://github.com/aws-amplify/amplify-js/issues/3733
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-
-      if (user?.challengeName === 'NEW_PASSWORD_REQUIRED') {
-        return navigate({
-          pathname: '/change-password',
-          search: `?${createSearchParams({
-            email: data.email,
-          })}`,
-        })
-      }
-      if (callbackUrl !== null) {
-        window.location.replace(callbackUrl)
-        return
-      }
-      return navigate(to, { replace: true })
+    if (error) {
+      setIsLoading(false)
+      setLoginError(
+        t(`pages.login.auth-errors.${error.code}`) ||
+          t(`pages.login.auth-errors.UnknownError`),
+      )
+      return
     }
 
-    setIsLoading(false)
-    setLoginError(
-      t(`pages.login.auth-errors.${error.code}`) ||
-        t(`pages.login.auth-errors.UnknownError`),
-    )
+    if (callbackUrl !== null) {
+      if (isFullUrl(callbackUrl)) window.location.href = callbackUrl
+      else navigate(callbackUrl, { replace: true })
+      return
+    }
+
+    if (user?.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      return navigate({
+        pathname: '/change-password',
+        search: `?${createSearchParams({
+          email: data.email,
+        })}`,
+      })
+    }
+
+    const to = `${from.pathname || '/'}${from.search || ''}`
+    return navigate(to, { replace: true })
   }
 
   return (
@@ -214,7 +225,7 @@ export const LoginPage = () => {
           <Link
             href="/registration"
             component={LinkBehavior}
-            state={from ? { from } : undefined}
+            state={routerState}
             data-testid="sign-up-link"
             sx={{ mt: 4, color: 'primary.main', fontWeight: '600' }}
           >

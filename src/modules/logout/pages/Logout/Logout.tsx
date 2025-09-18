@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AppLayoutMinimal } from '@app/layouts/AppLayoutMinimal'
+import { isFullUrl } from '@app/util'
 
 export const LogoutPage = () => {
   const [searchParams] = useSearchParams()
@@ -16,7 +17,8 @@ export const LogoutPage = () => {
     const logoutAndRedirect = async () => {
       await logout()
       if (callbackUrl) {
-        navigate(callbackUrl)
+        if (isFullUrl(callbackUrl)) window.location.href = callbackUrl
+        else navigate(callbackUrl)
       } else {
         navigate('/')
       }

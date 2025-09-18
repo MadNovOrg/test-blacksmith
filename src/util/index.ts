@@ -1334,3 +1334,12 @@ export function isDfeUrn(str: string) {
 export function isValidConnectID(str: string) {
   return /^(?:TTID-)?\d{7,}$/i.test(str)
 }
+
+export const isFullUrl = (url: string): boolean => {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
