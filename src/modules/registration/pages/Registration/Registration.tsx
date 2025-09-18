@@ -46,7 +46,7 @@ export const RegistrationPage: React.FC<
     searchParams.get('callbackUrl') || locationState.callbackUrl
 
   const onSignUp = async (email: string, password: string) => {
-    navigate('?success=true', { replace: true, state: { from } })
+    navigate('?success=true', { replace: true, state: { from, callbackUrl } })
     await login(email, password)
   }
 
