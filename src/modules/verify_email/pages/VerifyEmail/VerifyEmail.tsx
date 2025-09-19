@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 
+import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import {
   RemoveUnverifiedRoleMutation,
@@ -43,14 +44,17 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
   const { loadProfile, profile } = useAuth()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
   const locationState = (location.state || {}) as LocationState
   const from = locationState.from || defaultNextPath
   const callbackUrl = locationState.callbackUrl
   const nextUrl = callbackUrl ?? `${from.pathname || '/'}${from.search || ''}`
 
   const continueToNextPage = () => {
-    if (isFullUrl(nextUrl)) window.location.href = nextUrl
-    else navigate(nextUrl, { replace: true })
+    if (isFullUrl(nextUrl)) {
+      setLoading(true)
+      window.location.href = nextUrl
+    } else navigate(nextUrl, { replace: true })
   }
 
   const displayVerifyLater = nextUrl === '/booking/details'
@@ -59,7 +63,6 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
     const currentUser = await Auth.currentUserPoolUser()
     await currentUser.refreshSessionIfPossible()
     await loadProfile(currentUser)
-
     return continueToNextPage()
   }
 
@@ -74,6 +77,8 @@ export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
     }
     setSuccess(true)
   }, [profile, removeUnverifiedRole])
+
+  if (loading) return <SuspenseLoading />
 
   return (
     <Box display="flex" justifyContent="center">
