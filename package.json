@@ -250,7 +250,7 @@
     "nyc": "^17.1.0",
     "prettier": "^2.8.8",
     "prisma": "^5.12.1",
-    "remark-gfm": "^3.0.1",
+    "remark-gfm": "^4.0.1",
     "storybook": "^8.6.12",
     "ts-essentials": "9.4.2",
     "ts-jest": "^29.1.2",
