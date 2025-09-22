@@ -33,7 +33,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   release:
     name: Release
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     if: ${{ github.event.inputs.hotfix == 'false' }}
     steps:
       - name: Checkout Repo
@@ -88,7 +88,7 @@ jobs:
 
   hotfix-release:
     name: Hotfix Release
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     if: ${{ github.event.inputs.hotfix == 'true' }}
     steps:
       - name: Checkout to Current Branch
