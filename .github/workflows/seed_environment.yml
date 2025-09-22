@@ -28,7 +28,7 @@ env:
 jobs:
   data:
     name: Seed ${{ github.event.inputs.environment }}
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     steps:
       - name: Set endpoint variable
         run: echo "ENDPOINT=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
@@ -71,7 +71,7 @@ jobs:
   users-auth:
     needs: data
     name: ${{ github.event.inputs.environment }} Cognito - Profile DB Users alignment
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5

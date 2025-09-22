@@ -18,7 +18,7 @@ env:
   DEFAULT_ENV: 'DEV'
 jobs:
   invoice-sync:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     steps:
       - name: Log selected Environment
         run: echo Selected value is ---- ${{github.event.inputs.environment}}
