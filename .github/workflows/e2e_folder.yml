@@ -48,7 +48,7 @@ on:
 jobs:
   tests:
     name: E2E Tests by Folder
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     env:
       CI: true
       DEFAULT_TARGET: 'DEV'

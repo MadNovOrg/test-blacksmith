@@ -20,7 +20,7 @@ jobs:
     name: Lint & Typecheck
     env:
       NODE_OPTIONS: '--max-old-space-size=4096'
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -50,7 +50,7 @@ jobs:
     name: test
     env:
       NODE_OPTIONS: '--max-old-space-size=4096'
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         shard: [1, 2, 3, 4]

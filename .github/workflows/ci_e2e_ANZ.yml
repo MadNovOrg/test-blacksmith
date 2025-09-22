@@ -8,7 +8,7 @@ on:
 jobs:
   e2e-smoke-tests:
     name: ANZ E2E smoke tests
-    runs-on: blacksmith-8vcpu-ubuntu-2404
+    runs-on: ubuntu-8core
     strategy:
       fail-fast: false
       matrix:
