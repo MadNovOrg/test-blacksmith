@@ -37,7 +37,7 @@ jobs:
         run: echo "COGNITO_POOL_ID=${{ secrets[format('COGNITO_POOL_ID_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets[format('IAM_SERVICE_{0}', env.ENV_NAME)] }}
