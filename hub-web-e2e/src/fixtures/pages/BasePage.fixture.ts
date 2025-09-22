@@ -33,6 +33,16 @@ export class BasePage {
     })
 
     await this.page.waitForLoadState('domcontentloaded')
+
+    await this.page.addStyleTag({
+      content: `
+        * {
+          transition-duration: 0s !important;
+          animation-duration: 0s !important;
+        }
+      `,
+    })
+
     await expect(this.muiProgressCircle).toHaveCount(0, {
       timeout: 60_000,
     })

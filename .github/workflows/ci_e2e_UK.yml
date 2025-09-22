@@ -76,6 +76,14 @@ jobs:
         run: |
           pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Hasura Migration
         run: |
           cp hasura/.env.sample hasura/.env
