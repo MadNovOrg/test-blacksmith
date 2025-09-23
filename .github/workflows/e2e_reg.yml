@@ -18,7 +18,7 @@ jobs:
   tests:
     name: E2E regression tests
     timeout-minutes: 120
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       CI: true
       DEFAULT_TARGET: 'DEV'

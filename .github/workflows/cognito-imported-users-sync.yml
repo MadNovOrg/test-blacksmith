@@ -25,7 +25,7 @@ env:
 jobs:
   data:
     name: Sync imported attribute on ${{ github.event.inputs.environment }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Set endpoint variable
         run: echo "ENDPOINT=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
