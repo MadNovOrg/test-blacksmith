@@ -8,12 +8,12 @@ on:
 jobs:
   e2e-smoke-tests:
     name: UK E2E smoke tests
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: [1, 2, 3, 4, 5]
-        shardTotal: [5]
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
     env:
       CI: true
     services:

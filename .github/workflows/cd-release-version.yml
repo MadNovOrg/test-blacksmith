@@ -14,7 +14,7 @@ jobs:
   fetch-version:
     if: ${{ github.event.pull_request.merged == true && ((startsWith(github.event.pull_request.head.ref, 'changeset-release/') && github.event.pull_request.base.ref == 'main') || (startsWith(github.event.pull_request.head.ref, 'hotfix-release/') && github.event.pull_request.base.ref == 'hotfix_release_branch')) }}
     name: Fetch Version
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       RELEASE_VERSION: ${{ steps.get.outputs.RELEASE_VERSION }}
       RELEASE_TAG: ${{ steps.create_tag.outputs.RELEASE_TAG }}
@@ -55,7 +55,7 @@ jobs:
   label-check:
     name: Determine Deployment Region
     if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       region: ${{ steps.label-check.outputs.region }}
     steps:
@@ -82,7 +82,7 @@ jobs:
 
   manage-hotfix-release-branch:
     name: Manage Hotfix Release Branch
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     needs: fetch-version
     if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'changeset-release/') }}
     steps:
