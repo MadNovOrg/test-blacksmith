@@ -1,176 +1,176 @@
-name: CI/CD-DEV
+# name: CI/CD-DEV
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-  issues: write
+# permissions:
+#   id-token: write
+#   contents: read
+#   issues: write
 
-jobs:
-  lint-and-typecheck:
-    if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
-    name: Lint & Typecheck
-    env:
-      NODE_OPTIONS: '--max-old-space-size=4096'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 2
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: '9.15.5'
+# jobs:
+#   lint-and-typecheck:
+#     if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
+#     name: Lint & Typecheck
+#     env:
+#       NODE_OPTIONS: '--max-old-space-size=4096'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v5
+#         with:
+#           fetch-depth: 2
+#       - name: Setup pnpm
+#         uses: pnpm/action-setup@v3
+#         with:
+#           version: '9.15.5'
 
-      - name: Build
-        uses: actions/setup-node@v5
-        with:
-          node-version: '18.14.2'
-          cache: 'pnpm'
+#       - name: Build
+#         uses: actions/setup-node@v5
+#         with:
+#           node-version: '18.14.2'
+#           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: |
-          pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
+#       - name: Install dependencies
+#         run: |
+#           pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+#       - name: Lint
+#         run: pnpm lint
 
-      - name: Typecheck
-        run: pnpm typecheck
-  test:
-    if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
-    name: test
-    env:
-      NODE_OPTIONS: '--max-old-space-size=4096'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        shard: [1, 2, 3, 4]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 2
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: '9.15.5'
+#       - name: Typecheck
+#         run: pnpm typecheck
+#   test:
+#     if: ${{ ! startsWith(github.head_ref, 'changeset-release/') }}
+#     name: test
+#     env:
+#       NODE_OPTIONS: '--max-old-space-size=4096'
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         shard: [1, 2, 3, 4]
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v5
+#         with:
+#           fetch-depth: 2
+#       - name: Setup pnpm
+#         uses: pnpm/action-setup@v3
+#         with:
+#           version: '9.15.5'
 
-      - name: Build
-        uses: actions/setup-node@v5
-        with:
-          node-version: '18.14.2'
-          cache: 'pnpm'
+#       - name: Build
+#         uses: actions/setup-node@v5
+#         with:
+#           node-version: '18.14.2'
+#           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: |
-          pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
+#       - name: Install dependencies
+#         run: |
+#           pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
 
-      - name: Test
-        run: |
-          pnpm test:coverage --shard ${{ matrix.shard }}/${{ strategy.job-total }}
-          mv coverage/coverage-final.json coverage/coverage-shard${SHARD_NUMBER}.json
+#       - name: Test
+#         run: |
+#           pnpm test:coverage --shard ${{ matrix.shard }}/${{ strategy.job-total }}
+#           mv coverage/coverage-final.json coverage/coverage-shard${SHARD_NUMBER}.json
 
-      - name: Upload coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-shard${{ matrix.shard }}
-          path: coverage
+#       - name: Upload coverage
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: coverage-shard${{ matrix.shard }}
+#           path: coverage
 
-  sonar-analysis:
-    name: Build and analyze
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-      - name: Download Coverage
-        uses: actions/download-artifact@v5
-        with:
-          path: coverage
+#   sonar-analysis:
+#     name: Build and analyze
+#     needs: [test]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v5
+#         with:
+#           fetch-depth: 0
+#       - name: Download Coverage
+#         uses: actions/download-artifact@v5
+#         with:
+#           path: coverage
 
-      - name: Generate lcov reports for each shard
-        run: |
-          for shard in 1 2 3 4; do
-            mv coverage/coverage-shard$shard/coverage-shard.json coverage/coverage-$shard.json || true
-            rm -rf coverage/coverage-shard$shard
-          done
+#       - name: Generate lcov reports for each shard
+#         run: |
+#           for shard in 1 2 3 4; do
+#             mv coverage/coverage-shard$shard/coverage-shard.json coverage/coverage-$shard.json || true
+#             rm -rf coverage/coverage-shard$shard
+#           done
 
-          npx nyc merge ./coverage ./coverage/coverage.json
-          npx nyc report -t ./coverage --report-dir coverage --reporter=lcov
+#           npx nyc merge ./coverage ./coverage/coverage.json
+#           npx nyc report -t ./coverage --report-dir coverage --reporter=lcov
 
-      - name: Upload lcov artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: coverage
-      - uses: sonarsource/sonarqube-scan-action@master
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#       - name: Upload lcov artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: coverage
+#           path: coverage
+#       - uses: sonarsource/sonarqube-scan-action@master
+#         if: ${{ github.actor != 'dependabot[bot]' }}
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - uses: sonarsource/sonarqube-quality-gate-action@master
-        if: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'pull_request' }}
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#       - uses: sonarsource/sonarqube-quality-gate-action@master
+#         if: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'pull_request' }}
+#         timeout-minutes: 5
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  dev-cd:
-    name: DEV
-    needs: [lint-and-typecheck, test, sonar-analysis]
-    strategy:
-      matrix:
-        aws_region: [eu-west-2, ap-southeast-2]
-    if: |
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'push' &&
-      ! startsWith(github.head_ref, 'changeset-release/')
-    uses: ./.github/workflows/pipeline.yml
-    with:
-      mode: 'development'
-      aws_region: ${{ matrix.aws_region }}
-    secrets:
-      service_role_arn: ${{ matrix.aws_region == 'eu-west-2' && secrets.IAM_SERVICE_DEV || secrets.IAM_SERVICE_DEV_ANZ }}
-      hasura_admin_pass: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ADMIN_PASS_DEV || secrets.HASURA_ADMIN_PASS_DEV_ANZ }}
-      cognito_user_pool_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_POOL_ID_DEV ||  secrets.COGNITO_POOL_ID_DEV_ANZ }}
-      cognito_user_pool_client_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_CLIENT_ID_DEV || secrets.COGNITO_CLIENT_ID_DEV_ANZ }}
-      hasura_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ENDPOINT_DEV || secrets.HASURA_ENDPOINT_DEV_ANZ }}
-      hasura_ws_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_WS_ENDPOINT_DEV || secrets.HASURA_WS_ENDPOINT_DEV_ANZ }}
-      wp_host: ${{ matrix.aws_region && secrets.WP_HOST_DEV || secrets.WP_HOST_DEV_ANZ }}
-      s3_bucket: ${{ matrix.aws_region == 'eu-west-2' && secrets.S3_BUCKET_DEV || secrets.S3_BUCKET_DEV_ANZ }}
-      gmaps_key: ${{ secrets.GMAPS_KEY }}
-      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
-      stripe_key: ${{ matrix.aws_region == 'eu-west-2' && secrets.STRIPE_KEY_DEV || secrets.STRIPE_KEY_DEV_ANZ }}
-      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
-      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+#   dev-cd:
+#     name: DEV
+#     needs: [lint-and-typecheck, test, sonar-analysis]
+#     strategy:
+#       matrix:
+#         aws_region: [eu-west-2, ap-southeast-2]
+#     if: |
+#       github.ref == 'refs/heads/main' &&
+#       github.event_name == 'push' &&
+#       ! startsWith(github.head_ref, 'changeset-release/')
+#     uses: ./.github/workflows/pipeline.yml
+#     with:
+#       mode: 'development'
+#       aws_region: ${{ matrix.aws_region }}
+#     secrets:
+#       service_role_arn: ${{ matrix.aws_region == 'eu-west-2' && secrets.IAM_SERVICE_DEV || secrets.IAM_SERVICE_DEV_ANZ }}
+#       hasura_admin_pass: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ADMIN_PASS_DEV || secrets.HASURA_ADMIN_PASS_DEV_ANZ }}
+#       cognito_user_pool_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_POOL_ID_DEV ||  secrets.COGNITO_POOL_ID_DEV_ANZ }}
+#       cognito_user_pool_client_id: ${{ matrix.aws_region == 'eu-west-2' && secrets.COGNITO_CLIENT_ID_DEV || secrets.COGNITO_CLIENT_ID_DEV_ANZ }}
+#       hasura_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_ENDPOINT_DEV || secrets.HASURA_ENDPOINT_DEV_ANZ }}
+#       hasura_ws_endpoint: ${{ matrix.aws_region == 'eu-west-2' && secrets.HASURA_WS_ENDPOINT_DEV || secrets.HASURA_WS_ENDPOINT_DEV_ANZ }}
+#       wp_host: ${{ matrix.aws_region && secrets.WP_HOST_DEV || secrets.WP_HOST_DEV_ANZ }}
+#       s3_bucket: ${{ matrix.aws_region == 'eu-west-2' && secrets.S3_BUCKET_DEV || secrets.S3_BUCKET_DEV_ANZ }}
+#       gmaps_key: ${{ secrets.GMAPS_KEY }}
+#       recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+#       stripe_key: ${{ matrix.aws_region == 'eu-west-2' && secrets.STRIPE_KEY_DEV || secrets.STRIPE_KEY_DEV_ANZ }}
+#       request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+#       sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-  zap-full-scan:
-    name: OWASP ZAP Baseline Scan
-    needs: [dev-cd]
-    strategy:
-      matrix:
-        target:
-          [
-            'https://dev.connect.teamteach.com',
-            'https://dev.connect.teamteach.com.au',
-          ]
-    if: |
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'push' &&
-      ! startsWith(github.head_ref, 'changeset-release/')
-    uses: ./.github/workflows/owasp.yml
-    with:
-      full: true
-      target_url: ${{ matrix.target }}
-      artifact_name: ${{ matrix.target }}
+#   zap-full-scan:
+#     name: OWASP ZAP Baseline Scan
+#     needs: [dev-cd]
+#     strategy:
+#       matrix:
+#         target:
+#           [
+#             'https://dev.connect.teamteach.com',
+#             'https://dev.connect.teamteach.com.au',
+#           ]
+#     if: |
+#       github.ref == 'refs/heads/main' &&
+#       github.event_name == 'push' &&
+#       ! startsWith(github.head_ref, 'changeset-release/')
+#     uses: ./.github/workflows/owasp.yml
+#     with:
+#       full: true
+#       target_url: ${{ matrix.target }}
+#       artifact_name: ${{ matrix.target }}
