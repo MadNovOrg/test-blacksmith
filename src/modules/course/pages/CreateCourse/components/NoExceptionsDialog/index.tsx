@@ -1,0 +1,21 @@
+import Alert from '@mui/material/Alert'
+import React, { ComponentProps } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { Dialog } from '@app/components/dialogs'
+
+export const NoExceptionsDialog: React.FC<
+  ComponentProps<typeof Dialog>
+> = props => {
+  const { t } = useTranslation('pages', {
+    keyPrefix: 'create-course.exceptions',
+  })
+
+  return (
+    <Dialog title={t('no-exceptions-title')} {...props}>
+      <Alert sx={{ px: 0 }} severity="warning">
+        {t('no-exceptions-message')}
+      </Alert>
+    </Dialog>
+  )
+}

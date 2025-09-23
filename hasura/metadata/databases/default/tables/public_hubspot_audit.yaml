@@ -1,0 +1,62 @@
+table:
+  name: hubspot_audit
+  schema: public
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - error
+        - page_details
+        - authentication_mode
+        - hubspot_cookie
+        - status
+        - created_at
+        - id
+        - profile_id
+    comment: ""
+  - role: unverified
+    permission:
+      check: {}
+      columns:
+        - error
+        - page_details
+        - authentication_mode
+        - hubspot_cookie
+        - status
+        - created_at
+        - id
+        - profile_id
+    comment: ""
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - error
+        - page_details
+        - authentication_mode
+        - hubspot_cookie
+        - status
+        - created_at
+        - id
+        - profile_id
+    comment: ""
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - id
+      filter: {}
+    comment: ""

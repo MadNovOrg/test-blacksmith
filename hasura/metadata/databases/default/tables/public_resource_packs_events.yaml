@@ -1,0 +1,4 @@
+table:
+  name: resource_packs_events
+  schema: public
+is_enum: true

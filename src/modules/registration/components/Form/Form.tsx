@@ -1,0 +1,642 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import LoadingButton from '@mui/lab/LoadingButton'
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  styled,
+  TextField as MuiTextField,
+  Typography,
+} from '@mui/material'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { Auth } from 'aws-amplify'
+import { subYears } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
+import { useFeatureFlagEnabled } from 'posthog-js/react'
+import React, { useMemo, useState, useCallback } from 'react'
+import {
+  Controller,
+  FieldErrors,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form'
+import { Trans, useTranslation } from 'react-i18next'
+import { useToggle } from 'react-use'
+
+import CountriesSelector from '@app/components/CountriesSelector'
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { JobTitleSelector } from '@app/components/JobTitleSelector'
+import { OrgSelector as ANZOrgSelector } from '@app/components/OrgSelector/ANZ'
+import {
+  CallbackOption as ANZCallbackOption,
+  isHubOrg as ANZIsHubOrg,
+  useOrganizationToBeCreatedOnRegistration as ANZUseOrganizationToBeCreatedOnRegistration,
+} from '@app/components/OrgSelector/ANZ/utils'
+import { OrgSelector as UKOrgSelector } from '@app/components/OrgSelector/UK'
+import {
+  CallbackOption as UKCallbackOption,
+  isHubOrg as UKIsHubOrg,
+  useOrganizationToBeCreatedOnRegistration as UKUseOrganizationToBeCreatedOnRegistration,
+} from '@app/components/OrgSelector/UK/utils'
+import PhoneNumberInput, {
+  DEFAULT_PHONE_COUNTRY_ANZ,
+  DEFAULT_PHONE_COUNTRY_UK,
+} from '@app/components/PhoneNumberInput'
+import { Recaptcha, RecaptchaActions } from '@app/components/Recaptcha'
+import { useAuth } from '@app/context/auth'
+import { handleHubspotFormSubmit } from '@app/context/auth/helpers'
+import { AuthMode } from '@app/context/auth/types'
+import {
+  Cud_Operation_Enum,
+  Org_Created_From_Enum,
+  SignUpMutation,
+  SignUpMutationVariables,
+} from '@app/generated/graphql'
+import { useInsertNewOrganization } from '@app/hooks/useInsertNewOrganisationLead'
+import { gqlRequest } from '@app/lib/gql-request'
+import { useInsertOrganisationLog } from '@app/modules/organisation/queries/insert-org-log'
+import { SIGN_UP_MUTATION } from '@app/modules/registration/queries'
+import { FormInputs, getFormSchema } from '@app/modules/registration/utils'
+import { INPUT_DATE_FORMAT } from '@app/util'
+
+const TextField = styled(MuiTextField)(() => ({
+  '& .MuiInput-root': {
+    height: 40,
+  },
+}))
+
+type Props = {
+  onSignUp: (email: string, password: string) => void
+  courseId: number | null
+  quantity: number | null
+}
+
+const ukOrgSelector = (
+  register: UseFormRegister<FormInputs>,
+  values: FormInputs,
+  errors: FieldErrors<FormInputs>,
+  isSearchOnlyByPostCodeEnabled: boolean,
+  t: (key: string) => string,
+  orgSelectorOnChangeUK: (org: UKCallbackOption) => void,
+  isUKCountry: (code: string) => boolean,
+) => {
+  return (
+    <UKOrgSelector
+      required
+      {...register('organization')}
+      allowAdding={!isUKCountry(values.countryCode)}
+      autocompleteMode={false}
+      showTrainerOrgOnly={false}
+      error={errors.organization?.message}
+      value={values.organization ?? undefined}
+      countryCode={values.countryCode}
+      onChange={orgSelectorOnChangeUK}
+      textFieldProps={{
+        variant: 'filled',
+      }}
+      sx={{ mb: 3 }}
+      isShallowRetrieval
+      canSearchByAddress={false}
+      searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+      placeholder={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.post-code-and-name-placeholder')
+      }
+      label={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.residing-org')
+      }
+      showDfeResults={isUKCountry(values.countryCode)}
+      createdFrom={Org_Created_From_Enum.RegisterPage}
+    />
+  )
+}
+
+const anzOrgSelector = (
+  register: UseFormRegister<FormInputs>,
+  values: FormInputs,
+  errors: FieldErrors<FormInputs>,
+  isSearchOnlyByPostCodeEnabled: boolean,
+  t: (key: string) => string,
+  orgSelectorOnChangeANZ: (org: ANZCallbackOption) => void,
+) => {
+  return (
+    <ANZOrgSelector
+      required
+      {...register('organization')}
+      allowAdding={false}
+      autocompleteMode={false}
+      showTrainerOrgOnly={false}
+      error={errors.organization?.message}
+      value={values.organization ?? undefined}
+      countryCode={values.countryCode}
+      onChange={orgSelectorOnChangeANZ}
+      textFieldProps={{
+        variant: 'filled',
+      }}
+      sx={{ mb: 3 }}
+      isShallowRetrieval
+      canSearchByAddress={false}
+      searchOnlyByPostCode={isSearchOnlyByPostCodeEnabled}
+      placeholder={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.post-code-and-name-placeholder-anz')
+      }
+      label={
+        isSearchOnlyByPostCodeEnabled
+          ? undefined
+          : t('components.org-selector.residing-org')
+      }
+      showDfeResults={false}
+      createdFrom={Org_Created_From_Enum.RegisterPage}
+    />
+  )
+}
+
+export const Form: React.FC<React.PropsWithChildren<Props>> = ({
+  onSignUp,
+  courseId,
+  quantity,
+}) => {
+  const isSearchOnlyByPostCodeEnabled = useFeatureFlagEnabled(
+    'search-only-by-postcode-on-registration',
+  )
+  const hubspotFormsSubmissionEnabled = useFeatureFlagEnabled(
+    'enable-hubspot-forms-submissions',
+  )
+  const {
+    acl: { isUK },
+    profile,
+  } = useAuth()
+  const { t } = useTranslation()
+  const [showPassword, toggleShowPassword] = useToggle(false)
+  const [isManualFormError, setIsManualFormError] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [signUpError, setSignUpError] = useState('')
+  const organizationData = isUK()
+    ? UKUseOrganizationToBeCreatedOnRegistration()
+    : ANZUseOrganizationToBeCreatedOnRegistration()
+  const { getLabel: getCountryLabel, isUKCountry } = useWorldCountries()
+
+  const schema = useMemo(() => getFormSchema(t), [t])
+
+  const url = import.meta.env.VITE_BASE_WORDPRESS_API_URL
+  const { origin } = useMemo(() => (url ? new URL(url) : { origin: '' }), [url])
+
+  const [, insertOrganisation] = useInsertNewOrganization()
+
+  const [, insertLog] = useInsertOrganisationLog()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+    setValue,
+  } = useForm<FormInputs>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      country: getCountryLabel(isUK() ? 'GB-ENG' : 'AU'),
+      countryCode: isUK() ? 'GB-ENG' : 'AU',
+      dob: undefined,
+      phone: '',
+      phoneCountryCode: isUK()
+        ? DEFAULT_PHONE_COUNTRY_UK
+        : DEFAULT_PHONE_COUNTRY_ANZ,
+    },
+  })
+
+  const values = watch()
+  const minimalAge = subYears(new Date(), 16)
+
+  const onSubmit = async (data: FormInputs) => {
+    if (isManualFormError) return
+
+    setLoading(true)
+    setSignUpError('')
+
+    try {
+      let input: SignUpMutationVariables['input'] = {
+        email: data.email,
+        givenName: data.firstName,
+        familyName: data.surname,
+        phone: data.phone,
+        phoneCountryCode: data.phoneCountryCode ?? '',
+        dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
+        acceptTnc: data.tcs,
+        courseId,
+        quantity,
+        recaptchaToken: data.recaptchaToken,
+        jobTitle:
+          data.jobTitle === 'Other' ? data.otherJobTitle : data.jobTitle,
+        country: data.country,
+        countryCode: data.countryCode,
+      }
+      if (organizationData) {
+        const { data: newOrganizationData } = await insertOrganisation(
+          organizationData,
+        )
+        input = {
+          ...input,
+          orgId: newOrganizationData?.org?.id,
+        }
+        await insertLog({
+          orgId: newOrganizationData?.org?.id,
+          userId: profile?.id,
+          createfrom: Org_Created_From_Enum.RegisterPage,
+          op: Cud_Operation_Enum.Create,
+          updated_columns: {
+            old: null,
+            new: newOrganizationData?.org,
+          },
+        })
+      } else {
+        input = { ...input, orgId: data.organization?.id }
+      }
+
+      await gqlRequest<SignUpMutation, SignUpMutationVariables>(
+        SIGN_UP_MUTATION,
+        { input },
+      )
+
+      const user = await Auth.signUp({
+        username: data.email,
+        password: data.password,
+        attributes: {
+          email: data.email,
+          given_name: data.firstName,
+          family_name: data.surname,
+        },
+      })
+
+      onSignUp(data.email, data.password)
+
+      isUK() && hubspotFormsSubmissionEnabled
+        ? await handleHubspotFormSubmit({
+            authMode: AuthMode.REGISTER,
+            profile: {
+              email: data.email,
+              familyName: data.surname,
+              givenName: data.firstName,
+              phone: data.phone,
+              dob: data.dob ? String(zonedTimeToUtc(data.dob, 'GMT')) : '',
+              jobTitle: data.jobTitle,
+            },
+            userJWT:
+              user.user.getSignInUserSession()?.getIdToken().getJwtToken() ??
+              '',
+          })
+        : null
+    } catch (err) {
+      const { code = 'UnknownError' } = err as Error & { code: string }
+      const errors = 'pages.signup.form-errors.'
+      setSignUpError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
+      setLoading(false)
+    }
+  }
+
+  const orgSelectorOnChangeUK = useCallback(
+    (org: UKCallbackOption) => {
+      if (!org) {
+        setValue('organization', undefined, {
+          shouldValidate: true,
+        })
+        return
+      }
+      if (UKIsHubOrg(org)) {
+        setValue('organization', org, {
+          shouldValidate: true,
+        })
+      }
+    },
+    [setValue],
+  )
+
+  const orgSelectorOnChangeANZ = useCallback(
+    (org: ANZCallbackOption) => {
+      if (!org) {
+        setValue('organization', undefined, {
+          shouldValidate: true,
+        })
+        return
+      }
+      if (ANZIsHubOrg(org)) {
+        setValue('organization', org, {
+          shouldValidate: true,
+        })
+      }
+    },
+    [setValue],
+  )
+
+  return (
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      autoComplete="off"
+      aria-autocomplete="none"
+      mt={3}
+      data-testid="signup-form"
+    >
+      <Typography variant="body1" mb={1} fontWeight="600">
+        {t('personal-details')}
+      </Typography>
+      <Grid container spacing={3} mb={3}>
+        <Grid item md={6} xs={12}>
+          <TextField
+            id="firstName"
+            label={t('first-name')}
+            variant="filled"
+            placeholder={t('first-name-placeholder')}
+            error={!!errors.firstName}
+            helperText={errors.firstName?.message}
+            {...register('firstName')}
+            inputProps={{ 'data-testid': 'input-first-name' }}
+            sx={{ bgcolor: 'grey.100' }}
+            autoFocus
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <TextField
+            id="surname"
+            label={t('surname')}
+            variant="filled"
+            placeholder={t('surname-placeholder')}
+            error={!!errors.surname}
+            helperText={errors.surname?.message}
+            {...register('surname')}
+            inputProps={{ 'data-testid': 'input-surname' }}
+            sx={{ bgcolor: 'grey.100' }}
+            fullWidth
+            required
+          />
+        </Grid>
+      </Grid>
+
+      <Box mb={3}>
+        <TextField
+          id="email"
+          label={t('work-email')}
+          variant="filled"
+          placeholder={t('email-placeholder')}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          {...register('email')}
+          inputProps={{ 'data-testid': 'input-email' }}
+          sx={{ bgcolor: 'grey.100' }}
+          fullWidth
+          required
+        />
+      </Box>
+
+      <Box mb={3}>
+        <TextField
+          id="signup-pass"
+          variant="filled"
+          type={showPassword ? 'text' : 'password'}
+          label={t('pages.signup.pass-label')}
+          placeholder={t('pages.signup.pass-placeholder')}
+          error={!!errors.password}
+          helperText={errors.password?.message ?? ''}
+          {...register('password')}
+          fullWidth
+          required
+          inputProps={{ 'data-testid': 'input-password' }}
+          sx={{ bgcolor: 'grey.100' }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={toggleShowPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Typography
+          variant="body1"
+          sx={{ fontSize: '.75rem', color: 'grey' }}
+          data-testid="password-hint-message"
+        >
+          {t('common.validation-hints.password-hint-message')}
+        </Typography>
+      </Box>
+
+      <Box mb={3}>
+        <CountriesSelector
+          disableClearable
+          onChange={(_, code) => {
+            if (code) {
+              setValue(
+                'country',
+                getCountryLabel(code as WorldCountriesCodes) ?? '',
+              )
+              setValue('countryCode', code)
+            }
+          }}
+          value={values.countryCode}
+          showAllCountries={isUK() ? undefined : true}
+        />
+        <Typography
+          variant="body1"
+          sx={{ fontSize: '.75rem', color: 'grey' }}
+          data-testid="residing-country-hint-message"
+        >
+          {t('common.validation-hints.residing-country-hint-message')}
+        </Typography>
+      </Box>
+
+      <Box mb={3}>
+        <PhoneNumberInput
+          label={t('phone')}
+          variant="filled"
+          sx={{ bgcolor: 'grey.100' }}
+          inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
+          defaultCountry={
+            isUK() ? DEFAULT_PHONE_COUNTRY_UK : DEFAULT_PHONE_COUNTRY_ANZ
+          }
+          error={!!errors.phone}
+          helperText={errors.phone?.message}
+          handleManualError={isError => setIsManualFormError(isError)}
+          value={{
+            phoneNumber: values.phone ?? '',
+            countryCode: values.phoneCountryCode,
+          }}
+          onChange={({ phoneNumber, countryCode }) => {
+            setValue('phone', phoneNumber, { shouldValidate: true })
+            setValue('phoneCountryCode', countryCode)
+          }}
+          fullWidth
+          required
+        />
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Controller
+            name="dob"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                label={t('dob')}
+                format={INPUT_DATE_FORMAT}
+                value={field.value}
+                onChange={(d: Date | null) => setValue('dob', d)}
+                maxDate={minimalAge}
+                slotProps={{
+                  textField: {
+                    variant: 'filled',
+                    // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+                    'data-testid': 'dob-input',
+                    fullWidth: true,
+                    sx: { bgcolor: 'grey.100' },
+                    error: !!errors.dob,
+                    helperText: errors.dob?.message,
+                    required: true,
+                  },
+                }}
+              />
+            )}
+          />
+        </LocalizationProvider>
+      </Box>
+
+      {isUK()
+        ? ukOrgSelector(
+            register,
+            values,
+            errors,
+            Boolean(isSearchOnlyByPostCodeEnabled),
+            t,
+            orgSelectorOnChangeUK,
+            isUKCountry,
+          )
+        : anzOrgSelector(
+            register,
+            values,
+            errors,
+            Boolean(isSearchOnlyByPostCodeEnabled),
+            t,
+            orgSelectorOnChangeANZ,
+          )}
+
+      <Box>
+        <JobTitleSelector
+          errors={{
+            jobTitle: errors.jobTitle?.message,
+            otherJobTitle: errors.otherJobTitle?.message,
+          }}
+          register={{
+            jobTitle: { ...register('jobTitle') },
+            otherJobTitle: { ...register('otherJobTitle') },
+          }}
+          values={{ jobTitle: values.jobTitle }}
+        />
+      </Box>
+
+      <Box sx={{ my: 5 }}>
+        <Box sx={{ display: 'flex' }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register('tcs')}
+                data-testid="register-checkbox"
+                inputProps={{
+                  'aria-label': `T&Cs`,
+                }}
+              />
+            }
+            label={
+              <>
+                <Typography variant="body2">
+                  <Trans i18nKey="pages.signup.tcs-label">
+                    I accept the
+                    <a
+                      href={`${origin}/policies-procedures/terms-of-use/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('terms-of-use')} (${t(
+                        'opens-new-window',
+                      )})`}
+                    >
+                      Terms of Use
+                    </a>
+                    and agree to Team Teach processing my personal data in
+                    accordance with our
+                    <a
+                      href={`${origin}/policies-procedures/privacy-policy/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${t('privacy-policy')} (${t(
+                        'opens-new-window',
+                      )})`}
+                    >
+                      Privacy Policy
+                    </a>
+                  </Trans>
+                </Typography>
+                {errors.tcs ? (
+                  <FormHelperText error>{errors.tcs.message}</FormHelperText>
+                ) : null}
+              </>
+            }
+          />
+        </Box>
+      </Box>
+
+      <Box mb={5}>
+        <Recaptcha
+          action={RecaptchaActions.REGISTRATION}
+          onSuccess={token =>
+            setValue('recaptchaToken', token, { shouldValidate: true })
+          }
+          onExpired={() =>
+            setValue('recaptchaToken', '', { shouldValidate: true })
+          }
+        />
+
+        {errors.recaptchaToken?.message ? (
+          <FormHelperText error>{errors.recaptchaToken.message}</FormHelperText>
+        ) : null}
+      </Box>
+
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <LoadingButton
+          loading={loading}
+          type="submit"
+          variant="contained"
+          color="primary"
+          data-testid="signup-form-btn"
+          size="large"
+        >
+          {t('pages.signup.submit-btn')}
+        </LoadingButton>
+
+        {signUpError ? (
+          <FormHelperText sx={{ mt: 2 }} error data-testid="signup-form-error">
+            {signUpError}
+          </FormHelperText>
+        ) : null}
+      </Box>
+    </Box>
+  )
+}

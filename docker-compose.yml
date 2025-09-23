@@ -1,0 +1,107 @@
+version: '3.6'
+
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    volumes:
+      - tth-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tth-db
+
+  graphql-engine:
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    image: hasura/graphql-engine:v2.42.0.cli-migrations-v3
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    restart: always
+    volumes:
+      - ./hasura/migrations:/hasura-migrations
+      - ./hasura/metadata:/hasura-metadata
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
+      HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+      HASURA_GRAPHQL_JWT_SECRETS: |
+        [
+          {
+            "type": "RS256",
+            "jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json",
+            "claims_format": "stringified_json",
+            "allowed_skew": 60,
+            "issuer": "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg"
+          },
+          {
+            "type": "RS256",
+            "jwk_url":"https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_nd889mx4J/.well-known/jwks.json",
+            "claims_format": "stringified_json",
+            "allowed_skew": 60,
+            "issuer": "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_nd889mx4J"
+          }
+        ]
+      EVENTS_HOST: ${HASURA_EVENTS_HOST:-http://host.docker.internal:5000}
+      ACTIONS_HOST: ${HASURA_ACTIONS_HOST:-http://host.docker.internal:5000}
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      WP_GRAPHQL_ENDPOINT: 'http://dev.teamteach.com/graphql'
+
+  postgres-aus:
+    image: postgres:14
+    restart: always
+    volumes:
+      - tth-data-aus:/var/lib/postgresql/data
+    ports:
+      - 6543:6543
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tth-db-aus
+    command: postgres -c 'port=6543'
+
+  graphql-engine-aus:
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    image: hasura/graphql-engine:v2.42.0.cli-migrations-v3
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres-aus
+    restart: always
+    volumes:
+      - ./hasura/migrations:/hasura-migrations
+      - ./hasura/metadata:/hasura-metadata
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres-aus:6543/tth-db-aus
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
+      HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+      HASURA_GRAPHQL_JWT_SECRETS: |
+        [
+          {
+            "type": "RS256",
+            "jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json",
+            "claims_format": "stringified_json",
+            "allowed_skew": 60,
+            "issuer": "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg"
+          },
+          {
+            "type": "RS256",
+            "jwk_url":"https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_nd889mx4J/.well-known/jwks.json",
+            "claims_format": "stringified_json",
+            "allowed_skew": 60,
+            "issuer": "https://cognito-idp.ap-southeast-2.amazonaws.com/ap-southeast-2_nd889mx4J"
+          }
+        ]
+      EVENTS_HOST: ${HASURA_EVENTS_HOST:-http://host.docker.internal:6000}
+      ACTIONS_HOST: ${HASURA_ACTIONS_HOST:-http://host.docker.internal:6000}
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      WP_GRAPHQL_ENDPOINT: 'http://dev.teamteach.com/graphql'
+
+volumes:
+  tth-data:
+  tth-data-aus:

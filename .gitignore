@@ -1,0 +1,28 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+.cache
+
+# Env variables
+.env
+*.local
+hasura/.env
+
+# Test artifacts
+test-results
+playwright-report
+tmp
+/coverage/
+/html
+
+# IDE Files
+## VScode
+.vscode/*
+!.vscode/extensions.json
+
+## IntelliJ
+.idea
+
+# Sentry Config File
+.env.sentry-build-plugin

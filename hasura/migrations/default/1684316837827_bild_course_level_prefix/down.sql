@@ -1,0 +1,6 @@
+DELETE FROM course_level_prefix
+WHERE name IN ('BILD_REGULAR', 'BILD_INTERMEDIATE_TRAINER', 'BILD_ADVANCED_TRAINER');
+
+INSERT INTO course_level_prefix(name, prefix) VALUES
+('BILD_ACT', 'ACT'),
+('BILD_ACT_TRAINER', 'ACT-T');

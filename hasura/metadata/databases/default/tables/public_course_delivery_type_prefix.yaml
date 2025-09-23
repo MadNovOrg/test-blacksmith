@@ -1,0 +1,3 @@
+table:
+  name: course_delivery_type_prefix
+  schema: public

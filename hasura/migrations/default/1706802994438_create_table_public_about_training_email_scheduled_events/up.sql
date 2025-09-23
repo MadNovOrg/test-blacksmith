@@ -1,0 +1,2 @@
+CREATE TABLE "public"."about_training_email_scheduled_events" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "course_participant_id" uuid NOT NULL, "event_id" uuid NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") , UNIQUE ("event_id"), UNIQUE ("course_participant_id", "event_id"));COMMENT ON TABLE "public"."about_training_email_scheduled_events" IS E'Scheduled events for sending about training survey email to certified users';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "useDefineForClassFields": true,
+    "allowJs": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["vitest/globals"]
+  },
+  "include": ["./src/**/*", "./test", "./playwright"],
+  "extends": "./tsconfig.base.json"
+}

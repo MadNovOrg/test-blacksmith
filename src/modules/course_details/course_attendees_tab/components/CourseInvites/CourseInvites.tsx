@@ -1,0 +1,595 @@
+import LoadingButton from '@mui/lab/LoadingButton'
+import {
+  Autocomplete,
+  Box,
+  Button,
+  FormHelperText,
+  Grid,
+  TextField,
+  TextFieldProps,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import { saveAs } from 'file-saver'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
+import { useQuery } from 'urql'
+import isEmail from 'validator/lib/isEmail'
+import * as XLSX from 'xlsx'
+import * as yup from 'yup'
+
+import { Dialog } from '@app/components/dialogs'
+import { useAuth } from '@app/context/auth'
+import {
+  Course_Invite_Status_Enum,
+  Course_Status_Enum,
+  Course_Type_Enum,
+  ExportBlendedLearningCourseDataQuery,
+  ExportBlendedLearningCourseDataQueryVariables,
+} from '@app/generated/graphql'
+import useCourseInvites from '@app/modules/course_details/course_attendees_tab/hooks/useCourseInvites/useCourseInvites'
+import { EXPORT_BLENDED_LEARNING_ATTENDEES } from '@app/modules/course_details/course_attendees_tab/queries/blended-learning-attendees-data'
+import { Course } from '@app/types'
+import { courseEnded } from '@app/util'
+
+import { useInviteTTClientsToIndirectCourses } from '../../hooks/useInviteTTClientsToIndirectCourses'
+
+type Props = {
+  course: Course
+  attendeesCount?: number
+  onExportError?: () => void
+}
+
+export const CourseInvites = ({
+  course,
+  attendeesCount = 0,
+  onExportError,
+}: Props) => {
+  const { t } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { checkTTClients, notifyInternalsOfIndirectInviteAttempt } =
+    useInviteTTClientsToIndirectCourses()
+
+  const { acl, profile } = useAuth()
+
+  const state = location.state as {
+    invitees: string[]
+  } | null
+
+  const emailSchema = yup
+    .string()
+    .required()
+    .test('is-email', t('validation-errors.email-invalid'), email => {
+      return isEmail(email)
+    })
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  const [showModal, setShowModal] = useState(false)
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [newEmail, setNewEmail] = useState('')
+  const [emails, setEmails] = useState<string[]>([])
+  const [emailsState, setEmailsState] = useState<{
+    invited: number
+    total: number
+    ttClientEmails: string[]
+  }>({ invited: 0, total: 0, ttClientEmails: [] })
+  const [showTTClientsModal, setShowTTClientsModal] = useState(false)
+
+  const [{ data, fetching, error: exportError }, reexecuteQuery] = useQuery<
+    ExportBlendedLearningCourseDataQuery,
+    ExportBlendedLearningCourseDataQueryVariables
+  >({
+    query: EXPORT_BLENDED_LEARNING_ATTENDEES,
+    variables: { input: { courseId: course.id } },
+    pause: true,
+  })
+
+  const invites = useCourseInvites({
+    courseId: course?.id,
+    courseEnd: course?.dates?.aggregate?.end?.date,
+    inviter: profile?.id ?? null,
+    poll: {
+      untilInvitees: state?.invitees ?? [],
+    },
+  })
+
+  const closeModal = useCallback(() => {
+    setNewEmail('')
+    setEmails([])
+    setError('')
+    setSaving(false)
+    setShowModal(false)
+  }, [])
+
+  const inviteUsers = useCallback(
+    async (emails: Array<string>) => {
+      try {
+        setSaving(true)
+        await invites.send({
+          emails,
+          course: {
+            go1Integration: course.go1Integration,
+            resourcePackType: course.resourcePacksType ?? null,
+            type: course.type,
+          },
+        })
+        invites.getInvites({
+          requestPolicy: 'network-only',
+        })
+        closeModal()
+      } catch (err) {
+        setSaving(false)
+        setError((err as Error).message)
+      }
+    },
+    [
+      closeModal,
+      course.go1Integration,
+      course.resourcePacksType,
+      course.type,
+      invites,
+    ],
+  )
+
+  useEffect(() => {
+    const startInvitesPolling =
+      !invites.error &&
+      !invites.fetching &&
+      !invites.pollRunning &&
+      !state?.invitees?.every(invitee =>
+        (invites.data ?? []).some(
+          i =>
+            i.email?.trim().toLocaleLowerCase() ===
+            invitee.trim().toLocaleLowerCase(),
+        ),
+      )
+
+    if (startInvitesPolling) {
+      invites.startPolling()
+    }
+  }, [invites, state?.invitees, state?.invitees?.length])
+
+  const invitesLeft = course
+    ? course.max_participants -
+      invites.data.filter(ci => ci.status === Course_Invite_Status_Enum.Pending)
+        .length -
+      attendeesCount
+    : 0
+
+  const courseCancelledOrDraft =
+    course?.status === Course_Status_Enum.Cancelled ||
+    course?.status === Course_Status_Enum.Declined ||
+    course?.status === Course_Status_Enum.Draft
+
+  const onEmailsChange = (
+    ev: React.SyntheticEvent<Element, Event>,
+    value: (string | string[])[],
+    reason: string,
+  ) => {
+    setError('')
+
+    if (reason === 'removeOption') {
+      return setEmails(value as string[])
+    }
+
+    const [last] = value.slice(-1) as string[]
+    const newEntries = last
+      .split(/[,\s;]/)
+      .map(e => e.toLowerCase().trim())
+      .filter(Boolean)
+    const allValid = yup.array(emailSchema).min(1).isValidSync(newEntries)
+    if (!allValid) {
+      ev.preventDefault()
+      setNewEmail(last)
+      return setError('INVALID_EMAILS')
+    }
+
+    if (emails.length + newEntries.length > invitesLeft) {
+      ev.preventDefault()
+      setNewEmail(last)
+      return setError('LIMIT_REACHED')
+    }
+
+    setEmails([...new Set(emails.concat(newEntries))])
+    setNewEmail('')
+  }
+
+  const onSubmit = useCallback(async () => {
+    setError('')
+
+    if (!emails.length && !newEmail) {
+      return setError('EMAIL_REQUIRED')
+    }
+
+    const leftOvers = newEmail
+      .split(',')
+      .map(e => e.toLowerCase().trim())
+      .filter(Boolean)
+
+    if (!yup.array(emailSchema).isValidSync(leftOvers)) {
+      return setError('INVALID_EMAILS')
+    }
+
+    if (emails.length + leftOvers.length > invitesLeft) {
+      return setError('LIMIT_REACHED')
+    }
+
+    if (
+      course.type === Course_Type_Enum.Indirect &&
+      !acl.canInviteClientsToIndirectCourses()
+    ) {
+      const emailsData = await checkTTClients({
+        input: {
+          emailList: [...emails, ...leftOvers],
+          course: course.id,
+        },
+      })
+
+      const inviteesAsTTClients = emailsData?.clientEmails
+
+      const emailsToInvite = emailsData?.nonClientEmails
+
+      if (emailsToInvite?.length) await inviteUsers(emailsToInvite)
+      if (inviteesAsTTClients?.length) {
+        setEmailsState({
+          invited: emailsToInvite?.length || 0,
+          total: emails.length + leftOvers.length,
+          ttClientEmails: inviteesAsTTClients,
+        })
+        closeModal()
+        setShowTTClientsModal(Boolean(inviteesAsTTClients.length))
+      }
+    } else {
+      await inviteUsers([...emails, ...leftOvers])
+    }
+  }, [
+    course.id,
+    emails,
+    newEmail,
+    emailSchema,
+    invitesLeft,
+    course.type,
+    closeModal,
+    inviteUsers,
+    acl,
+    checkTTClients,
+  ])
+
+  const errorMessage = useMemo(() => {
+    if (!error) {
+      return null
+    }
+
+    const msg = t(`pages.course-participants.invite-error-${error}`)
+    if (msg !== '') {
+      return msg
+    }
+
+    return t('pages.course-participants.invite-error-UNKNOWN')
+  }, [error, t])
+
+  const courseHasEnded = course && courseEnded(course)
+  const isOpenCourse = course && course.type === Course_Type_Enum.Open
+
+  const renderInput = useCallback(
+    (params: TextFieldProps) => (
+      <TextField
+        {...params}
+        variant="filled"
+        placeholder={t('pages.course-participants.invite-input-placeholder')}
+        sx={{
+          '.MuiAutocomplete-inputRoot': {
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+          },
+          '.MuiAutocomplete-tag': { ml: -1 },
+          '.MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
+            width: 'auto',
+            alignSelf: 'stretch',
+            py: 1,
+          },
+        }}
+      />
+    ),
+    [t],
+  )
+
+  const allowInvites =
+    acl.canInviteAttendees(course.type, undefined, course) ||
+    (course.type === Course_Type_Enum.Closed &&
+      course.bookingContact?.id === profile?.id)
+
+  useUpdateEffect(() => {
+    if (exportError?.message && onExportError) onExportError()
+  }, [exportError?.message])
+
+  useUpdateEffect(() => {
+    if (exportError && onExportError) onExportError()
+
+    const formatDateTime = (dateTime?: string | null) =>
+      dateTime
+        ? new Date(dateTime).toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+          })
+        : ''
+
+    if (data?.attendees) {
+      const exportedData = data?.attendees
+
+      const attendeesData = [
+        Object.values(
+          t('pages.blended-learning-attendees-cols', { returnObjects: true }),
+        ),
+        ...exportedData.attendees.map(attendee => {
+          return [
+            attendee.userName,
+            attendee.email,
+            exportedData?.courseName,
+            exportedData?.courseCode,
+            formatDateTime(exportedData?.courseStartDate),
+            formatDateTime(exportedData?.courseEndDate),
+            attendee.blendedLearningStatus,
+            attendee.blendedLearningPass,
+            formatDateTime(attendee.blendedLearningStartDate),
+            formatDateTime(attendee.blendedLearningEndDate),
+            exportedData?.commissioningOrganisationName,
+            exportedData?.leadTrainerName,
+          ]
+        }),
+      ]
+
+      const wb = XLSX.utils.book_new()
+      const ws = XLSX.utils.aoa_to_sheet(attendeesData)
+      XLSX.utils.book_append_sheet(wb, ws, 'Attendees')
+
+      const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+
+      const [currentDate, currentTime] = formatDateTime(
+        new Date().toISOString(),
+      ).split(',')
+
+      const fileNameDate = currentDate.replaceAll('/', '.')
+
+      saveAs(
+        new Blob([buffer]),
+        `Blended Learning Progress Report ${fileNameDate.concat(
+          currentTime,
+        )}.xlsx`,
+      )
+    }
+  }, [data, reexecuteQuery, t])
+
+  const displayInviteTools =
+    !courseCancelledOrDraft &&
+    ((!courseHasEnded && allowInvites) ||
+      acl.canInviteAttendeesAfterCourseEnded(course.type))
+
+  return (
+    <>
+      <Grid
+        item
+        container
+        md={7}
+        sm={12}
+        alignItems="center"
+        justifyContent="flex-end"
+      >
+        {displayInviteTools &&
+          (isOpenCourse ? (
+            <>
+              <Typography variant="subtitle2" data-testid="seats-left">
+                {t('pages.course-participants.seats-left', {
+                  count: invitesLeft - emails.length,
+                })}
+              </Typography>
+
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ ml: 2 }}
+                onClick={() => {
+                  navigate(
+                    `/registration?course_id=${course.id}&quantity=1&internal=true`,
+                  )
+                }}
+                disabled={invitesLeft === 0}
+                data-testid="add-registrants-btn"
+              >
+                {t('pages.course-participants.add-registrants-btn')}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Grid
+                item
+                md={3}
+                sm={12}
+                display="flex"
+                justifyContent="space-around"
+              >
+                <Typography variant="subtitle2" data-testid="invites-left">
+                  {t('pages.course-participants.invites-left', {
+                    count: invitesLeft - emails.length,
+                  })}
+                </Typography>
+              </Grid>
+              <Grid item md={3} sm={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setShowModal(true)}
+                  disabled={invitesLeft === 0}
+                  fullWidth={isMobile}
+                  data-testid="course-invite-btn"
+                >
+                  {t('pages.course-participants.invite-btn')}
+                </Button>
+              </Grid>
+            </>
+          ))}
+        {acl.canSeeExportProgressBtnOnBLCourse(course) &&
+        attendeesCount > 0 &&
+        course.go1Integration ? (
+          <Grid
+            item
+            md={3}
+            sm={12}
+            sx={{ mt: { sm: 1, md: 0 }, ml: { sm: 0, md: 2 } }}
+          >
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={fetching}
+              data-testid="progress-export"
+              onClick={() => reexecuteQuery({ requestPolicy: 'network-only' })}
+              fullWidth={isMobile}
+            >
+              {t('pages.course-details.tabs.attendees.progress-export')}
+            </LoadingButton>
+          </Grid>
+        ) : null}
+      </Grid>
+      <Dialog
+        open={showModal}
+        onClose={closeModal}
+        slots={{
+          Title: () => <>{t('pages.course-participants.invite-modal-title')}</>,
+        }}
+        maxWidth={600}
+      >
+        <Trans
+          i18nKey={`pages.course-participants.invite-modal-intro${
+            acl.isAustralia() ? '-ANZ' : ''
+          }`}
+        />
+
+        <Typography fontWeight="bold" data-testid="modal-invites-left">
+          {t('pages.course-participants.invites-left', {
+            count: invitesLeft - emails.length,
+          })}
+        </Typography>
+
+        <Grid container alignItems="flex-end" spacing={2} sx={{ my: 1 }}>
+          <Grid item md={8} sm={12} sx={{ minWidth: 0 }}>
+            <Autocomplete
+              multiple
+              options={[]}
+              freeSolo
+              disableClearable
+              disabled={saving}
+              fullWidth
+              inputValue={newEmail}
+              onInputChange={(ev, value) => setNewEmail(value)}
+              value={emails}
+              onChange={onEmailsChange}
+              renderInput={renderInput}
+              data-testid="modal-invites-emails"
+            />
+          </Grid>
+          <Grid item md={4} sm={12}>
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={onSubmit}
+              loading={saving}
+              disabled={emails.length > invitesLeft}
+              fullWidth={isMobile}
+              data-testid="modal-invites-send"
+            >
+              {t('pages.course-participants.invite-send-btn')}
+            </LoadingButton>
+          </Grid>
+        </Grid>
+        {errorMessage ? (
+          <FormHelperText error>{errorMessage}</FormHelperText>
+        ) : (
+          <FormHelperText>
+            {t('pages.course-participants.invite-input-hint')}
+          </FormHelperText>
+        )}
+      </Dialog>
+      <Dialog
+        open={showTTClientsModal}
+        onClose={() => setShowTTClientsModal(false)}
+        slots={{
+          Title: () => (
+            <>
+              {t(
+                'pages.course-participants.trainer-inviting-tt-clients-dialog.title',
+                {
+                  invited: emailsState.invited,
+                  total: emailsState.total,
+                },
+              )}
+            </>
+          ),
+          Content: () => (
+            <>
+              <Typography mb={2}>
+                {' '}
+                {t(
+                  'pages.course-participants.trainer-inviting-tt-clients-dialog.content.tt-client-emails',
+                )}
+              </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}>
+                {emailsState.ttClientEmails.join(', ')}
+              </Typography>
+              <Typography my={2}>
+                {t(
+                  'pages.course-participants.trainer-inviting-tt-clients-dialog.content.notification-information',
+                )}
+              </Typography>
+              <Typography>
+                {t(
+                  'pages.course-participants.trainer-inviting-tt-clients-dialog.content.notification-information-24h',
+                )}
+              </Typography>
+            </>
+          ),
+          Actions: () => (
+            <Box display={'flex'} gap={2} sx={{ ml: 'auto' }}>
+              <Button
+                data-testid="cancel-tt-clients-invite"
+                color="secondary"
+                variant="outlined"
+                onClick={() => setShowTTClientsModal(false)}
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                data-testid="confirm-tt-clients-invite"
+                onClick={async () => {
+                  await notifyInternalsOfIndirectInviteAttempt({
+                    input: {
+                      invitedBy: profile?.id,
+                      course: course.id,
+                      inviteesList: emailsState.ttClientEmails,
+                    },
+                  })
+                  setShowTTClientsModal(false)
+                }}
+                variant="contained"
+              >
+                {t('confirm')}
+              </Button>
+            </Box>
+          ),
+        }}
+      />
+    </>
+  )
+}

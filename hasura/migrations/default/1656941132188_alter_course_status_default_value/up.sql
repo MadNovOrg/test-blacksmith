@@ -1,0 +1,1 @@
+ALTER TABLE ONLY public.course ALTER COLUMN course_status SET DEFAULT 'TRAINER_PENDING';

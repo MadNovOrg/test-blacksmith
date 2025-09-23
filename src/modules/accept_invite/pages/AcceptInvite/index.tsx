@@ -1,0 +1,103 @@
+import { Alert, CircularProgress, Container } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
+import { useMutation, useQuery } from 'urql'
+
+import { useAuth } from '@app/context/auth'
+import {
+  AcceptInviteMutation,
+  AcceptInviteMutationVariables,
+  Course_Invite_Status_Enum,
+  GetCourseParticipantByInviteQuery,
+  GetCourseParticipantByInviteQueryVariables,
+} from '@app/generated/graphql'
+import { ACCEPT_INVITE_MUTATION } from '@app/modules/accept_invite/queries/accept-invite'
+import { GET_COURSE_PARTICIPANT } from '@app/modules/accept_invite/queries/get-course-participant-by-invitation'
+import { RoleName } from '@app/types'
+
+export const AcceptInvite = () => {
+  const auth = useAuth()
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(false)
+  const params = useParams()
+  const [searchParams] = useSearchParams()
+
+  const courseId = searchParams.get('courseId') ?? ''
+  const inviteId = params.id as string
+
+  useEffect(() => {
+    if (auth.activeRole !== RoleName.USER) auth.changeRole(RoleName.USER)
+  }, [auth])
+
+  const [{ data: courseParticipants }] = useQuery<
+    GetCourseParticipantByInviteQuery,
+    GetCourseParticipantByInviteQueryVariables
+  >({
+    query: GET_COURSE_PARTICIPANT,
+    variables: { courseId: +courseId, inviteId },
+  })
+
+  const [, acceptInvite] = useMutation<
+    AcceptInviteMutation,
+    AcceptInviteMutationVariables
+  >(ACCEPT_INVITE_MUTATION)
+
+  const acceptInviteCallback = useCallback(async () => {
+    if (
+      courseParticipants?.course_participant &&
+      auth.activeRole === RoleName.USER
+    ) {
+      if (courseParticipants.course_participant.length > 0) {
+        setSuccess(true)
+        return
+      }
+      const { data: resp } = await acceptInvite({
+        inviteId,
+        courseId: Number(courseId ?? 0),
+      })
+      if (
+        resp?.acceptInvite?.status !== Course_Invite_Status_Enum.Accepted &&
+        !resp?.addParticipant?.id
+      ) {
+        setError(true)
+      }
+
+      setSuccess(true)
+    }
+  }, [
+    acceptInvite,
+    auth,
+    courseId,
+    courseParticipants?.course_participant,
+    inviteId,
+  ])
+
+  useEffect(() => {
+    acceptInviteCallback()
+  }, [acceptInviteCallback])
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ pt: 2 }}>
+        <Alert
+          severity="error"
+          variant="outlined"
+          data-testid="accept-invite-error-alert"
+        >
+          There was an error accepting the invite. Please try again later.
+        </Alert>
+      </Container>
+    )
+  }
+
+  if (success) {
+    return (
+      <Navigate
+        to={`/courses/${courseId}/details?success=invite_accepted`}
+        replace
+      />
+    )
+  }
+
+  return <CircularProgress size={50} />
+}

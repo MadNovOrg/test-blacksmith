@@ -1,0 +1,152 @@
+table:
+  name: course_participant_module
+  schema: public
+object_relationships:
+  - name: course_participant
+    using:
+      foreign_key_constraint_on: course_participant_id
+  - name: module
+    using:
+      foreign_key_constraint_on: module_id
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - completed
+        - course_participant_id
+        - module_id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - completed
+        - course_participant_id
+        - module_id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - completed
+        - course_participant_id
+        - module_id
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        _or:
+          - course_participant:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_participant:
+              course:
+                booking_contact_profile_id:
+                  _eq: X-Hasura-User-Id
+  - role: finance
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        course_participant:
+          profile_id:
+            _eq: X-Hasura-User-Id
+  - role: organization-key-contact
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        _or:
+          - course_participant:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_participant:
+              course:
+                organization_key_contact_profile_id:
+                  _eq: X-Hasura-User-Id
+  - role: sales-admin
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        course_participant:
+          profile_id:
+            _eq: X-Hasura-User-Id
+  - role: trainer
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        course_participant:
+          profile_id:
+            _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: trainer
+    permission:
+      filter:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter: {}

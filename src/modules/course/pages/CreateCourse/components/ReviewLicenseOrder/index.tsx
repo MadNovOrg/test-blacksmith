@@ -1,0 +1,309 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { LoadingButton } from '@mui/lab'
+import { Alert, Box, Button, Stack, Typography } from '@mui/material'
+import { parseISO } from 'date-fns'
+import React, { useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
+import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
+import { Course_Type_Enum } from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import useTimeZones from '@app/hooks/useTimeZones'
+import { InvoiceDetails } from '@app/modules/course/components/CourseForm/components/InvoiceDetails'
+import { ResourcePacksOptions } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/types'
+import { getResourcePacksTypeOptionLabels } from '@app/modules/course/components/CourseForm/components/ResourcePacksTypeSection/utils'
+import { WorkbookAddressDetails } from '@app/modules/course/components/CourseForm/components/WorkbooksAddressDetails'
+import { LoadingStatus } from '@app/util'
+
+import { useSaveCourse } from '../../hooks/useSaveCourse'
+import { StepsEnum } from '../../types'
+import { useCreateCourse } from '../CreateCourseProvider'
+
+export const ReviewLicenseOrder: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
+  const { acl } = useAuth()
+
+  const {
+    completeStep,
+    courseData,
+    go1Licensing,
+    invoiceDetails,
+    workbookDeliveryAddress,
+    resourcePacksCost,
+    setCurrentStepKey,
+  } = useCreateCourse()
+
+  const { saveCourse, savingStatus } = useSaveCourse()
+  const { addSnackbarMessage } = useSnackbar()
+  const { defaultCurrency, currencyAbbreviations } = useCurrencies(
+    courseData?.residingCountry,
+  )
+  const { isAustraliaCountry } = useWorldCountries()
+
+  const currencyAbbreviation = currencyAbbreviations[defaultCurrency]
+
+  const { formatGMTDateTimeByTimeZone } = useTimeZones()
+  const hasSavingError = savingStatus === LoadingStatus.ERROR
+
+  const { _t, t } = useScopedTranslation(
+    'pages.create-course.license-order-review',
+  )
+  const navigate = useNavigate()
+
+  const resourcePacksTypeOptions = useMemo(
+    () => getResourcePacksTypeOptionLabels(_t),
+    [_t],
+  )
+
+  const { startDate, endDate } = useMemo(
+    () =>
+      courseData
+        ? {
+            startDate:
+              typeof courseData.startDateTime === 'string'
+                ? parseISO(courseData.startDateTime)
+                : courseData.startDateTime,
+            endDate:
+              typeof courseData.endDateTime === 'string'
+                ? parseISO(courseData.endDateTime)
+                : courseData.endDateTime,
+          }
+        : {},
+    [courseData],
+  )
+
+  useEffect(() => {
+    setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
+  }, [setCurrentStepKey])
+
+  const displayTaxRow = acl.isAustralia()
+
+  const handleSubmitButtonClick = async () => {
+    if (acl.isTrainer() && courseData?.type === Course_Type_Enum.Indirect) {
+      navigate(`/courses/new/modules`)
+      return
+    }
+
+    const savedCourse = await saveCourse()
+
+    if (savedCourse?.id) {
+      if (
+        courseData?.type === Course_Type_Enum.Indirect &&
+        acl.isInternalUser()
+      ) {
+        completeStep(StepsEnum.REVIEW_AND_CONFIRM)
+
+        if (savedCourse.hasExceptions) {
+          addSnackbarMessage('course-created', {
+            label: _t('pages.create-course.submitted-closed-exceptions', {
+              code: savedCourse?.courseCode,
+            }),
+          })
+        }
+
+        navigate(`/manage-courses/all/${savedCourse?.id}/details`)
+
+        return
+      }
+
+      navigate(`/courses/${savedCourse.id}/modules`)
+    }
+  }
+
+  const courseTimezone = courseData?.timeZone
+    ? courseData?.timeZone.timeZoneId
+    : undefined
+
+  const taxType = useMemo(() => {
+    if (acl.isUK()) return _t('common.vat')
+
+    if (isAustraliaCountry(courseData?.residingCountry)) return _t('common.gst')
+
+    return _t('common.no-gst')
+  }, [_t, acl, courseData?.residingCountry, isAustraliaCountry])
+
+  const taxAmount = useMemo(() => {
+    if (acl.isUK()) return go1Licensing?.prices?.vat ?? 0
+
+    return (go1Licensing?.prices?.gst ?? 0) + (resourcePacksCost?.gst ?? 0)
+  }, [
+    acl,
+    go1Licensing?.prices?.gst,
+    go1Licensing?.prices?.vat,
+    resourcePacksCost?.gst,
+  ])
+
+  const amountDue = useMemo(() => {
+    return (
+      (go1Licensing?.prices.amountDue ?? 0) +
+      (resourcePacksCost?.amountDue ?? 0)
+    )
+  }, [go1Licensing?.prices.amountDue, resourcePacksCost?.amountDue])
+
+  const alertCondition = !courseData || (!go1Licensing && !resourcePacksCost)
+
+  return (
+    <Box>
+      <Typography variant="subtitle1" fontWeight="500" mb={2}>
+        {t('title')}
+      </Typography>
+
+      {hasSavingError ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {t('saving-error-message')}
+        </Alert>
+      ) : null}
+
+      {alertCondition ? (
+        <Alert
+          severity="error"
+          variant="outlined"
+          data-testid="license-order-details-not-found"
+        >
+          {_t('pages.create-course.course-not-found')}
+        </Alert>
+      ) : null}
+
+      <Stack spacing="2px">
+        {courseData ? (
+          <InfoPanel
+            title={
+              go1Licensing
+                ? `${_t('common.blended-learning')} - ${_t(
+                    `common.course-levels.${courseData.courseLevel}`,
+                  )}`
+                : _t(`common.course-levels.${courseData.courseLevel}`)
+            }
+          >
+            <InfoRow
+              label={`${_t('dates.long', {
+                date: courseData.startDateTime,
+              })} - ${_t('dates.long', {
+                date: courseData.endDateTime,
+              })}`}
+            />
+            <InfoRow
+              label={`${_t('dates.time', {
+                date: startDate,
+              })} ${formatGMTDateTimeByTimeZone(
+                startDate as Date,
+                courseTimezone,
+                false,
+              )} - ${_t('dates.time', {
+                date: endDate,
+              })} ${formatGMTDateTimeByTimeZone(
+                endDate as Date,
+                courseTimezone,
+                true,
+              )} `}
+            />
+          </InfoPanel>
+        ) : null}
+
+        {(go1Licensing || resourcePacksCost) && invoiceDetails ? (
+          <>
+            <InfoPanel title={_t('common.payment-method')}>
+              <InfoRow label={_t('common.pay-by-inv')}></InfoRow>
+            </InfoPanel>
+            {workbookDeliveryAddress ? (
+              <InfoPanel>
+                <WorkbookAddressDetails details={workbookDeliveryAddress} />
+              </InfoPanel>
+            ) : null}
+            <InfoPanel>
+              <InvoiceDetails details={invoiceDetails} />
+            </InfoPanel>
+
+            {go1Licensing ? (
+              <InfoPanel>
+                <InfoRow
+                  label={_t('pages.order-details.licenses-redeemed')}
+                  value={courseData?.maxParticipants.toString()}
+                />
+              </InfoPanel>
+            ) : null}
+
+            {resourcePacksCost ? (
+              <InfoPanel>
+                <InfoRow
+                  label={_t('pages.order-details.resource-packs-redeemed', {
+                    resourcePacksType:
+                      resourcePacksTypeOptions[
+                        courseData?.resourcePacksType as ResourcePacksOptions
+                      ],
+                  }).replace(/&amp;/g, '&')}
+                  value={courseData?.maxParticipants.toString()}
+                />
+              </InfoPanel>
+            ) : null}
+          </>
+        ) : null}
+
+        <InfoPanel>
+          <InfoRow
+            label={_t('common.subtotal')}
+            value={_t('common.amount-with-currency', {
+              amount: (amountDue - taxAmount).toFixed(2),
+              currency: currencyAbbreviation,
+            })}
+          />
+          {displayTaxRow ? (
+            <InfoRow
+              label={taxType}
+              value={_t('common.amount-with-currency', {
+                amount: taxAmount?.toFixed(2),
+                currency: currencyAbbreviation,
+              })}
+            />
+          ) : null}
+        </InfoPanel>
+        <InfoPanel>
+          <InfoRow>
+            <Typography fontWeight="600">{_t('common.amount-due')}</Typography>
+            <Typography fontWeight="600">
+              {_t('common.amount-with-currency', {
+                amount: amountDue.toFixed(2),
+                currency: currencyAbbreviation,
+              })}
+            </Typography>
+          </InfoRow>
+        </InfoPanel>
+      </Stack>
+
+      <Box display="flex" justifyContent="space-between" sx={{ mt: 4, mb: 4 }}>
+        <Button
+          onClick={() => navigate(`../license-order-details?type=INDIRECT`)}
+          startIcon={<ArrowBackIcon />}
+        >
+          {t('back-btn-text')}
+        </Button>
+
+        <Box>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            endIcon={<ArrowForwardIcon />}
+            loading={savingStatus === LoadingStatus.FETCHING}
+            onClick={() => {
+              if (!(!courseData || (!go1Licensing && !resourcePacksCost)))
+                handleSubmitButtonClick()
+            }}
+            data-testid="courseBuilder-button"
+            disabled={alertCondition}
+          >
+            {courseData?.type === Course_Type_Enum.Indirect &&
+            acl.isInternalUser()
+              ? _t('pages.create-course.review-and-confirm.submit-btn')
+              : _t('pages.create-course.course-builder-button-text')}
+          </LoadingButton>
+        </Box>
+      </Box>
+    </Box>
+  )
+}

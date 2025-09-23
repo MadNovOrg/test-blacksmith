@@ -1,0 +1,1 @@
+ALTER TABLE "public"."email_notifications" DROP COLUMN "status";

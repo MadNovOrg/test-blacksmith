@@ -1,0 +1,298 @@
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { never, fromValue } from 'wonka'
+
+import { PostQuery } from '@app/generated/graphql'
+
+import { _render, screen, userEvent, waitForText, within } from '@test/index'
+import { buildEntities, buildPost } from '@test/mock-data-utils'
+
+import Post from '.'
+
+describe('page: Post', () => {
+  it('displays skeleton while fetching data', () => {
+    const client = {
+      executeQuery: () => never,
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog/post-id'] },
+    )
+
+    expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('title-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('description-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('image-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('recent-posts-skeleton')).toBeInTheDocument()
+  })
+
+  // eslint-disable-next-line vitest/expect-expect
+  it('navigates back to the blog page', async () => {
+    const post = buildPost()
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route index element={<p>Blog page</p>} />
+          <Route path=":id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${post.id}`] },
+    )
+
+    await userEvent.click(screen.getByText('Blog'))
+
+    await waitForText('Blog page')
+  })
+
+  it('displays an error if there is no post', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post: null,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/not-found`] },
+    )
+
+    expect(screen.getByText('Post not found')).toBeInTheDocument()
+  })
+
+  it('displays post details', () => {
+    const post = {
+      ...buildPost(),
+      author: {
+        node: {
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+      },
+    }
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] },
+    )
+
+    expect(screen.getByTestId('post-title')).toHaveTextContent(post.title ?? '')
+    expect(screen.getByTestId('post-description')).toHaveTextContent(
+      post.excerpt ?? '',
+    )
+    expect(screen.getByText('by John Doe')).toBeInTheDocument()
+
+    post.tags?.nodes?.forEach(tag => {
+      expect(screen.getByText(tag?.name ?? '')).toBeInTheDocument()
+    })
+
+    expect(screen.getByAltText(post.title ?? '')).toHaveAttribute(
+      'src',
+      post.featuredImage?.node?.mediaItemUrl ?? '',
+    )
+  })
+
+  it('displays recent posts', () => {
+    const recentPosts = buildEntities(4, buildPost)
+    const post = buildPost()
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+              recentPosts: {
+                nodes: recentPosts,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] },
+    )
+
+    recentPosts.forEach(post => {
+      const recentPostEl = screen.getByTestId(`posts-grid-item-${post.id}`)
+
+      expect(
+        within(recentPostEl).getByText(post.title ?? ''),
+      ).toBeInTheDocument()
+
+      expect(
+        within(recentPostEl).getByAltText(post.title ?? ''),
+      ).toHaveAttribute('src', post.featuredImage?.node?.mediaItemUrl ?? '')
+    })
+  })
+
+  it("doesn't display author if author flag is not checked", () => {
+    const post = buildPost({
+      overrides: {
+        author: {
+          node: {
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+        customAuthor: {
+          displayAuthor: false,
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] },
+    )
+
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument()
+  })
+
+  it('displays original author if custom author text is not provided and flag is checked', () => {
+    const post = buildPost({
+      overrides: {
+        author: {
+          node: {
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+        customAuthor: {
+          displayAuthor: true,
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] },
+    )
+
+    expect(screen.getByText('by John Doe')).toBeInTheDocument()
+  })
+
+  it('displays custom author name if post contains one', () => {
+    const post = buildPost({
+      overrides: {
+        author: {
+          node: {
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+        customAuthor: {
+          displayAuthor: true,
+          authorName: 'Kirk Douglas',
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] },
+    )
+
+    expect(screen.getByText('by Kirk Douglas')).toBeInTheDocument()
+  })
+})

@@ -1,0 +1,192 @@
+import { format } from 'date-fns'
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { Client, CombinedError, Provider } from 'urql'
+import { never, fromValue } from 'wonka'
+
+import { PodcastQuery } from '@app/generated/graphql'
+
+import { _render, screen, userEvent, waitForText } from '@test/index'
+import { buildEntities, buildPodcast } from '@test/mock-data-utils'
+
+import Podcast from '.'
+
+describe('page: Podcast', () => {
+  it('displays skeleton while loading the podcast', () => {
+    const PODCAST_ID = 'podcast-id'
+
+    const client = {
+      executeQuery: () => never,
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/:id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] },
+    )
+
+    expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('title-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('description-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('recent-podcasts-skeleton')).toBeInTheDocument()
+  })
+
+  it('displays a message when podcast is not found', () => {
+    const PODCAST_ID = 'podcast-id'
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PodcastQuery }>({
+          data: {
+            podcast: {
+              podcast: null,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/:id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] },
+    )
+
+    expect(screen.getByText('Podcast not found')).toBeInTheDocument()
+  })
+
+  it("displays error message if can't load the podcast", () => {
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          error: new CombinedError({
+            networkError: Error('something went wrong!'),
+          }),
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/not-found`] },
+    )
+
+    expect(
+      screen.getByText('There was an error loading the podcast'),
+    ).toBeInTheDocument()
+  })
+
+  it('displays podcast info and the player', () => {
+    const PODCAST_ID = 'podcast-id'
+    const podcast = buildPodcast()
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PodcastQuery }>({
+          data: {
+            podcast: {
+              podcast,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] },
+    )
+
+    expect(screen.getByText(podcast.name)).toBeInTheDocument()
+    expect(screen.getByText(`by ${podcast.author}`)).toBeInTheDocument()
+    expect(
+      screen.getByText(format(new Date(podcast.publishedDate), 'd MMMM yyyy')),
+    ).toBeInTheDocument()
+  })
+
+  // eslint-disable-next-line vitest/expect-expect
+  it('links back to the podcasts page', async () => {
+    const PODCAST_ID = 'podcast-id'
+    const podcast = buildPodcast()
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PodcastQuery }>({
+          data: {
+            podcast: {
+              podcast,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] },
+    )
+
+    await userEvent.click(screen.getByText('Podcasts'))
+
+    await waitForText('Podcasts page')
+  })
+
+  it('displays recent podcasts', () => {
+    const PODCAST_ID = 'podcast-id'
+    const podcast = buildPodcast()
+    const recentPodcasts = buildEntities(4, buildPodcast)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PodcastQuery }>({
+          data: {
+            podcast: {
+              podcast,
+            },
+            recentPodcasts: {
+              records: recentPodcasts,
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] },
+    )
+
+    recentPodcasts.forEach(podcast => {
+      expect(
+        screen.getByTestId(`podcast-grid-item-${podcast.id}`),
+      ).toBeInTheDocument()
+    })
+  })
+})

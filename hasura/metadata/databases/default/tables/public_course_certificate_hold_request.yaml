@@ -1,0 +1,115 @@
+table:
+  name: course_certificate_hold_request
+  schema: public
+object_relationships:
+  - name: certificate
+    using:
+      foreign_key_constraint_on: certificate_id
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - expiry_date
+        - start_date
+        - certificate_id
+        - changelog_id
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - expiry_date
+        - start_date
+        - certificate_id
+        - changelog_id
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - expiry_date
+        - start_date
+        - certificate_id
+        - changelog_id
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      filter:
+        certificate:
+          profile_id:
+            _eq: X-Hasura-User-Id
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - id
+        - start_date
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      filter: {}
+      check: null
+event_triggers:
+  - name: course_certificate_hold_request_changed
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - expiry_date
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/hold'

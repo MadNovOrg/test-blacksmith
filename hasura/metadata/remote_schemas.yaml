@@ -1,0 +1,7 @@
+- name: wp-graphql
+  definition:
+    url_from_env: WP_GRAPHQL_ENDPOINT
+    timeout_seconds: 60
+    customization:
+      root_fields_namespace: content
+  comment: ""

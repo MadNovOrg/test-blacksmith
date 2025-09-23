@@ -1,0 +1,496 @@
+table:
+  name: course_certificate
+  schema: public
+configuration:
+  column_config:
+    blended_learning:
+      custom_name: blendedLearning
+    certification_date:
+      custom_name: certificationDate
+    course_accredited_by:
+      custom_name: courseAccreditedBy
+    course_id:
+      custom_name: courseId
+    course_level:
+      custom_name: courseLevel
+    course_name:
+      custom_name: courseName
+    created_at:
+      custom_name: createdAt
+    expiry_date:
+      custom_name: expiryDate
+    is_revoked:
+      custom_name: isRevoked
+    legacy_course_code:
+      custom_name: legacyCourseCode
+    profile_id:
+      custom_name: profileId
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    blended_learning: blendedLearning
+    certification_date: certificationDate
+    course_accredited_by: courseAccreditedBy
+    course_id: courseId
+    course_level: courseLevel
+    course_name: courseName
+    created_at: createdAt
+    expiry_date: expiryDate
+    is_revoked: isRevoked
+    legacy_course_code: legacyCourseCode
+    profile_id: profileId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: participant
+    using:
+      manual_configuration:
+        column_mapping:
+          id: certificate_id
+        insertion_order: null
+        remote_table:
+          name: course_participant
+          schema: public
+  - name: profile
+    using:
+      manual_configuration:
+        column_mapping:
+          profile_id: id
+        insertion_order: null
+        remote_table:
+          name: profile
+          schema: public
+computed_fields:
+  - name: grade
+    definition:
+      function:
+        name: course_certificate_grade
+        schema: public
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - expiry_date
+        - number
+        - profile_id
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter:
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+              - profile:
+                  courses:
+                    course:
+                      booking_contact_profile_id:
+                        _eq: X-Hasura-User-Id
+              - course:
+                  participants:
+                    order:
+                      bookingContactProfileId:
+                        _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter:
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+              - profile:
+                  courses:
+                    course:
+                      organization_key_contact_profile_id:
+                        _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter:
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - course:
+                  trainers:
+                    profile_id:
+                      _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+          - is_revoked:
+              _eq: false
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter:
+        _and:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
+  - role: user
+    permission:
+      columns:
+        - blended_learning
+        - certification_date
+        - course_accredited_by
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - is_revoked
+        - legacy_course_code
+        - number
+        - profile_id
+        - reaccreditation
+        - updated_at
+        - status
+      computed_fields:
+        - grade
+      filter:
+        _and:
+          - _or:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - profile:
+                  organizations:
+                    organization:
+                      _or:
+                        - members:
+                            _and:
+                              - is_admin:
+                                  _eq: true
+                              - profile_id:
+                                  _eq: X-Hasura-User-Id
+                        - main_organisation:
+                            members:
+                              _and:
+                                - is_admin:
+                                    _eq: true
+                                - profile_id:
+                                    _eq: X-Hasura-User-Id
+              - course:
+                  organization:
+                    _or:
+                      - members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
+                      - main_organisation:
+                          members:
+                            _and:
+                              - is_admin:
+                                  _eq: true
+                              - profile_id:
+                                  _eq: X-Hasura-User-Id
+          - is_revoked:
+              _eq: false
+      allow_aggregations: true
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - expiry_date
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - expiry_date
+        - is_revoked
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - expiry_date
+        - is_revoked
+      filter: {}
+      check: null
+delete_permissions:
+  - role: tt-ops
+    permission:
+      filter: {}
+event_triggers:
+  - name: certificate_revoke
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - is_revoked
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/revoke'
+  - name: course_certificate_added
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/role'
+  - name: course_certificate_expiry_date_changed
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - expiry_date
+          - is_revoked
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/expiry-date-changed'
+  - name: schedule_about_training_survey_email
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email'

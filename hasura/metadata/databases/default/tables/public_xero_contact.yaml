@@ -1,0 +1,100 @@
+table:
+  name: xero_contact
+  schema: public
+configuration:
+  column_config:
+    email_address:
+      custom_name: emailAddress
+    first_name:
+      custom_name: firstName
+    last_name:
+      custom_name: lastName
+    xero_id:
+      custom_name: xeroId
+  custom_column_names:
+    email_address: emailAddress
+    first_name: firstName
+    last_name: lastName
+    xero_id: xeroId
+  custom_root_fields: {}
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter:
+        email_address:
+          _ilike: X-Hasura-User-Email
+      allow_aggregations: true

@@ -1,0 +1,1 @@
+DROP TRIGGER set_public_draft_updated_at ON public.course_draft;

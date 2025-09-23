@@ -1,0 +1,1 @@
+export { MembershipAreaPage } from './MemberShipArea'

@@ -1,0 +1,11 @@
+DELETE FROM "public"."go1_history_events" 
+WHERE "name" = 'RESERVED_LICENSES_TRANSFERRED_TO_MAIN_ORG';
+
+DELETE FROM "public"."go1_history_events" 
+WHERE "name" = 'RESERVED_LICENSES_TRANSFERRED_FROM_AFFILIATE_ORG';
+
+DELETE FROM "public"."go1_history_events" 
+WHERE "name" = 'LICENSES_TRANSFERRED_TO_MAIN_ORG';
+
+DELETE FROM "public"."go1_history_events" 
+WHERE "name" = 'LICENSES_TRANSFERRED_FROM_AFFILIATE_ORG';

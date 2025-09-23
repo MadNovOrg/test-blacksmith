@@ -1,0 +1,5 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- alter table "public"."order" add column "order_due" float8
+
+ALTER TABLE "public"."order" DROP COLUMN "order_due";

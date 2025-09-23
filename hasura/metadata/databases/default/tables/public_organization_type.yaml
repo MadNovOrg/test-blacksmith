@@ -1,0 +1,104 @@
+table:
+  name: organization_type
+  schema: public
+object_relationships:
+  - name: organisation_sector
+    using:
+      foreign_key_constraint_on: sector
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: booking-contact
+    permission:
+      columns:
+        - id
+        - name
+        - sector
+        - nonUK
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: organization-key-contact
+    permission:
+      columns:
+        - id
+        - name
+        - sector
+        - nonUK
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - name
+        - sector
+        - nonUK
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - name
+        - sector
+        - id
+        - nonUK
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - name
+        - sector
+        - nonUK
+      filter: {}

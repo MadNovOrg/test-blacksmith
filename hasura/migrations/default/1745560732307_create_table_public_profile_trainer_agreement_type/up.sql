@@ -1,0 +1,2 @@
+CREATE TABLE "public"."profile_trainer_agreement_type" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "profile_id" uuid NOT NULL, "agreement_type" Text NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("profile_id") REFERENCES "public"."profile"("id") ON UPDATE cascade ON DELETE cascade, FOREIGN KEY ("agreement_type") REFERENCES "public"."trainer_agreement_type"("name") ON UPDATE cascade ON DELETE cascade);
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

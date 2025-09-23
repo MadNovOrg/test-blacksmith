@@ -1,0 +1,4 @@
+table:
+  name: splash_screens
+  schema: public
+is_enum: true

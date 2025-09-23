@@ -1,0 +1,1739 @@
+type Mutation {
+  acceptOrgInvite(
+    profileId: String!
+  ): AcceptOrgInviteOutput
+}
+
+type Mutation {
+  addResourcePacks(
+    input: ResourcePacksAddInput!
+  ): ResourcePacksAddOutput
+}
+
+type Mutation {
+  approveCourse(
+    input: ApproveCourseInput!
+  ): ApproveCourseOutput!
+}
+
+type Mutation {
+  arloCallback(
+    input: ArloCallbackInput!
+  ): ArloCallbackOutput
+}
+
+type Query {
+  canApplyPromoCode(
+    input: CanApplyPromoCodeInput!
+  ): CanApplyPromoCodeOutput!
+}
+
+type Mutation {
+  cancelIndividualFromCourse(
+    courseId: Int!
+    profileId: uuid!
+    reason: String!
+    fee: Float!
+    feeType: CancellationFeeType!
+  ): CancelIndividualFromCourseOutput
+}
+
+type Mutation {
+  cancelIndividualFromCourseWaitlist(
+    input: CancelIndividualFromCourseWaitlistInput!
+  ): CancelIndividualFromCourseWaitlistOutput
+}
+
+type Mutation {
+  cancelMyselfFromCourse(
+    courseId: Int!
+  ): Boolean
+}
+
+type Mutation {
+  cancelMyselfFromCourseWaitlist(
+    input: CancelMyselfFromCourseWaitlistInput!
+  ): CancelMyselfFromCourseWaitlistOutput
+}
+
+type Query {
+  checkTTClients(
+    input: CheckTTClientsInput!
+  ): CheckTTClientsOutput
+}
+
+type Mutation {
+  createOrder(
+    input: CreateOrderInput!
+  ): CreateOrderOutput
+}
+
+type Mutation {
+  createStripeSubscription(
+    priceId: String!
+    customerId: String!
+  ): createSubscriptionOutput
+}
+
+type Mutation {
+  createUser(
+    input: CreateAppUserInput!
+  ): CreateUserOutput!
+}
+
+type Query {
+  dbClean: DbCleanOutput
+}
+
+type Mutation {
+  declineInvite(
+    note: String
+  ): DeclineInviteOutput
+}
+
+type Mutation {
+  declineOrgInvite(
+    inviteId: uuid!
+  ): Boolean
+}
+
+type Mutation {
+  deleteMeeting(
+    meetingId: String!
+  ): DeleteMeetingOutput!
+}
+
+type Mutation {
+  deleteOrganisation(
+    orgId: uuid!
+  ): DeleteOrganisationOutput
+}
+
+type Mutation {
+  deleteUser(
+    profileId: uuid!
+    dryRun: Boolean
+  ): DeleteUserOutput!
+}
+
+type Query {
+  eligibleTransferCourses(
+    fromCourseId: Int!
+    participantId: uuid!
+  ): [TransferCourse!]!
+}
+
+type Query {
+  exportBlendedLearningCourseData(
+    input: BlendedLearningExportDataInput!
+  ): BlendedLearningExportDataOutput
+}
+
+type Query {
+  fetchPlans: [PlanObject]
+}
+
+type Query {
+  getCoursePricing(
+    input: GetCoursePricingInput!
+  ): GetCoursePricingOutput
+}
+
+type Query {
+  getInvite: CourseInvite
+}
+
+type Query {
+  getOrgInvite: OrgInvite
+}
+
+type Query {
+  getUserGO1Enrollments(
+    email: String!
+  ): GetUserGO1EnrollmentsOutput!
+}
+
+type Query {
+  getXeroInvoicesForOrders(
+    invoiceNumbers: [String!]!
+  ): [XeroInvoice]!
+}
+
+type Query {
+  go1EnrollmentsStatusSync: Go1EnrollmentsSyncOutput
+}
+
+type Mutation {
+  go1LicensesChange(
+    input: Go1LicensesChangeInput!
+  ): Go1LicensesChangeOutput
+}
+
+type Mutation {
+  gradedOnSync(
+    input: GradedOnSyncInput!
+  ): GradedOnSyncOutput
+}
+
+type Mutation {
+  importArloCertificates(
+    report: String!
+  ): ImportArloCertificatesOutput
+}
+
+type Mutation {
+  importLegacyCertificate(
+    input: ImportLegacyCertificateInput!
+  ): ImportLegacyCertificateOutput
+}
+
+type Mutation {
+  importOrganisations(
+    input: ImportOrganisationsInput!
+  ): ImportOrganisationsOutput
+}
+
+type Mutation {
+  importUsers(
+    input: ImportUsersInput!
+  ): ImportUsersOutput
+}
+
+type Query {
+  initAuth: InitAuthOutput!
+}
+
+type Query {
+  isUserSubscribedToMembership(
+    customerId: String!
+  ): isUserSubscribedToMembershipResponse
+}
+
+type Mutation {
+  joinWaitlist(
+    input: JoinWaitlistInput!
+  ): JoinWaitlistOutput!
+}
+
+type Query {
+  knowledgeHubResources: KnowledgeHubResourcesOutput
+}
+
+type Mutation {
+  mergeOrganisations(
+    input: MergeOrganisationsInput!
+  ): MergeOrganisationsOutput
+}
+
+type Mutation {
+  mergeUser(
+    primaryUser: uuid!
+    mergeWith: uuid!
+  ): MergeUserOutput!
+}
+
+type Mutation {
+  notifyCourseEdit(
+    oldCourse: NotifyCourseInput!
+    oldTrainers: [NotifyCourseTrainerInput]!
+  ): NotifyCourseEditOutput!
+}
+
+type Mutation {
+  notifyInternalUsersOfInviteAttempt(
+    input: NotifyInternalUsersOfInviteAttemptInput!
+  ): NotifyInternalUsersOfInviteAttemptOutput
+}
+
+type Mutation {
+  plansCreate(
+    data: PlansCreateInput!
+  ): PlansCreateResult
+}
+
+type Query {
+  podcast(
+    id: ID!
+  ): PodcastPayload
+}
+
+type Query {
+  podcasts(
+    input: PodcastsInput
+  ): PodcastsPayload
+}
+
+type Mutation {
+  rejectCourse(
+    input: RejectCourseInput!
+  ): RejectCourseOutput
+}
+
+type Mutation {
+  replaceParticipant(
+    input: ReplaceParticipantInput!
+  ): ReplaceParticipantOutput
+}
+
+type Mutation {
+  resendPassword(
+    email: String!
+  ): Boolean
+}
+
+type Mutation {
+  reserveResourcePacks(
+    input: ResourcePacksReserveInput!
+  ): ResourcePacksReserveOutput
+}
+
+type Mutation {
+  saveOrgInvites(
+    invites: [SaveOrgInviteInput!]!
+  ): SampleOutput
+}
+
+type Mutation {
+  scheduleAboutTrainingSurveys: scheduleAboutTrainingSurveysOutput
+}
+
+type Query {
+  searchTrainers(
+    input: SearchTrainersInput!
+  ): [SearchTrainer]
+}
+
+type Mutation {
+  sendCourseInformation(
+    courseId: Int!
+    attendeeIds: [uuid!]!
+  ): SendCourseInformationOutput!
+}
+
+type Mutation {
+  signUp(
+    input: SignUpInput!
+  ): SignUpOutput
+}
+
+type Mutation {
+  stripeCreatePaymentIntent(
+    input: StripeCreatePaymentIntentInput!
+  ): StripeCreatePaymentIntentOutput
+}
+
+type Mutation {
+  transferParticipant(
+    input: TransferInput!
+  ): TransferParticipantOutput
+}
+
+type Mutation {
+  updateAvatar(
+    avatar: bytea!
+    profileId: uuid!
+  ): UpdateAvatarResponse
+}
+
+type Mutation {
+  updateUserProfile(
+    input: UpdateUserProfileInput!
+  ): Boolean
+}
+
+type Mutation {
+  upsertZoomMeeting(
+    input: UpsertZoomMeetingInput
+  ): UpsertZoomMeetingPayload
+}
+
+type Mutation {
+  validateAndDispatchInvitesForIndirectCourse(
+    input: ValidateAndDispatchInvitesForIndirectCourseInput!
+  ): ValidateAndDispatchInvitesForIndirectCourseOutput
+}
+
+type Mutation {
+  verifyUser(
+    inviteId: uuid!
+  ): Boolean
+}
+
+type Mutation {
+  xeroCallback(
+    input: XeroCallbackInput!
+  ): XeroCallbackOutput
+}
+
+type Query {
+  xeroConnect: XeroConnectOutput
+}
+
+type Query {
+  xeroContactSearch(
+    input: XeroContactSearchInput!
+  ): XeroContactSearchOutput
+}
+
+type Mutation {
+  xeroDisconnect: XeroDisconnectOutput
+}
+
+type Query {
+  xeroInvoicesStatus(
+    input: XeroInvoicesStatusInput!
+  ): XeroInvoicesStatusOutput
+}
+
+type Query {
+  xeroSync: XeroInvoiceSyncOutput
+}
+
+type Query {
+  zoomUsers: ZoomUsersResponse
+}
+
+enum CreateOrderError {
+  USER_REGISTERED_ON_COURSE
+  NUMBER_OF_REGISTRANTS_AND_QUANTITY_VALUE
+  PROMOCODES_NOT_APPLICABLE
+  PROFILE_NOT_FOUND
+  COURSE_NOT_FOUND
+  NO_SPACE_ON_COURSE
+  PRICING_NOT_FOUND
+  ORDER_NOT_CREATED
+  INTERNAL_ERROR
+}
+
+enum BillingInterval {
+  day
+  week
+  month
+  year
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum CourseLevel {
+  LEVEL_1
+  LEVEL_1_BS
+  LEVEL_1_NP
+  LEVEL_2
+  ADVANCED
+  INTERMEDIATE_TRAINER
+  ADVANCED_TRAINER
+  BILD_REGULAR
+  BILD_INTERMEDIATE_TRAINER
+  BILD_ADVANCED_TRAINER
+  FOUNDATION_TRAINER_PLUS
+  FOUNDATION_TRAINER
+}
+
+enum SearchTrainerAvailability {
+  UNAVAILABLE
+  AVAILABLE
+  PENDING
+  EXPIRED
+}
+
+enum CourseTrainerType {
+  LEADER
+  ASSISTANT
+  MODERATOR
+}
+
+enum Currency {
+  AUD
+  EUR
+  GBP
+  NZD
+  USD
+}
+
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+enum XeroContactStatus {
+  ACTIVE
+  ARCHIVED
+  GDPRREQUEST
+}
+
+enum CourseType {
+  OPEN
+  CLOSED
+  INDIRECT
+}
+
+enum XeroInvoiceStatus {
+  AUTHORISED
+  DELETED
+  DRAFT
+  OVERDUE
+  PAID
+  SUBMITTED
+  UNKNOWN
+  VOIDED
+}
+
+enum Go1ChangeType {
+  LICENSES_ADDED
+  LICENSES_REMOVED
+  LICENSE_REVOKED
+  LICENSES_RELEASED
+  LICENSE_ISSUED
+  LICENSES_PURCHASED
+}
+
+enum PaymentMethod {
+  CC
+  INVOICE
+}
+
+enum ReplaceParticipantError {
+  NO_PARTICIPANT
+  INVALID_EMAIL
+  GENERIC_ERROR
+  NOT_AUTHORIZED
+}
+
+enum TransferFeeType {
+  APPLY_TERMS
+  CUSTOM_FEE
+  FREE
+}
+
+enum TransferFeeTypeEnum {
+  APPLY_TERMS
+  CUSTOM_FEE
+  FREE
+}
+
+enum Go1ChangeError {
+  GENERIC_ERROR
+  INVOICE_NOT_AUTHORIZED
+  INVOICE_PAID
+  INVALID_INVOICE
+}
+
+enum ConfirmCreditCardPaymentError {
+  GENERIC_ERROR
+  PAYMENT_NOT_SUCCEEDED
+  ORDER_NOT_FOUND
+}
+
+enum XeroPhoneType {
+  DEFAULT
+  DDI
+  FAX
+  MOBILE
+}
+
+enum XeroAddressType {
+  POBOX
+  STREET
+}
+
+enum TransferParticipantError {
+  GENERAL_ERROR
+  WRONG_COURSE_TYPE
+  PARTICIPANT_NOT_FOUND
+  PARTICIPANT_GRADED
+  COURSE_NOT_FOUND
+  NOT_ELIGIBLE_FOR_TRANSFER
+  TRANSFER_NOT_ALLOWED
+  NOT_ENOUGH_SPACES
+}
+
+enum CourseDeliveryType {
+  F2F
+  MIXED
+  VIRTUAL
+}
+
+enum MergeUserError {
+  GENERAL_ERROR
+}
+
+enum DeleteUserError {
+  GENERAL_ERROR
+  CERT_EXIST
+  SELF_DELETE
+  USER_TRAINER
+  PENDING_COURSE
+}
+
+enum SendCourseInformationError {
+  COURSE_NOT_FOUND
+  ATTENDEE_NOT_FOUND
+  ATTENDEE_LIST_IS_EMPTY
+}
+
+enum CancelMyselfFromCourseWaitlistError {
+  COURSE_NOT_FOUND
+  CANCELLATION_SECRET_INVALID
+}
+
+enum CancelIndividualFromCourseWaitlistError {
+  COURSE_NOT_FOUND
+  WAITLIST_NOT_FOUND
+}
+
+enum BildStrategy {
+  PRIMARY
+  SECONDARY
+  NON_RESTRICTIVE_TERTIARY
+  RESTRICTIVE_TERTIARY_INTERMEDIATE
+  RESTRICTIVE_TERTIARY_ADVANCED
+}
+
+enum CourseApprovalError {
+  COURSE_NOT_FOUND
+  GENERIC_ERROR
+  INVALID_COURSE_ID
+  INVALID_STATUS
+  NO_AUDIT_FOUND
+  TRAINER_NOT_FOUND
+}
+
+enum CancellationFeeType {
+  APPLY_CANCELLATION_TERMS
+  CUSTOM_FEE
+  NO_FEES
+}
+
+enum ImportLegacyCertificateError {
+  ALREADY_IMPORTED
+  UNSUPPORTED_LEVEL
+  PROFILE_NO_MATCH
+  GENERIC_ERROR
+  CERTIFICATE_NOT_FOUND
+}
+
+enum KnowledgeHubResourceType {
+  ARTICLE
+  DOWNLOAD
+  PODCAST
+  VIDEO
+}
+
+enum SaveOrgInviteError {
+  GENERAL_ERROR
+  ORG_MEMBER_ALREADY_EXISTS
+}
+
+enum CertificateStatus {
+  EXPIRED
+  EXPIRED_RECENTLY
+  EXPIRING_SOON
+  ACTIVE
+  ON_HOLD
+  REVOKED
+  INACTIVE
+}
+
+enum ImportFailCause {
+  INVALID_DATA
+}
+
+enum CancelIndividualFromCourseError {
+  GO1_ENROLLMENT_NOT_FOUND
+  GO1_ENROLLMENT_STARTED
+}
+
+enum ResourcePacksTypeEnum {
+  DIGITAL_WORKBOOK
+  PRINT_WORKBOOK
+}
+
+enum ResourcePacksAddErrorEnum {
+  GENERIC_ERROR
+  ORGANIZATION_NOT_FOUND
+  INVALID_AMOUNT
+  NOT_ALLOWED
+}
+
+enum ResourcePacksReserveErrorEnum {
+  GENERIC_ERROR
+  ORGANIZATION_NOT_FOUND
+  INVALID_AMOUNT
+  NOT_ALLOWED
+  INSUFFICIENT_RESOURCE_PACKS_AVAILABLE
+}
+
+enum ValidateAndDispatchInvitesForIndirectCourseError {
+  INSUFFICIENT_NUMBER_OF_RESOURCES
+  INTERNAL_SERVER_ERROR
+  UNAUTHORIZED
+}
+
+enum MergeOrganisationsStatus {
+  SUCCESS
+  FAIL
+}
+
+enum EnrollmentStatus {
+  COMPLETED
+  INPROGRESS
+}
+
+enum GO1EnrollmentStatus {
+  COMPLETED
+  INPROGRESS
+}
+
+input PlansCreateInput {
+  name: String!
+  currency: String!
+  amount: Int!
+  recurring_type: BillingInterval!
+  recurring_count: Int!
+  trial_type: BillingInterval!
+  trial_count: Int!
+}
+
+input UpsertZoomMeetingInput {
+  id: Float
+  """ ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z' """ startTime: String
+  """ Timezone string, e.g. Europe/London """ timezone: String
+  """ Optional user id to create the meeting for """ userId: String
+}
+
+input GetTrainersLevelsInput {
+  ids: [uuid!]!
+  trainerType: CourseTrainerType!
+  courseLevel: CourseLevel!
+  courseStart: date!
+  courseEnd: date!
+}
+
+input StripeCreatePaymentIntentInput {
+  orderId: String!
+}
+
+input SearchTrainersInput {
+  query: String
+  trainerType: CourseTrainerType
+  courseLevel: CourseLevel
+  courseStart: date
+  courseEnd: date
+  bildStrategies: [BildStrategy!]
+  courseType: CourseType
+  useAOL: Boolean
+}
+
+input Ordering {
+  direction: OrderDirection
+}
+
+input PodcastsInput {
+  term: String
+  order: Ordering
+  paging: Paging
+}
+
+input Paging {
+  perPage: Int
+  page: Int
+}
+
+input XeroCallbackInput {
+  url: String!
+}
+
+input XeroContactSearchInput {
+  searchTerm: String!
+}
+
+input CreateAppUserInput {
+  firstName: String!
+  lastName: String!
+  password: String!
+  country: String!
+  countryCode: String!
+  phone: String
+  phoneCountryCode: String
+  dob: String
+  acceptTnc: Boolean!
+  jobTitle: String!
+  orgId: String
+}
+
+input GetCoursePricingInput {
+  courseId: Int!
+}
+
+input XeroInvoicesStatusInput {
+  invoiceNumbers: [String]!
+  invoiceNumberContains: String
+  statuses: [XeroInvoiceStatus]
+}
+
+input Go1LicensesChangeInput {
+  amount: Int!
+  type: Go1ChangeType!
+  payload: jsonb
+  orgId: uuid!
+}
+
+input CanApplyPromoCodeInput {
+  courseId: Int!
+  code: String!
+}
+
+input CreateOrderParticipantInput {
+  addressLine1: String
+  addressLine2: String
+  city: String
+  country: String
+  email: String!
+  firstName: String!
+  lastName: String!
+  postCode: String
+  residingCountry: String
+  residingCountryCode: String
+}
+
+input CreateOrderInput {
+  courseId: Int!
+  quantity: Int!
+  paymentMethod: PaymentMethod!
+  billingAddress: String!
+  billingGivenName: String!
+  billingFamilyName: String!
+  billingEmail: String!
+  billingPhone: String!
+  clientPurchaseOrder: String!
+  registrants: [CreateOrderParticipantInput!]!
+  organizationId: String!
+  promoCodes: [String!]!
+  source: String
+  salesRepresentativeId: String
+  bookingContact: jsonb
+}
+
+input ReplaceParticipantInput {
+  participantId: uuid!
+  inviteeEmail: String!
+  inviteeFirstName: String!
+  inviteeLastName: String!
+  inviteeAddressLine1: String
+  inviteeAddressLine2: String
+  inviteeCity: String
+  inviteePostCode: String
+  inviteeCountry: String
+}
+
+input TransferFee {
+  type: TransferFeeType!
+  customFee: Float
+}
+
+input TransferInput {
+  participantId: uuid!
+  toCourseId: Int!
+  fee: TransferFee!
+  reason: String!
+  inviteeAddressLine1: String
+  inviteeAddressLine2: String
+  inviteeCity: String
+  inviteePostCode: String
+  inviteeCountry: String
+}
+
+input GetOrdersInput {
+  where: jsonb
+  orderBy: [jsonb]
+  limit: Int!
+  offset: Int!
+  invoiceStatus: [XeroInvoiceStatus]
+}
+
+input UpdateUserProfileInput {
+  profileId: uuid!
+  givenName: String
+  familyName: String
+  country: String
+  countryCode: String
+  phone: String
+  jobTitle: String
+  avatar: String
+  dob: String
+  dietaryRestrictions: String
+  disabilities: String
+  orgId: String
+  phoneCountryCode: String
+  canAccessKnowledgeHub: Boolean
+}
+
+input NotifyCourseInput {
+  courseId: Int!
+  level: CourseLevel!
+  startDate: date!
+  endDate: date!
+  venueId: uuid
+  virtualLink: String
+  parkingInstructions: String!
+  specialInstructions: String!
+}
+
+input NotifyCourseTrainerInput {
+  id: uuid!
+  type: CourseTrainerType!
+}
+
+input JoinWaitlistInput {
+  courseId: Int!
+  givenName: String!
+  familyName: String!
+  phone: String!
+  email: String!
+  orgName: String!
+  recaptchaToken: String!
+}
+
+input SignUpInput {
+  email: String!
+  givenName: String!
+  familyName: String!
+  country: String!
+  countryCode: String!
+  phone: String
+  phoneCountryCode: String
+  dob: date
+  courseId: Int
+  quantity: Int
+  jobTitle: String
+  sector: String
+  orgId: uuid
+  acceptTnc: Boolean!
+  recaptchaToken: String!
+}
+
+input ArloCallbackInput {
+  url: String!
+}
+
+input CancelIndividualFromCourseWaitlistInput {
+  courseId: Int!
+  waitlistId: uuid!
+}
+
+input CancelMyselfFromCourseWaitlistInput {
+  courseId: Int!
+  cancellationSecret: uuid!
+}
+
+input RejectCourseInput {
+  courseId: Int!
+  reason: String!
+}
+
+input ApproveCourseInput {
+  courseId: Int!
+  reason: String!
+}
+
+input BlendedLearningExportDataInput {
+  courseId: Int!
+}
+
+input ImportLegacyCertificateInput {
+  code: String!
+  profileId: uuid
+}
+
+input CurriculumSyncInput {
+  ids: [Int!]!
+}
+
+input SaveOrgInviteInput {
+  isAdmin: Boolean!
+  orgId: String!
+  profileEmail: String!
+}
+
+input GradedOnSyncInput {
+  participantIds: [uuid!]!
+}
+
+input ImportUsersInput {
+  data: String!
+  config: ImportUsersConfig!
+}
+
+input ImportUsersConfig {
+  firstNameColumn: String!
+  lastNameColumn: String!
+  emailColumn: String!
+  certificateNumberColumn: String!
+}
+
+input OrganizationProfilesInput {
+  orgId: uuid
+  profileId: uuid
+  showAll: Boolean
+  certificateFilter: [CertificateStatus]
+  limit: Int
+  offset: Int
+}
+
+input Invite {
+  email: String!
+  expiresIn: String
+  invitedAfterCourseHasEnded: Boolean!
+  inviter_id: String
+  status: String
+}
+
+input ImportOrganisationsInput {
+  data: String!
+  config: ImportOrganisationsConfig!
+}
+
+input ImportOrganisationsConfig {
+  name: String!
+  country: String!
+  state: String!
+  addressLine1: String!
+  addressLine2: String
+  city: String!
+  postcode: String!
+  sector: String!
+  type: String!
+  phone: String!
+  email: String!
+  website: String
+  mainOrganisation: String
+  mainContactFirstName: String
+  mainContactSurname: String
+  mainContactEmail: String
+  mainContactSetting: String
+  organisationAdminEmail: String
+}
+
+input ResourcePacksAddInput {
+  amount: Int!
+  invoiceNumber: String!
+  note: String
+  orgId: uuid!
+  resourcePackType: ResourcePacksTypeEnum!
+}
+
+input ResourcePacksReserveInput {
+  courseId: Int!
+  orgId: uuid!
+  quantity: Int!
+  resourcePackType: ResourcePacksTypeEnum!
+}
+
+input ValidateAndDispatchInvitesForIndirectCourseInput {
+  courseId: Int!
+  invites: [Invite!]!
+}
+
+input MergeOrganisationsInput {
+  main: uuid!
+  merge: [uuid]!
+}
+
+input NotifyInternalUsersOfInviteAttemptInput {
+  invitedBy: uuid!
+  inviteesList: [String!]!
+  course: Int!
+}
+
+input CheckTTClientsInput {
+  emailList: [String!]!
+  course: Int!
+}
+
+type LinkProfileResult {
+  status: Boolean!
+}
+
+type PlansCreateResult {
+  id: String!
+}
+
+type PlanObject {
+  id: String
+  active: Boolean
+  currency: String
+  productName: String
+  billingInterval: String
+  unitAmount: Int
+  name: String
+}
+
+type createSubscriptionOutput {
+  subscriptionId: String!
+  clientSecret: String!
+}
+
+type isUserSubscribedToMembershipResponse {
+  isSubscribed: Boolean!
+}
+
+type DeclineInviteOutput {
+  status: Boolean!
+}
+
+type DeclineOrgInviteOutput {
+  id: uuid!
+}
+
+type AcceptOrgInviteOutput {
+  id: uuid
+  error: Boolean
+  errorMessage: String
+}
+
+type CourseInvite {
+  id: String!
+  status: InviteStatus!
+  courseId: String!
+  courseName: String!
+  description: String
+  trainerName: String!
+  startDate: String!
+  endDate: String!
+  deliveryType: CourseDeliveryType
+  venueName: String!
+  venueAddress: Address
+  venueCoordinates: String
+  timeZone: String
+}
+
+type OrgInvite {
+  id: String!
+  orgName: String!
+  orgId: String!
+}
+
+type Address {
+  addressLineOne: String
+  addressLineTwo: String
+  city: String
+  postCode: String
+}
+
+type UpsertZoomMeetingPayload {
+  success: Boolean!
+  meeting: ZoomMeeting
+  userError: ZoomMeetingNotFoundError
+}
+
+type ZoomMeeting {
+  id: Int!
+  joinUrl: String!
+}
+
+type ZoomMeetingNotFoundError {
+  id: String!
+}
+
+type TrainerLevels {
+  profile_id: uuid!
+  levels: [CourseLevel!]!
+  availability: SearchTrainerAvailability!
+}
+
+type StripeCreatePaymentIntentOutput {
+  clientSecret: String!
+  amount: Float!
+  currency: Currency!
+}
+
+type SearchTrainer {
+  id: uuid!
+  fullName: String!
+  email: String!
+  translatedGivenName: String
+  translatedFamilyName: String
+  avatar: String
+  trainer_role_types: [TrainerRoleType!]!
+  levels: [CourseCertificateLevel!]!
+  availability: SearchTrainerAvailability
+}
+
+type Podcast {
+  id: String!
+  name: String!
+  description: String
+  mediaUrl: String!
+  author: String!
+  publishedDate: String!
+  thumbnail: String!
+  episodeNumber: Int!
+}
+
+type PodcastsPayload {
+  records: [Podcast!]!
+  total: Int!
+}
+
+type PodcastPayload {
+  podcast: Podcast
+}
+
+type XeroConnectOutput {
+  consentUrl: String
+}
+
+type XeroCallbackOutput {
+  status: Boolean!
+}
+
+type XeroContactSearchOutput {
+  contacts: [XeroContact!]!
+}
+
+type XeroContact {
+  contactID: ID!
+  contactStatus: XeroContactStatus!
+  updatedDateUTC: date
+  isCustomer: Boolean
+  name: String!
+  firstName: String
+  lastName: String
+  emailAddress: String
+  phones: [XeroPhone]
+  addresses: [XeroAddress]
+}
+
+type XeroPhone {
+  phoneType: XeroPhoneType!
+  phoneCountryCode: String
+  phoneAreaCode: String
+  phoneNumber: String
+}
+
+type XeroAddress {
+  addressType: XeroAddressType
+  addressLine1: String
+  addressLine2: String
+  city: String
+  region: String
+  postalCode: String
+  country: String
+}
+
+type CreateUserOutput {
+  cognitoId: String!
+  profileId: String!
+  email: String!
+}
+
+type InitAuthOutput {
+  email: String!
+  authChallenge: String!
+}
+
+type GetCoursePricingOutput {
+  type: CourseType
+  level: CourseLevel
+  blended: Boolean
+  reaccreditation: Boolean
+  priceAmount: Float!
+  priceCurrency: Currency!
+  xeroCode: String!
+}
+
+type XeroInvoicesStatusOutput {
+  invoices: [XeroInvoiceStatusKV]!
+}
+
+type XeroInvoiceStatusKV {
+  invoiceNumber: String!
+  status: XeroInvoiceStatus!
+}
+
+type XeroDisconnectOutput {
+  connected: Boolean!
+}
+
+type XeroInvoice {
+  invoiceID: ID!
+  type: String!
+  date: String!
+  total: Float!
+  status: XeroInvoiceStatus!
+  contact: XeroContact!
+  dueDate: String
+  subTotal: Float
+  totalTax: Float
+  lineItems: [XeroLineItem]!
+  reference: String
+  currencyCode: Currency!
+  invoiceNumber: String
+  fullyPaidOnDate: String
+  amountPaid: String
+  amountDue: String
+}
+
+type XeroItem {
+  itemID: String!
+  code: String!
+}
+
+type XeroLineItem {
+  description: String
+  quantity: Int!
+  unitAmount: Float!
+  itemCode: String!
+  accountCode: String
+  item: XeroItem
+  taxType: String!
+  taxAmount: Float!
+  lineAmount: Float!
+  tracking: [XeroTrackingCategory!]
+}
+
+type Go1LicensesChangeOutput {
+  success: Boolean!
+  error: Go1ChangeError
+}
+
+type UpdateAvatarResponse {
+  avatar: String!
+}
+
+type CanApplyPromoCodeOutput {
+  result: PromoCodeOutput
+}
+
+type CreateOrderOutput {
+  id: uuid
+  success: Boolean!
+  error: CreateOrderError
+}
+
+type TransferCourse {
+  id: Int!
+  courseCode: String!
+  courseResidingCountry: String
+  startDate: String!
+  endDate: String!
+  virtualLink: String
+  venue: String
+  venueName: String
+  venueCity: String
+  venueCountry: String
+  level: CourseLevel
+  freeSlots: Int!
+  reaccreditation: Boolean!
+  type: CourseType!
+  deliveryType: CourseDeliveryType!
+  timezone: String
+}
+
+type TransferParticipantOutput {
+  success: Boolean!
+  error: TransferParticipantError
+}
+
+type ReplaceParticipantOutput {
+  success: Boolean!
+  error: ReplaceParticipantError
+}
+
+type TrainerRoleTypeObj {
+  id: String!
+  name: String!
+}
+
+type TrainerRoleType {
+  trainer_role_type: TrainerRoleTypeObj
+}
+
+type CourseCertificateLevel {
+  courseLevel: CourseLevel!
+  expiryDate: date!
+}
+
+type PromoCodeOutput {
+  code: String!
+  amount: Int!
+  type: String!
+}
+
+type ConfirmCreditCardPaymentOutput {
+  confirmed: Boolean!
+  error: ConfirmCreditCardPaymentError
+}
+
+type XeroTrackingCategory {
+  trackingCategoryID: String!
+  name: String!
+  option: String!
+}
+
+type GetOrdersOutput {
+  orders: [OrderInfo]
+  count: Int
+}
+
+type Order {
+  order_id: String!
+}
+
+type OrderInfo {
+  id: uuid!
+  createdAt: Date
+  profileId: uuid
+  quantity: Int
+  registrants: jsonb
+  paymentMethod: PaymentMethod
+  orderDue: Float
+  orderTotal: Float
+  currency: String
+  stripePaymentId: uuid
+  xeroInvoiceNumber: Int
+  organization: OrganizationInfo
+  status: XeroInvoiceStatus
+  course: jsonb
+  xeroReference: String
+  dueDate: String
+}
+
+type OrganizationInfo {
+  name: String
+  id: uuid
+  address: jsonb
+}
+
+type MergeUserOutput {
+  success: Boolean!
+  error: MergeUserError
+}
+
+type DeleteUserOutput {
+  courseIds: String
+  error: DeleteUserError
+  hasGo1Account: Boolean
+  success: Boolean!
+}
+
+type NotifyCourseEditOutput {
+  status: Int!
+}
+
+type ApproveCourseOutput {
+  success: Boolean!
+  error: CourseApprovalError
+}
+
+type SendCourseInformationOutput {
+  success: Boolean!
+  error: SendCourseInformationError
+}
+
+type CancelIndividualFromCourseWaitlistOutput {
+  success: Boolean!
+  error: CancelIndividualFromCourseWaitlistError
+}
+
+type CancelMyselfFromCourseWaitlistOutput {
+  success: Boolean!
+  error: CancelMyselfFromCourseWaitlistError
+}
+
+type JoinWaitlistOutput {
+  success: Boolean!
+}
+
+type ZoomUser {
+  id: String!
+  firstName: String!
+  lastName: String!
+  displayName: String!
+  email: String!
+}
+
+type ZoomUsersResponse {
+  success: Boolean
+  data: ZoomUsersResponseData
+}
+
+type ZoomUsersResponseData {
+  current: String!
+  users: [ZoomUser!]
+}
+
+type DeleteMeetingOutput {
+  success: Boolean!
+}
+
+type SignUpOutput {
+  success: Boolean!
+}
+
+type ArloCallbackOutput {
+  status: Boolean!
+}
+
+type RejectCourseOutput {
+  success: Boolean!
+  error: CourseApprovalError
+}
+
+type ImportArloCertificatesOutput {
+  processed: Int
+  added: Int
+  invalid: Int
+  invalidEntries: [InvalidEntries]
+  error: String
+}
+
+type XeroInvoiceSyncOutput {
+  message: String
+}
+
+type BlendedLearningExportDataOutput {
+  courseName: String!
+  courseCode: String!
+  courseStartDate: String!
+  courseEndDate: String!
+  commissioningOrganisationName: String!
+  leadTrainerName: String!
+  attendees: [BlendedLearningAttendeeExportData!]!
+}
+
+type BlendedLearningAttendeeExportData {
+  userName: String!
+  email: String!
+  blendedLearningStatus: String!
+  blendedLearningPass: String!
+  blendedLearningStartDate: String!
+  blendedLearningEndDate: String
+}
+
+type ImportLegacyCertificateOutput {
+  success: Boolean!
+  trainerRoleAdded: Boolean!
+  error: ImportLegacyCertificateError
+}
+
+type KnowledgeHubResource {
+  id: String!
+  title: String!
+  description: String!
+  imageUrl: String!
+  srcSet: String
+  url: String!
+  publishedDate: String!
+  type: KnowledgeHubResourceType!
+  authors: [String!]
+}
+
+type KnowledgeHubResourcesOutput {
+  resources: [KnowledgeHubResource!]!
+}
+
+type CurriculumSyncOutput {
+  syncedCount: Int!
+  notSyncedCount: Int!
+}
+
+type SampleOutput {
+  success: Boolean!
+  error: SaveOrgInviteError
+}
+
+type GradedOnSyncOutput {
+  syncedCount: Int!
+  notSyncedCount: Int!
+}
+
+type ImportUsersOutput {
+  jobId: String!
+}
+
+type OrganizationProfilesOutput {
+  profilesByOrganisation: [ProfilesByOrganization]
+  profilesByLevel: [ProfilesByLevel]
+}
+
+type Organization {
+  id: uuid!
+  name: String
+}
+
+type UpcominEnrollment {
+  orgId: uuid!
+  orgName: String
+  courseLevel: CourseLevel
+  course: UpcomingEnrollmentCourse
+}
+
+type CourseCertificate {
+  courseLevel: CourseLevel
+  status: String
+  expiryDate: date
+  participant: CourseParticipant
+}
+
+type ProfilesByOrganization {
+  orgId: uuid
+  profiles: [OrganizationProfile]
+}
+
+type ProfilesByLevel {
+  level: CourseLevel
+  profiles: [OrganizationProfile]
+}
+
+type ProfileOrganization {
+  id: uuid
+  position: String
+  organization: OrganizationInfo!
+}
+
+type CourseParticipant {
+  certificateChanges: [CourseCertificateChangelog]
+}
+
+type Payload {
+  note: String
+}
+
+type CourseCertificateChangelog {
+  payload: Payload
+}
+
+type OrganizationProfile {
+  id: uuid!
+  fullName: String
+  archived: Boolean
+  avatar: String
+  certificates: [CourseCertificate]
+  upcomingEnrollments: [UpcominEnrollment]
+  organizations: [ProfileOrganization]
+}
+
+type UpcomingEnrollmentCourse {
+  id: uuid
+  course_code: String
+  name: String
+  level: CourseLevel
+  type: CourseType
+  schedule: [EnrollmentCourseSchedule]
+}
+
+type scheduleAboutTrainingSurveysOutput {
+  message: String
+}
+
+type DeleteOrganisationOutput {
+  success: Boolean!
+}
+
+type EnrollmentCourseSchedule {
+  start: String
+  end: String
+}
+
+type ImportArloCertificatesResponse {
+  processed: Int!
+  added: Int!
+  invalid: Int!
+  invalidEntries: [InvalidEntries]
+  error: String
+}
+
+type ImportArloCertificatesError {
+  message: String!
+  failedEntries: [FailedImportEntries]
+}
+
+type FailedImportEntries {
+  email: String!
+  total: Int!
+  cause: ImportFailCause
+}
+
+type InvalidEntries {
+  email: String!
+}
+
+type ImportOrganisationsOutput {
+  jobId: String
+  error: String
+}
+
+type Go1EnrollmentsSyncOutput {
+  message: String
+}
+
+type CancelIndividualFromCourseOutput {
+  success: Boolean!
+  error: CancelIndividualFromCourseError
+}
+
+type DbCleanOutput {
+  message: String!
+}
+
+type ResourcePacksAddOutput {
+  success: Boolean!
+  totalResourcePacks: Int
+  error: ResourcePacksAddErrorEnum
+}
+
+type ResourcePacksReserveOutput {
+  success: Boolean!
+  totalResourcePacks: Int
+  error: ResourcePacksReserveErrorEnum
+}
+
+type ValidateAndDispatchInvitesForIndirectCourseOutput {
+  error: ValidateAndDispatchInvitesForIndirectCourseError
+  extraLicensesRequiredToBuy: Int
+  extraResourcePacksRequiredToBuy: Int
+  success: Boolean!
+}
+
+type MergeOrganisationsOutput {
+  status: MergeOrganisationsStatus!
+  message: String!
+}
+
+type GetUserGO1EnrollmentsOutput {
+  enrollments: [GetUserGO1Enrollment!]!
+  success: Boolean!
+}
+
+type GetUserGO1Enrollment {
+  id: Int!
+  learningObject: GO1LearningObject
+  status: GO1EnrollmentStatus
+}
+
+type LearningObject {
+  id: Int!
+  title: String!
+}
+
+type GO1LearningObject {
+  id: Int!
+  title: String!
+}
+
+type NotifyInternalUsersOfInviteAttemptOutput {
+  success: Boolean!
+}
+
+type CheckTTClientsOutput {
+  clientEmails: [String!]!
+  nonClientEmails: [String!]!
+}
+
+scalar Date
+

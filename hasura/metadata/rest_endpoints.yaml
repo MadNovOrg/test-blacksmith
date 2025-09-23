@@ -1,0 +1,9 @@
+- comment: ""
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: GetUserKnowledgehubAccess
+  methods:
+    - GET
+  name: GetUserKnowledgehubAccess
+  url: user/knowledgehub-access/:id

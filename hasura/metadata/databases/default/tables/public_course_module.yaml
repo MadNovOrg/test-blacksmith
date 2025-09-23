@@ -1,0 +1,235 @@
+table:
+  name: course_module
+  schema: public
+configuration:
+  column_config:
+    course_id:
+      custom_name: courseId
+    module_id:
+      custom_name: moduleId
+  custom_column_names:
+    course_id: courseId
+    module_id: moduleId
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: module
+    using:
+      foreign_key_constraint_on: module_id
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - covered
+        - created_at
+        - id
+        - module_id
+        - updated_at
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - covered
+        - module_id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - module_id
+        - covered
+        - course_id
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: OPEN
+            - course_status:
+                _in:
+                  - CONFIRM_MODULES
+                  - SCHEDULED
+                  - TRAINER_MISSING
+                  - TRAINER_PENDING
+                  - TRAINER_DECLINED
+      allow_aggregations: true
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - covered
+        - id
+        - module_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - covered
+        - id
+        - module_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - covered
+        - created_at
+        - id
+        - module_id
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - covered
+        - id
+        - module_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+      allow_aggregations: true
+update_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - covered
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - covered
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - covered
+      filter: {}
+      check: null
+delete_permissions:
+  - role: trainer
+    permission:
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter: {}

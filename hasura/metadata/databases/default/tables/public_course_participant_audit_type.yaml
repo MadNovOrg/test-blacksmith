@@ -1,0 +1,4 @@
+table:
+  name: course_participant_audit_type
+  schema: public
+is_enum: true

@@ -1,0 +1,297 @@
+table:
+  name: promo_code
+  schema: public
+configuration:
+  column_config:
+    approved_by:
+      custom_name: approvedBy
+    booker_single_use:
+      custom_name: bookerSingleUse
+    created_at:
+      custom_name: createdAt
+    created_by:
+      custom_name: createdBy
+    denied_by:
+      custom_name: deniedBy
+    updated_at:
+      custom_name: updatedAt
+    uses_max:
+      custom_name: usesMax
+    valid_from:
+      custom_name: validFrom
+    valid_to:
+      custom_name: validTo
+  custom_column_names:
+    approved_by: approvedBy
+    booker_single_use: bookerSingleUse
+    created_at: createdAt
+    created_by: createdBy
+    denied_by: deniedBy
+    updated_at: updatedAt
+    uses_max: usesMax
+    valid_from: validFrom
+    valid_to: validTo
+  custom_root_fields: {}
+object_relationships:
+  - name: approver
+    using:
+      foreign_key_constraint_on: approved_by
+  - name: creator
+    using:
+      foreign_key_constraint_on: created_by
+array_relationships:
+  - name: courses
+    using:
+      foreign_key_constraint_on:
+        column: promo_id
+        table:
+          name: course_promo_code
+          schema: public
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+  - role: ld
+    permission:
+      check: {}
+      columns: []
+  - role: sales-admin
+    permission:
+      check:
+        _or:
+          - approved_by:
+              _eq: X-Hasura-User-Id
+          - approved_by:
+              _is_null: true
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+  - role: tt-ops
+    permission:
+      check:
+        _or:
+          - approved_by:
+              _eq: X-Hasura-User-Id
+          - approved_by:
+              _is_null: true
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - disabled
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - disabled
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
+        - valid_from
+        - valid_to
+        - booker_single_use
+        - uses_max
+        - levels
+        - enabled
+        - approved_by
+        - created_by
+        - created_at
+        - updated_at
+        - denied_by
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_at
+        - created_by
+        - denied_by
+        - description
+        - disabled
+        - enabled
+        - id
+        - levels
+        - type
+        - updated_at
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      check: {}
+  - role: ld
+    permission:
+      columns: []
+      filter: {}
+      check: null
+  - role: sales-admin
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - denied_by
+        - description
+        - disabled
+        - enabled
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: finance
+    permission:
+      filter: {}
+  - role: sales-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}
+event_triggers:
+  - name: promo_code_created
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - amount
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/promocode/created'

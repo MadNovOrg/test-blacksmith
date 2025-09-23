@@ -1,0 +1,796 @@
+import pdf, { Styles } from '@react-pdf/renderer'
+import { groupBy } from 'lodash-es'
+import React, { Fragment, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import TTLogoImage from '@app/assets/TT-Colour-Logo.png'
+import {
+  ForeignScriptFontPaths,
+  getForeignScript,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import {
+  Accreditors_Enum,
+  Course_Evaluation_Question_Type_Enum,
+  Course_Trainer_Type_Enum as CourseTrainerTypes,
+  GetCourseByIdQuery,
+  Venue,
+  GetEvaluationsSummaryQuery,
+} from '@app/generated/graphql'
+import {
+  CourseEvaluationGroupedQuestion,
+  CourseEvaluationInjuryQuestion,
+  CourseEvaluationQuestionGroup,
+  CourseEvaluationUngroupedQuestion,
+} from '@app/types'
+import { formatCourseVenue } from '@app/util'
+
+const { Document, Font, Page, StyleSheet, Text, View, Image } = pdf
+
+type Props = {
+  course: Pick<
+    NonNullable<GetCourseByIdQuery['course']>,
+    | 'accreditedBy'
+    | 'bildModules'
+    | 'deliveryType'
+    | 'curriculum'
+    | 'name'
+    | 'schedule'
+    | 'trainers'
+    | 'type'
+  >
+  isRestricted: boolean
+  participants: {
+    id: string
+    attended?: boolean | null
+    profile: { id: string; archived?: boolean | null; fullName?: string | null }
+  }[]
+  grouped: CourseEvaluationGroupedQuestion
+  ungrouped: CourseEvaluationUngroupedQuestion
+  injuryQuestion: CourseEvaluationInjuryQuestion
+  trainerAnswers: Pick<
+    GetEvaluationsSummaryQuery['answers'][number],
+    'answer' | 'id' | 'question'
+  >[]
+}
+
+type Curriculum = {
+  id: string
+  displayName: string
+  name: string
+  mandatory: boolean
+  lessons: {
+    items: {
+      name: string
+      covered: boolean
+    }[]
+  }
+}[]
+
+type PDFRatingSummaryProps = {
+  questionKey: string
+  answers: GetEvaluationsSummaryQuery['answers']
+}
+
+type PDFRatingAnswerProps = {
+  label: string
+  value: number
+  backgroundColor: string
+}
+
+type FlexGroupProps = {
+  data: React.ReactElement<unknown>[]
+  type?: 'column' | 'row'
+  groupSize?: number
+}
+
+const MAX_FLEX_ELEMENTS = 3
+
+const groups = [
+  CourseEvaluationQuestionGroup.TRAINING_RATING,
+  CourseEvaluationQuestionGroup.TRAINING_RELEVANCE,
+  CourseEvaluationQuestionGroup.TRAINER_STANDARDS,
+  CourseEvaluationQuestionGroup.MATERIALS_AND_VENUE,
+]
+
+const booleanQuestionTypes = [
+  Course_Evaluation_Question_Type_Enum.Boolean,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonY,
+  Course_Evaluation_Question_Type_Enum.BooleanReasonN,
+]
+
+const answerLabels = ['excellent', 'good', 'average', 'fair', 'poor']
+const answerColors: { [key: string]: string } = {
+  excellent: '#59C13D',
+  good: '#9EB934',
+  average: '#F2A61F',
+  fair: 'rgba(255, 0, 0, 0.6)',
+  poor: 'rgba(255, 0, 0, 0.8)',
+}
+
+Font.register({
+  family: 'Inter',
+  fonts: [
+    {
+      fontWeight: 'normal',
+      src: 'https://fonts.gstatic.com/s/inter/v11/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff',
+    },
+    {
+      fontWeight: 'bold',
+      src: 'https://fonts.gstatic.com/s/inter/v11/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hjp-Ek-_EeA.woff',
+    },
+  ],
+})
+Font.registerHyphenationCallback(word => [word])
+
+const styles = StyleSheet.create({
+  strikeThrough: {
+    textDecoration: 'line-through',
+    textDecorationColor: 'red',
+  },
+  page: {
+    textAlign: 'justify',
+    fontFamily: 'Inter',
+    backgroundColor: 'rgb(245, 245, 245)',
+    color: 'rgba(0, 0, 0, 0.87)',
+    padding: '10mm',
+    fontSize: '8px',
+  },
+  mainView: {
+    padding: '20px',
+  },
+  section: {
+    marginBottom: '15px',
+  },
+  centeredSection: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  textAlignCenter: {
+    textAlign: 'center',
+  },
+  text: {
+    fontSize: '8px',
+    lineHeight: '8px',
+    marginBottom: '6px',
+  },
+  largerText: {
+    fontSize: '10px',
+    marginBottom: '5px',
+  },
+  largestText: {
+    fontSize: '12px',
+    marginBottom: '10px',
+  },
+  smallerText: {
+    fontSize: '6px',
+  },
+  bold: {
+    fontWeight: 900,
+  },
+  title: {
+    marginBottom: '20',
+    fontSize: '24px',
+  },
+  courseNameText: {
+    fontSize: '18px',
+    width: '100%',
+    flexWrap: 'wrap',
+    lineHeight: 1.2,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignContent: 'space-between',
+    justifyContent: 'space-between',
+    gap: 20,
+  },
+  flexColumn: {
+    flexDirection: 'row',
+    alignContent: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingRight: '5px',
+  },
+  questionsSection: {
+    width: '60%',
+    marginLeft: '20%',
+  },
+  question: {
+    padding: '3%',
+    width: '100%',
+    backgroundColor: 'white',
+  },
+  ratingAnswer: {
+    width: '100%',
+    paddingTop: '2px',
+    paddingBottom: '2px',
+    alignItems: 'center',
+  },
+  progressBar: {
+    width: '70%',
+    backgroundColor: '#f5f5f5',
+    height: '8px',
+  },
+  participantAnswer: {
+    backgroundColor: '#ebf0fb',
+    padding: '4px',
+    marginTop: '2px',
+    marginBottom: '2px',
+  },
+  booleanAnswer: {
+    width: '47%',
+    height: '30px',
+    backgroundColor: 'white',
+    textAlign: 'center',
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  markedAnswer: {
+    backgroundColor: '#59C13D',
+  },
+  logo: {
+    alignSelf: 'center',
+    width: '90',
+    height: '90',
+  },
+})
+
+const FlexGroup: React.FC<React.PropsWithChildren<FlexGroupProps>> = ({
+  data,
+  type = 'row',
+  groupSize = MAX_FLEX_ELEMENTS,
+}) => {
+  const groups = []
+  for (let i = 0; i < data.length; i += groupSize) {
+    groups.push(data.slice(i, i + groupSize))
+  }
+
+  const flexStyle = type === 'row' ? [styles.flexRow] : [styles.flexColumn]
+  const result = groups.map((group, idx) => (
+    <View key={idx} style={flexStyle}>
+      {group.map((g, idx) => (
+        <View key={idx} style={{ width: `${100 / groupSize}%` }}>
+          {g}
+        </View>
+      ))}
+    </View>
+  ))
+
+  return <Fragment>{result}</Fragment>
+}
+
+const PDFRatingAnswer: React.FC<
+  React.PropsWithChildren<PDFRatingAnswerProps>
+> = ({ label, value, backgroundColor }) => {
+  const { t } = useTranslation()
+
+  return (
+    <View key={label} style={[styles.flexRow, styles.ratingAnswer]}>
+      <View style={styles.progressBar}>
+        <View
+          style={{ height: '100%', backgroundColor, width: `${value}%` }}
+        ></View>
+      </View>
+      <View style={{ width: '20%', textAlign: 'right' }}>
+        <Text>{t(label)}</Text>
+      </View>
+      <View style={{ width: '15%', paddingLeft: '15px', textAlign: 'left' }}>
+        <Text>{value}%</Text>
+      </View>
+    </View>
+  )
+}
+
+const PDFRatingSummary: React.FC<
+  React.PropsWithChildren<PDFRatingSummaryProps>
+> = ({ answers, questionKey }) => {
+  const { t } = useTranslation()
+
+  const groups = groupBy(answers, a => a.answer)
+  const num = answers?.length
+
+  const values = [
+    Number((((groups[5]?.length ?? 0) / num) * 100).toFixed(1)),
+    Number((((groups[4]?.length ?? 0) / num) * 100).toFixed(1)),
+    Number((((groups[3]?.length ?? 0) / num) * 100).toFixed(1)),
+    Number((((groups[2]?.length ?? 0) / num) * 100).toFixed(1)),
+    Number((((groups[1]?.length ?? 0) / num) * 100).toFixed(1)),
+  ]
+
+  return (
+    <View
+      wrap={false}
+      key={questionKey}
+      style={[styles.question, styles.centeredSection, styles.section]}
+    >
+      <View style={styles.flexRow}>
+        <Text style={[styles.text, styles.bold]}>
+          {t(`course-evaluation.questions.${questionKey}`)}
+        </Text>
+
+        <View>
+          <Text style={styles.centeredSection}>{values[0]}%</Text>
+          <Text style={[styles.smallerText, { color: 'green' }]}>
+            {t('common.excellent')}
+          </Text>
+        </View>
+      </View>
+
+      {answerLabels.map((label, index) => (
+        <PDFRatingAnswer
+          key={label}
+          label={label}
+          value={values[index]}
+          backgroundColor={answerColors[label]}
+        />
+      ))}
+    </View>
+  )
+}
+
+export const SummaryDocument: React.FC<React.PropsWithChildren<Props>> = ({
+  course,
+  isRestricted,
+  grouped,
+  ungrouped,
+  injuryQuestion,
+  trainerAnswers,
+  participants,
+}) => {
+  const { t } = useTranslation()
+
+  const courseModules = (course.curriculum as Curriculum) ?? []
+  const bildModules = course.bildModules.length
+    ? course.bildModules[0].modules
+    : null
+
+  const leadTrainer = course?.trainers?.find(t => t.type === 'LEADER') ?? {
+    id: null,
+    profile: { id: null, fullName: '' },
+  }
+
+  const assistTrainers = course?.trainers?.filter(
+    t => t.type === CourseTrainerTypes.Assistant,
+  )
+
+  const moderators = course?.trainers?.filter(
+    t => t.type === CourseTrainerTypes.Moderator,
+  )
+
+  const foreignFontsStyles = useMemo(() => {
+    const namesFontStyles: Styles = {}
+
+    ;[...(course?.trainers ?? []), ...participants].forEach(participant => {
+      if (participant.profile.fullName) {
+        const foreignScript = getForeignScript(participant.profile.fullName)
+
+        if (foreignScript) {
+          namesFontStyles[participant.profile.id] = {
+            fontFamily: foreignScript,
+            fontWeight: 500,
+          }
+
+          if (!Font.getRegisteredFontFamilies().includes(foreignScript)) {
+            Font.register({
+              family: foreignScript,
+              fonts: ForeignScriptFontPaths[foreignScript],
+            })
+          }
+        }
+      }
+    })
+
+    return StyleSheet.create(namesFontStyles)
+  }, [course?.trainers, participants])
+
+  return (
+    <Document>
+      <Page size="A4" orientation="portrait" style={styles.page}>
+        <Image style={styles.logo} src={TTLogoImage} />
+        <View id="content" style={styles.mainView}>
+          <View id="header">
+            <Text style={[styles.title, styles.textAlignCenter, styles.bold]}>
+              {t('pages.course-details.tabs.evaluation.title')}
+            </Text>
+
+            <Text
+              style={[
+                styles.text,
+                styles.courseNameText,
+                styles.textAlignCenter,
+                styles.bold,
+              ]}
+            >
+              {course.name}
+            </Text>
+
+            <Text style={[styles.textAlignCenter, { marginTop: '15px' }]}>
+              {t(`common.course-types.${course.type}`)} Course
+            </Text>
+
+            <View
+              style={[styles.section, { marginTop: '30px', width: '100%' }]}
+            >
+              <Text style={[styles.largestText, styles.bold]}>
+                {t('course-evaluation.pdf-export.trainers', {
+                  count: course?.trainers?.length ?? 0,
+                })}
+              </Text>
+
+              <Text style={styles.largerText}>
+                {t('course-evaluation.pdf-export.lead-trainer')}:{' '}
+                <Text style={foreignFontsStyles[leadTrainer?.profile.id] ?? {}}>
+                  {leadTrainer?.profile.fullName}
+                </Text>
+              </Text>
+
+              {assistTrainers.map(assistant => (
+                <Text key={assistant.id} style={styles.largerText}>
+                  {t('course-evaluation.pdf-export.assist-trainer')}:{' '}
+                  <Text style={foreignFontsStyles[assistant?.profile.id] ?? {}}>
+                    {' '}
+                    {assistant?.profile.fullName}
+                  </Text>
+                </Text>
+              ))}
+
+              {moderators.map(moderator => (
+                <Text key={moderator.id} style={styles.largerText}>
+                  {t('course-evaluation.pdf-export.moderator')}:{' '}
+                  <Text style={foreignFontsStyles[moderator?.profile.id] ?? {}}>
+                    {moderator?.profile.fullName}
+                  </Text>
+                </Text>
+              ))}
+            </View>
+
+            <View style={styles.section}>
+              <Text style={[styles.largestText, styles.bold]}>
+                {t('course-evaluation.pdf-export.schedule-and-venue')}
+              </Text>
+              <Text style={styles.text}>
+                {t('course-evaluation.pdf-export.started-at')}:{' '}
+                {t('dates.withTime', { date: course.schedule[0].start })}
+              </Text>
+              <Text style={styles.text}>
+                {t('course-evaluation.pdf-export.ended-at')}:{' '}
+                {t('dates.withTime', { date: course.schedule[0].end })}
+              </Text>
+
+              <Text style={styles.text}>
+                {t('course-evaluation.pdf-export.venue')}:{' '}
+                {course.schedule[0].venue
+                  ? formatCourseVenue(
+                      course.deliveryType,
+                      course.schedule[0].venue as Venue,
+                    )
+                  : null}
+              </Text>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={[styles.largestText, styles.bold]}>
+                {t('course-evaluation.pdf-export.course-modules')}
+              </Text>
+
+              {course.accreditedBy === Accreditors_Enum.Icm ? (
+                courseModules.map(
+                  module =>
+                    module.lessons?.items?.some(item => !!item.covered) && (
+                      <View key={module.displayName} wrap={false}>
+                        <Text style={[styles.largerText, styles.bold]}>
+                          {module.displayName}
+                        </Text>
+
+                        <FlexGroup
+                          type="column"
+                          data={module.lessons?.items
+                            .filter(({ covered }) => !!covered)
+                            .map(item => (
+                              <Text key={item.name} style={[styles.text]}>
+                                {item.name}
+                              </Text>
+                            ))}
+                        />
+                      </View>
+                    ),
+                )
+              ) : (
+                <FlexGroup
+                  data={Object.keys(bildModules).map(strategyName => {
+                    return (
+                      <View key={strategyName}>
+                        <Text style={[styles.largerText, styles.bold]}>
+                          {t(`bild-strategies.${strategyName}`)}
+                        </Text>
+
+                        {bildModules[strategyName].modules?.length
+                          ? bildModules[strategyName].modules.map(
+                              (module: { name: string }) => (
+                                <Text key={module.name} style={[styles.text]}>
+                                  {module.name}
+                                </Text>
+                              ),
+                            )
+                          : null}
+
+                        {bildModules[strategyName].groups?.length
+                          ? bildModules[strategyName].groups.map(
+                              (group: {
+                                name: string
+                                modules: { name: string }[]
+                              }) => {
+                                return (
+                                  <Fragment key={group.name}>
+                                    <Text
+                                      style={[
+                                        styles.text,
+                                        styles.bold,
+                                        { marginBottom: 10, marginTop: 3 },
+                                      ]}
+                                    >
+                                      {group.name}
+                                    </Text>
+
+                                    <View style={{ marginLeft: 7 }}>
+                                      {group.modules.map(module => {
+                                        return (
+                                          <Text
+                                            key={module.name}
+                                            style={[styles.text]}
+                                          >
+                                            {module.name}
+                                          </Text>
+                                        )
+                                      })}
+                                    </View>
+                                  </Fragment>
+                                )
+                              },
+                            )
+                          : null}
+                      </View>
+                    )
+                  })}
+                />
+              )}
+            </View>
+
+            <View style={styles.section}>
+              <Text style={[styles.largestText, styles.bold]}>
+                {t('course-evaluation.pdf-export.course-participants', {
+                  count: participants.length,
+                })}
+              </Text>
+
+              <FlexGroup
+                type="column"
+                data={participants.map(
+                  ({
+                    id,
+                    profile: { fullName: name, archived, id: profileId },
+                    attended,
+                  }) => (
+                    <Text
+                      key={id}
+                      style={{
+                        ...styles.text,
+                        ...(attended ? {} : styles.strikeThrough),
+                        ...(foreignFontsStyles[profileId] ?? {}),
+                      }}
+                    >
+                      {archived ? t('common.archived-profile') : name}
+                    </Text>
+                  ),
+                )}
+              />
+            </View>
+          </View>
+
+          <View break style={[styles.section, styles.questionsSection]}>
+            <Text
+              style={[styles.largestText, styles.textAlignCenter, styles.bold]}
+            >
+              {t('evaluation')}
+            </Text>
+
+            {groups.map(g => (
+              <Fragment key={g}>
+                <Text style={styles.largerText}>
+                  {t(`course-evaluation.groups.${g}`)}
+                </Text>
+                {Object.keys(grouped[g]).map(questionKey => (
+                  <PDFRatingSummary
+                    key={questionKey}
+                    questionKey={questionKey}
+                    answers={grouped[g][questionKey]}
+                  />
+                ))}
+              </Fragment>
+            ))}
+          </View>
+
+          {isRestricted ? null : (
+            <View break style={[styles.section, styles.questionsSection]}>
+              <Text
+                style={[
+                  styles.largestText,
+                  styles.textAlignCenter,
+                  styles.bold,
+                ]}
+              >
+                {t('pages.course-details.tabs.evaluation.attendee-feedback')}
+              </Text>
+
+              <Text style={styles.largerText}>
+                {t(`course-evaluation.questions.ANY_INJURIES`)}
+              </Text>
+
+              <View
+                style={[
+                  styles.question,
+                  styles.centeredSection,
+                  styles.section,
+                ]}
+              >
+                <PDFRatingAnswer
+                  label={'yes'}
+                  value={injuryQuestion.yes}
+                  backgroundColor="#cfd4df"
+                />
+                <PDFRatingAnswer
+                  label={'no'}
+                  value={injuryQuestion.no}
+                  backgroundColor="#cfd4df"
+                />
+              </View>
+
+              {Object.keys(ungrouped).map(questionKey => {
+                if (questionKey === 'SIGNATURE') return null
+
+                const answers = ungrouped[questionKey]
+
+                return (
+                  <View wrap={false} key={questionKey}>
+                    <Text style={styles.largerText}>
+                      {t(`course-evaluation.questions.${questionKey}`)}
+                    </Text>
+
+                    <View
+                      style={[
+                        styles.question,
+                        styles.centeredSection,
+                        styles.section,
+                      ]}
+                    >
+                      {answers.map(({ id, answer }) => (
+                        <Text
+                          wrap={false}
+                          key={id}
+                          style={styles.participantAnswer}
+                        >
+                          {answer ??
+                            t('course-evaluation.pdf-export.no-answer')}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
+                )
+              })}
+            </View>
+          )}
+
+          {isRestricted ? null : (
+            <View break style={[styles.section, styles.questionsSection]}>
+              <Text
+                style={[
+                  styles.largestText,
+                  styles.textAlignCenter,
+                  styles.bold,
+                ]}
+              >
+                {t('pages.course-details.tabs.evaluation.trainer-feedback')}
+              </Text>
+
+              {trainerAnswers?.map(a => {
+                if (
+                  a.question.type &&
+                  booleanQuestionTypes.includes(a.question.type)
+                ) {
+                  const answer = a.answer?.split('-') ?? []
+                  const shouldHaveReason =
+                    (a.question.type ===
+                      Course_Evaluation_Question_Type_Enum.BooleanReasonY &&
+                      answer[0] === 'YES') ||
+                    (a.question.type ===
+                      Course_Evaluation_Question_Type_Enum.BooleanReasonN &&
+                      answer[0] === 'NO')
+
+                  return (
+                    <View wrap={false} key={a.id}>
+                      <Text style={styles.largerText}>
+                        {t(
+                          `course-evaluation.questions.${a.question.questionKey}`,
+                        )}
+                      </Text>
+
+                      <View style={[styles.section, styles.flexRow]}>
+                        <View
+                          wrap={false}
+                          style={[
+                            styles.booleanAnswer,
+                            answer[0] === 'YES' ? styles.markedAnswer : {},
+                          ]}
+                        >
+                          <Text>{t('yes')}</Text>
+                        </View>
+
+                        <View
+                          wrap={false}
+                          style={[
+                            styles.booleanAnswer,
+                            answer[0] === 'NO' ? styles.markedAnswer : {},
+                          ]}
+                        >
+                          <Text>{t('no')}</Text>
+                        </View>
+                      </View>
+
+                      {shouldHaveReason ? (
+                        <View
+                          wrap={false}
+                          style={[
+                            styles.question,
+                            styles.centeredSection,
+                            styles.section,
+                          ]}
+                        >
+                          <Text style={styles.participantAnswer}>
+                            {answer[1] ||
+                              t('course-evaluation.pdf-export.no-answer')}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  )
+                }
+
+                if (
+                  a.question?.type === Course_Evaluation_Question_Type_Enum.Text
+                ) {
+                  return (
+                    <View wrap={false} key={a.id}>
+                      <Text style={styles.largerText}>
+                        {t(
+                          `course-evaluation.questions.${a.question.questionKey}`,
+                        )}
+                      </Text>
+
+                      <View
+                        style={[
+                          styles.question,
+                          styles.centeredSection,
+                          styles.section,
+                        ]}
+                      >
+                        <Text
+                          wrap={false}
+                          key={a.id}
+                          style={styles.participantAnswer}
+                        >
+                          {a.answer ??
+                            t('course-evaluation.pdf-export.no-answer')}
+                        </Text>
+                      </View>
+                    </View>
+                  )
+                }
+
+                return null
+              })}
+            </View>
+          )}
+        </View>
+      </Page>
+    </Document>
+  )
+}

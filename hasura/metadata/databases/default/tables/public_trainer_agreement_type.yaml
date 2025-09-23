@@ -1,0 +1,53 @@
+table:
+  name: trainer_agreement_type
+  schema: public
+is_enum: true
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - name
+      filter: {}
+    comment: ""

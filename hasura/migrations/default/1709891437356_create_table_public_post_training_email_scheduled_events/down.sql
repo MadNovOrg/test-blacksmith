@@ -1,0 +1,1 @@
+DROP TABLE "public"."post_training_email_scheduled_events";

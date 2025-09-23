@@ -1,0 +1,212 @@
+table:
+  name: course_evaluation_answers
+  schema: public
+configuration:
+  column_config:
+    course_id:
+      custom_name: courseId
+    profile_id:
+      custom_name: profileId
+    question_id:
+      custom_name: questionId
+  custom_column_names:
+    course_id: courseId
+    profile_id: profileId
+    question_id: questionId
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: participant
+    using:
+      manual_configuration:
+        column_mapping:
+          course_id: course_id
+          profile_id: profile_id
+        insertion_order: null
+        remote_table:
+          name: course_participant
+          schema: public
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+  - name: question
+    using:
+      foreign_key_constraint_on: question_id
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - answer
+        - course_id
+        - profile_id
+        - question_id
+  - role: user
+    permission:
+      check:
+        participant:
+          profile_id:
+            _eq: X-Hasura-User-Id
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+          - course:
+              participants:
+                order:
+                  bookingContactProfileId:
+                    _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        _or:
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                _or:
+                  - members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                  - main_organisation:
+                      members:
+                        _and:
+                          - is_admin:
+                              _eq: true
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+delete_permissions:
+  - role: trainer
+    permission:
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      filter: {}
+    comment: ""
+event_triggers:
+  - name: course_evaluation_added
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/status'

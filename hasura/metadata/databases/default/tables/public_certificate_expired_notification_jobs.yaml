@@ -1,0 +1,3 @@
+table:
+  name: certificate_expired_notification_jobs
+  schema: public

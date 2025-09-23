@@ -1,0 +1,1 @@
+CREATE TRIGGER set_public_draft_updated_at BEFORE UPDATE ON public.course_draft FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();

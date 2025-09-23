@@ -1,0 +1,1 @@
+INSERT INTO "public"."course_pricing"("id", "type", "level", "blended", "reaccreditation", "price_amount", "price_currency", "xero_code", "created_at", "updated_at") VALUES (E'a46811ed-aa8e-48b8-9f35-0a864b4eecf7', E'OPEN', E'THREE_DAY_SAFETY_RESPONSE_TRAINER', false, true, 100, E'GBP', E'SRT.RE.OP', E'2023-11-13T12:30:21.929707+00:00', E'2023-11-13T12:30:21.929707+00:00');

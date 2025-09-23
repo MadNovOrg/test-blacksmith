@@ -1,0 +1,1 @@
+alter table bild_strategy drop column "sort";

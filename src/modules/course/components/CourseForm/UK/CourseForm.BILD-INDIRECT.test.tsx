@@ -1,0 +1,425 @@
+import { t } from 'i18next'
+
+import {
+  Certificate_Status_Enum,
+  Course_Level_Enum,
+  Course_Type_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
+import { useCoursePrice } from '@app/modules/course/hooks/useCoursePrice/useCoursePrice'
+import { AwsRegions, RoleName } from '@app/types'
+
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
+
+import { renderForm, selectBildCategory, selectLevel } from '../test-utils'
+
+import { UkCourseForm } from '.'
+
+vi.mock('@app/components/OrgSelector/UK', () => ({
+  OrgSelector: vi.fn(() => <p>Org Selector</p>),
+}))
+
+vi.mock('@app/components/VenueSelector', () => ({
+  VenueSelector: vi.fn(() => <p>Venue Selector</p>),
+}))
+
+vi.mock('@app/modules/course/hooks/useCoursePrice/useCoursePrice', () => ({
+  useCoursePrice: vi.fn(),
+}))
+
+vi.mock('posthog-js/react', () => ({
+  useFeatureFlagEnabled: vi.fn(),
+}))
+
+const useCoursePriceMock = vi.mocked(useCoursePrice)
+
+describe('UkCourseForm - indirect BILD', () => {
+  vi.stubEnv('VITE_AWS_REGION', AwsRegions.UK)
+  beforeEach(() => {
+    useCoursePriceMock.mockReturnValue({
+      priceCurrency: 'GBP',
+      priceAmount: 100,
+    })
+  })
+  ;[RoleName.TT_ADMIN, RoleName.TT_OPS].forEach(role => {
+    it(`allows ${role} to create a BILD course`, async () => {
+      await waitFor(() => {
+        _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+          auth: {
+            activeCertificates: [
+              {
+                level: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+              },
+            ],
+            activeRole: role,
+          },
+        })
+      })
+
+      await userEvent.click(screen.getByLabelText(/course category/i))
+
+      expect(
+        within(screen.getByRole('listbox')).getByText(/bild/i),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('allows a trainer with a BILD Intermediate trainer certificate to create a BILD course', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildIntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await userEvent.click(screen.getByLabelText(/course category/i))
+
+    expect(
+      within(screen.getByRole('listbox')).getByText(/bild/i),
+    ).toBeInTheDocument()
+  })
+
+  it('allows a trainer with an BILD Advanced trainer certificate to create a BILD course', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await userEvent.click(screen.getByLabelText(/course category/i))
+
+    expect(
+      within(screen.getByRole('listbox')).getByText(/bild/i),
+    ).toBeInTheDocument()
+  })
+
+  it(`displays only ${Course_Level_Enum.BildRegular} course level`, async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+
+    await userEvent.click(screen.getByLabelText(/course level/i))
+
+    expect(
+      screen.queryByTestId(
+        `course-level-option-${Course_Level_Enum.BildAdvancedTrainer}`,
+      ),
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.queryByTestId(
+        `course-level-option-${Course_Level_Enum.BildIntermediateTrainer}`,
+      ),
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.getByTestId(
+        `course-level-option-${Course_Level_Enum.BildRegular}`,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it("doesn't allow a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Intermediate trainer certified", async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildIntermediateTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildIntermediateTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+
+    expect(
+      screen.getByLabelText(/restrictive tertiary advanced/i),
+    ).toBeDisabled()
+  })
+
+  it('allows a trainer to toggle Restrictive Tertiary Advanced strategy if BILD Advanced trainer certified', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+
+    expect(
+      screen.getByLabelText(/restrictive tertiary advanced/i),
+    ).toBeEnabled()
+  })
+
+  it('enables Blended learning toggle if Primary strategy is selected', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+
+    const blendedLearningToggle = screen.getByLabelText(/blended learning/i)
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+    expect(blendedLearningToggle).toBeEnabled()
+
+    await userEvent.click(screen.getByLabelText(/secondary/i))
+    expect(blendedLearningToggle).toBeEnabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+    expect(blendedLearningToggle).toBeDisabled()
+  })
+
+  it('enables Virtual delivery type if Primary srategy is the only one selected', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+
+    const virtualDeliveryToggle = screen.getByLabelText(/virtual/i)
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+    expect(virtualDeliveryToggle).toBeEnabled()
+
+    await userEvent.click(screen.getByLabelText(/secondary/i))
+    expect(virtualDeliveryToggle).toBeDisabled()
+  })
+
+  it('allows both blended learning and reaccreditation toggles to be selected', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+
+    const blendedLearningToggle = screen.getByLabelText(/blended learning/i)
+    const reaccreditationToggle = screen.getByLabelText(/reaccreditation/i)
+
+    expect(blendedLearningToggle).toBeDisabled()
+    expect(reaccreditationToggle).toBeDisabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+    await userEvent.click(screen.getByLabelText(/secondary/i))
+
+    expect(blendedLearningToggle).toBeEnabled()
+    expect(reaccreditationToggle).toBeEnabled()
+  })
+
+  it('allows mixed delivery only if primary strategy is selected', async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+    await selectLevel(Course_Level_Enum.BildRegular)
+
+    const mixedDeliveryToggle = screen.getByLabelText(/both/i)
+
+    expect(mixedDeliveryToggle).toBeDisabled()
+
+    await userEvent.click(screen.getByLabelText(/primary/i))
+
+    expect(mixedDeliveryToggle).toBeEnabled()
+  })
+
+  it("doesn't show AOL checkbox", async () => {
+    await waitFor(() => {
+      _render(<UkCourseForm type={Course_Type_Enum.Indirect} />, {
+        auth: {
+          activeCertificates: [
+            {
+              level: Course_Level_Enum.BildAdvancedTrainer,
+              grade: Grade_Enum.Pass,
+            },
+          ],
+          activeRole: RoleName.TRAINER,
+          profile: {
+            certificates: [
+              {
+                courseLevel: Course_Level_Enum.BildAdvancedTrainer,
+                grade: Grade_Enum.Pass,
+                status: Certificate_Status_Enum.Active,
+              },
+            ],
+          },
+        },
+      })
+    })
+
+    await selectBildCategory()
+    await selectLevel(Course_Level_Enum.BildRegular)
+
+    expect(screen.queryByTestId('aol-radio-group')).not.toBeInTheDocument()
+  })
+
+  it("doesn't allow changing residing country", async () => {
+    renderForm({ type: Course_Type_Enum.Closed, role: RoleName.TT_ADMIN })
+    await selectBildCategory()
+
+    expect(
+      screen.queryByLabelText(t('components.course-form.residing-country')),
+    ).not.toBeInTheDocument()
+  })
+})

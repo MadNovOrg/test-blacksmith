@@ -1,0 +1,1 @@
+export { OrderItemComponent } from './OrderItemComponent'

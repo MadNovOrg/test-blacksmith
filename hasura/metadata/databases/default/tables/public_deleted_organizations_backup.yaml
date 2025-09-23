@@ -1,0 +1,67 @@
+table:
+  name: deleted_organizations_backup
+  schema: public
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - geo_coordinates
+        - organisation_type
+        - region
+        - sector
+        - xero_contact_id
+        - created_at
+        - updated_at
+        - id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - geo_coordinates
+        - organisation_type
+        - region
+        - sector
+        - xero_contact_id
+        - created_at
+        - updated_at
+        - id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - geo_coordinates
+        - organisation_type
+        - region
+        - sector
+        - xero_contact_id
+        - created_at
+        - updated_at
+        - id

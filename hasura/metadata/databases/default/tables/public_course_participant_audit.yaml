@@ -1,0 +1,298 @@
+table:
+  name: course_participant_audit
+  schema: public
+object_relationships:
+  - name: authorizedBy
+    using:
+      foreign_key_constraint_on: authorized_by
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+computed_fields:
+  - name: fromCourse
+    definition:
+      function:
+        name: course_participant_audit_from_course
+        schema: public
+  - name: newAttendeeEmail
+    definition:
+      function:
+        name: course_participant_audit_new_attendee
+        schema: public
+  - name: searchFields
+    definition:
+      function:
+        name: merge_course_participant_audit_rows
+        schema: public
+  - name: toCourse
+    definition:
+      function:
+        name: course_participant_audit_to_course
+        schema: public
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        type:
+          _in:
+            - ATTENDED
+            - NOT_ATTENDED
+      set:
+        authorized_by: x-hasura-User-Id
+      columns:
+        - authorized_by
+        - course_id
+        - created_at
+        - id
+        - payload
+        - profile_id
+        - type
+        - xero_invoice_number
+        - updated_at
+  - role: tt-admin
+    permission:
+      check: {}
+      set:
+        authorized_by: x-hasura-User-Id
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - xero_invoice_number
+        - profile_id
+        - course_id
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        authorized_by: x-hasura-User-Id
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - xero_invoice_number
+        - profile_id
+        - course_id
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+        - xero_invoice_number
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - xero_invoice_number
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+        - searchFields
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - payload
+        - type
+        - xero_invoice_number
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+      computed_fields:
+        - newAttendeeEmail
+        - searchFields
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+        - xero_invoice_number
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - payload
+        - type
+        - xero_invoice_number
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+      computed_fields:
+        - newAttendeeEmail
+        - searchFields
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - payload
+        - type
+        - xero_invoice_number
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+        - searchFields
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+        - xero_invoice_number
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - payload
+        - type
+        - xero_invoice_number
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+        - searchFields
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - payload
+        - type
+        - xero_invoice_number
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+        - course_id
+      computed_fields:
+        - newAttendeeEmail
+        - searchFields
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - type
+        - xero_invoice_number
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: sales-representative
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: trainer
+    permission:
+      filter:
+        course:
+          _and:
+            - trainers:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - type:
+                      _eq: LEADER
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: tt-admin
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+  - role: tt-ops
+    permission:
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: INDIRECT
+            - go1_integration:
+                _eq: false
+event_triggers:
+  - name: participant_audit_added
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/participant-audit-added'

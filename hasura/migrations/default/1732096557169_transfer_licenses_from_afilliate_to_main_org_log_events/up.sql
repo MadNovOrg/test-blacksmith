@@ -1,0 +1,11 @@
+INSERT INTO "public"."go1_history_events" ("name") 
+VALUES (E'LICENSES_TRANSFERRED_FROM_AFFILIATE_ORG');
+
+INSERT INTO "public"."go1_history_events" ("name") 
+VALUES (E'LICENSES_TRANSFERRED_TO_MAIN_ORG');
+
+INSERT INTO "public"."go1_history_events"("name") 
+VALUES (E'RESERVED_LICENSES_TRANSFERRED_FROM_AFFILIATE_ORG');
+
+INSERT INTO "public"."go1_history_events"("name") 
+VALUES (E'RESERVED_LICENSES_TRANSFERRED_TO_MAIN_ORG');

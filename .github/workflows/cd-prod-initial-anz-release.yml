@@ -1,0 +1,31 @@
+#### this will trigger a production release on ANZ environment in order to set secrets and deploy the app
+name: ANZ Manual release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  prod-cd-anz:
+    name: PROD-ANZ-RELEASE
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      version: 4.12.0
+      aws_region: 'ap-southeast-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD_ANZ }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD_ANZ }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD_ANZ }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD_ANZ }}
+      wp_host: ${{ secrets.WP_HOST_PROD_ANZ }} ## same as UK but in a separate secret
+      s3_bucket: ${{ secrets.S3_BUCKET_PROD_ANZ }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_PROD_ANZ }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD_ANZ }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }} ## same as UK
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }} ## same as UK
+      stripe_key: ${{ secrets.STRIPE_KEY_ANZ }} ## set as empty string
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }} ## this doesnt even exist in github secrets
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }} ## same as UK for now

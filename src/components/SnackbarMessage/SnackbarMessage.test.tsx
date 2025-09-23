@@ -1,0 +1,63 @@
+import React from 'react'
+
+import { SnackbarProvider, SnackbarState } from '@app/context/snackbar'
+
+import { _render, screen, waitFor, act } from '@test/index'
+
+import { SnackbarMessage } from '.'
+
+describe('component: SnackbarMessage', () => {
+  beforeAll(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+  })
+
+  it("doesn't _render anything if message by key is not found", () => {
+    act(() => {
+      _render(
+        <SnackbarProvider>
+          <SnackbarMessage messageKey="course-created" />
+        </SnackbarProvider>,
+      )
+    })
+
+    expect(screen.queryByText(/course created/i)).not.toBeInTheDocument()
+  })
+
+  it('renders message by key if found in context', () => {
+    const initialMessages: SnackbarState['messages'] = new Map()
+
+    initialMessages.set('course-created', { label: 'course created' })
+
+    act(() => {
+      _render(
+        <SnackbarProvider initialMessages={initialMessages}>
+          <SnackbarMessage messageKey="course-created" />
+        </SnackbarProvider>,
+      )
+    })
+
+    expect(screen.getByText(/course created/i)).toBeInTheDocument()
+  })
+
+  it('deletes message by key on snackbar dismissed', async () => {
+    const initialMessages: SnackbarState['messages'] = new Map()
+
+    initialMessages.set('course-created', {
+      label: 'course created',
+    })
+
+    _render(
+      <SnackbarProvider initialMessages={initialMessages}>
+        <SnackbarMessage messageKey="course-created" />
+      </SnackbarProvider>,
+    )
+
+    act(() => {
+      vi.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.queryByText(/course created/i)).not.toBeInTheDocument()
+    })
+  })
+})

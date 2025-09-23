@@ -1,0 +1,10 @@
+table:
+  name: tt_client_invite_log
+  schema: public
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: invited_by

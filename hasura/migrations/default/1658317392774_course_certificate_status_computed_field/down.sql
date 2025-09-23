@@ -1,0 +1,1 @@
+DROP FUNCTION public.course_certificate_status(course_certificate_row public.course_certificate);

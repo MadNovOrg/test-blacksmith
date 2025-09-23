@@ -1,0 +1,48 @@
+import { Meta, Typeset, Stories, Title } from '@storybook/blocks'
+import { Typography } from '@mui/material'
+import theme from '@app/theme'
+import * as TypographyStories from './Typography.stories'
+
+<Meta of={TypographyStories} />
+
+export const typography = {
+  type: {
+    primary: theme.typography.fontFamily,
+  },
+  weight: {
+    regular: theme.typography.fontWeightRegular,
+    bold: theme.typography.fontWeightMedium,
+    extrabold: theme.typography.fontWeightBold,
+    black: theme.typography.fontWeightRegular,
+  },
+  size: {
+    h1: theme.typography.h1.fontSize,
+    h2: theme.typography.h2.fontSize,
+    h3: theme.typography.h3.fontSize,
+    h4: theme.typography.h4.fontSize,
+    h5: theme.typography.h5.fontSize,
+    h6: theme.typography.h6.fontSize,
+  },
+}
+
+export const SampleText = 'Lorem ipsum dolor sit amet'
+
+# Typography
+
+**Figma: [Design System / Typography](https://www.figma.com/file/cYODiFdEJxNwqqNu4Qk9ZR/TTH-V2-Wireframes?type=design&node-id=167%3A1001&t=CdGVin5LUTs443rW-1)**
+
+**Font: [Inter typeface](https://rsms.me/inter/)**
+
+**Weights:** 400(regular), 500(medium), 600(semibold)
+
+<Title>Sizes</Title>
+
+<Typeset
+  fontSizes={Object.values(typography.size)}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>
+
+<Title>Components</Title>
+
+<Stories />

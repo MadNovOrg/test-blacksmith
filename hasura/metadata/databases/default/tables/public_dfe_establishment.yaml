@@ -1,0 +1,157 @@
+table:
+  name: dfe_establishment
+  schema: public
+configuration:
+  column_config:
+    address_line_1:
+      custom_name: addressLineOne
+    address_line_2:
+      custom_name: addressLineTwo
+    address_line_3:
+      custom_name: addressLineThree
+    head_first_name:
+      custom_name: headFirstName
+    head_job_title:
+      custom_name: headJobTitle
+    head_last_name:
+      custom_name: headLastName
+    head_title:
+      custom_name: headTitle
+    local_authority:
+      custom_name: localAuthority
+    ofsted_last_inspection:
+      custom_name: ofstedLastInspection
+    ofsted_rating:
+      custom_name: ofstedRating
+    search_post_code:
+      custom_name: searchPostCode
+    trust_name:
+      custom_name: trustName
+    trust_type:
+      custom_name: trustType
+  custom_column_names:
+    address_line_1: addressLineOne
+    address_line_2: addressLineTwo
+    address_line_3: addressLineThree
+    head_first_name: headFirstName
+    head_job_title: headJobTitle
+    head_last_name: headLastName
+    head_title: headTitle
+    local_authority: localAuthority
+    ofsted_last_inspection: ofstedLastInspection
+    ofsted_rating: ofstedRating
+    search_post_code: searchPostCode
+    trust_name: trustName
+    trust_type: trustType
+  custom_root_fields: {}
+array_relationships:
+  - name: organizations
+    using:
+      manual_configuration:
+        column_mapping:
+          id: dfe_establishment_id
+        insertion_order: null
+        remote_table:
+          name: organization
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - address_line_1
+        - address_line_2
+        - address_line_3
+        - county
+        - head_first_name
+        - head_job_title
+        - head_last_name
+        - head_title
+        - id
+        - local_authority
+        - name
+        - ofsted_last_inspection
+        - ofsted_rating
+        - postcode
+        - registered
+        - search_post_code
+        - town
+        - trust_name
+        - trust_type
+        - urn
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - address_line_1
+        - address_line_2
+        - address_line_3
+        - county
+        - head_first_name
+        - head_job_title
+        - head_last_name
+        - head_title
+        - id
+        - local_authority
+        - name
+        - ofsted_last_inspection
+        - ofsted_rating
+        - postcode
+        - registered
+        - search_post_code
+        - town
+        - trust_name
+        - trust_type
+        - urn
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - address_line_1
+        - address_line_2
+        - address_line_3
+        - county
+        - head_first_name
+        - head_job_title
+        - head_last_name
+        - head_title
+        - id
+        - local_authority
+        - name
+        - ofsted_last_inspection
+        - ofsted_rating
+        - postcode
+        - registered
+        - search_post_code
+        - town
+        - trust_name
+        - trust_type
+        - urn
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - address_line_1
+        - address_line_2
+        - address_line_3
+        - county
+        - head_first_name
+        - head_job_title
+        - head_last_name
+        - head_title
+        - id
+        - local_authority
+        - name
+        - ofsted_last_inspection
+        - ofsted_rating
+        - postcode
+        - registered
+        - search_post_code
+        - town
+        - trust_name
+        - trust_type
+        - urn
+      filter: {}
+      allow_aggregations: true

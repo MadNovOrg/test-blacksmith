@@ -1,0 +1,1 @@
+alter table "public"."org_resource_packs_pricing_changelog" drop constraint "org_resource_packs_pricing_ch_org_resource_packs_pricing_i_fkey";

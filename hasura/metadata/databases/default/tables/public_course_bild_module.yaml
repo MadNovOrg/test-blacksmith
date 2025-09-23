@@ -1,0 +1,111 @@
+table:
+  name: course_bild_module
+  schema: public
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+delete_permissions:
+  - role: trainer
+    permission:
+      filter: {}
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}

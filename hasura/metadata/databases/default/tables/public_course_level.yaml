@@ -1,0 +1,10 @@
+table:
+  name: course_level
+  schema: public
+is_enum: true
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+      filter: {}

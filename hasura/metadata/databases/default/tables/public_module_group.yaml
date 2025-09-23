@@ -1,0 +1,95 @@
+table:
+  name: module_group
+  schema: public
+configuration:
+  column_config:
+    course_level:
+      custom_name: level
+    created_at:
+      custom_name: createdAt
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    course_level: level
+    created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
+array_relationships:
+  - name: durations
+    using:
+      foreign_key_constraint_on:
+        column: module_group_id
+        table:
+          name: module_group_duration
+          schema: public
+  - name: modules
+    using:
+      foreign_key_constraint_on:
+        column: module_group_id
+        table:
+          name: module
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - color
+        - course_level
+        - created_at
+        - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - color
+        - course_level
+        - created_at
+        - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - color
+        - course_level
+        - created_at
+        - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - color
+        - course_level
+        - created_at
+        - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - color
+        - course_level
+        - created_at
+        - id
+        - mandatory
+        - name
+        - requires
+        - updated_at
+      filter: {}
+      allow_aggregations: true

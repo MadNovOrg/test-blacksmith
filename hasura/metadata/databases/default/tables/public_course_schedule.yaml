@@ -1,0 +1,305 @@
+table:
+  name: course_schedule
+  schema: public
+configuration:
+  column_config:
+    created_at:
+      custom_name: createdAt
+    time_zone:
+      custom_name: timeZone
+    updated_at:
+      custom_name: updatedAt
+    virtual_account_id:
+      custom_name: virtualAccountId
+    virtual_link:
+      custom_name: virtualLink
+  custom_column_names:
+    created_at: createdAt
+    time_zone: timeZone
+    updated_at: updatedAt
+    virtual_account_id: virtualAccountId
+    virtual_link: virtualLink
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: venue
+    using:
+      foreign_key_constraint_on: venue_id
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: OPEN
+            - course_status:
+                _in:
+                  - CONFIRM_MODULES
+                  - SCHEDULED
+                  - TRAINER_MISSING
+                  - TRAINER_PENDING
+                  - TRAINER_DECLINED
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter:
+        course:
+          course_type:
+            _eq: OPEN
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - time_zone
+        - updated_at
+        - venue_id
+        - virtual_account_id
+        - virtual_link
+      filter: {}
+      check: null
+delete_permissions:
+  - role: tt-ops
+    permission:
+      filter: {}
+event_triggers:
+  - name: course_end_date_changed
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - end
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/schedule-end'
+  - name: course_start_date_changed
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - start
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/start-date/changed'
+  - name: cs_manage_pre_training_survey_email
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - start
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-pre-training-survey-email/manage-cs'

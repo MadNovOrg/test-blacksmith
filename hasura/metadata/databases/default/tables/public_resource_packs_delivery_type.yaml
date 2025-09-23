@@ -1,0 +1,4 @@
+table:
+  name: resource_packs_delivery_type
+  schema: public
+is_enum: true

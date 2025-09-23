@@ -1,0 +1,659 @@
+table:
+  name: course_invites
+  schema: public
+configuration:
+  column_config:
+    created_at:
+      custom_name: createdAt
+    expires_in:
+      custom_name: expiresIn
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    created_at: createdAt
+    expires_in: expiresIn
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: inviter
+    using:
+      foreign_key_constraint_on: inviter_id
+  - name: participant
+    using:
+      manual_configuration:
+        column_mapping:
+          id: invite_id
+        insertion_order: null
+        remote_table:
+          name: course_participant
+          schema: public
+insert_permissions:
+  - role: booking-contact
+    permission:
+      check:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+  - role: ld
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - status
+  - role: organization-key-contact
+    permission:
+      check:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - status
+        - invited_after_course_end
+        - inviter_id
+        - expires_in
+  - role: sales-representative
+    permission:
+      check:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+  - role: user
+    permission:
+      check:
+        course:
+          organization:
+            _or:
+              - members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+              - main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - invited_after_course_end
+        - inviter_id
+        - status
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter: {}
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          organization:
+            _or:
+              - members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+              - main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+update_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        _or:
+          - _and:
+              - email:
+                  _ilike: X-Hasura-User-Email
+              - status:
+                  _eq: PENDING
+          - course:
+              _or:
+                - organization:
+                    members:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - is_admin:
+                            _eq: true
+                - booking_contact_profile_id:
+                    _eq: X-Hasura-User-Id
+      check: null
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - inviter_id
+        - status
+      filter: {}
+      check: null
+  - role: organization-key-contact
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - expires_in
+        - id
+        - invited_after_course_end
+        - inviter_id
+        - note
+        - status
+        - updated_at
+      filter:
+        _or:
+          - _and:
+              - email:
+                  _ilike: X-Hasura-User-Email
+              - status:
+                  _eq: PENDING
+          - course:
+              _or:
+                - organization:
+                    members:
+                      _and:
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                        - is_admin:
+                            _eq: true
+                - organization_key_contact_profile_id:
+                    _eq: X-Hasura-User-Id
+      check: null
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - inviter_id
+        - status
+      filter: {}
+      check: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - inviter_id
+        - status
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      check: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - inviter_id
+        - note
+        - status
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - created_at
+        - inviter_id
+        - status
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - inviter_id
+        - status
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - inviter_id
+        - status
+      filter:
+        _or:
+          - _and:
+              - email:
+                  _ilike: X-Hasura-User-Email
+              - status:
+                  _eq: PENDING
+          - course:
+              organization:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: booking-contact
+    permission:
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+  - role: ld
+    permission:
+      filter: {}
+  - role: organization-key-contact
+    permission:
+      filter:
+        course:
+          _or:
+            - organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+            - organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+  - role: sales-admin
+    permission:
+      filter: {}
+  - role: sales-representative
+    permission:
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+  - role: trainer
+    permission:
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}
+  - role: user
+    permission:
+      filter:
+        course:
+          organization:
+            _or:
+              - members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+              - main_organisation:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+event_triggers:
+  - name: course_participant_added
+    definition:
+      enable_manual: false
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/participant-added'
+  - name: do_invite_resource_pack_post_completion
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/course-invites-changed'
+  - name: release_go1_license_invite_declined
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/course-invite'
+  - name: send_invite_email
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - created_at
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-invite'

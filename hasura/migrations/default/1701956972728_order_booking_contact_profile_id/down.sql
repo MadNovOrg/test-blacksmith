@@ -1,0 +1,1 @@
+DROP FUNCTION public.order_booking_contact_profile_id(order_row public.order)

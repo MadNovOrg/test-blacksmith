@@ -1,0 +1,81 @@
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
+
+import { useAuth } from '@app/context/auth'
+import { Accreditors_Enum } from '@app/generated/graphql'
+import { NotFound } from '@app/modules/not_found/pages/NotFound'
+
+import { BookingContainer } from '../../components/BookingContainer'
+import { BookingProvider, useBooking } from '../../components/BookingContext'
+import { CourseBookingDetails as CourseBookingDetailsANZ } from '../../components/CourseBookingDetails/ANZ'
+import { CourseBookingDetails as CourseBookingDetailsUK } from '../../components/CourseBookingDetails/UK'
+import { CourseBookingLayout } from '../../components/CourseBookingLayout'
+import { CourseBookingPayment } from '../../components/CourseBookingPayment'
+import { CourseBookingReview as CourseBookingReviewANZ } from '../../components/CourseBookingReview/ANZ'
+import { CourseBookingReview as CourseBookingReviewUK } from '../../components/CourseBookingReview/UK'
+import { CourseFull } from '../../components/CourseFull'
+
+const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
+  const { booking, availableSeats, course, error, isBooked, internalBooking } =
+    useBooking()
+  const { acl } = useAuth()
+
+  if (
+    (course?.accreditedBy === Accreditors_Enum.Bild && !internalBooking) ||
+    error
+  ) {
+    return <NotFound />
+  }
+
+  if (!isBooked && !availableSeats) {
+    return (
+      <BookingContainer>
+        <CourseFull courseId={course?.id || 0} />
+      </BookingContainer>
+    )
+  }
+
+  return (
+    <BookingContainer>
+      <Routes>
+        <Route element={<CourseBookingLayout />}>
+          <Route
+            path="details"
+            element={
+              acl.isUK() ? (
+                <CourseBookingDetailsUK />
+              ) : (
+                <CourseBookingDetailsANZ />
+              )
+            }
+          />
+
+          {booking.participants?.length ? (
+            <Route
+              path="review"
+              element={
+                acl.isUK() ? (
+                  <CourseBookingReviewUK />
+                ) : (
+                  <CourseBookingReviewANZ />
+                )
+              }
+            />
+          ) : null}
+
+          <Route path="payment/:orderId" element={<CourseBookingPayment />} />
+        </Route>
+      </Routes>
+    </BookingContainer>
+  )
+}
+
+export const CourseBookingPage: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
+  return (
+    <BookingProvider>
+      <BookingRoutes />
+    </BookingProvider>
+  )
+}

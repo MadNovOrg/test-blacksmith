@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS public.org_address_post_code;

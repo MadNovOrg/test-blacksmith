@@ -1,0 +1,4 @@
+table:
+  name: course_exception
+  schema: public
+is_enum: true

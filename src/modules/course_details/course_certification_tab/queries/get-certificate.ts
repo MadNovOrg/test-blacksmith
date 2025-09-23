@@ -1,0 +1,74 @@
+import { gql } from 'urql'
+
+import { CERTIFICATE, CERTIFICATE_CHANGELOG } from '@app/queries/fragments'
+
+export const GET_CERTIFICATE_QUERY = gql`
+  ${CERTIFICATE}
+  ${CERTIFICATE_CHANGELOG}
+  query GetCertificate($id: uuid!) {
+    certificateHoldRequest: course_certificate_hold_request(
+      where: { certificate_id: { _eq: $id } }
+    ) {
+      id
+      expiry_date
+      start_date
+    }
+    certificate: course_certificate_by_pk(id: $id) {
+      ...Certificate
+      profile {
+        fullName
+        id
+        avatar
+        archived
+      }
+      participant {
+        id
+        grade
+        dateGraded
+        gradedOn
+        profile {
+          fullName
+          avatar
+          archived
+        }
+        gradingModules {
+          completed
+          id
+          module {
+            id
+            name
+            moduleGroup {
+              id
+              name
+            }
+          }
+        }
+        bildGradingModules {
+          id
+          modules
+        }
+        course {
+          id
+          name
+          level
+          deliveryType
+          accreditedBy
+          go1Integration
+          reaccreditation
+          bildStrategies {
+            id
+            strategyName
+          }
+        }
+        certificateChanges(order_by: { createdAt: desc }) {
+          ...CertificateChangelog
+          author {
+            fullName
+            avatar
+            archived
+          }
+        }
+      }
+    }
+  }
+`

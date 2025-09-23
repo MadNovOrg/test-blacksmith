@@ -1,0 +1,53 @@
+import { gql } from 'urql'
+
+export const GET_PROMO_CODES = gql`
+  query GetPromoCodes(
+    $orderBy: [promo_code_order_by!]
+    $where: promo_code_bool_exp
+    $limit: Int = 20
+    $offset: Int = 0
+  ) {
+    promoCodes: promo_code(
+      order_by: $orderBy
+      where: $where
+      limit: $limit
+      offset: $offset
+    ) {
+      id
+      code
+      description
+      type
+      amount
+      validFrom
+      validTo
+      bookerSingleUse
+      usesMax
+      levels
+      disabled
+      courses {
+        course {
+          id
+          course_code
+        }
+      }
+      enabled
+      approvedBy
+      deniedBy
+      createdBy
+      creator {
+        id
+        fullName
+        avatar
+        archived
+      }
+      createdAt
+      updatedAt
+    }
+
+    promo_code_aggregate(where: $where) {
+      aggregate {
+        count
+      }
+    }
+  }
+`

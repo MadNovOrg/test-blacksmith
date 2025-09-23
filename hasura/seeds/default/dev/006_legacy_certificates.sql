@@ -1,0 +1,12 @@
+INSERT INTO public.legacy_certificate
+(id, created_at, updated_at, original_record, number, course_name, legacy_id, email, first_name, last_name, expiry_date,
+ certification_date, course_code)
+VALUES ('b9642f08-69f0-4e9d-a5b1-6849ee2420fd', '2022-04-29 11:00:33.946738 +00:00',
+        '2022-04-29 11:00:33.946738 +00:00', '{}', 'LEVEL2.CL.050911', 'PBM Level Two (INDR.CL)', 51103,
+        'user1+old@teamteach.testinator.com', 'Oliver', 'Participant', '2025-04-26', '2020-04-29', 'LEVEL2.CL.0011'),
+       ('a27bccef-7a3f-4d5e-8647-7069e2405410', '2022-04-29 11:02:34.825579 +00:00',
+        '2022-04-29 11:02:34.825579 +00:00', '{}', 'LEVEL2.CL.050912', 'PBM Level Two (INDR.CL)', 51104,
+        'user1+old@teamteach.testinator.com', 'Olly', 'Participant', '2025-04-26', '2020-04-29', 'LEVEL2.CL.0011'),
+       ('86057ae4-cf44-4235-ae54-fbfa58ea370b', '2022-04-29 11:02:34.825579 +00:00',
+        '2022-04-29 11:02:34.825579 +00:00', '{}', 'LEVEL2.CL.050913', 'PBM Level Two (INDR.CL)', 51105,
+        'user1@teamteach.testinator.com', 'Oliver', 'Participant', '2025-04-26', '2020-04-29', 'LEVEL2.CL.0011');

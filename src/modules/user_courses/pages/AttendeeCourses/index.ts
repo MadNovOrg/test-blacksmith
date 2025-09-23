@@ -1,0 +1,1 @@
+export { AttendeeCourses } from './AttendeeCourses'

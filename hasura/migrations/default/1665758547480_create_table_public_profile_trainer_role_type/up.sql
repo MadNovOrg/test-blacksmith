@@ -1,0 +1,2 @@
+CREATE TABLE "public"."profile_trainer_role_type" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "profile_id" uuid NOT NULL, "trainer_role_type_id" uuid NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "updated_at" timestamptz NOT NULL DEFAULT now(), PRIMARY KEY ("id") , FOREIGN KEY ("profile_id") REFERENCES "public"."profile"("id") ON UPDATE no action ON DELETE cascade, FOREIGN KEY ("trainer_role_type_id") REFERENCES "public"."trainer_role_type"("id") ON UPDATE no action ON DELETE cascade, UNIQUE ("id"));
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

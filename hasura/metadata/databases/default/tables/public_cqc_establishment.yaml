@@ -1,0 +1,3 @@
+table:
+  name: cqc_establishment
+  schema: public

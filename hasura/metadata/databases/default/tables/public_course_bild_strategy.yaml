@@ -1,0 +1,130 @@
+table:
+  name: course_bild_strategy
+  schema: public
+configuration:
+  column_config:
+    strategy_name:
+      custom_name: strategyName
+  custom_column_names:
+    strategy_name: strategyName
+  custom_root_fields: {}
+insert_permissions:
+  - role: ld
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - strategy_name
+        - id
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - strategy_name
+        - id
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - strategy_name
+        - id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - strategy_name
+        - id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - strategy_name
+        - id
+select_permissions:
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - id
+        - strategy_name
+      filter: {}
+update_permissions:
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+      check: null
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - strategy_name
+        - id
+      filter: {}
+      check: null

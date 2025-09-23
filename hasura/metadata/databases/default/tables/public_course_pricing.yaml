@@ -1,0 +1,110 @@
+table:
+  name: course_pricing
+  schema: public
+configuration:
+  column_config:
+    created_at:
+      custom_name: createdAt
+    price_amount:
+      custom_name: priceAmount
+    price_currency:
+      custom_name: priceCurrency
+    updated_at:
+      custom_name: updatedAt
+    xero_code:
+      custom_name: xeroCode
+  custom_column_names:
+    created_at: createdAt
+    price_amount: priceAmount
+    price_currency: priceCurrency
+    updated_at: updatedAt
+    xero_code: xeroCode
+  custom_root_fields: {}
+array_relationships:
+  - name: pricingSchedules
+    using:
+      foreign_key_constraint_on:
+        column: course_pricing_id
+        table:
+          name: course_pricing_schedule
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - blended
+        - level
+        - price_amount
+        - price_currency
+        - reaccreditation
+      filter:
+        _and:
+          - type:
+              _eq: OPEN
+  - role: finance
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - created_at
+        - updated_at
+        - id
+        - price_amount
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - id
+        - price_amount
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - type
+        - level
+        - blended
+        - reaccreditation
+        - price_amount
+        - price_currency
+        - xero_code
+        - created_at
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - id
+        - price_amount
+      filter: {}
+update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - price_amount
+      filter: {}
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - price_amount
+      filter: {}
+      check: {}

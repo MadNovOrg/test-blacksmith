@@ -1,0 +1,15 @@
+import { _render, screen, userEvent } from '@test/index'
+
+import { FilterByPaymentMethods } from './index'
+
+describe(FilterByPaymentMethods.name, () => {
+  it('triggers onChange when payment method = credit card is selected', async () => {
+    const onChange = vi.fn()
+    _render(<FilterByPaymentMethods onChange={onChange} />)
+
+    await userEvent.click(screen.getByText('Payment Method'))
+    await userEvent.click(screen.getByText('Credit card'))
+
+    expect(onChange).toHaveBeenCalledWith({ paymentMethods: ['CC'] })
+  })
+})

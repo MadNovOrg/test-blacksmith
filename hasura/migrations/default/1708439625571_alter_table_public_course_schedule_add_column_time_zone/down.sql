@@ -1,0 +1,1 @@
+alter table "public"."course_schedule" drop column "time_zone";

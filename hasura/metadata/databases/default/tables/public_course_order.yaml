@@ -1,0 +1,179 @@
+table:
+  name: course_order
+  schema: public
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: order
+    using:
+      foreign_key_constraint_on: order_id
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: sales-representative
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: unverified
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - order_id
+        - quantity
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+update_permissions:
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+      check: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+      check: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+      check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - order_id
+        - quantity
+      filter: {}
+      check: {}

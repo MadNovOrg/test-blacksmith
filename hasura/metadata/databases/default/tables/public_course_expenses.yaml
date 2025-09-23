@@ -1,0 +1,141 @@
+table:
+  name: course_expenses
+  schema: public
+configuration:
+  column_config:
+    course_id:
+      custom_name: courseId
+    created_at:
+      custom_name: createdAt
+    trainer_id:
+      custom_name: trainerId
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    course_id: courseId
+    created_at: createdAt
+    trainer_id: trainerId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: trainer
+    using:
+      foreign_key_constraint_on: trainer_id
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - data
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - data
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - course_id
+        - data
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter:
+        course:
+          course_type:
+            _eq: OPEN
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - data
+        - id
+        - trainer_id
+        - updated_at
+      filter:
+        course:
+          organization:
+            members:
+              _and:
+                - is_admin:
+                    _eq: true
+                - profile_id:
+                    _eq: X-Hasura-User-Id

@@ -1,0 +1,1 @@
+export { GeneralDetailsSection } from './GeneralDetailsSection'

@@ -1,0 +1,461 @@
+import { expect, test as base } from '@playwright/test'
+import { addMonths, format } from 'date-fns'
+
+import {
+  Course_Source_Enum,
+  Course_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { InviteStatus } from '@app/types'
+
+import * as API from '@qa/api'
+import { UNIQUE_COURSE } from '@qa/data/courses'
+import { UNIQUE_ORDER } from '@qa/data/order'
+import { Course } from '@qa/data/types'
+import { users } from '@qa/data/users'
+import { ConfirmRescheduleModal } from '@qa/fixtures/pages/courses/ConfirmRescheduleModal.fixture'
+import { CourseDetailsPage } from '@qa/fixtures/pages/courses/course-details/CourseDetailsPage.fixture'
+import { CreateCoursePage } from '@qa/fixtures/pages/courses/CreateCoursePage.fixture'
+import { Course_Renewal_Cycle_Enum } from '@qa/generated/graphql'
+import { stateFilePath, StoredCredentialKey } from '@qa/util'
+
+const testDataMovingEarlier = [
+  {
+    name: 'open course to earlier date',
+    user: 'ops',
+    attendee: users.user1WithOrg,
+    newStartDate: addMonths(new Date().setHours(9, 0), 1),
+    newEndDate: addMonths(new Date().setHours(17, 0), 1),
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.status = Course_Status_Enum.Scheduled
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 2)
+      course.schedule[0].end = addMonths(new Date().setHours(17, 0), 2)
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
+      return course
+    },
+  },
+  {
+    name: 'closed course to earlier date',
+    user: 'salesAdmin',
+    attendee: users.user1WithOrg,
+    newStartDate: addMonths(new Date().setHours(9, 0), 2),
+    newEndDate: addMonths(new Date().setHours(17, 0), 2),
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      const order = await UNIQUE_ORDER(users.salesAdmin, [])
+
+      course.assistTrainer = users.assistant
+      course.bookingContactProfile = users.user1WithOrg
+      course.freeSpaces = 0
+      course.max_participants = 3
+      course.orders = {
+        data: [
+          {
+            order: {
+              data: {
+                attendeesQuantity: 3,
+                billingAddress: order.billingAddress,
+                billingEmail: order.billingEmail,
+                billingFamilyName: order.billingFamilyName,
+                billingGivenName: order.billingGivenName,
+                billingPhone: order.billingPhone,
+                clientPurchaseOrder: order.clientPurchaseOrder,
+                currency: 'GBP',
+                organizationId: order.organizationId,
+                paymentMethod: order.paymentMethod,
+                registrants: [],
+                salesRepresentativeId: order.salesRepresentativeId,
+                source: order.source,
+                user: {
+                  fullName: 'Full name',
+                  email: users.salesAdmin.email,
+                  phone: '5555555555',
+                },
+              },
+            },
+            quantity: 1,
+          },
+        ],
+      }
+      course.organization = { name: 'London First School' }
+      course.price = 100
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
+      course.salesRepresentative = users.salesAdmin
+      course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.source = Course_Source_Enum.EmailEnquiry
+      course.status = Course_Status_Enum.Scheduled
+      course.type = Course_Type_Enum.Closed
+
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+          true,
+        )
+      ).id
+      return course
+    },
+  },
+  {
+    name: 'indirect course to earlier date',
+    user: 'trainer',
+    attendee: users.user1WithOrg,
+    newStartDate: addMonths(new Date().setHours(9, 0), 2),
+    newEndDate: addMonths(new Date().setHours(17, 0), 2),
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = Course_Type_Enum.Indirect
+      course.status = Course_Status_Enum.Scheduled
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
+      course.organization = { name: 'London First School' }
+      course.assistTrainer = users.assistant
+      course.organizationKeyContactProfile = users.user1WithOrg
+      course.curriculum = [
+        {
+          id: '696749a5-689e-4866-9dab-37579a16d2f7',
+          name: 'Theory',
+          lessons: {
+            items: [
+              { name: 'Values Exercise', covered: true },
+              { name: 'Legal Framework', covered: true },
+              { name: 'Policies Practices & Procedure', covered: true },
+              { name: 'Understanding Emotions & Behaviour', covered: true },
+              { name: 'Six Stages Of Crisis', covered: true },
+              { name: 'Conflict Spiral', covered: true },
+              { name: 'Fizzy Pop Challenge', covered: true },
+              { name: 'Behaviours That Challenge', covered: true },
+              { name: 'De-escalation Scenario', covered: true },
+              { name: 'Handling Plans', covered: true },
+              { name: 'Scripts', covered: true },
+              { name: 'Post Listening & Learning', covered: true },
+              { name: 'Quiz', covered: true },
+            ],
+          },
+          mandatory: true,
+          __typename: 'module_v2',
+          displayName: null,
+        },
+      ]
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
+      return course
+    },
+  },
+]
+
+for (const data of testDataMovingEarlier) {
+  const test = base.extend<{ course: Course }>({
+    course: async ({}, use) => {
+      const course = await data.course()
+
+      const coursePricing = await API.coursePricing.getCoursePricing({
+        type: course.type,
+        level: course.level,
+      })
+
+      let pricingSchedule: { id: string } | null | undefined
+
+      if (coursePricing.course_pricing[0]?.id) {
+        pricingSchedule = await API.coursePricing.insertPricingSchedule({
+          effectiveFrom: data.newStartDate,
+          effectiveTo: data.newEndDate,
+          coursePricingId: coursePricing.course_pricing[0].id,
+        })
+      }
+
+      await use(course)
+
+      if (pricingSchedule?.id) {
+        await API.coursePricing.deleteCoursePricingSchedule({
+          id: pricingSchedule.id,
+        })
+      }
+    },
+  })
+
+  test(`reschedule the ${data.name} using ${data.user}`, async ({
+    browser,
+    course,
+  }) => {
+    const userContext = await browser.newContext({
+      storageState: stateFilePath(data.user as StoredCredentialKey),
+    })
+
+    const page = await userContext.newPage()
+    const confirmRescheduleModal = new ConfirmRescheduleModal(page)
+    const createCoursePage = new CreateCoursePage(page)
+    const courseDetailsPage = new CourseDetailsPage(page)
+    await courseDetailsPage.goto(`${course.id}`)
+
+    const formattedStartDate = format(
+      course.schedule[0].start,
+      courseDetailsPage.dateFormat,
+    )
+    const formattedEndDate = format(
+      course.schedule[0].end,
+      courseDetailsPage.dateFormat,
+    )
+
+    await expect(await courseDetailsPage.startDateLabel).toContainText(
+      formattedStartDate,
+    )
+    await expect(await courseDetailsPage.endDateLabel).toContainText(
+      formattedEndDate,
+    )
+    await courseDetailsPage.clickEditCourseButton()
+    await createCoursePage.setStartDateTime(data.newStartDate)
+    await createCoursePage.setEndDateTime(data.newEndDate)
+    await createCoursePage.clickSaveChangesButton()
+    await confirmRescheduleModal.confirmChange(
+      'trainer availability',
+      course.type,
+    )
+
+    if (data.user === 'trainer') {
+      await page.locator('[data-testid="submit-button"]').click()
+      await page.locator('[data-testid="dialog-confirm-button"]').click()
+    }
+
+    const formattedNewStartDate = format(
+      data.newStartDate,
+      courseDetailsPage.dateFormat,
+    )
+    const formattedNewEndDate = format(
+      data.newEndDate,
+      courseDetailsPage.dateFormat,
+    )
+
+    await expect(await courseDetailsPage.startDateLabel).toContainText(
+      formattedNewStartDate,
+    )
+    await expect(await courseDetailsPage.endDateLabel).toContainText(
+      formattedNewEndDate,
+    )
+  })
+}
+
+const testDataMovingLater = [
+  {
+    name: 'open course to later date',
+    user: 'ops',
+    attendee: users.user1WithOrg,
+    newStartDate: addMonths(new Date().setHours(9, 0), 4),
+    newEndDate: addMonths(new Date().setHours(17, 0), 4),
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.status = Course_Status_Enum.Scheduled
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 2)
+      course.schedule[0].end = addMonths(new Date().setHours(17, 0), 2)
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
+      return course
+    },
+  },
+  {
+    name: 'closed course to later date',
+    user: 'salesAdmin',
+    attendee: users.user1WithOrg,
+    newStartDate: addMonths(new Date().setHours(9, 0), 6),
+    newEndDate: addMonths(new Date().setHours(17, 0), 6),
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      const order = await UNIQUE_ORDER(users.salesAdmin, [])
+
+      course.assistTrainer = users.assistant
+      course.bookingContactProfile = users.user1WithOrg
+      course.freeSpaces = 0
+      course.max_participants = 3
+      course.orders = {
+        data: [
+          {
+            order: {
+              data: {
+                attendeesQuantity: 3,
+                billingAddress: order.billingAddress,
+                billingEmail: order.billingEmail,
+                billingFamilyName: order.billingFamilyName,
+                billingGivenName: order.billingGivenName,
+                billingPhone: order.billingPhone,
+                clientPurchaseOrder: order.clientPurchaseOrder,
+                currency: 'GBP',
+                organizationId: order.organizationId,
+                paymentMethod: order.paymentMethod,
+                registrants: [],
+                salesRepresentativeId: order.salesRepresentativeId,
+                source: order.source,
+                user: {
+                  fullName: 'Full name',
+                  email: users.salesAdmin.email,
+                  phone: '5555555555',
+                },
+              },
+            },
+            quantity: 1,
+          },
+        ],
+      }
+      course.organization = { name: 'London First School' }
+      course.price = 100
+      course.renewalCycle = Course_Renewal_Cycle_Enum.One
+      course.salesRepresentative = users.salesAdmin
+      course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.source = Course_Source_Enum.EmailEnquiry
+      course.status = Course_Status_Enum.Scheduled
+      course.type = Course_Type_Enum.Closed
+
+      const newCourse = await API.course.insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.ACCEPTED,
+        true,
+      )
+
+      course.id = newCourse.id
+
+      return course
+    },
+  },
+  {
+    name: 'indirect course to later date',
+    user: 'trainer',
+    attendee: users.user1WithOrg,
+    newStartDate: addMonths(new Date().setHours(9, 0), 4),
+    newEndDate: addMonths(new Date().setHours(17, 0), 4),
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = Course_Type_Enum.Indirect
+      course.status = Course_Status_Enum.Scheduled
+      course.schedule[0].start = addMonths(new Date().setHours(9, 0), 3)
+      course.schedule[0].end = addMonths(new Date().setHours(17, 0), 3)
+      course.organization = { name: 'London First School' }
+      course.organizationKeyContactProfile = users.user1WithOrg
+      course.assistTrainer = users.assistant
+      course.id = (
+        await API.course.insertCourse(
+          course,
+          users.trainer.email,
+          InviteStatus.ACCEPTED,
+        )
+      ).id
+      return course
+    },
+  },
+]
+
+for (const data of testDataMovingLater) {
+  const test = base.extend<{ course: Course }>({
+    course: async ({}, use) => {
+      const course = await data.course()
+
+      const coursePricing = await API.coursePricing.getCoursePricing({
+        type: course.type,
+        level: course.level,
+      })
+
+      let pricingSchedule: { id: string } | null | undefined
+
+      if (coursePricing.course_pricing[0]?.id) {
+        pricingSchedule = await API.coursePricing.insertPricingSchedule({
+          effectiveFrom: data.newStartDate,
+          effectiveTo: data.newEndDate,
+          coursePricingId: coursePricing.course_pricing[0].id,
+        })
+      }
+
+      await use(course)
+
+      if (pricingSchedule?.id) {
+        await API.coursePricing.deleteCoursePricingSchedule({
+          id: pricingSchedule.id,
+        })
+      }
+    },
+  })
+
+  test(`reschedule the ${data.name} using ${data.user}`, async ({
+    browser,
+    course,
+  }) => {
+    const userContext = await browser.newContext({
+      storageState: stateFilePath(data.user as StoredCredentialKey),
+    })
+    const page = await userContext.newPage()
+    const createCoursePage = new CreateCoursePage(page)
+    const courseDetailsPage = new CourseDetailsPage(page)
+    const confirmRescheduleModal = new ConfirmRescheduleModal(page)
+    await courseDetailsPage.goto(`${course.id}`)
+
+    const formattedStartDate = format(
+      course.schedule[0].start,
+      courseDetailsPage.dateFormat,
+    )
+    const formattedEndDate = format(
+      course.schedule[0].end,
+      courseDetailsPage.dateFormat,
+    )
+
+    await expect(await courseDetailsPage.startDateLabel).toContainText(
+      formattedStartDate,
+    )
+    await expect(await courseDetailsPage.endDateLabel).toContainText(
+      formattedEndDate,
+    )
+    await courseDetailsPage.clickEditCourseButton()
+
+    await createCoursePage.setStartDateTime(data.newStartDate)
+    await createCoursePage.setEndDateTime(data.newEndDate)
+    await createCoursePage.clickSaveChangesButton()
+
+    await createCoursePage.setStartDateTime(data.newStartDate)
+    await createCoursePage.setEndDateTime(data.newEndDate)
+
+    await confirmRescheduleModal.confirmChange(
+      'trainer availability',
+      course.type,
+    )
+
+    const formattedNewStartDate = format(
+      data.newStartDate,
+      courseDetailsPage.dateFormat,
+    )
+    const formattedNewEndDate = format(
+      data.newEndDate,
+      courseDetailsPage.dateFormat,
+    )
+
+    if (data.user === 'trainer') {
+      await page.locator('[data-testid="submit-button"]').click()
+      await page.locator('[data-testid="dialog-confirm-button"]').click()
+    }
+
+    await expect(await courseDetailsPage.startDateLabel).toContainText(
+      formattedNewStartDate,
+    )
+    await expect(await courseDetailsPage.endDateLabel).toContainText(
+      formattedNewEndDate,
+    )
+  })
+}

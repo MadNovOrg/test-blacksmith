@@ -1,0 +1,70 @@
+table:
+  name: profile_trainer_role_type
+  schema: public
+object_relationships:
+  - name: trainer_role_type
+    using:
+      foreign_key_constraint_on: trainer_role_type_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - created_at
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - updated_at
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - trainer_role_type_id
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - created_at
+        - updated_at
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - created_at
+        - updated_at
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - trainer_role_type_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - created_at
+        - updated_at
+      filter: {}
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}

@@ -1,0 +1,292 @@
+import { format } from 'date-fns'
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { never, fromValue } from 'wonka'
+
+import {
+  WebinarsQuery,
+  WebinarsQueryVariables,
+  WpPageInfo,
+} from '@app/generated/graphql'
+
+import { _render, screen, userEvent, waitFor, within } from '@test/index'
+import { buildEntities, buildWebinar } from '@test/mock-data-utils'
+
+import Webinars from '.'
+
+describe('page: Webinars', () => {
+  it('displays skeleton while fetching webinars', () => {
+    const client = {
+      executeQuery: () => never,
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] },
+    )
+
+    expect(screen.getByTestId('featured-webinar-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('webinars-grid-skeleton')).toBeInTheDocument()
+  })
+
+  it('displays first webinar as a featured one', () => {
+    const webinars = buildEntities(2, buildWebinar)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: WebinarsQuery }>({
+          data: {
+            content: {
+              webinars: {
+                nodes: webinars,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] },
+    )
+
+    expect(
+      screen.queryByTestId('featured-webinar-skeleton'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('webinars-grid-skeleton'),
+    ).not.toBeInTheDocument()
+
+    const featuredWebinar = screen.getByTestId('featured-webinar')
+
+    expect(
+      within(featuredWebinar).getByText(webinars[0].title ?? ''),
+    ).toBeInTheDocument()
+
+    expect(within(featuredWebinar).getByText('New webinar')).toBeInTheDocument()
+
+    expect(
+      within(featuredWebinar).getByAltText(webinars[0].title ?? ''),
+    ).toHaveAttribute(
+      'src',
+      webinars[0].featuredImage?.node?.mediaItemUrl ?? '',
+    )
+  })
+
+  it('navigates to single webinar page when clicked on featured image', async () => {
+    const webinars = buildEntities(2, buildWebinar)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: WebinarsQuery }>({
+          data: {
+            content: {
+              webinars: {
+                nodes: webinars,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+          <Route path="/webinars/:id" element={<p>Webinar page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] },
+    )
+
+    const featuredWebinar = screen.getByTestId('featured-webinar')
+
+    await userEvent.click(
+      within(featuredWebinar).getByAltText(webinars[0].title ?? ''),
+    )
+
+    expect(screen.getByText('Webinar page')).toBeInTheDocument()
+  })
+
+  it('displays items in a grid', () => {
+    const webinars = buildEntities(10, buildWebinar)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: WebinarsQuery }>({
+          data: {
+            content: {
+              webinars: {
+                nodes: webinars,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] },
+    )
+
+    webinars.forEach(item => {
+      const itemElement = screen.getByTestId(`webinar-grid-item-${item.id}`)
+
+      expect(
+        within(itemElement).getByText(item.title ?? ''),
+      ).toBeInTheDocument()
+      expect(
+        within(itemElement).getByAltText(item.title ?? ''),
+      ).toHaveAttribute('src', item.featuredImage?.node?.mediaItemUrl ?? '')
+
+      expect(
+        within(itemElement).getByText(
+          format(new Date(item.date ?? ''), 'd MMMM yyyy'),
+        ),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('searches for a webinar', async () => {
+    const webinars = buildEntities(10, buildWebinar)
+    const filteredItem = buildWebinar()
+    const SEARCH_TERM = 'search term'
+
+    const client = {
+      executeQuery: ({ variables }: { variables: WebinarsQueryVariables }) => {
+        const items = variables.term === SEARCH_TERM ? [filteredItem] : webinars
+
+        return fromValue<{ data: WebinarsQuery }>({
+          data: {
+            content: {
+              webinars: {
+                nodes: items,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] },
+    )
+
+    await userEvent.type(
+      screen.getByPlaceholderText('Search webinars'),
+      SEARCH_TERM,
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`webinar-grid-item-${filteredItem.id}`),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('paginates webinars', async () => {
+    const firstBatch = buildEntities(13, buildWebinar)
+    const secondBatch = buildEntities(12, buildWebinar)
+
+    const client = {
+      executeQuery: ({ variables }: { variables: WebinarsQueryVariables }) => {
+        const items = variables.after ? secondBatch : firstBatch
+        const pageInfo: WpPageInfo = {
+          ...(variables.after
+            ? {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'start-cursor',
+                endCursor: null,
+              }
+            : {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: null,
+                endCursor: 'end-cursor',
+              }),
+        }
+
+        return fromValue<{ data: WebinarsQuery }>({
+          data: {
+            content: {
+              webinars: {
+                pageInfo,
+                nodes: items,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] },
+    )
+
+    await userEvent.click(screen.getByTestId('webinars-next-page'))
+
+    expect(
+      within(screen.getByTestId('featured-webinar')).getByText(
+        firstBatch[0].title ?? '',
+      ),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByTestId(`webinar-grid-item-${firstBatch[0].id}`),
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.getByTestId(`webinar-grid-item-${secondBatch[0].id}`),
+    ).toBeInTheDocument()
+
+    expect(screen.getByTestId('webinars-next-page')).toBeDisabled()
+
+    await userEvent.click(screen.getByTestId('webinars-previous-page'))
+
+    expect(
+      within(screen.getByTestId('featured-webinar')).getByText(
+        firstBatch[0].title ?? '',
+      ),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByTestId(`webinar-grid-item-${firstBatch[0].id}`),
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByTestId(`webinar-grid-item-${secondBatch[0].id}`),
+    ).not.toBeInTheDocument()
+
+    expect(screen.getByTestId('webinars-previous-page')).toBeDisabled()
+  })
+})

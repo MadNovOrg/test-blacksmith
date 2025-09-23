@@ -1,0 +1,67 @@
+import CheckIcon from '@mui/icons-material/Check'
+import { Box, styled, Typography } from '@mui/material'
+import React from 'react'
+
+const Circle = styled('span', {
+  shouldForwardProp: prop => prop !== 'completed' && prop !== 'line',
+})<{
+  completed?: boolean
+  line?: boolean
+}>(props => ({
+  borderRadius: '50%',
+  border: '1px solid',
+  borderColor: props.theme.palette.success.main,
+  color: props.completed
+    ? props.theme.palette.common.white
+    : props.theme.palette.text.primary,
+  width: 40,
+  height: 40,
+  marginRight: 30,
+  position: 'relative',
+  backgroundColor: props.completed
+    ? props.theme.palette.success.main
+    : props.theme.palette.common.white,
+  justifyContent: 'center',
+  alignItems: 'center',
+  display: 'inline-flex',
+
+  '&:after': {
+    content: props.line ? "''" : null,
+    position: 'absolute',
+    width: 1,
+    height: 44,
+    backgroundColor: props.theme.palette.success.main,
+    top: '100%',
+  },
+}))
+
+interface StepItemProps {
+  completed: boolean
+  index: number
+  line?: boolean
+}
+
+export const StepItem: React.FC<React.PropsWithChildren<StepItemProps>> = ({
+  completed,
+  index,
+  children,
+  line = false,
+}) => {
+  return (
+    <Box
+      display="flex"
+      alignItems="center"
+      mb={5}
+      data-testid={`step-item-${index}`}
+    >
+      <Circle completed={completed} line={line}>
+        {completed ? (
+          <CheckIcon />
+        ) : (
+          <Typography fontWeight={600}>{index}</Typography>
+        )}
+      </Circle>
+      {children}
+    </Box>
+  )
+}

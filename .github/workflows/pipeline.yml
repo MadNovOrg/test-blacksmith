@@ -1,0 +1,185 @@
+name: Pipeline
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        type: string
+        required: false
+        default: 'production'
+      version:
+        type: string
+        required: false
+        default: ${{ github.sha }}
+      checkout_ref:
+        required: false
+        type: string
+      aws_region:
+        required: true
+        type: string
+        default: 'eu-west-2'
+    secrets:
+      cognito_user_pool_id:
+        required: true
+      cognito_user_pool_client_id:
+        required: true
+      cognito_user_pool_id_au:
+      cognito_user_pool_client_id_au:
+      hasura_endpoint:
+        required: true
+      hasura_ws_endpoint:
+        required: true
+      s3_bucket:
+        required: true
+      service_role_arn:
+        required: true
+      hasura_admin_pass:
+        required: true
+      wp_host:
+        required: true
+      gmaps_key:
+        required: true
+      recaptcha_key:
+        required: true
+      stripe_key:
+        required: true
+      request_quote_url:
+        required: true
+      sentry_auth_token:
+        required: false
+      hubspot_register_form:
+        required: false
+      hubspot_login_form:
+        required: false
+      frontend_distribution:
+        required: false
+
+jobs:
+  build-deploy:
+    name: CD
+    env:
+      NODE_OPTIONS: '--max-old-space-size=6656'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.checkout_ref }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '9.15.5'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: ${{ secrets.service_role_arn }}
+          role-duration-seconds: 1200
+
+      - name: Build
+        uses: actions/setup-node@v5
+        with:
+          node-version: '18.14.2'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm pkg delete scripts.prepare && pnpm i --no-frozen-lockfile
+
+      - name: Build web
+        run: pnpm build --mode ${{inputs.mode}}
+        env:
+          VITE_AWS_REGION: ${{ inputs.aws_region }}
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets.cognito_user_pool_id }}
+          VITE_COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.cognito_user_pool_client_id }}
+          VITE_COGNITO_USER_POOL_ID_AU: ${{ secrets.cognito_user_pool_id_au }}
+          VITE_COGNITO_USER_POOL_CLIENT_ID_AU: ${{ secrets.cognito_user_pool_client_id_au }}
+          VITE_HASURA_GRAPHQL_API: '${{ secrets.hasura_endpoint }}/v1/graphql'
+          VITE_HASURA_WS_GRAPHQL_API: '${{ secrets.hasura_ws_endpoint }}/v1/graphql'
+          VITE_BASE_WORDPRESS_URL: '${{ secrets.wp_host }}'
+          VITE_GMAPS_KEY: ${{ secrets.gmaps_key }}
+          VITE_RECAPTCHA_KEY: ${{secrets.recaptcha_key}}
+          VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
+          VITE_HUBSPOT_REGISTER_FORM: ${{ secrets.hubspot_register_form }}
+          VITE_HUBSPOT_LOGIN_FORM: ${{ secrets.hubspot_login_form }}
+          VITE_APP_VERSION: ${{ inputs.version }}
+          REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}
+          SENTRY_AUTH_TOKEN: ${{secrets.sentry_auth_token}}
+
+      - name: Deploy to S3 bucket
+        run: |
+          aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
+          if [[ "${{ inputs.mode }}" != "development" && -n "${{ inputs.mode }}" && -n "${{ secrets.frontend_distribution }}" ]]; then
+            aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.frontend_distribution }} \
+            --paths '/*'
+          else
+            echo "Skipping CloudFront invalidation for non-staging/prod environment."
+          fi
+        shell: bash
+
+      - name: Get application version
+        id: package_version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+      - name: Sentry Release
+        uses: getsentry/action-release@v3.2.0
+        continue-on-error: true
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.sentry_auth_token }}
+          SENTRY_ORG: 'team-teach-ltd'
+          SENTRY_PROJECT: 'team-teach-hub'
+        with:
+          environment: ${{ inputs.mode }}
+          release: ${{steps.package_version.outputs.version}}
+
+  hasura_migrations:
+    name: Hasura migrations
+    needs: build-deploy
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET: ${{ secrets.hasura_admin_pass }}
+      ENDPOINT: ${{ secrets.hasura_endpoint }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.checkout_ref }}
+
+      - name: Install Hasura CLI
+        run: |
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.28.2 bash
+
+      - name: Apply Hasura migrations
+        working-directory: ./hasura
+        run: |
+          echo Hasura Metadata Apply
+          hasura metadata apply --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Migrate Apply
+          hasura migrate apply --all-databases --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Metadata Reload
+          hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT
+  hasura_clean_up:
+    name: Clean up Hasura
+    needs: hasura_migrations
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET: ${{ secrets.hasura_admin_pass }}
+      ENDPOINT: ${{ secrets.hasura_endpoint }}
+
+    steps:
+      - name: Clean Up request
+        id: dbClean
+        run: |
+          response=$(curl -s --location --request POST "$ENDPOINT/v1/graphql" \
+          -H "Content-Type: application/json" \
+          -H "x-hasura-admin-secret: $SECRET" \
+          -d '{
+            "query": "query { dbClean { message } }"
+          }' \
+          )
+          echo "$response"

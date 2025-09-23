@@ -1,0 +1,10 @@
+table:
+  name: module_category
+  schema: public
+is_enum: true
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - name
+      filter: {}

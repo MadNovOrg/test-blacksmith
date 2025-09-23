@@ -1,0 +1,1312 @@
+actions:
+  - name: acceptOrgInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/invite/accept'
+      forward_client_headers: true
+    permissions:
+      - role: sales-representative
+      - role: organization-key-contact
+      - role: finance
+      - role: booking-contact
+      - role: tt-ops
+      - role: trainer
+      - role: ld
+      - role: user
+      - role: anonymous
+      - role: tt-admin
+      - role: sales-admin
+  - name: addResourcePacks
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/resource-packs/add'
+    permissions:
+      - role: tt-ops
+      - role: sales-admin
+      - role: finance
+      - role: tt-admin
+    comment: Manually add resource packs to organisation
+  - name: approveCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/approve'
+      forward_client_headers: true
+    permissions:
+      - role: tt-ops
+      - role: trainer
+      - role: ld
+      - role: tt-admin
+  - name: arloCallback
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/arlo/callback'
+  - name: canApplyPromoCode
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/promocode/can-apply'
+    permissions:
+      - role: unverified
+      - role: tt-admin
+      - role: tt-ops
+      - role: trainer
+      - role: user
+    comment: Checks whether a promo code can be applied to a given course by the current user
+  - name: cancelIndividualFromCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/participant/cancel/individual'
+    permissions:
+      - role: booking-contact
+      - role: trainer
+      - role: tt-admin
+      - role: tt-ops
+      - role: ld
+      - role: user
+  - name: cancelIndividualFromCourseWaitlist
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/waitlist/cancel/individual'
+    permissions:
+      - role: sales-admin
+      - role: tt-admin
+      - role: tt-ops
+    comment: Removes another user from course waitlist
+  - name: cancelMyselfFromCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/participant/cancel/self'
+    permissions:
+      - role: user
+  - name: cancelMyselfFromCourseWaitlist
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/waitlist/cancel/self'
+    permissions:
+      - role: anonymous
+      - role: user
+    comment: Removes current anonymous user from course waitlist
+  - name: checkTTClients
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/invite/indirect-invite-attempt/check-clients'
+    permissions:
+      - role: user
+    comment: This action will check which emails are TT clients and which are not out of a list of given emails
+  - name: createOrder
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/order/create'
+    permissions:
+      - role: tt-admin
+      - role: unverified
+      - role: tt-ops
+      - role: trainer
+      - role: user
+    comment: Attempts to create a new Order
+  - name: createStripeSubscription
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
+    comment: Creates a membership subscription
+  - name: createUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/create'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: dbClean
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/db/clean'
+    comment: Thorough cleanup to remove all irrelevant data for both app versions (UK and Australia)
+  - name: declineInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/invite/decline'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: declineOrgInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/invite/decline'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: deleteMeeting
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/zoom/delete-meeting'
+    permissions:
+      - role: user
+  - name: deleteOrganisation
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/delete'
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: sales-admin
+  - name: deleteUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/delete'
+    permissions:
+      - role: tt-admin
+    comment: Delete users
+  - name: eligibleTransferCourses
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/transfer/eligible-courses'
+    permissions:
+      - role: user
+    comment: eligibleTransferCourses
+  - name: exportBlendedLearningCourseData
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/go1/export'
+    permissions:
+      - role: booking-contact
+      - role: tt-ops
+      - role: tt-admin
+      - role: organization-key-contact
+      - role: user
+      - role: trainer
+      - role: sales-representative
+      - role: ld
+      - role: sales-admin
+      - role: finance
+  - name: fetchPlans
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/stripe/prices/list'
+    comment: Fetches membership plans
+  - name: getCoursePricing
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/course/price'
+    permissions:
+      - role: user
+      - role: unverified
+    comment: getCoursePricing
+  - name: getInvite
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/invite/get'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: getOrgInvite
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/organization/invite/get'
+      forward_client_headers: true
+    permissions:
+      - role: user
+      - role: anonymous
+  - name: getUserGO1Enrollments
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/go1/user-enrollments'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+  - name: getXeroInvoicesForOrders
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/invoices'
+    permissions:
+      - role: sales-admin
+      - role: tt-admin
+      - role: tt-ops
+  - name: go1EnrollmentsStatusSync
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/go1/sync-enrollments-status'
+      timeout: 243
+    permissions:
+      - role: tt-admin
+    comment: Sync participants' go1 enrollment status
+  - name: go1LicensesChange
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/go1-licensing/change'
+    permissions:
+      - role: tt-ops
+      - role: sales-admin
+      - role: tt-admin
+    comment: go1LicensesChange
+  - name: gradedOnSync
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/participant/graded-on-sync/bulk'
+    comment: gradedOnSync
+  - name: importArloCertificates
+    definition:
+      kind: asynchronous
+      handler: '{{ACTIONS_HOST}}/certificate/upload/bulk'
+      forward_client_headers: true
+      timeout: 300
+    permissions:
+      - role: tt-admin
+  - name: importLegacyCertificate
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/certificate/import-legacy'
+    permissions:
+      - role: user
+  - name: importOrganisations
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/import/start'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+    comment: importOrganisations
+  - name: importUsers
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/import/start'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+    comment: importUsers
+  - name: initAuth
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/user/auth'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: isUserSubscribedToMembership
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
+    comment: Checks whether user is subscribed to membership
+  - name: joinWaitlist
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/waitlist/join'
+    permissions:
+      - role: unverified
+      - role: finance
+      - role: booking-contact
+      - role: organization-key-contact
+      - role: anonymous
+      - role: sales-representative
+      - role: tt-ops
+      - role: tt-admin
+      - role: trainer
+      - role: sales-admin
+      - role: ld
+      - role: user
+    comment: joinWaitlist
+  - name: knowledgeHubResources
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/knowledge-hub/resources'
+    permissions:
+      - role: user
+    comment: knowledgeHubResources
+  - name: mergeOrganisations
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/merge'
+    permissions:
+      - role: ld
+      - role: tt-ops
+      - role: tt-admin
+    comment: This actions manages the merging of two or more organisations
+  - name: mergeUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/merge'
+      forward_client_headers: true
+    permissions:
+      - role: sales-admin
+      - role: tt-ops
+      - role: tt-admin
+    comment: Merge users
+  - name: notifyCourseEdit
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/notify-editing'
+    permissions:
+      - role: tt-ops
+      - role: trainer
+      - role: sales-admin
+    comment: Notify course's trainer(s) and attendees about course editing
+  - name: notifyInternalUsersOfInviteAttempt
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/invite/indirect-invite-attempt/notify'
+    permissions:
+      - role: user
+    comment: notifyInternalUsersOfInviteAttempt
+  - name: plansCreate
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/prices/create'
+    comment: Creates a membership plan
+  - name: podcast
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/podcasts/single'
+    permissions:
+      - role: user
+    comment: Podcast
+  - name: podcasts
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/podcasts'
+    permissions:
+      - role: user
+    comment: Podcasts list
+  - name: rejectCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/reject'
+      forward_client_headers: true
+    permissions:
+      - role: tt-admin
+      - role: ld
+    comment: This action is called when a Admin / LD role Rejects a course in status Exceptions Approval Pending
+  - name: replaceParticipant
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/replace-participant'
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: sales-admin
+      - role: user
+    comment: replaceParticipant
+  - name: resendPassword
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/resend-password'
+    permissions:
+      - role: anonymous
+  - name: reserveResourcePacks
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/resource-packs/reserve'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+      - role: trainer
+      - role: sales-admin
+      - role: finance
+    comment: Used to reserve additional resource packs for an Indirect course without requiring the organization to purchase more.
+  - name: saveOrgInvites
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/invite/save'
+    permissions:
+      - role: finance
+      - role: sales-admin
+      - role: sales-representative
+      - role: tt-admin
+      - role: tt-ops
+      - role: user
+    comment: saveOrgInvites
+  - name: scheduleAboutTrainingSurveys
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/certificate/schedule-training-surveys'
+    comment: The action will create a schedule event for sending about training surveys to certified attendees
+  - name: searchTrainers
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/trainers/search'
+    permissions:
+      - role: sales-admin
+      - role: trainer
+  - name: sendCourseInformation
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/email/course-information'
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: trainer
+      - role: sales-admin
+      - role: booking-contact
+      - role: organization-key-contact
+      - role: user
+      - role: sales-representative
+    comment: Send course information to the specified course attendees
+  - name: signUp
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/auth/sign-up'
+    permissions:
+      - role: anonymous
+    comment: Creates a temporary profile
+  - name: stripeCreatePaymentIntent
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/create-payment-intent'
+    permissions:
+      - role: user
+      - role: unverified
+  - name: transferParticipant
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/transfer'
+    permissions:
+      - role: sales-admin
+      - role: user
+      - role: trainer
+    comment: transferParticipant
+  - name: updateAvatar
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/update-avatar'
+      forward_client_headers: true
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: trainer
+      - role: user
+  - name: updateUserProfile
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/update'
+    permissions:
+      - role: trainer
+      - role: tt-ops
+      - role: sales-admin
+      - role: tt-admin
+      - role: unverified
+      - role: anonymous
+      - role: user
+  - name: upsertZoomMeeting
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/zoom/upsert-meeting'
+    permissions:
+      - role: sales-admin
+      - role: tt-ops
+      - role: tt-admin
+      - role: trainer
+    comment: Creates or updates Zoom meeting with start date
+  - name: validateAndDispatchInvitesForIndirectCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/send-indirect-course-invite'
+    permissions:
+      - role: tt-admin
+      - role: organization-key-contact
+      - role: tt-ops
+      - role: trainer
+      - role: sales-admin
+      - role: user
+    comment: This action is triggered when inviting attendees to an Indirect course. It checks the availability of blended learning licenses (if the course is of the blended learning type) as well as the resource packs stock of the course's associated organization. Its primary use is for inviting participants after the course has been completed.
+  - name: verifyUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/verify'
+      forward_client_headers: true
+    permissions:
+      - role: unverified
+  - name: xeroCallback
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/xero/callback'
+    permissions:
+      - role: tt-admin
+  - name: xeroConnect
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/setup'
+    permissions:
+      - role: tt-admin
+  - name: xeroContactSearch
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/contacts/search'
+    permissions:
+      - role: booking-contact
+      - role: organization-key-contact
+      - role: trainer
+      - role: user
+      - role: sales-representative
+      - role: finance
+      - role: ld
+      - role: tt-admin
+      - role: sales-admin
+      - role: tt-ops
+  - name: xeroDisconnect
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/xero/disconnect'
+  - name: xeroInvoicesStatus
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/invoices/status'
+    permissions:
+      - role: sales-admin
+      - role: tt-admin
+  - name: xeroSync
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/invoices/sync'
+    comment: Sync Xero Invoices with the hub invoices
+  - name: zoomUsers
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/zoom/get-users'
+    permissions:
+      - role: user
+    comment: Zoom Users list
+custom_types:
+  enums:
+    - name: CreateOrderError
+      values:
+        - description: null
+          is_deprecated: null
+          value: USER_REGISTERED_ON_COURSE
+        - description: null
+          is_deprecated: null
+          value: NUMBER_OF_REGISTRANTS_AND_QUANTITY_VALUE
+        - description: null
+          is_deprecated: null
+          value: PROMOCODES_NOT_APPLICABLE
+        - description: null
+          is_deprecated: null
+          value: PROFILE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: NO_SPACE_ON_COURSE
+        - description: null
+          is_deprecated: null
+          value: PRICING_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: ORDER_NOT_CREATED
+        - description: null
+          is_deprecated: null
+          value: INTERNAL_ERROR
+    - name: BillingInterval
+      values:
+        - description: null
+          is_deprecated: null
+          value: day
+        - description: null
+          is_deprecated: null
+          value: week
+        - description: null
+          is_deprecated: null
+          value: month
+        - description: null
+          is_deprecated: null
+          value: year
+    - name: InviteStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: PENDING
+        - description: null
+          is_deprecated: null
+          value: ACCEPTED
+        - description: null
+          is_deprecated: null
+          value: DECLINED
+    - name: CourseLevel
+      values:
+        - description: null
+          is_deprecated: null
+          value: LEVEL_1
+        - description: null
+          is_deprecated: null
+          value: LEVEL_1_BS
+        - description: null
+          is_deprecated: null
+          value: LEVEL_1_NP
+        - description: null
+          is_deprecated: null
+          value: LEVEL_2
+        - description: null
+          is_deprecated: null
+          value: ADVANCED
+        - description: null
+          is_deprecated: null
+          value: INTERMEDIATE_TRAINER
+        - description: null
+          is_deprecated: null
+          value: ADVANCED_TRAINER
+        - description: null
+          is_deprecated: null
+          value: BILD_REGULAR
+        - description: null
+          is_deprecated: null
+          value: BILD_INTERMEDIATE_TRAINER
+        - description: null
+          is_deprecated: null
+          value: BILD_ADVANCED_TRAINER
+        - description: null
+          is_deprecated: null
+          value: FOUNDATION_TRAINER_PLUS
+        - description: null
+          is_deprecated: null
+          value: FOUNDATION_TRAINER
+    - name: SearchTrainerAvailability
+      values:
+        - description: null
+          is_deprecated: null
+          value: UNAVAILABLE
+        - description: null
+          is_deprecated: null
+          value: AVAILABLE
+        - description: null
+          is_deprecated: null
+          value: PENDING
+        - description: null
+          is_deprecated: null
+          value: EXPIRED
+    - name: CourseTrainerType
+      values:
+        - description: null
+          is_deprecated: null
+          value: LEADER
+        - description: null
+          is_deprecated: null
+          value: ASSISTANT
+        - description: null
+          is_deprecated: null
+          value: MODERATOR
+    - name: Currency
+      values:
+        - description: null
+          is_deprecated: null
+          value: AUD
+        - description: null
+          is_deprecated: null
+          value: EUR
+        - description: null
+          is_deprecated: null
+          value: GBP
+        - description: null
+          is_deprecated: null
+          value: NZD
+        - description: null
+          is_deprecated: null
+          value: USD
+    - name: OrderDirection
+      values:
+        - description: null
+          is_deprecated: null
+          value: ASC
+        - description: null
+          is_deprecated: null
+          value: DESC
+    - name: XeroContactStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: ACTIVE
+        - description: null
+          is_deprecated: null
+          value: ARCHIVED
+        - description: null
+          is_deprecated: null
+          value: GDPRREQUEST
+    - name: CourseType
+      values:
+        - description: null
+          is_deprecated: null
+          value: OPEN
+        - description: null
+          is_deprecated: null
+          value: CLOSED
+        - description: null
+          is_deprecated: null
+          value: INDIRECT
+    - name: XeroInvoiceStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: AUTHORISED
+        - description: null
+          is_deprecated: null
+          value: DELETED
+        - description: null
+          is_deprecated: null
+          value: DRAFT
+        - description: null
+          is_deprecated: null
+          value: OVERDUE
+        - description: null
+          is_deprecated: null
+          value: PAID
+        - description: null
+          is_deprecated: null
+          value: SUBMITTED
+        - description: null
+          is_deprecated: null
+          value: UNKNOWN
+        - description: null
+          is_deprecated: null
+          value: VOIDED
+    - name: Go1ChangeType
+      values:
+        - description: null
+          is_deprecated: null
+          value: LICENSES_ADDED
+        - description: null
+          is_deprecated: null
+          value: LICENSES_REMOVED
+        - description: null
+          is_deprecated: null
+          value: LICENSE_REVOKED
+        - description: null
+          is_deprecated: null
+          value: LICENSES_RELEASED
+        - description: null
+          is_deprecated: null
+          value: LICENSE_ISSUED
+        - description: null
+          is_deprecated: null
+          value: LICENSES_PURCHASED
+    - name: PaymentMethod
+      values:
+        - description: null
+          is_deprecated: null
+          value: CC
+        - description: null
+          is_deprecated: null
+          value: INVOICE
+    - name: ReplaceParticipantError
+      values:
+        - description: null
+          is_deprecated: null
+          value: NO_PARTICIPANT
+        - description: null
+          is_deprecated: null
+          value: INVALID_EMAIL
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: NOT_AUTHORIZED
+    - name: TransferFeeType
+      values:
+        - description: null
+          is_deprecated: null
+          value: APPLY_TERMS
+        - description: null
+          is_deprecated: null
+          value: CUSTOM_FEE
+        - description: null
+          is_deprecated: null
+          value: FREE
+    - name: TransferFeeTypeEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: APPLY_TERMS
+        - description: null
+          is_deprecated: null
+          value: CUSTOM_FEE
+        - description: null
+          is_deprecated: null
+          value: FREE
+    - name: Go1ChangeError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: INVOICE_NOT_AUTHORIZED
+        - description: null
+          is_deprecated: null
+          value: INVOICE_PAID
+        - description: null
+          is_deprecated: null
+          value: INVALID_INVOICE
+    - name: ConfirmCreditCardPaymentError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: PAYMENT_NOT_SUCCEEDED
+        - description: null
+          is_deprecated: null
+          value: ORDER_NOT_FOUND
+    - name: XeroPhoneType
+      values:
+        - description: null
+          is_deprecated: null
+          value: DEFAULT
+        - description: null
+          is_deprecated: null
+          value: DDI
+        - description: null
+          is_deprecated: null
+          value: FAX
+        - description: null
+          is_deprecated: null
+          value: MOBILE
+    - name: XeroAddressType
+      values:
+        - description: null
+          is_deprecated: null
+          value: POBOX
+        - description: null
+          is_deprecated: null
+          value: STREET
+    - name: TransferParticipantError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERAL_ERROR
+        - description: null
+          is_deprecated: null
+          value: WRONG_COURSE_TYPE
+        - description: null
+          is_deprecated: null
+          value: PARTICIPANT_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: PARTICIPANT_GRADED
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: NOT_ELIGIBLE_FOR_TRANSFER
+        - description: null
+          is_deprecated: null
+          value: TRANSFER_NOT_ALLOWED
+        - description: null
+          is_deprecated: null
+          value: NOT_ENOUGH_SPACES
+    - name: CourseDeliveryType
+      values:
+        - description: null
+          is_deprecated: null
+          value: F2F
+        - description: null
+          is_deprecated: null
+          value: MIXED
+        - description: null
+          is_deprecated: null
+          value: VIRTUAL
+    - name: MergeUserError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERAL_ERROR
+    - name: DeleteUserError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERAL_ERROR
+        - description: null
+          is_deprecated: null
+          value: CERT_EXIST
+        - description: null
+          is_deprecated: null
+          value: SELF_DELETE
+        - description: null
+          is_deprecated: null
+          value: USER_TRAINER
+        - description: null
+          is_deprecated: null
+          value: PENDING_COURSE
+    - name: SendCourseInformationError
+      values:
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: ATTENDEE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: ATTENDEE_LIST_IS_EMPTY
+    - name: CancelMyselfFromCourseWaitlistError
+      values:
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: CANCELLATION_SECRET_INVALID
+    - name: CancelIndividualFromCourseWaitlistError
+      values:
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: WAITLIST_NOT_FOUND
+    - name: BildStrategy
+      values:
+        - description: null
+          is_deprecated: null
+          value: PRIMARY
+        - description: null
+          is_deprecated: null
+          value: SECONDARY
+        - description: null
+          is_deprecated: null
+          value: NON_RESTRICTIVE_TERTIARY
+        - description: null
+          is_deprecated: null
+          value: RESTRICTIVE_TERTIARY_INTERMEDIATE
+        - description: null
+          is_deprecated: null
+          value: RESTRICTIVE_TERTIARY_ADVANCED
+    - name: CourseApprovalError
+      values:
+        - description: null
+          is_deprecated: null
+          value: COURSE_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: INVALID_COURSE_ID
+        - description: null
+          is_deprecated: null
+          value: INVALID_STATUS
+        - description: null
+          is_deprecated: null
+          value: NO_AUDIT_FOUND
+        - description: null
+          is_deprecated: null
+          value: TRAINER_NOT_FOUND
+    - name: CancellationFeeType
+      values:
+        - description: null
+          is_deprecated: null
+          value: APPLY_CANCELLATION_TERMS
+        - description: null
+          is_deprecated: null
+          value: CUSTOM_FEE
+        - description: null
+          is_deprecated: null
+          value: NO_FEES
+    - name: ImportLegacyCertificateError
+      values:
+        - description: null
+          is_deprecated: null
+          value: ALREADY_IMPORTED
+        - description: null
+          is_deprecated: null
+          value: UNSUPPORTED_LEVEL
+        - description: null
+          is_deprecated: null
+          value: PROFILE_NO_MATCH
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: CERTIFICATE_NOT_FOUND
+    - name: KnowledgeHubResourceType
+      values:
+        - description: null
+          is_deprecated: null
+          value: ARTICLE
+        - description: null
+          is_deprecated: null
+          value: DOWNLOAD
+        - description: null
+          is_deprecated: null
+          value: PODCAST
+        - description: null
+          is_deprecated: null
+          value: VIDEO
+    - name: SaveOrgInviteError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERAL_ERROR
+        - description: null
+          is_deprecated: null
+          value: ORG_MEMBER_ALREADY_EXISTS
+    - name: CertificateStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: EXPIRED
+        - description: null
+          is_deprecated: null
+          value: EXPIRED_RECENTLY
+        - description: null
+          is_deprecated: null
+          value: EXPIRING_SOON
+        - description: null
+          is_deprecated: null
+          value: ACTIVE
+        - description: null
+          is_deprecated: null
+          value: ON_HOLD
+        - description: null
+          is_deprecated: null
+          value: REVOKED
+        - description: null
+          is_deprecated: null
+          value: INACTIVE
+    - name: ImportFailCause
+      values:
+        - description: null
+          is_deprecated: null
+          value: INVALID_DATA
+    - name: CancelIndividualFromCourseError
+      values:
+        - description: null
+          is_deprecated: null
+          value: GO1_ENROLLMENT_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: GO1_ENROLLMENT_STARTED
+    - name: ResourcePacksTypeEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: DIGITAL_WORKBOOK
+        - description: null
+          is_deprecated: null
+          value: PRINT_WORKBOOK
+    - name: ResourcePacksAddErrorEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: ORGANIZATION_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: INVALID_AMOUNT
+        - description: null
+          is_deprecated: null
+          value: NOT_ALLOWED
+    - name: ResourcePacksReserveErrorEnum
+      values:
+        - description: null
+          is_deprecated: null
+          value: GENERIC_ERROR
+        - description: null
+          is_deprecated: null
+          value: ORGANIZATION_NOT_FOUND
+        - description: null
+          is_deprecated: null
+          value: INVALID_AMOUNT
+        - description: null
+          is_deprecated: null
+          value: NOT_ALLOWED
+        - description: null
+          is_deprecated: null
+          value: INSUFFICIENT_RESOURCE_PACKS_AVAILABLE
+    - name: ValidateAndDispatchInvitesForIndirectCourseError
+      values:
+        - description: null
+          is_deprecated: null
+          value: INSUFFICIENT_NUMBER_OF_RESOURCES
+        - description: null
+          is_deprecated: null
+          value: INTERNAL_SERVER_ERROR
+        - description: null
+          is_deprecated: null
+          value: UNAUTHORIZED
+    - name: MergeOrganisationsStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: SUCCESS
+        - description: null
+          is_deprecated: null
+          value: FAIL
+    - name: EnrollmentStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: COMPLETED
+        - description: null
+          is_deprecated: null
+          value: INPROGRESS
+    - name: GO1EnrollmentStatus
+      values:
+        - description: null
+          is_deprecated: null
+          value: COMPLETED
+        - description: null
+          is_deprecated: null
+          value: INPROGRESS
+  input_objects:
+    - name: PlansCreateInput
+    - name: UpsertZoomMeetingInput
+    - name: GetTrainersLevelsInput
+    - name: StripeCreatePaymentIntentInput
+    - name: SearchTrainersInput
+    - name: Ordering
+    - name: PodcastsInput
+    - name: Paging
+    - name: XeroCallbackInput
+    - name: XeroContactSearchInput
+    - name: CreateAppUserInput
+    - name: GetCoursePricingInput
+    - name: XeroInvoicesStatusInput
+    - name: Go1LicensesChangeInput
+    - name: CanApplyPromoCodeInput
+    - name: CreateOrderParticipantInput
+    - name: CreateOrderInput
+    - name: ReplaceParticipantInput
+    - name: TransferFee
+    - name: TransferInput
+    - name: GetOrdersInput
+    - name: UpdateUserProfileInput
+    - name: NotifyCourseInput
+    - name: NotifyCourseTrainerInput
+    - name: JoinWaitlistInput
+    - name: SignUpInput
+    - name: ArloCallbackInput
+    - name: CancelIndividualFromCourseWaitlistInput
+    - name: CancelMyselfFromCourseWaitlistInput
+    - name: RejectCourseInput
+    - name: ApproveCourseInput
+    - name: BlendedLearningExportDataInput
+    - name: ImportLegacyCertificateInput
+    - name: CurriculumSyncInput
+    - name: SaveOrgInviteInput
+    - name: GradedOnSyncInput
+    - name: ImportUsersInput
+    - name: ImportUsersConfig
+    - name: OrganizationProfilesInput
+    - name: Invite
+    - name: ImportOrganisationsInput
+    - name: ImportOrganisationsConfig
+    - name: ResourcePacksAddInput
+    - name: ResourcePacksReserveInput
+    - name: ValidateAndDispatchInvitesForIndirectCourseInput
+    - name: MergeOrganisationsInput
+    - name: NotifyInternalUsersOfInviteAttemptInput
+    - name: CheckTTClientsInput
+  objects:
+    - name: LinkProfileResult
+    - name: PlansCreateResult
+    - name: PlanObject
+    - name: createSubscriptionOutput
+    - name: isUserSubscribedToMembershipResponse
+    - name: DeclineInviteOutput
+    - name: DeclineOrgInviteOutput
+    - name: AcceptOrgInviteOutput
+    - name: CourseInvite
+    - name: OrgInvite
+    - name: Address
+    - name: UpsertZoomMeetingPayload
+    - name: ZoomMeeting
+    - name: ZoomMeetingNotFoundError
+    - name: TrainerLevels
+    - name: StripeCreatePaymentIntentOutput
+    - name: SearchTrainer
+    - name: Podcast
+    - name: PodcastsPayload
+    - name: PodcastPayload
+    - name: XeroConnectOutput
+    - name: XeroCallbackOutput
+    - name: XeroContactSearchOutput
+    - name: XeroContact
+    - name: XeroPhone
+    - name: XeroAddress
+    - name: CreateUserOutput
+    - name: InitAuthOutput
+    - name: GetCoursePricingOutput
+    - name: XeroInvoicesStatusOutput
+    - name: XeroInvoiceStatusKV
+    - name: XeroDisconnectOutput
+    - name: XeroInvoice
+    - name: XeroItem
+    - name: XeroLineItem
+    - name: Go1LicensesChangeOutput
+    - name: UpdateAvatarResponse
+    - name: CanApplyPromoCodeOutput
+    - name: CreateOrderOutput
+    - name: TransferCourse
+    - name: TransferParticipantOutput
+    - name: ReplaceParticipantOutput
+    - name: TrainerRoleTypeObj
+    - name: TrainerRoleType
+    - name: CourseCertificateLevel
+    - name: PromoCodeOutput
+    - name: ConfirmCreditCardPaymentOutput
+    - name: XeroTrackingCategory
+    - name: GetOrdersOutput
+    - name: Order
+    - name: OrderInfo
+    - name: OrganizationInfo
+    - name: MergeUserOutput
+    - name: DeleteUserOutput
+    - name: NotifyCourseEditOutput
+    - name: ApproveCourseOutput
+    - name: SendCourseInformationOutput
+    - name: CancelIndividualFromCourseWaitlistOutput
+    - name: CancelMyselfFromCourseWaitlistOutput
+    - name: JoinWaitlistOutput
+    - name: ZoomUser
+    - name: ZoomUsersResponse
+    - name: ZoomUsersResponseData
+    - name: DeleteMeetingOutput
+    - name: SignUpOutput
+    - name: ArloCallbackOutput
+    - name: RejectCourseOutput
+    - name: ImportArloCertificatesOutput
+    - name: XeroInvoiceSyncOutput
+    - name: BlendedLearningExportDataOutput
+    - name: BlendedLearningAttendeeExportData
+    - name: ImportLegacyCertificateOutput
+    - name: KnowledgeHubResource
+    - name: KnowledgeHubResourcesOutput
+    - name: CurriculumSyncOutput
+    - name: SampleOutput
+    - name: GradedOnSyncOutput
+    - name: ImportUsersOutput
+    - name: OrganizationProfilesOutput
+    - name: Organization
+    - name: UpcominEnrollment
+    - name: CourseCertificate
+    - name: ProfilesByOrganization
+    - name: ProfilesByLevel
+    - name: ProfileOrganization
+    - name: CourseParticipant
+    - name: Payload
+    - name: CourseCertificateChangelog
+    - name: OrganizationProfile
+    - name: UpcomingEnrollmentCourse
+    - name: scheduleAboutTrainingSurveysOutput
+    - name: DeleteOrganisationOutput
+    - name: EnrollmentCourseSchedule
+    - name: ImportArloCertificatesResponse
+    - name: ImportArloCertificatesError
+    - name: FailedImportEntries
+    - name: InvalidEntries
+    - name: ImportOrganisationsOutput
+    - name: Go1EnrollmentsSyncOutput
+    - name: CancelIndividualFromCourseOutput
+    - name: DbCleanOutput
+    - name: ResourcePacksAddOutput
+    - name: ResourcePacksReserveOutput
+    - name: ValidateAndDispatchInvitesForIndirectCourseOutput
+    - name: MergeOrganisationsOutput
+    - name: GetUserGO1EnrollmentsOutput
+    - name: GetUserGO1Enrollment
+    - name: LearningObject
+    - name: GO1LearningObject
+    - name: NotifyInternalUsersOfInviteAttemptOutput
+    - name: CheckTTClientsOutput
+  scalars:
+    - name: Date

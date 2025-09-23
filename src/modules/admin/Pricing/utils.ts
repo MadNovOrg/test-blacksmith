@@ -1,0 +1,678 @@
+import { GridRowsProp } from '@mui/x-data-grid'
+import {
+  areIntervalsOverlapping,
+  format,
+  isAfter,
+  isBefore,
+  isToday,
+  isValid,
+  isWithinInterval,
+  startOfDay,
+  startOfToday,
+} from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
+import { TFunction, t } from 'i18next'
+import { isEqual } from 'lodash'
+import * as yup from 'yup'
+
+import {
+  Course_Pricing_Schedule,
+  Course_Pricing,
+  Course_Level_Enum,
+  PricingChangelogQuery,
+} from '@app/generated/graphql'
+import { isNotNullish } from '@app/util'
+
+type PricingDates = {
+  pricingScheduleEffectiveFrom: Date | null
+  pricingScheduleEffectiveTo: Date | null
+  selectedEffectiveFrom?: Date | null
+  selectedEffectiveTo?: Date | null
+  isNewPricing?: boolean
+  isAgainstSelf?: boolean
+}
+
+export enum DatesValidation {
+  EFFECTIVE_FROM_EARLIER_THAN_TODAY = 'EFFECTIVE_FROM_EARLIER_THAN_TODAY',
+  INTERVALS_OVERLAP = 'INTERVALS_OVERLAP',
+  EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM = 'EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM',
+}
+export const datesValidationMap = new Map<DatesValidation, boolean | string>()
+export const validationAsMessages = new Map<DatesValidation, boolean | string>()
+
+export function getCourseAttributes(
+  t: TFunction,
+  coursePricing?: Course_Pricing | null,
+): string {
+  return [
+    coursePricing?.reaccreditation && t('reaccreditation'),
+    coursePricing?.blended && t('blended-learning'),
+  ]
+    .filter(Boolean)
+    .join(', ')
+}
+
+const today = startOfToday()
+
+export const getInitialRows = (
+  pricingSchedules: Course_Pricing_Schedule[] | undefined,
+): GridRowsProp => {
+  return (pricingSchedules ?? []).map(schedule => ({
+    id: schedule.id,
+    effectiveFrom: schedule.effectiveFrom,
+    effectiveTo: schedule.effectiveTo,
+    priceAmount: schedule.priceAmount,
+    priceCurrency: schedule.priceCurrency,
+    isNew: false,
+  }))
+}
+
+export const validatePricingDates = ({
+  pricingScheduleEffectiveFrom,
+  pricingScheduleEffectiveTo,
+  selectedEffectiveFrom,
+  selectedEffectiveTo,
+  isNewPricing,
+  isAgainstSelf,
+}: PricingDates) => {
+  let isValid = false
+
+  if (isNewPricing) {
+    isValid = validateDatesForNewPricings({
+      selectedEffectiveFrom,
+      selectedEffectiveTo,
+      pricingScheduleEffectiveFrom,
+      pricingScheduleEffectiveTo,
+    })
+  } else {
+    isValid = validateEditingExistingPrices({
+      selectedEffectiveFrom,
+      selectedEffectiveTo,
+      pricingScheduleEffectiveFrom,
+      pricingScheduleEffectiveTo,
+      isAgainstSelf,
+    })
+  }
+
+  if (!isValid) {
+    mapValidationToMessage()
+  }
+
+  return isValid
+}
+
+// Validates new pricing
+
+function validateDatesForNewPricings({
+  pricingScheduleEffectiveFrom,
+  pricingScheduleEffectiveTo,
+  selectedEffectiveFrom,
+  selectedEffectiveTo,
+}: PricingDates) {
+  if (!isNotNullish(selectedEffectiveFrom)) {
+    return false
+  }
+
+  if (
+    isEffectiveDateValidInterval(selectedEffectiveFrom, selectedEffectiveTo)
+  ) {
+    setValidationError(DatesValidation.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM)
+    return false
+  }
+
+  if (!isEffectiveDateGreaterThanToday(selectedEffectiveFrom)) {
+    setValidationError(DatesValidation.EFFECTIVE_FROM_EARLIER_THAN_TODAY)
+    return false
+  }
+
+  if (
+    intervalsOverlapForNewPricing(
+      selectedEffectiveFrom,
+      selectedEffectiveTo,
+      pricingScheduleEffectiveFrom,
+      pricingScheduleEffectiveTo,
+    )
+  ) {
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
+  }
+
+  if (
+    isEffectiveFromResidesInOtherInterval(
+      selectedEffectiveFrom,
+      pricingScheduleEffectiveFrom,
+      pricingScheduleEffectiveTo,
+      false,
+    )
+  ) {
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
+  }
+
+  if (
+    includesDatesFromOtherInterval(
+      selectedEffectiveFrom,
+      selectedEffectiveTo,
+      pricingScheduleEffectiveFrom,
+    )
+  ) {
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
+  }
+
+  return true
+}
+
+// Validates Editing
+function validateEditingExistingPrices({
+  selectedEffectiveFrom,
+  pricingScheduleEffectiveFrom,
+  pricingScheduleEffectiveTo,
+  isAgainstSelf,
+  selectedEffectiveTo,
+}: PricingDates): boolean {
+  if (!isNotNullish(selectedEffectiveFrom)) {
+    return false
+  }
+
+  if (
+    isEffectiveFromEarlierThanToday(
+      selectedEffectiveFrom,
+      pricingScheduleEffectiveFrom,
+      isAgainstSelf,
+    )
+  ) {
+    setValidationError(DatesValidation.EFFECTIVE_FROM_EARLIER_THAN_TODAY)
+    return false
+  }
+
+  if (
+    isEffectiveDateValidInterval(selectedEffectiveFrom, selectedEffectiveTo)
+  ) {
+    setValidationError(DatesValidation.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM)
+
+    return false
+  }
+
+  if (
+    isEffectiveFromResidesInOtherInterval(
+      selectedEffectiveFrom,
+      pricingScheduleEffectiveFrom,
+      pricingScheduleEffectiveTo,
+      isAgainstSelf,
+    )
+  ) {
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
+  }
+
+  if (
+    intervalsOverlap(
+      selectedEffectiveFrom,
+      selectedEffectiveTo,
+      pricingScheduleEffectiveFrom,
+      pricingScheduleEffectiveTo,
+      isAgainstSelf,
+    )
+  ) {
+    setValidationError(DatesValidation.INTERVALS_OVERLAP)
+    return false
+  }
+
+  return true
+}
+
+// Helper functions for validation
+function intervalsOverlapForNewPricing(
+  selectedEffectiveFrom: Date,
+  selectedEffectiveTo: Date | null | undefined,
+  pricingScheduleEffectiveFrom: Date | null,
+  pricingScheduleEffectiveTo: Date | null,
+) {
+  return (
+    selectedEffectiveFrom &&
+    selectedEffectiveTo &&
+    pricingScheduleEffectiveFrom &&
+    areIntervalsOverlapping(
+      { start: selectedEffectiveFrom, end: selectedEffectiveTo },
+      {
+        start: pricingScheduleEffectiveFrom,
+        end: pricingScheduleEffectiveTo ?? new Date(2199, 11, 31),
+      },
+      { inclusive: true },
+    )
+  )
+}
+
+function includesDatesFromOtherInterval(
+  selectedEffectiveFrom: Date,
+  selectedEffectiveTo: Date | null | undefined,
+  pricingScheduleEffectiveFrom: Date | null,
+) {
+  return (
+    selectedEffectiveFrom &&
+    !selectedEffectiveTo &&
+    pricingScheduleEffectiveFrom &&
+    (isAfter(pricingScheduleEffectiveFrom, selectedEffectiveFrom) ||
+      isEqual(pricingScheduleEffectiveFrom, selectedEffectiveFrom))
+  )
+}
+
+function isEffectiveFromEarlierThanToday(
+  selectedEffectiveFrom: Date,
+  pricingScheduleEffectiveFrom: Date | null,
+  isAgainstSelf: boolean | undefined,
+) {
+  if (!isAgainstSelf) return false
+
+  return Boolean(
+    selectedEffectiveFrom &&
+      pricingScheduleEffectiveFrom &&
+      yyyyMMddDateFormat(selectedEffectiveFrom) !==
+        yyyyMMddDateFormat(pricingScheduleEffectiveFrom) &&
+      !isEffectiveDateGreaterThanToday(selectedEffectiveFrom),
+  )
+}
+
+function isEffectiveDateValidInterval(
+  selectedEffectiveFrom: Date,
+  selectedEffectiveTo: Date | null | undefined,
+) {
+  return (
+    selectedEffectiveTo &&
+    isBefore(
+      startOfDay(new Date(selectedEffectiveTo)),
+      startOfDay(new Date(selectedEffectiveFrom)),
+    )
+  )
+}
+
+function isEffectiveFromResidesInOtherInterval(
+  selectedEffectiveFrom: Date,
+  pricingScheduleEffectiveFrom: Date | null,
+  pricingScheduleEffectiveTo: Date | null,
+  isAgainstSelf: boolean | undefined,
+) {
+  return (
+    !isAgainstSelf &&
+    pricingScheduleEffectiveFrom &&
+    pricingScheduleEffectiveTo &&
+    isEffectiveDateWithinInterval(selectedEffectiveFrom, {
+      start: pricingScheduleEffectiveFrom,
+      end: pricingScheduleEffectiveTo,
+    })
+  )
+}
+
+function intervalsOverlap(
+  selectedEffectiveFrom: Date,
+  selectedEffectiveTo: Date | null | undefined,
+  pricingScheduleEffectiveFrom: Date | null,
+  pricingScheduleEffectiveTo: Date | null,
+  isAgainstSelf: boolean | undefined,
+) {
+  return (
+    !isAgainstSelf &&
+    selectedEffectiveFrom &&
+    pricingScheduleEffectiveFrom &&
+    areIntervalsOverlapping(
+      {
+        start: startOfDay(selectedEffectiveFrom),
+        end: startOfDay(selectedEffectiveTo ?? new Date(2199, 11, 31)),
+      },
+      {
+        start: startOfDay(pricingScheduleEffectiveFrom),
+        end: startOfDay(pricingScheduleEffectiveTo ?? new Date(2199, 11, 31)),
+      },
+      { inclusive: true },
+    )
+  )
+}
+
+function isEffectiveDateGreaterThanToday(effectiveDate: Date): boolean {
+  const dateToCheck = startOfDay(effectiveDate)
+  return (
+    isAfter(dateToCheck, today) ||
+    (isToday(dateToCheck) && !isBefore(dateToCheck, today))
+  )
+}
+
+function isEffectiveDateWithinInterval(
+  effectiveDate: Date,
+  interval: Interval,
+): boolean {
+  const datesWithEqualHours = {
+    effectiveDate: startOfDay(effectiveDate),
+    interval: {
+      start: startOfDay(interval.start),
+      end: startOfDay(interval.end),
+    },
+  }
+
+  const {
+    effectiveDate: effectiveDateWithZeroGMT,
+    interval: intervalWithZeroGMT,
+  } = datesWithEqualHours
+  return isWithinInterval(effectiveDateWithZeroGMT, {
+    start: intervalWithZeroGMT.start,
+    end: intervalWithZeroGMT.end,
+  })
+}
+
+function setValidationError(validationType: DatesValidation) {
+  return datesValidationMap.set(validationType, true)
+}
+
+function mapValidationToMessage() {
+  validationAsMessages.clear()
+  datesValidationMap.forEach((value, key) =>
+    validationAsMessages.set(
+      key,
+      value === true
+        ? t(`pages.course-pricing.validation-errors.${key}`)
+        : value,
+    ),
+  )
+}
+
+export function resetValidationErrors() {
+  datesValidationMap.clear()
+}
+
+export function yyyyMMddDateFormat(date: Date): string {
+  return format(date, 'yyyy-MM-dd')
+}
+
+export const getSchema = ({
+  pricings,
+  isNewPricing,
+  rowId,
+}: {
+  pricings?: Course_Pricing_Schedule[]
+  isNewPricing: boolean
+  rowId: string
+}) => {
+  return yup.object({
+    effectiveFrom: yup
+      .string()
+      .required(
+        t('pages.course-pricing.validation-errors.effective-from-required'),
+      )
+      .test('validEffectiveFrom', '', (value, context) => {
+        const effectiveFrom = value
+        const effectiveTo = context.parent.effectiveTo
+        resetValidationErrors()
+
+        datesValidationMap.clear()
+
+        if (!pricings?.length) {
+          validatePricingDates({
+            pricingScheduleEffectiveFrom: null,
+            pricingScheduleEffectiveTo: null,
+            selectedEffectiveFrom: new Date(effectiveFrom),
+            selectedEffectiveTo: effectiveTo ? new Date(effectiveTo) : null,
+            isNewPricing,
+          })
+        }
+
+        pricings?.forEach(schedule => {
+          if (rowId === schedule.id) return
+          validatePricingDates({
+            pricingScheduleEffectiveFrom: new Date(schedule.effectiveFrom),
+            pricingScheduleEffectiveTo: schedule.effectiveTo
+              ? new Date(schedule.effectiveTo)
+              : null,
+            selectedEffectiveFrom: new Date(effectiveFrom),
+            selectedEffectiveTo: effectiveTo ? new Date(effectiveTo) : null,
+            isNewPricing,
+          })
+        })
+        if (datesValidationMap.size === 0) return true
+      }),
+    effectiveTo: yup
+      .string()
+      .test('validEffectiveTo', '', (value, context) => {
+        const effectiveTo = value
+        const effectiveFrom = context.parent.effectiveFrom
+        resetValidationErrors()
+
+        datesValidationMap.clear()
+
+        if (!pricings?.length && effectiveTo) {
+          validatePricingDates({
+            pricingScheduleEffectiveFrom: null,
+            pricingScheduleEffectiveTo: null,
+            selectedEffectiveTo: new Date(effectiveTo),
+            selectedEffectiveFrom: new Date(effectiveFrom),
+            isNewPricing,
+          })
+        }
+
+        pricings?.forEach(schedule => {
+          validatePricingDates({
+            pricingScheduleEffectiveFrom: new Date(schedule.effectiveFrom),
+            pricingScheduleEffectiveTo: schedule.effectiveTo
+              ? new Date(schedule.effectiveTo)
+              : null,
+            selectedEffectiveTo: effectiveTo ? new Date(effectiveTo) : null,
+            selectedEffectiveFrom: new Date(effectiveFrom),
+            isNewPricing,
+            isAgainstSelf: rowId === schedule.id,
+          })
+        })
+        if (datesValidationMap.size === 0) return true
+      })
+      .test(
+        'EffectiveToBeforeEffectiveFrom',
+        t(
+          'pages.course-pricing.validation-errors.EFFECTIVE_TO_BEFORE_EFFECTIVE_FROM',
+        ),
+        (value, context) => {
+          if (!value) return true
+          return (
+            zonedTimeToUtc(new Date(value), 'GMT') >=
+            zonedTimeToUtc(new Date(context?.parent.effectiveFrom), 'GMT')
+          )
+        },
+      )
+      .nullable(),
+    priceAmount: yup
+      .number()
+      .positive(
+        t('pages.course-pricing.validation-errors.price-amount-positive'),
+      )
+      .required(
+        t('pages.course-pricing.validation-errors.price-amount-required'),
+      ),
+  })
+}
+
+export const BILD_COURSE_LEVELS = [
+  Course_Level_Enum.BildRegular,
+  Course_Level_Enum.BildAdvancedTrainer,
+  Course_Level_Enum.BildIntermediateTrainer,
+]
+
+export const formatChangelogDate = (
+  date: PricingChangelogQuery['course_pricing_changelog'][number]['newEffectiveFrom'],
+) => {
+  return format(new Date(date), `dd MMMM yyyy`)
+}
+
+export const formatSchedulePriceDuration = (
+  changelog: Pick<
+    PricingChangelogQuery['course_pricing_changelog'][number],
+    | 'courseSchedulePrice'
+    | 'newEffectiveFrom'
+    | 'newEffectiveTo'
+    | 'oldEffectiveFrom'
+    | 'oldEffectiveTo'
+  >,
+) => {
+  const {
+    courseSchedulePrice,
+    newEffectiveFrom,
+    newEffectiveTo,
+    oldEffectiveFrom,
+    oldEffectiveTo,
+  } = changelog
+
+  let from = ''
+  let to = ''
+
+  if (
+    !newEffectiveFrom &&
+    !newEffectiveTo &&
+    !oldEffectiveFrom &&
+    !oldEffectiveTo
+  ) {
+    if (
+      !isValid(new Date(courseSchedulePrice?.effectiveFrom)) ||
+      !isValid(new Date(courseSchedulePrice?.effectiveTo))
+    ) {
+      return '-'
+    }
+
+    from = format(new Date(courseSchedulePrice?.effectiveFrom), 'dd MMMM yyyy')
+    to = format(new Date(courseSchedulePrice?.effectiveTo), 'dd MMMM yyyy')
+  } else {
+    const isInsertChangelog =
+      newEffectiveFrom && newEffectiveTo && !oldEffectiveFrom && !oldEffectiveTo
+
+    const isOldEffectiveToInfinite = !oldEffectiveTo && !isInsertChangelog
+
+    from = format(
+      new Date(isInsertChangelog ? newEffectiveFrom : oldEffectiveFrom),
+      'dd MMMM yyyy',
+    )
+    const effectiveToDate = isInsertChangelog ? newEffectiveTo : oldEffectiveTo
+
+    to = isOldEffectiveToInfinite
+      ? t('pages.course-pricing.indefinite')
+      : format(new Date(effectiveToDate), 'dd MMMM yyyy')
+  }
+
+  return `${from ?? ''}${to ? ' - ' + to : ''}`
+}
+
+export const getChangelogEvents = (
+  changelog: Pick<
+    PricingChangelogQuery['course_pricing_changelog'][number],
+    | 'coursePricing'
+    | 'indefiniteEffectiveTo'
+    | 'newEffectiveFrom'
+    | 'newEffectiveTo'
+    | 'newPrice'
+    | 'oldEffectiveFrom'
+    | 'oldEffectiveTo'
+    | 'oldPrice'
+  >,
+  t: TFunction,
+) => {
+  const events: string[] = []
+  const {
+    indefiniteEffectiveTo,
+    newEffectiveFrom,
+    newEffectiveTo,
+    newPrice,
+    oldEffectiveFrom,
+    oldEffectiveTo,
+    oldPrice,
+  } = changelog
+
+  const isChangelogPriceCreation =
+    !oldPrice && !oldEffectiveFrom && !oldEffectiveTo
+
+  const isChangelogPriceDelete =
+    !newPrice && !newEffectiveFrom && !newEffectiveTo && !indefiniteEffectiveTo
+
+  if (isChangelogPriceCreation) {
+    events.push(
+      t('pages.course-pricing.modal-changelog-insert-event', {
+        newPrice: t('currency', {
+          amount: changelog.newPrice,
+          currency: changelog.coursePricing.priceCurrency,
+        }),
+      }),
+    )
+  } else if (isChangelogPriceDelete) {
+    events.push(
+      t('pages.course-pricing.modal-changelog-delete-event', {
+        oldPrice: t('currency', {
+          amount: changelog.oldPrice,
+          currency: changelog.coursePricing.priceCurrency,
+        }),
+      }),
+    )
+  } else {
+    const changedPrice = oldPrice && newPrice
+    const effectiveFromChanged = oldEffectiveFrom && newEffectiveFrom
+    const effectiveToChanged = newEffectiveTo
+
+    if (changedPrice) {
+      events.push(
+        t('pages.course-pricing.modal-changelog-update-price-event', {
+          oldPrice: t('currency', {
+            amount: changelog.oldPrice,
+            currency: changelog.coursePricing.priceCurrency,
+          }),
+          newPrice: t('currency', {
+            amount: changelog.newPrice,
+            currency: changelog.coursePricing.priceCurrency,
+          }),
+        }),
+      )
+    }
+
+    if (effectiveFromChanged) {
+      events.push(
+        t('pages.course-pricing.modal-changelog-update-effective-from-event', {
+          newDate: formatChangelogDate(newEffectiveFrom),
+          oldDate: formatChangelogDate(oldEffectiveFrom),
+        }),
+      )
+    }
+
+    if (effectiveToChanged || indefiniteEffectiveTo) {
+      events.push(
+        t('pages.course-pricing.modal-changelog-update-effective-to-event', {
+          newDate: newEffectiveTo
+            ? formatChangelogDate(newEffectiveTo)
+            : t('pages.course-pricing.indefinite'),
+          oldDate: oldEffectiveTo
+            ? formatChangelogDate(oldEffectiveTo)
+            : t('pages.course-pricing.indefinite'),
+        }),
+      )
+    }
+  }
+
+  return events
+}
+
+export const getChangelogDuration = (
+  changelogs: PricingChangelogQuery['course_pricing_changelog'],
+) => {
+  if (changelogs[0].courseSchedulePrice) {
+    return {
+      from: changelogs[0].courseSchedulePrice.effectiveFrom,
+      to: changelogs[0].courseSchedulePrice.effectiveTo,
+    }
+  }
+
+  const deleteChangelog = changelogs.find(
+    changelog =>
+      !(
+        changelog.newPrice &&
+        changelog.newEffectiveFrom &&
+        changelog.newEffectiveTo
+      ),
+  )
+
+  if (deleteChangelog) {
+    return {
+      from: deleteChangelog.oldEffectiveFrom,
+      to: deleteChangelog.oldEffectiveTo,
+    }
+  }
+}

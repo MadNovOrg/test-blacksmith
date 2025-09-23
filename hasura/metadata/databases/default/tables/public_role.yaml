@@ -1,0 +1,76 @@
+table:
+  name: role
+  schema: public
+array_relationships:
+  - name: profile_roles
+    using:
+      foreign_key_constraint_on:
+        column: role_id
+        table:
+          name: profile_role
+          schema: public
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - name
+        - data
+        - rank
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - name
+        - rank
+        - data
+        - id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - name
+        - data
+        - rank
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - data
+        - id
+        - name
+        - rank
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - data
+        - id
+        - name
+        - rank
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - data
+        - id
+        - name
+        - rank
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - name
+        - rank
+        - data
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - name
+        - data
+        - rank
+      filter: {}

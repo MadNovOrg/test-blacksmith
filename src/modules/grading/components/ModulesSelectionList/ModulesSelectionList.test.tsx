@@ -1,0 +1,275 @@
+import React from 'react'
+
+import { _render, chance, screen, within, userEvent } from '@test/index'
+
+import { ModulesSelectionList, Props } from '.'
+
+describe('component: ModulesSelectionList', () => {
+  it('renders module groups and modules within groups', () => {
+    const moduleGroups: Props['moduleGroups'] = [
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
+        ],
+      },
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+        ],
+      },
+    ]
+
+    _render(<ModulesSelectionList moduleGroups={moduleGroups} />)
+
+    moduleGroups.forEach(moduleGroup => {
+      const groupElement = screen.getByTestId(`module-group-${moduleGroup.id}`)
+
+      expect(screen.getByText(moduleGroup.name)).toBeInTheDocument()
+
+      moduleGroup.modules.forEach(module => {
+        const moduleCheckbox = within(groupElement).getByLabelText(module.name)
+
+        if (module.covered) {
+          expect(moduleCheckbox).toBeChecked()
+        } else {
+          expect(moduleCheckbox).not.toBeChecked()
+        }
+      })
+    })
+  })
+
+  it('toggles module selection within module group when module item is clicked', async () => {
+    const moduleGroups: Props['moduleGroups'] = [
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
+        ],
+      },
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+        ],
+      },
+    ]
+
+    const onChangeMock = vi.fn()
+
+    _render(
+      <ModulesSelectionList
+        moduleGroups={moduleGroups}
+        onChange={onChangeMock}
+      />,
+    )
+
+    await userEvent.click(
+      screen.getByLabelText(moduleGroups[0].modules[0].name),
+    )
+
+    expect(
+      screen.getByLabelText(moduleGroups[0].modules[0].name),
+    ).not.toBeChecked()
+
+    expect(onChangeMock.mock.calls[0][0]).toEqual({
+      [moduleGroups[0].modules[0].id]: false,
+      [moduleGroups[0].modules[1].id]: false,
+      [moduleGroups[1].modules[0].id]: true,
+      [moduleGroups[1].modules[1].id]: true,
+    })
+
+    await userEvent.click(
+      screen.getByLabelText(moduleGroups[0].modules[0].name),
+    )
+
+    expect(screen.getByLabelText(moduleGroups[0].modules[0].name)).toBeChecked()
+
+    expect(onChangeMock.mock.calls[1][0]).toEqual({
+      [moduleGroups[0].modules[0].id]: true,
+      [moduleGroups[0].modules[1].id]: false,
+      [moduleGroups[1].modules[0].id]: true,
+      [moduleGroups[1].modules[1].id]: true,
+    })
+
+    expect(onChangeMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('toggles whole module group when module group item is clicked', async () => {
+    const moduleGroups: Props['moduleGroups'] = [
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
+        ],
+      },
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+        ],
+      },
+    ]
+
+    const onChangeMock = vi.fn()
+
+    _render(
+      <ModulesSelectionList
+        moduleGroups={moduleGroups}
+        onChange={onChangeMock}
+      />,
+    )
+
+    await userEvent.click(screen.getByLabelText(moduleGroups[1].name))
+
+    expect(screen.getByLabelText(moduleGroups[1].name)).not.toBeChecked()
+
+    expect(onChangeMock.mock.calls[0][0]).toEqual({
+      [moduleGroups[0].modules[0].id]: true,
+      [moduleGroups[0].modules[1].id]: false,
+      [moduleGroups[1].modules[0].id]: false,
+      [moduleGroups[1].modules[1].id]: false,
+    })
+
+    await userEvent.click(screen.getByLabelText(moduleGroups[1].name))
+
+    expect(screen.getByLabelText(moduleGroups[1].name)).toBeChecked()
+
+    expect(onChangeMock.mock.calls[1][0]).toEqual({
+      [moduleGroups[0].modules[0].id]: true,
+      [moduleGroups[0].modules[1].id]: false,
+      [moduleGroups[1].modules[0].id]: true,
+      [moduleGroups[1].modules[1].id]: true,
+    })
+  })
+
+  it('marks group as indeterminate if only some modules are checked within the group', () => {
+    const moduleGroups: Props['moduleGroups'] = [
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+        ],
+      },
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        mandatory: false,
+        modules: [
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: true,
+            submodules: [],
+          },
+          {
+            id: chance.guid(),
+            name: chance.name(),
+            covered: false,
+            submodules: [],
+          },
+        ],
+      },
+    ]
+
+    _render(<ModulesSelectionList moduleGroups={moduleGroups} />)
+
+    expect(screen.getByLabelText(moduleGroups[1].name)).not.toBeChecked()
+    expect(screen.getByLabelText(moduleGroups[1].name)).toHaveAttribute(
+      'data-indeterminate',
+      'true',
+    )
+  })
+})

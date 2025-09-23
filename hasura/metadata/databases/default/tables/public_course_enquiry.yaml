@@ -1,0 +1,59 @@
+table:
+  name: course_enquiry
+  schema: public
+configuration:
+  column_config:
+    course_id:
+      custom_name: courseId
+    family_name:
+      custom_name: familyName
+    given_name:
+      custom_name: givenName
+    org_name:
+      custom_name: orgName
+  custom_column_names:
+    course_id: courseId
+    family_name: familyName
+    given_name: givenName
+    org_name: orgName
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - interest
+        - message
+        - org_name
+        - phone
+        - sector
+        - source
+select_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - interest
+        - message
+        - org_name
+        - phone
+        - sector
+        - source
+        - created_at
+        - id
+      filter: {}
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}

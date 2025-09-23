@@ -1,0 +1,77 @@
+name: CHANGESETS TESTS
+
+# This workflow triggers after the changesets PR has been opened. Due to limitations
+# in the way GitHub handles tokens, the PR must be opened and closed before this workflow
+# will run. The purpose of this workflow is to re-run the tests to satisfy the branch
+# protection rules on the repository.
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  lint-and-typecheck:
+    if: startsWith(github.head_ref, 'changeset-release/')
+    name: Lint & Typecheck
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '9.15.5'
+
+      - name: Build
+        uses: actions/setup-node@v5
+        with:
+          node-version: '18.14.2'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm pkg delete scripts.prepare && pnpm i --no-frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+  test:
+    if: startsWith(github.head_ref, 'changeset-release/')
+    name: test
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '9.15.5'
+
+      - name: Build
+        uses: actions/setup-node@v5
+        with:
+          node-version: '18.14.2'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm pkg delete scripts.prepare && pnpm i --no-frozen-lockfile
+
+      - name: Test
+        run: pnpm test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }}

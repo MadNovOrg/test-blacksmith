@@ -1,0 +1,451 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { LoadingButton } from '@mui/lab'
+import {
+  Alert,
+  Box,
+  Button,
+  Link,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { UseFormReset, UseFormSetValue } from 'react-hook-form'
+import { Trans, useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
+import useWorldCountries from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
+import {
+  BildStrategy,
+  Course_Exception_Enum,
+  Course_Level_Enum,
+  Course_Trainer_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import ChooseTrainers, {
+  FormValues,
+} from '@app/modules/course/components/ChooseTrainers'
+import { CourseExceptionsConfirmation } from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation'
+import {
+  checkCourseDetailsForExceptions,
+  isTrainersRatioNotMet,
+} from '@app/modules/course/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { isModeratorNeeded } from '@app/rules/trainers'
+import {
+  CourseTrainer,
+  InviteStatus,
+  TrainerInput,
+  TrainerRoleType,
+  TrainerRoleTypeName,
+} from '@app/types'
+import {
+  LoadingStatus,
+  bildStrategiesToArray,
+  checkIsETA,
+  checkIsEmployerAOL,
+} from '@app/util'
+import { getRequiredLeads } from '@app/util/trainerRatio'
+
+import { useSaveCourse } from '../../hooks/useSaveCourse'
+import { StepsEnum } from '../../types'
+import { useCreateCourse } from '../CreateCourseProvider'
+
+const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
+  if (!trainers) {
+    return []
+  }
+
+  return [
+    ...trainers.assist.map(assistant => ({
+      profile_id: assistant.id,
+      type: Course_Trainer_Type_Enum.Assistant,
+      fullName: assistant.fullName,
+      levels: assistant.levels,
+      seniorOrPrincipalLeader: false,
+      trainer_role_types: assistant.trainer_role_types,
+    })),
+    ...trainers.moderator.map(moderator => ({
+      profile_id: moderator.id,
+      type: Course_Trainer_Type_Enum.Moderator,
+      fullName: moderator.fullName,
+      levels: moderator.levels,
+      seniorOrPrincipalLeader: false,
+      trainer_role_types: moderator.trainer_role_types,
+    })),
+    ...trainers.lead.map(trainer => ({
+      profile_id: trainer.id,
+      type: Course_Trainer_Type_Enum.Leader,
+      fullName: trainer.fullName,
+      levels: trainer.levels,
+      trainer_role_types: trainer.trainer_role_types,
+    })),
+  ]
+}
+
+const now = new Date()
+
+const trainerInputToCourseTrainer = (
+  trainers: TrainerInput[] = [],
+): CourseTrainer[] =>
+  trainers.map(t => ({
+    profile: {
+      id: t.profile_id,
+      fullName: t.fullName ?? '',
+      givenName: t.fullName?.split(' ')[0] ?? '',
+      familyName: t.fullName?.split(' ').slice(-1)[0] ?? '',
+      email: '',
+      phone: '',
+      dob: '',
+      jobTitle: '',
+      avatar: '',
+      title: '',
+      tags: null,
+      dietaryRestrictions: null,
+      disabilities: null,
+      addresses: [],
+      attributes: [],
+      contactDetails: [],
+      preferences: [],
+      organizations: [],
+      roles: [],
+      trainer_role_types:
+        t.trainer_role_types as CourseTrainer['profile']['trainer_role_types'],
+      lastActivity: now,
+      createdAt: now.toISOString(),
+      levels: t.levels,
+    },
+    type: t.type,
+    status: InviteStatus.PENDING,
+    id: t.profile_id,
+    levels: t.levels,
+  }))
+
+export const AssignTrainers = () => {
+  const { t } = useTranslation()
+  const { acl } = useAuth()
+  const { isUKCountry } = useWorldCountries()
+  const { completeStep, courseData, setCurrentStepKey, setTrainers, trainers } =
+    useCreateCourse()
+  const { addSnackbarMessage } = useSnackbar()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isAustraliaRegion = acl.isAustralia()
+
+  const navigate = useNavigate()
+  const [trainersDataValid, setTrainersDataValid] = useState(false)
+  const [seniorOrPrincipalLead, setSeniorOrPrincipalLead] = useState(false)
+  const [isETA, setIsETA] = useState(false)
+  const [isEmployerAOL, setIsEmployerAOL] = useState(false)
+  const { savingStatus, saveCourse } = useSaveCourse()
+  const [courseExceptions, setCourseExceptions] = useState<
+    Course_Exception_Enum[]
+  >([])
+  const methods = useRef<{
+    formValues: FormValues
+    reset: UseFormReset<FormValues>
+    setValue: UseFormSetValue<FormValues>
+  }>(null)
+
+  const needsModerator = useMemo(() => {
+    if (!courseData) return false
+
+    return isModeratorNeeded({
+      courseLevel: courseData.courseLevel,
+      courseType: courseData.type,
+      isConversion: courseData.conversion,
+    })
+  }, [courseData])
+
+  useEffect(() => {
+    setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)
+  }, [setCurrentStepKey])
+
+  useEffect(() => {
+    if (!needsModerator) {
+      if (
+        trainers.some(
+          trainer => trainer.type === Course_Trainer_Type_Enum.Moderator,
+        ) &&
+        setTrainers
+      ) {
+        setTrainers(
+          trainers.filter(
+            trainer => trainer.type !== Course_Trainer_Type_Enum.Moderator,
+          ),
+        )
+      }
+
+      if (methods.current?.formValues.moderator.length) {
+        methods.current?.setValue('moderator', [], { shouldValidate: true })
+      }
+    }
+  }, [needsModerator, setTrainers, trainers])
+
+  const handleTrainersDataChange = useCallback(
+    (data: FormValues, isValid: boolean) => {
+      setSeniorOrPrincipalLead(
+        data.lead.some(lead =>
+          lead.trainer_role_types.some(
+            ({ trainer_role_type: role }) =>
+              role?.name === TrainerRoleTypeName.SENIOR ||
+              role?.name === TrainerRoleTypeName.PRINCIPAL,
+          ),
+        ),
+      )
+      setIsETA(
+        data.lead.some(lead =>
+          checkIsETA(lead.trainer_role_types as TrainerRoleType[]),
+        ),
+      )
+      setIsEmployerAOL(
+        data.lead.some(lead =>
+          checkIsEmployerAOL(lead.trainer_role_types as TrainerRoleType[]),
+        ),
+      )
+      setTrainers(formValuesToTrainerInput(data))
+      setTrainersDataValid(isValid)
+    },
+    [setTrainers],
+  )
+
+  const requireOrderDetails = useMemo(
+    () =>
+      acl.isInternalUser() &&
+      courseData?.type === Course_Type_Enum.Indirect &&
+      Boolean(courseData?.blendedLearning || courseData?.resourcePacksType),
+    [
+      acl,
+      courseData?.blendedLearning,
+      courseData?.resourcePacksType,
+      courseData?.type,
+    ],
+  )
+
+  const submit = useCallback(async () => {
+    if (courseData && trainers) {
+      let nextPage: string
+      if (courseData.type === Course_Type_Enum.Closed) {
+        nextPage = '../trainer-expenses'
+      } else if (requireOrderDetails) {
+        nextPage = '../license-order-details'
+      } else {
+        const savedCourse = await saveCourse()
+
+        addSnackbarMessage('course-created', {
+          label: (
+            <Trans
+              i18nKey="pages.create-course.submitted-course"
+              values={{ code: savedCourse?.courseCode }}
+            >
+              <Link
+                underline="always"
+                href={`/manage-courses/all/${savedCourse?.id}/details`}
+              >
+                {savedCourse?.courseCode}
+              </Link>
+            </Trans>
+          ),
+        })
+
+        nextPage =
+          acl.isTTAdmin() || acl.isSalesAdmin()
+            ? `/courses/${savedCourse?.id}/details`
+            : '/courses'
+
+        if (!savedCourse?.id) {
+          return
+        }
+      }
+
+      completeStep(StepsEnum.ASSIGN_TRAINER)
+      navigate(nextPage)
+    }
+  }, [
+    courseData,
+    trainers,
+    requireOrderDetails,
+    completeStep,
+    navigate,
+    saveCourse,
+    addSnackbarMessage,
+    acl,
+  ])
+
+  const handleSubmitButtonClick = useCallback(async () => {
+    if (courseData) {
+      const exceptions = checkCourseDetailsForExceptions(
+        {
+          ...courseData,
+          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+          usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
+          isETA: isETA,
+          isEmployerAOL: isEmployerAOL,
+          isUKCountry: isUKCountry(courseData.residingCountry),
+          isAustraliaRegion: acl.isAustralia(),
+        },
+        trainers,
+        acl.isAustralia(),
+      )
+      if (
+        courseData.type === Course_Type_Enum.Closed &&
+        exceptions.length > 0
+      ) {
+        setCourseExceptions(exceptions)
+      } else {
+        await submit()
+      }
+    }
+  }, [
+    acl,
+    courseData,
+    isETA,
+    isEmployerAOL,
+    isUKCountry,
+    seniorOrPrincipalLead,
+    submit,
+    trainers,
+  ])
+
+  const requiredLeaders = useMemo(() => {
+    if (courseData) {
+      return getRequiredLeads(courseData.type, acl.isTrainer())
+    } else {
+      return { max: 1, min: 0 }
+    }
+  }, [acl, courseData])
+
+  const showTrainerRatioWarning = useMemo(() => {
+    if (
+      isAustraliaRegion &&
+      courseData?.courseLevel === Course_Level_Enum.FoundationTrainer
+    ) {
+      return false
+    }
+    return (
+      courseData?.courseLevel &&
+      isTrainersRatioNotMet(
+        {
+          ...courseData,
+          level: courseData.courseLevel,
+          max_participants: courseData.maxParticipants,
+          usesAOL: courseData.usesAOL,
+          isTrainer: acl.isTrainer(),
+          isUKCountry: isUKCountry(courseData.residingCountry),
+          isAustraliaRegion: acl.isAustralia(),
+        },
+        trainers.map(trainer => ({
+          type: trainer.type,
+          trainer_role_types: trainer.trainer_role_types,
+        })),
+      )
+    )
+  }, [acl, isAustraliaRegion, courseData, isUKCountry, trainers])
+
+  if (!courseData) {
+    return (
+      <Alert
+        severity="error"
+        variant="outlined"
+        data-testid="AssignTrainers-alert"
+      >
+        {t('pages.create-course.course-not-found')}
+      </Alert>
+    )
+  }
+
+  return courseData ? (
+    <>
+      {savingStatus === LoadingStatus.ERROR ? (
+        <Alert variant="outlined" severity="error" sx={{ mb: 2 }}>
+          {t('pages.create-course.error-creating-course')}
+        </Alert>
+      ) : null}
+      <Stack spacing={5}>
+        <ChooseTrainers
+          courseType={courseData.type}
+          courseLevel={courseData.courseLevel}
+          courseSchedule={{
+            start: courseData.startDateTime,
+            end: courseData.endDateTime,
+          }}
+          onChange={handleTrainersDataChange}
+          trainers={trainerInputToCourseTrainer(trainers)}
+          isReAccreditation={courseData.reaccreditation}
+          isConversion={courseData.conversion}
+          requiredLeaders={requiredLeaders}
+          bildStrategies={
+            bildStrategiesToArray(
+              courseData.bildStrategies,
+            ) as unknown as BildStrategy[]
+          }
+          methodsRef={methods}
+          useAOL={courseData.usesAOL}
+        />
+
+        {showTrainerRatioWarning ? (
+          <Alert
+            severity="warning"
+            variant="outlined"
+            sx={{ mt: 1 }}
+            data-testid="trainer-ratio-exception"
+          >
+            {t(
+              `pages.create-course.exceptions.type_${Course_Exception_Enum.TrainerRatioNotMet}`,
+            )}
+          </Alert>
+        ) : null}
+
+        <Box
+          display="flex"
+          flexDirection={isMobile ? 'column' : 'row'}
+          justifyContent="space-between"
+          sx={{ marginTop: 4 }}
+        >
+          <Box mb={2}>
+            <Button
+              onClick={() => navigate(`../../new?type=${courseData.type}`)}
+              startIcon={<ArrowBackIcon />}
+            >
+              {t('pages.create-course.assign-trainers.back-btn')}
+            </Button>
+          </Box>
+          <Box mb={2}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              disabled={!trainersDataValid}
+              loading={savingStatus === LoadingStatus.FETCHING}
+              endIcon={<ArrowForwardIcon />}
+              fullWidth={isMobile}
+              data-testid="AssignTrainers-submit"
+              onClick={handleSubmitButtonClick}
+            >
+              {(() => {
+                if (courseData.type === Course_Type_Enum.Closed)
+                  return t(
+                    'pages.create-course.step-navigation-trainer-expenses',
+                  )
+
+                return requireOrderDetails
+                  ? t('pages.create-course.step-navigation-order-details')
+                  : t('pages.create-course.assign-trainers.submit-btn')
+              })()}
+            </LoadingButton>
+          </Box>
+        </Box>
+
+        <CourseExceptionsConfirmation
+          open={courseExceptions.length > 0}
+          onCancel={() => setCourseExceptions([])}
+          onSubmit={submit}
+          exceptions={courseExceptions}
+          courseType={courseData?.type}
+        />
+      </Stack>
+    </>
+  ) : null
+}

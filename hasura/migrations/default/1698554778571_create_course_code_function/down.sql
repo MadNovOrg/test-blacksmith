@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS course_state(course);

@@ -1,0 +1,96 @@
+name: E2E Tests by Folder
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        default: 'DEV'
+        description: 'Environment - "DEV/STG"'
+        required: true
+        type: choice
+        options:
+          - DEV
+          - STG
+      folder:
+        default: courses
+        description: 'The folder used to run selected tests'
+        required: true
+        type: choice
+        options:
+          - auth
+          - blog
+          - booking
+          - certificate
+          - courses/accept
+          - courses/build
+          - courses/cancel
+          - courses/create
+          - courses/edit
+          - courses/evaluate
+          - courses/manage
+          - courses/view
+          - ebooks
+          - go1-licensing
+          - grading
+          - membership-home
+          - orders
+          - organisations
+          - permissions
+          - podcasts
+          - post-category
+          - post-tag
+          - profile
+          - queries
+          - research-summaries
+          - video-series
+          - webinars
+
+jobs:
+  tests:
+    name: E2E Tests by Folder
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      DEFAULT_TARGET: 'DEV'
+      E2E: true
+    strategy:
+      matrix:
+        browsers: ['chromium']
+    steps:
+      - name: Set Environment Variables
+        run: |
+          echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
+          echo "CI=${{ env.CI }}" >> $GITHUB_ENV
+          echo "E2E=${{ env.E2E }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '9.15.5'
+
+      - name: Build
+        uses: actions/setup-node@v5
+        with:
+          node-version: '18.14.2'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm pkg delete scripts.prepare && pnpm install --no-frozen-lockfile
+
+      - name: Playwright setup
+        run: pnpx playwright install
+
+      - name: Playwright tests
+        id: playwright
+        run: pnpm nx e2e:${{ matrix.browsers }} @teamteach/hub.web-e2e playwright/tests/${{ github.event.inputs.folder }}
+
+      - name: Playwright report
+        uses: actions/upload-artifact@v4
+        if: failure() && steps.playwright.outcome == 'failure'
+        with:
+          name: test-artifacts
+          path: test-results

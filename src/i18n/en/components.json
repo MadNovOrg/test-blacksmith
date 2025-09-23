@@ -1,0 +1,652 @@
+{
+  "course-hero-summary": {
+    "notes-label": "Additional notes",
+    "instructions-label": "See special instructions"
+  },
+  "error-page": {
+    "title": "Sorry! Something went wrong...",
+    "message": "We have been notified about the issue and are working on fixing it.",
+    "back-btn-text": "Home"
+  },
+  "fees-form": {
+    "fees-radio-group-title": "Will any fees apply?",
+    "apply-terms-option": "Apply terms",
+    "custom-fee-option": "Custom fee",
+    "custom-fee-label": "Amount",
+    "no-fee-option": "No fees"
+  },
+  "replace-participant": {
+    "title": "Replace attendee",
+    "description": "This action will replace the original attendee with the new attendee details entered below. Course instructions will be sent to the relevant details provided and the order will be updated accordingly.",
+    "participant-title": "Original attendee",
+    "invite-title": "New attendee",
+    "email-placeholder": "Email address *",
+    "first-name-placeholder": "First name *",
+    "surname-placeholder": "Surname *",
+    "alert-message": "<strong>Important:</strong> Please ensure the email address is entered correctly and is for the participant attending the course.",
+    "cancel-btn-text": "Close",
+    "submit-btn-text": "Replace attendee",
+    "replacement-error": "There was an error replacing the participant.",
+    "replacement-error-INVALID_EMAIL": "Invite email is already registered on the course.",
+    "terms-notice": "I confirm that the billing details remain the same for this booking in line with Team Teach <strong><termsOfBusinessLink>Terms of Business.</termsOfBusinessLink></strong>"
+  },
+  "not-found": {
+    "title": "Page not found",
+    "info": "Either you followed an invalid link or you do not have access to view this page. Please use the main navigation to find your way."
+  },
+  "certification-details": {
+    "certification-passed": "Certification Passed",
+    "course-passed-on": "Course passed on {{date, date_default}}",
+    "remaining": "remaining",
+    "digital-certificate": "Digital Certificate",
+    "dbs-certificate": "DBS Certificate",
+    "feedback": "Feedback",
+    "view-or-download-here": "View or download here"
+  },
+  "venue-selector": {
+    "title": "Venue",
+    "placeholder": "Start typing venue name or address",
+    "min-chars-label": "Please type at least 3 characters for suggestions.",
+    "google-maps-api-error": "Unknown error while communicating with Google Maps API.",
+    "suggestions": "Suggestions",
+    "venues": "Venues",
+    "modal": {
+      "title": "Confirm venue details",
+      "description": "Before you add this venue, please confirm the location details below.",
+      "submit": "Add as venue",
+      "fields": {
+        "name": "Venue name",
+        "addressLineOne": "Address line 1",
+        "addressLineTwo": "Address line 2 (optional)",
+        "city": "Town/City",
+        "postCode": "Postcode",
+        "zipCode": "Zip code",
+        "country": "Select country"
+      }
+    },
+    "no-results": "No results found.",
+    "add-new-venue": "Add new venue?"
+  },
+  "organization-dropdown": {
+    "title": "Select Organisations"
+  },
+  "organisation-region": {
+    "region": "Region",
+    "stateTerritory": "State/Territory",
+    "postal-address-state-territory": "Postal Address State/Territory",
+    "state": "State",
+    "territory": "Territory"
+  },
+  "suspense-loading": {
+    "text": "Loading..."
+  },
+  "create-course-menu": {
+    "button-text": "Create course",
+    "open-course-label": "Open course",
+    "closed-course-label": "Closed course",
+    "indirect-course-label": "Indirect course",
+    "bulk-import-label": "Bulk import open courses",
+    "tooltip-text": "You don't have the proper certificate for course creation"
+  },
+  "role-switcher": {
+    "subtitle": "Switch Role",
+    "user": "Individual",
+    "trainer": "Trainer",
+    "tt-ops": "Operations",
+    "tt-admin": "Administrator",
+    "sales-representative": "Sales representative",
+    "sales-admin": "Sales administrator",
+    "ld": "L&D",
+    "finance": "Finance",
+    "booking-contact": "Booking contact",
+    "organization-key-contact": "Organisation key contact",
+    "organization-admin": "Organisation administrator"
+  },
+  "course-form": {
+    "zoom-user": "Zoom User",
+    "general-details-title": "General details",
+    "organization-label": "Commissioning organisation",
+    "organization-key-contact-label": "Organisation key contact",
+    "contact-person-label": "Booking contact",
+    "course-level-section-title": "Course level and attributes",
+    "course-level-placeholder": "Course level",
+    "blended-learning-label": "Blended learning",
+    "blended-learning-price-label": "If not already pre-purchased by the chosen organisation, each additional license will result in a {{currency}}{{price}} (plus VAT) fee per person attending this course.",
+    "resource-packs-alert": "If not already pre-purchased by the chosen organisation, each additional Resource Packs will result in additional fee per person attending this course. Resource Pack costings are based on a per person fee, dependent on the option selected and course being delivered. If you would like to bulk purchase licenses, please get in contact with <0><1>{{email}}</1></0>.",
+    "blended-learning-price-label-anz": "If not already pre-purchased by the chosen organisation, each additional license will result in a {{currency}}{{price}}{{gstWording}} fee per person attending this course. If you would like to bulk purchase licenses, please get in contact with <0><1>{{email}}</1></0>",
+    "resource-pack-digital-workbook": "Digital Workbook & Connect",
+    "resource-pack-print-workbook": {
+      "EXPRESS": "Print Workbook (Express Delivery) & Connect",
+      "STANDARD": "Print Workbook (Standard Delivery) & Connect"
+    },
+    "reaccreditation-label": "Reaccreditation",
+    "conversion-label": "Conversion course",
+    "delivery-type-section-title": "Delivery type",
+    "f2f-option-label": "Face to face",
+    "virtual-option-label": "Virtual",
+    "mixed-option-label": "Both",
+    "start-datepicker-section-title": "Starts",
+    "start-date-placeholder": "Start date",
+    "organisation-required": "Organisation is a required field",
+    "start-date-required": "Start date is required field",
+    "start-date-in-the-past": "Start date cannot be in the past",
+    "min-start-date": "Start date should not be earlier than {{date, date_default}}",
+    "min-end-date": "End date should not be earlier than {{date, date_default}}",
+    "start-time-required": "Start time is required field",
+    "start-date-format": "Start date must be a valid date",
+    "start-time-placeholder": "Start time",
+    "end-datepicker-section-title": "Ends",
+    "end-date-placeholder": "End date",
+    "end-date-required": "End date is required field",
+    "end-date-in-the-past": "End date cannot be in the past",
+    "end-date-format": "End date must be a valid date",
+    "end-time-placeholder": "End time",
+    "end-time-required": "End time is required field",
+    "resource-packs-section-title": "Resource Packs",
+    "attendees-section-title": "Attendees",
+    "attendees-number-title": "How many attendees?",
+    "attendees-edit-label": "Trainer and attendee ratio can only be edited in accordance with Team Teach training protocols and your pre-approved Training Needs Analysis.",
+    "attendees-description": "Assist trainer(s) may be required based on the number of attendees.",
+    "min-attendees-placeholder": "Minimum",
+    "max-attendees-placeholder": "Maximum",
+    "num-attendees-placeholder": "Number of attendees",
+    "free-course-materials": {
+      "section-title": "Course Materials",
+      "panel-title": "Number of free Mandatory Course Materials",
+      "panel-description": "All attendees will receive course materials: however, additional {{mcmAmount}} will be charged per person. Please enter the amount of free course materials you wish the organisation not to be charged for.",
+      "placeholder-description": "Number of free Mandatory Course Materials",
+      "amount-of-mandatory-mcm": "Chargeable Mandatory Course Materials: {{count}}",
+      "errors": {
+        "is-required": "Number of free Mandatory Course Materials must have a value that is less than or equal to the number of attendees",
+        "is-negative": "Number of free Course Materials value cannot be negative",
+        "more-fcm-than-attendees-create": "Number of free Mandatory Course Materials value should not be greater than the number of attendees",
+        "more-fcm-than-attendees-edit": "Free Mandatory Course Materials must have a value that is less than or equal to the number of attendees"
+      }
+    },
+    "resource-packs": {
+      "section-title": "Resource Packs",
+      "section-description": "In accordance with Terms of Business and training protocols, all training from January 2025, will require participants to have a mandatory <strong>Resource Pack</strong> for both new and refresher courses. Resource packs include the latest edition workbook & access to <strong>Team Teach Connect</strong>, our innovative new training platform. View more information on resource packs <resourcePacksOrdersLink>here</resourcePacksOrdersLink>.\n If you require resource packs with paper copy workbooks within the next four weeks, we strongly recommend selecting express delivery to ensure timely arrival.",
+      "panel-title": "Number of free Resource Packs",
+      "panel-description": "All attendees will receive Resource Packs: however, additional {{mcmAmount}} will be charged per person. Please enter the amount of free Resource Packs you wish the organisation not to be charged for.",
+      "placeholder-description": "Number of free Resource Packs",
+      "amount-of-mandatory-mcm": "Chargeable Resource Packs*: {{count}}",
+      "errors": {
+        "is-required": "Number of free Resource Packs must have a value that is less than or equal to the number of attendees",
+        "is-negative": "Number of free Resource Packs value cannot be negative",
+        "more-fcm-than-attendees-create": "Number of free Resource Packs value should not be greater than the number of attendees",
+        "more-fcm-than-attendees-edit": "Number of free Resource Packs must have a value that is less than or equal to the number of attendees"
+      }
+    },
+    "course-level-required": "Course level is required field",
+    "end-date-before-start-date": "End date must be after the start date",
+    "resource-packs-type-required": "Resource Pack option is required",
+    "min-participants-positive": "Minimum number of attendees must be a positive number",
+    "min-participants-required": "Minimum number of attendees is required field",
+    "min-participants-less-than": "Minimum number of attendees must be less than the maximum number of attendees",
+    "max-participants-required": "Maximum number of attendees is required field",
+    "max-participants-positive": "Maximum number of attendees must be a positive number",
+    "max-participants-exceeded": "Number of participants cannot be greater than ",
+    "min-required-max-participants": "The max number of participants cannot be less than the sum of current attendees count and pending invites count",
+    "attendees-number-exceeds-trainer-ratio-message": "Number of attendees exceeds current trainer ratio",
+    "venue-required": "Venue is required field",
+    "online-meeting-link-label": "Online meeting link",
+    "online-meeting-link-required": "Online meeting link is a required field",
+    "contact-person-placeholder": "Contact name",
+    "contact-person-error": "Contact name is a required field",
+    "aol-title": "Area Operating License (AOL)",
+    "aol-label": "Is this course being delivered under a Team Teach Area Operating Licence?",
+    "aol-label-yes": "Yes, I am delivering under an active licence.",
+    "aol-label-no": "No, I am delivering directly to my organisation/employer.",
+    "course-cost-placeholder": "Cost of course (Per person)",
+    "course-cost": "How much are you charging for this course?",
+    "course-cost-title": "Course Cost",
+    "course-cost-positive-number-error": "Course cost must be a positive number",
+    "course-cost-required-error": "Provide the price of the course",
+    "course-cost-disclaimer": "Team Teach is not responsible for collecting fees for this course",
+    "country": "Country",
+    "aol-region": "AOL Region",
+    "free-spaces-title": "Free Spaces",
+    "free-spaces-description": "This will add free spaces onto the order and invoice for the given organisation selected",
+    "free-spaces-placeholder": "Number of free spaces",
+    "free-spaces-required": "Free spaces is a required field",
+    "free-spaces-less-equal": "Free spaces must be less or equal to the maximum number of attendees",
+    "finance-section-title": "Finance",
+    "standard-pricing": "Standard pricing",
+    "custom-pricing": "Custom pricing",
+    "sales-rep-title": "Sales",
+    "sales-rep-placeholder": "Sales representative",
+    "sales-rep-error": "Sales representative is a required field",
+    "source-label": "How did you hear about us?",
+    "source-title": "Source",
+    "booking-contact": "Booking contact",
+    "booking-contact-residing-country-helper-text": "Please select the country this contact currently lives in",
+    "account-code-title": "Account Code",
+    "price-placeholder": "Price per attendee",
+    "price": "Price",
+    "price-error": "Price is a required field",
+    "price-number-error": "Price per attendee must be a positive number",
+    "price-required-error": "Price per attendee is a required field",
+    "course-level-one-info": "Please be aware some holds may fall under Level Two certification.",
+    "arlo-migrated-courses-only": "This only applies to courses that have been migrated from Arlo",
+    "arlo-migrated-courses-only-anz": "This only applies to courses that have been migrated historically",
+    "name-and-surname-validation-info": "Please ensure that the name and surname you enter here exactly match the upper- and lower-case versions of your full name from your profile. Additionally, please make sure that there are no additional spaces saved at the end of your name or surname.",
+    "indirect-course-assist-trainer-info": "Please make sure the person you add is registered and holds a valid trainer certificate.",
+    "aol-info": "Please be aware that any training delivered outside of a licenced area would be invalidated by Team Teach and may cause the licence to be removed.",
+    "timezone-info": "Please note that the course time and date you set corresponds to the time zone of the country in which the course will take place (course residing country)",
+    "select-one-option": "Please mark at least one of the options above",
+    "reset-instructions-button": "Reset to default",
+    "bild-strategies-required": "At least one BILD strategy should be selected",
+    "renewal-cycle-required": "Course renewal cycle is a required field",
+    "timezone-required": "Time zone is a required field",
+    "special-instructions": {
+      "title": "Special instructions",
+      "subtitle": "Please ensure you include all applicable course information i.e. twilight dates, online training links, and any other relevant details.",
+      "modal-title": "Reset to default special instructions",
+      "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?",
+      "instructions": {
+        "CLOSED": {
+          "ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
+          },
+          "BILD_ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One or Two Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li></ul>"
+          },
+          "BILD_INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One, Level Two or BILD Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
+          },
+          "LEVEL_1": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
+          },
+          "LEVEL_2": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
+          },
+          "LEVEL_1_BS": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
+          },
+          "FOUNDATION_TRAINER_PLUS": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
+          }
+        },
+        "OPEN": {
+          "ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "BILD_ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One or Two Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "BILD_INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One, Level Two or BILD Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "LEVEL_1": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments are provided as part of the course cost; however, lunch will not be included. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
+          },
+          "LEVEL_2": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments are provided as part of the course cost; however, lunch will not be included. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          }
+        }
+      },
+      "instructions-anz": {
+        "CLOSED": {
+          "ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
+          },
+          "BILD_ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One or Two Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, such as a driving license or passport.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer certificate.</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "BILD_INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One, Level Two or BILD Certificate</span></li></ul>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
+          },
+          "LEVEL_1": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
+          },
+          "LEVEL_2": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
+          },
+          "LEVEL_1_BS": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>"
+          },
+          "FOUNDATION_TRAINER_PLUS": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
+          }
+        },
+        "OPEN": {
+          "ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "BILD_ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One or Two Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, such as a driving license or passport.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer certificate.</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "BILD_INTERMEDIATE_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Level One, Level Two or BILD Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach BILD Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "conversion": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments and lunch are provided as part of the course cost. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          },
+          "LEVEL_1": {
+            "F2F": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments are provided as part of the course cost; however, lunch will not be included. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>",
+            "VIRTUAL": "<p dir=\"ltr\"><span>This course is non-physical and will be delivered virtually via Zoom.</span></p>"
+          },
+          "LEVEL_2": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Refreshments</strong></b></u></p><p dir=\"ltr\"><span>Refreshments are provided as part of the course cost; however, lunch will not be included. If you have any dietary requirements, please ensure this is noted on your profile accordingly and we will accommodate where possible.</span></p>"
+          }
+        }
+      }
+    },
+    "parking-instructions": {
+      "title": "Parking instructions",
+      "modal-title": "Reset parking instructions to default value",
+      "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?"
+    },
+    "save-button-text": "Save changes",
+    "display-toggle-label": "Display on Website",
+    "tender-course-label": "Tender course",
+    "settings-section-title": "Settings",
+    "renewal-cycle": {
+      "panel-title": "Course renewal cycle",
+      "label": "Certificate duration",
+      "radio-label_one": "{{count}} year",
+      "radio-label_other": "{{count}} years"
+    },
+    "residing-country": "Course Residing Country"
+  },
+  "searchTrainers": {
+    "loading": "Loading...",
+    "noResults": "No trainers found. Try another search term.",
+    "placeholder": "Search eligible trainers...",
+    "maxReachedPlaceholder": "(max allowed reached)"
+  },
+  "profile-selector": {
+    "placeholder": "Search for a profile",
+    "min-chars": "Start typing to get suggestions",
+    "no-results": "No results found."
+  },
+  "org-selector": {
+    "title": "Organisation name",
+    "residing-org": "Residing Organisation",
+    "placeholder": "Start typing organisation post code, address or name",
+    "post-code-placeholder": "Start typing organisation post code",
+    "post-code-and-name-placeholder": "Start typing organisation name or post code/zip code",
+    "post-code-and-name-placeholder-anz": "Start typing organisation name or post code",
+    "no-results": "No organisations found",
+    "no-individuals": "No individuals found",
+    "start-typing": "Please start typing for suggestions.",
+    "modal": {
+      "title": "Add Organisation"
+    },
+    "dfe-suggestions": "Suggestions from Department for Education",
+    "tt-suggestions": "Suggestions from Team Teach",
+    "existing-organizations": "Found in Team Teach Connect",
+    "add-manually": "Create new organisation",
+    "request-creation": "Can’t find your Organisation?",
+    "request-creation-sub": "In case you could not find your Organisation, please fill out the form",
+    "my-organizations": "My organisations"
+  },
+  "add-organisation": {
+    "component-title": "Add Organisation",
+    "fields": {
+      "organisation-name": "Organisation name",
+      "organisation-type": "Organisation type",
+      "organisation-specify-other": "Please specify",
+      "organisation-email": "Organisation email",
+      "organisation-phone": "Organisation phone",
+      "sector": "Sector",
+      "primary-address-line": "Address line 1",
+      "secondary-address-line": "Address line 2",
+      "city": "Town/City",
+      "postCode": "Post code",
+      "zipCode": "Zip code",
+      "residing-country": "Residing Country",
+      "region": "Region",
+      "stateTerritory": "State/Territory",
+      "state": "State",
+      "territory": "Territory"
+    },
+    "already-exists": "Organisation already exists. Please select from the list."
+  },
+  "user-selector": {
+    "placeholder": "User email",
+    "min-chars": "Start typing to get suggestions",
+    "no-results": "No user found"
+  },
+  "certification-list": {
+    "title": "Certifications",
+    "organisation": "Organisation",
+    "manage-selected": "Manage selected ({{ number }})",
+    "download-certifications": "Download certification(s)",
+    "download-selected": "Download selected ({{ number }})",
+    "update-certifications": "Update certification(s)",
+    "download-all-certifications": "Download all certifications",
+    "date-obtained": "Date obtained",
+    "date-expired": "Date Expired",
+    "grade": "Grade",
+    "certificate": "Certificate",
+    "view-certificate": "View certificate",
+    "contact": "Email",
+    "name": "Name",
+    "status": "Status",
+    "course-code": "Course code",
+    "status-expired": "Expired",
+    "status-active": "Active",
+    "status-expired_recently": "Expired Recently",
+    "status-expiring_soon": "Expiring Soon",
+    "status-revoked": "Revoked"
+  },
+  "changelog-modal": {
+    "date-of-action": "Date of Action",
+    "dates": "Start / End date",
+    "new-dates": "Dates",
+    "notes": "Notes",
+    "administrator": "Administrator",
+    "date": "Date",
+    "change": "Change",
+    "revoked": "Revoked",
+    "unrevoked": "Unrevoked",
+    "put_on_hold": "On Hold"
+  },
+  "accept-decline-course": {
+    "accept": "Accept",
+    "decline": "Decline",
+    "declined": "Declined",
+    "modal_ACCEPT": {
+      "title": "Ready to build the course?",
+      "title-MODERATOR": "Moderate course",
+      "title-ASSISTANT": "Assist course",
+      "msg": "After you have accepted a course, you must confirm the modules and techniques that will be covered.",
+      "msg-ASSISTANT": "Upon accepting this invitation, you can see a full overview of the course.",
+      "msg-MODERATOR": "Upon accepting this invitation, you can see a full overview of the course.",
+      "cancel": "Cancel",
+      "submit": "Continue to course builder",
+      "submit-ASSISTANT": "Accept",
+      "submit-MODERATOR": "Accept"
+    },
+    "modal_DECLINE": {
+      "title": "Are you sure you want to decline this course?",
+      "msg": "You will no longer have access to this course once you have declined.",
+      "cancel": "Cancel",
+      "submit": "Decline"
+    }
+  },
+  "footer": {
+    "follow": "Follow Team Teach"
+  },
+  "table-no-rows": {
+    "itemsName": "records",
+    "noRecords-first": "No {{itemsName}} at this time",
+    "noMatches-first": "No matching {{itemsName}} found",
+    "noMatches-second": "Please adjust your filter or search criteria"
+  },
+  "trainer-avatar-group": {
+    "lead-trainer": "Lead",
+    "assist-trainer": "Assist",
+    "moderator": "Moderator"
+  },
+  "course-enquiry-form": {
+    "required-first-name": "First name is required",
+    "required-last-name": "Last name is required",
+    "required-email": "Email is required",
+    "required-interest": "Interest is required",
+    "required-organization": "Organisation name is required",
+    "required-sector": "Sector is required",
+    "required-phone": "Phone is required",
+    "interest-label": "What is your interest?",
+    "email-label": "Work email",
+    "source-label": "How did you hear about us? (optional)",
+    "message-label": "Message (optional)",
+    "participants-label": "Number of course participants",
+    "participants-negative": "Number of participants must be positive number",
+    "submit-button-label": "Enquire now",
+    "source-word-of-mouth": "Word of mouth",
+    "source-facebook": "Facebook",
+    "source-twitter": "Twitter",
+    "source-linkedin": "LinkedIn",
+    "source-instagram": "Instagram",
+    "source-reddit": "Reddit",
+    "source-email": "Email",
+    "source-google": "Google",
+    "source-bing": "Bing",
+    "source-other-search": "Other search engine",
+    "source-telemarketing": "Tele-marketing",
+    "source-leaflet": "Leaflet/Brochure"
+  },
+  "selectLevels": {
+    "placeholder": "Search course level(s)"
+  },
+  "selectCourses": {
+    "btn-browse": "Browse courses",
+    "loading": "Loading...",
+    "no-results": "No courses found. Try another search.",
+    "modal-title": "Select course(s)",
+    "modal-hint": "This applies discounts to existing courses (e.g. Scheduled, Draft, or Trainer Pending)."
+  },
+  "invoice-details": {
+    "title": "Invoice contact details",
+    "billing-address": "Billing address",
+    "organization-name": "Organisation name"
+  },
+  "audit-filtering-sidebar": {
+    "filter-by-date": "Filter by date"
+  },
+  "filter-dates": {
+    "validation": {
+      "end-date-before-start-date": "The date is before the start date",
+      "start-date-after-end-date": "The date is after the end date",
+      "invalid-date": "The date is invalid"
+    }
+  },
+  "profile-archive-dialog": {
+    "title": "Archive profile",
+    "confirmation-message": "Are you sure you want to archive user {{firstName}} {{lastName}} with the email {{email}}? Archiving a user will remove them from view from within Connect and make them unable to log in to their account. The archived user will not be visible to organisation admins and all non-admin Team Teach employees. This action can not be undone.",
+    "trainer-for-courses": "This user is a trainer for course(s):",
+    "trainer-for-courses-action": "To archive this user, they cannot be assigned as a trainer for any course that hasn’t been completed or cancelled.",
+    "course-participant": "This user is an attendee in course(s):",
+    "course-participant-action": "To archive this user, their attendance needs to be cancelled from these courses.",
+    "archive": "Archive"
+  },
+  "profile-delete-dialog": {
+    "title": "Delete Confirmation",
+    "confirmation-title": "Are you sure you want to delete user \"{{firstName}} {{lastName}}\" with the email \"{{email}}\"?",
+    "confirmation-message": "Deleting a user will remove them completely from Connect and this action cannot be undone. The user will need to re-register an account to gain to access to Connect.",
+    "confirmation-warning": "Please confirm that you wish to proceed with this action.",
+    "delete": "Delete",
+    "error": {
+      "message": "User \"{{firstName}} {{lastName}}\" with the email \"{{email}}\" cannot be deleted due to the following reason(s):",
+      "delete-error": "An error occurred while deleting the user.",
+      "no-delete-trainer": "This user is a trainer for course(s): {{courseIds}}.",
+      "no-delete-active-course": "This user has pending/unfinished course(s): {{courseIds}}.",
+      "no-delete-certified": "Can not delete user with a certificate."
+    }
+  },
+  "course-instructions-dialog": {
+    "special-title": "Special instructions",
+    "parking-title": "Parking"
+  },
+  "course-source-dropdown": {
+    "placeholder": "Select source",
+    "error": "Source is a required field"
+  },
+  "request-a-quote": {
+    "looking-for-private-course": "Looking for a private course?",
+    "enquire-now": "Enquire now",
+    "more-info": "Find out about the advantages of running a course in your own organisation. Contact us on <0>{{email}}</0> or request a quote using the button below."
+  },
+  "get-started-modal": {
+    "title": "Get started Guide"
+  },
+  "attendance-toggle": {
+    "error": "There was an error saving attendance."
+  },
+  "bulk-attendance-button": {
+    "label_zero": "Mark attendance",
+    "label_one": "Mark attendance ({{count}})",
+    "label_other": "Mark attendance ({{count}})",
+    "error": "There was an error marking attendance."
+  },
+  "import-certificate-dialog": {
+    "code-input-label": "Enter certificate number",
+    "submit-button-text": "Add certificate",
+    "ALREADY_IMPORTED-error": "This certificate has already been imported",
+    "UNSUPPORTED_LEVEL-error": "This certificate level isn't supported via Connect, please contact Team Teach",
+    "PROFILE_NO_MATCH-error": "Personal information on the certificate doesn't match profile's personal information",
+    "CERTIFICATE_NOT_FOUND-error": "We could not locate this certificate, please contact Team Teach.",
+    "generic-error": "There was an error importing certificate"
+  },
+  "update-version-dialog": {
+    "title": "Important Update Required",
+    "content": "A new and improved version of Team Teach Connect is now available!",
+    "update": "Update now"
+  },
+  "insights-report-splash-screen": {
+    "multiple-managed-orgs-body": "Compare progress, spot trends, and make informed decisions.<br/>Choose a school to start exploring.",
+    "multiple-managed-orgs-subtitle": "If you have Headteachers or SLT in your schools, you can invite them as an Organisation Admins from your organisation dashboards under the <strong>'Individuals'</strong> tab to benefit from these Insights.",
+    "multiple-managed-orgs-title": "Your schools' stories are ready.",
+    "one-managed-org-body": "Explore progress, trends, and opportunities in your Insights Report.",
+    "one-managed-org-subtitle": "If you have Headteachers or SLT in your school, you can invite them as Organisation Admins from your organisation dashboards under the <strong>'Individuals'</strong> tab to benefit from these Insights.",
+    "one-managed-org-title": "How is your school performing?"
+  },
+  "organisation-admin-nomination-splash-screen": {
+    "title": "Insights Report for your Organisation - For Headteachers & SLT",
+    "body": "See trends, track progress, and turn data into action — available exclusively to Organisation Admins only.<br/>If you're a Headteacher or part of the SLT, speak to your Organisation Admin or contact Team Teach to request access using link <linkToNominate>here</linkToNominate>."
+  }
+}

@@ -1,0 +1,4 @@
+table:
+  name: cud_operation
+  schema: public
+is_enum: true

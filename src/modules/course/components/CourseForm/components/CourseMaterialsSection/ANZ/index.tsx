@@ -1,0 +1,1 @@
+export { CourseMaterialsSection } from './CourseMaterialsSection'

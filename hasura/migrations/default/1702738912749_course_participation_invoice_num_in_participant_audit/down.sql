@@ -1,0 +1,1 @@
+DROP FUNCTION public.participant_audit_participation_order_invoice_number(audit_row course_participant_audit)

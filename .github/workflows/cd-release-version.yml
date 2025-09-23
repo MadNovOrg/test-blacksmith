@@ -1,0 +1,176 @@
+name: Production Deployment
+
+on:
+  pull_request:
+    types:
+      - closed
+
+permissions:
+  id-token: write
+  contents: write
+  issues: write
+
+jobs:
+  fetch-version:
+    if: ${{ github.event.pull_request.merged == true && ((startsWith(github.event.pull_request.head.ref, 'changeset-release/') && github.event.pull_request.base.ref == 'main') || (startsWith(github.event.pull_request.head.ref, 'hotfix-release/') && github.event.pull_request.base.ref == 'hotfix_release_branch')) }}
+    name: Fetch Version
+    runs-on: ubuntu-latest
+    outputs:
+      RELEASE_VERSION: ${{ steps.get.outputs.RELEASE_VERSION }}
+      RELEASE_TAG: ${{ steps.create_tag.outputs.RELEASE_TAG }}
+    steps:
+      - name: Determine Checkout Ref
+        id: determine_checkout_ref
+        run: |
+          if [[ "${{ github.event.pull_request.base.ref }}" == "hotfix_release_branch" ]]; then
+            echo "CHECKOUT_REF=hotfix_release_branch" >> $GITHUB_ENV
+          else
+            echo "CHECKOUT_REF=${{ github.head_ref }}" >> $GITHUB_ENV
+          fi
+      - name: Checkout
+        uses: actions/checkout@v5
+        # with:
+        #   ref: ${{ env.CHECKOUT_REF }}
+      - name: Fetch Version
+        id: get
+        run: |
+          RELEASE_VERSION=$(grep -oP '"version":\s*"\K[0-9]+\.[0-9]+\.[0-9]+' package.json)
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "::set-output name=RELEASE_VERSION::$RELEASE_VERSION"
+      - name: Create Tag
+        id: create_tag
+        run: |
+          TAG_NAME="RC-${{ env.RELEASE_VERSION }}"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+          echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
+          echo "::set-output name=RELEASE_TAG::$TAG_NAME"
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.create_tag.outputs.RELEASE_TAG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  label-check:
+    name: Determine Deployment Region
+    if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) }}
+    runs-on: ubuntu-latest
+    outputs:
+      region: ${{ steps.label-check.outputs.region }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Check Labels for Region
+        id: label-check
+        run: |
+          labels=$(echo '${{ toJson(github.event.pull_request.labels) }}' | jq -r '.[].name')
+          echo "Labels on this PR: $labels"
+
+          region="None"
+          if echo "$labels" | grep -q "Release - Both"; then
+            region="Both"
+          elif echo "$labels" | grep -q "Release - UK"; then
+            region="UK"
+          elif echo "$labels" | grep -q "Release - Australia"; then
+            region="ANZ"
+          fi
+
+          echo "Determined region: $region"
+          echo "::set-output name=region::$region"
+
+  manage-hotfix-release-branch:
+    name: Manage Hotfix Release Branch
+    runs-on: ubuntu-latest
+    needs: fetch-version
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'changeset-release/') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Delete Existing hotfix_release_branch
+        run: |
+          git push origin --delete hotfix_release_branch || true
+      - name: Create hotfix_release_branch from Latest Tag
+        run: |
+          git fetch origin --tags
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          git checkout -b hotfix_release_branch $LATEST_TAG
+          git push origin hotfix_release_branch --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Protect hotfix_release_branch
+        run: |
+          curl -X PUT -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.luke-cage-preview+json" \
+            https://api.github.com/repos/${{ github.repository }}/branches/hotfix_release_branch/protection \
+            -d '{"required_status_checks":{"strict":true,"contexts":[]},"enforce_admins":true,"required_pull_request_reviews":{"dismiss_stale_reviews":true},"restrictions":null}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  prod-cd:
+    name: UK Production Deployment
+    needs: [fetch-version, label-check]
+    if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) && (needs.label-check.outputs.region == 'UK' || needs.label-check.outputs.region == 'Both') }}
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
+      aws_region: 'eu-west-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD }}
+      wp_host: ${{ secrets.WP_HOST_PROD }}
+      s3_bucket: ${{ secrets.S3_BUCKET_PROD }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_PROD }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      hubspot_register_form: ${{ secrets.HUBSPOT_REGISTER_FORM }}
+      hubspot_login_form: ${{ secrets.HUBSPOT_LOGIN_FORM }}
+      frontend_distribution: ${{ secrets.FRONTEND_DISTRO_PROD }}
+
+  prod-cd-anz:
+    name: ANZ Production Deployment
+    needs: [fetch-version, label-check]
+    if: ${{ (github.event.pull_request.merged == true) && ( (startsWith(github.head_ref, 'changeset-release/')) || (startsWith(github.head_ref, 'hotfix-release/')) ) && (needs.label-check.outputs.region == 'ANZ' || needs.label-check.outputs.region == 'Both') }}
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      version: ${{ needs.fetch-version.outputs.RELEASE_VERSION }}
+      aws_region: 'ap-southeast-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_PROD_ANZ }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_PROD_ANZ }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_PROD_ANZ }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_PROD_ANZ }}
+      wp_host: ${{ secrets.WP_HOST_PROD_ANZ }}
+      s3_bucket: ${{ secrets.S3_BUCKET_PROD_ANZ }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_PROD_ANZ }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD_ANZ }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY_ANZ }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      frontend_distribution: ${{ secrets.FRONTEND_DISTRO_PROD_ANZ }}
+
+  zap-baseline-scan-uk:
+    name: ZAP Baseline Scan
+    needs: [prod-cd]
+    uses: ./.github/workflows/owasp.yml
+    with:
+      full: false
+      target_url: 'https://connect.teamteach.com'
+      artifact_name: 'connect.teamteach.com'
+
+  zap-baseline-scan-anz:
+    name: ZAP Baseline Scan
+    needs: [prod-cd-anz]
+    uses: ./.github/workflows/owasp.yml
+    with:
+      full: false
+      target_url: 'https://connect.teamteach.com.au'
+      artifact_name: 'connect.teamteach.com.au'

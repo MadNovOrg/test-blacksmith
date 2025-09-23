@@ -1,0 +1,86 @@
+name: CD-STG
+
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        type: choice
+        description: 'Select the region to deploy to'
+        required: true
+        default: 'Both'
+        options:
+          - 'UK'
+          - 'Australia'
+          - 'Both'
+
+permissions:
+  id-token: write
+  contents: write
+  issues: write
+
+jobs:
+  stg-cd:
+    if: ${{ github.event.inputs.region == 'UK' || github.event.inputs.region == 'Both' }}
+    name: Deploy
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      mode: 'staging'
+      aws_region: 'eu-west-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG }}
+      wp_host: ${{ secrets.WP_HOST_STG }}
+      s3_bucket: ${{ secrets.S3_BUCKET_STG }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_STG }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY_STG }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      frontend_distribution: ${{ secrets.FRONTEND_DISTRO_STG }}
+
+  stg-cd-anz:
+    if: ${{ github.event.inputs.region == 'Australia' || github.event.inputs.region == 'Both' }}
+    name: Deploy
+    uses: ./.github/workflows/pipeline.yml
+    with:
+      mode: 'staging'
+      aws_region: 'ap-southeast-2'
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG_ANZ }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG_ANZ }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG_ANZ }}
+      hasura_ws_endpoint: ${{ secrets.HASURA_WS_ENDPOINT_STG_ANZ }}
+      wp_host: ${{ secrets.WP_HOST_STG_ANZ }}
+      s3_bucket: ${{ secrets.S3_BUCKET_STG_ANZ }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_STG_ANZ }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG_ANZ }}
+      gmaps_key: ${{ secrets.GMAPS_KEY }}
+      recaptcha_key: ${{ secrets.RECAPTCHA_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY_STG_ANZ }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}
+      sentry_auth_token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      frontend_distribution: ${{secrets.FRONTEND_DISTRO_STG_ANZ}}
+
+  zap-full-scan-anz:
+    name: OWASP ZAP Baseline Scan
+    needs: [stg-cd-anz]
+    uses: ./.github/workflows/owasp.yml
+    if: ${{ github.event.inputs.region == 'Australia' || github.event.inputs.region == 'Both' }}
+    with:
+      full: false
+      target_url: 'https://stg.connect.teamteach.com.au'
+      artifact_name: 'stg.connect.teamteach.com.au'
+
+  zap-full-scan-uk:
+    name: OWASP ZAP Baseline Scan
+    needs: [stg-cd]
+    uses: ./.github/workflows/owasp.yml
+    if: ${{ github.event.inputs.region == 'UK' || github.event.inputs.region == 'Both' }}
+    with:
+      full: false
+      target_url: 'https://stg.connect.teamteach.com'
+      artifact_name: 'stg.connect.teamteach.com'

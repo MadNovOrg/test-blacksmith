@@ -1,0 +1,168 @@
+table:
+  name: resource_packs_pricing
+  schema: public
+array_relationships:
+  - name: org_resource_packs_pricings
+    using:
+      foreign_key_constraint_on:
+        column: resource_packs_pricing_id
+        table:
+          name: org_resource_packs_pricing
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - AUD_price
+        - NZD_price
+        - course_level
+        - course_type
+        - id
+        - reaccred
+        - resource_packs_delivery_type
+        - resource_packs_type
+      filter: {}
+    comment: ""

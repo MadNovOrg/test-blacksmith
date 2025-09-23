@@ -1,0 +1,144 @@
+table:
+  name: course_certificate_changelog
+  schema: public
+configuration:
+  column_config:
+    author_id:
+      custom_name: authorId
+    created_at:
+      custom_name: createdAt
+    participant_id:
+      custom_name: participantId
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    author_id: authorId
+    created_at: createdAt
+    participant_id: participantId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: author
+    using:
+      foreign_key_constraint_on: author_id
+  - name: participant
+    using:
+      foreign_key_constraint_on: participant_id
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+        - author_id
+        - participant_id
+        - payload
+        - type
+  - role: tt-admin
+    permission:
+      check:
+        participant:
+          certificate:
+            is_revoked:
+              _eq: false
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+        - author_id
+        - participant_id
+        - payload
+        - type
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+        - author_id
+        - id
+        - participant_id
+        - payload
+        - type
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - author_id
+        - id
+        - participant_id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter:
+        author_id:
+          _eq: X-Hasura-User-Id
+  - role: user
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter:
+        author_id:
+          _eq: X-Hasura-User-Id

@@ -1,0 +1,3 @@
+table:
+  name: scheduled_events_view
+  schema: public

@@ -1,0 +1,27 @@
+- role_name: booking-contact
+  role_set:
+    - user
+- role_name: finance
+  role_set:
+    - trainer
+- role_name: ld
+  role_set:
+    - tt-ops
+- role_name: organization-key-contact
+  role_set:
+    - user
+- role_name: sales-admin
+  role_set:
+    - trainer
+- role_name: sales-representative
+  role_set:
+    - trainer
+- role_name: trainer
+  role_set:
+    - user
+- role_name: tt-admin
+  role_set:
+    - tt-ops
+- role_name: tt-ops
+  role_set:
+    - trainer

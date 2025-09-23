@@ -1,0 +1,269 @@
+table:
+  name: submission_of_splash_screens
+  schema: public
+insert_permissions:
+  - role: anonymous
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: booking-contact
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: finance
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: ld
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: sales-admin
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: sales-representative
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: trainer
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: tt-admin
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: tt-ops
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: unverified
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+  - role: user
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - profile_id
+        - splash_screen
+    comment: ""
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: booking-contact
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: finance
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: organization-key-contact
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: unverified
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - splash_screen
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""

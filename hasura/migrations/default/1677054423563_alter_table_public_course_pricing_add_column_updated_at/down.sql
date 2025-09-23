@@ -1,0 +1,1 @@
+alter table "public"."course_pricing" drop column "updated_at";

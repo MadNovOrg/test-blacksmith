@@ -1,0 +1,31 @@
+DELETE FROM "public"."organization_type" WHERE "name" = E'International Primary';
+DELETE FROM "public"."organization_type" WHERE "name" = E'International Secondary';
+DELETE FROM "public"."organization_type" WHERE "name" = E'International 3 - 18';
+DELETE FROM "public"."organization_type" WHERE "name" = E'International Special';
+
+DELETE FROM "public"."organization_type" WHERE "name" = E'Acquired Brain Injury';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Adult Day Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Dementia / Alzheimer\'s';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Healthcare';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Learning Disabilities';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Long Term Care Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Mental Health Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Older Adults';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Rehabilitation Settings';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Residential Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Short Breaks';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Social Care';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Substance Misuse Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Supported Living';
+
+DELETE FROM "public"."organization_type" WHERE "name" = E'CAMHS';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Children\'s Homes';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Early Years';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Foster Care';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Healthcare';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Residential Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Short Breaks';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Social Care';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Specialist Learning Disability Services';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Supported Living';
+DELETE FROM "public"."organization_type" WHERE "name" = E'Youth Justice';

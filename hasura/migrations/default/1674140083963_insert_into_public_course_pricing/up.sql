@@ -1,0 +1,1 @@
+INSERT INTO "public"."course_pricing"("id", "type", "level", "blended", "reaccreditation", "price_amount", "price_currency", "xero_code") VALUES (E'b11d2313-b9eb-47b0-a960-b342c9848a85', E'OPEN', E'LEVEL_2', true, false, 230, E'GBP', E'LEVEL2.OP');

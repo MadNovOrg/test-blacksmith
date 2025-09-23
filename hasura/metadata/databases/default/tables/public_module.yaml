@@ -1,0 +1,98 @@
+table:
+  name: module
+  schema: public
+configuration:
+  column_config:
+    course_level:
+      custom_name: level
+    created_at:
+      custom_name: createdAt
+    module_category:
+      custom_name: type
+    module_group_id:
+      custom_name: group
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    course_level: level
+    created_at: createdAt
+    module_category: type
+    module_group_id: group
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: moduleGroup
+    using:
+      foreign_key_constraint_on: module_group_id
+array_relationships:
+  - name: submodules
+    using:
+      foreign_key_constraint_on:
+        column: module_id
+        table:
+          name: submodule
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - course_level
+        - description
+        - module_category
+        - name
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - course_level
+        - created_at
+        - description
+        - id
+        - module_category
+        - module_group_id
+        - name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_level
+        - description
+        - module_category
+        - name
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - course_level
+        - created_at
+        - description
+        - id
+        - module_category
+        - module_group_id
+        - name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_level
+        - created_at
+        - description
+        - id
+        - module_category
+        - module_group_id
+        - name
+        - updated_at
+      filter: {}
+      allow_aggregations: true

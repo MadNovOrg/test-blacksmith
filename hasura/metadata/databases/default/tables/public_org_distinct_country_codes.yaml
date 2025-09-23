@@ -1,0 +1,46 @@
+table:
+  name: org_distinct_country_codes
+  schema: public
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - countrycode
+      filter: {}
+      allow_aggregations: true

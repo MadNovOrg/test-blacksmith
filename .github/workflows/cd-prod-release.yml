@@ -1,0 +1,136 @@
+name: Start Production Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      hotfix:
+        type: choice
+        description: 'Is this a hotfix release?'
+        required: false
+        default: 'false'
+        options:
+          - true
+          - false
+      region:
+        type: choice
+        description: 'Select the region to deploy to'
+        required: true
+        default: 'Both'
+        options:
+          - 'Both'
+          - 'Australia'
+          - 'UK'
+
+permissions:
+  pull-requests: write
+  deployments: write
+  statuses: write
+  contents: write
+  actions: write
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.hotfix == 'false' }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '9.15.5'
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v5
+        with:
+          node-version: 18.x
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm i --no-frozen-lockfile
+
+      - name: Create Release Pull Request
+        uses: changesets/action@v1
+        with:
+          version: pnpm release:version
+          publish: pnpm release:tag
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add 'Release - ${{ inputs.region }}' Label to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:changeset-release/main`
+            });
+            const changesetPR = prs.data.find(pr => pr.base.ref === 'main' && pr.head.ref === 'changeset-release/main');
+            if (changesetPR) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: changesetPR.number,
+                labels: [`Release - ${context.payload.inputs.region}`]
+              });
+            } else {
+              throw new Error("No PR found with the specified criteria.");
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  hotfix-release:
+    name: Hotfix Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.hotfix == 'true' }}
+    steps:
+      - name: Checkout to Current Branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '9.15.5'
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v5
+        with:
+          node-version: 18.x
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm i --no-frozen-lockfile
+
+      - name: Install Changesets CLI
+        run: pnpm add -g @changesets/cli
+
+      - name: Bump Version, Tag Release, and Commit Changes
+        run: |
+          pnpm changeset version
+          pnpm changeset tag
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Bump version for hotfix release"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request to hotfix_release_branch
+        uses: peter-evans/create-pull-request@v3
+        with:
+          base: hotfix_release_branch
+          branch: ${{ github.ref }}
+          title: 'Merge changes from ${{ github.ref }}'
+          labels: 'Release - ${{ inputs.region}}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

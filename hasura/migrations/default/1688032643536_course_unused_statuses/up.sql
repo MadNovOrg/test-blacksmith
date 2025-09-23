@@ -1,0 +1,5 @@
+DELETE FROM course_status WHERE name = 'APPROVAL_PENDING';
+
+UPDATE course_status 
+SET name = 'TRAINER_DECLINED'
+WHERE name = 'TRAINER_UNAVAILABLE';

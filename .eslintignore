@@ -1,0 +1,9 @@
+node_modules
+dist
+playwright-report
+test-results
+src/generated/graphql.ts
+.eslintrc.js
+tmp
+html
+hub-web-e2e/src/generated/graphql.ts

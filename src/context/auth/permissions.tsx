@@ -1,0 +1,955 @@
+import { anyPass } from 'lodash/fp'
+import { MarkOptional } from 'ts-essentials'
+
+import {
+  Accreditors_Enum,
+  Course_Level_Enum,
+  Course_Status_Enum as CourseStatus,
+  Course_Type_Enum,
+  Course_Trainer_Type_Enum,
+  CourseTrainerType,
+  Course as GeneratedCourseType,
+  Grade_Enum,
+} from '@app/generated/graphql'
+import {
+  getANZLevels,
+  getLevels,
+} from '@app/modules/course/components/CourseForm/helpers'
+import { AwsRegions, Course, CourseInput, RoleName } from '@app/types'
+import {
+  getCourseAssistants,
+  getCourseLeadTrainer,
+  getCourseModerator,
+  REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL,
+  REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ,
+} from '@app/util'
+
+import type { AuthContextType } from './types'
+
+export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
+  const profile = auth.profile
+  const activeRole = auth.activeRole
+  const allowedRoles = auth.allowedRoles
+  const individualAllowedRoles = auth.individualAllowedRoles
+  const activeCertificates = auth.activeCertificates ?? []
+  const managedOrgIds = auth.managedOrgIds ?? []
+
+  const acl = Object.freeze({
+    isTTAdmin: () => activeRole === RoleName.TT_ADMIN,
+
+    isTTOps: () => activeRole === RoleName.TT_OPS,
+
+    isSalesAdmin: () => activeRole === RoleName.SALES_ADMIN,
+
+    isSalesRepresentative: () => activeRole === RoleName.SALES_REPRESENTATIVE,
+
+    isFinance: () => activeRole === RoleName.FINANCE,
+
+    isTrainer: () => activeRole === RoleName.TRAINER,
+
+    isUser: () => activeRole === RoleName.USER,
+
+    isIndividual: () =>
+      anyPass([
+        () => activeRole === RoleName.BOOKING_CONTACT,
+        () => activeRole === RoleName.ORGANIZATION_KEY_CONTACT,
+        () => activeRole === RoleName.USER,
+      ])(),
+
+    isLD: () => activeRole === RoleName.LD,
+
+    isAdmin: () => acl.isTTAdmin() || acl.isTTOps() || acl.isLD(),
+
+    hasOrgAdmin: (orgId?: string) =>
+      Boolean(
+        auth.isOrgAdmin && (orgId ? managedOrgIds.includes(orgId) : true),
+      ),
+
+    isOrgAdmin: (orgId?: string) =>
+      acl.hasOrgAdmin(orgId) && activeRole === RoleName.USER,
+
+    isBookingContact: () =>
+      Boolean(allowedRoles?.has(RoleName.BOOKING_CONTACT)) &&
+      activeRole === RoleName.BOOKING_CONTACT,
+
+    isOrgKeyContact: () =>
+      Boolean(allowedRoles?.has(RoleName.ORGANIZATION_KEY_CONTACT)) &&
+      activeRole === RoleName.ORGANIZATION_KEY_CONTACT,
+
+    isUserAndHaveUpToOneSubRole: () =>
+      (individualAllowedRoles?.size ?? 0) + +acl.hasOrgAdmin() <= 1,
+
+    isInternalUser: () =>
+      anyPass([
+        acl.isFinance,
+        acl.isLD,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])(),
+
+    canDeleteCourse: (
+      course: Pick<
+        Course,
+        | 'courseParticipants'
+        | 'go1Integration'
+        | 'resourcePacksType'
+        | 'participantSubmittedEvaluationCount'
+        | 'trainers'
+        | 'type'
+      >,
+    ) => {
+      // Only Indirect NON Blended Learning courses without any evaluation submitted or graded participant
+      if (
+        course.go1Integration ||
+        course.resourcePacksType ||
+        [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+          course.type,
+        ) ||
+        !course.courseParticipants ||
+        (course.participantSubmittedEvaluationCount?.aggregate.count ?? 0) >
+          0 ||
+        course.courseParticipants.some(participant =>
+          Boolean(participant.grade),
+        )
+      ) {
+        return false
+      }
+
+      return anyPass([
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+        () => acl.isCourseLeader({ trainers: course.trainers }),
+      ])()
+    },
+
+    canViewRevokedCert: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD, acl.isSalesAdmin])(),
+
+    canSeeExportProgressBtnOnBLCourse: (course: Course) =>
+      anyPass([
+        acl.isInternalUser,
+        acl.isTrainer,
+        acl.isOrgAdmin,
+        acl.isBookingContact,
+        () => acl.isOrganizationKeyContactOfCourse(course),
+      ])(),
+
+    isCourseLeader: (
+      course: Pick<Course, 'trainers'> | Pick<GeneratedCourseType, 'trainers'>,
+    ) =>
+      getCourseLeadTrainer(course.trainers)?.profile.id === profile?.id &&
+      activeRole === RoleName.TRAINER,
+
+    isCourseAssistantTrainer: (course: Pick<Course, 'trainers'>) =>
+      activeRole === RoleName.TRAINER &&
+      getCourseAssistants(course.trainers)?.some(
+        trainer => trainer.profile.id === profile?.id,
+      ),
+
+    isCourseModerator: (course: Pick<Course, 'trainers'>) =>
+      activeRole === RoleName.TRAINER &&
+      getCourseModerator(course.trainers)?.profile.id === profile?.id,
+
+    /**either Lead, Assistant or Moderator for the course */
+    isCourseAnyTrainer: (course: Pick<Course, 'trainers'>) =>
+      (activeRole === RoleName.TRAINER &&
+        course.trainers?.some(trainer => trainer.profile.id === profile?.id)) ??
+      false,
+
+    canSeeActionableCourseTable: () => anyPass([acl.isTTAdmin, acl.isLD])(),
+
+    canApproveCourseExceptions: () => anyPass([acl.isTTAdmin, acl.isLD])(),
+
+    /**
+     * @deprecated Will be removed in the near future
+     */
+    canViewMembership: () => {
+      if (activeRole === RoleName.USER) {
+        return Boolean(auth.activeCertificates?.length)
+      }
+
+      return anyPass([
+        acl.isUser,
+        acl.isTrainer,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isFinance,
+        acl.isAdmin,
+      ])()
+    },
+
+    canViewAdmin: () => acl.isInternalUser(),
+
+    canViewAdminDiscount: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isFinance])(),
+
+    canViewAdminPricing: () => anyPass([acl.isTTAdmin, acl.isFinance])(),
+
+    canApproveDiscount: () => anyPass([acl.isTTAdmin, acl.isFinance])(),
+
+    canViewAdminCancellationsTransfersReplacements: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isFinance,
+        acl.isSalesRepresentative,
+      ])(),
+
+    canViewContacts: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isLD,
+        acl.isTrainer,
+        acl.isSalesAdmin,
+      ])(),
+
+    canViewCertifications: () => acl.isInternalUser(),
+
+    canViewOrders: () => acl.isInternalUser(),
+
+    canViewCourseOrder: () =>
+      anyPass([
+        acl.isInternalUser,
+        acl.isTrainer,
+        acl.isOrgAdmin,
+        acl.isBookingContact,
+        acl.isOrgKeyContact,
+      ])(),
+
+    canViewProfiles: () =>
+      anyPass([
+        acl.isBookingContact,
+        acl.isInternalUser,
+        acl.isOrgAdmin,
+        acl.isOrgKeyContact,
+        acl.isTrainer,
+      ])(),
+
+    canEditProfiles: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
+
+    canViewEmailContacts: (courseType: Course_Type_Enum) => {
+      const can =
+        activeRole !== RoleName.TRAINER ||
+        courseType === Course_Type_Enum.Indirect
+
+      return can
+    },
+
+    canBookingContactCancelResendInvite: (
+      courseType: Course_Type_Enum,
+      courseStatus: CourseStatus,
+    ) => {
+      return [
+        courseType === Course_Type_Enum.Closed,
+        acl.isBookingContact(),
+        [
+          CourseStatus.EvaluationMissing,
+          CourseStatus.ExceptionsApprovalPending,
+          CourseStatus.GradeMissing,
+          CourseStatus.Scheduled,
+          CourseStatus.TrainerDeclined,
+          CourseStatus.TrainerMissing,
+          CourseStatus.TrainerPending,
+        ].includes(courseStatus),
+      ].every(val => Boolean(val))
+    },
+
+    canInviteAttendees: (
+      courseType: Course_Type_Enum,
+      courseStatus?: CourseStatus,
+      course?: Pick<Course, 'trainers' | 'organization'>,
+    ) => {
+      switch (courseType) {
+        case Course_Type_Enum.Open:
+          return anyPass([
+            acl.isTTAdmin,
+            acl.isTTOps,
+            acl.isSalesAdmin,
+            acl.isSalesRepresentative,
+            acl.isOrgAdmin,
+          ])()
+        case Course_Type_Enum.Closed:
+          return anyPass([
+            acl.isTTAdmin,
+            acl.isTTOps,
+            acl.isSalesAdmin,
+            acl.isSalesRepresentative,
+            () =>
+              course?.organization
+                ? acl.isOrgAdminOf([course?.organization.id ?? ''])
+                : false,
+            () => (course ? acl.isCourseLeader(course) : false),
+            () => (course ? acl.isCourseAssistantTrainer(course) : false),
+            () =>
+              courseStatus
+                ? acl.canBookingContactCancelResendInvite(
+                    courseType,
+                    courseStatus,
+                  )
+                : false,
+          ])()
+        case Course_Type_Enum.Indirect:
+          return anyPass([
+            acl.isTTAdmin,
+            acl.isTTOps,
+            acl.isSalesAdmin,
+            acl.isTrainer,
+            acl.isOrgKeyContact,
+            () =>
+              course?.organization
+                ? acl.isOrgAdminOf([course?.organization.id ?? ''])
+                : false,
+          ])()
+      }
+    },
+
+    canInviteAttendeesAfterCourseEnded: (courseType: Course_Type_Enum) => {
+      if (
+        [Course_Type_Enum.Closed, Course_Type_Enum.Indirect].includes(
+          courseType,
+        )
+      ) {
+        return anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])()
+      }
+      return false
+    },
+
+    canViewUsers: () => acl.isInternalUser(),
+
+    canViewAllOrganizations: () => acl.isInternalUser(),
+
+    canInviteToOrganizations: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isOrgAdmin,
+      ])(),
+
+    canViewOrganizations: () => anyPass([acl.isInternalUser, acl.isOrgAdmin])(),
+
+    canEditOrAddOrganizations: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isOrgAdmin,
+      ])(),
+
+    canSetOrgAdminRole: (orgId?: string): boolean =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        () => (orgId ? acl.isOrgAdminOf([orgId]) : false),
+      ])(),
+
+    canCreateCourses: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isTrainer])(),
+
+    canCreateCourse: (type: Course_Type_Enum) => {
+      switch (activeRole) {
+        case RoleName.TT_ADMIN:
+        case RoleName.TT_OPS:
+          return true
+        case RoleName.SALES_ADMIN: {
+          return [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(type)
+        }
+        case RoleName.TRAINER:
+          return (
+            [Course_Type_Enum.Indirect].includes(type) &&
+            acl.canCreateSomeCourseLevel()
+          )
+      }
+
+      return false
+    },
+
+    allowedCourseLevels: (
+      courseType: Course_Type_Enum,
+      levels: Course_Level_Enum[],
+    ) => {
+      if (!activeRole) return []
+
+      if (anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])()) {
+        return levels
+      }
+
+      const certificateMap = acl.isAustralia()
+        ? REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL_ANZ
+        : REQUIRED_TRAINER_CERTIFICATE_FOR_COURSE_LEVEL
+
+      const hasValidCertificate = (
+        allowed: string,
+        active: { level: string; grade: Grade_Enum | null },
+      ): boolean => {
+        const matchesLevel = active.level === allowed
+        const isNotUKAssistOnly =
+          !acl.isUK() || active.grade !== Grade_Enum.AssistOnly
+        return matchesLevel && isNotUKAssistOnly
+      }
+
+      const isLevelAllowed = (courseLevel: Course_Level_Enum): boolean => {
+        const allowedCertificates = certificateMap[courseType][courseLevel]
+        return allowedCertificates.some(allowed =>
+          activeCertificates.some(active =>
+            hasValidCertificate(allowed, active),
+          ),
+        )
+      }
+
+      return levels.filter(isLevelAllowed)
+    },
+
+    canCreateSomeCourseLevel: () => {
+      const allowedICMLevels =
+        acl.allowedCourseLevels(
+          Course_Type_Enum.Indirect,
+          acl.isUK()
+            ? getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Icm)
+            : getANZLevels(Course_Type_Enum.Indirect),
+        ).length > 0
+      const allowedBILDLevels =
+        acl.allowedCourseLevels(
+          Course_Type_Enum.Indirect,
+          getLevels(Course_Type_Enum.Indirect, Accreditors_Enum.Bild),
+        ).length > 0
+
+      return allowedBILDLevels || allowedICMLevels
+    },
+
+    canEditCourses: (
+      course:
+        | Pick<Course, 'type' | 'trainers'>
+        | Pick<GeneratedCourseType, 'type' | 'trainers'>,
+    ) => {
+      switch (activeRole) {
+        case RoleName.TT_ADMIN:
+        case RoleName.TT_OPS:
+          return true
+        case RoleName.SALES_ADMIN: {
+          return [Course_Type_Enum.Closed, Course_Type_Enum.Open].includes(
+            course.type,
+          )
+        }
+        case RoleName.TRAINER:
+          return (
+            [Course_Type_Enum.Indirect].includes(course.type) &&
+            acl.isCourseLeader(course)
+          )
+      }
+
+      return false
+    },
+
+    canAssignLeadTrainer: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isLD])(),
+
+    canRevokeCert: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canHoldCert: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canOverrideGrades: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canViewXeroConnect: () => anyPass([acl.isTTAdmin])(),
+
+    canViewArloConnect: () => anyPass([acl.isTTAdmin])(),
+
+    canCreateOrgs: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+      ])(),
+
+    canEditOrgUser: (userOrgIds?: string[]) => {
+      return (
+        anyPass([acl.isTTAdmin, acl.isSalesAdmin, acl.isTTOps])() ||
+        acl.isOrgAdminOf(userOrgIds ?? [])
+      )
+    },
+
+    canEditOrgs: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isOrgAdmin,
+      ])(),
+
+    canDeleteOrgs: () =>
+      anyPass([acl.isSalesAdmin, acl.isTTAdmin, acl.isTTOps])(),
+
+    canCancelCourses: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
+
+    canManageOrgCourses: () => anyPass([acl.isInternalUser, acl.isOrgAdmin])(),
+
+    canSeeWaitingLists: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
+
+    canRescheduleWithoutWarning: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canEditWithoutRestrictions: (courseType: Course_Type_Enum) => {
+      if (!activeRole) {
+        return false
+      }
+
+      if (activeRole === RoleName.TT_ADMIN) {
+        return true
+      }
+
+      switch (courseType) {
+        case Course_Type_Enum.Indirect: {
+          return anyPass([acl.isTTOps])()
+        }
+
+        case Course_Type_Enum.Closed: {
+          return anyPass([acl.isTTOps])()
+        }
+
+        case Course_Type_Enum.Open: {
+          return anyPass([acl.isTTOps, acl.isSalesAdmin])()
+        }
+      }
+    },
+
+    canViewCourseHistory: () =>
+      anyPass([acl.isTTAdmin, acl.isSalesAdmin, acl.isSalesRepresentative])(),
+
+    canViewCourseAsAttendeeHistory: () => anyPass([acl.isInternalUser])(),
+
+    isOrgAdminOf: (orgIds: string[]) => {
+      return (
+        acl.isOrgAdmin() &&
+        orgIds.some(participantOrgId =>
+          managedOrgIds.some(managedOrgId => managedOrgId === participantOrgId),
+        )
+      )
+    },
+
+    isOrganizationKeyContactOfCourse: (_course: Course) =>
+      Boolean(
+        acl.isOrgKeyContact() &&
+          _course.organizationKeyContact?.id === auth.profile?.id,
+      ),
+
+    isBookingContactOfCourse: (_course: Course) =>
+      Boolean(
+        acl.isBookingContact() &&
+          _course.bookingContact?.id === auth.profile?.id,
+      ),
+
+    isOneOfBookingContactsOfTheOpenCourse: (course: Course) =>
+      Boolean(
+        acl.isBookingContact() &&
+          course.type === Course_Type_Enum.Open &&
+          profile?.id &&
+          course.courseParticipants?.some(
+            p => p.order?.bookingContactProfileId === profile?.id,
+          ),
+      ),
+
+    canParticipateInCourses: () =>
+      anyPass([
+        acl.isBookingContact,
+        acl.isOrgKeyContact,
+        acl.isTrainer,
+        acl.isUser,
+      ])(),
+
+    canTransferParticipant: (participantOrgIds: string[], _course: Course) => {
+      return anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        () => acl.isOrgAdminOf(participantOrgIds),
+        () => acl.isOneOfBookingContactsOfTheOpenCourse(_course),
+      ])()
+    },
+
+    canReplaceParticipant: (participantOrgIds: string[], course: Course) => {
+      return anyPass([
+        acl.isBookingContact,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+        () =>
+          course.accreditedBy === Accreditors_Enum.Icm &&
+          acl.isOrgAdminOf(participantOrgIds),
+      ])()
+    },
+
+    canReplaceParticipantAfterCourseEnded: () => {
+      return anyPass([acl.isSalesAdmin, acl.isTTAdmin, acl.isTTOps])()
+    },
+
+    canCancelParticipant: (participantOrgIds: string[], _course: Course) => {
+      return (
+        anyPass([
+          acl.isBookingContact,
+          acl.isSalesAdmin,
+          acl.isTTAdmin,
+          acl.isTTOps,
+        ])() || acl.isOrgAdminOf(participantOrgIds)
+      )
+    },
+
+    canCancelParticipantINDIRECT: (
+      participantOrgIds: string[],
+      course: Course,
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        () => acl.isOrganizationKeyContactOfCourse(course),
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
+
+    canCancelParticipantCLOSED: (
+      participantOrgIds: string[],
+      course: Course,
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isCourseAssistantTrainer(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        acl.isBookingContact,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
+
+    canSendCourseInformation: (_participantOrgIds: string[], _course: Course) =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isTrainer,
+      ])() || acl.isOrgAdminOf(_participantOrgIds),
+
+    canSendCourseInformationINDIRECT: (
+      participantOrgIds: string[],
+      course: Course,
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        () => acl.isOrganizationKeyContactOfCourse(course),
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
+
+    canSendCourseInformationCLOSED: (
+      participantOrgIds: string[],
+      course: Course,
+    ) => {
+      return anyPass([
+        () => acl.isCourseLeader(course),
+        () => acl.isOrgAdminOf(participantOrgIds),
+        acl.isBookingContact,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isTTAdmin,
+        acl.isTTOps,
+      ])()
+    },
+
+    canSyncBlendedLearning: (course: Course) => {
+      return anyPass([acl.isTTAdmin, acl.isTTOps])() && course.go1Integration
+    },
+
+    canManageParticipantAttendance: (
+      participantOrgIds: string[],
+      course: Course,
+    ) => {
+      const permissionMap: Record<Course_Type_Enum, Array<boolean>> = {
+        [Course_Type_Enum.Closed]: [
+          acl.canCancelParticipantCLOSED(participantOrgIds, course),
+          acl.canSendCourseInformationCLOSED(participantOrgIds, course),
+        ],
+        [Course_Type_Enum.Indirect]: [
+          acl.canCancelParticipantINDIRECT(participantOrgIds, course),
+          acl.canSendCourseInformationINDIRECT(participantOrgIds, course),
+        ],
+        [Course_Type_Enum.Open]: [
+          acl.canTransferParticipant(participantOrgIds, course),
+          acl.canReplaceParticipant(participantOrgIds, course),
+          acl.canCancelParticipant(participantOrgIds, course),
+          acl.canSendCourseInformation(participantOrgIds, course),
+        ],
+      }
+      return permissionMap[course.type].some(Boolean)
+    },
+
+    canOnlySendCourseInformation: (
+      participantOrgIds: string[],
+      course: Course,
+    ) => {
+      return (
+        !acl.canTransferParticipant(participantOrgIds, course) &&
+        !acl.canReplaceParticipant(participantOrgIds, course) &&
+        !acl.canCancelParticipant(participantOrgIds, course) &&
+        acl.canSendCourseInformation(participantOrgIds, course)
+      )
+    },
+
+    canGradeParticipants: (
+      trainers: {
+        profile: { id: string }
+        type: Course_Trainer_Type_Enum | CourseTrainerType
+      }[],
+    ) => {
+      if (
+        activeRole === RoleName.TRAINER &&
+        trainers.find(
+          t =>
+            t.profile.id === auth.profile?.id &&
+            t.type !== Course_Trainer_Type_Enum.Moderator,
+        )
+      ) {
+        return true
+      }
+
+      return anyPass([acl.isTTAdmin, acl.isTTOps])()
+    },
+
+    canBuildCourse: () => acl.isTrainer(),
+
+    canManageBlendedLicenses: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin, acl.isFinance])(),
+
+    canManageResourcePacks: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance, acl.isSalesAdmin])(),
+
+    canSeeProfileRoles: () => {
+      const hubVisibilityDeniedRoles = [RoleName.TRAINER, RoleName.USER]
+      return activeRole && !hubVisibilityDeniedRoles.includes(activeRole)
+    },
+    canMergeProfiles: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isSalesAdmin])(),
+
+    canArchiveProfile: () => {
+      return acl.isTTAdmin() || acl.isTTOps()
+    },
+
+    canViewArchivedProfileData: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isLD,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+      ])(),
+
+    canManageCert: () =>
+      anyPass([
+        acl.isSalesAdmin,
+        acl.canHoldCert,
+        acl.canRevokeCert,
+        acl.canOverrideGrades,
+      ])(),
+
+    canCreateBildCourse: (type: Course_Type_Enum) => {
+      if (acl.isAustralia() || !activeRole) {
+        return false
+      }
+
+      switch (type) {
+        case Course_Type_Enum.Indirect: {
+          if (activeRole === RoleName.TRAINER) {
+            return [
+              Course_Level_Enum.BildIntermediateTrainer,
+              Course_Level_Enum.BildAdvancedTrainer,
+            ].some(level => activeCertificates.some(c => c.level === level))
+          }
+
+          return [RoleName.TT_OPS, RoleName.TT_ADMIN].includes(activeRole)
+        }
+        case Course_Type_Enum.Open:
+        case Course_Type_Enum.Closed: {
+          /**
+           * TODO: Patch this bug.
+           * @see https://behaviourhub.atlassian.net/browse/TTHP-761
+           */
+          return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN]
+        }
+      }
+    },
+
+    canDeliveryTertiaryAdvancedStrategy: () => {
+      if (activeRole === RoleName.TRAINER) {
+        return activeCertificates.some(
+          c => Course_Level_Enum.BildAdvancedTrainer === c.level,
+        )
+      }
+
+      return true
+    },
+
+    canDisableDiscounts: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance])(),
+
+    canViewArchivedUsersCertificates: () => {
+      return acl.isAdmin()
+    },
+    canViewCourseBuilderOnEditPage: (
+      course:
+        | Pick<
+            CourseInput,
+            'accreditedBy' | 'gradingConfirmed' | 'type' | 'gradingStarted'
+          >
+        | undefined
+        | null,
+      trainers: {
+        profile: { id: string }
+        type: Course_Trainer_Type_Enum | CourseTrainerType
+      }[],
+    ) => {
+      if (
+        anyPass([acl.isTTAdmin, acl.isTTOps, acl.isLD])() &&
+        !course?.gradingStarted &&
+        !course?.gradingConfirmed
+      )
+        return true
+      if (
+        !(
+          course?.accreditedBy === Accreditors_Enum.Icm &&
+          (course?.type === Course_Type_Enum.Closed ||
+            course?.type === Course_Type_Enum.Indirect) &&
+          !course.gradingConfirmed
+        )
+      ) {
+        return false
+      }
+
+      if (
+        acl.isTrainer() &&
+        trainers.find(
+          t =>
+            t.profile.id === auth.profile?.id &&
+            t.type === Course_Trainer_Type_Enum.Leader,
+        )
+      ) {
+        return true
+      }
+
+      return false
+    },
+    canViewDietaryAndDisabilitiesDetails: (course: Course) => {
+      const isCourseTrainer = course?.trainers?.some(
+        trainer => trainer.profile.id === auth.profile?.id,
+      )
+
+      return (
+        acl.isBookingContactOfCourse(course) ||
+        acl.isInternalUser() ||
+        acl.isOrganizationKeyContactOfCourse(course) ||
+        isCourseTrainer
+      )
+    },
+    canViewTrainerDietaryAndDisabilities: () =>
+      anyPass([acl.isOrgAdmin, acl.isBookingContact, acl.isOrgKeyContact])(),
+    canAddModuleNotes: (leadTrainerIds: string[]) => {
+      return (
+        acl.isTTAdmin() ||
+        (auth.profile?.id &&
+          leadTrainerIds.includes(auth.profile.id) &&
+          activeRole === RoleName.TRAINER)
+      )
+    },
+    canImportUsers: () => {
+      return activeRole
+        ? [RoleName.TT_ADMIN, RoleName.TT_OPS].includes(activeRole)
+        : false
+    },
+    canViewIndirectCourseEvaluationSubmitted: () =>
+      anyPass([
+        acl.isTrainer,
+        acl.isOrgAdmin,
+        acl.isOrgKeyContact,
+        acl.isInternalUser,
+      ])(),
+    canViewClosedCourseEvaluationSubmitted: () =>
+      anyPass([
+        acl.isTrainer,
+        acl.isOrgAdmin,
+        acl.isBookingContact,
+        acl.isInternalUser,
+      ])(),
+    canViewOpenCourseEvaluationSubmitted: () => anyPass([acl.isInternalUser])(),
+    canViewPreCourseMaterials: (course: Course) =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        () => acl.isCourseAnyTrainer(course),
+      ])(),
+
+    canManageKnowledgeHubAccess: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+    canViewResourcePacksPricing: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance, acl.isSalesAdmin])(),
+    canEditResourcePacksPricing: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance])(),
+    canApplyOrgResourcePacksPricingToAffiliates: () =>
+      anyPass([acl.isTTAdmin, acl.isTTOps, acl.isFinance])(),
+    isUK: () => import.meta.env.VITE_AWS_REGION === AwsRegions.UK,
+    isAustralia: () => import.meta.env.VITE_AWS_REGION === AwsRegions.Australia,
+    canLinkToMainOrg: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+      ])(),
+    canViewOrg: (orgId: string) =>
+      acl.isInternalUser() || acl.isOrgAdmin(orgId),
+    canImportOrganizations: () => anyPass([acl.isTTAdmin, acl.isTTOps])(),
+
+    canEditIndirectBLCourses: () =>
+      acl.isTrainer() || acl.isTTAdmin() || acl.isTTOps(),
+    canEditNamesAndDOB: () =>
+      acl.isTTAdmin() || acl.isTTOps() || acl.isSalesAdmin(),
+    canEditRoles: () => acl.isTTAdmin() || acl.isTTOps(),
+    canInviteClientsToIndirectCourses: () =>
+      acl.isAdmin() || acl.isSalesAdmin(),
+    canViewTTConnectId: () =>
+      anyPass([
+        acl.isTTAdmin,
+        acl.isTTOps,
+        acl.isSalesAdmin,
+        acl.isSalesRepresentative,
+        acl.isFinance,
+        acl.isOrgAdmin,
+        acl.isLD,
+      ])(),
+  })
+
+  return acl
+}
+
+export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
+  return { ...auth, acl: getACL(auth) }
+}

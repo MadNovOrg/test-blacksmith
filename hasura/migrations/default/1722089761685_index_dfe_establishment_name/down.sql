@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS dfe_establishment_name_index;

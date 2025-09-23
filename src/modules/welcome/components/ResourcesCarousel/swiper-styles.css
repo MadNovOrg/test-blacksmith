@@ -1,0 +1,15 @@
+.resources-carousel {
+  padding-bottom: 40px;
+}
+
+.resources-carousel .swiper-pagination {
+  bottom: 0;
+}
+
+.resources-carousel .swiper-pagination-bullet-active {
+  background-color: #9eb934;
+}
+
+.resources-carousel .swiper-slide {
+  height: auto;
+}

@@ -1,0 +1,53 @@
+table:
+  name: import_users_job
+  schema: public
+configuration:
+  column_config:
+    finished_on:
+      custom_name: finishedOn
+    started_by:
+      custom_name: startedBy
+    started_on:
+      custom_name: startedOn
+  custom_column_names:
+    finished_on: finishedOn
+    started_by: startedBy
+    started_on: startedOn
+  custom_root_fields: {}
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - result
+        - status
+        - data
+        - config
+        - started_by
+        - started_on
+        - finished_on
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - config
+        - result
+        - data
+        - status
+        - finished_on
+        - started_on
+        - id
+        - started_by
+      filter: {}
+event_triggers:
+  - name: import_users_job_added
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 1
+      timeout_sec: 3600
+    webhook: '{{EVENTS_HOST}}/user/import'

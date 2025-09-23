@@ -1,0 +1,208 @@
+table:
+  name: course_trainer
+  schema: public
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      columns:
+        - course_id
+        - status
+        - type
+        - id
+        - profile_id
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - status
+        - type
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - status
+        - type
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - profile_id
+        - type
+        - course_id
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+        - profile_id
+        - type
+        - course_id
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - profile_id
+        - type
+        - course_id
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - profile_id
+        - type
+        - course_id
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - id
+        - profile_id
+        - type
+        - course_id
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - id
+        - profile_id
+        - type
+        - course_id
+        - status
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - status
+        - type
+        - id
+        - profile_id
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - status
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - status
+        - type
+      filter: {}
+      check: null
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+  - role: trainer
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}
+event_triggers:
+  - name: course_trainer_assigned
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-trainer-assigned'
+  - name: course_trainer_status_changed
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-trainer-status'
+  - name: course_trainer_unassigned
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-trainer-unassigned'
+  - name: trainer_status_changed
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - status
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/status'
+  - name: update_go1_users_lead_trainer
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1/update-go1-users-lead-trainer'

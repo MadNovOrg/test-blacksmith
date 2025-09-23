@@ -1,0 +1,447 @@
+import { deepmerge } from 'deepmerge-ts'
+import { useMemo, useRef } from 'react'
+import { useQuery } from 'urql'
+
+import { useAuth } from '@app/context/auth'
+import {
+  Course_Bool_Exp,
+  Course_Level_Enum,
+  Course_Order_By,
+  Course_Status_Enum,
+  Course_Type_Enum,
+  Order_By,
+  UserCoursesQuery,
+  UserCoursesQueryVariables,
+} from '@app/generated/graphql'
+import { Sorting } from '@app/hooks/useTableSort'
+import { useUnevaluatedUserCourses } from '@app/modules/course_details/course_evaluation_tab/hooks/useUnevaluatedUserCourses'
+import { getIndividualsCourseStatusesConditions } from '@app/modules/trainer_courses/hooks/useCourses'
+import { GET_USER_COURSES } from '@app/modules/user_courses/queries/get-user-courses'
+import {
+  AdminOnlyCourseStatus,
+  AttendeeOnlyCourseStatus,
+  CourseState,
+} from '@app/types'
+import { ALL_ORGS, getSWRLoadingStatus, LoadingStatus } from '@app/util'
+
+export type UserCourseStatus =
+  | AdminOnlyCourseStatus.CancellationRequested
+  | AttendeeOnlyCourseStatus
+  | Course_Status_Enum.Cancelled
+  | Course_Status_Enum.Completed
+  | Course_Status_Enum.EvaluationMissing
+  | Course_Status_Enum.Scheduled
+
+export type CoursesFilters = {
+  keyword?: string
+  levels?: Course_Level_Enum[]
+  courseResidingCountries?: string[]
+  types?: Course_Type_Enum[]
+  states?: CourseState[]
+  statuses?: UserCourseStatus[]
+  creation?: { start?: Date; end?: Date }
+  schedule?: {
+    start?: Date
+    end?: Date
+  }
+}
+
+export function useUserCourses(
+  filters?: CoursesFilters,
+  sorting?: Sorting,
+  pagination?: { perPage: number; currentPage: number },
+  orgId?: string,
+  bookingContactOnly?: boolean,
+  orgKeyContactOnly?: boolean,
+): {
+  courses?: UserCoursesQuery['courses']
+  error?: Error
+  status: LoadingStatus
+  total?: number
+} {
+  const { acl, profile, organizationIds } = useAuth()
+  const dateRef = useRef(new Date().toISOString())
+
+  const forContactRole = bookingContactOnly || orgKeyContactOnly
+
+  const { courses: unevaluatedCourses } = useUnevaluatedUserCourses()
+  const unevaluatedIds = unevaluatedCourses?.map(c => c.id)
+
+  const courseStatusConditionsMap: Record<UserCourseStatus, Course_Bool_Exp> =
+    useMemo(() => {
+      const forOpenCourseBookingContact = bookingContactOnly
+        ? { profileId: profile?.id }
+        : undefined
+      const individualsStatusesConditions =
+        getIndividualsCourseStatusesConditions(
+          dateRef.current,
+          forOpenCourseBookingContact,
+        )
+
+      return {
+        [AttendeeOnlyCourseStatus.InfoRequired]: {
+          _or: [
+            {
+              participants: {
+                healthSafetyConsent: { _eq: false },
+                attended: { _is_null: true },
+              },
+            },
+          ],
+        },
+        [AttendeeOnlyCourseStatus.NotAttended]: {
+          _or: [
+            {
+              participants: {
+                attended: { _eq: false },
+              },
+            },
+          ],
+        },
+        [Course_Status_Enum.EvaluationMissing]: {
+          _or: [
+            {
+              id: { _in: unevaluatedIds },
+              participants: {
+                healthSafetyConsent: { _eq: true },
+                grade: { _is_null: false },
+              },
+              schedule: {
+                end: { _lt: dateRef.current },
+              },
+            },
+          ],
+        },
+        [Course_Status_Enum.Scheduled]: forContactRole
+          ? individualsStatusesConditions.SCHEDULED
+          : {
+              _or: [
+                {
+                  participants: {
+                    healthSafetyConsent: { _eq: true },
+                  },
+                  schedule: {
+                    end: { _gt: dateRef.current },
+                  },
+                },
+              ],
+            },
+        [Course_Status_Enum.Completed]: forContactRole
+          ? individualsStatusesConditions.COMPLETED
+          : {
+              _or: [
+                {
+                  participants: { grade: { _is_null: false } },
+                  id: { _nin: unevaluatedIds },
+                  schedule: {
+                    end: { _lt: dateRef.current },
+                  },
+                },
+              ],
+            },
+        [AttendeeOnlyCourseStatus.AwaitingGrade]: forContactRole
+          ? individualsStatusesConditions.AWAITING_GRADE
+          : {
+              _or: [
+                {
+                  participants: {
+                    grade: { _is_null: true },
+                  },
+                  schedule: {
+                    end: { _lt: dateRef.current },
+                  },
+                },
+              ],
+            },
+        [AdminOnlyCourseStatus.CancellationRequested]:
+          individualsStatusesConditions.CANCELLATION_REQUESTED,
+
+        [Course_Status_Enum.Cancelled]: individualsStatusesConditions.CANCELLED,
+      }
+    }, [bookingContactOnly, forContactRole, profile?.id, unevaluatedIds])
+
+  const where = useMemo(() => {
+    let userConditions: Course_Bool_Exp = {}
+
+    switch (true) {
+      case bookingContactOnly:
+        userConditions = {
+          _or: [
+            { bookingContact: { id: { _eq: profile?.id } } },
+            {
+              _and: [
+                { type: { _eq: Course_Type_Enum.Open } },
+                {
+                  participants: {
+                    order: {
+                      bookingContact: {
+                        _contains: {
+                          email: profile?.email,
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        }
+        break
+      case orgKeyContactOnly:
+        userConditions = {
+          organizationKeyContact: { id: { _eq: profile?.id } },
+        }
+        break
+      default:
+        userConditions = {
+          participants: { profile_id: { _eq: profile?.id } },
+        }
+    }
+
+    let filterConditions: Course_Bool_Exp = {}
+    // if orgId is defined then provide all available courses within that org, only if I have an admin role
+    if (orgId && !bookingContactOnly && !orgKeyContactOnly) {
+      const allAvailableOrgs = {}
+      const onlyUserOrgs = acl.isOrgAdmin()
+        ? { organization: { id: { _in: organizationIds } } }
+        : {}
+      const specificOrg = { organization: { id: { _eq: orgId } } }
+      if (orgId === ALL_ORGS) {
+        userConditions = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
+      } else {
+        userConditions = specificOrg
+      }
+    } else if (orgId) {
+      if (orgId !== ALL_ORGS) {
+        userConditions = deepmerge(userConditions, {
+          organization: { id: { _eq: orgId } },
+        })
+      }
+    }
+
+    if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.InfoRequired)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.INFO_REQUIRED,
+      )
+    }
+
+    if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.NotAttended)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.NOT_ATTENDED,
+      )
+    }
+
+    if (filters?.statuses?.includes(Course_Status_Enum.EvaluationMissing)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.EVALUATION_MISSING,
+      )
+    }
+
+    if (filters?.statuses?.includes(Course_Status_Enum.Scheduled)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.SCHEDULED,
+      )
+    }
+
+    if (filters?.statuses?.includes(Course_Status_Enum.Completed)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.COMPLETED,
+      )
+    }
+
+    if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.AwaitingGrade)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.AWAITING_GRADE,
+      )
+    }
+
+    if (
+      filters?.statuses?.includes(AdminOnlyCourseStatus.CancellationRequested)
+    ) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.CANCELLATION_REQUESTED,
+      )
+    }
+
+    if (filters?.statuses?.includes(Course_Status_Enum.Cancelled)) {
+      filterConditions = deepmerge(
+        filterConditions,
+        courseStatusConditionsMap.CANCELLED,
+      )
+    }
+
+    if (filters?.states?.length) {
+      filterConditions.state = { _in: filters.states }
+    }
+
+    if (filters?.levels?.length) {
+      filterConditions.level = { _in: filters.levels }
+    }
+
+    if (filters?.courseResidingCountries?.length) {
+      filterConditions._or = [
+        ...(filterConditions._or ?? []),
+        { residingCountry: { _in: filters.courseResidingCountries } },
+        {
+          _and: [
+            { residingCountry: { _is_null: true } },
+            {
+              schedule: {
+                venue: {
+                  countryCode: { _in: filters.courseResidingCountries },
+                },
+              },
+            },
+          ],
+        },
+      ]
+    }
+
+    if (filters?.types?.length) {
+      filterConditions.type = { _in: filters.types }
+    }
+
+    if (filters?.creation?.start) {
+      filterConditions.createdAt = {
+        _gte: filters.creation.start,
+      }
+    }
+
+    if (filters?.creation?.end) {
+      filterConditions.createdAt = {
+        ...filterConditions.createdAt,
+        _lte: filters.creation.end,
+      }
+    }
+
+    if (filters?.schedule?.start || filters?.schedule?.end) {
+      filterConditions.schedule = {
+        _and: [],
+      }
+      if (filters?.schedule?.start) {
+        filterConditions.schedule._and?.push({
+          start: { _gte: filters.schedule.start },
+        })
+      }
+      if (filters?.schedule?.end) {
+        filterConditions.schedule._and?.push({
+          end: { _lte: filters.schedule.end },
+        })
+      }
+    }
+
+    const query = filters?.keyword?.trim()
+
+    const keywords = query?.split(' ').filter(word => Boolean(word))
+
+    if (query?.length) {
+      const orClauses = [
+        keywords && keywords?.length > 1
+          ? {
+              _and: keywords.map(w => ({
+                search_fields: { _ilike: `%${w}%` },
+              })),
+            }
+          : { search_fields: { _ilike: `%${query}%` } },
+      ]
+
+      filterConditions._or = [
+        ...(filterConditions._or ?? []),
+        ...orClauses.filter(Boolean),
+      ]
+    }
+
+    return {
+      _and: [userConditions, filterConditions],
+    }
+  }, [
+    bookingContactOnly,
+    profile?.id,
+    profile?.email,
+    orgKeyContactOnly,
+    orgId,
+    filters?.statuses,
+    filters?.states,
+    filters?.levels,
+    filters?.courseResidingCountries,
+    filters?.types,
+    filters?.creation?.start,
+    filters?.creation?.end,
+    filters?.schedule?.start,
+    filters?.schedule?.end,
+    filters?.keyword,
+    acl,
+    organizationIds,
+    courseStatusConditionsMap.INFO_REQUIRED,
+    courseStatusConditionsMap.NOT_ATTENDED,
+    courseStatusConditionsMap.EVALUATION_MISSING,
+    courseStatusConditionsMap.SCHEDULED,
+    courseStatusConditionsMap.COMPLETED,
+    courseStatusConditionsMap.AWAITING_GRADE,
+    courseStatusConditionsMap.CANCELLATION_REQUESTED,
+    courseStatusConditionsMap.CANCELLED,
+  ])
+
+  const [{ data, error }] = useQuery<
+    UserCoursesQuery,
+    UserCoursesQueryVariables
+  >({
+    query: GET_USER_COURSES,
+    requestPolicy: 'cache-and-network',
+    variables: {
+      where,
+      profileId: profile?.id,
+      orderBy: getOrderBy(sorting),
+      withParticipantAggregates: Boolean(orgId),
+      ...(pagination
+        ? {
+            limit: pagination.perPage,
+            offset: pagination.perPage * (pagination?.currentPage - 1),
+          }
+        : null),
+      withParticipants: forContactRole,
+    },
+  })
+
+  return useMemo(
+    () => ({
+      courses: data?.courses,
+      error,
+      status: getSWRLoadingStatus(data, error),
+      total: data?.course_aggregate.aggregate?.count,
+    }),
+    [data, error],
+  )
+}
+
+function getOrderBy(sorting?: Sorting): Course_Order_By {
+  const defaultOrderBy = { name: Order_By.Asc }
+
+  if (!sorting) {
+    return defaultOrderBy
+  }
+
+  const dir = sorting.dir === 'asc' ? Order_By.Asc : Order_By.Desc
+
+  switch (sorting.by) {
+    case 'name':
+    case 'type':
+    case 'createdAt':
+      return { [sorting.by]: dir }
+    case 'start':
+      return { schedule_aggregate: { min: { start: dir } } }
+    case 'end':
+      return { schedule_aggregate: { min: { end: dir } } }
+
+    default: {
+      return defaultOrderBy
+    }
+  }
+}

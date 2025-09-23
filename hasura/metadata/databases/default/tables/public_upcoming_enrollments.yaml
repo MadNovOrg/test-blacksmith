@@ -1,0 +1,154 @@
+table:
+  name: upcoming_enrollments
+  schema: public
+configuration:
+  column_config:
+    course_id:
+      custom_name: courseId
+    course_level:
+      custom_name: courseLevel
+    org_id:
+      custom_name: orgId
+    org_name:
+      custom_name: orgName
+    profile_id:
+      custom_name: profileId
+    schedule_start:
+      custom_name: scheduleStart
+  custom_column_names:
+    course_id: courseId
+    course_level: courseLevel
+    org_id: orgId
+    org_name: orgName
+    profile_id: profileId
+    schedule_start: scheduleStart
+  custom_root_fields: {}
+object_relationships:
+  - name: course
+    using:
+      manual_configuration:
+        column_mapping:
+          course_id: id
+        insertion_order: null
+        remote_table:
+          name: course
+          schema: public
+  - name: organization
+    using:
+      manual_configuration:
+        column_mapping:
+          org_id: id
+        insertion_order: null
+        remote_table:
+          name: organization
+          schema: public
+  - name: profile
+    using:
+      manual_configuration:
+        column_mapping:
+          profile_id: id
+        insertion_order: null
+        remote_table:
+          name: profile
+          schema: public
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - certification_status
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+        - certification_status
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - certification_status
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+        - certification_status
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - org_name
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - certification_status
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - org_name
+        - certification_status
+        - course_id
+        - course_level
+        - schedule_start
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - certification_status
+        - course_id
+        - course_level
+        - org_id
+        - org_name
+        - profile_id
+      filter:
+        profile:
+          organizations:
+            organization:
+              _or:
+                - members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                - main_organisation:
+                    members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+      allow_aggregations: true

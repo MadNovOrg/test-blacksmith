@@ -1,0 +1,22 @@
+# .github/release.yml
+
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - octocat
+  categories:
+    - title: Bugfixes
+      labels:
+        - bugfix
+    - title: Chores
+      labels:
+        - chore
+        - chore:*
+    - title: Documentation
+      labels:
+        - documentation
+    - title: Other changes
+      labels:
+        - "*"

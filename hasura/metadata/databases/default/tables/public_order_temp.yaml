@@ -1,0 +1,165 @@
+table:
+  name: order_temp
+  schema: public
+configuration:
+  column_config:
+    billing_address:
+      custom_name: billingAddress
+    billing_email:
+      custom_name: billingEmail
+    billing_family_name:
+      custom_name: billingFamilyName
+    billing_given_name:
+      custom_name: billingGivenName
+    billing_phone:
+      custom_name: billingPhone
+    client_purchase_order:
+      custom_name: clientPurchaseOrder
+    course_id:
+      custom_name: courseId
+    created_at:
+      custom_name: createdAt
+    order_due:
+      custom_name: orderDue
+    order_total:
+      custom_name: orderTotal
+    organization_id:
+      custom_name: organizationId
+    payment_method:
+      custom_name: paymentMethod
+    profile_id:
+      custom_name: profileId
+    promo_codes:
+      custom_name: promoCodes
+    sales_representative_id:
+      custom_name: salesRepresentativeId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
+  custom_column_names:
+    billing_address: billingAddress
+    billing_email: billingEmail
+    billing_family_name: billingFamilyName
+    billing_given_name: billingGivenName
+    billing_phone: billingPhone
+    client_purchase_order: clientPurchaseOrder
+    course_id: courseId
+    created_at: createdAt
+    order_due: orderDue
+    order_total: orderTotal
+    organization_id: organizationId
+    payment_method: paymentMethod
+    profile_id: profileId
+    promo_codes: promoCodes
+    sales_representative_id: salesRepresentativeId
+    xero_invoice_number: xeroInvoiceNumber
+  custom_root_fields: {}
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - booking_contact
+        - client_purchase_order
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - registrants
+        - sales_representative_id
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - workbookDeliveryAddress
+        - xero_invoice_number
+  - role: trainer
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - registrants
+        - stripePaymentId
+        - user
+        - vat
+        - workbookDeliveryAddress
+        - xero_invoice_number
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - booking_contact
+        - client_purchase_order
+        - course_id
+        - created_at
+        - currency
+        - id
+        - organization_id
+        - payment_method
+        - profile_id
+        - promo_codes
+        - registrants
+        - sales_representative_id
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - workbookDeliveryAddress
+        - xero_invoice_number
+    comment: ""
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null

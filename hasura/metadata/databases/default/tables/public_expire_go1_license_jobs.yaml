@@ -1,0 +1,24 @@
+table:
+  name: expire_go1_license_jobs
+  schema: public
+configuration:
+  column_config:
+    job_id:
+      custom_name: jobId
+    license_id:
+      custom_name: licenseId
+  custom_column_names:
+    job_id: jobId
+    license_id: licenseId
+  custom_root_fields: {}
+event_triggers:
+  - name: go1_license_expiry_job_deleted
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 30
+      num_retries: 1
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/license-job-deleted'

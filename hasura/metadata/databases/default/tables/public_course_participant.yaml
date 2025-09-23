@@ -1,0 +1,834 @@
+table:
+  name: course_participant
+  schema: public
+configuration:
+  column_config:
+    booking_date:
+      custom_name: bookingDate
+    date_graded:
+      custom_name: dateGraded
+    go1_enrolment_id:
+      custom_name: go1EnrolmentId
+    go1_enrolment_progress:
+      custom_name: go1EnrolmentProgress
+    go1_enrolment_started:
+      custom_name: go1EnrolmentStarted
+    go1_enrolment_status:
+      custom_name: go1EnrolmentStatus
+    graded_on:
+      custom_name: gradedOn
+    hs_consent:
+      custom_name: healthSafetyConsent
+    invoice_id:
+      custom_name: invoiceID
+    order_id:
+      custom_name: orderId
+  custom_column_names:
+    booking_date: bookingDate
+    date_graded: dateGraded
+    go1_enrolment_id: go1EnrolmentId
+    go1_enrolment_progress: go1EnrolmentProgress
+    go1_enrolment_started: go1EnrolmentStarted
+    go1_enrolment_status: go1EnrolmentStatus
+    graded_on: gradedOn
+    hs_consent: healthSafetyConsent
+    invoice_id: invoiceID
+    order_id: orderId
+  custom_root_fields: {}
+object_relationships:
+  - name: bildGradingModules
+    using:
+      foreign_key_constraint_on:
+        column: participant_id
+        table:
+          name: course_participant_bild_module
+          schema: public
+  - name: certificate
+    using:
+      manual_configuration:
+        column_mapping:
+          certificate_id: id
+        insertion_order: null
+        remote_table:
+          name: course_certificate
+          schema: public
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: course_participant_about_training_email_scheduled_event
+    using:
+      foreign_key_constraint_on:
+        column: course_participant_id
+        table:
+          name: about_training_email_scheduled_events
+          schema: public
+  - name: invite
+    using:
+      foreign_key_constraint_on: invite_id
+  - name: order
+    using:
+      foreign_key_constraint_on: order_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+array_relationships:
+  - name: certificateChanges
+    using:
+      foreign_key_constraint_on:
+        column: participant_id
+        table:
+          name: course_certificate_changelog
+          schema: public
+  - name: gradingModules
+    using:
+      foreign_key_constraint_on:
+        column: course_participant_id
+        table:
+          name: course_participant_module
+          schema: public
+  - name: notes
+    using:
+      foreign_key_constraint_on:
+        column: participant_id
+        table:
+          name: course_participant_note
+          schema: public
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - attended
+        - booking_date
+        - course_id
+        - date_graded
+        - grade
+        - grading_feedback
+        - invite_id
+        - order_id
+        - profile_id
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - attended
+        - booking_date
+        - course_id
+        - date_graded
+        - grade
+        - grading_feedback
+        - invite_id
+        - order_id
+        - profile_id
+  - role: user
+    permission:
+      check:
+        invite:
+          email:
+            _ilike: X-Hasura-User-Email
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - attended
+        - course_id
+        - invite_id
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - course_id
+        - id
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: OPEN
+            - course_status:
+                _in:
+                  - CONFIRM_MODULES
+                  - SCHEDULED
+                  - TRAINER_MISSING
+                  - TRAINER_PENDING
+                  - TRAINER_DECLINED
+      allow_aggregations: true
+  - role: booking-contact
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter:
+        _or:
+          - course:
+              booking_contact_profile_id:
+                _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - order:
+              bookingContactProfileId:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter:
+        _or:
+          - course:
+              organization_key_contact_profile_id:
+                _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter:
+        _or:
+          - course:
+              trainers:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed
+        - completed_evaluation
+        - course_id
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_started
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter:
+        _or:
+          - profile:
+              organizations:
+                organization:
+                  _or:
+                    - members:
+                        _and:
+                          - is_admin:
+                              _eq: true
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                    - main_organisation:
+                        members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                _or:
+                  - members:
+                      _and:
+                        - is_admin:
+                            _eq: true
+                        - profile_id:
+                            _eq: X-Hasura-User-Id
+                  - main_organisation:
+                      members:
+                        _and:
+                          - is_admin:
+                              _eq: true
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+          - _and:
+              - course:
+                  course_type:
+                    _eq: OPEN
+              - course:
+                  course_status:
+                    _in:
+                      - CONFIRM_MODULES
+                      - SCHEDULED
+                      - TRAINER_MISSING
+                      - TRAINER_PENDING
+                      - TRAINER_DECLINED
+      allow_aggregations: true
+update_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - attended
+        - completed_evaluation
+        - date_graded
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+      filter:
+        _or:
+          - course:
+              trainers:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - course:
+              course_status:
+                _eq: EXCEPTIONS_APPROVAL_PENDING
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter:
+        _or:
+          - _not:
+              certificate: {}
+          - certificate:
+              is_revoked:
+                _eq: false
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_progress
+        - go1_enrolment_status
+        - grade
+        - graded_on
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter:
+        _or:
+          - _not:
+              certificate: {}
+          - certificate:
+              is_revoked:
+                _eq: false
+      check: null
+  - role: user
+    permission:
+      columns:
+        - completed_evaluation
+        - hs_consent
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: ld
+    permission:
+      filter: {}
+  - role: trainer
+    permission:
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}
+event_triggers:
+  - name: assistant_participant_delete
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/trainers/assistant/delete-participant'
+  - name: assistant_participant_insert
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/trainers/assistant/insert-participant'
+  - name: assistant_participant_update
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - certificate_id
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/trainers/assistant/update-participant'
+  - name: course_completed_evaluation
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - completed_evaluation
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-completed-evaluation'
+  - name: course_participant_completed_evaluation
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - certificate_id
+          - completed_evaluation
+          - go1_enrolment_status
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/evaluation'
+  - name: course_participant_graded
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/graded'
+  - name: course_participant_marked_as_attended
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - attended
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/attended'
+  - name: cp_manage_pre_training_survey_email
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-pre-training-survey-email/manage-cp'
+  - name: create_certificate
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - completed_evaluation
+          - go1_enrolment_status
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 120
+    webhook: '{{EVENTS_HOST}}/certificate/insert'
+  - name: go1_link
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 600
+      num_retries: 5
+      timeout_sec: 10
+    webhook: '{{EVENTS_HOST}}/go1/link'
+  - name: indirect_course_resource_pack_issue
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/issue'
+  - name: indirect_revert_issued_resource_pack
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/revert-issued'
+  - name: issue_go1_license
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/issue-license'
+  - name: manage_about_training_survey_email_event
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/schedule-about-training-survey-email/manage'
+  - name: manage_post_training_survey_email_event
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+          - attended
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email/manage'
+  - name: participant_cancelled
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+      update:
+        columns:
+          - attended
+    retry_conf:
+      interval_sec: 20
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1/participant/cancelled'
+  - name: participant_graded_status
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/status'
+  - name: schedule_post_training_survey_email
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - grade
+          - attended
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-post-training-survey-email'
+  - name: schedule_pre_training_survey_email
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/participant/schedule-pre-training-survey-email'

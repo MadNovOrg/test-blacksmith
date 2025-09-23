@@ -1,0 +1,1 @@
+CREATE TABLE "public"."course_exceptions" ("course_id" integer NOT NULL, "exception" text NOT NULL, PRIMARY KEY ("course_id","exception") , FOREIGN KEY ("exception") REFERENCES "public"."course_exception"("exception") ON UPDATE cascade ON DELETE cascade, FOREIGN KEY ("course_id") REFERENCES "public"."course"("id") ON UPDATE cascade ON DELETE cascade);

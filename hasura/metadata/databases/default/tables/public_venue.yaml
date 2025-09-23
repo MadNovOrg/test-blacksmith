@@ -1,0 +1,202 @@
+table:
+  name: venue
+  schema: public
+configuration:
+  column_config:
+    address_line_one:
+      custom_name: addressLineOne
+    address_line_two:
+      custom_name: addressLineTwo
+    country_code:
+      custom_name: countryCode
+    created_at:
+      custom_name: createdAt
+    geo_coordinates:
+      custom_name: geoCoordinates
+    google_places_id:
+      custom_name: googlePlacesId
+    post_code:
+      custom_name: postCode
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    address_line_one: addressLineOne
+    address_line_two: addressLineTwo
+    country_code: countryCode
+    created_at: createdAt
+    geo_coordinates: geoCoordinates
+    google_places_id: googlePlacesId
+    post_code: postCode
+    updated_at: updatedAt
+  custom_root_fields: {}
+array_relationships:
+  - name: schedule
+    using:
+      foreign_key_constraint_on:
+        column: venue_id
+        table:
+          name: course_schedule
+          schema: public
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - name
+        - post_code
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter:
+        schedule:
+          course:
+            _and:
+              - course_type:
+                  _eq: OPEN
+              - course_status:
+                  _in:
+                    - CONFIRM_MODULES
+                    - SCHEDULED
+                    - TRAINER_MISSING
+                    - TRAINER_PENDING
+                    - TRAINER_DECLINED
+  - role: sales-admin
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter:
+        schedule:
+          course:
+            course_type:
+              _eq: OPEN
+  - role: user
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter: {}
+update_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - country
+        - country_code
+        - geo_coordinates
+        - google_places_id
+        - name
+        - post_code
+      filter: {}
+      check: null
+event_triggers:
+  - name: venue_address_update
+    definition:
+      enable_manual: false
+      insert:
+        columns:
+          - address_line_one
+          - address_line_two
+          - city
+          - post_code
+      update:
+        columns:
+          - address_line_one
+          - address_line_two
+          - city
+          - post_code
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/venue/address/update'

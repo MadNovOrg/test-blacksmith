@@ -1,0 +1,307 @@
+table:
+  name: organization_invites
+  schema: public
+configuration:
+  column_config:
+    created_at:
+      custom_name: createdAt
+    is_admin:
+      custom_name: isAdmin
+    org_id:
+      custom_name: orgId
+    profile_id:
+      custom_name: profileId
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    created_at: createdAt
+    is_admin: isAdmin
+    org_id: orgId
+    profile_id: profileId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+  - role: sales-representative
+    permission:
+      check: {}
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - created_at
+        - email
+        - id
+        - is_admin
+        - org_id
+        - profile_id
+        - status
+        - updated_at
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+  - role: user
+    permission:
+      check:
+        organization:
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - created_at
+        - email
+        - id
+        - is_admin
+        - org_id
+        - profile_id
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter:
+        organization:
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+      allow_aggregations: true
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
+  - role: user
+    permission:
+      columns:
+        - is_admin
+        - status
+        - updated_at
+      filter:
+        organization:
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter: {}
+  - role: sales-representative
+    permission:
+      filter: {}
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}
+  - role: user
+    permission:
+      filter:
+        organization:
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+event_triggers:
+  - name: org_invite_email
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - updated_at
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/org-invite'

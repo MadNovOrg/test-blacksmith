@@ -1,0 +1,1142 @@
+// TODO Uncomment this when time will come 👻
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+generator erdSVG {
+  provider = "prisma-erd-generator"
+  output   = "../docs/db/diagram.svg"
+  theme    = "neutral"
+}
+
+generator erdMD {
+  provider = "prisma-erd-generator"
+  output   = "../docs/db/diagram.md"
+  theme    = "neutral"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model accreditors {
+  name   String   @id @unique
+  course course[]
+}
+
+model availability {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at        DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime          @default(now()) @db.Timestamptz(6)
+  start             DateTime          @db.Timestamptz(6)
+  end               DateTime          @db.Timestamptz(6)
+  description       String?
+  type              String
+  profile_id        String            @db.Uuid
+  profile           profile           @relation(fields: [profile_id], references: [id], onUpdate: Restrict)
+  availability_type availability_type @relation(fields: [type], references: [value], onUpdate: Restrict)
+}
+
+model availability_type {
+  value        String         @id
+  availability availability[]
+}
+
+model bild_strategy {
+  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String                 @unique
+  modules              Json
+  short_name           String
+  duration             Int?
+  course_bild_strategy course_bild_strategy[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model blended_learning_status {
+  name               String               @id
+  course_participant course_participant[]
+}
+
+model certificate_expired_notification_jobs {
+  id                    String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_certificate_id String             @db.Uuid
+  job_id                String             @db.Uuid
+  course_certificate    course_certificate @relation(fields: [course_certificate_id], references: [id], onDelete: Cascade, map: "certificate_expired_notification_job_course_certificate_id_fkey")
+
+  @@unique([course_certificate_id, job_id], map: "certificate_expired_notificati_course_certificate_id_job_id_key")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model certificate_expiry_notification_jobs {
+  id                                        String                                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_certificate_id                     String                                    @db.Uuid
+  job_id                                    String                                    @db.Uuid
+  timeframe                                 String
+  course_certificate                        course_certificate                        @relation(fields: [course_certificate_id], references: [id], onDelete: Cascade)
+  certificate_expiry_notification_timeframe certificate_expiry_notification_timeframe @relation(fields: [timeframe], references: [name], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([course_certificate_id, job_id, timeframe], map: "certificate_expiry_notificati_course_certificate_id_job_id__key")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model certificate_expiry_notification_timeframe {
+  name                                 String                                 @id
+  certificate_expiry_notification_jobs certificate_expiry_notification_jobs[]
+}
+
+model certificate_status {
+  name String @id
+}
+
+model color {
+  name                                   String         @id
+  module_group_module_group_colorTocolor module_group[] @relation("module_group_colorTocolor")
+}
+
+model course {
+  created_at                                                             DateTime                     @default(now()) @db.Timestamptz(6)
+  updated_at                                                             DateTime                     @default(now()) @db.Timestamptz(6)
+  name                                                                   String
+  course_type                                                            String
+  course_delivery_type                                                   String
+  course_level                                                           String
+  organization_id                                                        String?                      @db.Uuid
+  reaccreditation                                                        Boolean?                     @default(false)
+  description                                                            String?
+  course_status                                                          String?                      @default("TRAINER_PENDING")
+  min_participants                                                       Int                          @default(6)
+  max_participants                                                       Int                          @default(12)
+  grading_confirmed                                                      Boolean                      @default(false)
+  go1_integration                                                        Boolean                      @default(false)
+  aol_cost_of_course                                                     Decimal?                     @db.Decimal
+  id                                                                     Int                          @id @unique(map: "course_autoincremental_id_key") @default(autoincrement())
+  booking_contact_profile_id                                             String?                      @db.Uuid
+  aol_country                                                            String?
+  aol_region                                                             String?
+  free_spaces                                                            Int?                         @default(0)
+  account_code                                                           String?
+  cancellation_reason                                                    String?
+  cancellation_fee                                                       Int?
+  grading_started                                                        Boolean                      @default(false)
+  modules_duration                                                       Int                          @default(0)
+  created_by_id                                                          String?                      @db.Uuid
+  special_instructions                                                   String?
+  parking_instructions                                                   String?
+  source                                                                 String?
+  accredited_by                                                          String                       @default("ICM")
+  conversion                                                             Boolean?                     @default(false)
+  price                                                                  Decimal?                     @db.Decimal
+  price_currency                                                         String?                      @default("GBP")
+  booking_contact_invite_data                                            Json?
+  is_draft                                                               Boolean?                     @default(false)
+  exceptions_pending                                                     Boolean                      @default(false)
+  start                                                                  DateTime?                    @db.Timestamptz(6)
+  end                                                                    DateTime?                    @db.Timestamptz(6)
+  accreditors                                                            accreditors                  @relation(fields: [accredited_by], references: [name])
+  profile_course_booking_contact_profile_idToprofile                     profile?                     @relation("course_booking_contact_profile_idToprofile", fields: [booking_contact_profile_id], references: [id], onUpdate: Restrict, map: "course_contact_profile_id_fkey")
+  course_delivery_type_course_course_delivery_typeTocourse_delivery_type course_delivery_type         @relation("course_course_delivery_typeTocourse_delivery_type", fields: [course_delivery_type], references: [name], onUpdate: Restrict)
+  course_level_course_course_levelTocourse_level                         course_level                 @relation("course_course_levelTocourse_level", fields: [course_level], references: [name])
+  course_status_course_course_statusTocourse_status                      course_status?               @relation("course_course_statusTocourse_status", fields: [course_status], references: [name], onDelete: Cascade)
+  course_type_course_course_typeTocourse_type                            course_type                  @relation("course_course_typeTocourse_type", fields: [course_type], references: [name])
+  profile_course_created_by_idToprofile                                  profile?                     @relation("course_created_by_idToprofile", fields: [created_by_id], references: [id], onUpdate: Restrict)
+  organization                                                           organization?                @relation(fields: [organization_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  course_source                                                          course_source?               @relation(fields: [source], references: [name])
+  course_audit                                                           course_audit[]
+  course_bild_module                                                     course_bild_module[]
+  course_bild_strategy                                                   course_bild_strategy[]
+  course_cancellation_request                                            course_cancellation_request?
+  course_certificate                                                     course_certificate[]
+  course_end_jobs                                                        course_end_jobs[]
+  course_enquiry                                                         course_enquiry[]
+  course_evaluation_answers                                              course_evaluation_answers[]
+  course_expenses                                                        course_expenses[]
+  course_invites                                                         course_invites[]
+  course_module                                                          course_module[]
+  course_participant                                                     course_participant[]
+  course_participant_audit                                               course_participant_audit[]
+  course_promo_code                                                      course_promo_code[]
+  course_schedule                                                        course_schedule[]
+  course_trainer                                                         course_trainer[]
+  order                                                                  order[]
+  order_temp                                                             order_temp[]
+  private_course_booking                                                 private_course_booking[]
+  profile_temp                                                           profile_temp[]
+  venue_check_jobs                                                       venue_check_jobs[]
+  waitlist                                                               waitlist[]
+
+  @@index([organization_id], map: "course_organization_id")
+}
+
+model course_audit {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at        DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime          @default(now()) @db.Timestamptz(6)
+  course_id         Int
+  authorized_by     String            @db.Uuid
+  type              String
+  payload           Json
+  profile           profile           @relation(fields: [authorized_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  course            course            @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  course_audit_type course_audit_type @relation(fields: [type], references: [name], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model course_audit_type {
+  name         String         @id
+  course_audit course_audit[]
+}
+
+model course_bild_module {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id Int
+  modules   Json
+  course    course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+}
+
+model course_bild_strategy {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id     Int
+  strategy_name String
+  course        course        @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  bild_strategy bild_strategy @relation(fields: [strategy_name], references: [name], onDelete: Cascade)
+}
+
+model course_cancellation_request {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id    Int      @unique
+  requested_by String   @db.Uuid
+  reason       String
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @default(now()) @db.Timestamptz(6)
+  course       course   @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profile      profile  @relation(fields: [requested_by], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([course_id], map: "course_cancellation_request_course_id")
+}
+
+model course_certificate {
+  id                                    String                                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                            DateTime                                @default(now()) @db.Timestamptz(6)
+  updated_at                            DateTime                                @default(now()) @db.Timestamptz(6)
+  course_id                             Int?
+  number                                String                                  @unique
+  expiry_date                           DateTime                                @db.Date
+  profile_id                            String                                  @db.Uuid
+  course_name                           String
+  course_level                          String
+  certification_date                    DateTime                                @db.Date
+  is_revoked                            Boolean                                 @default(false)
+  certificate_expired_notification_jobs certificate_expired_notification_jobs[]
+  certificate_expiry_notification_jobs  certificate_expiry_notification_jobs[]
+  course                                course?                                 @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  course_certificate_hold_request       course_certificate_hold_request?
+  course_participant                    course_participant[]
+  legacy_certificate                    legacy_certificate[]
+}
+
+model course_certificate_changelog {
+  id                                String                            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                        DateTime                          @default(now()) @db.Timestamptz(6)
+  updated_at                        DateTime                          @default(now()) @db.Timestamptz(6)
+  participant_id                    String                            @db.Uuid
+  author_id                         String                            @db.Uuid
+  type                              String
+  payload                           Json?
+  profile                           profile                           @relation(fields: [author_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  course_participant                course_participant                @relation(fields: [participant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  course_certificate_changelog_type course_certificate_changelog_type @relation(fields: [type], references: [name])
+}
+
+model course_certificate_changelog_type {
+  name                         String                         @id
+  course_certificate_changelog course_certificate_changelog[]
+}
+
+model course_certificate_hold_request {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  certificate_id     String             @unique @db.Uuid
+  changelog_id       String             @unique @db.Uuid
+  expiry_date        DateTime           @db.Timestamp(6)
+  start_date         DateTime           @db.Date
+  course_certificate course_certificate @relation(fields: [certificate_id], references: [id], onDelete: Cascade)
+}
+
+model course_delivery_type {
+  name                                                                                   String                       @id
+  course_course_course_delivery_typeTocourse_delivery_type                               course[]                     @relation("course_course_delivery_typeTocourse_delivery_type")
+  course_delivery_type_prefix                                                            course_delivery_type_prefix?
+  module_group_duration_module_group_duration_course_delivery_typeTocourse_delivery_type module_group_duration[]      @relation("module_group_duration_course_delivery_typeTocourse_delivery_type")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_delivery_type_prefix {
+  id                   String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String               @unique
+  prefix               String               @unique
+  course_delivery_type course_delivery_type @relation(fields: [name], references: [name], onDelete: Cascade)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_draft {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id  String   @db.Uuid
+  course_type String
+  data        Json?
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  updated_at  DateTime @default(now()) @db.Timestamp(6)
+
+  @@unique([profile_id, course_type])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_end_jobs {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id Int
+  job_id    String @db.Uuid
+  course    course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, job_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_enquiry {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  interest    String
+  given_name  String
+  family_name String
+  email       String
+  phone       String
+  org_name    String
+  sector      String
+  message     String?
+  source      String?
+  course_id   Int
+  course      course    @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@unique([email, course_id])
+}
+
+model course_evaluation_answers {
+  id                          String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  question_id                 String                      @db.Uuid
+  answer                      String?
+  profile_id                  String                      @db.Uuid
+  course_id                   Int
+  course                      course                      @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profile                     profile                     @relation(fields: [profile_id], references: [id], onUpdate: Restrict)
+  course_evaluation_questions course_evaluation_questions @relation(fields: [question_id], references: [id], onUpdate: Restrict)
+}
+
+model course_evaluation_question_group {
+  name                        String                        @id
+  course_evaluation_questions course_evaluation_questions[]
+}
+
+model course_evaluation_question_type {
+  name                        String                        @id
+  course_evaluation_questions course_evaluation_questions[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_evaluation_questions {
+  id                               String                            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  question                         String
+  display_order                    Int                               @default(0)
+  type                             String?                           @default("TEXT")
+  group                            String?
+  question_key                     String?                           @unique
+  required                         Boolean                           @default(true)
+  course_evaluation_answers        course_evaluation_answers[]
+  course_evaluation_question_group course_evaluation_question_group? @relation(fields: [group], references: [name], onDelete: Restrict)
+  course_evaluation_question_type  course_evaluation_question_type?  @relation(fields: [type], references: [name], onDelete: Restrict)
+}
+
+model course_expenses {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  course_id  Int
+  trainer_id String   @db.Uuid
+  data       Json
+  course     course   @relation(fields: [course_id], references: [id])
+  profile    profile  @relation(fields: [trainer_id], references: [id])
+
+  @@index([course_id], map: "course_expenses_course_id")
+  @@index([trainer_id], map: "course_expenses_trainer_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_invite_status {
+  name           String           @id
+  course_invites course_invites[]
+  course_trainer course_trainer[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_invites {
+  id                   String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at           DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime              @default(now()) @db.Timestamptz(6)
+  status               String?               @default("PENDING")
+  email                String?
+  note                 String?
+  course_id            Int
+  course               course                @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  course_invite_status course_invite_status? @relation(fields: [status], references: [name], onDelete: Restrict)
+  course_participant   course_participant[]
+
+  @@unique([email, course_id])
+  @@index([course_id], map: "course_invites_course_id")
+}
+
+model course_level {
+  name                                                 String           @id
+  course_course_course_levelTocourse_level             course[]         @relation("course_course_levelTocourse_level")
+  course_pricing                                       course_pricing[]
+  module_module_course_levelTocourse_level             module[]         @relation("module_course_levelTocourse_level")
+  module_group_module_group_course_levelTocourse_level module_group[]   @relation("module_group_course_levelTocourse_level")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_level_prefix {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String @unique
+  prefix String @unique
+}
+
+model course_module {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  module_id  String   @db.Uuid
+  covered    Boolean?
+  course_id  Int
+  course     course   @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  module     module   @relation(fields: [module_id], references: [id], onDelete: Cascade)
+
+  @@index([course_id], map: "course_module_course_id")
+}
+
+model course_participant {
+  id                                    String                          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  registration_id                       String?                         @db.Uuid
+  invoice_id                            String?                         @db.Uuid
+  booking_date                          DateTime?                       @default(now()) @db.Timestamptz(6)
+  profile_id                            String                          @db.Uuid
+  invite_id                             String?                         @db.Uuid
+  go1_enrolment_id                      Int?
+  attended                              Boolean?
+  go1_enrolment_status                  String?
+  created_at                            DateTime?                       @default(now()) @db.Timestamptz(6)
+  updated_at                            DateTime?                       @default(now()) @db.Timestamptz(6)
+  grading_feedback                      String?
+  grade                                 String?
+  date_graded                           DateTime?                       @db.Timestamptz(6)
+  course_id                             Int
+  certificate_id                        String?                         @db.Uuid
+  hs_consent                            Boolean                         @default(false)
+  order_id                              String?                         @db.Uuid
+  completed_evaluation                  Boolean?                        @default(false)
+  course_certificate_changelog          course_certificate_changelog[]
+  course_certificate                    course_certificate?             @relation(fields: [certificate_id], references: [id], onUpdate: NoAction)
+  course                                course                          @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  blended_learning_status               blended_learning_status?        @relation(fields: [go1_enrolment_status], references: [name], onDelete: Restrict)
+  grade_course_participant_gradeTograde grade?                          @relation("course_participant_gradeTograde", fields: [grade], references: [name], onDelete: Restrict, onUpdate: Restrict)
+  course_invites                        course_invites?                 @relation(fields: [invite_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  order                                 order?                          @relation(fields: [order_id], references: [id], onUpdate: SetNull)
+  profile                               profile                         @relation(fields: [profile_id], references: [id], onUpdate: Restrict)
+  course_participant_bild_module        course_participant_bild_module?
+  course_participant_module             course_participant_module[]
+
+  @@unique([profile_id, course_id])
+  @@index([course_id], map: "course_participant_course_id")
+  @@index([invite_id], map: "course_participant_invite_id")
+}
+
+model course_participant_audit {
+  id                                                      String                        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                              DateTime                      @default(now()) @db.Timestamptz(6)
+  updated_at                                              DateTime                      @default(now()) @db.Timestamptz(6)
+  authorized_by                                           String                        @db.Uuid
+  type                                                    String
+  payload                                                 Json
+  course_id                                               Int
+  profile_id                                              String                        @db.Uuid
+  profile_course_participant_audit_authorized_byToprofile profile                       @relation("course_participant_audit_authorized_byToprofile", fields: [authorized_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  course                                                  course                        @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profile_course_participant_audit_profile_idToprofile    profile                       @relation("course_participant_audit_profile_idToprofile", fields: [profile_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  course_participant_audit_type                           course_participant_audit_type @relation(fields: [type], references: [name], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model course_participant_audit_type {
+  name                     String                     @id
+  course_participant_audit course_participant_audit[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_participant_bild_module {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  participant_id     String             @unique @db.Uuid
+  modules            Json
+  course_participant course_participant @relation(fields: [participant_id], references: [id], onDelete: Cascade)
+}
+
+model course_participant_cancellation {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime @default(now()) @db.Timestamptz(6)
+  profile_id          String   @db.Uuid
+  course_id           Int
+  cancellation_reason String
+  cancellation_fee    Int
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_participant_module {
+  id                    String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_participant_id String             @db.Uuid
+  module_id             String             @db.Uuid
+  completed             Boolean
+  course_participant    course_participant @relation(fields: [course_participant_id], references: [id], onDelete: Cascade)
+  module                module             @relation(fields: [module_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@unique([course_participant_id, module_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_pricing {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type                     String
+  level                    String
+  blended                  Boolean
+  reaccreditation          Boolean
+  price_amount             Decimal                    @db.Decimal
+  price_currency           String                     @default("GBP")
+  xero_code                String
+  created_at               DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime?                  @default(now()) @db.Timestamptz(6)
+  course_level             course_level               @relation(fields: [level], references: [name], onUpdate: Restrict)
+  course_type              course_type                @relation(fields: [type], references: [name], onUpdate: Restrict)
+  course_pricing_changelog course_pricing_changelog[]
+
+  @@unique([type, level, blended, reaccreditation])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_pricing_changelog {
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_pricing_id String         @db.Uuid
+  old_price         Decimal        @db.Decimal
+  new_price         Decimal        @db.Decimal
+  author_id         String?        @db.Uuid
+  created_at        DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime       @default(now()) @db.Timestamptz(6)
+  profile           profile?       @relation(fields: [author_id], references: [id], onUpdate: NoAction)
+  course_pricing    course_pricing @relation(fields: [course_pricing_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model course_promo_code {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id  Int?
+  promo_id   String?     @db.Uuid
+  course     course?     @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  promo_code promo_code? @relation(fields: [promo_id], references: [id], onDelete: Cascade)
+}
+
+model course_schedule {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime @default(now()) @db.Timestamptz(6)
+  start              DateTime @db.Timestamptz(6)
+  end                DateTime @db.Timestamptz(6)
+  venue_id           String?  @db.Uuid
+  virtual_link       String?
+  course_id          Int
+  virtual_account_id String?
+  course             course   @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  venue              venue?   @relation(fields: [venue_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([course_id], map: "course_schedule_course_id")
+  @@index([end], map: "course_schedule_end")
+  @@index([start], map: "course_schedule_start")
+  @@index([venue_id], map: "course_schedule_venue_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_source {
+  name   String   @id
+  course course[]
+}
+
+model course_status {
+  name                                       String   @id
+  course_course_course_statusTocourse_status course[] @relation("course_course_statusTocourse_status")
+}
+
+model course_trainer {
+  id                   String                @id(map: "course_leader_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id           String                @db.Uuid
+  type                 String
+  course_id            Int
+  status               String?               @default("PENDING")
+  profile              profile               @relation(fields: [profile_id], references: [id], onUpdate: Restrict, map: "course_leader_profile_id_fkey")
+  course_trainer_type  course_trainer_type   @relation(fields: [type], references: [name], onUpdate: Restrict, map: "course_leader_type_fkey")
+  course               course                @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  course_invite_status course_invite_status? @relation(fields: [status], references: [name], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([course_id, profile_id])
+  @@index([course_id], map: "course_trainer_course_id")
+  @@index([profile_id], map: "course_trainer_profile_id")
+}
+
+model course_trainer_type {
+  name           String           @id
+  course_trainer course_trainer[]
+}
+
+model course_type {
+  name                                   String           @id
+  course_course_course_typeTocourse_type course[]         @relation("course_course_typeTocourse_type")
+  course_pricing                         course_pricing[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model course_type_prefix {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String @unique
+  prefix String @unique
+}
+
+model dfe_establishment {
+  id                     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  urn                    String
+  name                   String
+  local_authority        String
+  trust_type             String?
+  trust_name             String?
+  address_line_1         String?
+  address_line_2         String?
+  address_line_3         String?
+  town                   String?
+  county                 String?
+  postcode               String?
+  head_title             String?
+  head_first_name        String?
+  head_last_name         String?
+  head_job_title         String?
+  ofsted_rating          String?
+  ofsted_last_inspection String?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model expire_go1_license_jobs {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  job_id       String       @db.Uuid
+  license_id   String       @db.Uuid
+  go1_licenses go1_licenses @relation(fields: [license_id], references: [id], onDelete: Cascade)
+
+  @@unique([job_id, license_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model go1_history_events {
+  name                 String                 @id
+  go1_licenses_history go1_licenses_history[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model go1_licenses {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id              String                    @db.Uuid
+  org_id                  String                    @db.Uuid
+  expire_date             DateTime                  @db.Timestamptz(6)
+  enrolled_on             DateTime                  @default(now()) @db.Timestamptz(6)
+  expire_go1_license_jobs expire_go1_license_jobs[]
+  organization            organization              @relation(fields: [org_id], references: [id], onUpdate: Restrict)
+  profile                 profile                   @relation(fields: [profile_id], references: [id], onUpdate: Restrict)
+
+  @@unique([profile_id, org_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model go1_licenses_history {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  org_id             String             @db.Uuid
+  captured_at        DateTime           @default(now()) @db.Timestamptz(6)
+  event              String
+  balance            Int
+  change             Int
+  payload            Json?
+  reserved_balance   Int                @default(0)
+  go1_history_events go1_history_events @relation(fields: [event], references: [name], onUpdate: Restrict)
+  organization       organization       @relation(fields: [org_id], references: [id], onDelete: Cascade)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model grade {
+  name                                               String               @id
+  course_participant_course_participant_gradeTograde course_participant[] @relation("course_participant_gradeTograde")
+}
+
+model identity {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  provider_id   String        @unique @db.VarChar
+  profile_id    String        @db.Uuid
+  type          String
+  profile       profile       @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  identity_type identity_type @relation(fields: [type], references: [value], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model identity_type {
+  value    String     @id
+  identity identity[]
+}
+
+model legacy_certificate {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at            DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime            @default(now()) @db.Timestamptz(6)
+  original_record       Json                @default("{}")
+  number                String              @unique
+  course_name           String
+  legacy_id             Int
+  email                 String
+  first_name            String
+  last_name             String
+  expiry_date           DateTime            @db.Date
+  certification_date    DateTime            @db.Date
+  course_certificate_id String?             @db.Uuid
+  course_certificate    course_certificate? @relation(fields: [course_certificate_id], references: [id], onUpdate: NoAction)
+}
+
+model module {
+  id                                                      String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                              DateTime                    @default(now()) @db.Timestamptz(6)
+  updated_at                                              DateTime                    @default(now()) @db.Timestamptz(6)
+  name                                                    String
+  description                                             String?
+  module_category                                         String
+  module_group_id                                         String?                     @db.Uuid
+  course_level                                            String
+  course_module                                           course_module[]
+  course_participant_module                               course_participant_module[]
+  course_level_module_course_levelTocourse_level          course_level                @relation("module_course_levelTocourse_level", fields: [course_level], references: [name], onUpdate: Restrict)
+  module_category_module_module_categoryTomodule_category module_category             @relation("module_module_categoryTomodule_category", fields: [module_category], references: [name])
+  module_group                                            module_group?               @relation(fields: [module_group_id], references: [id], onDelete: Restrict)
+}
+
+model module_category {
+  name                                           String   @id
+  module_module_module_categoryTomodule_category module[] @relation("module_module_categoryTomodule_category")
+}
+
+model module_group {
+  id                                                   String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                           DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at                                           DateTime                @default(now()) @db.Timestamptz(6)
+  name                                                 String
+  mandatory                                            Boolean                 @default(false)
+  course_level                                         String
+  color                                                String
+  module                                               module[]
+  color_module_group_colorTocolor                      color                   @relation("module_group_colorTocolor", fields: [color], references: [name], onUpdate: Restrict)
+  course_level_module_group_course_levelTocourse_level course_level            @relation("module_group_course_levelTocourse_level", fields: [course_level], references: [name], onUpdate: Restrict)
+  module_group_duration                                module_group_duration[]
+}
+
+model module_group_duration {
+  id                                                                                    String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at                                                                            DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at                                                                            DateTime             @default(now()) @db.Timestamptz(6)
+  module_group_id                                                                       String               @db.Uuid
+  course_delivery_type                                                                  String
+  reaccreditation                                                                       Boolean              @default(false)
+  duration                                                                              Int                  @default(0)
+  go1_integration                                                                       Boolean              @default(false)
+  course_delivery_type_module_group_duration_course_delivery_typeTocourse_delivery_type course_delivery_type @relation("module_group_duration_course_delivery_typeTocourse_delivery_type", fields: [course_delivery_type], references: [name], onUpdate: Restrict)
+  module_group                                                                          module_group         @relation(fields: [module_group_id], references: [id], onUpdate: Restrict)
+}
+
+model order {
+  id                                             String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id                                      Int
+  profile_id                                     String?              @db.Uuid
+  quantity                                       Int
+  payment_method                                 String
+  billing_address                                String
+  billing_given_name                             String
+  billing_family_name                            String
+  billing_email                                  String
+  billing_phone                                  String
+  registrants                                    Json                 @db.Json
+  created_at                                     DateTime             @default(now()) @db.Timestamptz(6)
+  price                                          Float?
+  vat                                            Float?
+  order_total                                    Float?
+  organization_id                                String               @db.Uuid
+  currency                                       String?
+  stripePaymentId                                String?
+  promo_codes                                    Json?                @default("[]")
+  order_due                                      Float?
+  xero_invoice_number                            String?              @unique
+  client_purchase_order                          String?
+  user                                           Json
+  source                                         String?
+  sales_representative_id                        String?              @db.Uuid
+  booking_contact                                Json?
+  course_participant                             course_participant[]
+  course                                         course               @relation(fields: [course_id], references: [id], onUpdate: Restrict)
+  organization                                   organization         @relation(fields: [organization_id], references: [id], onUpdate: Restrict)
+  payment_methods                                payment_methods      @relation(fields: [payment_method], references: [name])
+  profile_order_profile_idToprofile              profile?             @relation("order_profile_idToprofile", fields: [profile_id], references: [id], onUpdate: Restrict)
+  profile_order_sales_representative_idToprofile profile?             @relation("order_sales_representative_idToprofile", fields: [sales_representative_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  xero_invoice                                   xero_invoice?
+}
+
+model order_temp {
+  id                      String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id               Int
+  profile_id              String?         @db.Uuid
+  quantity                Int
+  payment_method          String
+  billing_address         String
+  billing_given_name      String
+  billing_family_name     String
+  billing_email           String
+  billing_phone           String
+  registrants             Json            @db.Json
+  created_at              DateTime        @default(now()) @db.Timestamptz(6)
+  price                   Float?
+  vat                     Float?
+  order_total             Float?
+  organization_id         String          @db.Uuid
+  currency                String?
+  stripePaymentId         String?
+  promo_codes             Json?           @default("[]")
+  order_due               Float?
+  xero_invoice_number     String?         @unique
+  client_purchase_order   String?
+  user                    Json
+  source                  String?
+  sales_representative_id String?         @db.Uuid
+  booking_contact         Json?
+  course                  course          @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  payment_methods         payment_methods @relation(fields: [payment_method], references: [name])
+}
+
+model organization {
+  id                                             String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                                           String                 @db.VarChar
+  tags                                           Json?
+  contact_details                                Json                   @default("[]")
+  attributes                                     Json                   @default("{}")
+  address                                        Json                   @default("{}")
+  preferences                                    Json                   @default("{}")
+  original_record                                Json?
+  created_at                                     DateTime               @default(now()) @db.Timestamptz(6)
+  updated_at                                     DateTime               @default(now()) @db.Timestamptz(6)
+  xero_contact_id                                String?
+  sector                                         String?
+  region                                         String?
+  trust_type                                     String?
+  trust_name                                     String?
+  go1_license                                    Int?                   @default(0)
+  geo_coordinates                                Unsupported("point")?
+  reserved_go1_licenses                          Int?                   @default(0)
+  course                                         course[]
+  go1_licenses                                   go1_licenses[]
+  go1_licenses_history                           go1_licenses_history[]
+  order                                          order[]
+  trust_type_organization_trust_typeTotrust_type trust_type?            @relation("organization_trust_typeTotrust_type", fields: [trust_type], references: [name], onDelete: Cascade)
+  organization_invites                           organization_invites[]
+  organization_member                            organization_member[]
+}
+
+model organization_invites {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at   DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime     @default(now()) @db.Timestamptz(6)
+  email        String
+  status       String       @default("PENDING")
+  org_id       String       @db.Uuid
+  profile_id   String?      @db.Uuid
+  is_admin     Boolean      @default(false)
+  organization organization @relation(fields: [org_id], references: [id], onDelete: Cascade)
+  profile      profile?     @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@unique([org_id, email])
+}
+
+model organization_member {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id      String       @db.Uuid
+  organization_id String       @db.Uuid
+  member_type     String?      @db.VarChar
+  source          String?      @map("_source") @db.VarChar
+  created_at      DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime     @default(now()) @db.Timestamptz(6)
+  is_admin        Boolean?     @default(false)
+  position        String?
+  organization    organization @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profile         profile      @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([profile_id, organization_id])
+  @@index([profile_id])
+}
+
+model payment_methods {
+  name       String       @id
+  order      order[]
+  order_temp order_temp[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model private_course_booking {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  given_name       String
+  family_name      String
+  email            String
+  phone            String
+  org_name         String
+  sector           String
+  message          String?
+  source           String?
+  course_id        Int
+  num_participants Int
+  course           course    @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, email])
+}
+
+model profile {
+  id                                                                       String                         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                                                                    String?                        @db.VarChar
+  tags                                                                     Json?
+  contact_details                                                          Json                           @default("[]")
+  attributes                                                               Json                           @default("{}")
+  addresses                                                                Json                           @default("[]")
+  preferences                                                              Json                           @default("{}")
+  original_record                                                          Json                           @default("{}")
+  created_at                                                               DateTime                       @default(now()) @db.Timestamptz(6)
+  updated_at                                                               DateTime                       @default(now()) @db.Timestamptz(6)
+  go1_id                                                                   Int?
+  stripe_customer_id                                                       String?                        @unique @db.VarChar
+  go1_profile                                                              Json?                          @default("{}")
+  job_title                                                                String?
+  dob                                                                      DateTime?                      @db.Date
+  dietary_restrictions                                                     String?
+  disabilities                                                             String?
+  last_activity                                                            DateTime                       @default(now()) @db.Timestamptz(6)
+  avatar                                                                   String?
+  given_name                                                               String?                        @map("_given_name")
+  family_name                                                              String?                        @map("_family_name")
+  email                                                                    String?                        @map("_email")
+  phone                                                                    String?                        @map("_phone")
+  archived                                                                 Boolean?                       @default(false)
+  availability                                                             availability[]
+  course_course_booking_contact_profile_idToprofile                        course[]                       @relation("course_booking_contact_profile_idToprofile")
+  course_course_created_by_idToprofile                                     course[]                       @relation("course_created_by_idToprofile")
+  course_audit                                                             course_audit[]
+  course_cancellation_request                                              course_cancellation_request[]
+  course_certificate_changelog                                             course_certificate_changelog[]
+  course_evaluation_answers                                                course_evaluation_answers[]
+  course_expenses                                                          course_expenses[]
+  course_participant                                                       course_participant[]
+  course_participant_audit_course_participant_audit_authorized_byToprofile course_participant_audit[]     @relation("course_participant_audit_authorized_byToprofile")
+  course_participant_audit_course_participant_audit_profile_idToprofile    course_participant_audit[]     @relation("course_participant_audit_profile_idToprofile")
+  course_pricing_changelog                                                 course_pricing_changelog[]
+  course_trainer                                                           course_trainer[]
+  go1_licenses                                                             go1_licenses[]
+  identity                                                                 identity[]
+  order_order_profile_idToprofile                                          order[]                        @relation("order_profile_idToprofile")
+  order_order_sales_representative_idToprofile                             order[]                        @relation("order_sales_representative_idToprofile")
+  organization_invites                                                     organization_invites[]
+  organization_member                                                      organization_member[]
+  profile_role                                                             profile_role[]
+  profile_trainer_role_type                                                profile_trainer_role_type[]
+  promo_code_promo_code_approved_byToprofile                               promo_code[]                   @relation("promo_code_approved_byToprofile")
+  promo_code_promo_code_created_byToprofile                                promo_code[]                   @relation("promo_code_created_byToprofile")
+  promo_code_promo_code_denied_byToprofile                                 promo_code[]                   @relation("promo_code_denied_byToprofile")
+}
+
+model profile_role {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id String   @db.Uuid
+  role_id    String   @db.Uuid
+  source     String?  @map("_source") @db.VarChar
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  profile    profile  @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  role       role     @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([profile_id, role_id])
+  @@index([profile_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model profile_temp {
+  id              Int       @id @default(autoincrement())
+  email           String
+  given_name      String
+  family_name     String
+  phone           String?
+  dob             DateTime? @db.Date
+  accept_tcs      Boolean
+  sector          String?
+  job_title       String?
+  course_id       Int?
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  organization_id String?   @db.Uuid
+  quantity        Int?
+  course          course?   @relation(fields: [course_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+}
+
+model profile_trainer_role_type {
+  id                   String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id           String            @db.Uuid
+  trainer_role_type_id String            @db.Uuid
+  created_at           DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime          @default(now()) @db.Timestamptz(6)
+  profile              profile           @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  trainer_role_type    trainer_role_type @relation(fields: [trainer_role_type_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model promo_code {
+  id                                      String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                                    String              @unique
+  description                             String?
+  type                                    String              @default("PERCENT")
+  amount                                  Decimal             @default(0) @db.Decimal
+  valid_from                              DateTime            @default(now()) @db.Timestamptz(6)
+  valid_to                                DateTime?           @db.Timestamptz(6)
+  booker_single_use                       Boolean             @default(true)
+  uses_max                                Decimal?            @db.Decimal
+  levels                                  Json                @default("[]")
+  enabled                                 Boolean             @default(true)
+  approved_by                             String?             @db.Uuid
+  created_by                              String              @db.Uuid
+  created_at                              DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at                              DateTime            @default(now()) @db.Timestamptz(6)
+  denied_by                               String?             @db.Uuid
+  disabled                                Boolean             @default(false)
+  course_promo_code                       course_promo_code[]
+  profile_promo_code_approved_byToprofile profile?            @relation("promo_code_approved_byToprofile", fields: [approved_by], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  profile_promo_code_created_byToprofile  profile             @relation("promo_code_created_byToprofile", fields: [created_by], references: [id], onUpdate: Restrict)
+  profile_promo_code_denied_byToprofile   profile?            @relation("promo_code_denied_byToprofile", fields: [denied_by], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  promo_code_type                         promo_code_type     @relation(fields: [type], references: [name], onUpdate: Restrict)
+}
+
+model promo_code_type {
+  name       String       @id
+  promo_code promo_code[]
+}
+
+model role {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String         @unique @db.VarChar
+  data         Json           @default("{}")
+  rank         Int?
+  profile_role profile_role[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model trainer_role_type {
+  id                        String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                      String                      @unique
+  profile_trainer_role_type profile_trainer_role_type[]
+}
+
+model trust_type {
+  name                                             String         @id
+  organization_organization_trust_typeTotrust_type organization[] @relation("organization_trust_typeTotrust_type")
+}
+
+model venue {
+  id               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at       DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime              @default(now()) @db.Timestamptz(6)
+  name             String
+  geo_coordinates  Unsupported("point")?
+  city             String
+  address_line_one String
+  address_line_two String?
+  post_code        String
+  google_places_id String?
+  course_schedule  course_schedule[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model venue_check_jobs {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id Int
+  job_id    String @db.Uuid
+  course    course @relation(fields: [course_id], references: [id], onDelete: Cascade)
+
+  @@unique([course_id, job_id])
+}
+
+model waitlist {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  course_id           Int
+  given_name          String
+  family_name         String
+  email               String
+  phone               String
+  org_name            String
+  confirmed           Boolean  @default(false)
+  cancellation_secret String   @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course              course   @relation(fields: [course_id], references: [id], onUpdate: Restrict)
+
+  @@unique([course_id, email])
+  @@index([course_id], map: "waitlist_course_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model xero_contact {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  xero_id       String         @unique
+  name          String?
+  first_name    String
+  last_name     String
+  email_address String?
+  addresses     Json?
+  phones        Json?
+  xero_invoice  xero_invoice[]
+}
+
+model xero_credential {
+  client_id String @id @db.VarChar
+  token     String @db.VarChar
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model xero_invoice {
+  id                  String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  xero_id             String              @unique
+  invoice_number      String              @unique
+  xero_contact_id     String
+  line_items          Json
+  total               Decimal             @db.Decimal
+  total_tax           Decimal             @db.Decimal
+  subtotal            Decimal             @db.Decimal
+  amount_due          Decimal?            @db.Decimal
+  amount_paid         Decimal?            @db.Decimal
+  fully_paid_on_date  DateTime?           @db.Timestamp(6)
+  due_date            DateTime            @db.Timestamp(6)
+  issued_date         DateTime            @db.Timestamp(6)
+  reference           String
+  currency_code       String
+  status              String              @map("_status")
+  order               order               @relation(fields: [invoice_number], references: [xero_invoice_number], onUpdate: Restrict)
+  xero_invoice_status xero_invoice_status @relation(fields: [status], references: [name], onUpdate: Restrict, map: "xero_invoice_status_fkey")
+  xero_contact        xero_contact        @relation(fields: [xero_contact_id], references: [xero_id])
+}
+
+model xero_invoice_status {
+  name         String         @id
+  xero_invoice xero_invoice[]
+}

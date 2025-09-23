@@ -1,0 +1,151 @@
+table:
+  name: organizations_statistics
+  schema: public
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+select_permissions:
+  - role: anonymous
+    permission:
+      columns: []
+      filter: {}
+  - role: booking-contact
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - id
+        - organization_id
+        - individuals
+        - active_certifications
+        - on_hold_certifications
+        - expiring_soon_certifications
+        - expired_recently_certifications
+      filter: {}
+      allow_aggregations: true
+  - role: organization-key-contact
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns: []
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - active_certifications
+        - expired_recently_certifications
+        - expiring_soon_certifications
+        - individuals
+        - on_hold_certifications
+        - id
+        - organization_id
+      filter:
+        organization:
+          _or:
+            - members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+            - main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+      allow_aggregations: true

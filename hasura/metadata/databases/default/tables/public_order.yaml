@@ -1,0 +1,653 @@
+table:
+  name: order
+  schema: public
+configuration:
+  column_config:
+    billing_address:
+      custom_name: billingAddress
+    billing_email:
+      custom_name: billingEmail
+    billing_family_name:
+      custom_name: billingFamilyName
+    billing_given_name:
+      custom_name: billingGivenName
+    billing_phone:
+      custom_name: billingPhone
+    booking_contact:
+      custom_name: bookingContact
+    client_purchase_order:
+      custom_name: clientPurchaseOrder
+    created_at:
+      custom_name: createdAt
+    order_due:
+      custom_name: orderDue
+    order_total:
+      custom_name: orderTotal
+    organization_id:
+      custom_name: organizationId
+    payment_method:
+      custom_name: paymentMethod
+    profile_id:
+      custom_name: profileId
+    promo_codes:
+      custom_name: promoCodes
+    resource_packs_quantity:
+      custom_name: resourcePacksQuantity
+    sales_representative_id:
+      custom_name: salesRepresentativeId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
+  custom_column_names:
+    billing_address: billingAddress
+    billing_email: billingEmail
+    billing_family_name: billingFamilyName
+    billing_given_name: billingGivenName
+    billing_phone: billingPhone
+    booking_contact: bookingContact
+    client_purchase_order: clientPurchaseOrder
+    created_at: createdAt
+    order_due: orderDue
+    order_total: orderTotal
+    organization_id: organizationId
+    payment_method: paymentMethod
+    profile_id: profileId
+    promo_codes: promoCodes
+    resource_packs_quantity: resourcePacksQuantity
+    sales_representative_id: salesRepresentativeId
+    xero_invoice_number: xeroInvoiceNumber
+  custom_root_fields: {}
+object_relationships:
+  - name: invoice
+    using:
+      foreign_key_constraint_on:
+        column: invoice_number
+        table:
+          name: xero_invoice
+          schema: public
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+  - name: salesRepresentative
+    using:
+      foreign_key_constraint_on: sales_representative_id
+array_relationships:
+  - name: courses
+    using:
+      foreign_key_constraint_on:
+        column: order_id
+        table:
+          name: course_order
+          schema: public
+computed_fields:
+  - name: bookingContactProfileId
+    definition:
+      function:
+        name: order_booking_contact_profile_id
+        schema: public
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns: []
+  - role: sales-admin
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - vat
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - vat
+        - created_at
+        - organization_id
+        - currency
+        - promo_codes
+        - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - workbookDeliveryAddress
+  - role: sales-representative
+    permission:
+      check: {}
+      columns: []
+  - role: trainer
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - created_at
+        - currency
+        - id
+        - invitees
+        - organization_id
+        - payment_method
+        - promo_codes
+        - registrants
+        - resource_packs_quantity
+        - user
+        - vat
+        - workbookDeliveryAddress
+  - role: tt-admin
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - created_at
+        - currency
+        - id
+        - invitees
+        - organization_id
+        - payment_method
+        - promo_codes
+        - registrants
+        - resource_packs_quantity
+        - sales_representative_id
+        - source
+        - user
+        - vat
+        - xero_invoice_number
+        - workbookDeliveryAddress
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - created_at
+        - currency
+        - id
+        - invitees
+        - organization_id
+        - payment_method
+        - promo_codes
+        - registrants
+        - resource_packs_quantity
+        - sales_representative_id
+        - source
+        - user
+        - vat
+        - vat
+        - xero_invoice_number
+        - workbookDeliveryAddress
+  - role: unverified
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - organization_id
+        - promo_codes
+        - client_purchase_order
+        - user
+        - workbookDeliveryAddress
+  - role: user
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - organization_id
+        - promo_codes
+        - client_purchase_order
+        - user
+        - workbookDeliveryAddress
+select_permissions:
+  - role: booking-contact
+    permission:
+      columns:
+        - booking_contact
+        - id
+        - payment_method
+        - source
+        - xero_invoice_number
+      computed_fields:
+        - bookingContactProfileId
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - courses:
+              course:
+                _or:
+                  - organization:
+                      members:
+                        _and:
+                          - profile_id:
+                              _eq: X-Hasura-User-Id
+                          - is_admin:
+                              _eq: true
+                  - booking_contact_profile_id:
+                      _eq: X-Hasura-User-Id
+          - bookingContactProfileId:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - id
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - created_at
+        - price
+        - vat
+        - order_total
+        - organization_id
+        - currency
+        - stripePaymentId
+        - promo_codes
+        - order_due
+        - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
+        - workbookDeliveryAddress
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - created_at
+        - price
+        - vat
+        - order_total
+        - organization_id
+        - currency
+        - stripePaymentId
+        - promo_codes
+        - order_due
+        - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
+        - workbookDeliveryAddress
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - created_at
+        - price
+        - vat
+        - order_total
+        - organization_id
+        - currency
+        - stripePaymentId
+        - promo_codes
+        - order_due
+        - xero_invoice_number
+        - client_purchase_order
+        - user
+        - source
+        - sales_representative_id
+        - booking_contact
+        - workbookDeliveryAddress
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - id
+        - payment_method
+        - source
+        - xero_invoice_number
+        - workbookDeliveryAddress
+      filter:
+        courses:
+          course:
+            trainers:
+              _and:
+                - status:
+                    _eq: ACCEPTED
+                - type:
+                    _eq: LEADER
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - booking_contact
+        - client_purchase_order
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - registrants
+        - resource_packs_quantity
+        - sales_representative_id
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
+        - workbookDeliveryAddress
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - attendeesQuantity
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - booking_contact
+        - client_purchase_order
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - registrants
+        - resource_packs_quantity
+        - sales_representative_id
+        - source
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
+        - workbookDeliveryAddress
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - id
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - created_at
+        - price
+        - vat
+        - order_total
+        - organization_id
+        - currency
+        - stripePaymentId
+        - promo_codes
+        - order_due
+        - xero_invoice_number
+        - user
+        - workbookDeliveryAddress
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  - role: user
+    permission:
+      columns:
+        - id
+        - profile_id
+        - attendeesQuantity
+        - payment_method
+        - billing_address
+        - billing_given_name
+        - billing_family_name
+        - billing_email
+        - billing_phone
+        - registrants
+        - resource_packs_quantity
+        - created_at
+        - price
+        - vat
+        - order_total
+        - organization_id
+        - currency
+        - stripePaymentId
+        - promo_codes
+        - order_due
+        - xero_invoice_number
+        - user
+        - source
+        - booking_contact
+        - workbookDeliveryAddress
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+          - courses:
+              course:
+                booking_contact_profile_id:
+                  _eq: X-Hasura-User-Id
+update_permissions:
+  - role: ld
+    permission:
+      columns:
+        - source
+        - sales_representative_id
+      filter:
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - source
+        - sales_representative_id
+      filter:
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - source
+        - sales_representative_id
+      filter:
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
+  - role: trainer
+    permission:
+      columns:
+        - sales_representative_id
+        - source
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - source
+        - sales_representative_id
+      filter:
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - source
+        - sales_representative_id
+      filter:
+        courses:
+          course:
+            course_type:
+              _in:
+                - OPEN
+                - CLOSED
+      check: {}
+event_triggers:
+  - name: indirect_course_resource_packs_purchase
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - xero_invoice_number
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/resource-packs/purchase'
+  - name: licenses_purchased
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - xero_invoice_number
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/purchase-licenses'
+  - name: new_order
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/order'
+  - name: save_order_invites
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - xero_invoice_number
+    retry_conf:
+      interval_sec: 18
+      num_retries: 3
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/save-order-invites'

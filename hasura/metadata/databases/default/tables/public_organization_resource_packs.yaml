@@ -1,0 +1,164 @@
+table:
+  name: organization_resource_packs
+  schema: public
+configuration:
+  column_config:
+    org_id:
+      custom_name: orgId
+    reserved_resource_packs:
+      custom_name: reservedResourcePacks
+    resource_packs_type:
+      custom_name: resourcePacksType
+    total_resource_packs:
+      custom_name: totalResourcePacks
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    org_id: orgId
+    reserved_resource_packs: reservedResourcePacks
+    resource_packs_type: resourcePacksType
+    total_resource_packs: totalResourcePacks
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: ld
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - id
+        - org_id
+        - reserved_resource_packs
+        - resource_packs_type
+        - total_resource_packs
+      filter:
+        _or:
+          - organization:
+              members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+          - organization:
+              main_organisation:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+      allow_aggregations: true
+    comment: ""
+update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - reserved_resource_packs
+        - total_resource_packs
+      filter: {}
+      check: null
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - reserved_resource_packs
+        - total_resource_packs
+      filter: {}
+      check: null
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - reserved_resource_packs
+        - total_resource_packs
+      filter: {}
+      check: null
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - reserved_resource_packs
+        - total_resource_packs
+      filter: {}
+      check: null
+    comment: ""

@@ -1,0 +1,2 @@
+CREATE TABLE "public"."course_evaluation_scheduled_event" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "event_id" uuid NOT NULL, "course_id" integer NOT NULL, "profile_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("course_id") REFERENCES "public"."course"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("profile_id") REFERENCES "public"."profile"("id") ON UPDATE restrict ON DELETE restrict, UNIQUE ("id"));
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

@@ -1,0 +1,16 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "target": "ES2021",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": ["./src/*"],
+      "@storybook-decorators/*": ["./.storybook/decorators/*"],
+      "@test/*": ["./test/*"]
+    }
+  }
+}

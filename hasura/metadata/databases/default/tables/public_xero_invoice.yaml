@@ -1,0 +1,187 @@
+table:
+  name: xero_invoice
+  schema: public
+configuration:
+  column_config:
+    amount_due:
+      custom_name: amountDue
+    amount_paid:
+      custom_name: amountPaid
+    currency_code:
+      custom_name: currencyCode
+    due_date:
+      custom_name: dueDate
+    fully_paid_on_date:
+      custom_name: fullyPaidOnDate
+    invoice_number:
+      custom_name: invoiceNumber
+    issued_date:
+      custom_name: issuedDate
+    line_items:
+      custom_name: lineItems
+    total_tax:
+      custom_name: totalTax
+    xero_contact_id:
+      custom_name: xeroContactId
+    xero_id:
+      custom_name: xeroId
+  custom_column_names:
+    amount_due: amountDue
+    amount_paid: amountPaid
+    currency_code: currencyCode
+    due_date: dueDate
+    fully_paid_on_date: fullyPaidOnDate
+    invoice_number: invoiceNumber
+    issued_date: issuedDate
+    line_items: lineItems
+    total_tax: totalTax
+    xero_contact_id: xeroContactId
+    xero_id: xeroId
+  custom_root_fields: {}
+object_relationships:
+  - name: contact
+    using:
+      foreign_key_constraint_on: xero_contact_id
+computed_fields:
+  - name: status
+    definition:
+      function:
+        name: calculate_invoice_status
+        schema: public
+    comment: Calculated invoice status that takes due_date into account
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter:
+        contact:
+          email_address:
+            _ilike: X-Hasura-User-Email
+      allow_aggregations: true

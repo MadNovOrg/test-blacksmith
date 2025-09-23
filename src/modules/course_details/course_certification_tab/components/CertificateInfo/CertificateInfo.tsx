@@ -1,0 +1,420 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Alert,
+  Box,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import MUIImage from 'mui-image'
+
+import { bildNewImage, cpdImage, icmImage, ntaImage } from '@app/assets'
+import {
+  Accreditors_Enum,
+  Certificate_Status_Enum,
+  Course_Participant_Module,
+  GetCertificateQuery,
+  Grade_Enum,
+} from '@app/generated/graphql'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { CertificateStatusChip } from '@app/modules/certifications/components/CertificateStatusChip'
+import {
+  countLessons,
+  isLesson,
+  isModule,
+} from '@app/modules/grading/shared/utils'
+import { NonNullish, Strategy } from '@app/types'
+import { transformModulesToGroups } from '@app/util'
+
+import { ModuleGroupAccordion } from '../ModuleGroupAccordion/ModuleGroupAccordion'
+
+import {
+  CertificateRevoked,
+  CertificateRevokedAlert,
+  CertificateValid,
+} from './components'
+
+type Participant = Pick<
+  NonNullish<GetCertificateQuery['certificate']>,
+  'participant'
+>
+
+type CertificateInfoProps = {
+  courseParticipant?: Participant['participant']
+  courseName: string
+  grade: Grade_Enum
+  accreditedBy: Accreditors_Enum
+  revokedDate: string
+  expiryDate: string
+  certificationNumber: string
+  dateIssued: string
+  status: Certificate_Status_Enum
+  statusTooltip?: string
+  expireHoldDate?: string
+  onShowChangelogModal: VoidFunction
+}
+
+export const CertificateInfo: React.FC<
+  React.PropsWithChildren<CertificateInfoProps>
+> = ({
+  accreditedBy,
+  courseParticipant,
+  courseName,
+  grade,
+  revokedDate,
+  expiryDate,
+  certificationNumber,
+  dateIssued,
+  status,
+  statusTooltip,
+  expireHoldDate,
+  onShowChangelogModal,
+}) => {
+  const imageSize = '10%'
+  const { t, _t } = useScopedTranslation('common.course-certificate')
+
+  const oldModuleGroupsWithModules = courseParticipant
+    ? transformModulesToGroups(
+        courseParticipant.gradingModules as unknown as Course_Participant_Module[],
+      )
+    : null
+
+  const filterModules = (strategy: Strategy): Strategy => {
+    const filteredModules = strategy.modules?.filter(
+      obj1 => !strategy.groups?.some(obj2 => obj2.name === obj1.name),
+    )
+    return { modules: filteredModules, groups: strategy.groups }
+  }
+
+  const isRevoked = status === Certificate_Status_Enum.Revoked
+  const isOnHold = status === Certificate_Status_Enum.OnHold
+
+  const strategyModules: Record<string, Strategy> =
+    courseParticipant?.bildGradingModules?.modules
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  return (
+    <Box mt={isMobile ? 8 : 0}>
+      {!courseParticipant && (
+        <Alert severity="warning" variant="outlined" sx={{ mb: 2 }}>
+          {t('completed-modules-unavailable')}
+        </Alert>
+      )}
+
+      {isRevoked ? (
+        <CertificateRevokedAlert
+          revokedDate={revokedDate}
+          onShowChangelogModal={onShowChangelogModal}
+        />
+      ) : null}
+
+      <Typography
+        color={theme.palette.dimGrey.main}
+        variant="subtitle2"
+        sx={{ mb: 2 }}
+      >
+        {t('certified-message')}
+      </Typography>
+
+      <Typography data-testid="certificate-grade" variant="h2" gutterBottom>
+        {t(`${grade.toLowerCase()}-title`)}
+      </Typography>
+
+      <Typography variant="subtitle1" gutterBottom>
+        {courseName}
+      </Typography>
+
+      {grade !== Grade_Enum.Fail ? (
+        <>
+          <Grid container spacing={2} mt={4}>
+            <Grid item md={3} xs={12}>
+              <Typography
+                data-testid="certificate-issue-date"
+                variant="body2"
+                sx={{ mb: 1 }}
+                color="grey.600"
+              >
+                {t('issue-date')}
+              </Typography>
+              <Typography variant="body1">
+                {_t('dates.default', { date: dateIssued })}
+              </Typography>
+            </Grid>
+
+            <Grid item md={3} xs={12}>
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
+                {t('number')}
+              </Typography>
+              <Typography data-testid="certificate-number" variant="body1">
+                {certificationNumber}
+              </Typography>
+            </Grid>
+
+            {isRevoked ? (
+              <CertificateRevoked revokedDate={revokedDate} />
+            ) : (
+              <CertificateValid expiryDate={expiryDate} />
+            )}
+            <Grid item xs={3}>
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.600">
+                {_t('status')}
+              </Typography>
+              <Box display="flex" alignItems="center">
+                <CertificateStatusChip
+                  status={status}
+                  tooltip={statusTooltip}
+                />
+                {isOnHold ? (
+                  <Typography variant="body2" sx={{ ml: 1 }}>
+                    {t(`on-hold-until`, {
+                      expireDate: expireHoldDate,
+                    })}
+                  </Typography>
+                ) : null}
+              </Box>
+            </Grid>
+          </Grid>
+
+          <Box mt={8} gap={6} display="flex" mb={9} alignItems="center">
+            {accreditedBy === Accreditors_Enum.Icm ? (
+              <MUIImage
+                duration={0}
+                src={icmImage}
+                width={imageSize}
+                height={imageSize}
+              />
+            ) : null}
+
+            {accreditedBy === Accreditors_Enum.Bild ? (
+              <MUIImage
+                duration={0}
+                src={bildNewImage}
+                width={imageSize}
+                height={imageSize}
+                style={{ filter: 'grayscale(1' }}
+              />
+            ) : null}
+
+            <MUIImage
+              duration={0}
+              src={cpdImage}
+              width={imageSize}
+              height={imageSize}
+            />
+            <MUIImage
+              duration={0}
+              src={ntaImage}
+              width={imageSize}
+              height={imageSize}
+            />
+          </Box>
+        </>
+      ) : null}
+      <>
+        <Typography variant="h3" gutterBottom>
+          {t('modules-list-title')}
+        </Typography>
+
+        {Array.isArray(courseParticipant?.gradedOn)
+          ? courseParticipant?.gradedOn.map(module => {
+              if (!isModule(module)) {
+                return null
+              }
+
+              const lessons = module.lessons?.items
+
+              const { numberOfLessons, coveredLessons } = countLessons(lessons)
+
+              return (
+                <>
+                  <Accordion key={module.id}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          width: { sm: '60%', md: '70%' },
+                          flexShrink: 0,
+                          mt: -0.5,
+                        }}
+                      >
+                        {module.displayName ?? module.name}
+                      </Typography>
+
+                      <Typography sx={{ color: 'text.secondary' }}>
+                        {`${coveredLessons} of ${numberOfLessons} completed`}
+                      </Typography>
+                    </AccordionSummary>
+
+                    {Array.isArray(lessons) && lessons.length ? (
+                      <AccordionDetails>
+                        {lessons.map((lesson: object) => {
+                          if (!isLesson(lesson)) {
+                            return null
+                          }
+
+                          const hasSubModules = Boolean(lesson.items)
+                          const subModules = lesson.items ?? []
+
+                          const { numberOfLessons, coveredLessons } =
+                            countLessons(subModules)
+
+                          return hasSubModules ? (
+                            <>
+                              <Accordion key={module.id}>
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                >
+                                  <Typography
+                                    sx={{
+                                      width: { sm: '60%', md: '70%' },
+                                      flexShrink: 0,
+                                      mt: -0.5,
+                                    }}
+                                  >
+                                    {lesson.name}
+                                  </Typography>
+
+                                  <Typography sx={{ color: 'text.secondary' }}>
+                                    {`${coveredLessons} of ${numberOfLessons} completed`}
+                                  </Typography>
+                                </AccordionSummary>
+
+                                {subModules.length ? (
+                                  <AccordionDetails>
+                                    {subModules.map((lesson: object) => {
+                                      if (!isLesson(lesson)) {
+                                        return null
+                                      }
+
+                                      return (
+                                        <Typography
+                                          key={lesson.name}
+                                          color={
+                                            !lesson.covered
+                                              ? 'grey.600'
+                                              : undefined
+                                          }
+                                        >
+                                          {lesson.name}
+                                        </Typography>
+                                      )
+                                    })}
+                                  </AccordionDetails>
+                                ) : null}
+                              </Accordion>
+                              <Divider />
+                            </>
+                          ) : (
+                            <Typography
+                              key={lesson.name}
+                              color={!lesson.covered ? 'grey.600' : undefined}
+                            >
+                              {lesson.name}
+                            </Typography>
+                          )
+                        })}
+                      </AccordionDetails>
+                    ) : null}
+                  </Accordion>
+                  <Divider />
+                </>
+              )
+            })
+          : null}
+      </>
+
+      {/* Handle historical course participants with old mode stored modules */}
+      {oldModuleGroupsWithModules?.length
+        ? oldModuleGroupsWithModules.map(moduleGroupWithModules => {
+            return (
+              <ModuleGroupAccordion
+                key={moduleGroupWithModules.id}
+                moduleGroupName={moduleGroupWithModules.name}
+                completedModules={moduleGroupWithModules.modules.filter(
+                  module => module.completed,
+                )}
+                uncompletedModules={moduleGroupWithModules.modules.filter(
+                  module => !module.completed,
+                )}
+              />
+            )
+          })
+        : null}
+
+      {courseParticipant?.bildGradingModules?.modules ? (
+        <>
+          <Typography variant="h3" gutterBottom>
+            {t('modules-list-title')}
+          </Typography>
+          {Object.keys(strategyModules).map(strategyName => (
+            <>
+              <Accordion
+                key={strategyName}
+                data-testid={`strategy-accordion-${strategyName}`}
+              >
+                <AccordionSummary
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                  <Typography variant="subtitle2">
+                    {_t(`common.bild-strategies.${strategyName}`) ||
+                      strategyName}
+                  </Typography>
+                </AccordionSummary>
+
+                <AccordionDetails sx={{ pt: 0, pb: 3 }}>
+                  <Stack spacing={1.5} mb={2}>
+                    {strategyModules[strategyName].modules?.length
+                      ? filterModules(
+                          strategyModules[strategyName],
+                        ).modules?.map(
+                          (bildModule: { name: string }, index: number) => (
+                            <Typography
+                              mb={2}
+                              key={`${bildModule.name}-${index}`}
+                            >
+                              {bildModule.name}
+                            </Typography>
+                          ),
+                        )
+                      : null}
+                  </Stack>
+
+                  {strategyModules[strategyName].groups?.length
+                    ? strategyModules[strategyName].groups?.map(group => (
+                        <Box mb={1} key={group.name}>
+                          <Typography fontWeight="500" mb={1}>
+                            {group.name}
+                          </Typography>
+
+                          <Stack spacing={1.5} sx={{ pl: 2 }} ml={2}>
+                            {group.modules?.length
+                              ? group.modules.map(module => (
+                                  <Typography key={module.name}>
+                                    {module.name}
+                                  </Typography>
+                                ))
+                              : null}
+                          </Stack>
+                        </Box>
+                      ))
+                    : null}
+                </AccordionDetails>
+              </Accordion>
+              <Divider />
+            </>
+          ))}
+        </>
+      ) : null}
+    </Box>
+  )
+}

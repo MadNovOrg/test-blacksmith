@@ -1,0 +1,158 @@
+table:
+  name: course_pricing_schedule
+  schema: public
+configuration:
+  column_config:
+    course_pricing_id:
+      custom_name: coursePricingId
+    effective_from:
+      custom_name: effectiveFrom
+    effective_to:
+      custom_name: effectiveTo
+    price_amount:
+      custom_name: priceAmount
+    price_currency:
+      custom_name: priceCurrency
+  custom_column_names:
+    course_pricing_id: coursePricingId
+    effective_from: effectiveFrom
+    effective_to: effectiveTo
+    price_amount: priceAmount
+    price_currency: priceCurrency
+  custom_root_fields: {}
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - id
+        - price_amount
+        - price_currency
+      filter: {}
+  - role: finance
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - course_pricing_id
+        - effective_from
+        - effective_to
+        - price_amount
+        - price_currency
+        - created_at
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+      filter: {}
+      check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - effective_from
+        - effective_to
+        - price_currency
+        - created_at
+        - updated_at
+        - course_pricing_id
+        - id
+        - price_amount
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: finance
+    permission:
+      filter: {}
+  - role: tt-admin
+    permission:
+      filter: {}
+event_triggers:
+  - name: schedule_course_price
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 5
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/price/handle-schedule'

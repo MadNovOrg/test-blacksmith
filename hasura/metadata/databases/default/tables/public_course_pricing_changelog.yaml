@@ -1,0 +1,125 @@
+table:
+  name: course_pricing_changelog
+  schema: public
+configuration:
+  column_config:
+    author_id:
+      custom_name: authorId
+    course_pricing_id:
+      custom_name: coursePricingId
+    course_pricing_schedule_id:
+      custom_name: coursePricingScheduleId
+    created_at:
+      custom_name: createdAt
+    indefinite_effective_to:
+      custom_name: indefiniteEffectiveTo
+    new_effective_from:
+      custom_name: newEffectiveFrom
+    new_effective_to:
+      custom_name: newEffectiveTo
+    new_price:
+      custom_name: newPrice
+    old_effective_from:
+      custom_name: oldEffectiveFrom
+    old_effective_to:
+      custom_name: oldEffectiveTo
+    old_price:
+      custom_name: oldPrice
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    author_id: authorId
+    course_pricing_id: coursePricingId
+    course_pricing_schedule_id: coursePricingScheduleId
+    created_at: createdAt
+    indefinite_effective_to: indefiniteEffectiveTo
+    new_effective_from: newEffectiveFrom
+    new_effective_to: newEffectiveTo
+    new_price: newPrice
+    old_effective_from: oldEffectiveFrom
+    old_effective_to: oldEffectiveTo
+    old_price: oldPrice
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+  - name: author
+    using:
+      foreign_key_constraint_on: author_id
+  - name: coursePricing
+    using:
+      foreign_key_constraint_on: course_pricing_id
+  - name: courseSchedulePrice
+    using:
+      foreign_key_constraint_on: course_pricing_schedule_id
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - author_id
+        - course_pricing_id
+        - course_pricing_schedule_id
+        - created_at
+        - id
+        - indefinite_effective_to
+        - new_effective_from
+        - new_effective_to
+        - new_price
+        - old_effective_from
+        - old_effective_to
+        - old_price
+        - updated_at
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - author_id
+        - course_pricing_id
+        - course_pricing_schedule_id
+        - created_at
+        - id
+        - indefinite_effective_to
+        - new_effective_from
+        - new_effective_to
+        - new_price
+        - old_effective_from
+        - old_effective_to
+        - old_price
+        - updated_at
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - author_id
+        - course_pricing_id
+        - course_pricing_schedule_id
+        - created_at
+        - id
+        - indefinite_effective_to
+        - new_effective_from
+        - new_effective_to
+        - new_price
+        - old_effective_from
+        - old_effective_to
+        - old_price
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - author_id
+        - course_pricing_id
+        - course_pricing_schedule_id
+        - created_at
+        - id
+        - indefinite_effective_to
+        - new_effective_from
+        - new_effective_to
+        - new_price
+        - old_effective_from
+        - old_effective_to
+        - old_price
+        - updated_at
+      filter: {}
+      allow_aggregations: true

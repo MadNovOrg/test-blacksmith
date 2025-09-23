@@ -1,0 +1,169 @@
+import { isValid } from 'date-fns'
+import { useMemo, useCallback } from 'react'
+import { useQuery, gql } from 'urql'
+
+import useWorldCountries, {
+  WorldCountriesCodes,
+} from '@app/components/CountriesSelector/hooks/useWorldCountries'
+import { useAuth } from '@app/context/auth'
+import {
+  Accreditors_Enum,
+  CoursePriceQuery,
+  CoursePriceQueryVariables,
+  Course_Level_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { useCurrencies } from '@app/hooks/useCurrencies'
+import { ClosedCoursePricingType } from '@app/types'
+
+export const COURSE_PRICE_QUERY = gql`
+  query CoursePrice($startDate: date, $priceCurrency: String!) {
+    coursePrice: course_pricing(
+      where: { priceCurrency: { _eq: $priceCurrency } }
+    ) {
+      level
+      type
+      blended
+      reaccreditation
+      pricingSchedules(
+        where: {
+          _and: [
+            { effectiveFrom: { _lte: $startDate } }
+            {
+              _or: [
+                { effectiveTo: { _gte: $startDate } }
+                { effectiveTo: { _is_null: true } }
+              ]
+            }
+            { priceCurrency: { _eq: $priceCurrency } }
+          ]
+        }
+      ) {
+        priceAmount
+        priceCurrency
+      }
+    }
+  }
+`
+
+interface ICoursePrice {
+  level: Course_Level_Enum
+  type: Course_Type_Enum
+  blended: boolean
+  reaccreditation: boolean
+  pricingSchedules?: {
+    priceAmount: number
+    priceCurrency: string
+  }[]
+}
+
+export function useCoursePrice(courseData?: {
+  accreditedBy: Accreditors_Enum | null
+  startDateTime: Date | null
+  residingCountry: WorldCountriesCodes
+  courseType: Course_Type_Enum
+  courseLevel: Course_Level_Enum
+  reaccreditation: boolean
+  blended: boolean
+  maxParticipants: number | null
+  closedCoursePricingType?: ClosedCoursePricingType
+}) {
+  const {
+    acl: { isAustralia, isUK },
+  } = useAuth()
+  const { defaultCurrency } = useCurrencies()
+  const { isUKCountry, isAustraliaCountry } = useWorldCountries()
+  const isBILDcourse = courseData?.accreditedBy === Accreditors_Enum.Bild
+  const isICMcourse = courseData?.accreditedBy === Accreditors_Enum.Icm
+  const isCLOSEDcourse = courseData?.courseType === Course_Type_Enum.Closed
+  const isLevel2 = courseData?.courseLevel === Course_Level_Enum.Level_2
+  const isBlended = Boolean(courseData?.blended)
+
+  const pauseQuery = useMemo(() => {
+    if (isAustralia()) {
+      return (
+        !courseData ||
+        !isValid(courseData?.startDateTime) ||
+        !isAustraliaCountry(courseData.residingCountry)
+      )
+    }
+    return (
+      !courseData ||
+      (isUKCountry(courseData.residingCountry) &&
+        courseData.courseType === Course_Type_Enum.Closed &&
+        courseData.closedCoursePricingType ===
+          ClosedCoursePricingType.CUSTOM) ||
+      !isValid(courseData?.startDateTime) ||
+      isBILDcourse ||
+      !isUKCountry(courseData.residingCountry)
+    )
+  }, [courseData, isAustralia, isAustraliaCountry, isBILDcourse, isUKCountry])
+
+  const [{ data }] = useQuery<CoursePriceQuery, CoursePriceQueryVariables>({
+    query: COURSE_PRICE_QUERY,
+    variables: courseData
+      ? {
+          startDate: isValid(courseData?.startDateTime)
+            ? courseData.startDateTime?.toISOString()
+            : undefined,
+          priceCurrency: defaultCurrency,
+        }
+      : undefined,
+    pause: pauseQuery,
+  })
+
+  const specialUKcondition =
+    isCLOSEDcourse &&
+    isICMcourse &&
+    isLevel2 &&
+    isBlended &&
+    isUK() &&
+    (!courseData.maxParticipants || courseData?.maxParticipants <= 8)
+
+  const extractCoursePrices = useCallback(
+    (pricesList?: ICoursePrice[]) => {
+      const coursePrice = pricesList?.find(price => {
+        if (
+          price.type === courseData?.courseType &&
+          price.level === courseData?.courseLevel &&
+          Boolean(price.blended) === Boolean(courseData?.blended) &&
+          Boolean(price.reaccreditation) ===
+            Boolean(courseData?.reaccreditation)
+        ) {
+          return price
+        }
+        return null
+      })
+
+      if (
+        coursePrice?.pricingSchedules &&
+        Array.isArray(coursePrice.pricingSchedules)
+      ) {
+        const scheduledPrice = coursePrice.pricingSchedules
+        if (scheduledPrice.length !== 0) {
+          if (specialUKcondition) return null
+
+          return {
+            priceCurrency: scheduledPrice[0].priceCurrency,
+            priceAmount: scheduledPrice[0].priceAmount,
+          }
+        }
+        return null
+      }
+
+      return null
+    },
+    [
+      courseData?.blended,
+      courseData?.courseLevel,
+      courseData?.courseType,
+      courseData?.reaccreditation,
+      specialUKcondition,
+    ],
+  )
+
+  return useMemo(
+    () => extractCoursePrices(data?.coursePrice),
+    [data?.coursePrice, extractCoursePrices],
+  )
+}

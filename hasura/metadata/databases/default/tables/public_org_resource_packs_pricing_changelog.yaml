@@ -1,0 +1,136 @@
+table:
+  name: org_resource_packs_pricing_changelog
+  schema: public
+object_relationships:
+  - name: actioned_by_profile
+    using:
+      foreign_key_constraint_on: actioned_by
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+  - name: resource_packs_pricing
+    using:
+      foreign_key_constraint_on: resource_packs_pricing_id
+insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_resource_packs_pricing_id
+    comment: ""
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_id
+        - org_resource_packs_pricing_id
+        - resource_packs_pricing_id
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: sales-admin
+    permission:
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_id
+        - org_resource_packs_pricing_id
+        - resource_packs_pricing_id
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: tt-admin
+    permission:
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_id
+        - org_resource_packs_pricing_id
+        - resource_packs_pricing_id
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: tt-ops
+    permission:
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_id
+        - org_resource_packs_pricing_id
+        - resource_packs_pricing_id
+      filter: {}
+      allow_aggregations: true
+    comment: ""
+  - role: user
+    permission:
+      columns:
+        - updated_columns
+        - operation
+        - actioned_at
+        - actioned_by
+        - id
+        - org_id
+        - org_resource_packs_pricing_id
+        - resource_packs_pricing_id
+      filter:
+        organization:
+          members:
+            _and:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - is_admin:
+                  _eq: true
+      allow_aggregations: true
+    comment: ""
