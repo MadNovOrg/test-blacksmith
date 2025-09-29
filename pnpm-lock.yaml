@@ -279,8 +279,8 @@ importers:
         specifier: ^12.3.1
         version: 12.3.1(i18next@22.4.10)(react-dom@19.0.0(react@19.0.0))(react-native@0.76.1(@babel/core@7.26.10)(@babel/preset-env@7.28.0(@babel/core@7.26.10))(@types/react@19.0.10)(react@19.0.0))(react@19.0.0)
       react-router-dom:
-        specifier: ^6.18.0
-        version: 6.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^7.9.3
+        version: 7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-select-country-list:
         specifier: ^2.2.3
         version: 2.2.3
@@ -310,7 +310,7 @@ importers:
         version: 9.0.4(react@19.0.0)
       use-query-params:
         specifier: ^2.2.1
-        version: 2.2.1(react-dom@19.0.0(react@19.0.0))(react-router-dom@6.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+        version: 2.2.1(react-dom@19.0.0(react@19.0.0))(react-router-dom@7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -2757,6 +2757,7 @@ packages:
   '@graphql-tools/prisma-loader@8.0.1':
     resolution: {integrity: sha512-bl6e5sAYe35Z6fEbgKXNrqRhXlCJYeWKBkarohgYA338/SD9eEhXtg3Cedj7fut3WyRLoQFpHzfiwxKs7XrgXg==}
     engines: {node: '>=16.0.0'}
+    deprecated: 'This package was intended to be used with an older versions of Prisma.\nThe newer versions of Prisma has a different approach to GraphQL integration.\nTherefore, this package is no longer needed and has been deprecated and removed.\nLearn more: https://www.prisma.io/graphql'
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
@@ -4078,10 +4079,6 @@ packages:
   '@react-pdf/types@2.8.2':
     resolution: {integrity: sha512-FE4BiWdbdPK15KZWO8laiIhqpZgDMGzp+CUdOjAGitdn9ANgsNrlZHHR+fX7uHlNXqs4OwsW7Pv3QYIPfPqtPA==}
 
-  '@remix-run/router@1.11.0':
-    resolution: {integrity: sha512-BHdhcWgeiudl91HvVa2wxqZjSHbheSgIiDvxrF1VjFzBzpTtuDPkOdOi3Iqvc08kXtFkLjhbS+ML9aM8mJS+wQ==}
-    engines: {node: '>=14.0.0'}
-
   '@repeaterjs/repeater@3.0.4':
     resolution: {integrity: sha512-AW8PKd6iX3vAZ0vA43nOUOnbq/X5ihgU+mSXXqunMkeQADGiqw/PY0JNeYtD5sr0PAy51YPgAPbDoeapv9r8WA==}
 
@@ -4092,7 +4089,7 @@ packages:
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: '>=4.22.4'
+      rollup: '>=3.29.5'
     peerDependenciesMeta:
       rollup:
         optional: true
@@ -5045,8 +5042,8 @@ packages:
   '@types/node@20.19.11':
     resolution: {integrity: sha512-uug3FEEGv0r+jrecvUUpbY8lLisvIjg6AAic6a2bSP5OEOLeJsDSnvhCDov7ipFFMXS3orMpzlmi0ZcuGkBbow==}
 
-  '@types/node@20.19.14':
-    resolution: {integrity: sha512-gqiKWld3YIkmtrrg9zDvg9jfksZCcPywXVN7IauUGhilwGV/yOyeUsvpR796m/Jye0zUzMXPKe8Ct1B79A7N5Q==}
+  '@types/node@20.19.17':
+    resolution: {integrity: sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==}
 
   '@types/parse-json@4.0.0':
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -6546,6 +6543,10 @@ packages:
     resolution: {integrity: sha512-Xd8lFX4LM9QEEwxQpF9J9NTUh8pmdJO0cyRJhFiDoLTk2eH8FXlRv2IFGYVadZpqI3j8fhNrSdKCeYPxiAhLXw==}
     engines: {node: '>=18'}
 
+  cookie@1.0.2:
+    resolution: {integrity: sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==}
+    engines: {node: '>=18'}
+
   copy-to-clipboard@3.3.1:
     resolution: {integrity: sha512-i13qo6kIHTTpCm8/Wup+0b1mVWETvu2kIMzKoK8FpkLkFxlt0znUAHcMzox+T8sPlqtZXq3CulEjQHsYiGFJUw==}
 
@@ -7640,8 +7641,8 @@ packages:
   flow-enums-runtime@0.0.6:
     resolution: {integrity: sha512-3PYnM29RFXwvAN6Pc/scUfkI7RwhQ/xqyLUyPNlXUp9S40zI8nup9tUSrTLSVnWGBN38FNiGWbwZOB6uR4OGdw==}
 
-  flow-parser@0.281.0:
-    resolution: {integrity: sha512-T97TugUp9nRqpkTTHhdOQWGKCpt5Ym49Cn6HVLJib6kn47jv3KZAXtyFWnQm51E+VFigUIcH7EyRFQKUeTWwYQ==}
+  flow-parser@0.287.0:
+    resolution: {integrity: sha512-92XfPmSg6zV/UD/R3Hw+sxBUi3SiIL8COqD7p3HRZysX1ksrw5MdPhpqox0U0Hd5lqQ9F1AJCi92fnRO7WDgFw==}
     engines: {node: '>=0.4.0'}
 
   follow-redirects@1.15.9:
@@ -10488,18 +10489,22 @@ packages:
     resolution: {integrity: sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==}
     engines: {node: '>=0.10.0'}
 
-  react-router-dom@6.18.0:
-    resolution: {integrity: sha512-Ubrue4+Ercc/BoDkFQfc6og5zRQ4A8YxSO3Knsne+eRbZ+IepAsK249XBH/XaFuOYOYr3L3r13CXTLvYt5JDjw==}
-    engines: {node: '>=14.0.0'}
+  react-router-dom@7.9.3:
+    resolution: {integrity: sha512-1QSbA0TGGFKTAc/aWjpfW/zoEukYfU4dc1dLkT/vvf54JoGMkW+fNA+3oyo2gWVW1GM7BxjJVHz5GnPJv40rvg==}
+    engines: {node: '>=20.0.0'}
     peerDependencies:
-      react: '>=16.8'
-      react-dom: '>=16.8'
+      react: '>=18'
+      react-dom: '>=18'
 
-  react-router@6.18.0:
-    resolution: {integrity: sha512-vk2y7Dsy8wI02eRRaRmOs9g2o+aE72YCx5q9VasT1N9v+lrdB79tIqrjMfByHiY5+6aYkH2rUa5X839nwWGPDg==}
-    engines: {node: '>=14.0.0'}
+  react-router@7.9.3:
+    resolution: {integrity: sha512-4o2iWCFIwhI/eYAIL43+cjORXYn/aRQPgtFRRZb3VzoyQ5Uej0Bmqj7437L97N9NJW4wnicSwLOLS+yCXfAPgg==}
+    engines: {node: '>=20.0.0'}
     peerDependencies:
-      react: '>=16.8'
+      react: '>=18'
+      react-dom: '>=18'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
 
   react-select-country-list@2.2.3:
     resolution: {integrity: sha512-eRgXL613dVyJiE99yKDYLvSBKDxvIlhkmvO2DVIjdKVyUQq6kBqoMUV/2zuRIAsbRXgBGmKjeL1dxjf7zTfszg==}
@@ -10920,6 +10925,9 @@ packages:
 
   set-cookie-parser@2.6.0:
     resolution: {integrity: sha512-RVnVQxTXuerk653XfuliOxBP81Sf0+qfQE73LIYKcyMYHG94AuH0kgrQpRDuTZnSmjpysHmzxJXKNfa6PjFhyQ==}
+
+  set-cookie-parser@2.7.1:
+    resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
 
   set-function-length@1.2.1:
     resolution: {integrity: sha512-j4t6ccc+VsKwYHso+kElc5neZpjtq9EnRICFZtWyBsLojhmeF/ZBd/elqm22WJh/BziDe/SBiOeAt0m2mfLD0g==}
@@ -18968,8 +18976,6 @@ snapshots:
       '@react-pdf/primitives': 4.1.1
       '@react-pdf/stylesheet': 6.0.2
 
-  '@remix-run/router@1.11.0': {}
-
   '@repeaterjs/repeater@3.0.4': {}
 
   '@rolldown/pluginutils@1.0.0-beta.19': {}
@@ -20066,7 +20072,7 @@ snapshots:
 
   '@types/node-forge@1.3.14':
     dependencies:
-      '@types/node': 20.19.14
+      '@types/node': 20.19.17
 
   '@types/node@12.20.55': {}
 
@@ -20078,7 +20084,7 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@20.19.14':
+  '@types/node@20.19.17':
     dependencies:
       undici-types: 6.21.0
 
@@ -21816,7 +21822,7 @@ snapshots:
 
   chrome-launcher@0.15.2:
     dependencies:
-      '@types/node': 20.19.14
+      '@types/node': 20.19.17
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -21827,7 +21833,7 @@ snapshots:
 
   chromium-edge-launcher@0.2.0:
     dependencies:
-      '@types/node': 20.19.14
+      '@types/node': 20.19.17
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -21997,6 +22003,8 @@ snapshots:
       lodash.keys: 2.3.0
 
   cookie@1.0.1: {}
+
+  cookie@1.0.2: {}
 
   copy-to-clipboard@3.3.1:
     dependencies:
@@ -23322,7 +23330,7 @@ snapshots:
 
   flow-enums-runtime@0.0.6: {}
 
-  flow-parser@0.281.0: {}
+  flow-parser@0.287.0: {}
 
   follow-redirects@1.15.9: {}
 
@@ -24879,7 +24887,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.19.14
+      '@types/node': 20.19.17
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -24947,7 +24955,7 @@ snapshots:
       '@babel/register': 7.28.3(@babel/core@7.28.4)
       babel-core: 7.0.0-bridge.0(@babel/core@7.28.4)
       chalk: 4.1.2
-      flow-parser: 0.281.0
+      flow-parser: 0.287.0
       graceful-fs: 4.2.11
       micromatch: 4.0.8
       neo-async: 2.6.2
@@ -27266,17 +27274,19 @@ snapshots:
 
   react-refresh@0.17.0: {}
 
-  react-router-dom@6.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-router-dom@7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
-      '@remix-run/router': 1.11.0
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-      react-router: 6.18.0(react@19.0.0)
+      react-router: 7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  react-router@6.18.0(react@19.0.0):
+  react-router@7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
-      '@remix-run/router': 1.11.0
+      cookie: 1.0.2
       react: 19.0.0
+      set-cookie-parser: 2.7.1
+    optionalDependencies:
+      react-dom: 19.0.0(react@19.0.0)
 
   react-select-country-list@2.2.3: {}
 
@@ -27781,6 +27791,8 @@ snapshots:
   set-blocking@2.0.0: {}
 
   set-cookie-parser@2.6.0: {}
+
+  set-cookie-parser@2.7.1: {}
 
   set-function-length@1.2.1:
     dependencies:
@@ -28726,7 +28738,7 @@ snapshots:
   universal-cookie@4.0.4:
     dependencies:
       '@types/cookie': 0.3.3
-      cookie: 1.0.1
+      cookie: 1.0.2
 
   universalify@0.1.2: {}
 
@@ -28833,13 +28845,13 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  use-query-params@2.2.1(react-dom@19.0.0(react@19.0.0))(react-router-dom@6.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
+  use-query-params@2.2.1(react-dom@19.0.0(react@19.0.0))(react-router-dom@7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       serialize-query-params: 2.0.2
     optionalDependencies:
-      react-router-dom: 6.18.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-router-dom: 7.9.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   util-deprecate@1.0.2: {}
 
