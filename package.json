@@ -142,7 +142,7 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.51.3",
     "react-i18next": "^12.3.1",
-    "react-router-dom": "^6.18.0",
+    "react-router-dom": "^7.9.4",
     "react-select-country-list": "^2.2.3",
     "react-use": "^17.6.0",
     "react-youtube": "^10.1.0",
