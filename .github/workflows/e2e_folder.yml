@@ -89,7 +89,7 @@ jobs:
         run: pnpm nx e2e:${{ matrix.browsers }} @teamteach/hub.web-e2e playwright/tests/${{ github.event.inputs.folder }}
 
       - name: Playwright report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
